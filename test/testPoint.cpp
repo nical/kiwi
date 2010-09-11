@@ -1,16 +1,16 @@
-#include "Point.hpp"
-#include "ArrayImageContainer.hpp"
-#include <iostream>
+#include "../src/image/Point.hpp"
+#include "../src/core/Commons.hpp"
 
 using namespace std;
 
 int main()
 {
 
+ScopedBlockMacro(s1, "kiwi::TestPoint");
 	
-	kiwi::Point<int,2> p(1,5);
+	kiwi::image::Point<int,2> p(1,5);
 
-	cerr << p.coordinate(0)<<endl;
+	debug.print() << p.coordinate(0)<<endl;
 
 
 

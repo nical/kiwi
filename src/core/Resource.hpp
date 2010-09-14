@@ -29,6 +29,9 @@ namespace kiwi
 namespace core
 {
 
+class Reader;
+class Writer;
+
 /**
  * @brief The base class for every kiwi Resource and Filter
  *
@@ -39,8 +42,7 @@ class Resource
 {
 public:
 //---------------------------------------  Internal classes declarations
-	class Reader;
-	class Writer;
+	
 	template<class SlotType> class InputPort;
 	template<class SlotType> class OutputPort;
 	
@@ -111,6 +113,14 @@ public:
 	 * @param writer A pointer to the Writer that is to be checked.
 	 */
 	virtual bool isWriterCompatible(portIndex_t inputIndex, Writer* reader) = 0;
+
+	/// TODO
+	//virtual void save(std::ostream out);
+	//virtual void load(std::istream in);
+
+	
+
+	virtual void layoutChanged() { }
 
 // ------------------------------------------------------- pulic methods
 
@@ -333,29 +343,30 @@ public:
 		string _name;
 	};
 
-//------------------------------------------------------- access classes
-	/**
-	 * @class Resource::Reader
-	 * @brief The base class to read data from Resources.
-	 */ 
-	class Reader
-	{
-	public:
-		virtual ~Reader() {}
-	};
 
-	/**
-	 * @class Resource::Reader
-	 * @brief The base class to read and write data from Resources.
-	 */ 
-	class Writer
-	{
-	public:
-		virtual ~Writer() {}
-	};
 
 }; // class Resource;
 
+//------------------------------------------------------- access classes
+/**
+ * @class Resource::Reader
+ * @brief The base class to read data from Resources.
+ */ 
+class Reader
+{
+public:
+	virtual ~Reader() {}
+};
+
+/**
+ * @class Resource::Reader
+ * @brief The base class to read and write data from Resources.
+ */ 
+class Writer
+{
+public:
+	virtual ~Writer() {}
+};
 
 
 // ----------------------------------------------------------- Operators

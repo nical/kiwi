@@ -203,7 +203,7 @@ void Resource::OutputPort<SlotType>::disconnect()
 
 
 template <>
-bool Resource::InputPort<Resource::Reader>::isCompatible(Resource::OutputPort<Resource::Reader>& output)
+bool Resource::InputPort<Reader>::isCompatible(Resource::OutputPort<Reader>& output)
 {
 	Reader* theReader = output.resource()->newReader(output.index());
 	bool result = _myResource->isReaderCompatible(_myIndex, theReader );
@@ -212,7 +212,7 @@ bool Resource::InputPort<Resource::Reader>::isCompatible(Resource::OutputPort<Re
 }
 
 template <>
-bool Resource::InputPort<Resource::Writer>::isCompatible(Resource::OutputPort<Resource::Writer>& output)
+bool Resource::InputPort<Writer>::isCompatible(Resource::OutputPort<Writer>& output)
 {
 	Writer* theWriter = output.resource()->newWriter(output.index());
 	bool result = _myResource->isWriterCompatible(_myIndex, theWriter );

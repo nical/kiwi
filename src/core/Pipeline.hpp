@@ -1,34 +1,62 @@
 #ifndef KIWI_FILTER_HPP
 #define KIWI_FILTER_HPP
 
-#include "Resource.hpp"
-#include "Filter.hpp"
+#include "core/Resource.hpp"
+#include "core/Filter.hpp"
+#include "core/Commons.hpp"
+
+#include <list>
 
 namespace kiwi
 {
-
+namespace core
+{
 
 	
 class Pipeline : public Filter
 {
 public:
-	Pipeline(unsigned nbInputReaders, unsigned nbOutputReaders,
-			unsigned nbInputWriters, unsigned nbOutputWriters)
-		:Resource(nbInputReaders, nbOutputReaders, nbInputWriters, nbOutputWriters)
+	Pipeline()
+		:Filter()
 	{
+		ScopedBlockMacro(s1, "kiwi::core::Pipeline: constructor");
+
 	}
 
-	virtual bool addFilter(Filter* filter);
+	bool contains(Filter* filter)
+	{
+		for(std::list<Filter*>::iterator it = _filterList.begin();
+			it != _filterList.end(); ++it)
+		{
+			if(*it = filter) return true;
+		}
+		return false;
+	}
+
+	bool addFilter(Filter& toAdd)
+	{
+		if(!contains(&toAdd))
+		{
+			_filterList.push_front(toAdd);
+			return true;
+		}
+		return false;
+	}
+
+	void Process()
+	{
+		std::list<Filter*> readyList;
+		std::list<Filter*> todo;
+	}
 
 private:
-	Pipeline* _pipeline;
-	Filter(unsigned _nbInputReaders, unsigned _nbOutputReaders,
-		unsigned _nbInputWriters, unsigned _nbOutputWriters);
-
+	std::list<Filter*> _filterList;
 };
 
 
 
+
+}//namespace core
 }//namespace kiwi
 
 

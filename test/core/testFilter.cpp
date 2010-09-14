@@ -11,33 +11,35 @@
 using namespace kiwi::core;
 using namespace kiwi;
 
+template <typename ValueType>
+class StlVectorReader : public Reader
+{
+public:
+	StlVectorReader(std::vector<ValueType>* data) : _data(data){}
+	inline ValueType at(unsigned pos){return (*_data)[pos];}
+	inline unsigned size() {return _data->size();}
+protected:
+	std::vector<ValueType>* _data;
+};
 
+template <typename ValueType>
+class StlVectorWriter : public Writer
+{
+public:
+	StlVectorWriter(std::vector<ValueType>* data) : _data(data){}
+	inline ValueType& at(unsigned pos){return (*_data)[pos];}
+	inline unsigned size() {return _data->size();}
+protected:
+	std::vector<ValueType>* _data;
+};
 
 template <typename ValueType>
 class StlVector : public Resource
 {
 public:
-	class Reader : public Resource::Reader
-	{
-	public:
-		Reader(std::vector<ValueType>* data) : _data(data){}
-		inline ValueType at(unsigned pos){return (*_data)[pos];}
-		inline unsigned size() {return _data->size();}
-	protected:
-		std::vector<ValueType>* _data;
-	};
-	class Writer : public Resource::Writer
-	{
-	public:
-		Writer(std::vector<ValueType>* data) : _data(data){}
-		inline ValueType& at(unsigned pos){return (*_data)[pos];}
-		inline unsigned size() {return _data->size();}
-	protected:
-		std::vector<ValueType>* _data;
-	};
-
-	Reader* newReader(unsigned index) { return new Reader(&_data);}
-	Writer* newWriter(unsigned index) { return new Writer(&_data);}
+	
+	Reader* newReader(unsigned index) { return new StlVectorReader<ValueType>(&_data);}
+	Writer* newWriter(unsigned index) { return new StlVectorWriter<ValueType>(&_data);}
 	
 	StlVector(unsigned initialSize)
 	: Resource()
@@ -47,8 +49,10 @@ public:
 		addReaderOutputPort("Read");
 		addWriterOutputPort("Read/Write");
 	}
-	bool isReaderCompatible(Resource::portIndex_t inputIndex, Resource::Reader* reader) {return false;}
-	bool isWriterCompatible(Resource::portIndex_t inputIndex, Resource::Writer* writer) {return false;}
+	bool isReaderCompatible(Resource::portIndex_t inputIndex, Reader* reader) {return false;}
+	bool isWriterCompatible(Resource::portIndex_t inputIndex, Writer* writer) {return false;}
+
+
 
 	inline unsigned int size() {return _data.size();}
 	
@@ -56,21 +60,22 @@ protected:
 	std::vector<ValueType> _data;
 };
 
+class TestReader : public Reader
+{
+	public:
+	TestReader(int a) {}
+};
+
+class TestWriter : public Writer
+{
+	public:
+	TestWriter(int a) {}
+};
 
 class TestFilter : public Filter
 {
 public:
-	class Reader : public Resource::Reader
-	{
-		public:
-		Reader(int a) {}
-	};
-
-	class Writer : public Resource::Writer
-	{
-		public:
-		Writer(int a) {}
-	};
+	
 
 	TestFilter() : Filter()
 	{
@@ -86,12 +91,12 @@ public:
 		ScopedBlockMacro(proc_block, "TestFilter::process()");
 
 		debug.print() << "Allocate Reader #0" << endl;
-		AllocateReaderMacro(StlVector<int>::Reader, A, 0)
+		AllocateReaderMacro(StlVectorReader<int>, A, 0)
 		debug.print() << "Allocate Reader #1" << endl;
-		AllocateReaderMacro(StlVector<int>::Reader, B, 1)
+		AllocateReaderMacro(StlVectorReader<int>, B, 1)
 
 		debug.print() << "Allocate Writer #0" << endl;		
-		AllocateWriterMacro(StlVector<int>::Writer, result, 0)
+		AllocateWriterMacro(StlVectorWriter<int>, result, 0)
 
 		if(!A or !B or !result) return;
 		
@@ -107,11 +112,17 @@ public:
 		
 	}
 	
-	Resource::Reader* newReader(unsigned index) { return new Reader(0);}
-	Resource::Writer* newWriter(unsigned index) { return new Writer(0);}
-	bool isReaderCompatible(Resource::portIndex_t inputIndex, Resource::Reader* reader) {return true;}
-	bool isWriterCompatible(Resource::portIndex_t inputIndex, Resource::Writer* writer) {return true;}
+	Reader* newReader(unsigned index) { return new TestReader(0);}
+	Writer* newWriter(unsigned index) { return new TestWriter(0);}
+	bool isReaderCompatible(Resource::portIndex_t inputIndex, Reader* reader) {return true;}
+	bool isWriterCompatible(Resource::portIndex_t inputIndex, Writer* writer) {return true;}
 
+	bool isReady()
+	{
+		return (readerInputPort(0).isConnected()
+			&& readerInputPort(1).isConnected()
+			&& writerInputPort(0).isConnected() );
+	}
 
 };
 

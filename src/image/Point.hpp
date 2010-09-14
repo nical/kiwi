@@ -9,6 +9,7 @@
 #ifndef KIWI_POINT_HPP
 #define KIWI_POINT_HPP
 
+#include "core/Commons.hpp"
 
 namespace kiwi
 {
@@ -22,13 +23,14 @@ class Point
 public:
 	//typedefs
 	typedef TCoordType CoordType;
-	typedef TDimension Dimension;
+	static const unsigned int Dimension = TDimension;
 	//zero value
-	static const Point<CoordType, Dimension> zero = Point<CoordType, Dimension>(0);
+	//static const Point<CoordType, TDimension> zero = Point<CoordType, Dimension>(0);
 
 	//constructors
 	Point(CoordType* data);
 	Point();
+	Point(CoordType x);
 	Point(CoordType x, CoordType y);
 	Point(CoordType x, CoordType y, CoordType z);
 	Point(CoordType x, CoordType y, CoordType z, CoordType w);
@@ -37,10 +39,12 @@ public:
 	inline CoordType& coordinate(unsigned int index){return _coordinates[index];}
 	inline CoordType& operator[](unsigned int index){return _coordinates[index];}
 
-	Point<CoordType,Dimension> operator + (const Point<CoordType,Dimension>& point);
-	Point<CoordType,Dimension> operator - (const Point<CoordType,Dimension>& point);
-	void operator += (const Point<CoordType,Dimension>& point);
-	void operator -= (const Point<CoordType,Dimension>& point);
+	Point<CoordType,TDimension> operator + (const Point<CoordType,TDimension>& point);
+	Point<CoordType,TDimension> operator - (const Point<CoordType,TDimension>& point);
+	void operator += (const Point<CoordType, TDimension>& point);
+	void operator -= (const Point<CoordType, TDimension>& point);
+	bool operator == (const Point<CoordType, TDimension>& point);
+	bool operator != (const Point<CoordType, TDimension>& point);	
 protected:
 	CoordType _coordinates[Dimension];
 };
@@ -50,30 +54,30 @@ protected:
 
 
 template <typename T, unsigned int D>
-Point<C,D>::Point(CoordType* data)
+Point<T,D>::Point(CoordType* data)
 {
 	for(unsigned i = 0; i < D; ++i) _coordinates[i] = data[i];
 }
 template <typename T, unsigned int D>
-Point<C,D>::Point()
+Point<T,D>::Point()
 {
-	for(unsigned i = 0; i < D; ++i) _coordinates[i] = 0;
+	// No initialization for performances
 }
 template <typename T, unsigned int D>
-Point<C,D>::Point(CoordType x)
+Point<T,D>::Point(CoordType x)
 {
 	_coordinates[0] = x;
 	for(unsigned i = 1; i < D; ++i) _coordinates[i] = 0;
 }
 template <typename T, unsigned int D>
-Point<C,D>::Point(CoordType x, CoordType y)
+Point<T,D>::Point(CoordType x, CoordType y)
 {
 	_coordinates[0] = x;
 	_coordinates[1] = y;
 	for(unsigned i = 2; i < D; ++i) _coordinates[i] = 0;
 }
 template <typename T, unsigned int D>
-Point<C,D>::Point(CoordType x, CoordType y, CoordType z)
+Point<T,D>::Point(CoordType x, CoordType y, CoordType z)
 {
 	_coordinates[0] = x;
 	_coordinates[1] = y;
@@ -81,7 +85,7 @@ Point<C,D>::Point(CoordType x, CoordType y, CoordType z)
 	for(unsigned i = 3; i < D; ++i) _coordinates[i] = 0;
 }
 template <typename T, unsigned int D>
-Point<C,D>::Point(CoordType x, CoordType y, CoordType z, CoordType w)
+Point<T,D>::Point(CoordType x, CoordType y, CoordType z, CoordType w)
 {
 	_coordinates[0] = x;
 	_coordinates[1] = y;
@@ -91,41 +95,59 @@ Point<C,D>::Point(CoordType x, CoordType y, CoordType z, CoordType w)
 }
 
 template <typename T, unsigned int D>
-Point<C,D>::Point(const Point<CoordType,Dimension>& point)
+Point<T,D>::Point(const Point<CoordType,Dimension>& point)
 {
 	for(unsigned i = 0; i < D; ++i) _coordinates[i] = point._coordinates[i];
 }
 
-template <typename C, unsigned int D>
-Point<C,D> Point<C,D>::operator + (const Point<C,D>& point)
+template <typename T, unsigned int D>
+Point<T,D> Point<T,D>::operator + (const Point<T,D>& point)
 {
-	Point<C,D> res;
+	Point<T,D> res;
 	for(unsigned int i = 0; i < D; ++ i)
 		res[i] = _coordinates[i] + point._coordinates[i];
 	return res;
 }
 
-template <typename C, unsigned int D>
-Point<C,D> Point<C,D>::operator - (const Point<C,D>& point)
+template <typename T, unsigned int D>
+Point<T,D> Point<T,D>::operator - (const Point<T,D>& point)
 {
-	Point<C,D> res;
+	Point<T,D> res;
 	for(unsigned int i = 0; i < D; ++ i)
 		res[i] = _coordinates[i] - point._coordinates[i];
 	return res;
 }
 
-template <typename C, unsigned int D>
-void Point<C,D>::operator += (const Point<C,D>& point)
+template <typename T, unsigned int D>
+void Point<T,D>::operator += (const Point<T,D>& point)
 {
 	for(unsigned int i = 0; i < D; ++ i)
 		_coordinates[i] += point._coordinates[i];
 }
 
-template <typename C, unsigned int D>
-void Point<C,D>::operator -= (const Point<C,D>& point)
+template <typename T, unsigned int D>
+void Point<T,D>::operator -= (const Point<T,D>& point)
 {
 	for(unsigned int i = 0; i < D; ++ i)
 		_coordinates[i] -= point._coordinates[i];
+}
+
+template <typename T, unsigned int D>
+bool Point<T,D>::operator == (const Point<T,D>& point)
+{
+	for(unsigned int i = 0; i < D; ++ i)
+		if(_coordinates[i] != point._coordinates[i]) return false;
+
+	return true;
+}
+
+template <typename T, unsigned int D>
+bool Point<T,D>::operator != (const Point<T,D>& point)
+{
+	for(unsigned int i = 0; i < D; ++ i)
+		if(_coordinates[i] == point._coordinates[i]) return true;
+
+	return false;
 }
 
 

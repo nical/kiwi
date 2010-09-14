@@ -1,0 +1,7 @@
+SET(KIWI_SRC ${KIWI_SRC} 
+		core/Resource.hpp
+		core/Filter.hpp
+		core/Commons.hpp
+		core/Pipeline.hpp
+		core/DebugOutputStream.hpp
+		)

@@ -1,0 +1,3 @@
+SET(KIWI_SRC ${KIWI_SRC} 
+		#audio classes here
+		)

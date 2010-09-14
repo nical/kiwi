@@ -334,12 +334,20 @@ public:
 	};
 
 //------------------------------------------------------- access classes
+	/**
+	 * @class Resource::Reader
+	 * @brief The base class to read data from Resources.
+	 */ 
 	class Reader
 	{
 	public:
 		virtual ~Reader() {}
 	};
 
+	/**
+	 * @class Resource::Reader
+	 * @brief The base class to read and write data from Resources.
+	 */ 
 	class Writer
 	{
 	public:

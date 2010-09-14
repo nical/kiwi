@@ -151,6 +151,7 @@ bool Point<T,D>::operator != (const Point<T,D>& point)
 }
 
 
+
 }//namespace image
 }//namespace kiwi
 

@@ -16,6 +16,7 @@ typedef std::string string;
 
 }
 
+
 #include "DebugOutputStream.hpp"
 
 #endif

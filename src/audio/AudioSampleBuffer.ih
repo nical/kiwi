@@ -1,0 +1,70 @@
+
+
+namespace kiwi
+{
+namespace audio
+{
+
+
+/*
+
+template<typename T>
+AudioSampleBuffer<T>::AudioSampleBuffer(ValueType* data, unsigned int size, bool reAllocate )
+	: _size(size), _reAllocated(reAllocate);
+{
+	if(reAllocate)
+	{
+		_data = new T[size];
+		for(unsigned int i = 0; i < size; ++i)
+		{
+			_data[i] = data[i];
+		}
+	}
+	else
+	{
+		_data = data;
+	}
+}
+*/
+
+template<typename T>
+AudioSampleBuffer<T>::~AudioSampleBuffer()
+{
+	if(_reAllocated){delete[] _data;}
+}
+
+template<typename T>
+core::Reader* AudioSampleBuffer<T>::newReader(unsigned int index)
+{
+	assert(index < getReaderOutputCount());
+	return new AudioSampleReader<T>(this);
+}
+
+
+template<typename T> 
+core::Writer* AudioSampleBuffer<T>::newWriter(unsigned int index)
+{
+	assert(index < getWriterOutputCount());
+	return new AudioSampleWriter<T>(this);
+}
+
+/*
+template<typename T>
+AudioSampleReader<T>::AudioSampleReader(AudioSampleBuffer<T>* theResource)
+{
+	assert(theResource != 0);
+	_data = theResource->getRawPointer();
+	_size = theResource->size();
+}
+
+template<typename T>
+AudioSampleWriter<T>::AudioSampleWriter(AudioSampleBuffer<T>* theResource)
+{
+	assert(theResource != 0);
+	_data = theResource->getRawPointer();
+	_size = theResource->size();
+}
+*/
+
+} //namespace
+} //namespace

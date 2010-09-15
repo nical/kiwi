@@ -1,0 +1,65 @@
+
+
+namespace kiwi
+{
+namespace core
+{
+
+
+Pipeline::Pipeline()
+	:Filter()
+{
+	ScopedBlockMacro(s1, "kiwi::core::Pipeline: constructor");
+
+}
+
+bool Pipeline::contains(Resource* resource)
+{
+	for(std::list<Filter*>::iterator it = _filterList.begin();
+		it != _filterList.end(); ++it)
+	{
+		if(*it = filter) return true;
+	}
+	return false;
+}
+
+bool Pipeline::add(Resource* toAdd)
+{
+	if(!contains(toAdd))
+	{
+		if(isFilter())
+		{
+			_filterList.push_front(toAdd);
+			return true;
+		}
+		else
+		{
+			_resourceList.push_front(toAdd);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Pipeline::update()
+{
+	return false;
+}
+
+void Pipeline::printErrors()
+{
+	
+}
+
+void Pipeline::process()
+{
+	
+}
+
+
+
+
+
+}//namespace core
+}//namespace kiwi
+

@@ -1,0 +1,33 @@
+
+
+namespace kiwi
+{
+namespace generic
+{
+	
+template <typename T, unsigned int D>
+core::Reader* ArrayData::newReader(unsigned index)
+{
+	//TODO !
+	return new ArrayReader<T,D>(&_data[0], _increments);
+}
+
+core::Writer* ArrayData::newWriter(unsigned index)
+{
+	// TODO !
+	return new ArrayReader<T,D>(&_data[0], _increments);
+}
+
+bool ArrayData::isReaderCompatible(portIndex_t inputIndex, Reader* reader) const
+{
+	
+}
+
+bool ArrayData::isWriterCompatible(portIndex_t inputIndex, Writer* reader) const
+{
+	
+}
+
+
+} // namespace
+} // namespace

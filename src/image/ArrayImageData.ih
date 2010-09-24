@@ -1,0 +1,31 @@
+
+
+namespace kiwi
+{
+namespace image
+{
+	
+	
+core::Reader* ArrayData::newReader(unsigned index)
+{
+	
+}
+
+core::Writer* ArrayData::newWriter(unsigned index)
+{
+	
+}
+
+bool ArrayData::isReaderCompatible(portIndex_t inputIndex, Reader* reader) const
+{
+	
+}
+
+bool ArrayData::isWriterCompatible(portIndex_t inputIndex, Writer* reader) const
+{
+	
+}
+
+
+} // namespace
+} // namespace

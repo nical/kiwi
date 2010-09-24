@@ -1,0 +1,5 @@
+SET(KIWI_SRC ${KIWI_SRC} 
+		generic/GenericIterator.hpp
+		generic/ArrayIterator.hpp
+		generic/ArrayImage.hpp
+		)

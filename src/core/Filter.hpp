@@ -21,7 +21,11 @@ public:
 	 */ 
 	virtual void process() = 0;
 
-	virtual bool isReady() = 0;
+	bool isReady() {return _ready;}
+	
+	
+	bool isAFilter() {return true;}
+
 
 	Filter():Resource()
 	{
@@ -30,8 +34,15 @@ public:
 	~Filter()
 	{
 		
-	}	
+	}
 
+// ---------------------------------------------------------------------	
+protected:
+	void setReady(bool state) {_ready = state;}
+
+// ---------------------------------------------------------------------
+private:
+	bool _ready;
 
 };
 

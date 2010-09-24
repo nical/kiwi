@@ -7,9 +7,10 @@ namespace kiwi
 {
 namespace image
 {
-	
+
+
 template<typename ValueTypeT, unsigned DimensionT>
-class ImageReader
+class GenericImageReader
 {
 public:
 	// typedefs
@@ -17,12 +18,13 @@ public:
 	typedef DimensionT Dimension;
 	// interface
 	virtual ValueType get(const Point<ValueType,Dimension>& coordinates) = 0;
-	virtual ConstIterator<ValueType> begin() = 0;
-	virtual ConstIterator<ValueType> end() = 0;
+	virtual core::GenericConstIterator<ValueType> begin() = 0;
+	virtual core::GenericConstIterator<ValueType> end() = 0;
 };
 
+
 template<typename ValueTypeT, unsigned DimensionT>
-class ImageWriter
+class GenericImageWriter
 {
 public:
 	// typedefs
@@ -31,9 +33,10 @@ public:
 	// interface
 	virtual ValueType get(const Point<ValueType,Dimension>& coordinates) = 0;
 	virtual void set(const Point<ValueType,Dimension>& coordinates, ValueType val) = 0;
-	virtual Iterator<ValueType> begin() = 0;
-	virtual Iterator<ValueType> end() = 0;
+	virtual core::GenericIterator<ValueType> begin() = 0;
+	virtual core::GenericIterator<ValueType> end() = 0;
 };
+
 
 
 } //namespace image

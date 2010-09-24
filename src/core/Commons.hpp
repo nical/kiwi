@@ -12,6 +12,7 @@ namespace kiwi
 {
 
 typedef std::string string;
+typedef unsigned char portIndex_t;
 
 
 }

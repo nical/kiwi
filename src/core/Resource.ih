@@ -1,3 +1,17 @@
+//      This program is free software; you can redistribute it and/or modify
+//      it under the terms of the GNU General Public License as published by
+//      the Free Software Foundation; either version 2 of the License, or
+//      (at your option) any later version.
+//      
+//      This program is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU General Public License for more details.
+//      
+//      You should have received a copy of the GNU General Public License
+//      along with this program; if not, write to the Free Software
+//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+//      MA 02110-1301, USA.
 
 
 namespace kiwi
@@ -16,7 +30,7 @@ Resource::Resource()
 {
 
 }
-	
+
 Resource::~Resource()
 {
 	while(getReaderInputCount())
@@ -39,53 +53,6 @@ Resource::~Resource()
 		delete _writerOutputs[_writerOutputs.size()-1];
 		removeWriterOutputPort();
 	}
-}
-
-
-
-template<typename ReaderType>
-ReaderType* Resource::newReaderFromInput(portIndex_t index) const
-{
-	ScopedBlockMacro(proc_block, "Resource::newReaderFromInput()");
-	assert(index < getReaderInputCount() );
-
-	OutputPort<Reader>* p = _readerInputs[index]->connectedOutput();
-	Reader* readerPtr = p->resource()->newReader( p->index() );
-	if(!readerPtr)
-	{
-		debug.error() << "Resource::newReaderFromInput() : nil Reader pointer " << endl();
-		return 0;
-	};
-	ReaderType* tempPtr = dynamic_cast<ReaderType*>( readerPtr );
-	if(!tempPtr)
-	{
-		delete readerPtr;
-		debug.error() << "Resource::newReaderFromInput() : uncompatible Reader types " << endl();
-		return 0;
-	}
-	return tempPtr;
-}
-
-template<typename WriterType>
-WriterType* Resource::newWriterFromInput(portIndex_t index) const
-{
-	ScopedBlockMacro(proc_block, "Resource::newWriterFromInput()");
-	assert(index < getWriterInputCount() );
-	OutputPort<Writer>* p = _writerInputs[index]->connectedOutput();
-	Writer* writerPtr = p->resource()->newWriter( p->index() );
-	if(!writerPtr)
-	{
-		debug.error() << "Resource::newWriterFromInput() : nil Writer pointer " << endl();
-		return 0;
-	};
-	WriterType* tempPtr = dynamic_cast<WriterType*>( writerPtr );
-	if(!tempPtr)
-	{
-		delete writerPtr;
-		debug.error() << "Resource::newWriterFromInput() : uncompatible Writer types " << endl();
-		return 0;
-	}
-	return tempPtr;
 }
 
 
@@ -183,7 +150,7 @@ void Resource::InputPort<SlotType>::disconnect()
 // ---------------------------------------------------------- OutputPort
 
 template <typename SlotType>
-Resource::OutputPort<SlotType>::OutputPort(Resource* myResource, Resource::portIndex_t myPort, const string& name)
+Resource::OutputPort<SlotType>::OutputPort(Resource* myResource, portIndex_t myPort, const string& name)
 {
 	_myResource = myResource;
 	_myIndex = myPort;
@@ -201,7 +168,7 @@ void Resource::OutputPort<SlotType>::disconnect()
 	}
 }
 
-
+/*
 template <>
 bool Resource::InputPort<Reader>::isCompatible(Resource::OutputPort<Reader>& output)
 {
@@ -220,6 +187,7 @@ bool Resource::InputPort<Writer>::isCompatible(Resource::OutputPort<Writer>& out
 	return result;
 }
 
+*/
 
 
 
@@ -241,24 +209,6 @@ bool operator >> (Resource::OutputPort<SlotType>& output, Resource::InputPort<Sl
 		return true;
 	}else{return false;}
 }
-
-
-template <typename SlotType>
-class InputPortPtrClass
-{
-public:
-	InputPortPtrClass(Resource::InputPort<SlotType>* p) : ptr(p) {}
-	Resource::InputPort<SlotType>* ptr;
-};
-
-
-template <typename SlotType>
-class OutputPortPtrClass
-{
-public:
-	OutputPortPtrClass(Resource::OutputPort<SlotType>* p) : ptr(p) {}
-	Resource::OutputPort<SlotType>* ptr;
-};
 
 
 

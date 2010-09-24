@@ -1,3 +1,18 @@
+//      This program is free software; you can redistribute it and/or modify
+//      it under the terms of the GNU General Public License as published by
+//      the Free Software Foundation; either version 2 of the License, or
+//      (at your option) any later version.
+//      
+//      This program is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU General Public License for more details.
+//      
+//      You should have received a copy of the GNU General Public License
+//      along with this program; if not, write to the Free Software
+//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+//      MA 02110-1301, USA.
+
 /**
  * @file Resource.h
  * @brief Header file for the base class of every kiwi resource and filter.
@@ -50,7 +65,7 @@ public:
 	/**
 	 * The scalar type used for indexing the ports.
 	 */ 
-	typedef unsigned char portIndex_t;
+	//typedef unsigned char portIndex_t;
 
 
 // -------------------------------------------- constructor / Destructor
@@ -68,58 +83,25 @@ public:
 
 
 // ----------------------------------------------------- virtual methods
-	/**
-	 *	@brief Allocates a new Reader that is to be passed to an other Resource.
-	 *
-	 * Allocates a new Reader that is to be passed to an other Resource.
-	 * This method should be implemented by every Resource/Filter.
-	 * 
-	 * 	@param index The index of the output port that to which corresponds the requested Reader.
-	 *	@return A pointer to the Reader allocated by this method 
-	 */ 
-	virtual Reader* newReader(unsigned index) = 0;
-
-	/**
-	 *	@brief Allocates a new Reader that is to be passed to an other Resource
-	 *
-	 * Allocates a new Reader that is to be passed to an other Resource.
-	 * This method should be implemented by every Resource/Filter.
-	 * 
-	 * 	@param index The index of the output port that to which corresponds the requested Reader.
-	 *	@return A pointer to the Reader allocated by this method 
-	 */ 
-	virtual Writer* newWriter(unsigned index) = 0;
 
 	/**
 	 * @brief Verifies the compatibility of a given Reader to one of the input ports
 	 *
-	 * Returns true if the Reader passed in parameter is compatible with the input ports, by trying
-	 * to downcast it.
+	 * Returns true if the output port passed in parameter is compatible with the input ports.
 	 * This method must be implemented by every Resource/Filter.
 	 *
 	 * @param inputIndex The index of the input port concerned
-	 * @param reader A pointer to the Reader that is to be checked.
+	 * @param port A reference to the output port that is to be checked.
 	 */
-	virtual bool isReaderCompatible(portIndex_t inputIndex, Reader* reader) = 0;
+	virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Reader>& port) const {return false;}
+	virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Writer>& port) const {return false;}
 
-	/**
-	 * @brief Verifies the compatibility of a given Writer to one of the input ports
-	 *
-	 * Returns true if the Writer passed in parameter is compatible with the input ports, by trying
-	 * to downcast it.
-	 * This method must be implemented by every Resource/Filter.
-	 *
-	 * @param inputIndex The index of the input port concerned
-	 * @param writer A pointer to the Writer that is to be checked.
-	 */
-	virtual bool isWriterCompatible(portIndex_t inputIndex, Writer* reader) = 0;
-
+	
 	/// TODO
 	//virtual void save(std::ostream out);
 	//virtual void load(std::istream in);
 
 	
-
 	virtual void layoutChanged() { }
 
 // ------------------------------------------------------- pulic methods
@@ -179,6 +161,8 @@ public:
 	 */
 	inline unsigned getWriterOutputCount() const {return _readerOutputs.size();}
 	
+	virtual bool isAFilter() {return false;}
+	
 // --------------------------------------------------- protected methods	
 protected:
 	// port setup
@@ -236,34 +220,6 @@ protected:
 	 */
 	void removeWriterOutputPort();
 	
-	// for internal use
-	/**
-	 * @brief Get a Reader to access the data conected to this Resource's inputs.
-	 *
-	 * Allocates and returns a pointer to a Reader to access the data conected to this Resource's inputs.
-	 * The resulting pointer is dowcasted to the ReaderType type. If the downcast is not possible, returns 0.
-	 * The returned pointer must be deleted after use to avoid memory leaks. A good practice would be
-	 * to put it directly in a scoped pointer.
-	 *
-	 * @param ReaderType Template parameter that defines the downcasted Reader type.
-	 * @param index The index of this Resource's input port concerned.
-	 */ 
-	template<typename ReaderType>
-	ReaderType* newReaderFromInput(portIndex_t index) const;
-
-	/**
-	 * @brief Get a Writer to access the data conected to this Resource's Writer inputs.
-	 *
-	 * Allocates and returns a pointer to a Writer to access and modify the data conected to this Resource's inputs.
-	 * The resulting pointer is dowcasted to the ReaderType type. If the downcast is not possible, returns 0.
-	 * The returned pointer must be deleted after use to avoid memory leaks. A good practice would be
-	 * to put it directly in a scoped pointer.
-	 * 
-	 * @param ReaderType Template parameter that defines the downcasted Reader type.
-	 * @param index The index of this Resource's input port concerned.
-	 */ 
-	template<typename WriterType>
-	WriterType* newWriterFromInput(portIndex_t index) const;
 	
 
 // ----------------------------------------------------- private members
@@ -355,6 +311,8 @@ public:
 class Reader
 {
 public:
+	// TODO any way to force the children classes to implement the following constructor ?
+	//Reader(const Resource::InputPort<Reader>& port);
 	virtual ~Reader() {}
 };
 
@@ -367,8 +325,19 @@ class Writer
 public:
 	virtual ~Writer() {}
 };
-
-
+/*
+class PortInfo
+{
+public:
+	PortInfo(Resource* resource, unsigned int port) 
+		: _resource(resource), _port(port){}
+	Resource* resource() const {return _resource;}
+	unsigned int port() const {return _port;}
+protected:
+	Resource* _resource;
+	unsigned int port;
+};
+*/
 // ----------------------------------------------------------- Operators
 /**
  *	@brief Operator for connections between Resource

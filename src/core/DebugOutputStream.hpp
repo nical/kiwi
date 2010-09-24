@@ -12,12 +12,11 @@
 #define BEGIN_BLOCK_MESSAGE " Begin block "
 #define END_BLOCK_MESSAGE " End block "
 
-#define ScopedBlockMacro(vname, message) ScopedBlock vname(message);
+#define ScopedBlockMacro(vname, message) kiwi::ScopedBlock vname(message);
+
 
 
 namespace kiwi
-{
-namespace core
 {
 
 
@@ -165,7 +164,7 @@ protected:
 };
 
 
-} //namespace
+
 } //namespace
 
 //#include "DebugOutputStream.ih"

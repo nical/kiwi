@@ -6,26 +6,6 @@ namespace audio
 {
 
 
-/*
-
-template<typename T>
-AudioSampleBuffer<T>::AudioSampleBuffer(ValueType* data, unsigned int size, bool reAllocate )
-	: _size(size), _reAllocated(reAllocate);
-{
-	if(reAllocate)
-	{
-		_data = new T[size];
-		for(unsigned int i = 0; i < size; ++i)
-		{
-			_data[i] = data[i];
-		}
-	}
-	else
-	{
-		_data = data;
-	}
-}
-*/
 
 template<typename T>
 AudioSampleBuffer<T>::~AudioSampleBuffer()

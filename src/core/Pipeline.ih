@@ -1,4 +1,6 @@
 
+#include <set>
+#include <utility>
 
 namespace kiwi
 {
@@ -13,23 +15,37 @@ Pipeline::Pipeline()
 
 }
 
+
+
 bool Pipeline::contains(Resource* resource)
 {
-	for(std::list<Filter*>::iterator it = _filterList.begin();
-		it != _filterList.end(); ++it)
+	ScopedBlockMacro(s1, "kiwi::core::Pipeline: contains");
+	Filter* fPtr = dynamic_cast<Filter*>(resource);
+	if(fPtr)
 	{
-		if(*it = filter) return true;
+		if(findFilter(fPtr) >= 0) return true;
+		else return false;
 	}
+	// TODO findResource
 	return false;
+}
+
+int Pipeline::findFilter(Resource* filter)
+{
+	for (int i = 0; i < _filters.size(); ++i)
+		if(_filters[i] == filter) return i;
+	
+	return -1; //if not found
 }
 
 bool Pipeline::add(Resource* toAdd)
 {
+	ScopedBlockMacro(s1, "kiwi::core::Pipeline::add()");
 	if(!contains(toAdd))
 	{
-		if(isFilter())
+		if(toAdd->isAFilter())
 		{
-			_filterList.push_front(toAdd);
+			_filters.push_back(static_cast<Filter*>(toAdd));
 			return true;
 		}
 		else
@@ -41,10 +57,80 @@ bool Pipeline::add(Resource* toAdd)
 	return false;
 }
 
-bool Pipeline::update()
+unsigned int Pipeline::index(unsigned int x, unsigned int y)
 {
-	return false;
+	return x + y * _filters.size();
 }
+
+void Pipeline::update()
+{
+	unsigned tableSize = _filters.size()*_filters.size();
+	// possibly reallocate the table
+	if(_filters.size() != _lastSize)
+	{
+		delete[] _lookupTable;
+		_lookupTable = new char[tableSize];
+	}
+	// init the table
+	for( unsigned i = 0; i < tableSize; ++i)
+	{
+		_lookupTable[i] = 0;
+	}
+
+	// find direct relations 
+	for(unsigned int i = 0; i < _filters.size();++i)
+	{
+		Filter* F = _filters[i];
+		std::set<unsigned int> prevFilters;
+		for(int j = F->getReaderInputCount() - 1; j >= 0; ++j )
+		{
+			int fi = findFilter( F->readerInputPort(j).resource() );
+			if(fi >= 0) prevFilters.insert( fi );
+		}
+		for(std::set<unsigned int>::iterator it = prevFilters.begin()
+		; it != prevFilters.end()
+		; ++it)
+		{	//TODO  syntaxe error with iterators here
+			_lookupTable[index(i, *it)] = 1;
+			_lookupTable[index(*it, i)] = -1;
+		}
+	}
+
+	// indirect relations
+	for(unsigned int i = 0; i < _filters.size();++i)
+	{
+		updateTableRec(i, i);
+	}
+
+}
+	
+	
+
+void Pipeline::updateTableRec(unsigned index1, unsigned index2)
+{
+	if(index1 != index2)
+	{
+		for(unsigned i3 = 0; i < _filters.size(); ++i)
+			if(_lookupTable[index(index2, i3)] == -1)
+			{
+				if(_lookupTable[index(index1, i3)] != -1;)
+				{
+					_lookupTable[index(index1, i3)] = -2;
+					_lookupTable[index(i3, index1)] = 2;
+				}
+				updateTableRec(index1, i3);
+			}
+	}
+	else
+	{
+		for(unsigned i3 = 0; i < _filters.size(); ++i)
+			if(_lookupTable[index(index2, i3)] == -1)
+			{
+				updateTableRec(index1, i3);
+			}
+	}
+}
+	
 
 void Pipeline::printErrors()
 {
@@ -53,7 +139,9 @@ void Pipeline::printErrors()
 
 void Pipeline::process()
 {
-	
+	ScopedBlockMacro(s1, "kiwi::core::Pipeline::process()");
+
+
 }
 
 

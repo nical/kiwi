@@ -1,5 +1,7 @@
 SET(KIWI_TESTS_SRC
-   testFilter.cpp)
+   testFilter.cpp
+#	testPipeline.cpp
+   )
 
 
 FOREACH(FILE ${KIWI_TESTS_SRC})

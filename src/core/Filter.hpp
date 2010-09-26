@@ -26,7 +26,6 @@ namespace kiwi
 namespace core
 {
 
-
 	
 class Filter : public Resource
 {

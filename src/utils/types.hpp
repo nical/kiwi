@@ -51,9 +51,6 @@ template<typename T> inline bool isPointer(T var = 0){ return true; }
 template<typename T> inline const char* str(T var = 0){ return "unknown type"; }
 
 
-template <typename T1, typename T2> struct SAME_TYPE{enum {RESULT = 0};};
-template <typename T1> struct SAME_TYPE<T1,T1>{enum {RESULT = 1};};
-
 /**
  * @brief Returns true if T1 and T2 are of the same type;
  */ 

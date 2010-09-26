@@ -4,6 +4,7 @@
 #include "core/Filter.hpp"
 
 #include "generic/SimpleValue.hpp"
+#include "generic/ArrayData.hpp"
 
 #include "utils/types.hpp"
 
@@ -35,8 +36,7 @@ public:
 		addReaderInputPort(sType, "A");
 		addReaderInputPort(sType, "B");
 		
-		addWriterInputPort(sType, "Write Result");
-		
+		addWriterInputPort(sType, "Write Result");	
 	}
 	~TestFilter() {}
 
@@ -107,6 +107,11 @@ debug.beginBlock("int main() ");
 
 	myTest.process();
 	
+	debug.beginBlock("Array Container test");
+		
+		ArrayData<float, 1> array()
+		
+	debug.endBlock("Array Container test");
 	
 	
 debug.endBlock();

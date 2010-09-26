@@ -28,11 +28,12 @@ using namespace std;
 
 Resource::Resource()
 {
-
+	debug.print() << "Resource::constructor"<<endl();
 }
 
 Resource::~Resource()
 {
+	debug.print() << "Resource::destructor"<<endl();
 	while(getReaderInputCount())
 	{
 		delete _readerInputs[_readerInputs.size()-1];
@@ -53,56 +54,70 @@ Resource::~Resource()
 		delete _writerOutputs[_writerOutputs.size()-1];
 		removeWriterOutputPort();
 	}
+
 }
 
 
-void Resource::addReaderInputPort(const string& name)
+void Resource::addReaderInputPort(const string& type, const string& name)
 {
-//debug.beginBlock("addReaderInputPort("+name+")");
+//ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 	portIndex_t index = getReaderInputCount();
-	_readerInputs.push_back( new InputPort<Reader>(this, index, name) );
-//debug.endBlock();
+	_readerInputs.push_back( new InputPort<Reader>(this, index, type, name) );
+	layoutChanged();
 }
-void Resource::addReaderOutputPort(const string& name)
+void Resource::addReaderOutputPort(const string& type, const string& name)
 {
-//debug.beginBlock("addReaderOutputPort("+name+")");
+//ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 	portIndex_t index = getReaderOutputCount();
-	_readerOutputs.push_back( new OutputPort<Reader>(this, index, name) );
-//debug.endBlock();
+	_readerOutputs.push_back( new OutputPort<Reader>(this, index, type, name) );
+	layoutChanged();
 }
 
-void Resource::addWriterInputPort(const string& name)
+void Resource::addWriterInputPort(const string& type, const string& name)
 {
-//debug.beginBlock("addWriterInputPort("+name+")");
+//ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 	portIndex_t index = getWriterInputCount();
-	_writerInputs.push_back( new InputPort<Writer>(this, index, name) );
-//debug.endBlock();
+	_writerInputs.push_back( new InputPort<Writer>(this, index, type, name) );
+	layoutChanged();
 }
-void Resource::addWriterOutputPort(const string& name)
+void Resource::addWriterOutputPort(const string& type, const string& name)
 {
-//debug.beginBlock("addWriterOutputPort("+name+")");
+//ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 	portIndex_t index = getWriterOutputCount();
-	_writerOutputs.push_back( new OutputPort<Writer>(this, index, name) );
-//debug.endBlock();
+	_writerOutputs.push_back( new OutputPort<Writer>(this, index, type, name) );
+	layoutChanged();
+
 }
 
+/*			---- TODO ----
+void Resource::addReaderOutputPortFromResource(const ReaderOutputPort& port)
+{
+	port.setSecondaryResource(this);
+	_writerOutputs.push_back( port );
+	layoutChanged();
+}
+*/
 
 void Resource::removeReaderInputPort()
 {
 	_readerInputs.pop_back();
+	layoutChanged();
 }
 void Resource::removeReaderOutputPort()
 {
 	_readerOutputs.pop_back();
+	layoutChanged();
 }
 
 void Resource::removeWriterInputPort()
 {
 	_writerInputs.pop_back();
+	layoutChanged();
 }
 void Resource::removeWriterOutputPort()
 {
 	_readerOutputs.pop_back();
+	layoutChanged();
 }
 
 // -----------------------------------------------------------------------------------------
@@ -111,12 +126,14 @@ void Resource::removeWriterOutputPort()
 
 // ----------------------------------------------------------- InputPort
 template <typename SlotType>
-Resource::InputPort<SlotType>::InputPort(Resource* myResource, portIndex_t myPort, const string& name)
+Resource::InputPort<SlotType>::InputPort(
+	Resource* myResource
+	, portIndex_t myIndex
+	, const string& type
+	, const string& name )
+: _myResource(myResource), _myIndex(myIndex), _type(type), _name(name)
+, _connectedResource(0)
 {
-	_connectedResource = 0;
-	_myResource = myResource;
-	_myIndex = myPort;
-	_name = name;
 }
 
 
@@ -124,8 +141,16 @@ template <typename SlotType>
 void Resource::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort)
 {
 debug.beginBlock( "esource::InputPort<SlotType>::connect" );
+	if(isCompatible(outputPort) )
+	{
 	_connectedResource = &outputPort;
 	outputPort._connections.push_back(this);
+	}
+	else
+	{
+		debug.error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
+		debug.error() << outputPort.getType() << " >> " << getType() << endl();
+	}
 debug.endBlock();
 }
 
@@ -150,11 +175,13 @@ void Resource::InputPort<SlotType>::disconnect()
 // ---------------------------------------------------------- OutputPort
 
 template <typename SlotType>
-Resource::OutputPort<SlotType>::OutputPort(Resource* myResource, portIndex_t myPort, const string& name)
+Resource::OutputPort<SlotType>::OutputPort(
+	Resource* myResource
+	, portIndex_t myIndex
+	, const string& type
+	, const string& name )
+: _myResource(myResource), _myIndex(myIndex), _type(type), _name(name)
 {
-	_myResource = myResource;
-	_myIndex = myPort;
-	_name = name;
 }
 
 
@@ -168,26 +195,6 @@ void Resource::OutputPort<SlotType>::disconnect()
 	}
 }
 
-/*
-template <>
-bool Resource::InputPort<Reader>::isCompatible(Resource::OutputPort<Reader>& output)
-{
-	Reader* theReader = output.resource()->newReader(output.index());
-	bool result = _myResource->isReaderCompatible(_myIndex, theReader );
-	delete theReader;
-	return result;
-}
-
-template <>
-bool Resource::InputPort<Writer>::isCompatible(Resource::OutputPort<Writer>& output)
-{
-	Writer* theWriter = output.resource()->newWriter(output.index());
-	bool result = _myResource->isWriterCompatible(_myIndex, theWriter );
-	delete theWriter;
-	return result;
-}
-
-*/
 
 
 

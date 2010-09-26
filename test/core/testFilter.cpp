@@ -5,57 +5,83 @@
 
 #include "generic/SimpleValue.hpp"
 
+#include "utils/types.hpp"
+
 #include <vector>
 
 using namespace kiwi;
 using namespace kiwi::core;
 
+typedef kiwi::generic::ValueReader<float> FloatReader; 
+typedef kiwi::generic::ValueWriter<float> FloatWriter;
+
+
+// ---------------------------------------------------------------------------------------
+// --------------------- A simple Filter -------------------------------------------------
+// ---------------------------------------------------------------------------------------
+
+
+
+// compute the sum of two Value<> resources and place it in an other Value<>
+template<typename TValueType>
 class TestFilter : public Filter
 {
 public:
 	
-
+// ---------------------------------------------------------------------------------------
 	TestFilter() : Filter()
 	{
-		addReaderInputPort("A");
-		addReaderInputPort("B");
+		kiwi::string sType( kiwi::string("value_")+ types::str<TValueType>() );
+		addReaderInputPort(sType, "A");
+		addReaderInputPort(sType, "B");
 		
-		addWriterInputPort("< Result");
+		addWriterInputPort(sType, "Write Result");
+		
 	}
 	~TestFilter() {}
 
+// ---------------------------------------------------------------------------------------
 	void process()
 	{
-		typedef generic::ValueReader<float> FloatResource; 
 		ScopedBlockMacro(proc_block, "TestFilter::process()");
+		if(!isReady() )
+		{
+			debug.error() << "TestFilter::Process error : not ready" << endl();
+			return;
+		}
 
 		debug.print() << "Allocate Reader #0" << endl;
-		FloatResource A(dynamic_cast<generic::ValueHolder<float>*>(readerInputPort(0).connectedOutput()->resource()), readerInputPort(0).connectedOutput()->index() );
+		FloatReader A( readerInputPort(0) );
 		
 		debug.print() << "Allocate Reader #1" << endl;
-		FloatResource B(dynamic_cast<generic::ValueHolder<float>*>(readerInputPort(1).connectedOutput()->resource()), readerInputPort(1).connectedOutput()->index() );
+		FloatReader B( readerInputPort(1) );
 		
-		debug.print() << "Allocate Writer #0" << endl;		
-		FloatResource result(dynamic_cast<generic::ValueHolder<float>*>(writerInputPort(0).connectedOutput()->resource()), readerInputPort(0).connectedOutput()->index() );
-
+		debug.print() << "Allocate Writer #0" << endl;
+		FloatWriter result( writerInputPort(0) );
 		
-		
+		debug.beginBlock( "compute..");
+			result.set( A.get() + A.get() );
+			debug.print() << "result :" << result.get() << endl();
+		debug.endBlock( "compute..");
 	}
 	
-	// Resource implementation -----------------------------------------
-	// This Resource has no input port so nothing to be compatible with
-	virtual bool isCompatible(portIndex_t, const OutputPort<Reader>&) const 
-	{ return true; }
-	virtual bool isCompatible(portIndex_t, const OutputPort<Writer>&) const 
-	{ return true; }
 	
-	bool isReady()
+// ---------------------------------------------------------------------------------------
+	bool readyCondition()
 	{
 		return (readerInputPort(0).isConnected()
 			&& readerInputPort(1).isConnected()
 			&& writerInputPort(0).isConnected() );
 	}
 };
+
+
+
+// ---------------------------------------------------------------------------------------
+// ---------------------------- Main -----------------------------------------------------
+// ---------------------------------------------------------------------------------------
+
+
 
 
 int main()
@@ -68,14 +94,14 @@ debug.beginBlock("int main() ");
 	debug.beginBlock("Allocate the resources");
 		generic::Value<float> resource1(10);
 		generic::Value<float> resource2(10);
-		generic::Value<float> resourceResult(10);
+		generic::Value<float> resourceResult(42);
 
-		TestFilter myTest;
+		TestFilter<float> myTest;
 	debug.endBlock();
 
 	debug.beginBlock("connect the ports");
 		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);
-		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);	
+		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
 		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
 	debug.endBlock();
 

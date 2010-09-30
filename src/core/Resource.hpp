@@ -172,6 +172,7 @@ public:
 	 */ 
 	virtual bool isAFilter() {return false;}
 	
+	inline bool isLayoutEventEnabled() { return _layoutEvtEnabled; }
 	
 	
 // --------------------------------------------------- protected methods	
@@ -256,8 +257,43 @@ protected:
 		writerOutputPort(index).setEnabled(status);
 	}
 	
-	inline void SetLayoutEventsEnabled(bool status) { _layoutEvtEnabled = status; }
-	inline bool isLayoutEventsEnabled() { return _layoutEvtEnabled; }
+	/**
+	 * @brief Enables/disables the automatic call to layoutChanged()
+	 * 
+	 * Disabling layoutChanged() is sometimes necessary, for exemple 
+	 * within the constructor or the destructor as in many cases
+	 * layout changed needs the object to be completely initialized.
+	 * Note that it is useless to disable it if layoutChanged() is not 
+	 * overloaded by the child class.
+	 */ 
+	inline void SetLayoutEventEnabled(bool status) { _layoutEvtEnabled = status; }
+	
+	/**
+	 * @brief Redirect a port to the port another Resource's port.
+	 * 
+	 * bindPort allows a Resource to have ports that are in fact pointing 
+	 * to another Resource instead of itself.
+	 * Each port contains knows both the Resource that contains it and also
+	 * the Resource that actuly contains the data.
+	 * This distinction permits to have for instance a Resource that 
+	 * contains other Resources and redirects its ports to the one of the
+	 * contained Resource (for exemple Pipelines). 
+	 * Another use of this method is for any Filter that writes in a 
+	 * Resource to provide the output readers of the Resource in its own
+	 * outputs.
+	 * 
+	 * @param myPort This class's port that has to be redirected to another Resource's port.
+	 * @param toBind ...
+	 */ 
+	inline void bindPort(ReaderOutputPort& myPort, const ReaderOutputPort& toBind)
+		{ myPort.bind(toBind); }
+	inline void bindPort(WriterOutputPort& myPort, const WriterOutputPort& toBind)
+		{ myPort.bind(toBind); }
+	inline void bindPort(ReaderInputPort& myPort, const ReaderInputPort& toBind)
+		{ myPort.bind(toBind); }
+	inline void bindPort(WriterInputPort& myPort, const WriterInputPort& toBind)
+		{ myPort.bind(toBind); }
+	
 // ----------------------------------------------------- private members
 private:
 

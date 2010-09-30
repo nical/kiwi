@@ -64,14 +64,14 @@ void Resource::addReaderInputPort(const string& type, const string& name)
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 	portIndex_t index = getReaderInputCount();
 	_readerInputs.push_back( new InputPort<Reader>(this, index, type, name) );
-	if( isLayoutEventsEnabled() ) layoutChanged();
+	if( isLayoutEventEnabled() ) layoutChanged();
 }
 void Resource::addReaderOutputPort(const string& type, const string& name)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 	portIndex_t index = getReaderOutputCount();
 	_readerOutputs.push_back( new OutputPort<Reader>(this, index, type, name) );
-	if( isLayoutEventsEnabled() ) layoutChanged();
+	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void Resource::addWriterInputPort(const string& type, const string& name)
@@ -79,14 +79,14 @@ void Resource::addWriterInputPort(const string& type, const string& name)
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 	portIndex_t index = getWriterInputCount();
 	_writerInputs.push_back( new InputPort<Writer>(this, index, type, name) );
-	if( isLayoutEventsEnabled() ) layoutChanged();
+	if( isLayoutEventEnabled() ) layoutChanged();
 }
 void Resource::addWriterOutputPort(const string& type, const string& name)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 	portIndex_t index = getWriterOutputCount();
 	_writerOutputs.push_back( new OutputPort<Writer>(this, index, type, name) );
-	if( isLayoutEventsEnabled() ) layoutChanged();
+	if( isLayoutEventEnabled() ) layoutChanged();
 
 }
 
@@ -96,23 +96,23 @@ void Resource::addWriterOutputPort(const string& type, const string& name)
 void Resource::removeReaderInputPort()
 {
 	_readerInputs.pop_back();
-	if( isLayoutEventsEnabled() ) layoutChanged();
+	if( isLayoutEventEnabled() ) layoutChanged();
 }
 void Resource::removeReaderOutputPort()
 {
 	_readerOutputs.pop_back();
-	if( isLayoutEventsEnabled() ) layoutChanged();
+	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void Resource::removeWriterInputPort()
 {
 	_writerInputs.pop_back();
-	if( isLayoutEventsEnabled() ) layoutChanged();
+	if( isLayoutEventEnabled() ) layoutChanged();
 }
 void Resource::removeWriterOutputPort()
 {
 	_readerOutputs.pop_back();
-	if( isLayoutEventsEnabled() ) layoutChanged();
+	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 // -----------------------------------------------------------------------------------------
@@ -151,14 +151,17 @@ ScopedBlockMacro(__sccop, "Resource::InputPort<SlotType>::connect" );
 	}
 	if(isCompatible(outputPort) )
 	{
-	if( isConnected() ) disconnect();
-	_connectedResource = &outputPort;
-	outputPort._connections.push_back(this);
+		if( isConnected() ) disconnect();
+		_connectedResource = &outputPort;
+		outputPort._connections.push_back(this);
+		if( _metaResource.resource->isLayoutEventEnabled() ) 
+			_metaResource.resource->layoutChanged();
 	}
 	else
 	{
 		debug.error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
 		debug.error() << outputPort.getType() << " >> " << getType() << endl();
+		return;
 	}
 
 }
@@ -184,6 +187,7 @@ ScopedBlockMacro(scp_block,"Resource::InputPort<SlotType>::disconnect");
 template <typename SlotType>
 void Resource::InputPort<SlotType>::bind(const InputPort<SlotType>& port)
 {
+	debug.print() << "port rebinding" << endl();
 	_subResource = port._subResource;
 	_type = port._type;
 	// note that if the binded Resource is deleted, trying to acces
@@ -221,7 +225,9 @@ void Resource::OutputPort<SlotType>::disconnect()
 template <typename SlotType>
 void Resource::OutputPort<SlotType>::bind(const OutputPort<SlotType>& port)
 {
-	_subResource = port._subResource;
+	debug.print() << "port rebinding" << endl();
+	_subResource.resource = port._subResource.resource;
+	_subResource.index = port._subResource.index;
 	_type = port._type;
 	// note that if the binded Resource is deleted, trying to acces
 	// this port might cause a segfault

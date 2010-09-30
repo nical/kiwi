@@ -17,9 +17,9 @@ typedef kiwi::generic::ValueReader<float> FloatReader;
 typedef kiwi::generic::ValueWriter<float> FloatWriter;
 
 
-// ---------------------------------------------------------------------------------------
-// --------------------- A simple Filter -------------------------------------------------
-// ---------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// --------------------- A simple Filter -------------------------------
+// ---------------------------------------------------------------------
 
 
 
@@ -31,11 +31,11 @@ public:
 	enum{ A = 0, B = 1};
 	enum{ WRITE = 0};
 	enum{ RESULT = 0};
-// ---------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------
 	TestFilter() : Filter()
 	{
 	ScopedBlockMacro(scp_block, "TestFilter::constructor");
-		SetLayoutEventsEnabled(false);
+		SetLayoutEventEnabled(false);
 		kiwi::string sType( kiwi::string("value_")+ types::str<TValueType>() );
 		addReaderInputPort(sType, "A");
 		addReaderInputPort(sType, "B");
@@ -46,24 +46,11 @@ public:
 		//port is connected
 		addReaderOutputPort(sType, "Result");
 		setReaderOutputPortEnabled(0,false);
-		SetLayoutEventsEnabled(true);
+		SetLayoutEventEnabled(true);
 	}
 	~TestFilter() {}
 
-	void layoutChanged()
-	{
-
-		if(writerInputPort(0).isConnected())
-		{
-			setReaderOutputPortEnabled(0,true);
-		}
-		else
-		{
-			readerOutputPort(0).disconnect();
-			setReaderOutputPortEnabled(0,false);
-		}
-
-	}
+	
 
 // ---------------------------------------------------------------------------------------
 	void process()
@@ -85,26 +72,47 @@ public:
 		FloatWriter result( writerInputPort(0) );
 		
 		debug.beginBlock( "compute..");
-			result.set( A.get() + A.get() );
+			result.set( A.get() + B.get() );
 			debug.print() << "result :" << result.get() << endl();
 		debug.endBlock( "compute..");
 	}
 	
 	
-// ---------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------
 	bool readyCondition()
 	{
 		return (readerInputPort(0).isConnected()
 			&& readerInputPort(1).isConnected()
 			&& writerInputPort(0).isConnected() );
 	}
+	
+	void layoutChanged()
+	{
+	ScopedBlockMacro(__scop, "TestFiler::layoutChanged")
+		if(writerInputPort(0).isConnected() )
+		{
+			if( !readerOutputPort(0).isEnabled() )
+			{
+				setReaderOutputPortEnabled(0,true);
+				ReaderOutputPort& op
+				= writerInputPort(0).connectedOutput()->resource()->readerOutputPort(0);
+				bindPort( readerOutputPort(0), op );
+			}
+		}
+		else
+		{
+			readerOutputPort(0).disconnect();
+			setReaderOutputPortEnabled(0,false);	
+		}
+
+	}
 };
 
 
 
-// ---------------------------------------------------------------------------------------
-// ---------------------------- Main -----------------------------------------------------
-// ---------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------- Main -----------------------------------
+// ---------------------------------------------------------------------
 
 
 
@@ -142,9 +150,16 @@ debug.beginBlock("int main() ");
 	debug.print() << endl();
 	
 	debug.beginBlock("Test: now this should work");
+		if(! myTest.isLayoutEventEnabled() )
+			debug.error() << "error : layoutEvent not enabled" << endl();
+		
+		if(myTest.readerOutputPort(0).resource() 
+			== myTest.readerOutputPort(0).metaResource() )
+			debug.error() << "error : binding badly done" << endl();
+			
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(1);
-		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
+		resourceResult.writerOutputPort(0) >> myTest2.writerInputPort(0);
 	debug.endBlock("Test: did it work ?");
 
 	debug.print() << endl();
@@ -152,11 +167,11 @@ debug.beginBlock("int main() ");
 	myTest.process();
 	myTest2.process();
 	
-	debug.beginBlock("Array Container test");
+	//debug.beginBlock("Array Container test");
 		
 		//ArrayData<float, 1> array()
 		
-	debug.endBlock("Array Container test");
+	//debug.endBlock("Array Container test");
 	
 	
 debug.endBlock();

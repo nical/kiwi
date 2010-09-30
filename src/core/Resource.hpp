@@ -46,7 +46,12 @@ namespace core
 
 class Reader;
 class Writer;
-
+class Resource;
+struct PortInfo
+{
+	Resource* resource;
+	portIndex_t index;
+};
 /**
  * @class Resource
  * @brief The base class for every kiwi Resource and Filter
@@ -167,6 +172,8 @@ public:
 	 */ 
 	virtual bool isAFilter() {return false;}
 	
+	
+	
 // --------------------------------------------------- protected methods	
 protected:
 	// port setup
@@ -220,8 +227,37 @@ protected:
 	 */
 	void removeWriterOutputPort();
 	
-	void addReaderOutputPortFromResource(const ReaderOutputPort& port );
-
+	/**
+	 * @brief Enables/disables port
+	 */ 
+	void setReaderInputPortEnabled(portIndex_t index, bool status)
+	{ 
+		readerInputPort(index).setEnabled(status);
+	}
+	/**
+	 * @brief Enables/disables port
+	 */
+	void setReaderOutputPortEnabled(portIndex_t index, bool status)
+	{ 
+		readerOutputPort(index).setEnabled(status);
+	}
+	/**
+	 * @brief Enables/disables port
+	 */
+	void setWriterInputPortEnabled(portIndex_t index, bool status)
+	{ 
+		writerInputPort(index).setEnabled(status);
+	}
+	/**
+	 * @brief Enables/disables port
+	 */
+	void setWriterOutputPortEnabled(portIndex_t index, bool status)
+	{ 
+		writerOutputPort(index).setEnabled(status);
+	}
+	
+	inline void SetLayoutEventsEnabled(bool status) { _layoutEvtEnabled = status; }
+	inline bool isLayoutEventsEnabled() { return _layoutEvtEnabled; }
 // ----------------------------------------------------- private members
 private:
 
@@ -230,6 +266,8 @@ private:
 	std::vector<InputPort<Writer>* > _writerInputs;
 	std::vector<OutputPort<Reader>* > _readerOutputs;
 	std::vector<OutputPort<Writer>* > _writerOutputs;
+	
+	bool _layoutEvtEnabled;
 
 //----------------------------------------------------- Internal Classes
 public:
@@ -252,32 +290,34 @@ public:
 		InputPort(Resource* myResource, portIndex_t myPort, const string& type, const string& name);
 		void connect(OutputPort<SlotType>& outputPort);
 		void disconnect();
+		inline portIndex_t index() const {return _subResource.index;}
+		inline Resource* resource() const {return _subResource.resource;}
+		inline portIndex_t metaIndex() const {return _metaResource.index;}
+		inline Resource* metaResource() const {return _metaResource.resource;}
 		inline string getName() {return _name;}
 		inline string getType() {return _type;}
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
 		inline bool isCompatible(OutputPort<SlotType>& output)	
 			{ return ( getType().find(output.getType())!= string::npos ); }
-		inline bool isConnected() const 
-			{ return (_connectedResource != 0); }
+		inline bool isConnected() const { return (_connectedResource != 0); }
+		inline bool isEnabled() const {return _enabled;}
 		inline OutputPort<SlotType>* connectedOutput() const 
 			{ return _connectedResource; }
-		inline portIndex_t index() const {return _myIndex;}
-		inline Resource* resource() const {return _myResource;}
-
 		
 	protected:
 		inline void setName(const string& name){_name = name;}
 		inline void setType(const string& type){_type = type;}
-		//inline unsigned externalCount() {return _myExtCount;}
+		void bind(const InputPort<SlotType>& port);
+		inline void setEnabled(bool status) {_enabled = status;}
 		
 	private:
+		PortInfo _metaResource;
+		PortInfo _subResource;
 		OutputPort<SlotType>* _connectedResource; // the Resource in input of this
-		Resource* _myResource; 			// this Resource
-		portIndex_t _myIndex;			// the index of this port
 		string _name;
 		string _type;
-		//unsigned int _myExtCount;
+		bool _enabled;
 	};
 
 	/**
@@ -301,40 +341,48 @@ public:
 		
 		// --------------------------------------------------------------------
 		OutputPort(Resource* myResource, portIndex_t myPort, const string& type, const string& name);
-		inline portIndex_t index() const {return _myIndex;}
-		inline Resource* resource() const {return _myResource;}
+		inline portIndex_t index() const {return _subResource.index;}
+		inline Resource* resource() const {return _subResource.resource;}
+		inline portIndex_t metaIndex() const {return _metaResource.index;}
+		inline Resource* metaResource() const {return _metaResource.resource;}
 		inline string getName() { return _name; }
 		inline string getType() { return _type; }
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
 		inline bool isCompatible(OutputPort<SlotType>& output)	
-			{ return ( getType().find(output.getType())!= string::npos ); }
-		inline bool isConnected() const 
-			{ return (_connections.size() != 0); }
-		inline connectionList connections() const {return _connections;}
+			{ return ( getType().find(output.getType())!= string::npos 
+			|| getType().find("any")!= string::npos ); }
+		inline bool isConnected() const { return (_connections.size() != 0); }
+		inline bool isEnabled() const { return _enabled; }
+		inline connectionList connections() const { return _connections; }
 		void disconnect(); //empty the connected resources list
 		
 	protected:
 		inline void setName(const string& name){_name = name;}
 		inline void setType(const string& type){_type = type;}
+		void bind(const OutputPort<SlotType>& port);
+		inline void setEnabled(bool status) {_enabled = status;}
+		
 	private:
-		Resource* _myResource;
-		portIndex_t _myIndex;
+		PortInfo _metaResource;
+		PortInfo _subResource;
 		connectionList _connections;
 		string _name;
 		string _type;
+		bool _enabled;
 	};
 
 
 
 }; // class Resource;
 
+
+
 //------------------------------------------------------- access classes
 /**
  * @class Reader
  * @brief The base class to read data from Resource.
  */ 
-
 class Reader
 {
 public:

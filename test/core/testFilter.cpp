@@ -28,17 +28,42 @@ template<typename TValueType>
 class TestFilter : public Filter
 {
 public:
-	
+	enum{ A = 0, B = 1};
+	enum{ WRITE = 0};
+	enum{ RESULT = 0};
 // ---------------------------------------------------------------------------------------
 	TestFilter() : Filter()
 	{
+	ScopedBlockMacro(scp_block, "TestFilter::constructor");
+		SetLayoutEventsEnabled(false);
 		kiwi::string sType( kiwi::string("value_")+ types::str<TValueType>() );
 		addReaderInputPort(sType, "A");
 		addReaderInputPort(sType, "B");
 		
 		addWriterInputPort(sType, "Write Result");	
+		
+		//add a reader output that will be available only when the writer
+		//port is connected
+		addReaderOutputPort(sType, "Result");
+		setReaderOutputPortEnabled(0,false);
+		SetLayoutEventsEnabled(true);
 	}
 	~TestFilter() {}
+
+	void layoutChanged()
+	{
+
+		if(writerInputPort(0).isConnected())
+		{
+			setReaderOutputPortEnabled(0,true);
+		}
+		else
+		{
+			readerOutputPort(0).disconnect();
+			setReaderOutputPortEnabled(0,false);
+		}
+
+	}
 
 // ---------------------------------------------------------------------------------------
 	void process()
@@ -97,19 +122,39 @@ debug.beginBlock("int main() ");
 		generic::Value<float> resourceResult(42);
 
 		TestFilter<float> myTest;
+		TestFilter<float> myTest2;
 	debug.endBlock();
+
+	debug.print() << endl();
+
+	debug.beginBlock("Test: this should not work");
+		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);
+	debug.endBlock("Test: it didn't work right ?");
+	
+	debug.print() << endl();
 
 	debug.beginBlock("connect the ports");
 		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
 		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
-	debug.endBlock();
+	debug.endBlock("connect the ports");
+	
+	debug.print() << endl();
+	
+	debug.beginBlock("Test: now this should work");
+		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);
+		resource1.readerOutputPort(0) >> myTest2.readerInputPort(1);
+		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
+	debug.endBlock("Test: did it work ?");
+
+	debug.print() << endl();
 
 	myTest.process();
+	myTest2.process();
 	
 	debug.beginBlock("Array Container test");
 		
-		ArrayData<float, 1> array()
+		//ArrayData<float, 1> array()
 		
 	debug.endBlock("Array Container test");
 	

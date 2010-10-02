@@ -1,7 +1,7 @@
 #pragma once
 /**
- * @file Resource.hpp
- * @brief A base class for kiwi resources.
+ * @file Point.hpp
+ * @brief a generic point/vector class.
  * @author Nicolas Silva
  * @version 0.1
  */
@@ -13,7 +13,7 @@
 
 namespace kiwi
 {
-namespace image
+namespace generic
 {
 
 
@@ -38,6 +38,7 @@ public:
 	//other methods
 	inline CoordType& coordinate(unsigned int index){return _coordinates[index];}
 	inline CoordType& operator[](unsigned int index){return _coordinates[index];}
+	inline CoordType& operator()(unsigned int index){return _coordinates[index];}
 
 	Point<CoordType,TDimension> operator + (const Point<CoordType,TDimension>& point);
 	Point<CoordType,TDimension> operator - (const Point<CoordType,TDimension>& point);

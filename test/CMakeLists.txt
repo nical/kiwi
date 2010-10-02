@@ -12,6 +12,21 @@ link_directories (${PROJECT_BINARY_DIR})
 
 #------TESTS subdirectories ------
 
-add_subdirectory(audio)
-add_subdirectory(core)
-add_subdirectory(image)
+SET(KIWI_TESTS_SRC
+	core/TestFilter.cpp
+	generic/TestArrayData.cpp
+	generic/TestPoint.cpp
+   )
+
+
+FOREACH(FILE ${KIWI_TESTS_SRC})
+  add_executable(${FILE} ${FILE})
+  target_link_libraries (${FILE} ${LIBKIWI_NAME})
+#  add_test(${FILE} ${FILE})
+ENDFOREACH(FILE)
+
+
+#add_subdirectory(audio)
+#add_subdirectory(core)
+#add_subdirectory(image)
+#add_subdirectory(generic)

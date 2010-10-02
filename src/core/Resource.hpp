@@ -266,7 +266,7 @@ protected:
 	 * Note that it is useless to disable it if layoutChanged() is not 
 	 * overloaded by the child class.
 	 */ 
-	inline void SetLayoutEventEnabled(bool status) { _layoutEvtEnabled = status; }
+	inline void setLayoutEventEnabled(bool status) { _layoutEvtEnabled = status; }
 	
 	/**
 	 * @brief Redirect a port to the port another Resource's port.

@@ -31,6 +31,7 @@ public:
 	inline std::ostream& error();
 	inline std::ostream& print();
 	inline std::ostream& emphase();
+	inline void endl(char n = 1);
 	//inline ScopedBlock scopedBlock(const string& message = "");
 protected:
 	std::string  prefixInfo();
@@ -94,6 +95,10 @@ std::ostream& DebugOutputStream::print()
 	 return std::cerr;
 }
 
+void DebugOutputStream::endl(char n)
+{
+	for(; n > 0; --n) print() << kiwi::endl();
+}
 
 // ------------------------------- prefixes
 

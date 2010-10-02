@@ -1,10 +1,10 @@
-#include "image/Point.hpp"
+#include "generic/Point.hpp"
 #include "core/Commons.hpp"
 #include <assert.h>
 int main()
 {
 
-typedef kiwi::image::Point<int,2> point2D;
+typedef kiwi::generic::Point<int,2> point2D;
 
 //ScopedBlockMacro(s1, "kiwi::TestPoint");
 	

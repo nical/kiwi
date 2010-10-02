@@ -12,8 +12,6 @@
 //      along with this program; if not, write to the Free Software
 //      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 //      MA 02110-1301, USA.
-#ifdef undefinedcrap
-
 
 #pragma once
 
@@ -21,7 +19,8 @@
 #define KIWI_ARRAYDATA_HPP
 
 #include "core/Resource.hpp"
-
+#include "generic/Point.hpp"
+#include "utils/types.hpp"
 #include <boost/lexical_cast.hpp>
 
 namespace kiwi
@@ -36,18 +35,13 @@ class ArrayData : public core::Resource
 {
 public:
 	typedef TValueType ValueType;
-
-	kiwi::string sType("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
-				+ types::str<TValueType>() );
-		addWriterInputPort(sType, "Write Result");
-
-	ArrayData()
-	{
-		for(unsigned i = 0; i < TComponents; ++i)
-		addReaderOutputPort(sType, portName(i) );
-
-	}
+	typedef Point<unsigned int, TDimension> Coordinates;
+	
+	enum{NUMBERS = 0, RVBA = 1, CMJN = 2, XYZ = 3, ABCD = 4 };
+	
+	ArrayData(Coordinates size, unsigned char nameHint = 0);
+	~ArrayData();
+	
 // --------------------------------------------------------- Overloading
 
 
@@ -56,26 +50,19 @@ public:
 	
 	ValueType * const getRawPointer() const;
 	
-	inline unsigned int size() const {return _data.size();}
+	inline unsigned int size() const {return _totalSize;}
 	inline unsigned int spanSize(unsigned int dimension);
 	
 protected:
 	
-	virtual kiwi::string portName(unsigned int index)
-	{
-		switch(index)
-		{
-			case 0 : { return "x"; }
-			case 1 : { return "y"; }
-			case 2 : { return "z"; }
-			case 3 : { return "w"; }
-			default : { return "#"; }
-		}
-	}
+	virtual kiwi::string portName(portIndex_t index, unsigned char nameHint) const;
 
 
-	vector<ValueType> _data;
-	unsigned int _increments[TDimension+1];
+
+	ValueType* _data;
+	bool _deleteDataDestructor;
+	unsigned int _totalSize;
+	Point<unsigned, TDimension> _spanSize;
 
 };	
 
@@ -90,5 +77,3 @@ protected:
 #include "ArrayData.ih"
 
 #endif
-
-#endif //temporary

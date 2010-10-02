@@ -3,8 +3,86 @@ namespace kiwi
 {
 namespace generic
 {
+
+template<typename T, unsigned int D, unsigned int C>
+ArrayData<T,D,C>::ArrayData(Coordinates size, unsigned char nameHint)
+{
+	_deleteDataDestructor = true;
+	_spanSize = size;
+	// compute the total size
+	_totalSize = C;
+	for(unsigned i = 0; i < D; ++i)
+		_totalSize*= size(i);
+	// allocate the data
+	_data = new T[_totalSize];
 	
 	
+	// disable the event so that layoutChanged() is not called from
+	// within the constructor
+	setLayoutEventEnabled(false);
+	// "compute" the runtime type name of this class in function of
+	// the template parameters
+	kiwi::string sType("array"
+			+ boost::lexical_cast<kiwi::string>(D)+"d_"
+			+ types::str<T>() );
+			
+	for(unsigned i = 0; i < C; ++i)
+	{
+		addWriterOutputPort( sType, portName(i,nameHint) );
+		addReaderOutputPort( sType, portName(i,nameHint) );
+	}
+	setLayoutEventEnabled(true);
+}
+
+
+
+template<typename T, unsigned int D, unsigned int C>
+ArrayData<T,D,C>::~ArrayData()
+{
+	if(_deleteDataDestructor) delete[] _data;
+	
+}
+
+template<typename T, unsigned int D, unsigned int C>
+kiwi::string ArrayData<T,D,C>::portName(portIndex_t index, unsigned char nameHint) const
+{
+	switch(nameHint)
+	{
+		case XYZ :
+		switch(index)
+		{
+			case 0 : { return "x"; }
+			case 1 : { return "y"; }
+			case 2 : { return "z"; }
+			case 3 : { return "w"; }
+			default : { return "#"; }
+		}
+		case RVBA :
+		switch(index)
+		{
+			case 0 : { return "r"; }
+			case 1 : { return "v"; }
+			case 2 : { return "b"; }
+			case 3 : { return "a"; }
+			default : { return "#"; }
+		}
+		case CMJN :
+		switch(index)
+		{
+			case 0 : { return "c"; }
+			case 1 : { return "m"; }
+			case 2 : { return "j"; }
+			case 3 : { return "n"; }
+			default : { return "#"; }
+		}
+		case ABCD : {
+			char a = 97+index;
+			return kiwi::string( &a );
+		}
+		default : return boost::lexical_cast<kiwi::string>(index);
+	}
+}	
+
 
 
 } // namespace

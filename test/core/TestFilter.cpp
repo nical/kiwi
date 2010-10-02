@@ -35,7 +35,7 @@ public:
 	TestFilter() : Filter()
 	{
 	ScopedBlockMacro(scp_block, "TestFilter::constructor");
-		SetLayoutEventEnabled(false);
+		setLayoutEventEnabled(false);
 		kiwi::string sType( kiwi::string("value_")+ types::str<TValueType>() );
 		addReaderInputPort(sType, "A");
 		addReaderInputPort(sType, "B");
@@ -46,7 +46,7 @@ public:
 		//port is connected
 		addReaderOutputPort(sType, "Result");
 		setReaderOutputPortEnabled(0,false);
-		SetLayoutEventEnabled(true);
+		setLayoutEventEnabled(true);
 	}
 	~TestFilter() {}
 
@@ -139,7 +139,7 @@ debug.beginBlock("int main() ");
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);
 	debug.endBlock("Test: it didn't work right ?");
 	
-	debug.print() << endl();
+	debug.endl();
 
 	debug.beginBlock("connect the ports");
 		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);
@@ -147,7 +147,7 @@ debug.beginBlock("int main() ");
 		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
 	debug.endBlock("connect the ports");
 	
-	debug.print() << endl();
+	debug.endl();
 	
 	debug.beginBlock("Test: now this should work");
 		if(! myTest.isLayoutEventEnabled() )
@@ -162,16 +162,10 @@ debug.beginBlock("int main() ");
 		resourceResult.writerOutputPort(0) >> myTest2.writerInputPort(0);
 	debug.endBlock("Test: did it work ?");
 
-	debug.print() << endl();
+	debug.endl();
 
 	myTest.process();
 	myTest2.process();
-	
-	//debug.beginBlock("Array Container test");
-		
-		//ArrayData<float, 1> array()
-		
-	//debug.endBlock("Array Container test");
 	
 	
 debug.endBlock();

@@ -1,0 +1,55 @@
+
+
+namespace kiwi
+{
+namespace generic
+{
+
+
+
+
+template<typename T, unsigned int D>
+ArrayDataWriter<T,D>::ArrayDataWriter(
+	const core::Resource::WriterInputPort& port
+)
+{
+	ArrayData<T,D>* resource = 
+		dynamic_cast< ArrayData<T,D>* >( 
+			port.connectedOutput()->resource() 
+		);
+	if(!resource)
+	{
+		debug.error() << "ArrayDataWriter<"
+			<<types::str<T>() 
+			<< ">::Constructor : "
+			<< "enable to determine the Resource type" 
+			<< endl();
+	}
+	_port = port.connectedOutput()->index();
+	_data = resource->getDataPointer(_port);
+	_incs = resource->getIncrements(_port);
+}
+
+
+
+template<typename T, unsigned int D>
+T ArrayDataWriter<T,D>::get(const Point<int,D>& coords) const
+{
+	unsigned index = 0;
+	for(unsigned i = 0; i < D; ++i)
+		index += _incs(i)*coords(i);
+		
+	return _data[index];
+}
+template<typename T, unsigned int D>
+void ArrayDataWriter<T,D>::set(const Point<int, D>& coords, ValueType value)
+{
+	unsigned index = 0;
+	for(unsigned i = 0; i < D; ++i)
+		index += _incs(i)*coords(i);
+		
+	_data[index] = value;
+}
+
+} // namespace
+} // namespace

@@ -8,7 +8,8 @@
 
 #include "utils/types.hpp"
 
-#include <vector>
+
+#include <assert.h>
 
 using namespace kiwi;
 using namespace kiwi::core;
@@ -36,11 +37,23 @@ public:
 	{
 	ScopedBlockMacro(scp_block, "TestFilter::constructor");
 		setLayoutEventEnabled(false);
+		
 		kiwi::string sType( kiwi::string("value_")+ types::str<TValueType>() );
+		
+		assert(this->getReaderInputCount() == 0 );
+		assert(this->getWriterInputCount() == 0 );
+		
 		addReaderInputPort(sType, "A");
+		
+		assert(this->getReaderInputCount() == 1 );
+		
 		addReaderInputPort(sType, "B");
 		
-		addWriterInputPort(sType, "Write Result");	
+		assert(this->getReaderInputCount() == 2 );
+		
+		addWriterInputPort(sType, "Write Result");
+		
+		assert(this->getWriterInputCount() == 0 );
 		
 		//add a reader output that will be available only when the writer
 		//port is connected
@@ -136,15 +149,26 @@ debug.beginBlock("int main() ");
 	debug.print() << endl();
 
 	debug.beginBlock("Test: this should not work");
-		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);
+		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);		
+		assert( !myTest.readerOutputPort(0).isConnected() );
+		assert( !myTest2.readerInputPort(0).isConnected() );
 	debug.endBlock("Test: it didn't work right ?");
 	
 	debug.endl();
 
 	debug.beginBlock("connect the ports");
-		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);
+		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);	
+			assert( resource1.readerOutputPort(0).isConnected() );
+			assert( myTest.readerInputPort(0).isConnected() );
+		
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
+			assert( resource2.readerOutputPort(0).isConnected() );
+			assert( myTest.readerInputPort(1).isConnected() );
+
 		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
+			assert( resourceResult.writerOutputPort(0).isConnected() );
+			assert( myTest.writerInputPort(0).isConnected() );
+
 	debug.endBlock("connect the ports");
 	
 	debug.endl();
@@ -152,19 +176,32 @@ debug.beginBlock("int main() ");
 	debug.beginBlock("Test: now this should work");
 		if(! myTest.isLayoutEventEnabled() )
 			debug.error() << "error : layoutEvent not enabled" << endl();
+		assert(myTest.isLayoutEventEnabled());
 		
 		if(myTest.readerOutputPort(0).resource() 
 			== myTest.readerOutputPort(0).metaResource() )
 			debug.error() << "error : binding badly done" << endl();
+		assert( myTest.readerOutputPort(0).resource() != myTest.readerOutputPort(0).metaResource() );	
 			
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);
+			assert( myTest.readerOutputPort(0).isConnected() );
+			assert( myTest2.readerInputPort(0).isConnected() );
+
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(1);
+			assert( resource1.readerOutputPort(0).isConnected() );
+			assert( myTest2.readerInputPort(1).isConnected() );
+
 		resourceResult.writerOutputPort(0) >> myTest2.writerInputPort(0);
+			assert( resourceResult.writerOutputPort(0).isConnected() );
+			assert( myTest.writerInputPort(0).isConnected() );
+
 	debug.endBlock("Test: did it work ?");
 
 	debug.endl();
-
+	
+	assert(myTest.isReady() );
 	myTest.process();
+	assert(myTest2.isReady() );
 	myTest2.process();
 	
 	

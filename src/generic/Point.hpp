@@ -155,7 +155,7 @@ template <typename T, unsigned int D>
 bool Point<T,D>::operator != (const Point<T,D>& point)
 {
 	for(unsigned int i = 0; i < D; ++ i)
-		if(_coordinates[i] == point._coordinates[i]) return true;
+		if(_coordinates[i] != point._coordinates[i]) return true;
 
 	return false;
 }

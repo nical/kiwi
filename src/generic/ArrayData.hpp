@@ -30,42 +30,59 @@ namespace generic
 
 
 
-template<typename TValueType, unsigned int TDimension, unsigned int TComponents>
+template<typename TValueType, unsigned int TDimension>
 class ArrayData : public core::Resource
 {
 public:
 	typedef TValueType ValueType;
 	typedef Point<unsigned int, TDimension> Coordinates;
+	typedef Point<unsigned int, TDimension+1> incsType;
 	
 	enum{NUMBERS = 0, RVBA = 1, CMJN = 2, XYZ = 3, ABCD = 4 };
 	
-	ArrayData(Coordinates size, unsigned char nameHint = 0);
+	/**
+	 * @brief constructor
+	 */ 
+	ArrayData(Coordinates size
+		, unsigned char nbComponents = 1
+		, unsigned char nameHint = 0 );
+	/**
+	 * @brief constructor
+	 */
+	ArrayData(ValueType* dataPtr
+		, Coordinates size
+		, unsigned char nbComponents = 1
+		, unsigned char nameHint = 0 );
+	/**
+	 * @brief destructor
+	 */
 	~ArrayData();
-	
-// --------------------------------------------------------- Overloading
-
 
 
 // -----------------------------------------------------------------
 	
-	ValueType * const getRawPointer() const;
+	ValueType * const getDataPointer() const {return _data;}
+	ValueType * const getDataPointer(portIndex_t index) const {return _data + index;}
 	
 	inline unsigned int size() const {return _totalSize;}
-	inline unsigned int spanSize(unsigned int dimension);
+	inline unsigned int spanSize(unsigned int dimension) {return _spanSize(dimension);}
+	Point<unsigned,TDimension+1> getIncrements(portIndex_t index) const;
 	
 protected:
 	
 	virtual kiwi::string portName(portIndex_t index, unsigned char nameHint) const;
 
 
+private: 
+	void init(unsigned char nameHint);
 
 	ValueType* _data;
 	bool _deleteDataDestructor;
 	unsigned int _totalSize;
-	Point<unsigned, TDimension> _spanSize;
+	unsigned char _nbComponents;
+	Coordinates _spanSize;
 
 };	
-
 
 
 

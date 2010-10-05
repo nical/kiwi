@@ -38,14 +38,23 @@ public:
 	//other methods
 	inline CoordType& coordinate(unsigned int index){return _coordinates[index];}
 	inline CoordType& operator[](unsigned int index){return _coordinates[index];}
+	inline CoordType operator[](unsigned int index) const {return _coordinates[index];}
 	inline CoordType& operator()(unsigned int index){return _coordinates[index];}
+	inline CoordType operator()(unsigned int index) const {return _coordinates[index];}
 
 	Point<CoordType,TDimension> operator + (const Point<CoordType,TDimension>& point);
 	Point<CoordType,TDimension> operator - (const Point<CoordType,TDimension>& point);
 	void operator += (const Point<CoordType, TDimension>& point);
 	void operator -= (const Point<CoordType, TDimension>& point);
 	bool operator == (const Point<CoordType, TDimension>& point);
-	bool operator != (const Point<CoordType, TDimension>& point);	
+	bool operator != (const Point<CoordType, TDimension>& point);
+
+/*	template < typename CoordType2 >
+	Point<CoordType,TDimension>& operator = (const Point<CoordType2, TDimension>& p);
+*/
+
+	Point<CoordType,TDimension>& operator = (const Point<CoordType, TDimension>& p);
+	
 protected:
 	CoordType _coordinates[Dimension];
 };
@@ -151,6 +160,28 @@ bool Point<T,D>::operator != (const Point<T,D>& point)
 	return false;
 }
 
+/*
+template <typename T1, unsigned int D>
+template <typename T2 >
+Point<T1,D>& Point<T1,D>::operator = (const Point<T2, D>& p)
+{
+	if(reinterpret_cast<const Point<T1,D>* >(&p) != this)
+		for(unsigned i = 0; i < D; ++i)
+			_coordinates[i] 
+				= static_cast<T1>(p(i));
+	
+	return *this;
+}
+*/
+template <typename T, unsigned int D>
+Point<T,D>& Point<T,D>::operator = (const Point<T, D>& p)
+{
+	if(&p != this)
+		for(unsigned i = 0; i < D; ++i)
+			this->_coordinates[i] = p._coordinates[i];
+	
+	return *this;
+}
 
 
 }//namespace image

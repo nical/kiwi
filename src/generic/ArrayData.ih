@@ -4,20 +4,26 @@ namespace kiwi
 namespace generic
 {
 
-template<typename T, unsigned int D, unsigned int C>
-ArrayData<T,D,C>::ArrayData(Coordinates size, unsigned char nameHint)
+template<typename T, unsigned int D>
+ArrayData<T,D>::ArrayData(Coordinates size, unsigned char nbComponents, unsigned char nameHint)
 {
 	_deleteDataDestructor = true;
 	_spanSize = size;
+	_nbComponents = nbComponents;
 	// compute the total size
-	_totalSize = C;
-	for(unsigned i = 0; i < D; ++i)
-		_totalSize*= size(i);
+	_totalSize = nbComponents;
+	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
 	// allocate the data
 	_data = new T[_totalSize];
 	
+	init(nameHint);
 	
-	// disable the event so that layoutChanged() is not called from
+}
+
+template<typename T, unsigned int D>
+void ArrayData<T,D>::init(unsigned char nameHint)
+{
+// disable the event so that layoutChanged() is not called from
 	// within the constructor
 	setLayoutEventEnabled(false);
 	// "compute" the runtime type name of this class in function of
@@ -26,7 +32,7 @@ ArrayData<T,D,C>::ArrayData(Coordinates size, unsigned char nameHint)
 			+ boost::lexical_cast<kiwi::string>(D)+"d_"
 			+ types::str<T>() );
 			
-	for(unsigned i = 0; i < C; ++i)
+	for(unsigned i = 0; i < _nbComponents; ++i)
 	{
 		addWriterOutputPort( sType, portName(i,nameHint) );
 		addReaderOutputPort( sType, portName(i,nameHint) );
@@ -34,17 +40,34 @@ ArrayData<T,D,C>::ArrayData(Coordinates size, unsigned char nameHint)
 	setLayoutEventEnabled(true);
 }
 
+template<typename T, unsigned int D>
+ArrayData<T,D>::ArrayData(ValueType* dataPtr, Coordinates size, unsigned char nbComponents, unsigned char nameHint)
+{
+	_deleteDataDestructor = false;
+	_spanSize = size;
+	_nbComponents = nbComponents;
+	// compute the total size
+	_totalSize = nbComponents;
+	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
+	
+	
+	_data = dataPtr;
+	
+	init(nameHint);
+
+}
 
 
-template<typename T, unsigned int D, unsigned int C>
-ArrayData<T,D,C>::~ArrayData()
+
+template<typename T, unsigned int D>
+ArrayData<T,D>::~ArrayData()
 {
 	if(_deleteDataDestructor) delete[] _data;
 	
 }
 
-template<typename T, unsigned int D, unsigned int C>
-kiwi::string ArrayData<T,D,C>::portName(portIndex_t index, unsigned char nameHint) const
+template<typename T, unsigned int D>
+kiwi::string ArrayData<T,D>::portName(portIndex_t index, unsigned char nameHint) const
 {
 	switch(nameHint)
 	{
@@ -82,6 +105,27 @@ kiwi::string ArrayData<T,D,C>::portName(portIndex_t index, unsigned char nameHin
 		default : return boost::lexical_cast<kiwi::string>(index);
 	}
 }	
+
+
+template<typename T, unsigned int D>
+Point<unsigned int, D+1>
+ArrayData<T,D>::getIncrements(portIndex_t index) const
+{
+	incsType incs;
+	incs(0) = _nbComponents;
+	unsigned temp = _nbComponents;
+	for(unsigned i = 0; i < D; ++i)
+	{
+		temp *= _spanSize(i);
+		incs(i+1) = temp;
+	}
+	return incs;
+}
+
+// ---------------------------------------------------------------------
+// -------------------------------------------------------------- Reader
+// ---------------------------------------------------------------------
+
 
 
 

@@ -86,11 +86,17 @@ public:
 	// -----------------------------------------------------------------
 	ValueReader(const Resource::ReaderInputPort& port)
 	{
-		_resource = dynamic_cast<ValueHolder<TValueType>* >( port.connectedOutput()->resource() );
+		_resource = dynamic_cast<ValueHolder<TValueType>* >( 
+			port.connectedOutput()->resource() 
+		);
+		
 		if(!_resource)
 		{
-			debug.error() << "ValueReader<"<<types::str<ValueType>() << ">::Constructor : "
-				<< "enable to determine the Resource type" << endl();
+			debug.error() << "ValueReader<"
+				<< types::str<ValueType>() 
+				<< ">::Constructor : "
+				<< "enable to determine the Resource type" 
+				<< endl();
 		}
 		_port = port.connectedOutput()->index();
 	}
@@ -109,11 +115,17 @@ public:
 	// -----------------------------------------------------------------
 	ValueWriter(const Resource::WriterInputPort& port)
 	{
-		_resource = dynamic_cast<ValueHolder<TValueType>* >( port.connectedOutput()->resource() );
+		_resource = dynamic_cast<ValueHolder<TValueType>* >(
+			port.connectedOutput()->resource() 
+		);
+		
 		if(!_resource)
 		{
-			debug.error() << "ValueWriter<"<<types::str<ValueType>() << ">::Constructor : "
-				<< "enable to determine the Resource type" << endl();
+			debug.error() << "ValueWriter<"
+				<< types::str<ValueType>() 
+				<< ">::Constructor : "
+				<< "enable to determine the Resource type" 
+				<< endl();
 		}
 		_port = port.connectedOutput()->index();
 	}

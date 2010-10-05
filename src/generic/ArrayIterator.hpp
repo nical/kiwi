@@ -14,7 +14,7 @@
 //      MA 02110-1301, USA.
 
 /**
- * @file BasicIterator.hpp
+ * @file ArrayIterator.hpp
  * @brief Header file for the base class of every kiwi resource and filter.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
  * @version 0.1
@@ -25,6 +25,8 @@
 #ifndef KIWI_ARRAYITERATOR_HPP
 #define KIWI_ARRAYITERATOR_HPP
 
+#include "generic/GenericIterator.hpp"
+
 namespace kiwi
 {
 namespace generic
@@ -32,7 +34,7 @@ namespace generic
 
 
 template<typename ValueTypeT>
-class BasicIterator : public GenericIterator<ValueTypeT>
+class ArrayIterator : public GenericIterator<ValueTypeT>
 {
 public:
 	// typedefs
@@ -42,7 +44,7 @@ public:
 	bool operator ++ () {++_data;} 
 	bool operator -- () {--_data;}
 	inline ValueType& operator * () {return _data;}
-	bool operator == (const BasicIterator<ValueType>& it) {return (_data == *it);}
+	bool operator == (const ArrayIterator<ValueType>& it) {return (_data == *it);}
 
 protected:
 	ValueType* _data;
@@ -51,7 +53,7 @@ protected:
 
 
 template<typename ValueTypeT>
-class BasicConstIterator : public GenericConstIterator<ValueTypeT>
+class ArrayConstIterator : public GenericConstIterator<ValueTypeT>
 {
 public:
 	// typedefs
@@ -61,7 +63,7 @@ public:
 	bool operator ++ () {++_data;}
 	bool operator -- () {--_data;}
 	inline ValueType operator * () {return _data;}
-	bool operator == (const BasicConstIterator<ValueType>& it) {return (_data == *it);}
+	bool operator == (const ArrayConstIterator<ValueType>& it) {return (_data == *it);}
 
 protected:
 	ValueType* _data;

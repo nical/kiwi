@@ -4,6 +4,8 @@ A generic and easy to use pipeline system.
 
 <h2> Resources and filters </h2>
 
+<img src="doc/images/boxes.png" width=100% >
+
 Kiwi features a powerful pipeline system composed of resources and filters : 
 A *resource* (kiwi::core ::Resource) is an object that contains input and output ports and give access to the data it contains by providing readers and writers throught these ports.
 A *Filter* (kiwi::core::Filter) is a resource that can be executed using its process() method. Filters inherit from resources their connecting system.

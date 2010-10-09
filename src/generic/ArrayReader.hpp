@@ -20,7 +20,7 @@
 #define KIWI_ARRAYDATAREADER_HPP
 
 #include "core/Resource.hpp"
-#include "generic/ArrayData.hpp"
+#include "generic/ArrayContainer.hpp"
 #include "generic/ArrayIterator.hpp"
 
 
@@ -31,18 +31,19 @@ namespace generic
 	
 	
 template < typename TValueType, unsigned int TDimension>	
-class ArrayDataReader : public core::Reader
+class ArrayReader : public core::Reader
 {
 public:
 	typedef TValueType ValueType;
-	typedef Point<unsigned int, TDimension+1> incsType;
+	typedef Point<unsigned int, TDimension+1> IncsType;
+	typedef Point<unsigned int, TDimension> Coordinates;
 	// see: template rebinding
 	
 	// -----------------------------------------------------------------
 	/**
 	 * @brief Constructor.
 	 */ 
-	ArrayDataReader(const core::Resource::ReaderInputPort& port);
+	ArrayReader(const core::Resource::ReaderInputPort& port);
 	
 	/**
 	 * @brief Basic access method.
@@ -58,17 +59,18 @@ public:
 	 * @brief Returns an iterator to the beguinning of the data.
 	 */ 
 	ArrayConstIterator<TValueType> begin() const
-		{return ArrayConstIterator<ValueType>(_data, _incs); }
+		{return ArrayConstIterator<ValueType>(_data, _incs(0) ); }
 	
 	/**
 	 * @brief Returns an iterator to the end of the data.
 	 */ 	
 	ArrayConstIterator<TValueType> end() const
-		{return ArrayConstIterator<ValueType>(_data, _incs); } 			// TODO !
+		{return ArrayConstIterator<ValueType>(_data, _incs(0) ); } 			// TODO !
 	
 protected:
  ValueType* _data;
- incsType _incs;
+ IncsType _incs;
+ Coordinates _span;
  portIndex_t _port;
 };
 
@@ -78,7 +80,7 @@ protected:
 } // namespace
 
 
-#include "generic/ArrayDataReader.ih"
+#include "generic/ArrayReader.ih"
 
 
 #endif

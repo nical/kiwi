@@ -16,11 +16,11 @@
 
 #pragma once
 
-#ifndef KIWI_ARRAYDATAWRITER_HPP
-#define KIWI_ARRAYDATAWRITER_HPP
+#ifndef KIWI_ARRAYWRITER_HPP
+#define KIWI_ARRAYWRITER_HPP
 
 #include "core/Resource.hpp"
-#include "generic/ArrayData.hpp"
+#include "generic/ArrayContainer.hpp"
 
 
 namespace kiwi
@@ -30,17 +30,18 @@ namespace generic
 	
 	
 template < typename TValueType, unsigned int TDimension>
-class ArrayDataWriter : public core::Writer
+class ArrayWriter : public core::Writer
 {
 public:
 	typedef TValueType ValueType;
-	typedef Point<unsigned int, TDimension+1> incsType;
+	typedef Point<unsigned int, TDimension+1> IncsType;
+	typedef Point<unsigned int, TDimension> Coordinates;
 	
 	// -----------------------------------------------------------------
 	/**
 	 * @brief Constructor.
 	 */ 
-	ArrayDataWriter(const core::Resource::WriterInputPort& port);
+	ArrayWriter(const core::Resource::WriterInputPort& port);
 	
 	/**
 	 * @brief Basic access method.
@@ -67,8 +68,9 @@ public:
 	
 protected:
  ValueType* _data;
- incsType _incs;
+ IncsType _incs;
  portIndex_t _port;
+ Coordinates _span;
 };
 
 
@@ -76,7 +78,7 @@ protected:
 } // namespace
 
 
-#include "generic/ArrayDataWriter.ih"
+#include "generic/ArrayWriter.ih"
 
 
 #endif

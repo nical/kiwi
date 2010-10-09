@@ -5,7 +5,7 @@ namespace generic
 {
 
 template<typename T, unsigned int D>
-ArrayData<T,D>::ArrayData(Coordinates size, unsigned char nbComponents, unsigned char nameHint)
+ArrayContainer<T,D>::ArrayContainer(Coordinates size, unsigned char nbComponents, unsigned char nameHint)
 {
 	_deleteDataDestructor = true;
 	_spanSize = size;
@@ -21,7 +21,7 @@ ArrayData<T,D>::ArrayData(Coordinates size, unsigned char nbComponents, unsigned
 }
 
 template<typename T, unsigned int D>
-void ArrayData<T,D>::init(unsigned char nameHint)
+void ArrayContainer<T,D>::init(unsigned char nameHint)
 {
 // disable the event so that layoutChanged() is not called from
 	// within the constructor
@@ -41,7 +41,7 @@ void ArrayData<T,D>::init(unsigned char nameHint)
 }
 
 template<typename T, unsigned int D>
-ArrayData<T,D>::ArrayData(ValueType* dataPtr, Coordinates size, unsigned char nbComponents, unsigned char nameHint)
+ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr, Coordinates size, unsigned char nbComponents, unsigned char nameHint)
 {
 	_deleteDataDestructor = false;
 	_spanSize = size;
@@ -60,14 +60,14 @@ ArrayData<T,D>::ArrayData(ValueType* dataPtr, Coordinates size, unsigned char nb
 
 
 template<typename T, unsigned int D>
-ArrayData<T,D>::~ArrayData()
+ArrayContainer<T,D>::~ArrayContainer()
 {
 	if(_deleteDataDestructor) delete[] _data;
 	
 }
 
 template<typename T, unsigned int D>
-kiwi::string ArrayData<T,D>::portName(portIndex_t index, unsigned char nameHint) const
+kiwi::string ArrayContainer<T,D>::portName(portIndex_t index, unsigned char nameHint) const
 {
 	switch(nameHint)
 	{
@@ -109,9 +109,9 @@ kiwi::string ArrayData<T,D>::portName(portIndex_t index, unsigned char nameHint)
 
 template<typename T, unsigned int D>
 Point<unsigned int, D+1>
-ArrayData<T,D>::getIncrements(portIndex_t index) const
+ArrayContainer<T,D>::increments(portIndex_t index) const
 {
-	incsType incs;
+	IncsType incs;
 	incs(0) = _nbComponents;
 	unsigned temp = _nbComponents;
 	for(unsigned i = 0; i < D; ++i)

@@ -4,7 +4,6 @@
 #include "core/Filter.hpp"
 
 #include "generic/SimpleValue.hpp"
-#include "generic/ArrayData.hpp"
 
 #include "utils/types.hpp"
 

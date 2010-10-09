@@ -172,6 +172,11 @@ public:
 	 */ 
 	virtual bool isAFilter() {return false;}
 	
+	/**
+	 * @brief Returns true if the layout event is enabled.
+	 * 
+	 * The layout event being enabled means that 
+	 */ 
 	inline bool isLayoutEventEnabled() { return _layoutEvtEnabled; }
 	
 	

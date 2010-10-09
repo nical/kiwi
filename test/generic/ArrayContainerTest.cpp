@@ -3,9 +3,9 @@
 
 #include "core/Filter.hpp"
 
-#include "generic/ArrayData.hpp"
-#include "generic/ArrayDataReader.hpp"
-#include "generic/ArrayDataWriter.hpp"
+#include "generic/ArrayContainer.hpp"
+#include "generic/ArrayReader.hpp"
+#include "generic/ArrayWriter.hpp"
 
 #include "generic/Point.hpp"
 
@@ -33,8 +33,8 @@ public:
 	enum{ WRITE = 0};
 	enum{ RESULT = 0};
 	
-	typedef generic::ArrayDataReader<TValueType, TDimension> myReader;
-	typedef generic::ArrayDataWriter<TValueType, TDimension> myWriter;
+	typedef generic::ArrayReader<TValueType, TDimension> myReader;
+	typedef generic::ArrayWriter<TValueType, TDimension> myWriter;
 // ---------------------------------------------------------------------
 	AddArraysFilter() : Filter()
 	{
@@ -58,13 +58,14 @@ public:
 
 	
 
-// ---------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------
 	void process()
 	{
 		ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
 		if(!isReady() )
 		{
-			debug.error() << "AddArraysFilter::Process error : not ready" << endl();
+			debug.error() << "AddArraysFilter::Process error : not ready" 
+				<< endl();
 			return;
 		}
 
@@ -132,12 +133,10 @@ bool ArrayTest()
 		generic::Point<unsigned,Dim> size;
 		for(unsigned i = 0; i < Dim; ++i) size[i] = 255;
 	
-		generic::ArrayData<T,Dim> resource1(size, Comp, 1);
-		generic::ArrayData<T,Dim> resource2(size, Comp, 2);
-		generic::ArrayData<T,Dim> resourceResult(size, Comp, 3);
-
+		generic::ArrayContainer<T,Dim> resource1(size, Comp, 1);
+		generic::ArrayContainer<T,Dim> resource2(size, Comp, 2);
+		generic::ArrayContainer<T,Dim> resourceResult(size, Comp, 3);
 		
-
 		AddArraysFilter<T,Dim> myTest;
 	debug.endBlock();
 
@@ -166,7 +165,7 @@ bool ArrayTest()
 int main()
 {
 
-ScopedBlockMacro(s2, "kiwi::TestArrayData");
+ScopedBlockMacro(s2, "kiwi::TestArrayContainer");
 
 debug.beginBlock("int main() ");
 

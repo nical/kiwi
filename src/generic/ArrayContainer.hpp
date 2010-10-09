@@ -31,32 +31,32 @@ namespace generic
 
 
 template<typename TValueType, unsigned int TDimension>
-class ArrayData : public core::Resource
+class ArrayContainer : public core::Resource
 {
 public:
 	typedef TValueType ValueType;
 	typedef Point<unsigned int, TDimension> Coordinates;
-	typedef Point<unsigned int, TDimension+1> incsType;
+	typedef Point<unsigned int, TDimension+1> IncsType;
 	
 	enum{NUMBERS = 0, RVBA = 1, CMJN = 2, XYZ = 3, ABCD = 4 };
 	
 	/**
 	 * @brief constructor
 	 */ 
-	ArrayData(Coordinates size
+	ArrayContainer(Coordinates size
 		, unsigned char nbComponents = 1
 		, unsigned char nameHint = 0 );
 	/**
 	 * @brief constructor
 	 */
-	ArrayData(ValueType* dataPtr
+	ArrayContainer(ValueType* dataPtr
 		, Coordinates size
 		, unsigned char nbComponents = 1
 		, unsigned char nameHint = 0 );
 	/**
 	 * @brief destructor
 	 */
-	~ArrayData();
+	~ArrayContainer();
 
 
 // -----------------------------------------------------------------
@@ -66,7 +66,8 @@ public:
 	
 	inline unsigned int size() const {return _totalSize;}
 	inline unsigned int spanSize(unsigned int dimension) {return _spanSize(dimension);}
-	Point<unsigned,TDimension+1> getIncrements(portIndex_t index) const;
+	inline Coordinates spanSize() {return _spanSize;}
+	Point<unsigned,TDimension+1> increments(portIndex_t index) const;
 	
 protected:
 	
@@ -91,6 +92,6 @@ private:
 }//namespace	
 }//namespace	
 
-#include "ArrayData.ih"
+#include "ArrayContainer.ih"
 
 #endif

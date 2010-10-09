@@ -8,16 +8,16 @@ namespace generic
 
 
 template<typename T, unsigned int D>
-ArrayDataReader<T,D>::ArrayDataReader(
+ArrayReader<T,D>::ArrayReader(
 	const core::Resource::ReaderInputPort& port )
 {
-	ArrayData<T,D>* resource = 
-		dynamic_cast< ArrayData<T,D>* >( 
+	ArrayContainer<T,D>* resource = 
+		dynamic_cast< ArrayContainer<T,D>* >( 
 			port.connectedOutput()->resource() 
 		);
 	if(!resource)
 	{
-		debug.error() << "ArrayDataReader<"
+		debug.error() << "ArrayContainerReader<"
 			<<types::str<T>() 
 			<< ">::Constructor : "
 			<< "enable to determine the Resource type" 
@@ -25,13 +25,14 @@ ArrayDataReader<T,D>::ArrayDataReader(
 	}
 	_port = port.connectedOutput()->index();
 	_data = resource->getDataPointer(_port);
-	_incs = resource->getIncrements(_port);
+	_incs = resource->increments(_port);
+	_span = resource->spanSize();
 }
 
 
 
 template<typename T, unsigned int D>
-T ArrayDataReader<T,D>::get(const Point<int,D>& coords) const
+T ArrayReader<T,D>::get(const Point<int,D>& coords) const
 {
 	unsigned index = 0;
 	for(unsigned i = 0; i < D; ++i)
@@ -44,7 +45,7 @@ T ArrayDataReader<T,D>::get(const Point<int,D>& coords) const
 } // namespace
 
 /*
- ‘kiwi::generic::ArrayDataReader<TValueType, TDimension>::ArrayDataReader(const kiwi::core::Resource::InputPort<kiwi::core::Reader>&)’ 
- ‘kiwi::generic::ArrayDataReader<TValueType, TDimension>’
+ ‘kiwi::generic::ArrayContainerReader<TValueType, TDimension>::ArrayContainerReader(const kiwi::core::Resource::InputPort<kiwi::core::Reader>&)’ 
+ ‘kiwi::generic::ArrayContainerReader<TValueType, TDimension>’
 
 */

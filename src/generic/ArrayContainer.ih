@@ -1,3 +1,28 @@
+//      Redistribution and use in source and binary forms, with or without
+//      modification, are permitted provided that the following conditions are
+//      met:
+//      
+//      * Redistributions of source code must retain the above copyright
+//        notice, this list of conditions and the following disclaimer.
+//      * Redistributions in binary form must reproduce the above
+//        copyright notice, this list of conditions and the following disclaimer
+//        in the documentation and/or other materials provided with the
+//        distribution.
+//      * Neither the name of the  nor the names of its
+//        contributors may be used to endorse or promote products derived from
+//        this software without specific prior written permission.
+//      
+//      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+//      "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//      A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//      OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//      SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//      LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//      DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//      THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+//      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace kiwi
 {
@@ -5,20 +30,43 @@ namespace generic
 {
 
 template<typename T, unsigned int D>
-ArrayContainer<T,D>::ArrayContainer(Coordinates size, unsigned char nbComponents, unsigned char nameHint)
+ArrayContainer<T,D>::ArrayContainer(Coordinates size
+	, unsigned char nbComponents
+	, bool interleaved 
+	, unsigned char nameHint)
+:_interleaved(interleaved), _nbComponents(nbComponents)
 {
 	_deleteDataDestructor = true;
 	_spanSize = size;
-	_nbComponents = nbComponents;
 	// compute the total size
 	_totalSize = nbComponents;
 	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
+	debug.print() << "allocate " << _totalSize << endl();
 	// allocate the data
 	_data = new T[_totalSize];
 	
 	init(nameHint);
-	
 }
+
+template<typename T, unsigned int D>
+ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
+	, Coordinates size
+	, unsigned char nbComponents
+	, bool interleaved
+	, unsigned char nameHint)
+:_interleaved(interleaved), _nbComponents(nbComponents )
+{
+	_deleteDataDestructor = false;
+	_spanSize = size;
+	// compute the total size
+	_totalSize = nbComponents;
+	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
+
+	_data = dataPtr;
+	
+	init(nameHint);
+}
+
 
 template<typename T, unsigned int D>
 void ArrayContainer<T,D>::init(unsigned char nameHint)
@@ -34,29 +82,11 @@ void ArrayContainer<T,D>::init(unsigned char nameHint)
 			
 	for(unsigned i = 0; i < _nbComponents; ++i)
 	{
-		addWriterOutputPort( sType, portName(i,nameHint) );
-		addReaderOutputPort( sType, portName(i,nameHint) );
+		addWriterOutputPort( sType, portName(i,nameHint, WRITER_OUT) );
+		addReaderOutputPort( sType, portName(i,nameHint, READER_OUT) );
 	}
 	setLayoutEventEnabled(true);
 }
-
-template<typename T, unsigned int D>
-ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr, Coordinates size, unsigned char nbComponents, unsigned char nameHint)
-{
-	_deleteDataDestructor = false;
-	_spanSize = size;
-	_nbComponents = nbComponents;
-	// compute the total size
-	_totalSize = nbComponents;
-	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
-	
-	
-	_data = dataPtr;
-	
-	init(nameHint);
-
-}
-
 
 
 template<typename T, unsigned int D>
@@ -67,7 +97,9 @@ ArrayContainer<T,D>::~ArrayContainer()
 }
 
 template<typename T, unsigned int D>
-kiwi::string ArrayContainer<T,D>::portName(portIndex_t index, unsigned char nameHint) const
+kiwi::string ArrayContainer<T,D>::portName(portIndex_t index
+	, unsigned char nameHint
+	, unsigned char portType) const
 {
 	switch(nameHint)
 	{
@@ -102,6 +134,10 @@ kiwi::string ArrayContainer<T,D>::portName(portIndex_t index, unsigned char name
 			char a = 97+index;
 			return kiwi::string( &a );
 		}
+		case MONO : {
+			if(portType == READER_OUT) return "read";
+			else return "write";
+		}
 		default : return boost::lexical_cast<kiwi::string>(index);
 	}
 }	
@@ -111,8 +147,10 @@ template<typename T, unsigned int D>
 Point<unsigned int, D+1>
 ArrayContainer<T,D>::increments(portIndex_t index) const
 {
+	
 	IncsType incs;
-	incs(0) = _nbComponents;
+	if(_interleaved) incs(0) = _nbComponents;
+	else incs(0) = 1;
 	unsigned temp = _nbComponents;
 	for(unsigned i = 0; i < D; ++i)
 	{
@@ -122,10 +160,41 @@ ArrayContainer<T,D>::increments(portIndex_t index) const
 	return incs;
 }
 
-// ---------------------------------------------------------------------
-// -------------------------------------------------------------- Reader
-// ---------------------------------------------------------------------
 
+template<typename T, unsigned int D>
+T* const ArrayContainer<T,D>::getDataPointer(portIndex_t index) const
+{
+ScopedBlockMacro(__scop, "ArrayConstIterator::getDataPointer")
+	if(_interleaved)
+		return _data + index;
+	else
+	{
+		unsigned int oneBufferSize = 1;
+		for(unsigned i = 0; i < D; ++i) oneBufferSize *= _spanSize(i);
+//		debug.print() << oneBufferSize << endl();
+//		debug.print() << oneBufferSize*index << endl();
+		_data + index * oneBufferSize;
+	}
+}
+
+
+template<typename T, unsigned int D>
+void ArrayContainer<T,D>::printState()
+{
+ScopedBlockMacro(__scop, kiwi::string("ArrayContainer<")
+	+  types::str<T>() 
+	+ "," + boost::lexical_cast<string>( D )
+	+ ">::printState" )
+	
+	ArrayIterator<ValueType> it = getBasicIterator();
+	
+	do{		
+		debug.print() << *it;
+	}while ( it.onIteration() );
+
+	debug.endl();
+	debug.print() << _totalSize << " elements" << endl(); 
+}
 
 
 

@@ -6,10 +6,13 @@
 #include "generic/ArrayContainer.hpp"
 #include "generic/ArrayReader.hpp"
 #include "generic/ArrayWriter.hpp"
+#include "generic/ArrayIterator.hpp"
 
 #include "generic/Point.hpp"
 
 #include "utils/types.hpp"
+
+#include "audio/AudioBuffer.hpp"
 
 #include <vector>
 
@@ -61,7 +64,7 @@ public:
 // ---------------------------------------------------------------------
 	void process()
 	{
-		ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
 		if(!isReady() )
 		{
 			debug.error() << "AddArraysFilter::Process error : not ready" 
@@ -79,10 +82,35 @@ public:
 		myWriter result( writerInputPort(0) );
 		
 		debug.beginBlock( "compute..");
+			ArrayConstIterator<TValueType> itA = A.getIterator();
+			ArrayConstIterator<TValueType> itB = B.getIterator();
+			ArrayIterator<TValueType> itResult = result.getIterator();
+			debug.print() << "test" << endl();
 			Point<int, TDimension> pos(0);
 			result.set( pos , A.get( pos ) + B.get( pos ) );
-			//debug.print() << "result :" << result.get() << endl();
+			unsigned count = 0;
+			do
+			{
+				if( itA.isDone() ) break;
+				if( itB.isDone() ) break;
+				
+				++count;
+				//debug.print() << " on iteration " << endl();
+				
+				*itResult = *itA + *itB;
+				// this is unsafe crap: you don't iterate through image 
+				// that might not have the same size that way but right
+				// now i'm testing iterators so... 
+				++itA ;
+				++itB ;
+			} while(itResult.onIteration() );
+			
+			debug.print() << count << " iterations " << endl();
+
 		debug.endBlock( "compute..");
+		
+		debug.print() << "end of the method" << endl();
+		return;
 	}
 	
 	
@@ -130,14 +158,39 @@ bool ArrayTest()
 {
 
 	debug.beginBlock("Allocate the resources");
+		//audio::AudioBuffer<float> audioTest( 128, 1 );
+		
+		bool interleave = true;
+		
 		generic::Point<unsigned,Dim> size;
-		for(unsigned i = 0; i < Dim; ++i) size[i] = 255;
-	
-		generic::ArrayContainer<T,Dim> resource1(size, Comp, 1);
-		generic::ArrayContainer<T,Dim> resource2(size, Comp, 2);
-		generic::ArrayContainer<T,Dim> resourceResult(size, Comp, 3);
+		for(unsigned i = 0; i < Dim; ++i) size[i] = 10;
+		
+		debug.print() << "resource1" << endl();
+		// here the container allocates its data
+		generic::ArrayContainer<T,Dim> resource1(size, Comp, true);
+		
+		debug.print() << "resource2" << endl();
+		// here the container uses some preallocated memory 
+		T* preAllocData = new T[100*Comp];
+		generic::ArrayContainer<T,Dim> resource2(preAllocData, size, Comp, interleave);
+		// remember to delete the allocated memory !
+		
+		debug.print() << "resourceResult" << endl();
+		generic::ArrayContainer<T,Dim> resourceResult(size, Comp, interleave);
 		
 		AddArraysFilter<T,Dim> myTest;
+		
+		T count = 0;
+		ArrayIterator<T> it = resource1.getBasicIterator();
+		do { *it = ++count; } while ( it.onIteration() );
+		it = resource2.getBasicIterator();
+		do { *it = 1000; } while ( it.onIteration() );
+		it = resourceResult.getBasicIterator();
+		do { *it = 0; } while ( it.onIteration() );
+		
+		resource1.printState();
+		resource2.printState();
+		
 	debug.endBlock();
 
 	debug.endl();
@@ -152,14 +205,16 @@ bool ArrayTest()
 
 	myTest.process();
 
+	debug.print() << "processed" << endl();
+
+	resourceResult.printState();
+		delete[] preAllocData;
 	return true;
 }
 
 // ---------------------------------------------------------------------
 // ---------------------------- Main -----------------------------------
 // ---------------------------------------------------------------------
-
-
 
 
 int main()
@@ -169,7 +224,7 @@ ScopedBlockMacro(s2, "kiwi::TestArrayContainer");
 
 debug.beginBlock("int main() ");
 
-	ArrayTest<int, 2, 1>();
+	ArrayTest<int, 2, 2>();
 
 	
 debug.endBlock();

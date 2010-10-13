@@ -151,7 +151,7 @@ ArrayContainer<T,D>::increments(portIndex_t index) const
 	IncsType incs;
 	if(_interleaved) incs(0) = _nbComponents;
 	else incs(0) = 1;
-	unsigned temp = _nbComponents;
+	unsigned temp = incs(0);
 	for(unsigned i = 0; i < D; ++i)
 	{
 		temp *= _spanSize(i);
@@ -159,6 +159,13 @@ ArrayContainer<T,D>::increments(portIndex_t index) const
 	}
 	return incs;
 }
+
+template<typename T, unsigned int D>
+ArrayIterator<T> ArrayContainer<T,D>::getBasicIterator() const
+{ 
+	return ArrayIterator<ValueType>( _data, _data + _totalSize-1, 1 ); 
+}
+	
 
 
 template<typename T, unsigned int D>
@@ -169,14 +176,18 @@ ScopedBlockMacro(__scop, "ArrayConstIterator::getDataPointer")
 		return _data + index;
 	else
 	{
-		unsigned int oneBufferSize = 1;
-		for(unsigned i = 0; i < D; ++i) oneBufferSize *= _spanSize(i);
-//		debug.print() << oneBufferSize << endl();
-//		debug.print() << oneBufferSize*index << endl();
-		_data + index * oneBufferSize;
+		return _data + index * oneBufferSize();
 	}
 }
 
+
+template<typename T, unsigned int D>
+unsigned int ArrayContainer<T,D>::oneBufferSize() const
+{
+	unsigned int oneBuffer = 1;
+	for(unsigned i = 0; i < D; ++i) oneBuffer *= _spanSize(i);
+	return oneBuffer;
+}
 
 template<typename T, unsigned int D>
 void ArrayContainer<T,D>::printState()

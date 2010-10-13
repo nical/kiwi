@@ -79,21 +79,58 @@ public:
 	ValueType * const getDataPointer() const 
 		{ return _data; }
 	
+	/**
+	 * Returns a pointer to the data of a given port.
+	 * 
+	 * Note that if the data is interleaved, the value next to the one 
+	 * pointed by the returned pointer does not belong to the data 
+	 * associated to the port (@see increments).
+	 */ 
 	ValueType * const getDataPointer(portIndex_t index) const;
 	
+	/**
+	 * @brief Returns the total size of the container.
+	 * 
+	 * Equals the number of atomic vale stored.
+	 *  = number of components * product of each span size 
+	 */ 
 	inline unsigned int size() const {return _totalSize;}
 	
+	/**
+	 * @brief Returns the size of a given span.
+	 */ 
 	inline unsigned int spanSize(unsigned int dimension) 
 		{ return _spanSize(dimension); }
 		
+	/**
+	 * @brief Returns a Point<uint32, Dimension> containing the dimensions
+	 * of the ArrayConatiner.
+	 */ 	
 	inline Coordinates spanSize() { return _spanSize; }
 	
+	/**
+	 * @brief Returns the amount of scalar object referring to one port.
+	 * 
+	 */ 
+	unsigned int oneBufferSize() const;
+	
+	/**
+	 * @brief Returns information on how the data is to be iterated.
+	 * 
+	 * ( used by the Reader and Writer )
+	 */ 
 	Point<unsigned,TDimension+1> increments(portIndex_t index) const;
 	
+	/**
+	 * @brief Returns true if the buffers are interleaved.
+	 * 
+	 */ 
 	inline bool isInterleaved() { return _interleaved; }
 	
-	ArrayIterator<ValueType> getBasicIterator() const
-	{ return ArrayIterator<ValueType>( _data, _data + _totalSize-1, 1 ); }
+	/**
+	 * @brief Rturns an iterator that iterates through all the data.
+	 */ 
+	ArrayIterator<ValueType> getBasicIterator() const;
 	
 	void printState();
 	

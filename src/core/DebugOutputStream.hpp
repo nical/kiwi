@@ -12,9 +12,19 @@
 #define BEGIN_BLOCK_MESSAGE " Begin block "
 #define END_BLOCK_MESSAGE " End block "
 
+
+#ifdef DEBUG
 #define ScopedBlockMacro(vname, message) kiwi::ScopedBlock vname(message);
+#else
+#define ScopedBlockMacro(vname, message) 
+#endif
 
 
+#ifdef DEBUG
+#define __( instruction ) instruction
+#else
+#define __( instruction ) 
+#endif
 
 namespace kiwi
 {
@@ -49,7 +59,14 @@ DebugOutputStream debug;
 
 // ---------------------------------------------------------------------
 
-string endl() { return "\n"; }
+string endl() 
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+	return "\033[0m\n";
+#else
+	return "\n";
+#endif
+}
 
 // ---------------------------------------------------------------------
 

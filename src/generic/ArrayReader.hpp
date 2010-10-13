@@ -74,16 +74,11 @@ public:
 	/**
 	 * @brief Returns an iterator to the beguinning of the data.
 	 */ 
-	ArrayConstIterator<TValueType> getIterator() const
-	{
-		unsigned size = 1;
-		for(unsigned i = 0; i < TDimension; ++i) size *= _span(i);
-		return ArrayConstIterator<ValueType>(_data, _data+size*_incs(0)-1, _incs(0) ); 
-	}
-		
+	ArrayConstIterator<TValueType> getIterator() const ;
+	
+	
 protected:
  ValueType* _data;
- ValueType* _end;
  IncsType _incs;
  Coordinates _span;
  portIndex_t _port;

@@ -52,9 +52,9 @@ ArrayWriter<T,D>::ArrayWriter(
 	}
 	_port = port.connectedOutput()->index();
 	_data = resource->getDataPointer(_port);
-//	_end = resource->getEndDataPointer(_port);
 	_incs = resource->increments(_port);
 	_span = resource->spanSize();
+
 }
 
 
@@ -83,6 +83,11 @@ template<typename T, unsigned int D>
 void ArrayWriter<T,D>::set(unsigned int i, ValueType value)
 {
 	_data[i] = value;
+}
+template<typename T, unsigned int D>
+T ArrayWriter<T,D>::get(unsigned int i) const
+{
+	return _data[i];
 }
 
 

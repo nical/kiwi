@@ -52,6 +52,10 @@ ArrayReader<T,D>::ArrayReader(
 	_data = resource->getDataPointer(_port);
 	_incs = resource->increments(_port);
 	_span = resource->spanSize();
+/*	unsigned csize = 1;
+	for(unsigned i = 0; i < D; ++i) csize*=_span(i);
+	_end = _data + csize;
+*/ 
 }
 
 
@@ -59,14 +63,13 @@ ArrayReader<T,D>::ArrayReader(
 template<typename T, unsigned int D>
 T ArrayReader<T,D>::get(const Point<int,D>& coords) const
 {
-	ScopedBlockMacro(__scop, "get" );
+//	ScopedBlockMacro(__scop, "get" );
 	unsigned index = 0;
 	for(unsigned i = 0; i < D; ++i)
 	{
-		debug.print() << "inc" << i << " " << _incs[i] << endl();
 		index += _incs(i)*coords(i);
 	}
-	debug.print() << "index "  << index << endl();
+//	debug.print() << "index "  << index << endl();
 	return _data[index];
 }
 
@@ -76,6 +79,15 @@ T ArrayReader<T,D>::get(unsigned int i) const
 {
 	return _data[i];
 }
+
+template<typename T, unsigned int D>
+ArrayConstIterator<T> ArrayReader<T,D>::getIterator() const
+{
+	unsigned size = 1;
+	for(unsigned i = 0; i < D; ++i) size *= _span(i);
+	return ArrayConstIterator<ValueType>(_data, _data+size*_incs(0)-1, _incs(0) ); 
+}
+
 
 } // namespace
 } // namespace

@@ -24,84 +24,42 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-#pragma once
-
-#ifndef KIWI_ARRAYWRITER_HPP
-#define KIWI_ARRAYWRITER_HPP
-
-#include "core/Resource.hpp"
-#include "generic/ArrayContainer.hpp"
-
+#include "generic/Point.hpp"
 
 namespace kiwi
 {
-namespace generic
+namespace audio
 {
 	
-	
-template < typename TValueType, unsigned int TDimension>
-class ArrayWriter : public core::Writer
+template<typename T>
+AudioBuffer<T>::AudioBuffer( unsigned size, portIndex_t nbBuffer ) 
+: generic::ArrayContainer<T,1>(generic::Point<unsigned int,1>(size*nbBuffer)
+	, nbBuffer				
+	, false			// arrays are not interleaved
+	, generic::ArrayContainer<T,1>::MONO )
 {
-public:
-	typedef TValueType ValueType;
-	typedef Point<unsigned int, TDimension+1> IncsType;
-	typedef Point<unsigned int, TDimension> Coordinates;
 	
-	// -----------------------------------------------------------------
-	/**
-	 * @brief Constructor.
-	 */ 
-	ArrayWriter(const core::Resource::WriterInputPort& port);
+}
+
+template<typename T>	
+AudioBuffer<T>::AudioBuffer(ValueType* dataPtr
+	, unsigned size
+	, portIndex_t nbBuffer )
+: generic::ArrayContainer<T,1>(dataPtr
+	, generic::Point<unsigned int,1>(size*nbBuffer)
+	, nbBuffer
+	, false
+	, generic::ArrayContainer<T,1>::MONO )
+{
 	
-	/**
-	 * @brief Basic access method.
-	 */ 
-	ValueType get(const Point<int, TDimension>& coords) const;	
-	/**
-	 * @brief Basic access method.
-	 */ 
-	ValueType get(unsigned int i) const;
+}
+
+template<typename T>
+AudioBuffer<T>::~AudioBuffer()
+{
 	
-	/**
-	 * @brief Basic access method.
-	 */ 
-	void set(const Point<int, TDimension>& coords, ValueType value);
-	/**
-	 * @brief Basic access method.
-	 */ 
-	void set(unsigned int i, ValueType value);
+}
 	
-	/**
-	 * @brief Unsafe yet faster access method.
-	 */ 
-	inline const ValueType* getDataPointer() const { return _data; } 	// TODO: const stuff
 	
-	/**
-	 * @brief Returns an iterator to the beguinning of the data.
-	 */ 
-	ArrayIterator<ValueType> getIterator() const
-	{
-		unsigned size = 1;
-		for(unsigned i = 0; i < TDimension; ++i) size *= _span(i);
-		debug.print() << "Writer::chan size :  " << size*_incs(0)-1 << endl();
-		return ArrayIterator<ValueType>( _data, _data + size*_incs(0)-1, _incs(0) );
-	}
-	
-protected:
- ValueType* _data;
- ValueType* _end;
- IncsType _incs;
- portIndex_t _port;
- Coordinates _span;
-};
-
-
-}	
-} // namespace
-
-
-#include "generic/ArrayWriter.ih"
-
-
-#endif
+} //namespace
+} //namespace

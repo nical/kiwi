@@ -16,6 +16,8 @@
 
 #include <vector>
 
+//#include <Magick++.h>
+
 using namespace kiwi;
 using namespace kiwi::core;
 using namespace kiwi::generic;
@@ -64,7 +66,7 @@ public:
 // ---------------------------------------------------------------------
 	void process()
 	{
-	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+	//ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
 		if(!isReady() )
 		{
 			debug.error() << "AddArraysFilter::Process error : not ready" 
@@ -85,17 +87,18 @@ public:
 			ArrayConstIterator<TValueType> itA = A.getIterator();
 			ArrayConstIterator<TValueType> itB = B.getIterator();
 			ArrayIterator<TValueType> itResult = result.getIterator();
-			debug.print() << "test" << endl();
+			
 			Point<int, TDimension> pos(0);
 			result.set( pos , A.get( pos ) + B.get( pos ) );
 			unsigned count = 0;
+			debug.print() << "avant la boucle" << endl();
 			do
 			{
 				if( itA.isDone() ) break;
 				if( itB.isDone() ) break;
 				
 				++count;
-				//debug.print() << " on iteration " << endl();
+				//debug.print() << " on iteration " << count << endl();
 				
 				*itResult = *itA + *itB;
 				// this is unsafe crap: you don't iterate through image 
@@ -160,14 +163,14 @@ bool ArrayTest()
 	debug.beginBlock("Allocate the resources");
 		//audio::AudioBuffer<float> audioTest( 128, 1 );
 		
-		bool interleave = true;
+		bool interleave = false;
 		
 		generic::Point<unsigned,Dim> size;
 		for(unsigned i = 0; i < Dim; ++i) size[i] = 10;
 		
 		debug.print() << "resource1" << endl();
 		// here the container allocates its data
-		generic::ArrayContainer<T,Dim> resource1(size, Comp, true);
+		generic::ArrayContainer<T,Dim> resource1(size, Comp, interleave);
 		
 		debug.print() << "resource2" << endl();
 		// here the container uses some preallocated memory 
@@ -183,8 +186,10 @@ bool ArrayTest()
 		T count = 0;
 		ArrayIterator<T> it = resource1.getBasicIterator();
 		do { *it = ++count; } while ( it.onIteration() );
+		
 		it = resource2.getBasicIterator();
 		do { *it = 1000; } while ( it.onIteration() );
+		
 		it = resourceResult.getBasicIterator();
 		do { *it = 0; } while ( it.onIteration() );
 		
@@ -226,6 +231,7 @@ debug.beginBlock("int main() ");
 
 	ArrayTest<int, 2, 2>();
 
+	__( debug.print() << "woooooat !" << endl; )
 	
 debug.endBlock();
 	return 0;

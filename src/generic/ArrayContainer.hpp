@@ -58,32 +58,48 @@ public:
 	 */ 
 	typedef Point<unsigned int, TDimension+1> IncsType;
 	
+	/**
+	 * @brief An enum for the constructor's name hint.
+	 */ 
 	enum{ NUMBERS = 0, RVBA = 1, CMJN = 2, XYZ = 3, ABCD = 4, MONO = 5 };
 	enum{ READER_OUT = 0, WRITER_OUT = 1 };
 	
 	/**
-	 * @brief constructor
+	 * @brief Constructor (allocates the data).
+	 * 
+	 * @param nbComponents The number of components (and also the number of output ports).
+	 * @param interleaved Defines wether or not buffer are interleaved (if nbComponents > 1).
+	 * @param nameHint a hint to choose the ports names (see the enums).
 	 */ 
 	ArrayContainer(Coordinates size
 		, unsigned char nbComponents = 1
 		, bool interleaved = false
 		, unsigned char nameHint = 0 );
+		
 	/**
-	 * @brief constructor
-	 */
+	 * @brief Constructor (use pre allocated data).
+	 * 
+	 * @param dataPtr a pointer to the pre allocated data.
+	 * @param nbComponents The number of components (and also the number of output ports).
+	 * @param interleaved Defines wether or not buffer are interleaved (if nbComponents > 1).
+	 * @param nameHint a hint to choose the ports names (see the enums).
+	 */ 
 	ArrayContainer(ValueType* dataPtr
 		, Coordinates size
 		, unsigned char nbComponents = 1
 		, bool interleaved = false
 		, unsigned char nameHint = 0 );
+		
 	/**
-	 * @brief destructor
+	 * @brief Destructor.
 	 */
 	~ArrayContainer();
 
 
 // -----------------------------------------------------------------
-	
+	/**
+	 * @brief Returns a pointer to the very first element stored in the container.
+	 */ 
 	ValueType * const getDataPointer() const 
 		{ return _data; }
 	
@@ -148,7 +164,7 @@ public:
 	 * @brief TODO
 	 */ 
 	bool resize(Coordinates newSize, bool keepData)
-	{ assert( "not supported yet" === ""); }
+	{ assert( "not supported yet" == ""); }
 		
 	
 protected:
@@ -175,10 +191,11 @@ private:
 
 	ValueType* _data;
 	bool _deleteDataDestructor;
+	bool _interleaved;
 	unsigned int _totalSize;
 	unsigned char _nbComponents;
 	Coordinates _spanSize;
-	bool _interleaved;
+
 };	
 
 

@@ -1,4 +1,4 @@
 SET(KIWI_SRC ${KIWI_SRC} 
 		audio/audio.hpp
-		audio/AudioSampleBuffer.hpp
+		audio/AudioBuffer.hpp
 		)

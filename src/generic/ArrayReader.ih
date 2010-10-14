@@ -24,78 +24,71 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
-
-#ifndef KIWI_GENERICITERATOR_HPP
-#define KIWI_GENERICITERATOR_HPP
-
 
 namespace kiwi
 {
 namespace generic
 {
 
-/**
- * @class GenericIterator
- * @brief A generic Iterator class for kiwi resources
- */
-template<typename ValueTypeT>
-class GenericIterator
+
+
+template<typename T, unsigned int D>
+ArrayReader<T,D>::ArrayReader(
+	const core::Resource::ReaderInputPort& port )
 {
-public:
-	typedef ValueTypeT ValueType;
+	ArrayContainer<T,D>* resource = 
+		dynamic_cast< ArrayContainer<T,D>* >( 
+			port.connectedOutput()->resource() 
+		);
+	if(!resource)
+	{
+		debug.error() << "ArrayContainerReader<"
+			<< types::str<T>() 
+			<< ">::Constructor : "
+			<< "enable to determine the Resource type" 
+			<< endl();
+	}
+	_port = port.connectedOutput()->index();
+	_data = resource->getDataPointer(_port);
+	_incs = resource->increments(_port);
+	_span = resource->spanSize();
+/*	unsigned csize = 1;
+	for(unsigned i = 0; i < D; ++i) csize*=_span(i);
+	_end = _data + csize;
+*/ 
+}
 
-	inline bool next() { return ++(*this); }
-	inline bool prev() { return --(*this); }
-	inline ValueType& operator * () { return *_ptr; }
-	inline ValueType& get() { return *_ptr; }
-	bool operator == (const GenericIterator<ValueType>& it)
-		{ return _ptr == it.ptr; }
-	inline bool operator != (const GenericIterator<ValueType>& it) {return !(*this == it); }
 
-	// virtual
-	virtual bool operator ++ () = 0;
-	virtual bool operator -- () = 0;
-	
-protected:
-	ValueType* _ptr;
-};
 
-/**
- * @class GenericIterator
- * @brief A generic const Iterator class for kiwi resources
- */
-template<typename ValueTypeT>
-class GenericConstIterator
+template<typename T, unsigned int D>
+T ArrayReader<T,D>::get(const Point<int,D>& coords) const
 {
-public:
-	typedef ValueTypeT ValueType;
-
-	inline bool next() { return ++(*this); }
-	inline bool prev() { return ++(*this); }
-	inline ValueType operator * () { return *_ptr;}
-	inline ValueType get() {return *_ptr;}
-	
-	inline bool operator == (const GenericConstIterator<ValueType>& it)
-		{ return _ptr == it.ptr; }
-	
-	inline bool operator != (const GenericConstIterator<ValueType>& it) 
-		{return !(*this == it); }
+//	ScopedBlockMacro(__scop, "get" );
+	unsigned index = 0;
+	for(unsigned i = 0; i < D; ++i)
+	{
+		index += _incs(i)*coords(i);
+	}
+//	debug.print() << "index "  << index << endl();
+	return _data[index];
+}
 
 
-	virtual bool operator ++ () = 0;
-	virtual bool operator -- () = 0;
+template<typename T, unsigned int D>
+T ArrayReader<T,D>::get(unsigned int i) const
+{
+	return _data[i];
+}
+
+template<typename T, unsigned int D>
+ArrayConstIterator<T> ArrayReader<T,D>::getIterator() const
+{
+	unsigned size = 1;
+	for(unsigned i = 0; i < D; ++i) size *= _span(i);
+	return ArrayConstIterator<ValueType>(_data, _data+size*_incs(0)-1, _incs(0) ); 
+}
 
 
-protected:
-	ValueType* _ptr;
-	int a;
-};
+} // namespace
+} // namespace
 
-
-
-} //namespace 
-} //namespace kiwi
-
-
-#endif

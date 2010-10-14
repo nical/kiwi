@@ -1,4 +1,3 @@
-//      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
 //      
@@ -26,76 +25,46 @@
 
 #pragma once
 
-#ifndef KIWI_GENERICITERATOR_HPP
-#define KIWI_GENERICITERATOR_HPP
+#ifndef KIWI_AUDIOBUFFER_HPP
+#define KIWI_AUDIOBUFFER_HPP
 
+#include "generic/ArrayContainer.hpp"
 
 namespace kiwi
 {
-namespace generic
+namespace audio
 {
 
-/**
- * @class GenericIterator
- * @brief A generic Iterator class for kiwi resources
- */
-template<typename ValueTypeT>
-class GenericIterator
+
+template< typename TValueType >
+class AudioBuffer : public generic::ArrayContainer<TValueType, 1>
 {
 public:
-	typedef ValueTypeT ValueType;
 
-	inline bool next() { return ++(*this); }
-	inline bool prev() { return --(*this); }
-	inline ValueType& operator * () { return *_ptr; }
-	inline ValueType& get() { return *_ptr; }
-	bool operator == (const GenericIterator<ValueType>& it)
-		{ return _ptr == it.ptr; }
-	inline bool operator != (const GenericIterator<ValueType>& it) {return !(*this == it); }
-
-	// virtual
-	virtual bool operator ++ () = 0;
-	virtual bool operator -- () = 0;
+	typedef TValueType ValueType;
 	
-protected:
-	ValueType* _ptr;
-};
-
-/**
- * @class GenericIterator
- * @brief A generic const Iterator class for kiwi resources
- */
-template<typename ValueTypeT>
-class GenericConstIterator
-{
-public:
-	typedef ValueTypeT ValueType;
-
-	inline bool next() { return ++(*this); }
-	inline bool prev() { return ++(*this); }
-	inline ValueType operator * () { return *_ptr;}
-	inline ValueType get() {return *_ptr;}
+	/**
+	 * @brief constructor
+	 */ 
+	AudioBuffer( unsigned size,  portIndex_t nbBuffer = 1 );
 	
-	inline bool operator == (const GenericConstIterator<ValueType>& it)
-		{ return _ptr == it.ptr; }
+	/**
+	 * @brief constructor
+	 */
+	AudioBuffer(ValueType* dataPtr, unsigned size, portIndex_t nbBuffer = 1);
+
+	/**
+	 * @brief destructor
+	 */
+	~AudioBuffer();
 	
-	inline bool operator != (const GenericConstIterator<ValueType>& it) 
-		{return !(*this == it); }
-
-
-	virtual bool operator ++ () = 0;
-	virtual bool operator -- () = 0;
-
-
-protected:
-	ValueType* _ptr;
-	int a;
 };
 
 
 
-} //namespace 
-} //namespace kiwi
+} // namespace
+} // namespace
 
+#include "audio/AudioBuffer.ih"
 
 #endif

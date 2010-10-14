@@ -24,78 +24,84 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 #pragma once
 
-#ifndef KIWI_GENERICITERATOR_HPP
-#define KIWI_GENERICITERATOR_HPP
+#ifndef KIWI_ARRAYWRITER_HPP
+#define KIWI_ARRAYWRITER_HPP
+
+#include "core/Resource.hpp"
+#include "generic/ArrayContainer.hpp"
 
 
 namespace kiwi
 {
 namespace generic
 {
-
-/**
- * @class GenericIterator
- * @brief A generic Iterator class for kiwi resources
- */
-template<typename ValueTypeT>
-class GenericIterator
+	
+	
+template < typename TValueType, unsigned int TDimension>
+class ArrayWriter : public core::Writer
 {
 public:
-	typedef ValueTypeT ValueType;
-
-	inline bool next() { return ++(*this); }
-	inline bool prev() { return --(*this); }
-	inline ValueType& operator * () { return *_ptr; }
-	inline ValueType& get() { return *_ptr; }
-	bool operator == (const GenericIterator<ValueType>& it)
-		{ return _ptr == it.ptr; }
-	inline bool operator != (const GenericIterator<ValueType>& it) {return !(*this == it); }
-
-	// virtual
-	virtual bool operator ++ () = 0;
-	virtual bool operator -- () = 0;
+	typedef TValueType ValueType;
+	typedef Point<unsigned int, TDimension+1> IncsType;
+	typedef Point<unsigned int, TDimension> Coordinates;
+	
+	// -----------------------------------------------------------------
+	/**
+	 * @brief Constructor.
+	 */ 
+	ArrayWriter(const core::Resource::WriterInputPort& port);
+	
+	/**
+	 * @brief Basic access method.
+	 */ 
+	ValueType get(const Point<int, TDimension>& coords) const;	
+	/**
+	 * @brief Basic access method.
+	 */ 
+	ValueType get(unsigned int i) const;
+	
+	/**
+	 * @brief Basic access method.
+	 */ 
+	void set(const Point<int, TDimension>& coords, ValueType value);
+	/**
+	 * @brief Basic access method.
+	 */ 
+	void set(unsigned int i, ValueType value);
+	
+	/**
+	 * @brief Unsafe yet faster access method.
+	 */ 
+	inline const ValueType* getDataPointer() const { return _data; } 	// TODO: const stuff
+	
+	/**
+	 * @brief Returns an iterator to the beguinning of the data.
+	 */ 
+	ArrayIterator<ValueType> getIterator() const
+	{
+		unsigned size = 1;
+		for(unsigned i = 0; i < TDimension; ++i) size *= _span(i);
+		debug.print() << "Writer::chan size :  " << size*_incs(0)-1 << endl();
+		return ArrayIterator<ValueType>( _data, _data + size*_incs(0)-1, _incs(0) );
+	}
 	
 protected:
-	ValueType* _ptr;
-};
-
-/**
- * @class GenericIterator
- * @brief A generic const Iterator class for kiwi resources
- */
-template<typename ValueTypeT>
-class GenericConstIterator
-{
-public:
-	typedef ValueTypeT ValueType;
-
-	inline bool next() { return ++(*this); }
-	inline bool prev() { return ++(*this); }
-	inline ValueType operator * () { return *_ptr;}
-	inline ValueType get() {return *_ptr;}
-	
-	inline bool operator == (const GenericConstIterator<ValueType>& it)
-		{ return _ptr == it.ptr; }
-	
-	inline bool operator != (const GenericConstIterator<ValueType>& it) 
-		{return !(*this == it); }
-
-
-	virtual bool operator ++ () = 0;
-	virtual bool operator -- () = 0;
-
-
-protected:
-	ValueType* _ptr;
-	int a;
+ ValueType* _data;
+ ValueType* _end;
+ IncsType _incs;
+ portIndex_t _port;
+ Coordinates _span;
 };
 
 
+}	
+} // namespace
 
-} //namespace 
-} //namespace kiwi
+
+#include "generic/ArrayWriter.ih"
 
 
 #endif

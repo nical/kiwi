@@ -170,7 +170,7 @@ bool ArrayTest()
 		
 		debug.print() << "resource1" << endl();
 		// here the container allocates its data
-		generic::ArrayContainer<T,Dim> resource1(size, Comp, interleave);
+		generic::ArrayContainer<T,Dim> resource1(size, Comp, true);
 		
 		debug.print() << "resource2" << endl();
 		// here the container uses some preallocated memory 

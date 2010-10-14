@@ -44,7 +44,16 @@ namespace kiwi
 namespace generic
 {
 
-
+/**
+ * @class ArrayIterator
+ * @brief Iterator class working with contiguous data containers.
+ * 
+ * This iterator class has been designed to work with ArrayContainer but
+ * is compatible with any continuous data container.
+ * The iterator needs to know the starting pointer and the pointer to 
+ * the last value, as well as the increment value to iterate through
+ * interleaved arrays.
+ */ 
 template<typename ValueTypeT>
 class ArrayIterator : public GenericIterator<ValueTypeT>
 {
@@ -53,14 +62,47 @@ public:
 	typedef ValueTypeT ValueType;
 	typedef GenericIterator<ValueTypeT> parent;
 
-	// constructor
+	/** 
+	 * @brief Constructor. 
+	 * 
+	 * @param dataPtr A pointer to the first element.
+	 * @param endPtr A pointer to the last element.
+	 * @param increment The increment for each iteration.
+	 * 
+	 */ 
 	ArrayIterator(ValueType* dataPtr
 		, ValueType* endPtr
 		, unsigned int increment=1 );
 	// methods
+	/**
+	 * @brief Move forward.
+	 * 
+	 * For performances no bounding check is performed.
+	 */ 
 	bool operator ++ ();
+	
+	/**
+	 * @brief Move backward.
+	 * 
+	 * For performances no bounding check is performed.
+	 */ 
 	bool operator -- ();
+	
+	/**
+	 * @brief Determines wether or not the iterator has finished 
+	 * iterating through the range.
+	 * 
+	 */ 
 	bool isDone();
+	
+	/**
+	 * @brief Move forward, returns false if not possible.
+	 * 
+	 * This method is designed to be used in a loop :
+	 * | do {
+	 * |	// use *it
+	 * | while( it.onIteration() );
+	 */ 
 	bool onIteration();
 
 protected:
@@ -70,21 +112,63 @@ protected:
 
 
 
+/**
+ * @class ArrayConstIterator
+ * @brief const iterator class working with contiguous data containers.
+ * 
+ * This iterator class has been designed to work with ArrayContainer but
+ * is compatible with any continuous data container.
+ * The iterator needs to know the starting pointer and the pointer to 
+ * the last value, as well as the increment value to iterate through
+ * interleaved arrays.
+ */ 
 template<typename ValueTypeT>
 class ArrayConstIterator : public GenericConstIterator<ValueTypeT>
 {
 public:
-	// typedefs
+	// -------------------------------------------------------- typedefs
 	typedef ValueTypeT ValueType;
 	typedef GenericConstIterator<ValueTypeT> parent;
-	// constructor
-	ArrayConstIterator(ValueType* dataPtr
+	// ----------------------------------------------------- constructor
+
+	/** 
+	 * @brief Constructor. 
+	 * 
+	 * @param dataPtr A pointer to the first element.
+	 * @param endPtr A pointer to the last element.
+	 * @param increment The increment for each iteration.
+	 */ 
+	 ArrayConstIterator(ValueType* dataPtr
 		, ValueType* endPtr
 		, unsigned int increment=1 );
-	// methods
+	// --------------------------------------------------------- methods
+	/**
+	 * @brief Move forward.
+	 * 
+	 * For performances no bounding check is performed.
+	 */ 
 	bool operator ++ ();
+	
+	/**
+	 * @brief Move backward.
+	 * 
+	 * For performances no bounding check is performed.
+	 */ 
 	bool operator -- ();
+	/**
+	 * @brief Determines wether or not the iterator has finished 
+	 * iterating through the range.
+	 * 
+	 */ 
 	bool isDone();
+	/**
+	 * @brief Move forward, returns false if not possible.
+	 * 
+	 * This method is designed to be used in a loop :
+	 * | do {
+	 * |	// use *it
+	 * | while( it.onIteration() );
+	 */ 
 	bool onIteration();
 	
 protected:

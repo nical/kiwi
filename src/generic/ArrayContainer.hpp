@@ -47,7 +47,15 @@ class ArrayContainer : public core::Resource
 {
 public:
 	typedef TValueType ValueType;
+	/**
+	 * @brief The Point type used to adress a value in this container.
+	 */ 
 	typedef Point<unsigned int, TDimension> Coordinates;
+	
+	/**
+	 * @brief The Point type used to contain the increments of this
+	 * container.
+	 */ 
 	typedef Point<unsigned int, TDimension+1> IncsType;
 	
 	enum{ NUMBERS = 0, RVBA = 1, CMJN = 2, XYZ = 3, ABCD = 4, MONO = 5 };
@@ -84,7 +92,9 @@ public:
 	 * 
 	 * Note that if the data is interleaved, the value next to the one 
 	 * pointed by the returned pointer does not belong to the data 
-	 * associated to the port (@see increments).
+	 * associated to the port 
+	 * @see increments
+	 * @see isInterleaved
 	 */ 
 	ValueType * const getDataPointer(portIndex_t index) const;
 	
@@ -134,14 +144,33 @@ public:
 	
 	void printState();
 	
+	/**
+	 * @brief TODO
+	 */ 
+	bool resize(Coordinates newSize, bool keepData)
+	{ assert( "not supported yet" === ""); }
+		
+	
 protected:
 	
+	/**
+	 * @brief A helper method that automatically set the port names given
+	 * a family of names.
+	 * 
+	 * @param index The index of the port. 
+	 * @param nameHint the kind of object you are manipulating (see the
+	 * enum at the beguinning of the class definition).
+	 * @param the port type (Reader/Writer... cf the enum as well). 
+	 */ 
 	virtual kiwi::string portName(portIndex_t index
 		, unsigned char nameHint
 		, unsigned char portType = READER_OUT ) const;
 
 
-private: 
+private:
+	/**
+	 * @brief Initializes the container. (called from within the constructors)
+	 */ 
 	void init(unsigned char nameHint);
 
 	ValueType* _data;

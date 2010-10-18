@@ -1,22 +1,17 @@
+#include "TestSuite.hpp"
 
 #include "core/Commons.hpp"
 
 #include "core/Filter.hpp"
 
-#include "generic/ArrayContainer.hpp"
-#include "generic/ArrayReader.hpp"
-#include "generic/ArrayWriter.hpp"
-#include "generic/ArrayIterator.hpp"
-
 #include "generic/Point.hpp"
 
 #include "utils/types.hpp"
 
-#include "audio/AudioBuffer.hpp"
+#include "text/StringContainer.hpp"
 
 #include <vector>
 
-//#include <Magick++.h>
 
 using namespace kiwi;
 using namespace kiwi::core;
@@ -31,23 +26,21 @@ using namespace kiwi::generic;
 
 // compute the sum of two Value<> resources and place it in an other Value<>
 template<typename TValueType, unsigned int TDimension>
-class AddArraysFilter : public Filter
+class TestStringFilter : public Filter
 {
 public:
-	enum{ A = 0, B = 1};
-	enum{ WRITE = 0};
-	enum{ RESULT = 0};
+	enum{ A = 0, B = 1 };
+	enum{ WRITE = 0 };
+	enum{ RESULT = 0 };
 	
 	typedef generic::ArrayReader<TValueType, TDimension> myReader;
 	typedef generic::ArrayWriter<TValueType, TDimension> myWriter;
 // ---------------------------------------------------------------------
-	AddArraysFilter() : Filter()
+	TestStringFilter() : Filter()
 	{
-	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
+	ScopedBlockMacro(scp_block, "TestStringFilter::constructor");
 		setLayoutEventEnabled(false);
-		kiwi::string sType( kiwi::string("array")
-			+ boost::lexical_cast<kiwi::string>(TDimension)
-			+"d_"+ types::str<TValueType>() );
+		kiwi::string sType( "string" );
 		addReaderInputPort(sType, "A");
 		addReaderInputPort(sType, "B");
 		
@@ -59,17 +52,18 @@ public:
 		setReaderOutputPortEnabled(0,false);
 		setLayoutEventEnabled(true);
 	}
-	~AddArraysFilter() {}
+	~TestStringFilter() {}
 
 	
 
 // ---------------------------------------------------------------------
 	void process()
 	{
-	//ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+	//ScopedBlockMacro(proc_block, "TestStringFilter::process()");
+		
 		if(!isReady() )
 		{
-			debug.error() << "AddArraysFilter::Process error : not ready" 
+			debug.error() << "TestStringFilter::Process error : not ready" 
 				<< endl();
 			return;
 		}
@@ -84,32 +78,8 @@ public:
 		myWriter result( writerInputPort(0) );
 		
 		debug.beginBlock( "compute..");
-			ArrayConstIterator<TValueType> itA = A.getIterator();
-			ArrayConstIterator<TValueType> itB = B.getIterator();
-			ArrayIterator<TValueType> itResult = result.getIterator();
-			
-			Point<int, TDimension> pos(0);
-			result.set( pos , A.get( pos ) + B.get( pos ) );
-			unsigned count = 0;
-			debug.print() << "avant la boucle" << endl();
-			do
-			{
-				if( itA.isDone() ) break;
-				if( itB.isDone() ) break;
-				
-				++count;
-				//debug.print() << " on iteration " << count << endl();
-				
-				*itResult = *itA + *itB;
-				// this is unsafe crap: you don't iterate through image 
-				// that might not have the same size that way but right
-				// now i'm testing iterators so... 
-				++itA ;
-				++itB ;
-			} while(itResult.onIteration() );
-			
-			debug.print() << count << " iterations " << endl();
-
+		
+		
 		debug.endBlock( "compute..");
 		
 		debug.print() << "end of the method" << endl();
@@ -156,43 +126,26 @@ public:
 // ---------------------------- Test -----------------------------------
 // ---------------------------------------------------------------------
 
-template<typename T, unsigned Dim, unsigned Comp>
-bool ArrayTest()
+bool StringTest()
 {
 
 	debug.beginBlock("Allocate the resources");
 		//audio::AudioBuffer<float> audioTest( 128, 1 );
 		
-		bool interleave = false;
-		
-		generic::Point<unsigned,Dim> size;
-		for(unsigned i = 0; i < Dim; ++i) size[i] = 10;
-		
 		debug.print() << "resource1" << endl();
-		// here the container allocates its data
-		generic::ArrayContainer<T,Dim> resource1(size, Comp, true);
+		
+		text::StringContainer resource1("foo");
 		
 		debug.print() << "resource2" << endl();
-		// here the container uses some preallocated memory 
-		T* preAllocData = new T[100*Comp];
-		generic::ArrayContainer<T,Dim> resource2(preAllocData, size, Comp, interleave);
+		text::StringContainer resource2();
 		// remember to delete the allocated memory !
 		
 		debug.print() << "resourceResult" << endl();
-		generic::ArrayContainer<T,Dim> resourceResult(size, Comp, interleave);
+		text::StringContainer resourceResult();
 		
-		AddArraysFilter<T,Dim> myTest;
+		TestStringFilter myTest;
 		
-		T count = 0;
-		ArrayIterator<T> it = resource1.getBasicIterator();
-		do { *it = ++count; } while ( it.onIteration() );
-		
-		it = resource2.getBasicIterator();
-		do { *it = 1000; } while ( it.onIteration() );
-		
-		it = resourceResult.getBasicIterator();
-		do { *it = 0; } while ( it.onIteration() );
-		
+			
 		resource1.printState();
 		resource2.printState();
 		
@@ -225,16 +178,15 @@ bool ArrayTest()
 int main()
 {
 
-ScopedBlockMacro(s2, "kiwi::TestArrayContainer");
+ScopedBlockMacro(s2, "kiwi::StringContainerTest");
 
 debug.beginBlock("int main() ");
 
-	ArrayTest<int, 2, 2>();
+	StringTest();
 
-	__( debug.print() << "woooooat !" << endl; )
-	
 debug.endBlock();
 	return 0;
 }
+
 
 

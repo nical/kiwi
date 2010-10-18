@@ -13,9 +13,11 @@ link_directories (${PROJECT_BINARY_DIR})
 #------TESTS subdirectories ------
 
 SET(KIWI_TESTS_SRC
-	core/FilterTest
-	generic/ArrayContainerTest
-	generic/PointTest
+	TestSuite
+#	core/FilterTest
+#	generic/ArrayContainerTest
+#	generic/PointTest
+#	text/StringContainerTest
    )
 
 

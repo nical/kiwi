@@ -18,6 +18,6 @@ typedef unsigned char portIndex_t;
 }
 
 
-#include "DebugOutputStream.hpp"
+#include "utils/DebugOutputStream.hpp"
 
 #endif

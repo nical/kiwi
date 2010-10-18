@@ -4,7 +4,7 @@
 #define DEBUGOUTPUTSTREAM_HPP
 
 #include <iostream>
-#include "Commons.hpp"
+#include "core/Commons.hpp"
 
 #define DEBUG
 

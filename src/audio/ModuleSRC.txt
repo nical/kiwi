@@ -1,4 +1,0 @@
-SET(KIWI_SRC ${KIWI_SRC} 
-		audio/audio.hpp
-		audio/AudioBuffer.hpp
-		)

@@ -1,4 +1,0 @@
-SET(KIWI_SRC ${KIWI_SRC} 
-		image/image.hpp
-		image/ArrayImageData.hpp
-		)

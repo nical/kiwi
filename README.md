@@ -2,21 +2,22 @@
 
 A generic and easy to use pipeline system. 
 
-<h2> Resources and filters </h2>
 
 <img src='http://img808.imageshack.us/img808/4377/kiwiboxespng01.png' border='0'/>
 
-Uploaded with <a target='_blank' href='http://imageshack.us'>ImageShack.us</a>
+
+<h2> Resources and filters </h2>
 
 Kiwi features a powerful pipeline system composed of resources and filters : 
 <ul>
-<li>A <b>resource</b> (kiwi::core::Resource) is an object that contains input and output ports and give access to the data it contains by providing readers and writers throught these ports.</li>
-<li>A <b>Filter</b> (kiwi::core::Filter) is a resource that can be executed using its process() method. Filters inherit from resources their connecting system. </li>
-<li>A <b>Pipeline</b> (kiwi::core::Pipeline) is a filter that contains other filters (including eventually pipelines) and is responsible for processing each of its filters in the correct order. This is the composite design pattern applied to the kiwi system. </li>
+	<li>A <b>resource</b> (kiwi::core::Resource) is an object that contains input and output ports and give access to the data it contains by providing readers and writers throught these ports.</li>
+	<li>A <b>Filter</b> (kiwi::core::Filter) is a resource that can be executed using its process() method. Filters inherit from resources their connecting system. </li>
+	<li>A <b>Pipeline</b> (kiwi::core::Pipeline) is a filter that contains other filters (including eventually pipelines) and is responsible for processing each of its filters in the correct order. This is the composite design pattern applied to the kiwi system. </li>
 </ul>
+
 <h2> Creating new resources and filters </h2>
 
-Kiwi is designed to make the creation of Resources and Filters very easy. Just create a class deriving from kiwi::core::Resource or kiwi::core::Filter and overload a few method.
+Kiwi is designed to make the creation of Resources and Filters very easy. Just create a class deriving from kiwi::core::Resource or kiwi::core::Filter and overload a few methods.
 
 <h3> Resources </h3>
 

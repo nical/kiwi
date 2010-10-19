@@ -26,7 +26,7 @@ This page is in under construction, more informations are to come soon
 
 <h2> The project's advancement </h2>
 
-kiwi 0.2.1
+kiwi 0.2.2
 
 Kiwi is still at an early stage, and interfaces are subject to change.
 
@@ -36,6 +36,7 @@ Kiwi is still at an early stage, and interfaces are subject to change.
 
 <h3> Currently in developement </h3>
  - The generic ArrayData Resource
+ - A simple string container
 
 <h3> TODO </h3>
  - Unit tests
@@ -45,7 +46,7 @@ Kiwi is still at an early stage, and interfaces are subject to change.
 
 <h2> License </h2>
 
-Kiwi's code source is free under the Gnu GPLv2 License.
+Kiwi's code source is under the new BSD License.
 
 <h2> Project member(s) </h2>
 

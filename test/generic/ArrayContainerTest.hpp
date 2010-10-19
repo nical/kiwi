@@ -1,3 +1,7 @@
+#pragma once
+
+#ifndef KIWI_ARRAYCONTAINER_TEST
+#define KIWI_ARRAYCONTAINER_TEST
 
 #include "core/Commons.hpp"
 
@@ -12,11 +16,8 @@
 
 #include "utils/types.hpp"
 
-#include "audio/AudioBuffer.hpp"
-
 #include <vector>
 
-//#include <Magick++.h>
 
 using namespace kiwi;
 using namespace kiwi::core;
@@ -66,14 +67,15 @@ public:
 // ---------------------------------------------------------------------
 	void process()
 	{
-	//ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
-		if(!isReady() )
+	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+
+__(		if(!isReady() )
 		{
 			debug.error() << "AddArraysFilter::Process error : not ready" 
 				<< endl();
 			return;
 		}
-
+)
 		debug.print() << "Allocate Reader #0" << endl;
 		myReader A( readerInputPort(0) );
 		
@@ -157,7 +159,7 @@ public:
 // ---------------------------------------------------------------------
 
 template<typename T, unsigned Dim, unsigned Comp>
-bool ArrayTest()
+void ArrayContainerTest()
 {
 
 	debug.beginBlock("Allocate the resources");
@@ -170,11 +172,12 @@ bool ArrayTest()
 		
 		debug.print() << "resource1" << endl();
 		// here the container allocates its data
-		generic::ArrayContainer<T,Dim> resource1(size, Comp, true);
+		generic::ArrayContainer<T,Dim> resource1(size, Comp, interleave);
 		
 		debug.print() << "resource2" << endl();
 		// here the container uses some preallocated memory 
-		T* preAllocData = new T[100*Comp];
+		unsigned allocSize = Comp; for(unsigned i = 0; i < Dim; ++i) allocSize*=10;
+		T* preAllocData = new T[allocSize];
 		generic::ArrayContainer<T,Dim> resource2(preAllocData, size, Comp, interleave);
 		// remember to delete the allocated memory !
 		
@@ -182,19 +185,20 @@ bool ArrayTest()
 		generic::ArrayContainer<T,Dim> resourceResult(size, Comp, interleave);
 		
 		AddArraysFilter<T,Dim> myTest;
+		AddArraysFilter<T,Dim> myTest2;
 		
 		T count = 0;
 		ArrayIterator<T> it = resource1.getBasicIterator();
 		do { *it = ++count; } while ( it.onIteration() );
 		
 		it = resource2.getBasicIterator();
-		do { *it = 1000; } while ( it.onIteration() );
+		do { *it = 100; } while ( it.onIteration() );
 		
 		it = resourceResult.getBasicIterator();
 		do { *it = 0; } while ( it.onIteration() );
 		
-		resource1.printState();
-		resource2.printState();
+		//resource1.printState();
+		//resource2.printState();
 		
 	debug.endBlock();
 
@@ -204,24 +208,24 @@ bool ArrayTest()
 		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
 		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
+		
+		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
+		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);
+		resourceResult.writerOutputPort(0) >> myTest2.writerInputPort(0);
 	debug.endBlock("connect the ports");
 
 	debug.print() << endl();
 
 	myTest.process();
+	myTest2.process();
 
 	debug.print() << "processed" << endl();
 
-	resourceResult.printState();
-		delete[] preAllocData;
-	return true;
+	//resourceResult.printState();
+	delete[] preAllocData;
 }
 
-// ---------------------------------------------------------------------
-// ---------------------------- Main -----------------------------------
-// ---------------------------------------------------------------------
-
-
+/*
 int main()
 {
 
@@ -236,5 +240,6 @@ debug.beginBlock("int main() ");
 debug.endBlock();
 	return 0;
 }
+*/
 
-
+#endif

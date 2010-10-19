@@ -46,17 +46,9 @@ public:
 	virtual T& getValue(portIndex_t port = 0) = 0;
 };
 
-// dumb class only for testing multiple inheritences and diamond issues
-class TestHolder : public virtual Resource
-{
-public:
-
-	virtual void plop() { debug.print() << "plop" << endl(); }
-};
-
 // ------------------------------------------------------------ Resource
 template <typename TValueType>
-class Value : public ValueHolder<TValueType>, TestHolder
+class Value : public ValueHolder<TValueType>
 {
 public:
 	typedef TValueType ValueType;
@@ -86,6 +78,8 @@ public:
 	// -----------------------------------------------------------------
 	ValueReader(const Resource::ReaderInputPort& port)
 	{
+		assert( port.connectedOutput()->resource() );
+		
 		_resource = dynamic_cast<ValueHolder<TValueType>* >( 
 			port.connectedOutput()->resource() 
 		);

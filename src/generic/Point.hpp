@@ -10,6 +10,9 @@
 #define KIWI_POINT_HPP
 
 #include "core/Commons.hpp"
+#include <assert.h>
+#include <boost/lexical_cast.hpp>
+#include "utils/types.hpp"
 
 namespace kiwi
 {
@@ -25,8 +28,7 @@ public:
 	typedef TCoordType CoordType;
 	static const unsigned int Dimension = TDimension;
 	//zero value
-	//static const Point<CoordType, TDimension> zero = Point<CoordType, Dimension>(0);
-
+	static Point<CoordType, Dimension> zero(){return Point<CoordType, Dimension>(0.0);}
 	//constructors
 	Point(CoordType* data);
 	Point();
@@ -71,17 +73,20 @@ Point<T,D>::Point(CoordType* data)
 template <typename T, unsigned int D>
 Point<T,D>::Point()
 {
+	assert(D>0);
 	// No initialization for performances
 }
 template <typename T, unsigned int D>
 Point<T,D>::Point(CoordType x)
 {
+	assert(D>0);
 	_coordinates[0] = x;
 	for(unsigned i = 1; i < D; ++i) _coordinates[i] = 0;
 }
 template <typename T, unsigned int D>
 Point<T,D>::Point(CoordType x, CoordType y)
 {
+	assert(D>=2);
 	_coordinates[0] = x;
 	_coordinates[1] = y;
 	for(unsigned i = 2; i < D; ++i) _coordinates[i] = 0;
@@ -89,6 +94,7 @@ Point<T,D>::Point(CoordType x, CoordType y)
 template <typename T, unsigned int D>
 Point<T,D>::Point(CoordType x, CoordType y, CoordType z)
 {
+	assert(D>=3);
 	_coordinates[0] = x;
 	_coordinates[1] = y;
 	_coordinates[2] = z;
@@ -97,6 +103,7 @@ Point<T,D>::Point(CoordType x, CoordType y, CoordType z)
 template <typename T, unsigned int D>
 Point<T,D>::Point(CoordType x, CoordType y, CoordType z, CoordType w)
 {
+	assert(D>=4);
 	_coordinates[0] = x;
 	_coordinates[1] = y;
 	_coordinates[2] = z;
@@ -107,15 +114,26 @@ Point<T,D>::Point(CoordType x, CoordType y, CoordType z, CoordType w)
 template <typename T, unsigned int D>
 Point<T,D>::Point(const Point<CoordType,Dimension>& point)
 {
+	assert(D>0);
 	for(unsigned i = 0; i < D; ++i) _coordinates[i] = point._coordinates[i];
 }
 
 template <typename T, unsigned int D>
 Point<T,D> Point<T,D>::operator + (const Point<T,D>& point)
 {
+ScopedBlockMacro(__scop, kiwi::string("Point<")
+		+types::str<T>()+","
+		+boost::lexical_cast<kiwi::string>(D)
+		+">::operator + (Point)")
 	Point<T,D> res;
-	for(unsigned int i = 0; i < D; ++ i)
+	for(unsigned int i = 0; i < D; ++i)
+	{
 		res[i] = _coordinates[i] + point._coordinates[i];
+__(		debug.print() << "> " <<  static_cast<float>(_coordinates[i]) <<" + "
+					<< static_cast<float>(point._coordinates[i])
+					<< " = " << static_cast<float>( res[i] ) << endl();
+)//debug
+	}
 	return res;
 }
 
@@ -145,9 +163,17 @@ void Point<T,D>::operator -= (const Point<T,D>& point)
 template <typename T, unsigned int D>
 bool Point<T,D>::operator == (const Point<T,D>& point)
 {
-	for(unsigned int i = 0; i < D; ++ i)
-		if(_coordinates[i] != point._coordinates[i]) return false;
 
+ScopedBlockMacro(__scop, kiwi::string("Point<")
+		+types::str<T>()+","
+		+boost::lexical_cast<kiwi::string>(D)
+		+">::operator == (Point)")
+	for(unsigned int i = 0; i < D; ++ i)
+	{
+		debug.print() << "> " << static_cast<double>(_coordinates[i]) << " " 
+				<< static_cast<double>(point._coordinates[i]) << endl();
+		if(_coordinates[i] != point._coordinates[i]) return false;
+	}
 	return true;
 }
 

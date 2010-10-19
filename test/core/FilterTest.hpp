@@ -52,7 +52,10 @@ public:
 		
 		addWriterInputPort(sType, "Write Result");
 		
-		assert(this->getWriterInputCount() == 0 );
+		debug.print() << "writer input count: " 
+		<< this->getWriterInputCount() << endl();
+		
+		assert(this->getWriterInputCount() == 1 );
 		
 		//add a reader output that will be available only when the writer
 		//port is connected
@@ -126,23 +129,16 @@ public:
 // ---------------------------- Main -----------------------------------
 // ---------------------------------------------------------------------
 
-
-
-
-int main()
+template<typename T> void FilterTest()
 {
-
-ScopedBlockMacro(s2, "kiwi::Test");
-
-debug.beginBlock("int main() ");
-
+ScopedBlockMacro(__scop, "Filter Test");	
 	debug.beginBlock("Allocate the resources");
-		generic::Value<float> resource1(10);
-		generic::Value<float> resource2(10);
-		generic::Value<float> resourceResult(42);
+		generic::Value<T> resource1(10);
+		generic::Value<T> resource2(10);
+		generic::Value<T> resourceResult(42);
 
-		TestFilter<float> myTest;
-		TestFilter<float> myTest2;
+		TestFilter<T> myTest;
+		TestFilter<T> myTest2;
 	debug.endBlock();
 
 	debug.print() << endl();
@@ -204,8 +200,17 @@ debug.beginBlock("int main() ");
 	myTest2.process();
 	
 	
-debug.endBlock();
+}
+
+/*
+int main()
+{
+
+ScopedBlockMacro(s2, "kiwi::FilterTest");
+	FilterTest<float>();
+	FilterTest<int>();
+
 	return 0;
 }
 
-
+*/

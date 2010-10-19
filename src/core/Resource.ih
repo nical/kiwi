@@ -126,7 +126,8 @@ Resource::InputPort<SlotType>::InputPort(
 	, portIndex_t myIndex
 	, const string& type
 	, const string& name )
-:  _type(type), _name(name), _connectedResource(0), _enabled(true)
+:  _type(type), _name(name)
+, _connectedResource(0), _enabled(true), _subPort(0)
 {
 	_metaResource.resource = myResource;
 	_metaResource.index = myIndex;
@@ -136,7 +137,7 @@ Resource::InputPort<SlotType>::InputPort(
 
 
 template <typename SlotType>
-void Resource::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort)
+void Resource::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMetaPort)
 {
 ScopedBlockMacro(__sccop, "Resource::InputPort<SlotType>::connect" );
 	if( !isEnabled() )
@@ -149,27 +150,31 @@ ScopedBlockMacro(__sccop, "Resource::InputPort<SlotType>::connect" );
 		debug.error() << "InputPort::connect() : output port disabled" << endl();
 		return;
 	}
-	if(isCompatible(outputPort) )
-	{
-		if( isConnected() ) disconnect();
-		_connectedResource = &outputPort;
-		outputPort._connections.push_back(this);
-		if( _metaResource.resource->isLayoutEventEnabled() ) 
-			_metaResource.resource->layoutChanged();
-	}
-	else
-	{
-		debug.error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
-		debug.error() << outputPort.getType() << " >> " << getType() << endl();
-		return;
-	}
-
+	// if it is the subPort
+	
+		if(isCompatible(outputPort) )
+		{
+			if( isConnected() ) disconnect();
+			_connectedResource = &outputPort;
+			if( isMetaPort ) outputPort._connections.push_back(this);
+			if( _subPort != 0 )	_subPort->connect(outputPort, false);
+			if( _metaResource.resource->isLayoutEventEnabled() ) 
+					_metaResource.resource->layoutChanged();
+		}
+		else
+		{
+			debug.error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
+			debug.error() << outputPort.getType() << " >> " << getType() << endl();
+			return;
+		}
+	
 }
 
 template <typename SlotType>
 void Resource::InputPort<SlotType>::disconnect()
 {
 ScopedBlockMacro(scp_block,"Resource::InputPort<SlotType>::disconnect");
+	if(_subPort != 0) _subPort->disconnect();
 	if(!isConnected() ) return;
 	for(typename OutputPort<SlotType>::connectionList::iterator it
 		= _connectedResource->_connections.begin(); it!= _connectedResource->_connections.end(); ++it)
@@ -185,11 +190,12 @@ ScopedBlockMacro(scp_block,"Resource::InputPort<SlotType>::disconnect");
 
 
 template <typename SlotType>
-void Resource::InputPort<SlotType>::bind(const InputPort<SlotType>& port)
+void Resource::InputPort<SlotType>::bind(/*const*/ InputPort<SlotType>& port)
 {
-	debug.print() << "port rebinding" << endl();
-	_subResource = port._subResource;
+__(	debug.print() << "input port rebinding" << endl();  )
+	//_subResource = port._subResource;
 	_type = port._type;
+	_subPort = &port;
 	// note that if the binded Resource is deleted, trying to acces
 	// this port might cause a segfault
 }

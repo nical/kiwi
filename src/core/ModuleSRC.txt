@@ -3,5 +3,4 @@ SET(KIWI_SRC ${KIWI_SRC}
 		core/Filter.hpp
 		core/Pipeline.hpp
 		core/Commons.hpp
-		core/DebugOutputStream.hpp
 		)

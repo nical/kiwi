@@ -3,6 +3,7 @@
 #include "generic/PointTest.hpp"
 #include "core/FilterTest.hpp"
 #include "generic/ArrayContainerTest.hpp"
+#include "core/MetaFilterTest.hpp"
 //#include "audio/AudioBufferTest.hpp"
 //#include "text/StringContainerTest.hpp"
 
@@ -44,5 +45,6 @@ int main()
 		debug.print() << "----------------------------------------------"
 					<< "ArrayContainer Test Ok" << endl();
 		debug.endl(3);
+		MetaFilterTest<int, 2 ,2>();
 
 }

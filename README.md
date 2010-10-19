@@ -46,7 +46,7 @@ Kiwi is still at an early stage, and interfaces are subject to change.
 
 <h2> License </h2>
 
-Kiwi's code source is free under the Gnu GPLv2 License.
+Kiwi's code source is under the new BSD License.
 
 <h2> Project member(s) </h2>
 

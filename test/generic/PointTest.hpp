@@ -1,3 +1,7 @@
+#pragma once
+#ifndef KIWI_POINT_TEST
+#define KIWI_POINT_TEST
+
 #include "generic/Point.hpp"
 #include "core/Commons.hpp"
 #include <assert.h>
@@ -36,3 +40,5 @@ void PointTest()
 	debug.print() << " Point tests : success !" << endl();
 
 }
+
+#endif

@@ -301,15 +301,15 @@ protected:
 	 * outputs.
 	 * 
 	 * @param myPort This class's port that has to be redirected to another Resource's port.
-	 * @param toBind ...
+	 * @param toBind The other Resource's port.
 	 */ 
 	inline void bindPort(ReaderOutputPort& myPort, const ReaderOutputPort& toBind)
 		{ myPort.bind(toBind); }
 	inline void bindPort(WriterOutputPort& myPort, const WriterOutputPort& toBind)
 		{ myPort.bind(toBind); }
-	inline void bindPort(ReaderInputPort& myPort, const ReaderInputPort& toBind)
+	inline void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
 		{ myPort.bind(toBind); }
-	inline void bindPort(WriterInputPort& myPort, const WriterInputPort& toBind)
+	inline void bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 		{ myPort.bind(toBind); }
 	
 // ----------------------------------------------------- private members
@@ -342,7 +342,7 @@ public:
 	friend class Resource;
 	public:
 		InputPort(Resource* myResource, portIndex_t myPort, const string& type, const string& name);
-		void connect(OutputPort<SlotType>& outputPort);
+		void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
 		void disconnect();
 		inline portIndex_t index() const {return _subResource.index;}
 		inline Resource* resource() const {return _subResource.resource;}
@@ -362,12 +362,13 @@ public:
 	protected:
 		inline void setName(const string& name){_name = name;}
 		inline void setType(const string& type){_type = type;}
-		void bind(const InputPort<SlotType>& port);
+		void bind(/*const*/ InputPort<SlotType>& port);
 		inline void setEnabled(bool status) {_enabled = status;}
 		
 	private:
 		PortInfo _metaResource;
 		PortInfo _subResource;
+		InputPort<SlotType>* _subPort;
 		OutputPort<SlotType>* _connectedResource; // the Resource in input of this
 		string _name;
 		string _type;

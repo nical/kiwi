@@ -1,18 +1,14 @@
 #pragma once
 
-#ifndef KIWI_ARRAYCONTAINER_TEST
-#define KIWI_ARRAYCONTAINER_TEST
+#ifndef KIWI_METAFILTER_TEST
+#define KIWI_METAFILTER_TEST
+
 
 #include "core/Commons.hpp"
 
 #include "core/Filter.hpp"
 
-#include "generic/ArrayContainer.hpp"
-#include "generic/ArrayReader.hpp"
-#include "generic/ArrayWriter.hpp"
-#include "generic/ArrayIterator.hpp"
-
-#include "generic/Point.hpp"
+#include "generic/ArrayContainerTest.hpp"
 
 #include "utils/types.hpp"
 
@@ -32,17 +28,14 @@ using namespace kiwi::generic;
 
 // compute the sum of two Value<> resources and place it in an other Value<>
 template<typename TValueType, unsigned int TDimension>
-class AddArraysFilter : public Filter
+class MetaAddArraysFilter : public Filter
 {
 public:
-	enum{ A = 0, B = 1};
-	enum{ WRITE = 0};
-	enum{ RESULT = 0};
 	
 	typedef generic::ArrayReader<TValueType, TDimension> myReader;
 	typedef generic::ArrayWriter<TValueType, TDimension> myWriter;
 // ---------------------------------------------------------------------
-	AddArraysFilter() : Filter()
+	MetaAddArraysFilter() : Filter()
 	{
 	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
 		setLayoutEventEnabled(false);
@@ -58,63 +51,33 @@ public:
 		//port is connected
 		addReaderOutputPort(sType, "Result");
 		setReaderOutputPortEnabled(0,false);
+		
+		bindPort(readerInputPort(0), _subFilter.readerInputPort(0) );
+		bindPort(readerInputPort(1), _subFilter.readerInputPort(1) );
+		bindPort(writerInputPort(0),_subFilter.writerInputPort(0) );
+		bindPort(readerOutputPort(0), _subFilter.readerOutputPort(0) );
+		
+		
 		setLayoutEventEnabled(true);
 	}
-	~AddArraysFilter() {}
+	~MetaAddArraysFilter() {}
 
 	
 
 // ---------------------------------------------------------------------
 	void process()
 	{
-	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+	ScopedBlockMacro(proc_block, "MetaAddArraysFilter::process()");
 
 __(		if(!isReady() )
 		{
-			debug.error() << "AddArraysFilter::Process error : not ready" 
+			debug.error() << "MetaAddArraysFilter::Process error : not ready" 
 				<< endl();
 			return;
 		}
 )
-		debug.print() << "Allocate Reader #0" << endl;
-		myReader A( readerInputPort(0) );
+		_subFilter.process();
 		
-		debug.print() << "Allocate Reader #1" << endl;
-		myReader B( readerInputPort(1) );
-		
-		debug.print() << "Allocate Writer #0" << endl;
-		myWriter result( writerInputPort(0) );
-		
-		debug.beginBlock( "compute..");
-			ArrayConstIterator<TValueType> itA = A.getIterator();
-			ArrayConstIterator<TValueType> itB = B.getIterator();
-			ArrayIterator<TValueType> itResult = result.getIterator();
-			
-			Point<int, TDimension> pos(0);
-			result.set( pos , A.get( pos ) + B.get( pos ) );
-			unsigned count = 0;
-			debug.print() << "avant la boucle" << endl();
-			do
-			{
-				if( itA.isDone() ) break;
-				if( itB.isDone() ) break;
-				
-				++count;
-				//debug.print() << " on iteration " << count << endl();
-				
-				*itResult = *itA + *itB;
-				// this is unsafe crap: you don't iterate through image 
-				// that might not have the same size that way but right
-				// now i'm testing iterators so... 
-				++itA ;
-				++itB ;
-			} while(itResult.onIteration() );
-			
-			debug.print() << count << " iterations " << endl();
-
-		debug.endBlock( "compute..");
-		
-		debug.print() << "end of the method" << endl();
 		return;
 	}
 	
@@ -122,9 +85,7 @@ __(		if(!isReady() )
 // ---------------------------------------------------------------------
 	bool readyCondition()
 	{
-		return (readerInputPort(0).isConnected()
-			&& readerInputPort(1).isConnected()
-			&& writerInputPort(0).isConnected() );
+		return _subFilter.isReady();
 	}
 	
 	void layoutChanged()
@@ -147,6 +108,9 @@ __(		if(!isReady() )
 		}
 
 	}
+	
+protected:
+	AddArraysFilter<TValueType,TDimension> _subFilter;
 };
 
 
@@ -159,11 +123,14 @@ __(		if(!isReady() )
 // ---------------------------------------------------------------------
 
 template<typename T, unsigned Dim, unsigned Comp>
-void ArrayContainerTest()
+void MetaFilterTest()
 {
+// Here we run the same test that ArrayContainerTest but using a 
+// "meta-filter" that encapsulates AddArraysFilter to test the 
+// functionning of port bindings
 
-	debug.beginBlock("Allocate the resources");
-		//audio::AudioBuffer<float> audioTest( 128, 1 );
+
+ 	debug.beginBlock("Allocate the resources");
 		
 		bool interleave = false;
 		
@@ -184,8 +151,8 @@ void ArrayContainerTest()
 		debug.print() << "resourceResult" << endl();
 		generic::ArrayContainer<T,Dim> resourceResult(size, Comp, interleave);
 		
-		AddArraysFilter<T,Dim> myTest;
-		AddArraysFilter<T,Dim> myTest2;
+		MetaAddArraysFilter<T,Dim> myTest;
+		MetaAddArraysFilter<T,Dim> myTest2;
 		
 		T count = 0;
 		ArrayIterator<T> it = resource1.getBasicIterator();
@@ -221,25 +188,9 @@ void ArrayContainerTest()
 
 	debug.print() << "processed" << endl();
 
-	//resourceResult.printState();
+	resourceResult.printState();
 	delete[] preAllocData;
 }
 
-/*
-int main()
-{
-
-ScopedBlockMacro(s2, "kiwi::TestArrayContainer");
-
-debug.beginBlock("int main() ");
-
-	ArrayTest<int, 2, 2>();
-
-	__( debug.print() << "woooooat !" << endl; )
-	
-debug.endBlock();
-	return 0;
-}
-*/
 
 #endif

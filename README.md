@@ -4,7 +4,9 @@ A generic and easy to use pipeline system.
 
 <h2> Resources and filters </h2>
 
-<img src="doc/images/boxes.png" width=100% >
+<img src='http://img808.imageshack.us/img808/4377/kiwiboxespng01.png' border='0'/>
+
+Uploaded with <a target='_blank' href='http://imageshack.us'>ImageShack.us</a>
 
 Kiwi features a powerful pipeline system composed of resources and filters : 
 <ul>
@@ -39,18 +41,26 @@ Kiwi is still at an early stage, and interfaces are subject to change.
  - A simple string container
 
 <h3> TODO </h3>
- - Unit tests
- - Pipeline classes
- - Resources and filters to demonstrate kiwi's potential !
-
+<ul>
+ <li> Pipeline classes. </li>
+ <li> A set of resources and filters to demonstrate kiwi's potential ! </li>
+ <li> A web-based frontend (html+svg+js) to connect graphically kiwi boxes and see the result in live. </li>
+</ul> 
 
 <h2> License </h2>
 
-Kiwi's code source is under the new BSD License.
+Most of Kiwi's source code is under the <b>new BSD License</b>. However some of the plugin sets 
+are under other licenses, like the image::cairo plugin set that is under the LGPL. See the
+readme.txt file in each sub-project directory for informations about which license apply.
 
 <h2> Project member(s) </h2>
 
-For know the kiwi project is designed/developped/maintained by Nicolas Silva.
+For know the Kiwi project is designed/developed/maintained by <b>Nicolas Silva</b>.
+
+I would be very happy to share this experience with anyone who is motivated to create and/or test filters and resources based on kiwi!
+
+To contact me:
 
 email: nical.silva@gmal.com
 twitter: [@nicalsilva](http://twitter.com/#!/nicalsilva)
+

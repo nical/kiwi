@@ -62,6 +62,6 @@ I would be very happy to share this experience with anyone who is motivated to c
 
 To contact me:
 
-email: nical.silva@gmal.com <br/>
+email: nical.silva@gmail.com <br/>
 twitter: [@nicalsilva](http://twitter.com/#!/nicalsilva)
 

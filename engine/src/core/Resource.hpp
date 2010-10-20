@@ -95,7 +95,7 @@ public:
 
 
 	/**
-	 * @brief Destructor
+	 * @brief Destructor.
 	 */ 
 	virtual ~Resource();
 

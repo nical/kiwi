@@ -205,13 +205,13 @@ void ArrayContainerTest()
 	debug.endl();
 
 	debug.beginBlock("connect the ports");
-		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);
+		resource1.readerOutputPort(1) >> myTest.readerInputPort(0);
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
 		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
 		
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);
-		resourceResult.writerOutputPort(0) >> myTest2.writerInputPort(0);
+		resourceResult.writerOutputPort(1) >> myTest2.writerInputPort(0);
 	debug.endBlock("connect the ports");
 
 	debug.print() << endl();

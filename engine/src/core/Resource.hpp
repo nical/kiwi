@@ -183,7 +183,7 @@ public:
 	/**
 	 * @brief Returns true if the object is a Filter.
 	 */ 
-	virtual bool isAFilter() {return false;}
+	virtual bool isAFilter() { return false; }
 	
 	/**
 	 * @brief Returns true if the layout event is enabled.
@@ -192,6 +192,12 @@ public:
 	 */ 
 	inline bool isLayoutEventEnabled() { return _layoutEvtEnabled; }
 	
+
+
+	virtual kiwi::string readerInputPortName( portIndex_t index );
+	virtual kiwi::string readerOutputPortName( portIndex_t index );
+	virtual kiwi::string writerInputPortName( portIndex_t index );
+	virtual kiwi::string writerOutputPortName( portIndex_t index );
 	
 // --------------------------------------------------- protected methods	
 protected:
@@ -311,6 +317,11 @@ protected:
 		{ myPort.bind(toBind); }
 	inline void bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 		{ myPort.bind(toBind); }
+		
+	portIndex_t indexOf(const ReaderInputPort& port) const;
+	portIndex_t indexOf(const WriterInputPort& port) const;
+	portIndex_t indexOf(const ReaderOutputPort& port) const;
+	portIndex_t indexOf(const WriterOutputPort& port) const;
 	
 // ----------------------------------------------------- private members
 private:
@@ -344,11 +355,9 @@ public:
 		InputPort(Resource* myResource, portIndex_t myPort, const string& type, const string& name);
 		void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
 		void disconnect();
-		inline portIndex_t index() const {return _subResource.index;}
-		inline Resource* resource() const {return _subResource.resource;}
-		inline portIndex_t metaIndex() const {return _metaResource.index;}
-		inline Resource* metaResource() const {return _metaResource.resource;}
-		inline string getName() {return _name;}
+		inline portIndex_t index() const {return _resource->indexOf(*this);}
+		inline Resource* resource() const {return _resource;}
+		inline string getName(); //{return _name;}
 		inline string getType() {return _type;}
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
@@ -362,14 +371,13 @@ public:
 	protected:
 		inline void setName(const string& name){_name = name;}
 		inline void setType(const string& type){_type = type;}
-		void bind(/*const*/ InputPort<SlotType>& port);
+		void bind( InputPort<SlotType>& port);
 		inline void setEnabled(bool status) {_enabled = status;}
 		
 	private:
-		PortInfo _metaResource;
-		PortInfo _subResource;
+		Resource* _resource;
 		InputPort<SlotType>* _subPort;
-		OutputPort<SlotType>* _connectedResource; // the Resource in input of this
+		OutputPort<SlotType>* _connectedResource;
 		string _name;
 		string _type;
 		bool _enabled;
@@ -398,9 +406,9 @@ public:
 		OutputPort(Resource* myResource, portIndex_t myPort, const string& type, const string& name);
 		inline portIndex_t index() const {return _subResource.index;}
 		inline Resource* resource() const {return _subResource.resource;}
-		inline portIndex_t metaIndex() const {return _metaResource.index;}
-		inline Resource* metaResource() const {return _metaResource.resource;}
-		inline string getName() { return _name; }
+		inline portIndex_t metaIndex() const {return _resource->indexOf(*this);}
+		inline Resource* metaResource() const {return _resource;}
+		inline string getName() { return _name; } // TODO: rename to name()  ?
 		inline string getType() { return _type; }
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
@@ -419,11 +427,11 @@ public:
 		inline void setEnabled(bool status) {_enabled = status;}
 		
 	private:
-		PortInfo _metaResource;
+		Resource* _resource;
 		PortInfo _subResource;
 		connectionList _connections;
-		string _name;
-		string _type;
+		string _name; // TODO change this
+		string _type; // and this
 		bool _enabled;
 	};
 

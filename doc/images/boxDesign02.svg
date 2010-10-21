@@ -540,7 +540,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -556,7 +556,10 @@
        x="40"
        y="142.36218"
        rx="11.318409"
-       ry="9.4486675" />
+       ry="9.4486675"
+       inkscape:export-filename="/home/nico/Dev/kiwi/doc/images/kiwiBoxesPng01.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <path
        sodipodi:nodetypes="cs"
        id="path3257"

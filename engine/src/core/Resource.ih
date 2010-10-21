@@ -115,6 +115,88 @@ void Resource::removeWriterOutputPort()
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
+portIndex_t Resource::indexOf(const ReaderInputPort& port) const
+{
+	for(unsigned i = 0; i < _readerInputs.size(); ++i)
+		if(_readerInputs[i] == &port)
+			return i;
+			
+	__(//debug	
+	debug.error() 
+		<< "Resource::indexOf( ReaderInputPort& ) Error : unknown port !" 
+		<< endl();
+	)//debug
+		
+	//default value
+	return 0;	
+}
+
+portIndex_t Resource::indexOf(const WriterInputPort& port) const
+{
+	for(unsigned i = 0; i < _writerInputs.size(); ++i)
+		if(_writerInputs[i] == &port)
+			return i;
+	__(	
+	debug.error() 
+		<< "Resource::indexOf( WriterInputPort& ) Error : unknown port !" 
+		<< endl(); 
+	)
+	//default value
+	return 0;	
+}
+
+portIndex_t Resource::indexOf(const ReaderOutputPort& port) const
+{
+	for(unsigned i = 0; i < _readerOutputs.size(); ++i)
+		if(_readerOutputs[i] == &port)
+			return i;
+			
+	__(//debug	
+	debug.error() 
+		<< "Resource::indexOf( ReaderOutputPort& ) Error : unknown port !" 
+		<< endl();
+	)//debug
+		
+	//default value
+	return 0;	
+}
+
+portIndex_t Resource::indexOf(const WriterOutputPort& port) const
+{
+	for(unsigned i = 0; i < _writerOutputs.size(); ++i)
+		if( _writerOutputs[i] == &port )
+			return i;
+			
+	__(//debug	
+	debug.error() 
+		<< "Resource::indexOf( WriterOutputPort& ) Error : unknown port !" 
+		<< endl();
+	)//debug
+		
+	//default value
+	return 0;	
+}
+
+kiwi::string Resource::readerInputPortName(portIndex_t index) 
+{
+	return kiwi::string("");
+}
+
+kiwi::string Resource::readerOutputPortName(portIndex_t index)
+{
+	return kiwi::string("");
+}
+
+kiwi::string Resource::writerInputPortName(portIndex_t index)
+{
+	return kiwi::string("");
+}
+
+kiwi::string Resource::writerOutputPortName(portIndex_t index)
+{
+	return kiwi::string("");
+}
+
 // -----------------------------------------------------------------------------------------
 // -------------------------------------------------------- Port classes -------------------
 // -----------------------------------------------------------------------------------------
@@ -123,16 +205,13 @@ void Resource::removeWriterOutputPort()
 template <typename SlotType>
 Resource::InputPort<SlotType>::InputPort(
 	Resource* myResource
-	, portIndex_t myIndex
+	, portIndex_t myIndex // TODO: unused param
 	, const string& type
 	, const string& name )
 :  _type(type), _name(name)
-, _connectedResource(0), _enabled(true), _subPort(0)
+, _connectedResource(0), _enabled(true), _subPort(0), _resource(myResource)
 {
-	_metaResource.resource = myResource;
-	_metaResource.index = myIndex;
-	_subResource.resource = myResource;
-	_subResource.index = myIndex;
+	
 }
 
 
@@ -158,8 +237,8 @@ ScopedBlockMacro(__sccop, "Resource::InputPort<SlotType>::connect" );
 			_connectedResource = &outputPort;
 			if( isMetaPort ) outputPort._connections.push_back(this);
 			if( _subPort != 0 )	_subPort->connect(outputPort, false);
-			if( _metaResource.resource->isLayoutEventEnabled() ) 
-					_metaResource.resource->layoutChanged();
+			if( _resource->isLayoutEventEnabled() ) 
+					_resource->layoutChanged();
 		}
 		else
 		{
@@ -193,11 +272,24 @@ template <typename SlotType>
 void Resource::InputPort<SlotType>::bind(/*const*/ InputPort<SlotType>& port)
 {
 __(	debug.print() << "input port rebinding" << endl();  )
-	//_subResource = port._subResource;
 	_type = port._type;
 	_subPort = &port;
 	// note that if the binded Resource is deleted, trying to acces
 	// this port might cause a segfault
+}
+
+
+template<>
+//template <typename SlotType>
+string Resource::InputPort<Reader>::getName()
+{
+	return _resource->readerInputPortName(_resource->indexOf(*this));
+}
+template<>
+//template <typename SlotType>
+string Resource::InputPort<Writer>::getName()
+{
+	return _resource->readerInputPortName(_resource->indexOf(*this));
 }
 
 // ---------------------------------------------------------- OutputPort
@@ -207,11 +299,9 @@ Resource::OutputPort<SlotType>::OutputPort(
 	Resource* myResource
 	, portIndex_t myIndex
 	, const string& type
-	, const string& name )
-:  _type(type), _name(name), _enabled(true)
+	, const string& name )	// TODO : unused parameter
+:  _type(type), _name(name), _enabled(true), _resource(myResource)
 {
-	_metaResource.resource = myResource;
-	_metaResource.index = myIndex;
 	_subResource.resource = myResource;
 	_subResource.index = myIndex;
 }
@@ -239,6 +329,18 @@ void Resource::OutputPort<SlotType>::bind(const OutputPort<SlotType>& port)
 	// this port might cause a segfault
 }
 
+
+template<>
+string Resource::OutputPort<Reader>::getName()
+{
+	return _resource->readerOutputPortName( _resource->indexOf(*this) );
+}
+
+template<>
+string Resource::OutputPort<Writer>::getName()
+{
+	return _resource->readerOutputPortName(	_resource->indexOf(*this) );
+}
 
 
 // -----------------------------------------------------------------------------------------

@@ -52,7 +52,7 @@ Kiwi is still at an early stage, and interfaces are subject to change.
 
 Most of Kiwi's source code is under the <b>new BSD License</b>. However some of the plugin sets 
 are under other licenses, like the image::cairo plugin set that is under the LGPL. See the
-readme.txt file in each sub-project directory for informations about which license apply.
+readme.txt file in each sub-project directory for informations about which license applies.
 
 <h2> Project member(s) </h2>
 

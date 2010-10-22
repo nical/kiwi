@@ -301,17 +301,27 @@ string Resource::InputPort<Writer>::name()
 template <typename SlotType>
 Resource::OutputPort<SlotType>::OutputPort(
 	Resource* myResource
-//	, portIndex_t myIndex
 	, const string& type
 	, const string& name )	
-:  _type(type), _name(name), _enabled(true), _resource(myResource)
+:  _type(type)
+	, _name(name)
+	, _enabled(true)
+	, _resource(myResource)
+	, _subPort(0)
 {
-	_subResource.resource = myResource; // TODO remove
-	_subPort = this;
-	char myIndex = 0; // DEBUG TODO REMOVE !!
-	_subResource.index = myIndex; // WARNING this might cause errors
+	// nothing to do
 }
 
+template <typename SlotType>
+Resource::OutputPort<SlotType>* 
+Resource::OutputPort<SlotType>::subPort() //const 
+{
+	// if there's port rebinding, _subPort != 0 
+	// call the _subPort's method
+	if(_subPort) return _subPort->subPort();
+	// if this is the "subport" return a pointer to self
+	else return this;
+} 
 
 template <typename SlotType>
 void Resource::OutputPort<SlotType>::disconnect()
@@ -325,11 +335,12 @@ void Resource::OutputPort<SlotType>::disconnect()
 
 
 template <typename SlotType>
-void Resource::OutputPort<SlotType>::bind(const OutputPort<SlotType>& port)
+void Resource::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
 {
 	debug.print() << "port rebinding" << endl();
-	_subResource.resource = port._subResource.resource;
-	_subResource.index = port._subResource.index;
+	
+	_subPort = &port;
+
 	_type = port._type;
 	// note that if the binded Resource is deleted, trying to acces
 	// this port might cause a segfault
@@ -348,27 +359,15 @@ string Resource::OutputPort<Writer>::name()
 	return _resource->readerOutputPortName(	_resource->indexOf(*this) );
 }
 
-
-template <typename SlotType>
-portIndex_t Resource::OutputPort<SlotType>::metaIndex() const 
-{
-	return _resource->indexOf(*this);
-}
-
 template <typename SlotType>
 portIndex_t Resource::OutputPort<SlotType>::index() const 
 {
-	return _subResource.index;
+	return _resource->indexOf(*this);
+	//return subPort()->index();
 }
 
 template <typename SlotType>
 Resource* Resource::OutputPort<SlotType>::resource() const 
-{
-	return _subResource.resource;
-}
-
-template <typename SlotType>
-Resource* Resource::OutputPort<SlotType>::metaResource() const 
 {
 	return _resource;
 }

@@ -314,9 +314,9 @@ protected:
 	 * @param myPort This class's port that has to be redirected to another Resource's port.
 	 * @param toBind The other Resource's port.
 	 */ 
-	inline void bindPort(ReaderOutputPort& myPort, const ReaderOutputPort& toBind)
+	inline void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
 		{ myPort.bind(toBind); }
-	inline void bindPort(WriterOutputPort& myPort, const WriterOutputPort& toBind)
+	inline void bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
 		{ myPort.bind(toBind); }
 	inline void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
 		{ myPort.bind(toBind); }
@@ -363,7 +363,8 @@ public:
 		inline string name(); //{return _name;}
 		inline string type() { return _type; }
 		// TODO this is a temporary solution for port compatibility
-		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
+		// a more flexible version is to come with use of polymorphism 
+		// to get compatibility of child classes.
 		inline bool isCompatible(OutputPort<SlotType>& output)	
 			{ return ( type().find(output.type())!= string::npos ); }
 		inline bool isConnected() const { return (_connectedResource != 0); }
@@ -406,12 +407,10 @@ public:
 		typedef typename std::list< InputPort<SlotType>* > connectionList;
 		
 		// --------------------------------------------------------------------
-		OutputPort(Resource* myResource, /*portIndex_t myPort,*/ const string& type, const string& name);
+		OutputPort(Resource* myResource, const string& type, const string& name);
 		inline portIndex_t index() const ;
 		inline Resource* resource() const ;
-		inline portIndex_t metaIndex() const ;
-		
-		inline Resource* metaResource() const ;
+		OutputPort<SlotType>* subPort() ;//const ;
 		inline string name();
 		inline string type();
 		// TODO this is a temporary solution for port compatibility
@@ -426,13 +425,13 @@ public:
 	protected:
 		inline void setName(const string& name);
 		inline void setType(const string& type);
-		void bind(const OutputPort<SlotType>& port);
+		void bind(OutputPort<SlotType>& port);
 		inline void setEnabled(bool status);
 		
 	private:
 		Resource* _resource;
 		OutputPort<SlotType>* _subPort;
-		PortInfo _subResource; // todo remove this
+		//PortInfo _subResource; // todo remove this
 		connectionList _connections;
 		string _name; // TODO change this
 		string _type; // and this

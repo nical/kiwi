@@ -38,7 +38,7 @@ ArrayReader<T,D>::ArrayReader(
 {
 	ArrayContainer<T,D>* resource = 
 		dynamic_cast< ArrayContainer<T,D>* >( 
-			port.connectedOutput()->resource() 
+			port.connectedOutput()->subPort()->resource() 
 		);
 	if(!resource)
 	{

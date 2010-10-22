@@ -62,30 +62,30 @@ Resource::~Resource()
 void Resource::addReaderInputPort(const string& type, const string& name)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
-	portIndex_t index = getReaderInputCount();
-	_readerInputs.push_back( new InputPort<Reader>(this, index, type, name) );
+//	portIndex_t index = getReaderInputCount();
+	_readerInputs.push_back( new InputPort<Reader>(this, type, name) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 void Resource::addReaderOutputPort(const string& type, const string& name)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
-	portIndex_t index = getReaderOutputCount();
-	_readerOutputs.push_back( new OutputPort<Reader>(this, index, type, name) );
+//	portIndex_t index = getReaderOutputCount();
+	_readerOutputs.push_back( new OutputPort<Reader>(this, type, name) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void Resource::addWriterInputPort(const string& type, const string& name)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
-	portIndex_t index = getWriterInputCount();
-	_writerInputs.push_back( new InputPort<Writer>(this, index, type, name) );
+//	portIndex_t index = getWriterInputCount();
+	_writerInputs.push_back( new InputPort<Writer>(this, type, name) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 void Resource::addWriterOutputPort(const string& type, const string& name)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
-	portIndex_t index = getWriterOutputCount();
-	_writerOutputs.push_back( new OutputPort<Writer>(this, index, type, name) );
+//	portIndex_t index = getWriterOutputCount();
+	_writerOutputs.push_back( new OutputPort<Writer>(this, type, name) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 
 }
@@ -117,6 +117,7 @@ void Resource::removeWriterOutputPort()
 
 portIndex_t Resource::indexOf(const ReaderInputPort& port) const
 {
+ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _readerInputs.size(); ++i)
 		if(_readerInputs[i] == &port)
 			return i;
@@ -133,6 +134,7 @@ portIndex_t Resource::indexOf(const ReaderInputPort& port) const
 
 portIndex_t Resource::indexOf(const WriterInputPort& port) const
 {
+ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _writerInputs.size(); ++i)
 		if(_writerInputs[i] == &port)
 			return i;
@@ -147,6 +149,7 @@ portIndex_t Resource::indexOf(const WriterInputPort& port) const
 
 portIndex_t Resource::indexOf(const ReaderOutputPort& port) const
 {
+ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _readerOutputs.size(); ++i)
 		if(_readerOutputs[i] == &port)
 			return i;
@@ -163,6 +166,7 @@ portIndex_t Resource::indexOf(const ReaderOutputPort& port) const
 
 portIndex_t Resource::indexOf(const WriterOutputPort& port) const
 {
+ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _writerOutputs.size(); ++i)
 		if( _writerOutputs[i] == &port )
 			return i;
@@ -205,7 +209,7 @@ kiwi::string Resource::writerOutputPortName(portIndex_t index)
 template <typename SlotType>
 Resource::InputPort<SlotType>::InputPort(
 	Resource* myResource
-	, portIndex_t myIndex // TODO: unused param
+//	, portIndex_t myIndex // TODO: unused param
 	, const string& type
 	, const string& name )
 :  _type(type), _name(name)
@@ -243,7 +247,7 @@ ScopedBlockMacro(__sccop, "Resource::InputPort<SlotType>::connect" );
 		else
 		{
 			debug.error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
-			debug.error() << outputPort.getType() << " >> " << getType() << endl();
+			debug.error() << outputPort.type() << " >> " << type() << endl();
 			return;
 		}
 	
@@ -281,13 +285,13 @@ __(	debug.print() << "input port rebinding" << endl();  )
 
 template<>
 //template <typename SlotType>
-string Resource::InputPort<Reader>::getName()
+string Resource::InputPort<Reader>::name()
 {
 	return _resource->readerInputPortName(_resource->indexOf(*this));
 }
 template<>
 //template <typename SlotType>
-string Resource::InputPort<Writer>::getName()
+string Resource::InputPort<Writer>::name()
 {
 	return _resource->readerInputPortName(_resource->indexOf(*this));
 }
@@ -297,13 +301,15 @@ string Resource::InputPort<Writer>::getName()
 template <typename SlotType>
 Resource::OutputPort<SlotType>::OutputPort(
 	Resource* myResource
-	, portIndex_t myIndex
+//	, portIndex_t myIndex
 	, const string& type
-	, const string& name )	// TODO : unused parameter
+	, const string& name )	
 :  _type(type), _name(name), _enabled(true), _resource(myResource)
 {
-	_subResource.resource = myResource;
-	_subResource.index = myIndex;
+	_subResource.resource = myResource; // TODO remove
+	_subPort = this;
+	char myIndex = 0; // DEBUG TODO REMOVE !!
+	_subResource.index = myIndex; // WARNING this might cause errors
 }
 
 
@@ -331,17 +337,91 @@ void Resource::OutputPort<SlotType>::bind(const OutputPort<SlotType>& port)
 
 
 template<>
-string Resource::OutputPort<Reader>::getName()
+string Resource::OutputPort<Reader>::name()
 {
 	return _resource->readerOutputPortName( _resource->indexOf(*this) );
 }
 
 template<>
-string Resource::OutputPort<Writer>::getName()
+string Resource::OutputPort<Writer>::name()
 {
 	return _resource->readerOutputPortName(	_resource->indexOf(*this) );
 }
 
+
+template <typename SlotType>
+portIndex_t Resource::OutputPort<SlotType>::metaIndex() const 
+{
+	return _resource->indexOf(*this);
+}
+
+template <typename SlotType>
+portIndex_t Resource::OutputPort<SlotType>::index() const 
+{
+	return _subResource.index;
+}
+
+template <typename SlotType>
+Resource* Resource::OutputPort<SlotType>::resource() const 
+{
+	return _subResource.resource;
+}
+
+template <typename SlotType>
+Resource* Resource::OutputPort<SlotType>::metaResource() const 
+{
+	return _resource;
+}
+
+template <typename SlotType>
+string Resource::OutputPort<SlotType>::type() 
+{ 
+	return _type; 
+}
+
+template <typename SlotType>
+bool Resource::OutputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
+{
+	return ( type().find(output.type())!= string::npos 
+	|| type().find("any")!= string::npos ); 
+}
+
+template <typename SlotType>
+bool Resource::OutputPort<SlotType>::isConnected() const 
+{ 
+	return (_connections.size() != 0); 
+}
+
+template <typename SlotType>
+bool Resource::OutputPort<SlotType>::isEnabled() const 
+{ 
+	return _enabled; 
+}
+
+template <typename SlotType>
+typename Resource::OutputPort<SlotType>::connectionList 
+Resource::OutputPort<SlotType>::connections() const 
+{ 
+	return _connections; 
+}
+
+template <typename SlotType>
+void Resource::OutputPort<SlotType>::setName(const string& name)
+{
+	_name = name;
+}
+
+template <typename SlotType>
+void Resource::OutputPort<SlotType>::setType(const string& type)
+{
+	_type = type;
+}
+
+template <typename SlotType>
+void Resource::OutputPort<SlotType>::setEnabled(bool status) 
+{
+	_enabled = status;
+}
 
 // -----------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------

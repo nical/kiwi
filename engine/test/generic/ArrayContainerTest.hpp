@@ -197,6 +197,11 @@ void ArrayContainerTest()
 		it = resourceResult.getBasicIterator();
 		do { *it = 0; } while ( it.onIteration() );
 		
+		assert( myTest.indexOf( myTest.readerInputPort(0) ) == 0 );
+		assert( myTest.indexOf( myTest.readerInputPort(1) ) == 1 );
+		assert( resource1.indexOf( resource1.writerOutputPort(0) ) == 0 );
+		assert( resource1.indexOf( resource1.writerOutputPort(1) ) == 1 );
+		
 		//resource1.printState();
 		//resource2.printState();
 		

@@ -193,6 +193,11 @@ public:
 	inline bool isLayoutEventEnabled() { return _layoutEvtEnabled; }
 	
 
+	portIndex_t indexOf(const ReaderInputPort& port) const;
+	portIndex_t indexOf(const WriterInputPort& port) const;
+	portIndex_t indexOf(const ReaderOutputPort& port) const;
+	portIndex_t indexOf(const WriterOutputPort& port) const;
+	
 
 	virtual kiwi::string readerInputPortName( portIndex_t index );
 	virtual kiwi::string readerOutputPortName( portIndex_t index );
@@ -318,11 +323,6 @@ protected:
 	inline void bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 		{ myPort.bind(toBind); }
 		
-	portIndex_t indexOf(const ReaderInputPort& port) const;
-	portIndex_t indexOf(const WriterInputPort& port) const;
-	portIndex_t indexOf(const ReaderOutputPort& port) const;
-	portIndex_t indexOf(const WriterOutputPort& port) const;
-	
 // ----------------------------------------------------- private members
 private:
 
@@ -352,17 +352,20 @@ public:
 	{
 	friend class Resource;
 	public:
-		InputPort(Resource* myResource, portIndex_t myPort, const string& type, const string& name);
+		InputPort(Resource* myResource, /* portIndex_t myPort,*/ const string& type, const string& name);
 		void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
 		void disconnect();
-		inline portIndex_t index() const {return _resource->indexOf(*this);}
+		inline portIndex_t index() const 
+		{
+			return _resource->indexOf(*this);
+		}
 		inline Resource* resource() const {return _resource;}
-		inline string getName(); //{return _name;}
-		inline string getType() {return _type;}
+		inline string name(); //{return _name;}
+		inline string type() { return _type; }
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
 		inline bool isCompatible(OutputPort<SlotType>& output)	
-			{ return ( getType().find(output.getType())!= string::npos ); }
+			{ return ( type().find(output.type())!= string::npos ); }
 		inline bool isConnected() const { return (_connectedResource != 0); }
 		inline bool isEnabled() const {return _enabled;}
 		inline OutputPort<SlotType>* connectedOutput() const 
@@ -403,32 +406,33 @@ public:
 		typedef typename std::list< InputPort<SlotType>* > connectionList;
 		
 		// --------------------------------------------------------------------
-		OutputPort(Resource* myResource, portIndex_t myPort, const string& type, const string& name);
-		inline portIndex_t index() const {return _subResource.index;}
-		inline Resource* resource() const {return _subResource.resource;}
-		inline portIndex_t metaIndex() const {return _resource->indexOf(*this);}
-		inline Resource* metaResource() const {return _resource;}
-		inline string getName() { return _name; } // TODO: rename to name()  ?
-		inline string getType() { return _type; }
+		OutputPort(Resource* myResource, /*portIndex_t myPort,*/ const string& type, const string& name);
+		inline portIndex_t index() const ;
+		inline Resource* resource() const ;
+		inline portIndex_t metaIndex() const ;
+		
+		inline Resource* metaResource() const ;
+		inline string name();
+		inline string type();
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
-		inline bool isCompatible(OutputPort<SlotType>& output)	
-			{ return ( getType().find(output.getType())!= string::npos 
-			|| getType().find("any")!= string::npos ); }
-		inline bool isConnected() const { return (_connections.size() != 0); }
-		inline bool isEnabled() const { return _enabled; }
-		inline connectionList connections() const { return _connections; }
+		inline bool isCompatible(OutputPort<SlotType>& output);
+			
+		inline bool isConnected() const ;
+		inline bool isEnabled() const ;
+		inline connectionList connections() const ;
 		void disconnect(); //empty the connected resources list
 		
 	protected:
-		inline void setName(const string& name){_name = name;}
-		inline void setType(const string& type){_type = type;}
+		inline void setName(const string& name);
+		inline void setType(const string& type);
 		void bind(const OutputPort<SlotType>& port);
-		inline void setEnabled(bool status) {_enabled = status;}
+		inline void setEnabled(bool status);
 		
 	private:
 		Resource* _resource;
-		PortInfo _subResource;
+		OutputPort<SlotType>* _subPort;
+		PortInfo _subResource; // todo remove this
 		connectionList _connections;
 		string _name; // TODO change this
 		string _type; // and this

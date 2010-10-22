@@ -1,0 +1,175 @@
+//      Redistribution and use in source and binary forms, with or without
+//      modification, are permitted provided that the following conditions are
+//      met:
+//      
+//      * Redistributions of source code must retain the above copyright
+//        notice, this list of conditions and the following disclaimer.
+//      * Redistributions in binary form must reproduce the above
+//        copyright notice, this list of conditions and the following disclaimer
+//        in the documentation and/or other materials provided with the
+//        distribution.
+//      * Neither the name of the  nor the names of its
+//        contributors may be used to endorse or promote products derived from
+//        this software without specific prior written permission.
+//      
+//      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+//      "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//      A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//      OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//      SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//      LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//      DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//      THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+//      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+namespace kiwi
+{
+namespace core	
+{
+
+
+// ----------------------------------------------------------- InputPort
+template <typename SlotType>
+Resource::InputPort<SlotType>::InputPort(
+	Resource* myResource
+	, const string& type
+	, const string& name )
+:  _type(type), _name(name)
+	, _connectedResource(0)
+	, _enabled(true)
+	, _subPort(0)
+	, _resource(myResource)
+{
+	//nothing to do
+}
+
+
+template <typename SlotType>
+void 
+Resource::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMetaPort)
+{
+ScopedBlockMacro(__sccop, "Resource::InputPort<SlotType>::connect" );
+	if( !isEnabled() )
+	{
+		debug.error() << "InputPort::connect() : input port disabled" << endl();
+		return;
+	}
+	if( !outputPort.isEnabled() )
+	{
+		debug.error() << "InputPort::connect() : output port disabled" << endl();
+		return;
+	}
+	// if it is the subPort
+	
+		if(isCompatible(outputPort) )
+		{
+			if( isConnected() ) disconnect();
+			_connectedResource = &outputPort;
+			if( isMetaPort ) outputPort._connections.push_back(this);
+			if( _subPort != 0 )	_subPort->connect(outputPort, false);
+			if( _resource->isLayoutEventEnabled() ) 
+					_resource->layoutChanged();
+		}
+		else
+		{
+			debug.error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
+			debug.error() << outputPort.type() << " >> " << type() << endl();
+			return;
+		}
+	
+}
+
+template <typename SlotType>
+void 
+Resource::InputPort<SlotType>::disconnect()
+{
+ScopedBlockMacro(scp_block,"Resource::InputPort<SlotType>::disconnect");
+	if(_subPort != 0) _subPort->disconnect();
+	if(!isConnected() ) return;
+	for(typename OutputPort<SlotType>::connectionList::iterator it
+		= _connectedResource->_connections.begin(); it!= _connectedResource->_connections.end(); ++it)
+	{
+		if(*it == this)
+		{
+			_connectedResource->_connections.erase(it);
+			break;
+		}
+	}
+	_connectedResource= 0;
+}
+
+
+template <typename SlotType>
+void 
+Resource::InputPort<SlotType>::bind(/*const*/ InputPort<SlotType>& port)
+{
+__(	debug.print() << "input port rebinding" << endl();  )
+	_type = port._type;
+	_subPort = &port;
+	// note that if the binded Resource is deleted, trying to acces
+	// this port might cause a segfault
+}
+
+
+template <typename SlotType>
+inline kiwi::string 
+Resource::InputPort<SlotType>::type() 
+{ 
+	return _type;
+}
+
+
+template <typename SlotType>
+inline bool 
+Resource::InputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
+{ 
+	return ( type().find(output.type())!= string::npos ); 
+}
+
+template <typename SlotType>
+inline bool 
+Resource::InputPort<SlotType>::isConnected() const 
+{ 
+	return (_connectedResource != 0); 
+}
+
+template <typename SlotType>
+inline bool 
+Resource::InputPort<SlotType>::isEnabled() const 
+{
+	return _enabled;
+}
+
+template <typename SlotType>
+inline Resource::OutputPort<SlotType>* 
+Resource::InputPort<SlotType>::connectedOutput() const 
+{ 
+	return _connectedResource; 
+}
+
+
+template<>
+//template <typename SlotType>
+kiwi::string 
+Resource::InputPort<Reader>::name()
+{
+	return _resource->readerInputPortName(_resource->indexOf(*this));
+}
+template<>
+//template <typename SlotType>
+kiwi::string 
+Resource::InputPort<Writer>::name()
+{
+	return _resource->readerInputPortName(_resource->indexOf(*this));
+}
+
+
+
+
+
+} //namespace
+} //namespace

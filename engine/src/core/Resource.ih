@@ -66,6 +66,7 @@ void Resource::addReaderInputPort(const string& type, const string& name)
 	_readerInputs.push_back( new InputPort<Reader>(this, type, name) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
+
 void Resource::addReaderOutputPort(const string& type, const string& name)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
@@ -81,6 +82,7 @@ void Resource::addWriterInputPort(const string& type, const string& name)
 	_writerInputs.push_back( new InputPort<Writer>(this, type, name) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
+
 void Resource::addWriterOutputPort(const string& type, const string& name)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
@@ -91,31 +93,36 @@ void Resource::addWriterOutputPort(const string& type, const string& name)
 }
 
 
-
-
-void Resource::removeReaderInputPort()
+void 
+Resource::removeReaderInputPort()
 {
 	_readerInputs.pop_back();
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
-void Resource::removeReaderOutputPort()
+
+void 
+Resource::removeReaderOutputPort()
 {
 	_readerOutputs.pop_back();
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
-void Resource::removeWriterInputPort()
+void 
+Resource::removeWriterInputPort()
 {
 	_writerInputs.pop_back();
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
-void Resource::removeWriterOutputPort()
+
+void 
+Resource::removeWriterOutputPort()
 {
 	_readerOutputs.pop_back();
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
-portIndex_t Resource::indexOf(const ReaderInputPort& port) const
+portIndex_t 
+Resource::indexOf(const ReaderInputPort& port) const
 {
 ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _readerInputs.size(); ++i)
@@ -132,7 +139,8 @@ ScopedBlockMacro(__scop, "Resource::indexOf");
 	return 0;	
 }
 
-portIndex_t Resource::indexOf(const WriterInputPort& port) const
+portIndex_t 
+Resource::indexOf(const WriterInputPort& port) const
 {
 ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _writerInputs.size(); ++i)
@@ -144,10 +152,11 @@ ScopedBlockMacro(__scop, "Resource::indexOf");
 		<< endl(); 
 	)
 	//default value
-	return 0;	
+	return 0;
 }
 
-portIndex_t Resource::indexOf(const ReaderOutputPort& port) const
+portIndex_t 
+Resource::indexOf(const ReaderOutputPort& port) const
 {
 ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _readerOutputs.size(); ++i)
@@ -164,7 +173,8 @@ ScopedBlockMacro(__scop, "Resource::indexOf");
 	return 0;	
 }
 
-portIndex_t Resource::indexOf(const WriterOutputPort& port) const
+portIndex_t 
+Resource::indexOf(const WriterOutputPort& port) const
 {
 ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _writerOutputs.size(); ++i)
@@ -181,257 +191,44 @@ ScopedBlockMacro(__scop, "Resource::indexOf");
 	return 0;	
 }
 
-kiwi::string Resource::readerInputPortName(portIndex_t index) 
+kiwi::string 
+Resource::readerInputPortName(portIndex_t index) 
 {
 	return kiwi::string("");
 }
 
-kiwi::string Resource::readerOutputPortName(portIndex_t index)
+kiwi::string 
+Resource::readerOutputPortName(portIndex_t index)
 {
 	return kiwi::string("");
 }
 
-kiwi::string Resource::writerInputPortName(portIndex_t index)
+kiwi::string 
+Resource::writerInputPortName(portIndex_t index)
 {
 	return kiwi::string("");
 }
 
-kiwi::string Resource::writerOutputPortName(portIndex_t index)
+kiwi::string 
+Resource::writerOutputPortName(portIndex_t index)
 {
 	return kiwi::string("");
 }
 
-// -----------------------------------------------------------------------------------------
-// -------------------------------------------------------- Port classes -------------------
-// -----------------------------------------------------------------------------------------
 
-// ----------------------------------------------------------- InputPort
-template <typename SlotType>
-Resource::InputPort<SlotType>::InputPort(
-	Resource* myResource
-//	, portIndex_t myIndex // TODO: unused param
-	, const string& type
-	, const string& name )
-:  _type(type), _name(name)
-, _connectedResource(0), _enabled(true), _subPort(0), _resource(myResource)
-{
-	
-}
-
-
-template <typename SlotType>
-void Resource::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMetaPort)
-{
-ScopedBlockMacro(__sccop, "Resource::InputPort<SlotType>::connect" );
-	if( !isEnabled() )
-	{
-		debug.error() << "InputPort::connect() : input port disabled" << endl();
-		return;
-	}
-	if( !outputPort.isEnabled() )
-	{
-		debug.error() << "InputPort::connect() : output port disabled" << endl();
-		return;
-	}
-	// if it is the subPort
-	
-		if(isCompatible(outputPort) )
-		{
-			if( isConnected() ) disconnect();
-			_connectedResource = &outputPort;
-			if( isMetaPort ) outputPort._connections.push_back(this);
-			if( _subPort != 0 )	_subPort->connect(outputPort, false);
-			if( _resource->isLayoutEventEnabled() ) 
-					_resource->layoutChanged();
-		}
-		else
-		{
-			debug.error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
-			debug.error() << outputPort.type() << " >> " << type() << endl();
-			return;
-		}
-	
-}
-
-template <typename SlotType>
-void Resource::InputPort<SlotType>::disconnect()
-{
-ScopedBlockMacro(scp_block,"Resource::InputPort<SlotType>::disconnect");
-	if(_subPort != 0) _subPort->disconnect();
-	if(!isConnected() ) return;
-	for(typename OutputPort<SlotType>::connectionList::iterator it
-		= _connectedResource->_connections.begin(); it!= _connectedResource->_connections.end(); ++it)
-	{
-		if(*it == this)
-		{
-			_connectedResource->_connections.erase(it);
-			break;
-		}
-	}
-	_connectedResource= 0;
-}
-
-
-template <typename SlotType>
-void Resource::InputPort<SlotType>::bind(/*const*/ InputPort<SlotType>& port)
-{
-__(	debug.print() << "input port rebinding" << endl();  )
-	_type = port._type;
-	_subPort = &port;
-	// note that if the binded Resource is deleted, trying to acces
-	// this port might cause a segfault
-}
-
-
-template<>
-//template <typename SlotType>
-string Resource::InputPort<Reader>::name()
-{
-	return _resource->readerInputPortName(_resource->indexOf(*this));
-}
-template<>
-//template <typename SlotType>
-string Resource::InputPort<Writer>::name()
-{
-	return _resource->readerInputPortName(_resource->indexOf(*this));
-}
-
-// ---------------------------------------------------------- OutputPort
-
-template <typename SlotType>
-Resource::OutputPort<SlotType>::OutputPort(
-	Resource* myResource
-	, const string& type
-	, const string& name )	
-:  _type(type)
-	, _name(name)
-	, _enabled(true)
-	, _resource(myResource)
-	, _subPort(0)
-{
-	// nothing to do
-}
-
-template <typename SlotType>
-Resource::OutputPort<SlotType>* 
-Resource::OutputPort<SlotType>::subPort() //const 
-{
-	// if there's port rebinding, _subPort != 0 
-	// call the _subPort's method
-	if(_subPort) return _subPort->subPort();
-	// if this is the "subport" return a pointer to self
-	else return this;
-} 
-
-template <typename SlotType>
-void Resource::OutputPort<SlotType>::disconnect()
-{
-	typename std::list<Resource::InputPort<SlotType>*>::iterator it;
-	for(it = _connections.begin(); it!= _connections.end(); ++it)
-	{
-		(*it)->disconnect();
-	}
-}
-
-
-template <typename SlotType>
-void Resource::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
-{
-	debug.print() << "port rebinding" << endl();
-	
-	_subPort = &port;
-
-	_type = port._type;
-	// note that if the binded Resource is deleted, trying to acces
-	// this port might cause a segfault
-}
-
-
-template<>
-string Resource::OutputPort<Reader>::name()
-{
-	return _resource->readerOutputPortName( _resource->indexOf(*this) );
-}
-
-template<>
-string Resource::OutputPort<Writer>::name()
-{
-	return _resource->readerOutputPortName(	_resource->indexOf(*this) );
-}
-
-template <typename SlotType>
-portIndex_t Resource::OutputPort<SlotType>::index() const 
-{
-	return _resource->indexOf(*this);
-	//return subPort()->index();
-}
-
-template <typename SlotType>
-Resource* Resource::OutputPort<SlotType>::resource() const 
-{
-	return _resource;
-}
-
-template <typename SlotType>
-string Resource::OutputPort<SlotType>::type() 
-{ 
-	return _type; 
-}
-
-template <typename SlotType>
-bool Resource::OutputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
-{
-	return ( type().find(output.type())!= string::npos 
-	|| type().find("any")!= string::npos ); 
-}
-
-template <typename SlotType>
-bool Resource::OutputPort<SlotType>::isConnected() const 
-{ 
-	return (_connections.size() != 0); 
-}
-
-template <typename SlotType>
-bool Resource::OutputPort<SlotType>::isEnabled() const 
-{ 
-	return _enabled; 
-}
-
-template <typename SlotType>
-typename Resource::OutputPort<SlotType>::connectionList 
-Resource::OutputPort<SlotType>::connections() const 
-{ 
-	return _connections; 
-}
-
-template <typename SlotType>
-void Resource::OutputPort<SlotType>::setName(const string& name)
-{
-	_name = name;
-}
-
-template <typename SlotType>
-void Resource::OutputPort<SlotType>::setType(const string& type)
-{
-	_type = type;
-}
-
-template <typename SlotType>
-void Resource::OutputPort<SlotType>::setEnabled(bool status) 
-{
-	_enabled = status;
-}
-
-// -----------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 
 
 // ----------------------------------------------------------- Operators
 
 template <typename SlotType>
-bool operator >> (Resource::OutputPort<SlotType>& output, Resource::InputPort<SlotType>& input )
+bool 
+operator >> (
+	Resource::OutputPort<SlotType>& output
+	, Resource::InputPort<SlotType>& input )
 {
 	if(!input.isConnected())
 	{

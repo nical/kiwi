@@ -361,16 +361,14 @@ public:
 		}
 		inline Resource* resource() const {return _resource;}
 		inline string name(); //{return _name;}
-		inline string type() { return _type; }
+		inline string type();
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism 
 		// to get compatibility of child classes.
-		inline bool isCompatible(OutputPort<SlotType>& output)	
-			{ return ( type().find(output.type())!= string::npos ); }
-		inline bool isConnected() const { return (_connectedResource != 0); }
-		inline bool isEnabled() const {return _enabled;}
-		inline OutputPort<SlotType>* connectedOutput() const 
-			{ return _connectedResource; }
+		inline bool isCompatible(OutputPort<SlotType>& output);
+		inline bool isConnected() const ;
+		inline bool isEnabled() const ;
+		inline OutputPort<SlotType>* connectedOutput() const ;
 		
 	protected:
 		inline void setName(const string& name){_name = name;}
@@ -491,6 +489,8 @@ bool operator>>(Resource::OutputPort<SlotType>& output, Resource::InputPort<Slot
 
 }//namespace kiwi
 
-#include "Resource.ih"
+#include "core/Resource.ih"
+#include "core/InputPort.ih"
+#include "core/OutputPort.ih"
 
 #endif

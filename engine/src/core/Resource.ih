@@ -129,7 +129,7 @@ ScopedBlockMacro(__scop, "Resource::indexOf");
 		if(_readerInputs[i] == &port)
 			return i;
 			
-	__(//debug	
+	DEBUG_ONLY(//debug	
 	debug.error() 
 		<< "Resource::indexOf( ReaderInputPort& ) Error : unknown port !" 
 		<< endl();
@@ -146,7 +146,7 @@ ScopedBlockMacro(__scop, "Resource::indexOf");
 	for(unsigned i = 0; i < _writerInputs.size(); ++i)
 		if(_writerInputs[i] == &port)
 			return i;
-	__(	
+	DEBUG_ONLY(	
 	debug.error() 
 		<< "Resource::indexOf( WriterInputPort& ) Error : unknown port !" 
 		<< endl(); 
@@ -163,7 +163,7 @@ ScopedBlockMacro(__scop, "Resource::indexOf");
 		if(_readerOutputs[i] == &port)
 			return i;
 			
-	__(//debug	
+	DEBUG_ONLY(//debug	
 	debug.error() 
 		<< "Resource::indexOf( ReaderOutputPort& ) Error : unknown port !" 
 		<< endl();
@@ -181,15 +181,45 @@ ScopedBlockMacro(__scop, "Resource::indexOf");
 		if( _writerOutputs[i] == &port )
 			return i;
 			
-	__(//debug	
+	DEBUG_ONLY(
 	debug.error() 
 		<< "Resource::indexOf( WriterOutputPort& ) Error : unknown port !" 
 		<< endl();
-	)//debug
+	)//DEBUG_ONLY
 		
 	//default value
 	return 0;	
 }
+
+// ------------------------------------------------------ port rebinding
+
+inline void 
+Resource::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
+
+inline void 
+Resource::bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
+{ 
+	myPort.bind(toBind);
+}
+
+inline void 
+Resource::bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
+
+inline void 
+Resource::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
+
+
+// ---------------------------------------------------------- port names
+
 
 kiwi::string 
 Resource::readerInputPortName(portIndex_t index) 
@@ -216,9 +246,6 @@ Resource::writerOutputPortName(portIndex_t index)
 }
 
 
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
 
 
 

@@ -105,9 +105,9 @@ ScopedBlockMacro(scp_block,"Resource::InputPort<SlotType>::disconnect");
 
 template <typename SlotType>
 void 
-Resource::InputPort<SlotType>::bind(/*const*/ InputPort<SlotType>& port)
+Resource::InputPort<SlotType>::bind(InputPort<SlotType>& port)
 {
-__(	debug.print() << "input port rebinding" << endl();  )
+DEBUG_ONLY(	debug.print() << "input port rebinding" << endl();  )
 	_type = port._type;
 	_subPort = &port;
 	// note that if the binded Resource is deleted, trying to acces
@@ -116,12 +116,25 @@ __(	debug.print() << "input port rebinding" << endl();  )
 
 
 template <typename SlotType>
+inline portIndex_t 
+Resource::InputPort<SlotType>::index() const 
+{
+	return _resource->indexOf(*this);
+}
+
+template <typename SlotType>
+inline Resource* 
+Resource::InputPort<SlotType>::resource() const 
+{
+	return _resource;
+}
+
+template <typename SlotType>
 inline kiwi::string 
 Resource::InputPort<SlotType>::type() 
 { 
 	return _type;
 }
-
 
 template <typename SlotType>
 inline bool 
@@ -153,18 +166,45 @@ Resource::InputPort<SlotType>::connectedOutput() const
 
 
 template<>
-//template <typename SlotType>
 kiwi::string 
 Resource::InputPort<Reader>::name()
 {
 	return _resource->readerInputPortName(_resource->indexOf(*this));
 }
+
 template<>
-//template <typename SlotType>
 kiwi::string 
 Resource::InputPort<Writer>::name()
 {
 	return _resource->readerInputPortName(_resource->indexOf(*this));
+}
+
+
+
+
+// ----------------------------------------------------------- protected
+
+
+
+template <typename SlotType>
+inline void 
+Resource::InputPort<SlotType>::setEnabled(bool status) 
+{
+	_enabled = status;
+}
+
+template <typename SlotType>
+inline void 
+Resource::InputPort<SlotType>::setName(const string& name)
+{
+	_name = name;
+}
+
+template <typename SlotType>
+inline void 
+Resource::InputPort<SlotType>::setType(const string& type)
+{
+	_type = type;
 }
 
 

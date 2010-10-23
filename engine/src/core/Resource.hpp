@@ -314,15 +314,12 @@ protected:
 	 * @param myPort This class's port that has to be redirected to another Resource's port.
 	 * @param toBind The other Resource's port.
 	 */ 
-	inline void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
-		{ myPort.bind(toBind); }
-	inline void bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
-		{ myPort.bind(toBind); }
-	inline void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
-		{ myPort.bind(toBind); }
-	inline void bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
-		{ myPort.bind(toBind); }
-		
+	inline void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind);
+	inline void bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind);
+	inline void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind);
+	inline void bindPort(WriterInputPort& myPort, WriterInputPort& toBind);
+
+
 // ----------------------------------------------------- private members
 private:
 
@@ -352,15 +349,12 @@ public:
 	{
 	friend class Resource;
 	public:
-		InputPort(Resource* myResource, /* portIndex_t myPort,*/ const string& type, const string& name);
+		InputPort(Resource* myResource, const string& type, const string& name);
 		void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
 		void disconnect();
-		inline portIndex_t index() const 
-		{
-			return _resource->indexOf(*this);
-		}
-		inline Resource* resource() const {return _resource;}
-		inline string name(); //{return _name;}
+		inline portIndex_t index() const ;
+		inline Resource* resource() const ;
+		inline string name();
 		inline string type();
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism 
@@ -371,10 +365,10 @@ public:
 		inline OutputPort<SlotType>* connectedOutput() const ;
 		
 	protected:
-		inline void setName(const string& name){_name = name;}
-		inline void setType(const string& type){_type = type;}
+		inline void setName(const string& name);
+		inline void setType(const string& type);
 		void bind( InputPort<SlotType>& port);
-		inline void setEnabled(bool status) {_enabled = status;}
+		inline void setEnabled(bool status);
 		
 	private:
 		Resource* _resource;
@@ -450,8 +444,6 @@ public:
 class Reader
 {
 public:
-	// TODO any way to force the children classes to implement the following constructor ?
-	//Reader(const Resource::InputPort<Reader>& port);
 	virtual ~Reader() {}
 };
 

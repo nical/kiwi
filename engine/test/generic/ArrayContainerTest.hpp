@@ -69,7 +69,7 @@ public:
 	{
 	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
 
-__(		if(!isReady() )
+DEBUG_ONLY(		if(!isReady() )
 		{
 			debug.error() << "AddArraysFilter::Process error : not ready" 
 				<< endl();
@@ -176,7 +176,8 @@ void ArrayContainerTest()
 		
 		debug.print() << "resource2" << endl();
 		// here the container uses some preallocated memory 
-		unsigned allocSize = Comp; for(unsigned i = 0; i < Dim; ++i) allocSize*=10;
+		unsigned allocSize = Comp; for(unsigned i = 0; i < Dim; ++i) 
+			allocSize*=10;
 		T* preAllocData = new T[allocSize];
 		generic::ArrayContainer<T,Dim> resource2(preAllocData, size, Comp, interleave);
 		// remember to delete the allocated memory !
@@ -240,7 +241,7 @@ debug.beginBlock("int main() ");
 
 	ArrayTest<int, 2, 2>();
 
-	__( debug.print() << "woooooat !" << endl; )
+	DEBUG_ONLY( debug.print() << "woooooat !" << endl; )
 	
 debug.endBlock();
 	return 0;

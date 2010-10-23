@@ -26,6 +26,12 @@
 #define __( instruction ) 
 #endif
 
+#ifdef DEBUG
+#define DEBUG_ONLY( instruction ) instruction
+#else
+#define DEBUG_ONLY( instruction ) 
+#endif
+
 namespace kiwi
 {
 

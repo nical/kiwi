@@ -19,46 +19,46 @@ int main()
 		PointTest<double,4>();
 		PointTest<unsigned int,3>();
 		
-		debug.endl(3);
-		debug.print() << "------------------------------------------------"
+		Debug::endl(3);
+		Debug::print() << "------------------------------------------------"
 					<< "Point Test Ok" << endl();
 	
 	
 		ArrayContainerTest<int, 2, 2>();
-		debug.print() << "----------------------------------------------"
+		Debug::print() << "----------------------------------------------"
 		<< endl();
-		debug.print() << "----------------------------------------------"
+		Debug::print() << "----------------------------------------------"
 		<< endl();
 		ArrayContainerTest<float, 2, 2>();
-		debug.print() << "----------------------------------------------"
+		Debug::print() << "----------------------------------------------"
 		<< endl();
 		ArrayContainerTest<unsigned int, 1, 2>();
-		debug.print() << "----------------------------------------------"
+		Debug::print() << "----------------------------------------------"
 		<< endl();
-		debug.print() << "----------------------------------------------"
+		Debug::print() << "----------------------------------------------"
 		<< endl();
 		ArrayContainerTest<double, 3, 4>();
-		debug.print() << "----------------------------------------------"
+		Debug::print() << "----------------------------------------------"
 		<< endl();
 		ArrayContainerTest<long int, 5, 2>();
 	
-		debug.endl(3);
-		debug.print() << "----------------------------------------------"
+		Debug::endl(3);
+		Debug::print() << "----------------------------------------------"
 					<< "ArrayContainer Test Ok" << endl();
-		debug.endl(3);
+		Debug::endl(3);
 		
 		MultiArrayContainerTest<int, 2, 2>();
-		debug.print() << "----------------------------------------------"
+		Debug::print() << "----------------------------------------------"
 		<< endl();
 		
 		MultiArrayContainerTest<double, 3, 4>();
-		debug.print() << "----------------------------------------------"
+		Debug::print() << "----------------------------------------------"
 		<< endl();
 		
-		debug.endl(3);
-		debug.print() << "----------------------------------------------"
+		Debug::endl(3);
+		Debug::print() << "----------------------------------------------"
 					<< "MultiArrayContainer Test Ok" << endl();
-		debug.endl(3);
+		Debug::endl(3);
 		
 		
 		MetaFilterTest<int, 2 ,2>();

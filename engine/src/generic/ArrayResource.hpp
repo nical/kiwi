@@ -1,3 +1,6 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
+
 #pragma once
 
 #ifndef KIWI_ARRAYRESOURCE_HPP

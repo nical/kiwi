@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -41,7 +43,7 @@ ArrayContainer<T,D>::ArrayContainer(Coordinates size
 	// compute the total size
 	_totalSize = nbComponents;
 	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
-	debug.print() << "allocate " << _totalSize << endl();
+	Debug::print() << "allocate " << _totalSize << endl();
 	// allocate the data
 	_data = new T[_totalSize];
 	
@@ -200,11 +202,11 @@ ScopedBlockMacro(__scop, kiwi::string("ArrayContainer<")
 	ArrayIterator<ValueType> it = getBasicIterator();
 	
 	do{		
-		debug.print() << *it;
+		Debug::print() << *it;
 	}while ( it.onIteration() );
 
-	debug.endl();
-	debug.print() << _totalSize << " elements" << endl(); 
+	Debug::endl();
+	Debug::print() << _totalSize << " elements" << endl(); 
 }
 
 

@@ -69,9 +69,9 @@ public:
 	{
 	ScopedBlockMacro(proc_block, "MetaAddArraysFilter::process()");
 
-__(		if(!isReady() )
+DEBUG_ONLY(		if(!isReady() )
 		{
-			debug.error() << "MetaAddArraysFilter::Process error : not ready" 
+			Debug::error() << "MetaAddArraysFilter::Process error : not ready" 
 				<< endl();
 			return;
 		}
@@ -130,25 +130,25 @@ void MetaFilterTest()
 // functionning of port bindings
 
 
- 	debug.beginBlock("Allocate the resources");
+ 	Debug::beginBlock("Allocate the resources");
 		
 		bool interleave = false;
 		
 		generic::Point<unsigned,Dim> size;
 		for(unsigned i = 0; i < Dim; ++i) size[i] = 10;
 		
-		debug.print() << "resource1" << endl();
+		Debug::print() << "resource1" << endl();
 		// here the container allocates its data
 		generic::ArrayContainer<T,Dim> resource1(size, Comp, interleave);
 		
-		debug.print() << "resource2" << endl();
+		Debug::print() << "resource2" << endl();
 		// here the container uses some preallocated memory 
 		unsigned allocSize = Comp; for(unsigned i = 0; i < Dim; ++i) allocSize*=10;
 		T* preAllocData = new T[allocSize];
 		generic::ArrayContainer<T,Dim> resource2(preAllocData, size, Comp, interleave);
 		// remember to delete the allocated memory !
 		
-		debug.print() << "resourceResult" << endl();
+		Debug::print() << "resourceResult" << endl();
 		generic::ArrayContainer<T,Dim> resourceResult(size, Comp, interleave);
 		
 		MetaAddArraysFilter<T,Dim> myTest;
@@ -167,11 +167,11 @@ void MetaFilterTest()
 		//resource1.printState();
 		//resource2.printState();
 		
-	debug.endBlock();
+	Debug::endBlock();
 
-	debug.endl();
+	Debug::endl();
 
-	debug.beginBlock("connect the ports");
+	Debug::beginBlock("connect the ports");
 		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
 		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
@@ -179,14 +179,14 @@ void MetaFilterTest()
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);
 		resourceResult.writerOutputPort(0) >> myTest2.writerInputPort(0);
-	debug.endBlock("connect the ports");
+	Debug::endBlock("connect the ports");
 
-	debug.print() << endl();
+	Debug::print() << endl();
 
 	myTest.process();
 	myTest2.process();
 
-	debug.print() << "processed" << endl();
+	Debug::print() << "processed" << endl();
 
 	resourceResult.printState();
 	delete[] preAllocData;

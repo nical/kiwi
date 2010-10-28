@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -314,10 +316,10 @@ protected:
 	 * @param myPort This class's port that has to be redirected to another Node's port.
 	 * @param toBind The other Node's port.
 	 */ 
-	inline void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind);
-	inline void bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind);
-	inline void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind);
-	inline void bindPort(WriterInputPort& myPort, WriterInputPort& toBind);
+	void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind);
+	void bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind);
+	void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind);
+	void bindPort(WriterInputPort& myPort, WriterInputPort& toBind);
 
 
 // ----------------------------------------------------- private members

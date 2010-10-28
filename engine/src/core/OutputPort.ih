@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -74,7 +76,7 @@ template <typename SlotType>
 void 
 Node::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
 {
-	debug.print() << "port rebinding" << endl();
+	Debug::print() << "port rebinding" << endl();
 	
 	_subPort = &port;
 

@@ -52,7 +52,7 @@ public:
 		
 		addWriterInputPort(sType, "Write Result");
 		
-		debug.print() << "writer input count: " 
+		Debug::print() << "writer input count: " 
 		<< this->getWriterInputCount() << endl();
 		
 		assert(this->getWriterInputCount() == 1 );
@@ -73,23 +73,23 @@ public:
 		ScopedBlockMacro(proc_block, "TestFilter::process()");
 		if(!isReady() )
 		{
-			debug.error() << "TestFilter::Process error : not ready" << endl();
+			Debug::error() << "TestFilter::Process error : not ready" << endl();
 			return;
 		}
 
-		debug.print() << "Allocate Reader #0" << endl;
+		Debug::print() << "Allocate Reader #0" << endl;
 		FloatReader A( readerInputPort(0) );
 		
-		debug.print() << "Allocate Reader #1" << endl;
+		Debug::print() << "Allocate Reader #1" << endl;
 		FloatReader B( readerInputPort(1) );
 		
-		debug.print() << "Allocate Writer #0" << endl;
+		Debug::print() << "Allocate Writer #0" << endl;
 		FloatWriter result( writerInputPort(0) );
 		
-		debug.beginBlock( "compute..");
+		Debug::beginBlock( "compute..");
 			result.set( A.get() + B.get() );
-			debug.print() << "result :" << result.get() << endl();
-		debug.endBlock( "compute..");
+			Debug::print() << "result :" << result.get() << endl();
+		Debug::endBlock( "compute..");
 	}
 	
 	
@@ -132,26 +132,26 @@ public:
 template<typename T> void FilterTest()
 {
 ScopedBlockMacro(__scop, "Filter Test");	
-	debug.beginBlock("Allocate the resources");
+	Debug::beginBlock("Allocate the resources");
 		generic::Value<T> resource1(10);
 		generic::Value<T> resource2(10);
 		generic::Value<T> resourceResult(42);
 
 		TestFilter<T> myTest;
 		TestFilter<T> myTest2;
-	debug.endBlock();
+	Debug::endBlock();
 
-	debug.print() << endl();
+	Debug::print() << endl();
 
-	debug.beginBlock("Test: this should not work");
+	Debug::beginBlock("Test: this should not work");
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);		
 		assert( !myTest.readerOutputPort(0).isConnected() );
 		assert( !myTest2.readerInputPort(0).isConnected() );
-	debug.endBlock("Test: it didn't work right ?");
+	Debug::endBlock("Test: it didn't work right ?");
 	
-	debug.endl();
+	Debug::endl();
 
-	debug.beginBlock("connect the ports");
+	Debug::beginBlock("connect the ports");
 		resource1.readerOutputPort(0) >> myTest.readerInputPort(0);	
 			assert( resource1.readerOutputPort(0).isConnected() );
 			assert( myTest.readerInputPort(0).isConnected() );
@@ -164,18 +164,18 @@ ScopedBlockMacro(__scop, "Filter Test");
 			assert( resourceResult.writerOutputPort(0).isConnected() );
 			assert( myTest.writerInputPort(0).isConnected() );
 
-	debug.endBlock("connect the ports");
+	Debug::endBlock("connect the ports");
 	
-	debug.endl();
+	Debug::endl();
 	
-	debug.beginBlock("Test: now this should work");
+	Debug::beginBlock("Test: now this should work");
 		if(! myTest.isLayoutEventEnabled() )
-			debug.error() << "error : layoutEvent not enabled" << endl();
+			Debug::error() << "error : layoutEvent not enabled" << endl();
 		assert(myTest.isLayoutEventEnabled());
 		
 		if(myTest.readerOutputPort(0).resource() 
 			== myTest.readerOutputPort(0).metaResource() )
-			debug.error() << "error : binding badly done" << endl();
+			Debug::error() << "error : binding badly done" << endl();
 		assert( myTest.readerOutputPort(0).resource() != myTest.readerOutputPort(0).metaResource() );	
 			
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(0);
@@ -190,9 +190,9 @@ ScopedBlockMacro(__scop, "Filter Test");
 			assert( resourceResult.writerOutputPort(0).isConnected() );
 			assert( myTest.writerInputPort(0).isConnected() );
 
-	debug.endBlock("Test: did it work ?");
+	Debug::endBlock("Test: did it work ?");
 
-	debug.endl();
+	Debug::endl();
 	
 	assert(myTest.isReady() );
 	myTest.process();

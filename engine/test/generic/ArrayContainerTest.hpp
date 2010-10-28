@@ -71,21 +71,21 @@ public:
 
 DEBUG_ONLY(		if(!isReady() )
 		{
-			debug.error() << "AddArraysFilter::Process error : not ready" 
+			Debug::error() << "AddArraysFilter::Process error : not ready" 
 				<< endl();
 			return;
 		}
 )
-		debug.print() << "Allocate Reader #0" << endl;
+		Debug::print() << "Allocate Reader #0" << endl;
 		myReader A( readerInputPort(0) );
 		
-		debug.print() << "Allocate Reader #1" << endl;
+		Debug::print() << "Allocate Reader #1" << endl;
 		myReader B( readerInputPort(1) );
 		
-		debug.print() << "Allocate Writer #0" << endl;
+		Debug::print() << "Allocate Writer #0" << endl;
 		myWriter result( writerInputPort(0) );
 		
-		debug.beginBlock( "compute..");
+		Debug::beginBlock( "compute..");
 			ArrayConstIterator<TValueType> itA = A.getIterator();
 			ArrayConstIterator<TValueType> itB = B.getIterator();
 			ArrayIterator<TValueType> itResult = result.getIterator();
@@ -93,14 +93,14 @@ DEBUG_ONLY(		if(!isReady() )
 			Point<int, TDimension> pos(0);
 			result.set( pos , A.get( pos ) + B.get( pos ) );
 			unsigned count = 0;
-			debug.print() << "avant la boucle" << endl();
+			Debug::print() << "avant la boucle" << endl();
 			do
 			{
 				if( itA.isDone() ) break;
 				if( itB.isDone() ) break;
 				
 				++count;
-				//debug.print() << " on iteration " << count << endl();
+				//Debug::print() << " on iteration " << count << endl();
 				
 				*itResult = *itA + *itB;
 				// this is unsafe crap: you don't iterate through image 
@@ -110,11 +110,11 @@ DEBUG_ONLY(		if(!isReady() )
 				++itB ;
 			} while(itResult.onIteration() );
 			
-			debug.print() << count << " iterations " << endl();
+			Debug::print() << count << " iterations " << endl();
 
-		debug.endBlock( "compute..");
+		Debug::endBlock( "compute..");
 		
-		debug.print() << "end of the method" << endl();
+		Debug::print() << "end of the method" << endl();
 		return;
 	}
 	
@@ -162,7 +162,7 @@ template<typename T, unsigned Dim, unsigned Comp>
 void ArrayContainerTest()
 {
 
-	debug.beginBlock("Allocate the resources");
+	Debug::beginBlock("Allocate the resources");
 		//audio::AudioBuffer<float> audioTest( 128, 1 );
 		
 		bool interleave = false;
@@ -170,11 +170,11 @@ void ArrayContainerTest()
 		generic::Point<unsigned,Dim> size;
 		for(unsigned i = 0; i < Dim; ++i) size[i] = 10;
 		
-		debug.print() << "resource1" << endl();
+		Debug::print() << "resource1" << endl();
 		// here the container allocates its data
 		generic::ArrayContainer<T,Dim> resource1(size, Comp, interleave);
 		
-		debug.print() << "resource2" << endl();
+		Debug::print() << "resource2" << endl();
 		// here the container uses some preallocated memory 
 		unsigned allocSize = Comp; for(unsigned i = 0; i < Dim; ++i) 
 			allocSize*=10;
@@ -182,7 +182,7 @@ void ArrayContainerTest()
 		generic::ArrayContainer<T,Dim> resource2(preAllocData, size, Comp, interleave);
 		// remember to delete the allocated memory !
 		
-		debug.print() << "resourceResult" << endl();
+		Debug::print() << "resourceResult" << endl();
 		generic::ArrayContainer<T,Dim> resourceResult(size, Comp, interleave);
 		
 		AddArraysFilter<T,Dim> myTest;
@@ -206,11 +206,11 @@ void ArrayContainerTest()
 		//resource1.printState();
 		//resource2.printState();
 		
-	debug.endBlock();
+	Debug::endBlock();
 
-	debug.endl();
+	Debug::endl();
 
-	debug.beginBlock("connect the ports");
+	Debug::beginBlock("connect the ports");
 		resource1.readerOutputPort(1) >> myTest.readerInputPort(0);
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
 		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
@@ -218,14 +218,14 @@ void ArrayContainerTest()
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);
 		resourceResult.writerOutputPort(1) >> myTest2.writerInputPort(0);
-	debug.endBlock("connect the ports");
+	Debug::endBlock("connect the ports");
 
-	debug.print() << endl();
+	Debug::print() << endl();
 
 	myTest.process();
 	myTest2.process();
 
-	debug.print() << "processed" << endl();
+	Debug::print() << "processed" << endl();
 
 	//resourceResult.printState();
 	delete[] preAllocData;
@@ -237,13 +237,13 @@ int main()
 
 ScopedBlockMacro(s2, "kiwi::TestArrayContainer");
 
-debug.beginBlock("int main() ");
+Debug::beginBlock("int main() ");
 
 	ArrayTest<int, 2, 2>();
 
-	DEBUG_ONLY( debug.print() << "woooooat !" << endl; )
+	DEBUG_ONLY( Debug::print() << "woooooat !" << endl; )
 	
-debug.endBlock();
+Debug::endBlock();
 	return 0;
 }
 */

@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -55,12 +57,12 @@ Node::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMeta
 ScopedBlockMacro(__sccop, "Node::InputPort<SlotType>::connect" );
 	if( !isEnabled() )
 	{
-		debug.error() << "InputPort::connect() : input port disabled" << endl();
+		Debug::error() << "InputPort::connect() : input port disabled" << endl();
 		return;
 	}
 	if( !outputPort.isEnabled() )
 	{
-		debug.error() << "InputPort::connect() : output port disabled" << endl();
+		Debug::error() << "InputPort::connect() : output port disabled" << endl();
 		return;
 	}
 	// if it is the subPort
@@ -76,8 +78,8 @@ ScopedBlockMacro(__sccop, "Node::InputPort<SlotType>::connect" );
 		}
 		else
 		{
-			debug.error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
-			debug.error() << outputPort.type() << " >> " << type() << endl();
+			Debug::error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
+			Debug::error() << outputPort.type() << " >> " << type() << endl();
 			return;
 		}
 	
@@ -107,7 +109,7 @@ template <typename SlotType>
 void 
 Node::InputPort<SlotType>::bind(InputPort<SlotType>& port)
 {
-DEBUG_ONLY(	debug.print() << "input port rebinding" << endl();  )
+DEBUG_ONLY(	Debug::print() << "input port rebinding" << endl();  )
 	_type = port._type;
 	_subPort = &port;
 	// note that if the binded Node is deleted, trying to acces

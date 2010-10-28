@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -44,7 +46,7 @@ ArrayWriter<T,D>::ArrayWriter(
 		);
 	if(!node)
 	{
-		debug.error() << "ArrayWriter<"
+		Debug::error() << "ArrayWriter<"
 			<<types::str<T>() 
 			<< ">::Constructor : "
 			<< "enable to determine the Resource type" 

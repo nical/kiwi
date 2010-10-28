@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -85,7 +87,7 @@ public:
 	{
 		unsigned size = 1;
 		for(unsigned i = 0; i < TDimension; ++i) size *= _span(i);
-		debug.print() << "Writer::chan size :  " 
+		Debug::print() << "Writer::chan size :  " 
 					<< size*_incs(0)-1 << endl();
 		return ArrayIterator<ValueType>( _data, _data + size*_incs(0)-1, _incs(0) );
 	}

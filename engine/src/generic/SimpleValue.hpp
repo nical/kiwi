@@ -86,7 +86,7 @@ public:
 		
 		if(!_node)
 		{
-			debug.error() << "ValueReader<"
+			Debug::error() << "ValueReader<"
 				<< types::str<ValueType>() 
 				<< ">::Constructor : "
 				<< "enable to determine the Resource type" 
@@ -115,7 +115,7 @@ public:
 		
 		if(!_node)
 		{
-			debug.error() << "ValueWriter<"
+			Debug::error() << "ValueWriter<"
 				<< types::str<ValueType>() 
 				<< ">::Constructor : "
 				<< "enable to determine the Resource type" 

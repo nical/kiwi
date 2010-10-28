@@ -4,7 +4,10 @@ include_directories (${PROJECT_SOURCE_DIR}/src)
 ##Recursive calls
 ## each subdir must contain a ModuleSRC.txt file with a set command on the variable ${KIWI_SRC}
 
-
+SET(KIWI_SRC ${KIWI_SRC}
+		core/Commons.cpp
+		utils/DebugOutputStream.cpp
+		)
 
 include(core/ModuleSRC.txt)
 include(generic/ModuleSRC.txt)

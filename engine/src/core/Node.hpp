@@ -203,7 +203,12 @@ public:
 	virtual kiwi::string readerOutputPortName( portIndex_t index );
 	virtual kiwi::string writerInputPortName( portIndex_t index );
 	virtual kiwi::string writerOutputPortName( portIndex_t index );
-	
+/*	
+	virtual kiwi::string readerInputPortType( portIndex_t index );
+	virtual kiwi::string readerOutputPortType( portIndex_t index );
+	virtual kiwi::string writerInputPortType( portIndex_t index );
+	virtual kiwi::string writerOutputPortType( portIndex_t index );
+*/	
 // --------------------------------------------------- protected methods	
 protected:
 	// port setup
@@ -212,7 +217,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
-	void addReaderInputPort(const string& type, const string& name = "#");
+	void addReaderInputPort(const string& type);
 
 	/**
 	 * @brief Remove an input port from this Filter's Reader interface.
@@ -225,7 +230,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
-	void addReaderOutputPort(const string& type, const string& name = "#");
+	void addReaderOutputPort(const string& type);
 	/**
 	 * @brief Remove an output port from this Filter's Reader interface.
 	 *
@@ -237,7 +242,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
-	void addWriterInputPort(const string& type, const string& name = "#");
+	void addWriterInputPort(const string& type);
 	/**
 	 * @brief Remove an input port from this Filter's Writer interface.
 	 *
@@ -249,7 +254,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
-	void addWriterOutputPort(const string& type, const string& name = "#");
+	void addWriterOutputPort(const string& type);
 	/**
 	 * @brief Remove an output port from this Filter's Writer interface.
 	 *
@@ -349,7 +354,7 @@ public:
 	{
 	friend class Node;
 	public:
-		InputPort(Node* myNode, const string& type, const string& name);
+		InputPort(Node* myNode, const string& type);
 		void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
 		void disconnect();
 		inline portIndex_t index() const ;
@@ -359,13 +364,12 @@ public:
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism 
 		// to get compatibility of child classes.
-		inline bool isCompatible(OutputPort<SlotType>& output);
+		inline bool isCompatible(OutputPort<SlotType>& output) ;
 		inline bool isConnected() const ;
 		inline bool isEnabled() const ;
 		inline OutputPort<SlotType>* connectedOutput() const ;
 		
 	protected:
-		inline void setName(const string& name);
 		inline void setType(const string& type);
 		void bind( InputPort<SlotType>& port);
 		inline void setEnabled(bool status);
@@ -374,7 +378,6 @@ public:
 		Node* _node;
 		InputPort<SlotType>* _subPort;
 		OutputPort<SlotType>* _connectedNode;
-		string _name;
 		string _type;
 		bool _enabled;
 	};
@@ -399,7 +402,7 @@ public:
 		typedef typename std::list< InputPort<SlotType>* > connectionList;
 		
 		// --------------------------------------------------------------------
-		OutputPort(Node* myNode, const string& type, const string& name);
+		OutputPort(Node* myNode, const string& type);
 		inline portIndex_t index() const ;
 		inline Node* node() const ;
 		OutputPort<SlotType>* subPort() ;//const ;
@@ -425,7 +428,6 @@ public:
 		OutputPort<SlotType>* _subPort;
 		//PortInfo _subNode; // todo remove this
 		connectionList _connections;
-		string _name; // TODO change this
 		string _type; // and this
 		bool _enabled;
 	};
@@ -433,6 +435,7 @@ public:
 
 
 }; // class Node;
+
 
 
 

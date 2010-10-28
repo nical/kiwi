@@ -36,10 +36,8 @@ namespace core
 template <typename SlotType>
 Node::OutputPort<SlotType>::OutputPort(
 	Node* myNode
-	, const string& type
-	, const string& name )	
+	, const string& type )	
 :  _type(type)
-	, _name(name)
 	, _enabled(true)
 	, _node(myNode)
 	, _subPort(0)
@@ -148,12 +146,7 @@ Node::OutputPort<SlotType>::connections() const
 	return _connections; 
 }
 
-template <typename SlotType>
-void 
-Node::OutputPort<SlotType>::setName(const string& name)
-{
-	_name = name;
-}
+
 
 template <typename SlotType>
 void 

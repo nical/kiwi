@@ -82,8 +82,8 @@ void ArrayContainer<T,D>::init(unsigned char nameHint)
 			
 	for(unsigned i = 0; i < _nbComponents; ++i)
 	{
-		addWriterOutputPort( sType, portName(i,nameHint, WRITER_OUT) );
-		addReaderOutputPort( sType, portName(i,nameHint, READER_OUT) );
+		Node::addWriterOutputPort( sType );
+		Node::addReaderOutputPort( sType );
 	}
 	Node::setLayoutEventEnabled(true);
 }

@@ -20,6 +20,7 @@ SET(KIWI_TESTS_SRC
 #	text/StringContainerTest
    )
 
+message("Kiwi Library : ${LIBKIWI_NAME}")
 
 FOREACH(FILE ${KIWI_TESTS_SRC})
   add_executable(${FILE} ${FILE})

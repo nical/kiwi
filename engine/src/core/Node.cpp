@@ -29,7 +29,6 @@
 
 #include "Node.hpp"
 
-
 namespace kiwi
 {
 namespace core

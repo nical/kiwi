@@ -28,8 +28,8 @@
 
 #pragma once
 
-#ifndef DEBUGOUTPUTSTREAM_HPP
-#define DEBUGOUTPUTSTREAM_HPP
+#ifndef KIWI_DEBUGOUTPUTSTREAM_HPP
+#define KIWI_DEBUGOUTPUTSTREAM_HPP
 
 #include <iostream>
 #include "core/Commons.hpp"
@@ -62,6 +62,18 @@
 
 namespace kiwi
 {
+	
+	
+
+string endl() 
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+	return "\033[0m\n";
+#else
+	return "\n";
+#endif
+}
+	
 
 
 class DebugOutputStream
@@ -69,21 +81,94 @@ class DebugOutputStream
 public:
 	DebugOutputStream() {}
 	~DebugOutputStream() {std::cerr << postfixReset();}
-	static void beginBlock(const kiwi::string& message = "");
-	static void endBlock(const kiwi::string& message = "");
+	static void beginBlock(const kiwi::string& message = "")
+	{
+#ifdef DEBUG
+	std::cerr << prefixEmphase() <<indent() 
+		<< "[" << BEGIN_BLOCK_MESSAGE << "] " 
+		<< message<< postfixReset()<< std::endl;
+	_indentation ++;
+#endif
+	}
+	static void endBlock(const kiwi::string& message = "")
+	{
+#ifdef DEBUG
+	_indentation --;
+	 std::cerr << prefixEmphase() << indent()
+		<< "[" << END_BLOCK_MESSAGE <<"] "
+		<< message << postfixReset() << std::endl;
+#endif
+	}
 //	inline void operator << (const string& text);
-	static std::ostream& error();
-	static std::ostream& print();
-	static std::ostream& emphase();
-	static void endl(char n = 1);
+	static std::ostream& error()
+		{ return std::cerr << prefixError() << indent() ; }
+		
+	static std::ostream& print()
+	{
+		std::cerr << indent();
+		return std::cerr;
+	}
+	
+	static std::ostream& emphase()
+	{
+		return std::cerr << prefixEmphase() << indent() ;
+	}
+	
+	static void endl(char n = 1)
+	{
+		for(; n > 0; --n) print() << kiwi::endl();
+	}
 	//inline ScopedBlock scopedBlock(const string& message = "");
 protected:
-	static std::string  prefixInfo();
-	static std::string  prefixError();
-	static std::string  prefixWarning();
-	static std::string  prefixEmphase();
-	static std::string  postfixReset();
-	static string indent();
+	static std::string  prefixInfo()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m";
+#else
+		return "";
+#endif
+	}
+	static std::string  prefixError()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m\033[31m";
+		//return "\033[0m\033[31m[ERR]";
+#else
+		return "";
+#endif
+	}
+	
+	static std::string  prefixWarning()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m\033[35m";
+#else
+		return "";
+#endif
+	}
+	
+	static std::string  prefixEmphase()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m\033[1m";
+#else
+		return "";
+#endif
+	}
+	
+	static std::string  postfixReset()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m";
+#else
+		return "";
+#endif
+	}
+	static string indent()
+	{
+		return string(_indentation*INDENTATION_PATTERN, ' ');
+	}
+	
 	static unsigned _indentation;
 };
 typedef DebugOutputStream Debug;
@@ -115,17 +200,9 @@ protected:
 
 // ---------------------------------------------------------------------
 
-string endl() 
-{
-#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
-	return "\033[0m\n";
-#else
-	return "\n";
-#endif
-}
-
 // ---------------------------------------------------------------------
 
+/*
 string DebugOutputStream::indent()
 {
 	return string(_indentation*INDENTATION_PATTERN, ' ');
@@ -147,12 +224,8 @@ void DebugOutputStream::endBlock(const string& message)
 
 #endif
 }
-/*
-ScopedBlock DebugOutputStream::scopedBlock(const string& message)
-{
-	return ScopedBlock(this, message);
-}
-*/
+
+
 std::ostream& DebugOutputStream::error()
 {
 	return std::cerr << prefixError() << indent() ;
@@ -222,6 +295,7 @@ std::string DebugOutputStream::postfixReset()
 }
 
 
+*/
 
 } //namespace
 

@@ -79,8 +79,8 @@ set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 # Configuration of the Config.h
 #------------------------------------------------------------------------------
 SET(Kiwi_VERSION_MAJOR 0)
-SET(Kiwi_VERSION_MINOR 1)
-SET(Kiwi_VERSION_PATCH 0)
+SET(Kiwi_VERSION_MINOR 2)
+SET(Kiwi_VERSION_PATCH 2)
 #CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/core/Config.h.in" "${PROJECT_SOURCE_DIR}/src/core/Config.h" IMMEDIATE)
 
 
@@ -90,6 +90,5 @@ SET(Kiwi_VERSION_PATCH 0)
 add_subdirectory (src)
 add_subdirectory (test)
 
-message("-- KIWI_SRC = ${KIWI_SRC}")
 
 #add_executable(testFilter ${KIWI_SRC})

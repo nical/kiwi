@@ -136,7 +136,7 @@ DEBUG_ONLY(		if(!isReady() )
 			{
 				setReaderOutputPortEnabled(0,true);
 				ReaderOutputPort& op
-				= writerInputPort(0).connectedOutput()->resource()->readerOutputPort(0);
+				= writerInputPort(0).connectedOutput()->node()->readerOutputPort(0);
 				bindPort( readerOutputPort(0), op );
 			}
 		}

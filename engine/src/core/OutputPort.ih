@@ -34,22 +34,22 @@ namespace core
 
 
 template <typename SlotType>
-Resource::OutputPort<SlotType>::OutputPort(
-	Resource* myResource
+Node::OutputPort<SlotType>::OutputPort(
+	Node* myNode
 	, const string& type
 	, const string& name )	
 :  _type(type)
 	, _name(name)
 	, _enabled(true)
-	, _resource(myResource)
+	, _node(myNode)
 	, _subPort(0)
 {
 	// nothing to do
 }
 
 template <typename SlotType>
-Resource::OutputPort<SlotType>* 
-Resource::OutputPort<SlotType>::subPort() //const 
+Node::OutputPort<SlotType>* 
+Node::OutputPort<SlotType>::subPort() //const 
 {
 	// if there's port rebinding, _subPort != 0 
 	// call the _subPort's method
@@ -60,9 +60,9 @@ Resource::OutputPort<SlotType>::subPort() //const
 
 template <typename SlotType>
 void 
-Resource::OutputPort<SlotType>::disconnect()
+Node::OutputPort<SlotType>::disconnect()
 {
-	typename std::list<Resource::InputPort<SlotType>*>::iterator it;
+	typename std::list<Node::InputPort<SlotType>*>::iterator it;
 	for(it = _connections.begin(); it!= _connections.end(); ++it)
 	{
 		(*it)->disconnect();
@@ -72,56 +72,56 @@ Resource::OutputPort<SlotType>::disconnect()
 
 template <typename SlotType>
 void 
-Resource::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
+Node::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
 {
 	debug.print() << "port rebinding" << endl();
 	
 	_subPort = &port;
 
 	_type = port._type;
-	// note that if the binded Resource is deleted, trying to acces
+	// note that if the binded Node is deleted, trying to acces
 	// this port might cause a segfault
 }
 
 
 template<>
 kiwi::string 
-Resource::OutputPort<Reader>::name()
+Node::OutputPort<Reader>::name()
 {
-	return _resource->readerOutputPortName( _resource->indexOf(*this) );
+	return _node->readerOutputPortName( _node->indexOf(*this) );
 }
 
 template<>
 kiwi::string 
-Resource::OutputPort<Writer>::name()
+Node::OutputPort<Writer>::name()
 {
-	return _resource->readerOutputPortName(	_resource->indexOf(*this) );
+	return _node->readerOutputPortName(	_node->indexOf(*this) );
 }
 
 template <typename SlotType>
 portIndex_t 
-Resource::OutputPort<SlotType>::index() const 
+Node::OutputPort<SlotType>::index() const 
 {
-	return _resource->indexOf(*this);
+	return _node->indexOf(*this);
 }
 
 template <typename SlotType>
-Resource* 
-Resource::OutputPort<SlotType>::resource() const 
+Node* 
+Node::OutputPort<SlotType>::node() const 
 {
-	return _resource;
+	return _node;
 }
 
 template <typename SlotType>
 string 
-Resource::OutputPort<SlotType>::type() 
+Node::OutputPort<SlotType>::type() 
 { 
 	return _type; 
 }
 
 template <typename SlotType>
 bool 
-Resource::OutputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
+Node::OutputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
 {
 	return ( type().find(output.type())!= string::npos 
 	|| type().find("any")!= string::npos ); 
@@ -129,42 +129,42 @@ Resource::OutputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)
 
 template <typename SlotType>
 bool 
-Resource::OutputPort<SlotType>::isConnected() const 
+Node::OutputPort<SlotType>::isConnected() const 
 { 
 	return (_connections.size() != 0); 
 }
 
 template <typename SlotType>
 bool 
-Resource::OutputPort<SlotType>::isEnabled() const 
+Node::OutputPort<SlotType>::isEnabled() const 
 { 
 	return _enabled; 
 }
 
 template <typename SlotType>
-typename Resource::OutputPort<SlotType>::connectionList 
-Resource::OutputPort<SlotType>::connections() const 
+typename Node::OutputPort<SlotType>::connectionList 
+Node::OutputPort<SlotType>::connections() const 
 { 
 	return _connections; 
 }
 
 template <typename SlotType>
 void 
-Resource::OutputPort<SlotType>::setName(const string& name)
+Node::OutputPort<SlotType>::setName(const string& name)
 {
 	_name = name;
 }
 
 template <typename SlotType>
 void 
-Resource::OutputPort<SlotType>::setType(const string& type)
+Node::OutputPort<SlotType>::setType(const string& type)
 {
 	_type = type;
 }
 
 template <typename SlotType>
 void 
-Resource::OutputPort<SlotType>::setEnabled(bool status) 
+Node::OutputPort<SlotType>::setEnabled(bool status) 
 {
 	_enabled = status;
 }

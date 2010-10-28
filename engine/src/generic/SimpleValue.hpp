@@ -78,13 +78,13 @@ public:
 	// -----------------------------------------------------------------
 	ValueReader(const Resource::ReaderInputPort& port)
 	{
-		assert( port.connectedOutput()->resource() );
+		assert( port.connectedOutput()->node() );
 		
-		_resource = dynamic_cast<ValueHolder<TValueType>* >( 
-			port.connectedOutput()->resource() 
+		_node = dynamic_cast<ValueHolder<TValueType>* >( 
+			port.connectedOutput()->node() 
 		);
 		
-		if(!_resource)
+		if(!_node)
 		{
 			debug.error() << "ValueReader<"
 				<< types::str<ValueType>() 
@@ -95,9 +95,9 @@ public:
 		_port = port.connectedOutput()->index();
 	}
 	
-	virtual ValueType get() {return _resource->getValue(_port);}
+	virtual ValueType get() {return _node->getValue(_port);}
 private:
-	ValueHolder<ValueType>* _resource;
+	ValueHolder<ValueType>* _node;
 	portIndex_t _port;
 };
 
@@ -109,11 +109,11 @@ public:
 	// -----------------------------------------------------------------
 	ValueWriter(const Resource::WriterInputPort& port)
 	{
-		_resource = dynamic_cast<ValueHolder<TValueType>* >(
-			port.connectedOutput()->resource() 
+		_node = dynamic_cast<ValueHolder<TValueType>* >(
+			port.connectedOutput()->node() 
 		);
 		
-		if(!_resource)
+		if(!_node)
 		{
 			debug.error() << "ValueWriter<"
 				<< types::str<ValueType>() 
@@ -124,10 +124,10 @@ public:
 		_port = port.connectedOutput()->index();
 	}
 	
-	virtual ValueType get() {return _resource->getValue(_port);}
-	virtual void set(ValueType val) {_resource->getValue(_port) = val; }
+	virtual ValueType get() {return _node->getValue(_port);}
+	virtual void set(ValueType val) {_node->getValue(_port) = val; }
 private:
-	ValueHolder<ValueType>* _resource;
+	ValueHolder<ValueType>* _node;
 	portIndex_t _port;
 };
 

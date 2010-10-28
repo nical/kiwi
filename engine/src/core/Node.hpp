@@ -27,15 +27,15 @@
 
 
 /**
- * @file Resource.h
- * @brief Header file for the base class of every kiwi resource and filter.
+ * @file Node.h
+ * @brief Header file for the base class of every kiwi node and filter.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
  * @version 0.1
  */
 
 #pragma once
-#ifndef KIWI_RESOURCE_HPP
-#define KIWI_RESOURCE_HPP
+#ifndef KIWI_NODE_HPP
+#define KIWI_NODE_HPP
 
 #include <list>
 #include <vector>
@@ -59,20 +59,20 @@ namespace core
 
 class Reader;
 class Writer;
-class Resource;
+class Node;
 struct PortInfo
 {
-	Resource* resource;
+	Node* node;
 	portIndex_t index;
 };
 /**
- * @class Resource
- * @brief The base class for every kiwi Resource and Filter
+ * @class Node
+ * @brief The base class for every kiwi Node and Filter
  *
  * TODO Lots of explainations needed here 
  *
  */ 
-class Resource
+class Node
 {
 public:
 //---------------------------------------  Internal classes declarations
@@ -91,13 +91,13 @@ public:
 	/**
 	 * @brief Constructor
 	 */ 
-	Resource();
+	Node();
 
 
 	/**
 	 * @brief Destructor.
 	 */ 
-	virtual ~Resource();
+	virtual ~Node();
 
 
 
@@ -107,7 +107,7 @@ public:
 	 * @brief Verifies the compatibility of a given Reader to one of the input ports
 	 *
 	 * Returns true if the output port passed in parameter is compatible with the input ports.
-	 * This method must be implemented by every Resource/Filter.
+	 * This method must be implemented by every Node/Filter.
 	 *
 	 * @param inputIndex The index of the input port concerned
 	 * @param port A reference to the output port that is to be checked.
@@ -128,7 +128,7 @@ public:
 	/**
 	 * @brief Access to a port.
 	 *
-	 * Retrives the indexth InputPort of the Resource's Reader interface.
+	 * Retrives the indexth InputPort of the Node's Reader interface.
 	 *
 	 * @param index The index of the port.
 	 */ 
@@ -137,7 +137,7 @@ public:
 	/**
 	 * @brief Access to a port.
 	 *
-	 * Retrives the indexth OutputPort of the Resource's Reader interface.
+	 * Retrives the indexth OutputPort of the Node's Reader interface.
 	 *
 	 * @param index The index of the port.
 	 */ 
@@ -147,7 +147,7 @@ public:
 	/**
 	 * @brief Access to a port.
 	 *
-	 * Retrives the indexth InputPort of the Resource's Writer interface.
+	 * Retrives the indexth InputPort of the Node's Writer interface.
 	 *
 	 * @param index The index of the port.
 	 */
@@ -156,7 +156,7 @@ public:
 	/**
 	 * @brief Access to a port.
 	 *
-	 * Retrives the indexth OutputPort of the Resource's Writer interface.
+	 * Retrives the indexth OutputPort of the Node's Writer interface.
 	 *
 	 * @param index The index of the port.
 	 */
@@ -164,19 +164,19 @@ public:
 		{assert(index < getWriterOutputCount() );return *_writerOutputs[index];}
 
 	/**
-	 * @brief Returns the amount of Reader Inputs of this Resource.
+	 * @brief Returns the amount of Reader Inputs of this Node.
 	 */ 
 	inline unsigned getReaderInputCount() const {return _readerInputs.size();}
 	/**
-	 * @brief Returns the amount of Reader Outputs of this Resource.
+	 * @brief Returns the amount of Reader Outputs of this Node.
 	 */
 	inline unsigned getReaderOutputCount() const {return _readerOutputs.size();}
 	/**
-	 * @brief Returns the amount of Writer inputs of this Resource.
+	 * @brief Returns the amount of Writer inputs of this Node.
 	 */
 	inline unsigned getWriterInputCount() const {return _writerInputs.size();}
 	/**
-	 * @brief Returns the amount of Writer outputs of this Resource.
+	 * @brief Returns the amount of Writer outputs of this Node.
 	 */
 	inline unsigned getWriterOutputCount() const {return _readerOutputs.size();}
 	
@@ -210,7 +210,7 @@ protected:
 	/**
 	 * @brief Adds an input port to the Reader interface.
 	 *
-	 * This is to be used in the initialisation phase of a Resource/Filter.
+	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
 	void addReaderInputPort(const string& type, const string& name = "#");
 
@@ -223,7 +223,7 @@ protected:
 	/**
 	 * @brief Adds an output port to the Reader interface.
 	 *
-	 * This is to be used in the initialisation phase of a Resource/Filter.
+	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
 	void addReaderOutputPort(const string& type, const string& name = "#");
 	/**
@@ -235,7 +235,7 @@ protected:
 	/**
 	 * @brief Adds an input port to the Writer interface.
 	 *
-	 * This is to be used in the initialisation phase of a Resource/Filter.
+	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
 	void addWriterInputPort(const string& type, const string& name = "#");
 	/**
@@ -247,7 +247,7 @@ protected:
 	/**
 	 * @brief Adds an output port to the Writer interface.
 	 *
-	 * This is to be used in the initialisation phase of a Resource/Filter.
+	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
 	void addWriterOutputPort(const string& type, const string& name = "#");
 	/**
@@ -298,21 +298,21 @@ protected:
 	inline void setLayoutEventEnabled(bool status) { _layoutEvtEnabled = status; }
 	
 	/**
-	 * @brief Redirect a port to the port another Resource's port.
+	 * @brief Redirect a port to the port another Node's port.
 	 * 
-	 * bindPort allows a Resource to have ports that are in fact pointing 
-	 * to another Resource instead of itself.
-	 * Each port contains knows both the Resource that contains it and also
-	 * the Resource that actuly contains the data.
-	 * This distinction permits to have for instance a Resource that 
-	 * contains other Resources and redirects its ports to the one of the
-	 * contained Resource (for exemple Pipelines). 
+	 * bindPort allows a Node to have ports that are in fact pointing 
+	 * to another Node instead of itself.
+	 * Each port contains knows both the Node that contains it and also
+	 * the Node that actuly contains the data.
+	 * This distinction permits to have for instance a Node that 
+	 * contains other Nodes and redirects its ports to the one of the
+	 * contained Node (for exemple Pipelines). 
 	 * Another use of this method is for any Filter that writes in a 
-	 * Resource to provide the output readers of the Resource in its own
+	 * Node to provide the output readers of the Node in its own
 	 * outputs.
 	 * 
-	 * @param myPort This class's port that has to be redirected to another Resource's port.
-	 * @param toBind The other Resource's port.
+	 * @param myPort This class's port that has to be redirected to another Node's port.
+	 * @param toBind The other Node's port.
 	 */ 
 	inline void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind);
 	inline void bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind);
@@ -335,25 +335,25 @@ private:
 public:
 
 	/**
-	 * @class Resource::InputPort<Reader|Writer>
+	 * @class Node::InputPort<Reader|Writer>
 	 * @brief Generic input port class for Reader and Writer interface.
 	 *
-	 * An instance of this class is hold by a kResource for each of it's inputs.
-	 * Port classes are designed to do most of the external actions on Resource/Filter which are
-	 * doning connections between Resources and retrieving informations on their input/output data.
+	 * An instance of this class is hold by a kNode for each of it's inputs.
+	 * Port classes are designed to do most of the external actions on Node/Filter which are
+	 * doning connections between Nodes and retrieving informations on their input/output data.
 	 * 
 	 * Each port has a name which use is facultative has they are truely accessed using an integer index.
 	 */
 	template<class SlotType>
 	class InputPort
 	{
-	friend class Resource;
+	friend class Node;
 	public:
-		InputPort(Resource* myResource, const string& type, const string& name);
+		InputPort(Node* myNode, const string& type, const string& name);
 		void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
 		void disconnect();
 		inline portIndex_t index() const ;
-		inline Resource* resource() const ;
+		inline Node* node() const ;
 		inline string name();
 		inline string type();
 		// TODO this is a temporary solution for port compatibility
@@ -371,37 +371,37 @@ public:
 		inline void setEnabled(bool status);
 		
 	private:
-		Resource* _resource;
+		Node* _node;
 		InputPort<SlotType>* _subPort;
-		OutputPort<SlotType>* _connectedResource;
+		OutputPort<SlotType>* _connectedNode;
 		string _name;
 		string _type;
 		bool _enabled;
 	};
 
 	/**
-	 * @class Resource::OutputPort<Reader|Writer>
+	 * @class Node::OutputPort<Reader|Writer>
 	 * @brief Generic output port class for Reader and Writer interface.
 	 *
-	 * An instance of this class is hold by a Resource for each of it's outputs.
-	 * Port classes are designed to do most of the external actions on Resource/Filter which are
-	 * doning connections between Resources and retrieving informations on their input/output data.
+	 * An instance of this class is hold by a Node for each of it's outputs.
+	 * Port classes are designed to do most of the external actions on Node/Filter which are
+	 * doning connections between Nodes and retrieving informations on their input/output data.
 	 * 
 	 * Each port has a name which use is facultative has they are truely accessed using an integer index.
 	 */
 	template<class SlotType>
 	class OutputPort
 	{
-	friend class Resource;
+	friend class Node;
 	public:
 	friend class InputPort<SlotType>;
 		// --------------------------------------------------------------------
 		typedef typename std::list< InputPort<SlotType>* > connectionList;
 		
 		// --------------------------------------------------------------------
-		OutputPort(Resource* myResource, const string& type, const string& name);
+		OutputPort(Node* myNode, const string& type, const string& name);
 		inline portIndex_t index() const ;
-		inline Resource* resource() const ;
+		inline Node* node() const ;
 		OutputPort<SlotType>* subPort() ;//const ;
 		inline string name();
 		inline string type();
@@ -412,7 +412,7 @@ public:
 		inline bool isConnected() const ;
 		inline bool isEnabled() const ;
 		inline connectionList connections() const ;
-		void disconnect(); //empty the connected resources list
+		void disconnect(); //empty the connected nodes list
 		
 	protected:
 		inline void setName(const string& name);
@@ -421,9 +421,9 @@ public:
 		inline void setEnabled(bool status);
 		
 	private:
-		Resource* _resource;
+		Node* _node;
 		OutputPort<SlotType>* _subPort;
-		//PortInfo _subResource; // todo remove this
+		//PortInfo _subNode; // todo remove this
 		connectionList _connections;
 		string _name; // TODO change this
 		string _type; // and this
@@ -432,14 +432,14 @@ public:
 
 
 
-}; // class Resource;
+}; // class Node;
 
 
 
 //------------------------------------------------------- access classes
 /**
  * @class Reader
- * @brief The base class to read data from Resource.
+ * @brief The base class to read data from Node.
  */ 
 class Reader
 {
@@ -449,7 +449,7 @@ public:
 
 /**
  * @class Writer
- * @brief The base class to read and write data from Resource.
+ * @brief The base class to read and write data from Node.
  */
 class Writer
 {
@@ -461,17 +461,17 @@ public:
 
 // ----------------------------------------------------------- Operators
 /**
- *	@brief Operator for connections between Resource.
+ *	@brief Operator for connections between Node.
  * 
- * The operator to connect Resources port in an elegant way.
+ * The operator to connect Nodes port in an elegant way.
  * Corresonds to InputPort::connect(OutputPort<SlotType>& outputPort);
  *
  * exemple:
- * 	// connects myResource1's first OutputPort to myResource2's second InputPort
- * 	myResource1.readerOutputPort(0) >> myResource2.readerInputPort(1);
+ * 	// connects myNode1's first OutputPort to myNode2's second InputPort
+ * 	myNode1.readerOutputPort(0) >> myNode2.readerInputPort(1);
  */ 
 template <typename SlotType>
-bool operator>>(Resource::OutputPort<SlotType>& output, Resource::InputPort<SlotType>& input );
+bool operator>>(Node::OutputPort<SlotType>& output, Node::InputPort<SlotType>& input );
 
 
 
@@ -481,7 +481,7 @@ bool operator>>(Resource::OutputPort<SlotType>& output, Resource::InputPort<Slot
 
 }//namespace kiwi
 
-#include "core/Resource.ih"
+#include "core/Node.ih"
 #include "core/InputPort.ih"
 #include "core/OutputPort.ih"
 

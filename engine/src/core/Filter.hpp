@@ -18,7 +18,7 @@
 #ifndef KIWI_FILTER_HPP
 #define KIWI_FILTER_HPP
 
-#include "Resource.hpp"
+#include "Node.hpp"
 
 
 namespace kiwi
@@ -27,7 +27,7 @@ namespace core
 {
 
 	
-class Filter : public Resource
+class Filter : public Node
 {
 public:
 
@@ -44,19 +44,19 @@ public:
 	 * 
 	 * This method should be called before calling process().It checks that the boolean 
 	 * readiness state is true AND that the optionnal readyCondition returns true as well.
-	 * @see Resource::readyCondition()
+	 * @see Node::readyCondition()
 	 */ 
 	bool isReady() {return (_ready && readyCondition() );}
 	
 	
 	/**
-	 * Returns true. Overloaded from Resource, this helps Pipeline know wether or not the
-	 * Resource they manipulate are filters.
+	 * Returns true. Overloaded from Node, this helps Pipeline know wether or not the
+	 * Node they manipulate are filters.
 	 */ 
 	bool isAFilter() {return true;}
 
 
-	Filter():Resource()
+	Filter():Node()
 	{
 		setReady(true);
 	}

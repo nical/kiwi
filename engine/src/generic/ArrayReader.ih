@@ -36,11 +36,11 @@ template<typename T, unsigned int D>
 ArrayReader<T,D>::ArrayReader(
 	const core::Resource::ReaderInputPort& port )
 {
-	ArrayContainer<T,D>* resource = 
+	ArrayContainer<T,D>* node = 
 		dynamic_cast< ArrayContainer<T,D>* >( 
-			port.connectedOutput()->subPort()->resource() 
+			port.connectedOutput()->subPort()->node() 
 		);
-	if(!resource)
+	if(!node)
 	{
 		debug.error() << "ArrayContainerReader<"
 			<< types::str<T>() 
@@ -49,9 +49,9 @@ ArrayReader<T,D>::ArrayReader(
 			<< endl();
 	}
 	_port = port.connectedOutput()->index();
-	_data = resource->getDataPointer(_port);
-	_incs = resource->increments(_port);
-	_span = resource->spanSize();
+	_data = node->getDataPointer(_port);
+	_incs = node->increments(_port);
+	_span = node->spanSize();
 /*	unsigned csize = 1;
 	for(unsigned i = 0; i < D; ++i) csize*=_span(i);
 	_end = _data + csize;

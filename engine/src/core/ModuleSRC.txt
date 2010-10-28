@@ -1,5 +1,5 @@
 SET(KIWI_SRC ${KIWI_SRC} 
-		core/Resource.hpp
+		core/Node.hpp
 		core/Filter.hpp
 		core/Pipeline.hpp
 		core/Commons.hpp

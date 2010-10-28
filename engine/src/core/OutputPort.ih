@@ -39,9 +39,10 @@ template <typename SlotType>
 Node::OutputPort<SlotType>::OutputPort(
 	Node* myNode
 	, const string& type
-	, const string& name )	
+//	, const string& name )	
+)
 :  _type(type)
-	, _name(name)
+//	, _name(name)
 	, _enabled(true)
 	, _node(myNode)
 	, _subPort(0)

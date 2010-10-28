@@ -427,7 +427,7 @@ public:
 		OutputPort<SlotType>* _subPort;
 		//PortInfo _subNode; // todo remove this
 		connectionList _connections;
-		string _name; // TODO change this
+		//string _name; // TODO change this
 		string _type; // and this
 		bool _enabled;
 	};

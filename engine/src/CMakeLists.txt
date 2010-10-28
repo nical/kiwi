@@ -5,7 +5,7 @@ include_directories (${PROJECT_SOURCE_DIR}/src)
 ## each subdir must contain a ModuleSRC.txt file with a set command on the variable ${KIWI_SRC}
 
 SET(KIWI_SRC ${KIWI_SRC}
-		core/Node.cpp
+		core/Node.ih
 #		utils/DebugOutputStream.cpp
 		)
 

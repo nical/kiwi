@@ -212,7 +212,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Resource/Filter.
 	 */ 
-	void addReaderInputPort(const string& type, const string& name = "#");
+	void addReaderInputPort(const string& type);
 
 	/**
 	 * @brief Remove an input port from this Filter's Reader interface.
@@ -225,7 +225,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Resource/Filter.
 	 */ 
-	void addReaderOutputPort(const string& type, const string& name = "#");
+	void addReaderOutputPort(const string& type);
 	/**
 	 * @brief Remove an output port from this Filter's Reader interface.
 	 *
@@ -237,7 +237,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Resource/Filter.
 	 */ 
-	void addWriterInputPort(const string& type, const string& name = "#");
+	void addWriterInputPort(const string& type);
 	/**
 	 * @brief Remove an input port from this Filter's Writer interface.
 	 *
@@ -249,7 +249,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Resource/Filter.
 	 */ 
-	void addWriterOutputPort(const string& type, const string& name = "#");
+	void addWriterOutputPort(const string& type);
 	/**
 	 * @brief Remove an output port from this Filter's Writer interface.
 	 *
@@ -349,7 +349,7 @@ public:
 	{
 	friend class Resource;
 	public:
-		InputPort(Resource* myResource, const string& type, const string& name);
+		InputPort(Resource* myResource, const string& type );
 		void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
 		void disconnect();
 		inline portIndex_t index() const ;
@@ -399,7 +399,7 @@ public:
 		typedef typename std::list< InputPort<SlotType>* > connectionList;
 		
 		// --------------------------------------------------------------------
-		OutputPort(Resource* myResource, const string& type, const string& name);
+		OutputPort(Resource* myResource, const string& type);
 		inline portIndex_t index() const ;
 		inline Resource* resource() const ;
 		OutputPort<SlotType>* subPort() ;//const ;

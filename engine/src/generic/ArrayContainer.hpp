@@ -181,13 +181,16 @@ protected:
 	virtual kiwi::string portName(portIndex_t index
 		, unsigned char nameHint
 		, unsigned char portType = READER_OUT ) const;
+		
+	kiwi:: string readerOutputPortName(portIndex_t index);
+	kiwi:: string writerOutputPortName(portIndex_t index);
 
 
 private:
 	/**
 	 * @brief Initializes the container. (called from within the constructors)
 	 */ 
-	void init(unsigned char nameHint);
+	void init();
 
 	ValueType* _data;
 	bool _deleteDataDestructor;
@@ -195,6 +198,7 @@ private:
 	unsigned int _totalSize;
 	unsigned char _nbComponents;
 	Coordinates _spanSize;
+	unsigned char _nameHint;
 
 };	
 

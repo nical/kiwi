@@ -36,10 +36,8 @@ namespace core
 template <typename SlotType>
 Resource::OutputPort<SlotType>::OutputPort(
 	Resource* myResource
-	, const string& type
-	, const string& name )	
+	, const string& type )	
 :  _type(type)
-	, _name(name)
 	, _enabled(true)
 	, _resource(myResource)
 	, _subPort(0)
@@ -88,14 +86,14 @@ template<>
 kiwi::string 
 Resource::OutputPort<Reader>::name()
 {
-	return _resource->readerOutputPortName( _resource->indexOf(*this) );
+	return _resource->readerOutputPortName( index() );
 }
 
 template<>
 kiwi::string 
 Resource::OutputPort<Writer>::name()
 {
-	return _resource->readerOutputPortName(	_resource->indexOf(*this) );
+	return _resource->writerOutputPortName(	index() );
 }
 
 template <typename SlotType>

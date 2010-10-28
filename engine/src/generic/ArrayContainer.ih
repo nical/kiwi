@@ -34,7 +34,7 @@ ArrayContainer<T,D>::ArrayContainer(Coordinates size
 	, unsigned char nbComponents
 	, bool interleaved 
 	, unsigned char nameHint)
-:_interleaved(interleaved), _nbComponents(nbComponents)
+:_interleaved(interleaved), _nbComponents(nbComponents), _nameHint(nameHint)
 {
 	_deleteDataDestructor = true;
 	_spanSize = size;
@@ -45,7 +45,7 @@ ArrayContainer<T,D>::ArrayContainer(Coordinates size
 	// allocate the data
 	_data = new T[_totalSize];
 	
-	init(nameHint);
+	init();
 }
 
 template<typename T, unsigned int D>
@@ -64,12 +64,12 @@ ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
 
 	_data = dataPtr;
 	
-	init(nameHint);
+	init();
 }
 
 
 template<typename T, unsigned int D>
-void ArrayContainer<T,D>::init(unsigned char nameHint)
+void ArrayContainer<T,D>::init()
 {
 // disable the event so that layoutChanged() is not called from
 	// within the constructor
@@ -82,8 +82,8 @@ void ArrayContainer<T,D>::init(unsigned char nameHint)
 			
 	for(unsigned i = 0; i < _nbComponents; ++i)
 	{
-		addWriterOutputPort( sType, portName(i,nameHint, WRITER_OUT) );
-		addReaderOutputPort( sType, portName(i,nameHint, READER_OUT) );
+		addWriterOutputPort( sType );
+		addReaderOutputPort( sType );
 	}
 	setLayoutEventEnabled(true);
 }
@@ -94,6 +94,22 @@ ArrayContainer<T,D>::~ArrayContainer()
 {
 	if(_deleteDataDestructor) delete[] _data;
 	
+}
+
+
+template<typename T, unsigned int D>
+kiwi:: string 
+ArrayContainer<T,D>::readerOutputPortName(portIndex_t index)
+{
+	return portName(index, _nameHint, READER_OUT);
+}
+
+
+template<typename T, unsigned int D>
+kiwi:: string 
+ArrayContainer<T,D>::writerOutputPortName(portIndex_t index)
+{
+	return portName(index, _nameHint, WRITER_OUT);
 }
 
 template<typename T, unsigned int D>

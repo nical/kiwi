@@ -49,14 +49,14 @@ public:
 		kiwi::string sType( kiwi::string("array")
 			+ boost::lexical_cast<kiwi::string>(TDimension)
 			+"d_"+ types::str<TValueType>() );
-		addReaderInputPort(sType, "A");
-		addReaderInputPort(sType, "B");
+		addReaderInputPort(sType);
+		addReaderInputPort(sType);
 		
-		addWriterInputPort(sType, "Write Result");	
+		addWriterInputPort(sType);	
 		
 		//add a reader output that will be available only when the writer
 		//port is connected
-		addReaderOutputPort(sType, "Result");
+		addReaderOutputPort(sType);
 		setReaderOutputPortEnabled(0,false);
 		setLayoutEventEnabled(true);
 	}
@@ -147,6 +147,22 @@ DEBUG_ONLY(		if(!isReady() )
 		}
 
 	}
+	
+	kiwi::string readerInputPortName(portIndex_t index)
+	{
+DEBUG_ONLY(	debug.print() << "ReaderInputPortName" << (int)index << endl(); )
+		return boost::lexical_cast<kiwi::string>((int)index);
+	}
+	kiwi::string writerInputPortName(portIndex_t index)
+	{
+DEBUG_ONLY(	debug.print() << "ReaderInputPortName" << (int)index << endl(); )
+		return boost::lexical_cast<kiwi::string>((int)index);
+	}
+	kiwi::string readerOutputPortName(portIndex_t index)
+	{
+DEBUG_ONLY(	debug.print() << "ReaderInputPortName" << (int)index << endl(); )
+		return boost::lexical_cast<kiwi::string>((int)index);
+	}
 };
 
 
@@ -202,6 +218,12 @@ void ArrayContainerTest()
 		assert( myTest.indexOf( myTest.readerInputPort(1) ) == 1 );
 		assert( resource1.indexOf( resource1.writerOutputPort(0) ) == 0 );
 		assert( resource1.indexOf( resource1.writerOutputPort(1) ) == 1 );
+			
+		assert( myTest.readerInputPort(0).name() == "0" );
+		assert( myTest.readerInputPort(1).name() == "1" );
+		assert( myTest.writerInputPort(0).name() == "0" );
+		
+		//assert( myTest.readerOutputPort(0).subPort()->index() == 1 );
 		
 		//resource1.printState();
 		//resource2.printState();
@@ -213,7 +235,7 @@ void ArrayContainerTest()
 	debug.beginBlock("connect the ports");
 		resource1.readerOutputPort(1) >> myTest.readerInputPort(0);
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
-		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
+		resourceResult.writerOutputPort(1) >> myTest.writerInputPort(0);
 		
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);

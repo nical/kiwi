@@ -50,10 +50,19 @@ ArrayWriter<T,D>::ArrayWriter(
 			<< "enable to determine the Resource type" 
 			<< endl();
 	}
-	_port = port.connectedOutput()->index();
+
+	_port = port.connectedOutput()->subPort()->index();
 	_data = resource->getDataPointer(_port);
 	_incs = resource->increments(_port);
 	_span = resource->spanSize();
+
+	DEBUG_ONLY(
+		debug.print() 
+				<< "ArrayWriter: Connecting to Resource on port " 
+				<< (int)_port 
+				<< endl();
+	)//DEBG_ONLY
+	
 
 }
 

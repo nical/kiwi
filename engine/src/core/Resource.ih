@@ -59,37 +59,28 @@ Resource::~Resource()
 }
 
 
-void Resource::addReaderInputPort(const string& type, const string& name)
+void Resource::addReaderInputPort(const string& type)
 {
-//ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
-//	portIndex_t index = getReaderInputCount();
-	_readerInputs.push_back( new InputPort<Reader>(this, type, name) );
+	_readerInputs.push_back( new InputPort<Reader>(this, type) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
-void Resource::addReaderOutputPort(const string& type, const string& name)
+void Resource::addReaderOutputPort(const string& type)
 {
-//ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
-//	portIndex_t index = getReaderOutputCount();
-	_readerOutputs.push_back( new OutputPort<Reader>(this, type, name) );
+	_readerOutputs.push_back( new OutputPort<Reader>(this, type) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
-void Resource::addWriterInputPort(const string& type, const string& name)
+void Resource::addWriterInputPort(const string& type)
 {
-//ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
-//	portIndex_t index = getWriterInputCount();
-	_writerInputs.push_back( new InputPort<Writer>(this, type, name) );
+	_writerInputs.push_back( new InputPort<Writer>(this, type) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
-void Resource::addWriterOutputPort(const string& type, const string& name)
+void Resource::addWriterOutputPort(const string& type)
 {
-//ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
-//	portIndex_t index = getWriterOutputCount();
-	_writerOutputs.push_back( new OutputPort<Writer>(this, type, name) );
+	_writerOutputs.push_back( new OutputPort<Writer>(this, type) );
 	if( isLayoutEventEnabled() ) layoutChanged();
-
 }
 
 
@@ -224,25 +215,25 @@ Resource::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 kiwi::string 
 Resource::readerInputPortName(portIndex_t index) 
 {
-	return kiwi::string("");
+	return kiwi::string("#");
 }
 
 kiwi::string 
 Resource::readerOutputPortName(portIndex_t index)
 {
-	return kiwi::string("");
+	return kiwi::string("#");
 }
 
 kiwi::string 
 Resource::writerInputPortName(portIndex_t index)
 {
-	return kiwi::string("");
+	return kiwi::string("#");
 }
 
 kiwi::string 
 Resource::writerOutputPortName(portIndex_t index)
 {
-	return kiwi::string("");
+	return kiwi::string("#");
 }
 
 

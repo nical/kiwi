@@ -42,14 +42,14 @@ public:
 		kiwi::string sType( kiwi::string("array")
 			+ boost::lexical_cast<kiwi::string>(TDimension)
 			+"d_"+ types::str<TValueType>() );
-		addReaderInputPort(sType, "A");
-		addReaderInputPort(sType, "B");
+		addReaderInputPort(sType);
+		addReaderInputPort(sType);
 		
-		addWriterInputPort(sType, "Write Result");	
+		addWriterInputPort(sType);	
 		
 		//add a reader output that will be available only when the writer
 		//port is connected
-		addReaderOutputPort(sType, "Result");
+		addReaderOutputPort(sType);
 		setReaderOutputPortEnabled(0,false);
 		
 		bindPort(readerInputPort(0), _subFilter.readerInputPort(0) );
@@ -178,7 +178,7 @@ void MetaFilterTest()
 		
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);
-		resourceResult.writerOutputPort(0) >> myTest2.writerInputPort(0);
+		resourceResult.writerOutputPort(1) >> myTest2.writerInputPort(0);
 	debug.endBlock("connect the ports");
 
 	debug.print() << endl();

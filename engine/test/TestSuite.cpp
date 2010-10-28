@@ -3,6 +3,7 @@
 #include "generic/PointTest.hpp"
 #include "core/FilterTest.hpp"
 #include "generic/ArrayContainerTest.hpp"
+#include "generic/MultiArrayContainerTest.hpp"
 #include "core/MetaFilterTest.hpp"
 //#include "audio/AudioBufferTest.hpp"
 //#include "text/StringContainerTest.hpp"
@@ -45,6 +46,21 @@ int main()
 		debug.print() << "----------------------------------------------"
 					<< "ArrayContainer Test Ok" << endl();
 		debug.endl(3);
+		
+		MultiArrayContainerTest<int, 2, 2>();
+		debug.print() << "----------------------------------------------"
+		<< endl();
+		
+		MultiArrayContainerTest<double, 3, 4>();
+		debug.print() << "----------------------------------------------"
+		<< endl();
+		
+		debug.endl(3);
+		debug.print() << "----------------------------------------------"
+					<< "MultiArrayContainer Test Ok" << endl();
+		debug.endl(3);
+		
+		
 		MetaFilterTest<int, 2 ,2>();
 
 }

@@ -38,13 +38,13 @@ ArrayWriter<T,D>::ArrayWriter(
 	const core::Resource::WriterInputPort& port
 )
 {
-	ArrayContainer<T,D>* node = 
-		dynamic_cast< ArrayContainer<T,D>* >( 
+	ArrayResource<T,D>* node = 
+		dynamic_cast< ArrayResource<T,D>* >( 
 			port.connectedOutput()->subPort()->node()
 		);
 	if(!node)
 	{
-		debug.error() << "ArrayContainerWriter<"
+		debug.error() << "ArrayWriter<"
 			<<types::str<T>() 
 			<< ">::Constructor : "
 			<< "enable to determine the Resource type" 
@@ -55,6 +55,20 @@ ArrayWriter<T,D>::ArrayWriter(
 	_incs = node->increments(_port);
 	_span = node->spanSize();
 
+}
+
+
+
+
+template<typename T, unsigned int D>
+ArrayWriter<T,D>::ArrayWriter( 
+	const ArrayResource<T,D>& resource
+	, portIndex_t portIndex )
+{
+	_port = portIndex;
+	_data = resource.getDataPointer(_port);
+	_incs = resource.increments(_port);
+	_span = resource.spanSize();
 }
 
 

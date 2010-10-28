@@ -25,6 +25,8 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include "generic/ArrayResource.hpp"
+
 namespace kiwi
 {
 namespace generic
@@ -34,15 +36,15 @@ namespace generic
 
 template<typename T, unsigned int D>
 ArrayReader<T,D>::ArrayReader(
-	const core::Resource::ReaderInputPort& port )
+	const core::Node::ReaderInputPort& port )
 {
-	ArrayContainer<T,D>* node = 
-		dynamic_cast< ArrayContainer<T,D>* >( 
+	ArrayResource<T,D>* node = 
+		dynamic_cast< ArrayResource<T,D>* >( 
 			port.connectedOutput()->subPort()->node() 
 		);
 	if(!node)
 	{
-		debug.error() << "ArrayContainerReader<"
+		debug.error() << "ArrayReader<"
 			<< types::str<T>() 
 			<< ">::Constructor : "
 			<< "enable to determine the Resource type" 
@@ -56,6 +58,17 @@ ArrayReader<T,D>::ArrayReader(
 	for(unsigned i = 0; i < D; ++i) csize*=_span(i);
 	_end = _data + csize;
 */ 
+}
+
+
+
+template<typename T, unsigned int D>
+ArrayReader<T,D>::ArrayReader( const ArrayResource<T,D>& resource, portIndex_t portIndex )
+{
+	_port = portIndex;
+	_data = resource.getDataPointer(_port);
+	_incs = resource.increments(_port);
+	_span = resource.spanSize();
 }
 
 

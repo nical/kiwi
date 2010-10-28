@@ -26,14 +26,15 @@
 
 #pragma once
 
-#ifndef KIWI_ARRAYDATA_HPP
-#define KIWI_ARRAYDATA_HPP
+#ifndef KIWI_MULTIARRAYCONTAINER_HPP
+#define KIWI_MULTIARRAYCONTAINER_HPP
 
-#include "generic/ArrayResource.hpp"
+#include "core/Resource.hpp"
 #include "generic/Point.hpp"
 #include "utils/types.hpp"
 #include <boost/lexical_cast.hpp>
 #include "generic/ArrayIterator.hpp"
+#include "generic/ArrayResource.hpp"
 
 namespace kiwi
 {
@@ -43,7 +44,7 @@ namespace generic
 
 
 template<typename TValueType, unsigned int TDimension>
-class ArrayContainer : public ArrayResource<TValueType, TDimension>
+class MultiArrayContainer : public ArrayResource<TValueType,TDimension>
 {
 public:
 	typedef TValueType ValueType;
@@ -71,9 +72,8 @@ public:
 	 * @param interleaved Defines wether or not buffer are interleaved (if nbComponents > 1).
 	 * @param nameHint a hint to choose the ports names (see the enums).
 	 */ 
-	ArrayContainer(Coordinates size
+	MultiArrayContainer(Coordinates size
 		, unsigned char nbComponents = 1
-		, bool interleaved = false
 		, unsigned char nameHint = 0 );
 		
 	/**
@@ -81,26 +81,24 @@ public:
 	 * 
 	 * @param dataPtr a pointer to the pre allocated data.
 	 * @param nbComponents The number of components (and also the number of output ports).
-	 * @param interleaved Defines wether or not buffer are interleaved (if nbComponents > 1).
 	 * @param nameHint a hint to choose the ports names (see the enums).
 	 */ 
-	ArrayContainer(ValueType* dataPtr
+	MultiArrayContainer(ValueType** dataPtr
 		, Coordinates size
 		, unsigned char nbComponents = 1
-		, bool interleaved = false
-		, unsigned char nameHint = 0 );
+		, unsigned char nameHint = NUMBERS );
 		
 	/**
 	 * @brief Destructor.
 	 */
-	~ArrayContainer();
+	~MultiArrayContainer();
 
 
 // -----------------------------------------------------------------
 	/**
-	 * @brief Returns a pointer to the very first element stored in the container.
+	 * @brief Returns a pointer to the array oh buffers.
 	 */ 
-	ValueType * const getDataPointer() const 
+	ValueType ** const getDataPointer() const 
 		{ return _data; }
 	
 	/**
@@ -113,6 +111,8 @@ public:
 	 * @see isInterleaved
 	 */ 
 	ValueType * const getDataPointer(portIndex_t index) const;
+	
+	
 	
 	/**
 	 * @brief Returns the total size of the container.
@@ -132,7 +132,7 @@ public:
 	 * @brief Returns a Point<uint32, Dimension> containing the dimensions
 	 * of the ArrayConatiner.
 	 */ 	
-	inline Coordinates spanSize() const { return _spanSize; }
+	Coordinates spanSize() const { return _spanSize; }
 	
 	/**
 	 * @brief Returns the amount of scalar object referring to one port.
@@ -151,7 +151,7 @@ public:
 	 * @brief Returns true if the buffers are interleaved.
 	 * 
 	 */ 
-	inline bool isInterleaved() { return _interleaved; }
+	inline bool isInterleaved() { return false; }
 	
 	/**
 	 * @brief Rturns an iterator that iterates through all the data.
@@ -188,10 +188,12 @@ private:
 	 * @brief Initializes the container. (called from within the constructors)
 	 */ 
 	void init(unsigned char nameHint);
-
-	ValueType* _data;
+	
+	// here is the main difference between the multiArraycontainer and the MultiArrayContainer
+	// the different buffers are not stored at the same place in the memory (allows more
+	// compatibility with the VST framework for audio processing applications)
+	ValueType** _data; // (in the MultiArrayContainer it is a simple pointer here)
 	bool _deleteDataDestructor;
-	bool _interleaved;
 	unsigned int _totalSize;
 	unsigned char _nbComponents;
 	Coordinates _spanSize;
@@ -205,6 +207,6 @@ private:
 }//namespace	
 }//namespace	
 
-#include "ArrayContainer.ih"
+#include "MultiArrayContainer.ih"
 
 #endif

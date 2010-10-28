@@ -1,0 +1,256 @@
+#pragma once
+
+#ifndef KIWI_MULTIARRAYCONTAINER_TEST
+#define KIWI_MULTIARRAYCONTAINER_TEST
+
+#include "core/Commons.hpp"
+
+#include "core/Filter.hpp"
+
+#include "generic/MultiArrayContainer.hpp"
+#include "generic/ArrayReader.hpp"
+#include "generic/ArrayWriter.hpp"
+#include "generic/ArrayIterator.hpp"
+
+#include "generic/ArrayContainerTest.hpp" // for AddArrays Filter
+
+#include "generic/Point.hpp"
+
+#include "utils/types.hpp"
+
+#include <vector>
+
+
+using namespace kiwi;
+using namespace kiwi::core;
+using namespace kiwi::generic;
+
+
+// ---------------------------------------------------------------------
+// --------------------- A simple Filter -------------------------------
+// ---------------------------------------------------------------------
+
+/*
+
+// compute the sum of two Value<> resources and place it in an other Value<>
+template<typename TValueType, unsigned int TDimension>
+class AddArraysFilter : public Filter
+{
+public:
+	enum{ A = 0, B = 1};
+	enum{ WRITE = 0};
+	enum{ RESULT = 0};
+	
+	typedef generic::ArrayReader<TValueType, TDimension> myReader;
+	typedef generic::ArrayWriter<TValueType, TDimension> myWriter;
+// ---------------------------------------------------------------------
+	AddArraysFilter() : Filter()
+	{
+	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
+		setLayoutEventEnabled(false);
+		kiwi::string sType( kiwi::string("array")
+			+ boost::lexical_cast<kiwi::string>(TDimension)
+			+"d_"+ types::str<TValueType>() );
+		addReaderInputPort(sType, "A");
+		addReaderInputPort(sType, "B");
+		
+		addWriterInputPort(sType, "Write Result");	
+		
+		//add a reader output that will be available only when the writer
+		//port is connected
+		addReaderOutputPort(sType, "Result");
+		setReaderOutputPortEnabled(0,false);
+		setLayoutEventEnabled(true);
+	}
+	~AddArraysFilter() {}
+
+	
+
+// ---------------------------------------------------------------------
+	void process()
+	{
+	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+
+DEBUG_ONLY(		if(!isReady() )
+		{
+			debug.error() << "AddArraysFilter::Process error : not ready" 
+				<< endl();
+			return;
+		}
+)
+		debug.print() << "Allocate Reader #0" << endl;
+		myReader A( readerInputPort(0) );
+		
+		debug.print() << "Allocate Reader #1" << endl;
+		myReader B( readerInputPort(1) );
+		
+		debug.print() << "Allocate Writer #0" << endl;
+		myWriter result( writerInputPort(0) );
+		
+		debug.beginBlock( "compute..");
+			ArrayConstIterator<TValueType> itA = A.getIterator();
+			ArrayConstIterator<TValueType> itB = B.getIterator();
+			ArrayIterator<TValueType> itResult = result.getIterator();
+			
+			Point<int, TDimension> pos(0);
+			result.set( pos , A.get( pos ) + B.get( pos ) );
+			unsigned count = 0;
+			debug.print() << "avant la boucle" << endl();
+			do
+			{
+				if( itA.isDone() ) break;
+				if( itB.isDone() ) break;
+				
+				++count;
+				//debug.print() << " on iteration " << count << endl();
+				
+				*itResult = *itA + *itB;
+				// this is unsafe crap: you don't iterate through image 
+				// that might not have the same size that way but right
+				// now i'm testing iterators so... 
+				++itA ;
+				++itB ;
+			} while(itResult.onIteration() );
+			
+			debug.print() << count << " iterations " << endl();
+
+		debug.endBlock( "compute..");
+		
+		debug.print() << "end of the method" << endl();
+		return;
+	}
+	
+	
+// ---------------------------------------------------------------------
+	bool readyCondition()
+	{
+		return (readerInputPort(0).isConnected()
+			&& readerInputPort(1).isConnected()
+			&& writerInputPort(0).isConnected() );
+	}
+	
+	void layoutChanged()
+	{
+	ScopedBlockMacro(__scop, "TestFiler::layoutChanged")
+		if(writerInputPort(0).isConnected() )
+		{
+			if( !readerOutputPort(0).isEnabled() )
+			{
+				setReaderOutputPortEnabled(0,true);
+				ReaderOutputPort& op
+				= writerInputPort(0).connectedOutput()->resource()->readerOutputPort(0);
+				bindPort( readerOutputPort(0), op );
+			}
+		}
+		else
+		{
+			readerOutputPort(0).disconnect();
+			setReaderOutputPortEnabled(0,false);	
+		}
+
+	}
+};
+
+
+
+*/
+
+
+// ---------------------------------------------------------------------
+// ---------------------------- Test -----------------------------------
+// ---------------------------------------------------------------------
+
+template<typename T, unsigned Dim, unsigned Comp>
+void MultiArrayContainerTest()
+{
+	typedef generic::ArrayReader<T, Dim> myReader;
+	typedef generic::ArrayWriter<T, Dim> myWriter;
+
+	debug.beginBlock("Allocate the resources");
+		
+		generic::Point<unsigned,Dim> size;
+		for(unsigned i = 0; i < Dim; ++i) size[i] = 10;
+		
+		debug.print() << "resource1" << endl();
+		// here the container allocates its data
+		generic::MultiArrayContainer<T,Dim> resource1(size, Comp);
+		
+		debug.print() << "resource2" << endl();
+		// here the container uses some preallocated memory 
+		unsigned allocSize = 1; for(unsigned i = 0; i < Dim; ++i) 
+			allocSize*=10;
+		T** preAllocData = new T*[Comp];
+		for(unsigned i = 0; i< Comp; ++i)
+			preAllocData[i] = new T[allocSize];
+		
+		generic::MultiArrayContainer<T,Dim> resource2(preAllocData, size, Comp);
+		// remember to delete the allocated memory !
+		
+		debug.print() << "resourceResult" << endl();
+		generic::MultiArrayContainer<T,Dim> resourceResult(size, Comp);
+		
+		AddArraysFilter<T,Dim> myTest;
+		AddArraysFilter<T,Dim> myTest2;
+		
+		T count = 0;
+		
+		myWriter rd10( resource1, 0 );
+		ArrayIterator<T> it = rd10.getIterator();
+		do { *it = ++count; } while ( it.onIteration() );
+		
+		myWriter rd11( resource1, 1 );
+		it = rd11.getIterator();
+		do { *it = ++count; } while ( it.onIteration() );
+		
+		myWriter rd20( resource2, 0 );
+		it = rd20.getIterator();
+		do { *it = 100; } while ( it.onIteration() );
+		
+		myWriter rd21( resource1, 1 );
+		it = rd21.getIterator();
+		do { *it = 500; } while ( it.onIteration() );
+		
+		myWriter wr10( resource2, 0 );
+		it = rd11.getIterator();
+		do { *it = 0; } while ( it.onIteration() );
+		
+		myWriter wr11( resource1, 1 );
+		it = wr10.getIterator();
+		do { *it = 0; } while ( it.onIteration() );
+		
+		assert( myTest.indexOf( myTest.readerInputPort(0) ) == 0 );
+		assert( myTest.indexOf( myTest.readerInputPort(1) ) == 1 );
+		assert( resource1.indexOf( resource1.writerOutputPort(0) ) == 0 );
+		assert( resource1.indexOf( resource1.writerOutputPort(1) ) == 1 );
+		
+		//resource1.printState();
+		//resource2.printState();
+		
+	debug.endBlock();
+
+	debug.endl();
+
+	debug.beginBlock("connect the ports");
+		resource1.readerOutputPort(1) >> myTest.readerInputPort(0);
+		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
+		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
+		
+		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
+		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);
+		resourceResult.writerOutputPort(1) >> myTest2.writerInputPort(0);
+	debug.endBlock("connect the ports");
+
+	debug.print() << endl();
+
+	myTest.process();
+	myTest2.process();
+
+	debug.print() << "processed" << endl();
+
+	for(unsigned i = 0; i< Comp; ++i)
+			delete[] preAllocData[i];
+	delete[] preAllocData;
+}
+
+
+#endif

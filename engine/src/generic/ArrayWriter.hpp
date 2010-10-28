@@ -31,7 +31,7 @@
 #define KIWI_ARRAYWRITER_HPP
 
 #include "core/Resource.hpp"
-#include "generic/ArrayContainer.hpp"
+#include "generic/ArrayResource.hpp"
 
 
 namespace kiwi
@@ -53,6 +53,7 @@ public:
 	 * @brief Constructor.
 	 */ 
 	ArrayWriter(const core::Resource::WriterInputPort& port);
+	ArrayWriter(const ArrayResource<ValueType,TDimension>& resource, portIndex_t portIndex);
 	
 	/**
 	 * @brief Basic access method.
@@ -84,7 +85,8 @@ public:
 	{
 		unsigned size = 1;
 		for(unsigned i = 0; i < TDimension; ++i) size *= _span(i);
-		debug.print() << "Writer::chan size :  " << size*_incs(0)-1 << endl();
+		debug.print() << "Writer::chan size :  " 
+					<< size*_incs(0)-1 << endl();
 		return ArrayIterator<ValueType>( _data, _data + size*_incs(0)-1, _incs(0) );
 	}
 	

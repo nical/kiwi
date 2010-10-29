@@ -18,7 +18,7 @@ namespace generic
 
 
 template <typename TValueType, unsigned int TDimension>
-class ArrayResource : public core::Resource
+class AbstractArrayContainer : public core::Resource
 {
 public:
 	typedef TValueType ValueType;

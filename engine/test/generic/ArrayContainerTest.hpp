@@ -76,13 +76,13 @@ DEBUG_ONLY(		if(!isReady() )
 			return;
 		}
 )
-		Debug::print() << "Allocate Reader #0" << endl;
+		Debug::print() << "Allocate Reader #0" << endl();
 		myReader A( readerInputPort(0) );
 		
-		Debug::print() << "Allocate Reader #1" << endl;
+		Debug::print() << "Allocate Reader #1" << endl();
 		myReader B( readerInputPort(1) );
 		
-		Debug::print() << "Allocate Writer #0" << endl;
+		Debug::print() << "Allocate Writer #0" << endl();
 		myWriter result( writerInputPort(0) );
 		
 		Debug::beginBlock( "compute..");
@@ -93,7 +93,6 @@ DEBUG_ONLY(		if(!isReady() )
 			Point<int, TDimension> pos(0);
 			result.set( pos , A.get( pos ) + B.get( pos ) );
 			unsigned count = 0;
-			Debug::print() << "avant la boucle" << endl();
 			do
 			{
 				if( itA.isDone() ) break;
@@ -105,7 +104,7 @@ DEBUG_ONLY(		if(!isReady() )
 				*itResult = *itA + *itB;
 				// this is unsafe crap: you don't iterate through image 
 				// that might not have the same size that way but right
-				// now i'm testing iterators so... 
+				// now i'm interested on testing iterators
 				++itA ;
 				++itB ;
 			} while(itResult.onIteration() );

@@ -36,7 +36,7 @@
 #include "utils/types.hpp"
 #include <boost/lexical_cast.hpp>
 #include "generic/ArrayIterator.hpp"
-#include "generic/ArrayResource.hpp"
+#include "generic/AbstractArrayContainer.hpp"
 
 namespace kiwi
 {
@@ -46,7 +46,7 @@ namespace generic
 
 
 template<typename TValueType, unsigned int TDimension>
-class MultiArrayContainer : public ArrayResource<TValueType,TDimension>
+class MultiArrayContainer : public AbstractArrayContainer<TValueType,TDimension>
 {
 public:
 	typedef TValueType ValueType;

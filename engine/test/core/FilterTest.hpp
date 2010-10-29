@@ -3,7 +3,7 @@
 
 #include "core/Filter.hpp"
 
-#include "generic/SimpleValue.hpp"
+#include "generic/ValueContainer.hpp"
 
 #include "utils/types.hpp"
 
@@ -133,9 +133,9 @@ template<typename T> void FilterTest()
 {
 ScopedBlockMacro(__scop, "Filter Test");	
 	Debug::beginBlock("Allocate the resources");
-		generic::Value<T> resource1(10);
-		generic::Value<T> resource2(10);
-		generic::Value<T> resourceResult(42);
+		generic::ValueContainer<T> resource1(10);
+		generic::ValueContainer<T> resource2(10);
+		generic::ValueContainer<T> resourceResult(42);
 
 		TestFilter<T> myTest;
 		TestFilter<T> myTest2;

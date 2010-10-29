@@ -170,14 +170,14 @@ template<>
 kiwi::string 
 Node::InputPort<Reader>::name()
 {
-	return _node->readerInputPortName(_node->indexOf(*this));
+	return _node->readerInputName(_node->indexOf(*this));
 }
 
 template<>
 kiwi::string 
 Node::InputPort<Writer>::name()
 {
-	return _node->readerInputPortName(_node->indexOf(*this));
+	return _node->readerInputName(_node->indexOf(*this));
 }
 
 

@@ -40,8 +40,8 @@ ArrayWriter<T,D>::ArrayWriter(
 	const core::Resource::WriterInputPort& port
 )
 {
-	ArrayResource<T,D>* node = 
-		dynamic_cast< ArrayResource<T,D>* >( 
+	AbstractArrayContainer<T,D>* node = 
+		dynamic_cast< AbstractArrayContainer<T,D>* >( 
 			port.connectedOutput()->subPort()->node()
 		);
 	if(!node)
@@ -64,7 +64,7 @@ ArrayWriter<T,D>::ArrayWriter(
 
 template<typename T, unsigned int D>
 ArrayWriter<T,D>::ArrayWriter( 
-	const ArrayResource<T,D>& resource
+	const AbstractArrayContainer<T,D>& resource
 	, portIndex_t portIndex )
 {
 	_port = portIndex;

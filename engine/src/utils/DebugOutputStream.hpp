@@ -48,16 +48,25 @@
 #endif
 
 
-#ifdef DEBUG
-#define __( instruction ) instruction
-#else
-#define __( instruction ) 
-#endif
 
 #ifdef DEBUG
 #define DEBUG_ONLY( instruction ) instruction
 #else
 #define DEBUG_ONLY( instruction ) 
+#endif
+
+#ifdef KIWI_VERBOSE
+#define VERBOSE( instruction ) instruction
+#else
+#define VERBOSE( instruction ) 
+#endif
+
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+#define LINUX_ONLY( instruction ) instruction
+#define NOT_LINUX( instruction )
+#else
+#define LINUX_ONLY( instruction ) 
+#define NOT_LINUX( instruction ) instruction
 #endif
 
 namespace kiwi
@@ -76,6 +85,8 @@ string endl()
 	
 
 static unsigned _indentation;	
+static bool _showEndBlock;
+static bool _showBeginBlock;
 
 class DebugOutputStream
 {
@@ -84,23 +95,39 @@ protected:
 public:
 	DebugOutputStream() {}
 	~DebugOutputStream() {std::cerr << postfixReset();}
+	
+	static void init(
+		bool showEndBlock = true
+		, bool showBeginBlock = true
+		, unsigned indentation = 0 )
+	{
+		_showEndBlock = showEndBlock;
+		_showBeginBlock = showBeginBlock;
+		_indentation = indentation;
+	}
+	
+	
 	static void beginBlock(const kiwi::string& message = "")
 	{
-#ifdef DEBUG
-	std::cerr << prefixEmphase() <<indent() 
-		<< "[" << BEGIN_BLOCK_MESSAGE << "] " 
-		<< message<< postfixReset()<< std::endl;
-	_indentation ++;
-#endif
+		DEBUG_ONLY(
+			std::cerr << prefixEmphase() << indent();
+			if(_showBeginBlock)
+				std::cerr << "[" << BEGIN_BLOCK_MESSAGE << "] ";
+			std::cerr << message<< postfixReset()<< std::endl;
+			_indentation ++;
+		)//DEBUG_ONLY
 	}
 	static void endBlock(const kiwi::string& message = "")
 	{
-#ifdef DEBUG
-	_indentation --;
-	 std::cerr << prefixEmphase() << indent()
-		<< "[" << END_BLOCK_MESSAGE <<"] "
-		<< message << postfixReset() << std::endl;
-#endif
+	DEBUG_ONLY(
+		_indentation --;
+		if( _showEndBlock )
+		{
+			std::cerr << prefixEmphase() << indent()
+				<< "[" << END_BLOCK_MESSAGE <<"] "
+				<< message << postfixReset() << std::endl;
+		}
+	)//DEBUG_ONLY
 	}
 //	inline void operator << (const string& text);
 	static std::ostream& error()

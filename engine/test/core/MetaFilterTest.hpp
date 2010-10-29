@@ -37,7 +37,7 @@ public:
 // ---------------------------------------------------------------------
 	MetaAddArraysFilter() : Filter()
 	{
-	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
+//	ScopedBlockMacro(scp_block, "MetaAddArraysFilter::constructor");
 		setLayoutEventEnabled(false);
 		kiwi::string sType( kiwi::string("array")
 			+ boost::lexical_cast<kiwi::string>(TDimension)
@@ -69,15 +69,17 @@ public:
 	{
 	ScopedBlockMacro(proc_block, "MetaAddArraysFilter::process()");
 
-DEBUG_ONLY(		if(!isReady() )
-		{
-			Debug::error() << "MetaAddArraysFilter::Process error : not ready" 
-				<< endl();
-			return;
-		}
-)
+		DEBUG_ONLY(		
+			if( !isReady() )
+			{
+				Debug::error() << "MetaAddArraysFilter::Process error : not ready" 
+					<< endl();
+				return;
+			}
+		)//DEBUG_ONLY
+			
 		_subFilter.process();
-		
+			
 		return;
 	}
 	
@@ -90,7 +92,7 @@ DEBUG_ONLY(		if(!isReady() )
 	
 	void layoutChanged()
 	{
-	ScopedBlockMacro(__scop, "TestFiler::layoutChanged")
+	//ScopedBlockMacro(__scop, "TestFiler::layoutChanged")
 		if(writerInputPort(0).isConnected() )
 		{
 			if( !readerOutputPort(0).isEnabled() )

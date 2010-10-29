@@ -201,10 +201,10 @@ public:
 	portIndex_t indexOf(const WriterOutputPort& port) const;
 	
 
-	virtual kiwi::string readerInputPortName( portIndex_t index );
-	virtual kiwi::string readerOutputPortName( portIndex_t index );
-	virtual kiwi::string writerInputPortName( portIndex_t index );
-	virtual kiwi::string writerOutputPortName( portIndex_t index );
+	virtual kiwi::string readerInputName( portIndex_t index );
+	virtual kiwi::string readerOutputName( portIndex_t index );
+	virtual kiwi::string writerInputName( portIndex_t index );
+	virtual kiwi::string writerOutputName( portIndex_t index );
 /*	
 	virtual kiwi::string readerInputPortType( portIndex_t index );
 	virtual kiwi::string readerOutputPortType( portIndex_t index );
@@ -326,6 +326,15 @@ protected:
 	void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind);
 	void bindPort(WriterInputPort& myPort, WriterInputPort& toBind);
 
+/*	template<typename SlotType>
+	bool isCompatible<SlotType>( portIndex_t index, const ReaderOutputPort& port );
+	
+	template<typename SlotType>
+	bool checkTypeCascade<SlotType>( portIndex_t index, kiwi::string inputType);
+*/
+	// OutputPort<T>.isCompatibe( iPort ) 
+	//	- Node.isCompatible<T>(i, iPort) //overload here
+	//   - checkTypeCascade(...)
 
 // ----------------------------------------------------- private members
 private:

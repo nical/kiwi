@@ -38,9 +38,8 @@ namespace core
 template <typename SlotType>
 Node::InputPort<SlotType>::InputPort(
 	Node* myNode
-	, const string& type
-	, const string& name )
-:  _type(type), _name(name)
+	, const string& type )
+:  _type(type)
 	, _connectedNode(0)
 	, _enabled(true)
 	, _subPort(0)
@@ -195,12 +194,6 @@ Node::InputPort<SlotType>::setEnabled(bool status)
 	_enabled = status;
 }
 
-template <typename SlotType>
-inline void 
-Node::InputPort<SlotType>::setName(const string& name)
-{
-	_name = name;
-}
 
 template <typename SlotType>
 inline void 

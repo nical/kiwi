@@ -75,9 +75,12 @@ string endl()
 }
 	
 
+static unsigned _indentation;	
 
 class DebugOutputStream
 {
+protected:
+
 public:
 	DebugOutputStream() {}
 	~DebugOutputStream() {std::cerr << postfixReset();}
@@ -168,8 +171,7 @@ protected:
 	{
 		return string(_indentation*INDENTATION_PATTERN, ' ');
 	}
-	
-	static unsigned _indentation;
+
 };
 typedef DebugOutputStream Debug;
 

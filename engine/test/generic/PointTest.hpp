@@ -17,7 +17,7 @@ void PointTest()
 	typedef kiwi::generic::Point<T,D> pointnd;
 
 	ScopedBlockMacro(__scop, "kiwi::TestPoint");
-		debug.print() << "init -----------------" << endl();
+		Debug::print() << "init -----------------" << endl();
 	pointnd p1(1,5);
 	pointnd p2(42,4);
 	pointnd p3(43,9);
@@ -25,7 +25,7 @@ void PointTest()
 	pointnd pzero2 = pointnd::zero();
 	pointnd copy(p3);
 	pointnd eq = p1;
-		debug.print() << "assert ---------------" << endl();
+		Debug::print() << "assert ---------------" << endl();
 	assert(p1 != p2);
 	assert(p1+p2 == p3);
 	assert(p1-p1 == pzero);
@@ -37,7 +37,7 @@ void PointTest()
 
 	for(unsigned i = 0; i < D; ++i) assert( p2[i]==p2(i) );
 	
-	debug.print() << " Point tests : success !" << endl();
+	Debug::print() << " Point tests : success !" << endl();
 
 }
 

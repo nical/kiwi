@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -38,32 +40,37 @@ ArrayWriter<T,D>::ArrayWriter(
 	const core::Resource::WriterInputPort& port
 )
 {
-	ArrayContainer<T,D>* resource = 
-		dynamic_cast< ArrayContainer<T,D>* >( 
-			port.connectedOutput()->subPort()->resource()
+	AbstractArrayContainer<T,D>* node = 
+		dynamic_cast< AbstractArrayContainer<T,D>* >( 
+			port.connectedOutput()->subPort()->node()
 		);
-	if(!resource)
+	if(!node)
 	{
-		debug.error() << "ArrayContainerWriter<"
+		Debug::error() << "ArrayWriter<"
 			<<types::str<T>() 
 			<< ">::Constructor : "
 			<< "enable to determine the Resource type" 
 			<< endl();
 	}
+	_port = port.connectedOutput()->index();
+	_data = node->getDataPointer(_port);
+	_incs = node->increments(_port);
+	_span = node->spanSize();
 
-	_port = port.connectedOutput()->subPort()->index();
-	_data = resource->getDataPointer(_port);
-	_incs = resource->increments(_port);
-	_span = resource->spanSize();
+}
 
-	DEBUG_ONLY(
-		debug.print() 
-				<< "ArrayWriter: Connecting to Resource on port " 
-				<< (int)_port 
-				<< endl();
-	)//DEBG_ONLY
-	
 
+
+
+template<typename T, unsigned int D>
+ArrayWriter<T,D>::ArrayWriter( 
+	const AbstractArrayContainer<T,D>& resource
+	, portIndex_t portIndex )
+{
+	_port = portIndex;
+	_data = resource.getDataPointer(_port);
+	_incs = resource.increments(_port);
+	_span = resource.spanSize();
 }
 
 

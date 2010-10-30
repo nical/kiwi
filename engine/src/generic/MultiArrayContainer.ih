@@ -31,12 +31,14 @@ namespace kiwi
 namespace generic
 {
 
+using core::Resource;
+
+
 template<typename T, unsigned int D>
-ArrayContainer<T,D>::ArrayContainer(Coordinates size
+MultiArrayContainer<T,D>::MultiArrayContainer(Coordinates size
 	, unsigned char nbComponents
-	, bool interleaved 
 	, unsigned char nameHint)
-:_interleaved(interleaved), _nbComponents(nbComponents)
+: _nbComponents(nbComponents)
 {
 	_deleteDataDestructor = true;
 	_spanSize = size;
@@ -45,18 +47,21 @@ ArrayContainer<T,D>::ArrayContainer(Coordinates size
 	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
 	Debug::print() << "allocate " << _totalSize << endl();
 	// allocate the data
-	_data = new T[_totalSize];
+	unsigned oneBufSize = oneBufferSize();
+	_data = new T*[_nbComponents];
+	for(unsigned i = 0; i<_nbComponents; ++i) 
+		_data[i] = new T[oneBufSize];
 	
 	init(nameHint);
 }
 
 template<typename T, unsigned int D>
-ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
+MultiArrayContainer<T,D>::MultiArrayContainer(
+	ValueType** dataPtr
 	, Coordinates size
 	, unsigned char nbComponents
-	, bool interleaved
 	, unsigned char nameHint)
-:_interleaved(interleaved), _nbComponents(nbComponents )
+: _nbComponents(nbComponents )
 {
 	_deleteDataDestructor = false;
 	_spanSize = size;
@@ -71,11 +76,11 @@ ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
 
 
 template<typename T, unsigned int D>
-void ArrayContainer<T,D>::init(unsigned char nameHint)
+void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 {
 // disable the event so that layoutChanged() is not called from
 	// within the constructor
-	Node::setLayoutEventEnabled(false);
+	Resource::setLayoutEventEnabled(false);
 	// "compute" the runtime type name of this class in function of
 	// the template parameters
 	kiwi::string sType("array"
@@ -84,22 +89,28 @@ void ArrayContainer<T,D>::init(unsigned char nameHint)
 			
 	for(unsigned i = 0; i < _nbComponents; ++i)
 	{
+ 		// TODO: WARNING: This has changed (names handling) but unfortunately i didn't push the 
+		//code before stupidly locking myself outside so this will have to be corrected as soon as i can 
 		Node::addWriterOutputPort( sType );
 		Node::addReaderOutputPort( sType );
 	}
-	Node::setLayoutEventEnabled(true);
+	Resource::setLayoutEventEnabled(true);
 }
 
 
 template<typename T, unsigned int D>
-ArrayContainer<T,D>::~ArrayContainer()
+MultiArrayContainer<T,D>::~MultiArrayContainer()
 {
-	if(_deleteDataDestructor) delete[] _data;
-	
-}
+	if(_deleteDataDestructor) 
+	{
+		for(unsigned i = 0; i < _nbComponents; ++i) 
+			delete[] _data[i];
+		delete[] _data;
+	}	
+}	
 
 template<typename T, unsigned int D>
-kiwi::string ArrayContainer<T,D>::portName(portIndex_t index
+kiwi::string MultiArrayContainer<T,D>::portName(portIndex_t index
 	, unsigned char nameHint
 	, unsigned char portType) const
 {
@@ -147,12 +158,11 @@ kiwi::string ArrayContainer<T,D>::portName(portIndex_t index
 
 template<typename T, unsigned int D>
 Point<unsigned int, D+1>
-ArrayContainer<T,D>::increments(portIndex_t index) const
+MultiArrayContainer<T,D>::increments(portIndex_t index) const
 {
-	
 	IncsType incs;
-	if(_interleaved) incs(0) = _nbComponents;
-	else incs(0) = 1;
+
+	incs(0) = 1;
 	unsigned temp = incs(0);
 	for(unsigned i = 0; i < D; ++i)
 	{
@@ -162,39 +172,38 @@ ArrayContainer<T,D>::increments(portIndex_t index) const
 	return incs;
 }
 
+/*
 template<typename T, unsigned int D>
-ArrayIterator<T> ArrayContainer<T,D>::getBasicIterator() const
+ArrayIterator<T> MultiArrayContainer<T,D>::getBasicIterator() const
 { 
 	return ArrayIterator<ValueType>( _data, _data + _totalSize-1, 1 ); 
 }
-	
+*/	
 
 
 template<typename T, unsigned int D>
-T* const ArrayContainer<T,D>::getDataPointer(portIndex_t index) const
+T* const MultiArrayContainer<T,D>::getDataPointer(portIndex_t index) const
 {
 ScopedBlockMacro(__scop, "ArrayConstIterator::getDataPointer")
-	if(_interleaved)
-		return _data + index;
-	else
-	{
-		return _data + index * oneBufferSize();
-	}
+
+	return _data[index];
+
 }
 
 
 template<typename T, unsigned int D>
-unsigned int ArrayContainer<T,D>::oneBufferSize() const
+unsigned int MultiArrayContainer<T,D>::oneBufferSize() const
 {
 	unsigned int oneBuffer = 1;
 	for(unsigned i = 0; i < D; ++i) oneBuffer *= _spanSize(i);
 	return oneBuffer;
 }
 
+/*
 template<typename T, unsigned int D>
-void ArrayContainer<T,D>::printState()
+void MultiArrayContainer<T,D>::printState()
 {
-ScopedBlockMacro(__scop, kiwi::string("ArrayContainer<")
+ScopedBlockMacro(__scop, kiwi::string("MultiArrayContainer<")
 	+  types::str<T>() 
 	+ "," + boost::lexical_cast<string>( D )
 	+ ">::printState" )
@@ -208,7 +217,7 @@ ScopedBlockMacro(__scop, kiwi::string("ArrayContainer<")
 	Debug::endl();
 	Debug::print() << _totalSize << " elements" << endl(); 
 }
-
+*/
 
 
 } // namespace

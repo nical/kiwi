@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -31,7 +33,7 @@
 #define KIWI_ARRAYDATAREADER_HPP
 
 #include "core/Resource.hpp"
-#include "generic/ArrayContainer.hpp"
+#include "generic/AbstractArrayContainer.hpp"
 #include "generic/ArrayIterator.hpp"
 
 
@@ -55,6 +57,7 @@ public:
 	 * @brief Constructor.
 	 */ 
 	ArrayReader(const core::Resource::ReaderInputPort& port);
+	ArrayReader(const AbstractArrayContainer<ValueType,TDimension>& resource, portIndex_t portIndex);
 	
 	/**
 	 * @brief Basic access method.

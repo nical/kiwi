@@ -1,7 +1,35 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
+//      Redistribution and use in source and binary forms, with or without
+//      modification, are permitted provided that the following conditions are
+//      met:
+//      
+//      * Redistributions of source code must retain the above copyright
+//        notice, this list of conditions and the following disclaimer.
+//      * Redistributions in binary form must reproduce the above
+//        copyright notice, this list of conditions and the following disclaimer
+//        in the documentation and/or other materials provided with the
+//        distribution.
+//      * Neither the name of the  nor the names of its
+//        contributors may be used to endorse or promote products derived from
+//        this software without specific prior written permission.
+//      
+//      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+//      "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//      A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//      OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//      SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//      LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//      DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//      THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+//      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 #pragma once
 
-#ifndef DEBUGOUTPUTSTREAM_HPP
-#define DEBUGOUTPUTSTREAM_HPP
+#ifndef KIWI_DEBUGOUTPUTSTREAM_HPP
+#define KIWI_DEBUGOUTPUTSTREAM_HPP
 
 #include <iostream>
 #include "core/Commons.hpp"
@@ -20,11 +48,6 @@
 #endif
 
 
-#ifdef DEBUG
-#define __( instruction ) instruction
-#else
-#define __( instruction ) 
-#endif
 
 #ifdef DEBUG
 #define DEBUG_ONLY( instruction ) instruction
@@ -32,38 +55,24 @@
 #define DEBUG_ONLY( instruction ) 
 #endif
 
+#ifdef KIWI_VERBOSE
+#define VERBOSE( instruction ) instruction
+#else
+#define VERBOSE( instruction ) 
+#endif
+
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+#define LINUX_ONLY( instruction ) instruction
+#define NOT_LINUX( instruction )
+#else
+#define LINUX_ONLY( instruction ) 
+#define NOT_LINUX( instruction ) instruction
+#endif
+
 namespace kiwi
 {
-
-
-class DebugOutputStream
-{
-public:
-	DebugOutputStream() {}
-	~DebugOutputStream() {std::cerr << postfixReset();}
-	inline void beginBlock(const string& message = "");
-	inline void endBlock(const string& message = "");
-//	inline void operator << (const string& text);
-	inline std::ostream& error();
-	inline std::ostream& print();
-	inline std::ostream& emphase();
-	inline void endl(char n = 1);
-	//inline ScopedBlock scopedBlock(const string& message = "");
-protected:
-	std::string  prefixInfo();
-	std::string  prefixError();
-	std::string  prefixWarning();
-	std::string  prefixEmphase();
-	std::string  postfixReset();
-	string indent();
-	unsigned _indentation;
-};
-
-DebugOutputStream debug;
-
-
-
-// ---------------------------------------------------------------------
+	
+	
 
 string endl() 
 {
@@ -73,9 +82,156 @@ string endl()
 	return "\n";
 #endif
 }
+	
+
+static unsigned _indentation;	
+static bool _showEndBlock;
+static bool _showBeginBlock;
+
+class DebugOutputStream
+{
+protected:
+
+public:
+	DebugOutputStream() {}
+	~DebugOutputStream() {std::cerr << postfixReset();}
+	
+	static void init(
+		bool showEndBlock = true
+		, bool showBeginBlock = true
+		, unsigned indentation = 0 )
+	{
+		_showEndBlock = showEndBlock;
+		_showBeginBlock = showBeginBlock;
+		_indentation = indentation;
+	}
+	
+	
+	static void beginBlock(const kiwi::string& message = "")
+	{
+		DEBUG_ONLY(
+			std::cerr << prefixEmphase() << indent();
+			if(_showBeginBlock)
+				std::cerr << "[" << BEGIN_BLOCK_MESSAGE << "] ";
+			std::cerr << message<< postfixReset()<< std::endl;
+			_indentation ++;
+		)//DEBUG_ONLY
+	}
+	static void endBlock(const kiwi::string& message = "")
+	{
+	DEBUG_ONLY(
+		_indentation --;
+		if( _showEndBlock )
+		{
+			std::cerr << prefixEmphase() << indent()
+				<< "[" << END_BLOCK_MESSAGE <<"] "
+				<< message << postfixReset() << std::endl;
+		}
+	)//DEBUG_ONLY
+	}
+//	inline void operator << (const string& text);
+	static std::ostream& error()
+		{ return std::cerr << prefixError() << indent() ; }
+		
+	static std::ostream& print()
+	{
+		std::cerr << indent();
+		return std::cerr;
+	}
+	
+	static std::ostream& emphase()
+	{
+		return std::cerr << prefixEmphase() << indent() ;
+	}
+	
+	static void endl(char n = 1)
+	{
+		for(; n > 0; --n) print() << kiwi::endl();
+	}
+	//inline ScopedBlock scopedBlock(const string& message = "");
+protected:
+	static std::string  prefixInfo()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m";
+#else
+		return "";
+#endif
+	}
+	static std::string  prefixError()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m\033[31m";
+		//return "\033[0m\033[31m[ERR]";
+#else
+		return "";
+#endif
+	}
+	
+	static std::string  prefixWarning()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m\033[35m";
+#else
+		return "";
+#endif
+	}
+	
+	static std::string  prefixEmphase()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m\033[1m";
+#else
+		return "";
+#endif
+	}
+	
+	static std::string  postfixReset()
+	{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+		return "\033[0m";
+#else
+		return "";
+#endif
+	}
+	static string indent()
+	{
+		return string(_indentation*INDENTATION_PATTERN, ' ');
+	}
+
+};
+typedef DebugOutputStream Debug;
+
+// Debug::print() << " text" << endl();
+// Debug::println( << "text" )
+
+//DebugOutputStream debug;
+
+
+class ScopedBlock
+{
+public:
+	ScopedBlock(kiwi::string message)
+	: _message(message)
+	{
+		Debug::beginBlock(_message);
+	}
+	~ScopedBlock()
+	{
+		Debug::endBlock(_message);
+	}
+protected:
+	kiwi::string _message;
+};
+
+
+
 
 // ---------------------------------------------------------------------
 
+// ---------------------------------------------------------------------
+
+/*
 string DebugOutputStream::indent()
 {
 	return string(_indentation*INDENTATION_PATTERN, ' ');
@@ -97,12 +253,8 @@ void DebugOutputStream::endBlock(const string& message)
 
 #endif
 }
-/*
-ScopedBlock DebugOutputStream::scopedBlock(const string& message)
-{
-	return ScopedBlock(this, message);
-}
-*/
+
+
 std::ostream& DebugOutputStream::error()
 {
 	return std::cerr << prefixError() << indent() ;
@@ -172,26 +324,7 @@ std::string DebugOutputStream::postfixReset()
 }
 
 
-// ---------------------------------------------------------------------
-
-
-class ScopedBlock
-{
-public:
-	ScopedBlock( string message)
-	: _message(message)
-	{
-		debug.beginBlock(_message);
-	}
-	~ScopedBlock()
-	{
-		debug.endBlock(_message);
-	}
-protected:
-	string _message;
-};
-
-
+*/
 
 } //namespace
 

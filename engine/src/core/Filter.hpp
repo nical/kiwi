@@ -1,24 +1,38 @@
-//      This program is free software; you can redistribute it and/or modify
-//      it under the terms of the GNU General Public License as published by
-//      the Free Software Foundation; either version 2 of the License, or
-//      (at your option) any later version.
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
+//      Redistribution and use in source and binary forms, with or without
+//      modification, are permitted provided that the following conditions are
+//      met:
 //      
-//      This program is distributed in the hope that it will be useful,
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//      GNU General Public License for more details.
+//      * Redistributions of source code must retain the above copyright
+//        notice, this list of conditions and the following disclaimer.
+//      * Redistributions in binary form must reproduce the above
+//        copyright notice, this list of conditions and the following disclaimer
+//        in the documentation and/or other materials provided with the
+//        distribution.
+//      * Neither the name of the  nor the names of its
+//        contributors may be used to endorse or promote products derived from
+//        this software without specific prior written permission.
 //      
-//      You should have received a copy of the GNU General Public License
-//      along with this program; if not, write to the Free Software
-//      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-//      MA 02110-1301, USA.
+//      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+//      "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//      A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//      OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//      SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//      LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//      DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//      THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+//      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 
 #pragma once
 
 #ifndef KIWI_FILTER_HPP
 #define KIWI_FILTER_HPP
 
-#include "Resource.hpp"
+#include "Node.hpp"
 
 
 namespace kiwi
@@ -27,7 +41,7 @@ namespace core
 {
 
 	
-class Filter : public Resource
+class Filter : public Node
 {
 public:
 
@@ -44,19 +58,19 @@ public:
 	 * 
 	 * This method should be called before calling process().It checks that the boolean 
 	 * readiness state is true AND that the optionnal readyCondition returns true as well.
-	 * @see Resource::readyCondition()
+	 * @see Node::readyCondition()
 	 */ 
 	bool isReady() {return (_ready && readyCondition() );}
 	
 	
 	/**
-	 * Returns true. Overloaded from Resource, this helps Pipeline know wether or not the
-	 * Resource they manipulate are filters.
+	 * Returns true. Overloaded from Node, this helps Pipeline know wether or not the
+	 * Node they manipulate are filters.
 	 */ 
 	bool isAFilter() {return true;}
 
 
-	Filter():Resource()
+	Filter():Node()
 	{
 		setReady(true);
 	}

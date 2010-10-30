@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -25,6 +27,8 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include "generic/AbstractArrayContainer.hpp"
+
 namespace kiwi
 {
 namespace generic
@@ -34,28 +38,39 @@ namespace generic
 
 template<typename T, unsigned int D>
 ArrayReader<T,D>::ArrayReader(
-	const core::Resource::ReaderInputPort& port )
+	const core::Node::ReaderInputPort& port )
 {
-	ArrayContainer<T,D>* resource = 
-		dynamic_cast< ArrayContainer<T,D>* >( 
-			port.connectedOutput()->subPort()->resource() 
+	AbstractArrayContainer<T,D>* node = 
+		dynamic_cast< AbstractArrayContainer<T,D>* >( 
+			port.connectedOutput()->subPort()->node() 
 		);
-	if(!resource)
+	if(!node)
 	{
-		debug.error() << "ArrayContainerReader<"
+		Debug::error() << "ArrayReader<"
 			<< types::str<T>() 
 			<< ">::Constructor : "
 			<< "enable to determine the Resource type" 
 			<< endl();
 	}
-	_port = port.connectedOutput()->subPort()->index();
-	_data = resource->getDataPointer(_port);
-	_incs = resource->increments(_port);
-	_span = resource->spanSize();
+	_port = port.connectedOutput()->index();
+	_data = node->getDataPointer(_port);
+	_incs = node->increments(_port);
+	_span = node->spanSize();
 /*	unsigned csize = 1;
 	for(unsigned i = 0; i < D; ++i) csize*=_span(i);
 	_end = _data + csize;
 */ 
+}
+
+
+
+template<typename T, unsigned int D>
+ArrayReader<T,D>::ArrayReader( const AbstractArrayContainer<T,D>& resource, portIndex_t portIndex )
+{
+	_port = portIndex;
+	_data = resource.getDataPointer(_port);
+	_incs = resource.increments(_port);
+	_span = resource.spanSize();
 }
 
 
@@ -69,7 +84,7 @@ T ArrayReader<T,D>::get(const Point<int,D>& coords) const
 	{
 		index += _incs(i)*coords(i);
 	}
-//	debug.print() << "index "  << index << endl();
+//	Debug::print() << "index "  << index << endl();
 	return _data[index];
 }
 

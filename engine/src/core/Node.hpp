@@ -42,7 +42,7 @@
 #include <list>
 #include <vector>
 
-#include <boost/scoped_ptr.hpp>
+
 
 #include "Commons.hpp"
 #include <assert.h>
@@ -263,35 +263,58 @@ protected:
 	 * Removes The last output port (the one oh highest index) from this Filter's Reader interface.
 	 */
 	void removeWriterOutputPort();
+
+// ------------------------------------------------------ Deprecated !	
+
+	///**
+	 //* @brief Enables/disables port
+	 //*/ 
+	//void setReaderInputPortEnabled(portIndex_t index, bool status)
+	//{ 
+		//readerInputPort(index).setEnabled(status);
+	//}
+	///**
+	 //* @brief Enables/disables port
+	 //*/
+	//void setReaderOutputPortEnabled(portIndex_t index, bool status)
+	//{ 
+		//readerOutputPort(index).setEnabled(status);
+	//}
+	///**
+	 //* @brief Enables/disables port
+	 //*/
+	//void setWriterInputPortEnabled(portIndex_t index, bool status)
+	//{ 
+		//writerInputPort(index).setEnabled(status);
+	//}
+	///**
+	 //* @brief Enables/disables port
+	 //*/
+	//void setWriterOutputPortEnabled(portIndex_t index, bool status)
+	//{ 
+		//writerOutputPort(index).setEnabled(status);
+	//}
+
+// ------------------------------------------------------
 	
 	/**
 	 * @brief Enables/disables port
-	 */ 
-	void setReaderInputPortEnabled(portIndex_t index, bool status)
-	{ 
-		readerInputPort(index).setEnabled(status);
+	 */
+	template<typename SlotType>
+	void setPortEnabled(InputPort<SlotType>& port, bool status)
+	{
+		port.setEnabled(status);
 	}
+	
 	/**
 	 * @brief Enables/disables port
 	 */
-	void setReaderOutputPortEnabled(portIndex_t index, bool status)
-	{ 
-		readerOutputPort(index).setEnabled(status);
+	template<typename SlotType>
+	void setPortEnabled(OutputPort<SlotType>& port, bool status)
+	{
+		port.setEnabled(status);
 	}
-	/**
-	 * @brief Enables/disables port
-	 */
-	void setWriterInputPortEnabled(portIndex_t index, bool status)
-	{ 
-		writerInputPort(index).setEnabled(status);
-	}
-	/**
-	 * @brief Enables/disables port
-	 */
-	void setWriterOutputPortEnabled(portIndex_t index, bool status)
-	{ 
-		writerOutputPort(index).setEnabled(status);
-	}
+	
 	
 	/**
 	 * @brief Enables/disables the automatic call to layoutChanged()
@@ -365,24 +388,77 @@ public:
 	{
 	friend class Node;
 	public:
+		/**
+		 * @brief Constructor.
+		 * @todo The second argument will disapear in next version.
+		 */ 
 		InputPort(Node* myNode, const string& type);
+		
+		/**
+		 * @brief Connection method.
+		 */ 
 		void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
+		/**
+		 * @brief Disconnect the port if connected.
+		 */ 
 		void disconnect();
+		/**
+		 * @brief Returns the index of this port.
+		 */ 
 		inline portIndex_t index() const ;
+		/**
+		 * @brief Returns a pointer to the Node containing this port.
+		 */ 
 		inline Node* node() const ;
+		/**
+		 * @brief Returns this port's Name as a string.
+		 */ 
 		inline string name();
+		/**
+		 * @brief Returns this port's Type as a string.
+		 */ 
 		inline string type();
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism 
 		// to get compatibility of child classes.
+		/**
+		 * @brief Port compatibility check based on the type string.
+		 */ 
 		inline bool isCompatible(OutputPort<SlotType>& output) ;
+		/**
+		 * @brief Resturns true if this port is connected.
+		 */ 
 		inline bool isConnected() const ;
+		/**
+		 * @brief returns true if this port is enabled.
+		 * 
+		 * A port as to be enabloed to be connected. 
+		 * By default a port is enabled.
+		 */ 
 		inline bool isEnabled() const ;
+		/**
+		 * @brief Returns a pointer to the OutputPort connected to this InputPort.
+		 * 
+		 * Returns 0 if not connected. 
+		 */ 
 		inline OutputPort<SlotType>* connectedOutput() const ;
 		
 	protected:
 		inline void setType(const string& type);
+		/**
+		 * @brief Used internally by kiwi::core::Node to perform port binding.
+		 * 
+		 * @see kiwi::core::Node::bindPort
+		 */ 
 		void bind( InputPort<SlotType>& port);
+		/**
+		 * @brief Used internally by kiwi::core::Node to enable/disable ports.
+		 * 
+		 * @see kiwi::core::setReaderInputPortEnabled
+		 * @see kiwi::core::setReaderOutputPortEnabled
+		 * @see kiwi::core::setWriterInputPortEnabled
+		 * @see kiwi::core::setWriterOutputPortEnabled
+		 */ 
 		inline void setEnabled(bool status);
 		
 	private:
@@ -413,33 +489,102 @@ public:
 		typedef typename std::list< InputPort<SlotType>* > connectionList;
 		
 		// --------------------------------------------------------------------
+		/**
+		 * @brief Constructor.
+		 * @todo The second argument will disapear in next version.
+		 */ 
 		OutputPort(Node* myNode, const string& type);
+		/**
+		 * @brief Returns the index of this port.
+		 */ 
 		inline portIndex_t index() const ;
+		/**
+		 * @brief Returns a pointer to the Node containing this port.
+		 */ 
 		inline Node* node() const ;
+		
+		/**
+		 * @brief Returns a pointer to the port that catually contains the Data.
+		 * 
+		 * If this port is binded to another port, then this method returns
+		 * A pointer to this other port. If this port is not binded, then
+		 * this returns a pointer to self.
+		 * 
+		 * This method is to be used whenever you need to access the port that
+		 * is directly linked to the data. When a port A is binded to another
+		 * port B, it means that A's Node doesn't contain the data whereas B
+		 * (or another port C that B is binded to) has it. subPort() is called
+		 * recursively untill the Node containing the data is found and returns
+		 * the pointer to the corresponding port.
+		 * 
+		 * So this method MUST be used when accessing a Node's data through its
+		 * port (when initializing Readers and Writers for instance) because
+		 * you don't know if the node doesn't encapsulate other Nodes that
+		 * actually contain the Data and bind it's ports to it.
+		 */ 
 		OutputPort<SlotType>* subPort() ;//const ;
+		/**
+		 * @brief Returns this port's Type as a string.
+		 */ 
 		inline string name();
+		/**
+		 * @brief Returns this port's Type as a string.
+		 */ 
 		inline string type();
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
+		/**
+		 * @brief Port compatibility check based on the type string.
+		 */ 
 		inline bool isCompatible(OutputPort<SlotType>& output);
-			
+		/**
+		 * @brief Resturns true if this port is connected.
+		 */ 
 		inline bool isConnected() const ;
+		/**
+		 * @brief returns true if this port is enabled.
+		 * 
+		 * A port as to be enabloed to be connected. 
+		 * By default a port is enabled.
+		 */ 
 		inline bool isEnabled() const ;
+		/**
+		 * @brief Returns a list of the connected input ports.
+		 * 
+		 * Returns a std::list<kiwi::core::InputPort<T> of the port connected to this port
+		 */ 
 		inline connectionList connections() const ;
-		void disconnect(); //empty the connected nodes list
+		/**
+		 * @brief Break all of this port's connecions.
+		 */ 
+		void disconnect();
 		
 	protected:
-		inline void setName(const string& name);
+		/**
+		 * @todo deprecated
+		 */ 
 		inline void setType(const string& type);
+		/**
+		 * @brief Used internally by kiwi::core::Node to perform port binding.
+		 * 
+		 * @see kiwi::core::Node::bindPort
+		 */ 
 		void bind(OutputPort<SlotType>& port);
+		/**
+		 * @brief Used internally by kiwi::core::Node to enable/disable ports.
+		 * 
+		 * @see kiwi::core::setReaderInputPortEnabled
+		 * @see kiwi::core::setReaderOutputPortEnabled
+		 * @see kiwi::core::setWriterInputPortEnabled
+		 * @see kiwi::core::setWriterOutputPortEnabled
+		 */ 
 		inline void setEnabled(bool status);
 		
 	private:
 		Node* _node;
 		OutputPort<SlotType>* _subPort;
-		//PortInfo _subNode; // todo remove this
 		connectionList _connections;
-		string _type; // and this
+		string _type; // to change
 		bool _enabled;
 	};
 

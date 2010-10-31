@@ -55,7 +55,7 @@ public:
 		//add a reader output that will be available only when the writer
 		//port is connected
 		addReaderOutputPort(sType);
-		setReaderOutputPortEnabled(0,false);
+		setPortEnabled(readerOutputPort(0),false);
 		setLayoutEventEnabled(true);
 	}
 	~ValueTestFilter() {}
@@ -110,7 +110,7 @@ public:
 		{
 			if( !readerOutputPort(0).isEnabled() )
 			{
-				setReaderOutputPortEnabled(0,true);
+				setPortEnabled(readerOutputPort(0),true);
 				ReaderOutputPort& op
 				= writerInputPort(0).connectedOutput()->node()->readerOutputPort(0);
 				bindPort( readerOutputPort(0), op );
@@ -119,7 +119,7 @@ public:
 		else
 		{
 			readerOutputPort(0).disconnect();
-			setReaderOutputPortEnabled(0,false);	
+			setPortEnabled(readerOutputPort(0),false);
 		}
 
 	}

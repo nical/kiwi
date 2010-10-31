@@ -129,11 +129,10 @@ ScopedBlockMacro(__scop, kiwi::string("Point<")
 	for(unsigned int i = 0; i < D; ++i)
 	{
 		res[i] = _coordinates[i] + point._coordinates[i];
-		DEBUG_ONLY(		
-			Debug::print() << "> " <<  static_cast<float>(_coordinates[i]) <<" + "
+__(		Debug::print() << "> " <<  static_cast<float>(_coordinates[i]) <<" + "
 					<< static_cast<float>(point._coordinates[i])
 					<< " = " << static_cast<float>( res[i] ) << endl();
-		)//DEBUG_ONLY
+)//debug
 	}
 	return res;
 }

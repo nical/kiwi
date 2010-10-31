@@ -31,7 +31,7 @@
 #ifndef KIWI_ARRAYDATA_HPP
 #define KIWI_ARRAYDATA_HPP
 
-#include "generic/AbstractArrayContainer.hpp"
+#include "generic/ArrayResource.hpp"
 #include "generic/Point.hpp"
 #include "utils/types.hpp"
 #include <boost/lexical_cast.hpp>
@@ -45,7 +45,7 @@ namespace generic
 
 
 template<typename TValueType, unsigned int TDimension>
-class ArrayContainer : public AbstractArrayContainer<TValueType, TDimension>
+class ArrayContainer : public ArrayResource<TValueType, TDimension>
 {
 public:
 	typedef TValueType ValueType;

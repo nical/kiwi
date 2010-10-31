@@ -4,7 +4,6 @@
 #include "core/FilterTest.hpp"
 #include "generic/ArrayContainerTest.hpp"
 #include "generic/MultiArrayContainerTest.hpp"
-#include "generic/ValueContainerTest.hpp"
 #include "core/MetaFilterTest.hpp"
 //#include "audio/AudioBufferTest.hpp"
 //#include "text/StringContainerTest.hpp"
@@ -13,7 +12,6 @@
 
 int main()
 {
-	Debug::init(false, false, 0);
 	ScopedBlockMacro(__scop, "kiwi::TestSuite")
 	
 		PointTest<char,2>();
@@ -50,14 +48,6 @@ int main()
 		Debug::endl(3);
 		
 		MultiArrayContainerTest<int, 2, 2>();
-		Debug::print() << "----------------------------------------------"
-		<< endl();
-		
-		ValueContainerTest<double>();
-		Debug::print() << "----------------------------------------------"
-		<< endl();
-		
-		ValueContainerTest<char>();
 		Debug::print() << "----------------------------------------------"
 		<< endl();
 		

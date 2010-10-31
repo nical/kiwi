@@ -33,7 +33,7 @@
 #define KIWI_ARRAYWRITER_HPP
 
 #include "core/Resource.hpp"
-#include "generic/AbstractArrayContainer.hpp"
+#include "generic/ArrayResource.hpp"
 
 
 namespace kiwi
@@ -55,7 +55,7 @@ public:
 	 * @brief Constructor.
 	 */ 
 	ArrayWriter(const core::Resource::WriterInputPort& port);
-	ArrayWriter(const AbstractArrayContainer<ValueType,TDimension>& resource, portIndex_t portIndex);
+	ArrayWriter(const ArrayResource<ValueType,TDimension>& resource, portIndex_t portIndex);
 	
 	/**
 	 * @brief Basic access method.

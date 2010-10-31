@@ -76,13 +76,13 @@ DEBUG_ONLY(		if(!isReady() )
 			return;
 		}
 )
-		Debug::print() << "Allocate Reader #0" << endl();
+		Debug::print() << "Allocate Reader #0" << endl;
 		myReader A( readerInputPort(0) );
 		
-		Debug::print() << "Allocate Reader #1" << endl();
+		Debug::print() << "Allocate Reader #1" << endl;
 		myReader B( readerInputPort(1) );
 		
-		Debug::print() << "Allocate Writer #0" << endl();
+		Debug::print() << "Allocate Writer #0" << endl;
 		myWriter result( writerInputPort(0) );
 		
 		Debug::beginBlock( "compute..");
@@ -93,6 +93,7 @@ DEBUG_ONLY(		if(!isReady() )
 			Point<int, TDimension> pos(0);
 			result.set( pos , A.get( pos ) + B.get( pos ) );
 			unsigned count = 0;
+			Debug::print() << "avant la boucle" << endl();
 			do
 			{
 				if( itA.isDone() ) break;
@@ -104,7 +105,7 @@ DEBUG_ONLY(		if(!isReady() )
 				*itResult = *itA + *itB;
 				// this is unsafe crap: you don't iterate through image 
 				// that might not have the same size that way but right
-				// now i'm interested on testing iterators
+				// now i'm testing iterators so... 
 				++itA ;
 				++itB ;
 			} while(itResult.onIteration() );
@@ -145,22 +146,6 @@ DEBUG_ONLY(		if(!isReady() )
 			setReaderOutputPortEnabled(0,false);	
 		}
 
-	}
-	
-	kiwi::string readerInputPortName(portIndex_t index)
-	{
-DEBUG_ONLY(	debug.print() << "ReaderInputPortName" << (int)index << endl(); )
-		return boost::lexical_cast<kiwi::string>((int)index);
-	}
-	kiwi::string writerInputPortName(portIndex_t index)
-	{
-DEBUG_ONLY(	debug.print() << "ReaderInputPortName" << (int)index << endl(); )
-		return boost::lexical_cast<kiwi::string>((int)index);
-	}
-	kiwi::string readerOutputPortName(portIndex_t index)
-	{
-DEBUG_ONLY(	debug.print() << "ReaderInputPortName" << (int)index << endl(); )
-		return boost::lexical_cast<kiwi::string>((int)index);
 	}
 };
 
@@ -217,12 +202,6 @@ void ArrayContainerTest()
 		assert( myTest.indexOf( myTest.readerInputPort(1) ) == 1 );
 		assert( resource1.indexOf( resource1.writerOutputPort(0) ) == 0 );
 		assert( resource1.indexOf( resource1.writerOutputPort(1) ) == 1 );
-			
-		assert( myTest.readerInputPort(0).name() == "0" );
-		assert( myTest.readerInputPort(1).name() == "1" );
-		assert( myTest.writerInputPort(0).name() == "0" );
-		
-		//assert( myTest.readerOutputPort(0).subPort()->index() == 1 );
 		
 		//resource1.printState();
 		//resource2.printState();
@@ -234,7 +213,7 @@ void ArrayContainerTest()
 	Debug::beginBlock("connect the ports");
 		resource1.readerOutputPort(1) >> myTest.readerInputPort(0);
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
-		resourceResult.writerOutputPort(1) >> myTest.writerInputPort(0);
+		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
 		
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);

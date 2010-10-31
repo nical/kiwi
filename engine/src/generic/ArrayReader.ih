@@ -27,7 +27,7 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "generic/AbstractArrayContainer.hpp"
+#include "generic/ArrayResource.hpp"
 
 namespace kiwi
 {
@@ -40,8 +40,8 @@ template<typename T, unsigned int D>
 ArrayReader<T,D>::ArrayReader(
 	const core::Node::ReaderInputPort& port )
 {
-	AbstractArrayContainer<T,D>* node = 
-		dynamic_cast< AbstractArrayContainer<T,D>* >( 
+	ArrayResource<T,D>* node = 
+		dynamic_cast< ArrayResource<T,D>* >( 
 			port.connectedOutput()->subPort()->node() 
 		);
 	if(!node)
@@ -65,7 +65,7 @@ ArrayReader<T,D>::ArrayReader(
 
 
 template<typename T, unsigned int D>
-ArrayReader<T,D>::ArrayReader( const AbstractArrayContainer<T,D>& resource, portIndex_t portIndex )
+ArrayReader<T,D>::ArrayReader( const ArrayResource<T,D>& resource, portIndex_t portIndex )
 {
 	_port = portIndex;
 	_data = resource.getDataPointer(_port);

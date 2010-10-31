@@ -1,0 +1,224 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
+//      Redistribution and use in source and binary forms, with or without
+//      modification, are permitted provided that the following conditions are
+//      met:
+//      
+//      * Redistributions of source code must retain the above copyright
+//        notice, this list of conditions and the following disclaimer.
+//      * Redistributions in binary form must reproduce the above
+//        copyright notice, this list of conditions and the following disclaimer
+//        in the documentation and/or other materials provided with the
+//        distribution.
+//      * Neither the name of the  nor the names of its
+//        contributors may be used to endorse or promote products derived from
+//        this software without specific prior written permission.
+//      
+//      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+//      "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//      A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//      OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//      SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//      LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//      DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//      THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+//      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+namespace kiwi
+{
+namespace generic
+{
+
+using core::Resource;
+
+
+template<typename T, unsigned int D>
+MultiArrayContainer<T,D>::MultiArrayContainer(Coordinates size
+	, unsigned char nbComponents
+	, unsigned char nameHint)
+: _nbComponents(nbComponents)
+{
+	_deleteDataDestructor = true;
+	_spanSize = size;
+	// compute the total size
+	_totalSize = nbComponents;
+	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
+	Debug::print() << "allocate " << _totalSize << endl();
+	// allocate the data
+	unsigned oneBufSize = oneBufferSize();
+	_data = new T*[_nbComponents];
+	for(unsigned i = 0; i<_nbComponents; ++i) 
+		_data[i] = new T[oneBufSize];
+	
+	init(nameHint);
+}
+
+template<typename T, unsigned int D>
+MultiArrayContainer<T,D>::MultiArrayContainer(
+	ValueType** dataPtr
+	, Coordinates size
+	, unsigned char nbComponents
+	, unsigned char nameHint)
+: _nbComponents(nbComponents )
+{
+	_deleteDataDestructor = false;
+	_spanSize = size;
+	// compute the total size
+	_totalSize = nbComponents;
+	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
+
+	_data = dataPtr;
+	
+	init(nameHint);
+}
+
+
+template<typename T, unsigned int D>
+void MultiArrayContainer<T,D>::init(unsigned char nameHint)
+{
+// disable the event so that layoutChanged() is not called from
+	// within the constructor
+	Resource::setLayoutEventEnabled(false);
+	// "compute" the runtime type name of this class in function of
+	// the template parameters
+	kiwi::string sType("array"
+			+ boost::lexical_cast<kiwi::string>(D)+"d_"
+			+ types::str<T>() );
+			
+	for(unsigned i = 0; i < _nbComponents; ++i)
+	{
+ 		// TODO: WARNING: This has changed (names handling) but unfortunately i didn't push the 
+		//code before stupidly locking myself outside so this will have to be corrected as soon as i can 
+		Node::addWriterOutputPort( sType );
+		Node::addReaderOutputPort( sType );
+	}
+	Resource::setLayoutEventEnabled(true);
+}
+
+
+template<typename T, unsigned int D>
+MultiArrayContainer<T,D>::~MultiArrayContainer()
+{
+	if(_deleteDataDestructor) 
+	{
+		for(unsigned i = 0; i < _nbComponents; ++i) 
+			delete[] _data[i];
+		delete[] _data;
+	}	
+}	
+
+template<typename T, unsigned int D>
+kiwi::string MultiArrayContainer<T,D>::portName(portIndex_t index
+	, unsigned char nameHint
+	, unsigned char portType) const
+{
+	switch(nameHint)
+	{
+		case XYZ :
+		switch(index)
+		{
+			case 0 : { return "x"; }
+			case 1 : { return "y"; }
+			case 2 : { return "z"; }
+			case 3 : { return "w"; }
+			default : { return "#"; }
+		}
+		case RVBA :
+		switch(index)
+		{
+			case 0 : { return "r"; }
+			case 1 : { return "v"; }
+			case 2 : { return "b"; }
+			case 3 : { return "a"; }
+			default : { return "#"; }
+		}
+		case CMJN :
+		switch(index)
+		{
+			case 0 : { return "c"; }
+			case 1 : { return "m"; }
+			case 2 : { return "j"; }
+			case 3 : { return "n"; }
+			default : { return "#"; }
+		}
+		case ABCD : {
+			char a = 97+index;
+			return kiwi::string( &a );
+		}
+		case MONO : {
+			if(portType == READER_OUT) return "read";
+			else return "write";
+		}
+		default : return boost::lexical_cast<kiwi::string>(index);
+	}
+}	
+
+
+template<typename T, unsigned int D>
+Point<unsigned int, D+1>
+MultiArrayContainer<T,D>::increments(portIndex_t index) const
+{
+	IncsType incs;
+
+	incs(0) = 1;
+	unsigned temp = incs(0);
+	for(unsigned i = 0; i < D; ++i)
+	{
+		temp *= _spanSize(i);
+		incs(i+1) = temp;
+	}
+	return incs;
+}
+
+/*
+template<typename T, unsigned int D>
+ArrayIterator<T> MultiArrayContainer<T,D>::getBasicIterator() const
+{ 
+	return ArrayIterator<ValueType>( _data, _data + _totalSize-1, 1 ); 
+}
+*/	
+
+
+template<typename T, unsigned int D>
+T* const MultiArrayContainer<T,D>::getDataPointer(portIndex_t index) const
+{
+ScopedBlockMacro(__scop, "ArrayConstIterator::getDataPointer")
+
+	return _data[index];
+
+}
+
+
+template<typename T, unsigned int D>
+unsigned int MultiArrayContainer<T,D>::oneBufferSize() const
+{
+	unsigned int oneBuffer = 1;
+	for(unsigned i = 0; i < D; ++i) oneBuffer *= _spanSize(i);
+	return oneBuffer;
+}
+
+/*
+template<typename T, unsigned int D>
+void MultiArrayContainer<T,D>::printState()
+{
+ScopedBlockMacro(__scop, kiwi::string("MultiArrayContainer<")
+	+  types::str<T>() 
+	+ "," + boost::lexical_cast<string>( D )
+	+ ">::printState" )
+	
+	ArrayIterator<ValueType> it = getBasicIterator();
+	
+	do{		
+		Debug::print() << *it;
+	}while ( it.onIteration() );
+
+	Debug::endl();
+	Debug::print() << _totalSize << " elements" << endl(); 
+}
+*/
+
+
+} // namespace
+} // namespace

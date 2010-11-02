@@ -264,37 +264,6 @@ protected:
 	 */
 	void removeWriterOutputPort();
 
-// ------------------------------------------------------ Deprecated !	
-
-	///**
-	 //* @brief Enables/disables port
-	 //*/ 
-	//void setReaderInputPortEnabled(portIndex_t index, bool status)
-	//{ 
-		//readerInputPort(index).setEnabled(status);
-	//}
-	///**
-	 //* @brief Enables/disables port
-	 //*/
-	//void setReaderOutputPortEnabled(portIndex_t index, bool status)
-	//{ 
-		//readerOutputPort(index).setEnabled(status);
-	//}
-	///**
-	 //* @brief Enables/disables port
-	 //*/
-	//void setWriterInputPortEnabled(portIndex_t index, bool status)
-	//{ 
-		//writerInputPort(index).setEnabled(status);
-	//}
-	///**
-	 //* @brief Enables/disables port
-	 //*/
-	//void setWriterOutputPortEnabled(portIndex_t index, bool status)
-	//{ 
-		//writerOutputPort(index).setEnabled(status);
-	//}
-
 // ------------------------------------------------------
 	
 	/**

@@ -5,7 +5,7 @@ A generic and easy to use pipeline system.
 
 <img src='http://img808.imageshack.us/img808/4377/kiwiboxespng01.png' border='0'/>
 
-
+Checkout the [wiki](http://github.com/nical/kiwi/wiki)
 <h2> Resources and filters </h2>
 
 Kiwi features a powerful pipeline system composed of resources and filters : 
@@ -63,5 +63,5 @@ I would be very happy to share this experience with anyone who is motivated to c
 To contact me:
 
 email: nical.silva@gmail.com <br/>
-twitter: [@nicalsilva](http://twitter.com/#!/nicalsilva)
-
+twitter: [@nicalsilva](http://twitter.com/#!/nicalsilva)<br/>
+my resume [(fr)](http://github.com/nical/resume/raw/fr/NicolasSilva.pdf)<br/>

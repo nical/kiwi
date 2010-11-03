@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="kiwi architecture.svg">
+  <defs
+     id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient5249">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop5251" />
+      <stop
+         style="stop-color:#a1c4ed;stop-opacity:1"
+         offset="1"
+         id="stop5253" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient5120">
+      <stop
+         style="stop-color:#e7ac11;stop-opacity:1"
+         offset="0"
+         id="stop5122" />
+      <stop
+         style="stop-color:#fae803;stop-opacity:1"
+         offset="1"
+         id="stop5124" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path3866"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mend"
+       style="overflow:visible;">
+      <path
+         id="path3872"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.4) rotate(180) translate(10,0)" />
+    </marker>
+    <filter
+       id="filter4882"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur4884"
+         in="SourceAlpha"
+         stdDeviation="5"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4886"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0 " />
+      <feOffset
+         id="feOffset4888"
+         in="bluralpha"
+         dx="1"
+         dy="3"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4890">
+        <feMergeNode
+           id="feMergeNode4892"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4894"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter4896"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur4898"
+         in="SourceAlpha"
+         stdDeviation="5"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4900"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0 " />
+      <feOffset
+         id="feOffset4902"
+         in="bluralpha"
+         dx="1"
+         dy="3"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4904">
+        <feMergeNode
+           id="feMergeNode4906"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4908"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter4910"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur4912"
+         in="SourceAlpha"
+         stdDeviation="5"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4914"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0 " />
+      <feOffset
+         id="feOffset4916"
+         in="bluralpha"
+         dx="1"
+         dy="3"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4918">
+        <feMergeNode
+           id="feMergeNode4920"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4922"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter4924"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur4926"
+         in="SourceAlpha"
+         stdDeviation="5"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4928"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0 " />
+      <feOffset
+         id="feOffset4930"
+         in="bluralpha"
+         dx="1"
+         dy="3"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4932">
+        <feMergeNode
+           id="feMergeNode4934"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4936"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter5080"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur5082"
+         in="SourceAlpha"
+         stdDeviation="1"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix5084"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0 " />
+      <feOffset
+         id="feOffset5086"
+         in="bluralpha"
+         dx="-1"
+         dy="1"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge5088">
+        <feMergeNode
+           id="feMergeNode5090"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode5092"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5120"
+       id="linearGradient5126"
+       x1="453.59265"
+       y1="61.858383"
+       x2="454.03043"
+       y2="11.855831"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5120"
+       id="linearGradient5147"
+       gradientUnits="userSpaceOnUse"
+       x1="453.59265"
+       y1="61.858383"
+       x2="454.03043"
+       y2="11.855831" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5120"
+       id="linearGradient5183"
+       gradientUnits="userSpaceOnUse"
+       x1="453.59265"
+       y1="61.858383"
+       x2="454.03043"
+       y2="11.855831" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5120"
+       id="linearGradient5207"
+       gradientUnits="userSpaceOnUse"
+       x1="453.59265"
+       y1="61.858383"
+       x2="454.03043"
+       y2="11.855831" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5249"
+       id="linearGradient5255"
+       x1="320"
+       y1="52.362183"
+       x2="320"
+       y2="112.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5249"
+       id="linearGradient5269"
+       gradientUnits="userSpaceOnUse"
+       x1="320"
+       y1="52.362183"
+       x2="320"
+       y2="112.36218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5120-4"
+       id="linearGradient5126-4"
+       x1="453.59265"
+       y1="61.858383"
+       x2="454.03043"
+       y2="11.855831"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient5120-4">
+      <stop
+         style="stop-color:#e7ac11;stop-opacity:1"
+         offset="0"
+         id="stop5122-6" />
+      <stop
+         style="stop-color:#fae803;stop-opacity:1"
+         offset="1"
+         id="stop5124-9" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5120-4"
+       id="linearGradient5328"
+       gradientUnits="userSpaceOnUse"
+       x1="453.59265"
+       y1="61.858383"
+       x2="454.03043"
+       y2="11.855831" />
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter4910-8"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-0.25"
+       y="-0.25">
+      <feGaussianBlur
+         id="feGaussianBlur4912-0"
+         in="SourceAlpha"
+         stdDeviation="5"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4914-2"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0 " />
+      <feOffset
+         id="feOffset4916-0"
+         in="bluralpha"
+         dx="1"
+         dy="3"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4918-8">
+        <feMergeNode
+           id="feMergeNode4920-5"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4922-5"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5120-4"
+       id="linearGradient5456"
+       gradientUnits="userSpaceOnUse"
+       x1="453.59265"
+       y1="61.858383"
+       x2="454.03043"
+       y2="11.855831" />
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter4882-4"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-0.25"
+       y="-0.25">
+      <feGaussianBlur
+         id="feGaussianBlur4884-2"
+         in="SourceAlpha"
+         stdDeviation="5"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4886-4"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.8 0 " />
+      <feOffset
+         id="feOffset4888-6"
+         in="bluralpha"
+         dx="1"
+         dy="3"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4890-0">
+        <feMergeNode
+           id="feMergeNode4892-7"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4894-3"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5249"
+       id="linearGradient5551"
+       x1="360"
+       y1="52.362183"
+       x2="360"
+       y2="112.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5249"
+       id="linearGradient5565"
+       gradientUnits="userSpaceOnUse"
+       x1="280"
+       y1="42.362183"
+       x2="280"
+       y2="72.362183" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="380.95942"
+     inkscape:cy="734.41139"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1416"
+     inkscape:window-height="852"
+     inkscape:window-x="24"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       id="g5537"
+       transform="translate(-145,265)">
+      <g
+         transform="translate(55,105)"
+         id="g5539">
+        <rect
+           rx="10"
+           ry="10"
+           y="32.362183"
+           x="260"
+           height="80"
+           width="130"
+           id="rect5541"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882-4)" />
+        <path
+           sodipodi:nodetypes="cc"
+           inkscape:connector-curvature="0"
+           id="path5543"
+           d="m 260,52.362183 130,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
+    </g>
+    <g
+       transform="translate(-150,260)"
+       id="g5257-5"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g5259-8"
+         transform="translate(55,105)">
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882-4)"
+           id="rect5261-0"
+           width="130"
+           height="80"
+           x="260"
+           y="32.362183"
+           ry="10"
+           rx="10" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 260,52.362183 130,0"
+           id="path5267-3"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc" />
+      </g>
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       id="g5422"
+       transform="translate(45,135)">
+      <g
+         transform="translate(55,105)"
+         id="g5424">
+        <rect
+           rx="10"
+           ry="10"
+           y="32.362183"
+           x="260"
+           height="80"
+           width="100"
+           id="rect5426"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882)" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path5428"
+           d="m 260,52.362183 100,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
+    </g>
+    <g
+       transform="translate(40,130)"
+       id="g5408"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       style="fill:#ffffff">
+      <g
+         id="g5410"
+         transform="translate(55,105)"
+         style="fill:#ffffff">
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882)"
+           id="rect5412"
+           width="100"
+           height="80"
+           x="260"
+           y="32.362183"
+           ry="10"
+           rx="10" />
+        <path
+           style="fill:#ffffff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 260,52.362183 100,0"
+           id="path5418"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+    <g
+       id="g5400"
+       transform="translate(0,135)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         transform="translate(-90,105)"
+         id="g5402">
+        <rect
+           rx="10"
+           ry="10"
+           y="32.362183"
+           x="260"
+           height="80"
+           width="160"
+           id="rect5404"
+           style="fill:#ffffff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4910-8)" />
+        <path
+           sodipodi:nodetypes="cc"
+           inkscape:connector-curvature="0"
+           id="path5406"
+           d="m 260,52.362183 160,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       transform="translate(-5,130)"
+       id="g5334-5">
+      <g
+         id="g5336-6"
+         transform="translate(-90,105)">
+        <rect
+           style="fill:#ffffff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4910-8)"
+           id="rect5338-0"
+           width="160"
+           height="80"
+           x="260"
+           y="32.362183"
+           ry="10"
+           rx="10" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 260,52.362183 160,0"
+           id="path5344-0"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc" />
+      </g>
+    </g>
+    <g
+       id="g3763"
+       transform="translate(60,0)"
+       style="filter:url(#filter4924)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         rx="10"
+         ry="10"
+         y="32.362183"
+         x="260"
+         height="80"
+         width="100"
+         id="rect2987"
+         style="fill:#ffffff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3757"
+         y="47.362183"
+         x="290"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-size:14px"
+           y="47.362183"
+           x="290"
+           id="tspan3759"
+           sodipodi:role="line">Node</tspan></text>
+      <path
+         inkscape:connector-curvature="0"
+         id="path3761"
+         d="m 260,52.362183 100,0"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <g
+       id="g3807"
+       transform="translate(80,5.000001)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         transform="translate(-90,105)"
+         id="g3781">
+        <rect
+           rx="10"
+           ry="10"
+           y="32.362183"
+           x="260"
+           height="80"
+           width="100"
+           id="rect3771"
+           style="fill:#ffffff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4910)" />
+        <text
+           sodipodi:linespacing="125%"
+           id="text3773"
+           y="47.362183"
+           x="280"
+           style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+           xml:space="preserve"><tspan
+             style="font-size:14px"
+             y="47.362183"
+             x="280"
+             id="tspan3775"
+             sodipodi:role="line">Resource</tspan></text>
+        <path
+           inkscape:connector-curvature="0"
+           id="path3777"
+           d="m 260,52.362183 100,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
+    </g>
+    <g
+       id="g3814"
+       transform="translate(75,5.000001)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g3787"
+         transform="translate(55,105)">
+        <rect
+           style="fill:#ffffff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4896)"
+           id="rect3789"
+           width="100"
+           height="80"
+           x="260"
+           y="32.362183"
+           ry="10"
+           rx="10" />
+        <text
+           xml:space="preserve"
+           style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+           x="295"
+           y="47.362183"
+           id="text3791"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan3793"
+             x="295"
+             y="47.362183"
+             style="font-size:14px">Filter</tspan></text>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 260,52.362183 100,0"
+           id="path3795"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+    <g
+       transform="translate(165,125)"
+       id="g3814-2"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g3787-0"
+         transform="translate(55,105)">
+        <rect
+           style="fill:#ffffff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882)"
+           id="rect3789-6"
+           width="100"
+           height="80"
+           x="260"
+           y="32.362183"
+           ry="10"
+           rx="10" />
+        <text
+           xml:space="preserve"
+           style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+           x="283"
+           y="47.362183"
+           id="text3791-5"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan3793-9"
+             x="283"
+             y="47.362183"
+             style="font-size:14px">Pipeline</tspan></text>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 260,52.362183 100,0"
+           id="path3795-5"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend);stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 310,142.36218 40,-30"
+       id="path3854"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend);stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 420,142.36218 -30,-30"
+       id="path3856"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend);stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 400,262.36218 20,-40"
+       id="path3858"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g5128"
+       transform="translate(80,10.000001)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         sodipodi:nodetypes="cccccc"
+         inkscape:connector-curvature="0"
+         id="rect4938"
+         d="m 420,12.362183 120,0 10,11.428569 0,38.571431 -130,0 z"
+         style="fill:url(#linearGradient5126);fill-opacity:1;stroke:#6f280a;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text4959"
+         y="33.076469"
+         x="428.57144"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-size:14px"
+           y="33.076469"
+           x="428.57144"
+           id="tspan4961"
+           sodipodi:role="line">Implements </tspan><tspan
+           id="tspan4963"
+           style="font-size:14px"
+           y="50.576469"
+           x="428.57144"
+           sodipodi:role="line">the port system</tspan></text>
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path4966"
+         d="m 538.66072,15.040754 0.0893,8.75 8.21428,-0.08929"
+         style="fill:none;stroke:#7c4007;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <g
+       id="g5135"
+       transform="translate(131.42856,129.28571)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         style="fill:url(#linearGradient5147);fill-opacity:1;stroke:#6f280a;stroke-opacity:1"
+         d="m 420,12.362183 120,0 10,11.428569 0,38.571431 -130,0 z"
+         id="path5137"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccc" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="428.57144"
+         y="33.076469"
+         id="text5139"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="33.076469"
+           style="font-size:14px"
+           id="tspan5143"><tspan
+   style="font-weight:normal;fill:#0000ff;fill-opacity:1;-inkscape-font-specification:Sans"
+   id="tspan5157">void</tspan><tspan
+   style="font-style:italic;fill:#333333;-inkscape-font-specification:Sans Italic"
+   id="tspan5165"> process</tspan>()</tspan><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="50.576469"
+           style="font-size:14px"
+           id="tspan5155">method</tspan></text>
+      <path
+         style="fill:none;stroke:#7c4007;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 538.66072,15.040754 0.0893,8.75 8.21428,-0.08929"
+         id="path5145"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <path
+       style="fill:none;stroke:#51200d;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 420,72.362184 80,-20"
+       id="path5149"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;stroke:#51200d;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 490,182.36218 60,-10"
+       id="path5151"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g5171"
+       transform="translate(191.42856,239.28571)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         style="fill:url(#linearGradient5183);fill-opacity:1;stroke:#6f280a;stroke-opacity:1"
+         d="m 420,12.362183 120,0 10,11.428569 -1.42856,69.285721 -130,0 z"
+         id="path5173"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccc" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="428.57144"
+         y="33.076469"
+         id="text5175"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="33.076469"
+           style="font-size:14px"
+           id="tspan5179">Contains Nodes </tspan><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="50.576469"
+           style="font-size:14px"
+           id="tspan5189">and handles </tspan><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="68.076469"
+           style="font-size:14px"
+           id="tspan5191">&quot;processing&quot; </tspan><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="85.576469"
+           style="font-size:14px"
+           id="tspan5193">them</tspan></text>
+      <path
+         style="fill:none;stroke:#7c4007;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 538.66072,15.040754 0.0893,8.75 8.21428,-0.08929"
+         id="path5181"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <path
+       inkscape:connector-curvature="0"
+       id="path5185"
+       d="m 580,302.36218 30,-5"
+       style="fill:none;stroke:#51200d;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g5195"
+       transform="translate(-340,140)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         style="fill:url(#linearGradient5207);fill-opacity:1;stroke:#6f280a;stroke-opacity:1"
+         d="m 420,12.362183 120,0 10,11.428569 0,38.571431 -130,0 z"
+         id="path5197"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccc" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="430"
+         y="42.362183"
+         id="text5199"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="430"
+           y="42.362183"
+           style="font-size:14px"
+           id="tspan5203">Data containers</tspan></text>
+      <path
+         style="fill:none;stroke:#7c4007;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 538.66072,15.040754 0.0893,8.75 8.21428,-0.08929"
+         id="path5205"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <path
+       style="fill:none;stroke:#51200d;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 250,192.36218 -40,-10"
+       id="path5211"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       id="g5213"
+       transform="translate(35,125)">
+      <g
+         transform="translate(55,105)"
+         id="g5215">
+        <rect
+           rx="10"
+           ry="10"
+           y="32.362183"
+           x="260"
+           height="80"
+           width="100"
+           id="rect5217"
+           style="fill:url(#linearGradient5255);fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882)" />
+        <text
+           sodipodi:linespacing="125%"
+           id="text5219"
+           y="47.362183"
+           x="265"
+           style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+           xml:space="preserve"><tspan
+             style="font-size:14px"
+             y="47.362183"
+             x="265"
+             id="tspan5221"
+             sodipodi:role="line">Custom Filter</tspan></text>
+        <path
+           inkscape:connector-curvature="0"
+           id="path5223"
+           d="m 260,52.362183 100,0"
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
+    </g>
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:connector-curvature="0"
+       id="path5225"
+       d="m 520,262.36218 -60,-40"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend);stroke-miterlimit:4;stroke-dasharray:none"
+       sodipodi:nodetypes="cc" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:connector-curvature="0"
+       id="path5239"
+       d="m 260,262.36218 20,-40"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend);stroke-miterlimit:4;stroke-dasharray:none" />
+    <g
+       transform="translate(-155,255)"
+       id="g5257"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g5259"
+         transform="translate(55,105)">
+        <rect
+           style="fill:url(#linearGradient5269);fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882)"
+           id="rect5261"
+           width="130"
+           height="80"
+           x="260"
+           y="32.362183"
+           ry="10"
+           rx="10" />
+        <text
+           xml:space="preserve"
+           style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+           x="265"
+           y="47.362183"
+           id="text5263"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan5265"
+             x="265"
+             y="47.362183"
+             style="font-size:14px">Custom Resource</tspan></text>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 260,52.362183 130,0"
+           id="path5267"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc" />
+      </g>
+    </g>
+    <g
+       id="g5128-8"
+       transform="translate(-418.75002,238.57143)"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         sodipodi:nodetypes="cccccc"
+         inkscape:connector-curvature="0"
+         id="rect4938-9"
+         d="m 420,12.362183 120,0 10,11.428569 -1.24998,70.000001 -130,0 z"
+         style="fill:url(#linearGradient5126-4);fill-opacity:1;stroke:#6f280a;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text4959-9"
+         y="33.076469"
+         x="428.57144"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           id="tspan4963-3"
+           style="font-size:14px"
+           y="33.076469"
+           x="428.57144"
+           sodipodi:role="line">Example:</tspan><tspan
+           style="font-size:14px"
+           y="50.576469"
+           x="428.57144"
+           sodipodi:role="line"
+           id="tspan5332">ArrayContainer,</tspan><tspan
+           style="font-size:14px"
+           y="68.076469"
+           x="428.57144"
+           sodipodi:role="line"
+           id="tspan5432">TreeContainer</tspan><tspan
+           style="font-size:14px"
+           y="85.576469"
+           x="428.57144"
+           sodipodi:role="line"
+           id="tspan5434">etc.</tspan></text>
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path4966-5"
+         d="m 538.66072,15.040754 0.0893,8.75 8.21428,-0.08929"
+         style="fill:none;stroke:#7c4007;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       transform="translate(81.428558,349.28571)"
+       id="g5316">
+      <path
+         style="fill:url(#linearGradient5328);fill-opacity:1;stroke:#6f280a;stroke-opacity:1"
+         d="m 410,12.362183 130,0 10,11.428569 0,68.571431 -140,0 z"
+         id="path5318"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccc" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="418.57144"
+         y="33.076473"
+         id="text5320"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="418.57144"
+           y="33.076473"
+           style="font-size:14px"
+           id="tspan5324">Example:</tspan><tspan
+           sodipodi:role="line"
+           x="418.57144"
+           y="50.576473"
+           style="font-size:14px"
+           id="tspan5585">Gaussian blur,</tspan><tspan
+           sodipodi:role="line"
+           x="418.57144"
+           y="68.076469"
+           style="font-size:14px"
+           id="tspan5587">search &amp; replace,</tspan><tspan
+           sodipodi:role="line"
+           x="418.57144"
+           y="85.576469"
+           style="font-size:14px"
+           id="tspan5589">etc.</tspan></text>
+      <path
+         style="fill:none;stroke:#7c4007;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 538.66072,15.040754 0.0893,8.75 8.21428,-0.08929"
+         id="path5326"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       transform="translate(-10,125)"
+       id="g5334">
+      <g
+         id="g5336"
+         transform="translate(-90,105)">
+        <rect
+           style="fill:url(#linearGradient5551);stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4910);fill-opacity:1"
+           id="rect5338"
+           width="160"
+           height="80"
+           x="260"
+           y="32.362183"
+           ry="10"
+           rx="10" />
+        <text
+           xml:space="preserve"
+           style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+           x="275"
+           y="47.362183"
+           id="text5340"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan5342"
+             x="275"
+             y="47.362183"
+             style="font-size:14px">Resource Interface</tspan></text>
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 260,52.362183 160,0"
+           id="path5344"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc" />
+      </g>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend);stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 240,392.36218 0,-50"
+       id="path5438"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       sodipodi:nodetypes="cc" />
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       transform="translate(-418.57144,359.28571)"
+       id="g5440">
+      <path
+         style="fill:url(#linearGradient5456);fill-opacity:1;stroke:#6f280a;stroke-opacity:1"
+         d="m 420,12.362183 120,0 10,11.428569 -1.24998,70.000001 -130,0 z"
+         id="path5442"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccc" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="428.57144"
+         y="33.076469"
+         id="text5444"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="33.076469"
+           style="font-size:14px"
+           id="tspan5446">Example:</tspan><tspan
+           id="tspan5452"
+           sodipodi:role="line"
+           x="428.57144"
+           y="50.576469"
+           style="font-size:14px">AudioBuffer,</tspan><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="68.076469"
+           style="font-size:14px"
+           id="tspan5463">ImageContainer</tspan><tspan
+           sodipodi:role="line"
+           x="428.57144"
+           y="85.576469"
+           style="font-size:14px"
+           id="tspan5465">etc.</tspan></text>
+      <path
+         style="fill:none;stroke:#7c4007;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 538.66072,15.040754 0.0893,8.75 8.21428,-0.08929"
+         id="path5454"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5467"
+       d="m 160,302.36218 -30,-10"
+       style="fill:none;stroke:#51200d;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       style="fill:none;stroke:#51200d;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 160,432.36218 -30,-10"
+       id="path5469"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       transform="translate(15,315)"
+       id="g5553"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g5555"
+         transform="translate(55,105)">
+        <rect
+           style="fill:url(#linearGradient5565);fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882)"
+           id="rect5557"
+           width="40"
+           height="40"
+           x="260"
+           y="32.362183"
+           ry="10"
+           rx="10" />
+      </g>
+    </g>
+    <g
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/ubuntu/Documents/kiwi_architecture.png"
+       id="g5567"
+       transform="translate(15,255)">
+      <g
+         transform="translate(55,105)"
+         id="g5569">
+        <rect
+           rx="10"
+           ry="10"
+           y="32.362183"
+           x="260"
+           height="40"
+           width="40"
+           id="rect5571"
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4882)" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="380"
+       y="422.36218"
+       id="text5575"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5577"
+         x="380"
+         y="422.36218"
+         style="font-size:14px">kiwi::core</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="379.90356"
+       y="483.2453"
+       id="text5579"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5581"
+         x="379.90356"
+         y="483.2453"
+         style="font-size:14px">user defined classes</tspan></text>
+    <path
+       style="fill:none;stroke:#51200d;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 450,332.36218 40,50"
+       id="path5591"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>

@@ -45,6 +45,21 @@ namespace generic
 
 
 
+/**
+ * @brief Templated container class based on array buffers allocated separately.
+ * 
+ * This class is very close to kiwi::generic::ArrayContainer. The difference
+ * is that buffers are allocated separately so they are not contiguously
+ * placed in memory whereas all the data in ArrayContainer is stored in one
+ * place. This means that MultiArrayContainer's buffers cannot be interleaved
+ * though this feature is present in ArrayContainer.
+ * 
+ * The advantage of this container (in comparison with ArrayContainer) is
+ * that it can be constructed on top of preallocated buffers that are at
+ * different places of the memory, which is usefull for example in the case
+ * of compatibility with the VST framework if one wants to use this class
+ * as a set of audio buffers without copying all the data at the construction.
+ */ 
 template<typename TValueType, unsigned int TDimension>
 class MultiArrayContainer : public AbstractArrayContainer<TValueType,TDimension>
 {
@@ -65,6 +80,9 @@ public:
 	 * @brief An enum for the constructor's name hint.
 	 */ 
 	enum{ NUMBERS = 0, RVBA = 1, CMJN = 2, XYZ = 3, ABCD = 4, MONO = 5 };
+	/**
+	 * @brief An enum for the constructor's name hint.
+	 */ 
 	enum{ READER_OUT = 0, WRITER_OUT = 1 };
 	
 	/**

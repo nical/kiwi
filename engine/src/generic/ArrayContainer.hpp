@@ -43,7 +43,10 @@ namespace generic
 {
 
 
-
+/**
+ * @brief Templated container class based on contiguous array buffers.
+ * 
+ */ 
 template<typename TValueType, unsigned int TDimension>
 class ArrayContainer : public AbstractArrayContainer<TValueType, TDimension>
 {
@@ -143,9 +146,15 @@ public:
 	unsigned int oneBufferSize() const;
 	
 	/**
-	 * @brief Returns information on how the data is to be iterated.
+	 * @brief Returns this container's stride.
 	 * 
-	 * ( used by the Reader and Writer )
+	 * This is used by the Reader and Writer classes to know how the data
+	 * is to be iterated.
+	 * 
+	 * stride[1] = stride[0] * width
+	 * stride[2] = stride[1] * width * height
+	 * stride[3] = stride[2] * width * height * depth
+	 * etc. 
 	 */ 
 	Point<unsigned,TDimension+1> increments(portIndex_t index) const;
 	

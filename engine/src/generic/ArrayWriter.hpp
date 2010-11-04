@@ -41,7 +41,15 @@ namespace kiwi
 namespace generic
 {
 	
-	
+/**
+ * @brief Writer class able to read and write data in any Container inheriting
+ * from kiwi::generic::AbstractArrayContainer. 
+ * 
+ * 
+ * (like kiwi::generic::ArrayContainer, kiwi::generic::MultiArrayContainer 
+ * or kiwi::image::CairoImageContainer).
+ * 
+ */ 	
 template < typename TValueType, unsigned int TDimension>
 class ArrayWriter : public core::Writer
 {

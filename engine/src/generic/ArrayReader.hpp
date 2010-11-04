@@ -42,7 +42,14 @@ namespace kiwi
 namespace generic
 {
 	
-	
+/**
+ * @brief Reader class able to read data from any Container inheriting
+ * from kiwi::generic::AbstractArrayContainer. 
+ * 
+ * (like kiwi::generic::ArrayContainer, kiwi::generic::MultiArrayContainer 
+ * or kiwi::image::CairoImageContainer).
+ * 
+ */ 
 template < typename TValueType, unsigned int TDimension>	
 class ArrayReader : public core::Reader
 {

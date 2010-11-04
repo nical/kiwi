@@ -49,7 +49,7 @@ ArrayReader<T,D>::ArrayReader(
 		Debug::error() << "ArrayReader<"
 			<< types::str<T>() 
 			<< ">::Constructor : "
-			<< "enable to determine the Resource type" 
+			<< "enable to determine the Container type" 
 			<< endl();
 	}
 	_port = port.connectedOutput()->index();

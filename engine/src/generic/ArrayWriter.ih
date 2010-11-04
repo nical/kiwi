@@ -37,7 +37,7 @@ namespace generic
 
 template<typename T, unsigned int D>
 ArrayWriter<T,D>::ArrayWriter(
-	const core::Resource::WriterInputPort& port
+	const core::Container::WriterInputPort& port
 )
 {
 	AbstractArrayContainer<T,D>* node = 
@@ -49,7 +49,7 @@ ArrayWriter<T,D>::ArrayWriter(
 		Debug::error() << "ArrayWriter<"
 			<<types::str<T>() 
 			<< ">::Constructor : "
-			<< "enable to determine the Resource type" 
+			<< "enable to determine the Container type" 
 			<< endl();
 	}
 	_port = port.connectedOutput()->index();

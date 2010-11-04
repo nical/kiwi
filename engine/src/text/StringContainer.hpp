@@ -30,7 +30,7 @@ namespace kiwi
 namespace text
 {
 
-class StringContainer : public core::Resource
+class StringContainer : public core::Container
 {
 public:
 	StringContainer(const kiwi::string& str = "") 

@@ -31,7 +31,7 @@ namespace kiwi
 namespace generic
 {
 
-using core::Resource;
+using core::Container;
 
 
 template<typename T, unsigned int D>
@@ -80,7 +80,7 @@ void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 {
 // disable the event so that layoutChanged() is not called from
 	// within the constructor
-	Resource::setLayoutEventEnabled(false);
+	Container::setLayoutEventEnabled(false);
 	// "compute" the runtime type name of this class in function of
 	// the template parameters
 	kiwi::string sType("array"
@@ -94,7 +94,7 @@ void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 		Node::addWriterOutputPort( sType );
 		Node::addReaderOutputPort( sType );
 	}
-	Resource::setLayoutEventEnabled(true);
+	Container::setLayoutEventEnabled(true);
 }
 
 

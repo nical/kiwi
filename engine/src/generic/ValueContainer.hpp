@@ -33,7 +33,7 @@
 #ifndef KIWI_VALUE_HPP
 #define KIWI_VALUE_HPP
 
-#include "core/Resource.hpp"
+#include "core/Container.hpp"
 #include "core/Commons.hpp"
 #include "utils/types.hpp"
 
@@ -47,11 +47,11 @@ using namespace kiwi::core;
 // ----------------------------------------------------------- Interface
 /**
  * @class kiwi::core::AbstractValueContainer<T>
- * Interface that must be implemented by any Resource that provide 
+ * Interface that must be implemented by any Container that provide 
  * a Value<T> port type
  */ 
 template <typename T>
-class AbstractValueContainer : public virtual Resource
+class AbstractValueContainer : public virtual Container
 {
 public:
 	/**
@@ -60,7 +60,7 @@ public:
 	virtual T& getValue(portIndex_t port = 0) = 0;
 };
 
-// ------------------------------------------------------------ Resource
+// ------------------------------------------------------------ Container
 template <typename TValueType>
 class ValueContainer : public AbstractValueContainer<TValueType>
 {
@@ -93,7 +93,7 @@ class ValueReader : public Reader
 public:
 	typedef TValueType ValueType;
 	// -----------------------------------------------------------------
-	ValueReader(const Resource::ReaderInputPort& port)
+	ValueReader(const Container::ReaderInputPort& port)
 	{
 		assert( port.connectedOutput()->subPort()->node() );
 		
@@ -106,7 +106,7 @@ public:
 			Debug::error() << "ValueReader<"
 				<< types::str<ValueType>() 
 				<< ">::Constructor : "
-				<< "enable to determine the Resource type" 
+				<< "enable to determine the Container type" 
 				<< endl();
 		}
 		_port = port.connectedOutput()->subPort()->index();
@@ -124,7 +124,7 @@ class ValueWriter : public Writer
 public:
 	typedef TValueType ValueType;
 	// -----------------------------------------------------------------
-	ValueWriter(const Resource::WriterInputPort& port)
+	ValueWriter(const Container::WriterInputPort& port)
 	{
 		_resource = dynamic_cast<AbstractValueContainer<TValueType>* >(
 			port.connectedOutput()->subPort()->node() 
@@ -135,7 +135,7 @@ public:
 				Debug::error() << "ValueWriter<"
 					<< types::str<ValueType>() 
 					<< ">::Constructor : "
-					<< "enable to determine the Resource type" 
+					<< "enable to determine the Container type" 
 					<< endl();
 			}
 		)//DEBUG_ONLY

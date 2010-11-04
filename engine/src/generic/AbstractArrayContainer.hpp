@@ -6,7 +6,7 @@
 #ifndef KIWI_ARRAYRESOURCE_HPP
 #define KIWI_ARRAYRESOURCE_HPP
 
-#include "core/Resource.hpp"
+#include "core/Container.hpp"
 #include "generic/Point.hpp"
 
 
@@ -18,7 +18,7 @@ namespace generic
 
 
 template <typename TValueType, unsigned int TDimension>
-class AbstractArrayContainer : public core::Resource
+class AbstractArrayContainer : public core::Container
 {
 public:
 	typedef TValueType ValueType;

@@ -65,7 +65,7 @@ class Node;
 
 /**
  * @class Node
- * @brief The base class for every kiwi Resource and Filter
+ * @brief The base class for every kiwi Container and Filter
  *
  * This is the most important class in the library. kiwi::Node implements
  * the connection system that represents Kiwi's main feature.

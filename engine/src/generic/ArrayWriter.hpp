@@ -32,7 +32,7 @@
 #ifndef KIWI_ARRAYWRITER_HPP
 #define KIWI_ARRAYWRITER_HPP
 
-#include "core/Resource.hpp"
+#include "core/Container.hpp"
 #include "generic/AbstractArrayContainer.hpp"
 
 
@@ -54,7 +54,7 @@ public:
 	/**
 	 * @brief Constructor.
 	 */ 
-	ArrayWriter(const core::Resource::WriterInputPort& port);
+	ArrayWriter(const core::Container::WriterInputPort& port);
 	ArrayWriter(const AbstractArrayContainer<ValueType,TDimension>& resource, portIndex_t portIndex);
 	
 	/**

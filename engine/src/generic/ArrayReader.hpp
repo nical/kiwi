@@ -32,7 +32,7 @@
 #ifndef KIWI_ARRAYDATAREADER_HPP
 #define KIWI_ARRAYDATAREADER_HPP
 
-#include "core/Resource.hpp"
+#include "core/Container.hpp"
 #include "generic/AbstractArrayContainer.hpp"
 #include "generic/ArrayIterator.hpp"
 
@@ -56,7 +56,7 @@ public:
 	/**
 	 * @brief Constructor.
 	 */ 
-	ArrayReader(const core::Resource::ReaderInputPort& port);
+	ArrayReader(const core::Container::ReaderInputPort& port);
 	ArrayReader(const AbstractArrayContainer<ValueType,TDimension>& resource, portIndex_t portIndex);
 	
 	/**

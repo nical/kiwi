@@ -31,7 +31,7 @@
 #ifndef KIWI_MULTIARRAYCONTAINER_HPP
 #define KIWI_MULTIARRAYCONTAINER_HPP
 
-#include "core/Resource.hpp"
+#include "core/Container.hpp"
 #include "generic/Point.hpp"
 #include "utils/types.hpp"
 #include <boost/lexical_cast.hpp>

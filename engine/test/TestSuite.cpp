@@ -73,4 +73,7 @@ int main()
 		
 		MetaFilterTest<int, 2 ,2>();
 
+		Debug::endl(3);
+		Debug::print() << "end of the test suite" << endl();
+
 }

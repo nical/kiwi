@@ -40,12 +40,17 @@ namespace kiwi
 namespace core
 {
 
-
+/**
+ * @brief The base class for containers.
+ * 
+ * At the moment it does not add anything to kiwi::Node's implementation
+ * But for semantic and evolutivity purpose Resource and Node are distinct. 
+ */ 
 class Resource : public Node
 {
 public: 
 	Resource() : Node() {}
-
+	int nodeType() { return Node::CONTAINER; };
 };
 
 

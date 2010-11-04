@@ -27,6 +27,14 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+/**
+ * @file Filter.hpp
+ * @brief Header file for the Filter class.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.2
+ */
+
+
 #pragma once
 
 #ifndef KIWI_FILTER_HPP
@@ -45,13 +53,14 @@ class Filter : public Node
 {
 public:
 
+	int nodeType() { return Node::FILTER; };
+
 	/**
 	 * Main entry point of the filter. This is the function you should override to perform
 	 * whatever the filter is supposed to do.
 	 */ 
 	virtual void process() = 0;
 
-	
 	
 	/**
 	 * @brief Returns true if the Filter is reday to process.
@@ -62,13 +71,6 @@ public:
 	 */ 
 	bool isReady() {return (_ready && readyCondition() );}
 	
-	
-	/**
-	 * Returns true. Overloaded from Node, this helps Pipeline know wether or not the
-	 * Node they manipulate are filters.
-	 */ 
-	bool isAFilter() {return true;}
-
 
 	Filter():Node()
 	{

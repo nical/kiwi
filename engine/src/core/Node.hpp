@@ -29,10 +29,10 @@
 
 
 /**
- * @file Node.h
- * @brief Header file for the base class of every kiwi node and filter.
+ * @file Node.hpp
+ * @brief Header file for the base class of every kiwi resources and filters.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
- * @version 0.1
+ * @version 0.2
  */
 
 #pragma once
@@ -62,16 +62,13 @@ namespace core
 class Reader;
 class Writer;
 class Node;
-struct PortInfo
-{
-	Node* node;
-	portIndex_t index;
-};
+
 /**
  * @class Node
- * @brief The base class for every kiwi Node and Filter
+ * @brief The base class for every kiwi Resource and Filter
  *
- * TODO Lots of explainations needed here 
+ * This is the most important class in the library. kiwi::Node implements
+ * the connection system that represents Kiwi's main feature.
  *
  */ 
 class Node
@@ -89,6 +86,8 @@ public:
 	typedef OutputPort<Writer> WriterOutputPort;
 	typedef InputPort<Writer> WriterInputPort;
 
+	enum { FILTER, CONTAINER};
+
 // -------------------------------------------- constructor / Destructor
 	/**
 	 * @brief Constructor
@@ -105,6 +104,8 @@ public:
 
 // ----------------------------------------------------- virtual methods
 
+	virtual int nodeType() = 0;
+
 	/**
 	 * @brief Verifies the compatibility of a given Reader to one of the input ports
 	 *
@@ -115,17 +116,34 @@ public:
 	 * @param port A reference to the output port that is to be checked.
 	 */
 	virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Reader>& port) const {return false;}
-	virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Writer>& port) const {return false;}
-
 	
-	// TODO
-	//virtual void save(std::ostream out);
-	//virtual void load(std::istream in);
+	/**
+	 * @brief Verifies the compatibility of a given Reader to one of the input ports
+	 *
+	 * Returns true if the output port passed in parameter is compatible with the input ports.
+	 * This method must be implemented by every Node/Filter.
+	 *
+	 * @param inputIndex The index of the input port concerned
+	 * @param port A reference to the output port that is to be checked.
+	 */virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Writer>& port) const {return false;}
 
-	
+
+	/**
+	 * @brief Automatically called when port are connected or disconnected.
+	 * 
+	 * This virtual method is automatically called whenever a port is 
+	 * connected or disconnected. One can optionnaly override it if there 
+	 * is any need to execute some custom code when it happens.
+	 * 
+	 * By default it does nothing.
+	 * 
+	 * Note: This method should be overload a least only to call the parent
+	 * class's method in case it does override it and you want to keep
+	 * this behaviour.
+	 */  
 	virtual void layoutChanged() { }
 
-// ------------------------------------------------------- pulic methods
+// ------------------------------------------------------ pulic methods
 
 	/**
 	 * @brief Access to a port.
@@ -134,7 +152,7 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */ 
-	InputPort<Reader>& readerInputPort(portIndex_t index) const
+	ReaderInputPort& readerInputPort(portIndex_t index) const
 		{assert(index < getReaderInputCount() ); return *_readerInputs[index];}
 	/**
 	 * @brief Access to a port.
@@ -143,7 +161,7 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */ 
-	OutputPort<Reader>& readerOutputPort(portIndex_t index) const
+	ReaderOutputPort& readerOutputPort(portIndex_t index) const
 		{assert(index < getReaderOutputCount() );return *_readerOutputs[index];}
 
 	/**
@@ -153,7 +171,7 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */
-	InputPort<Writer>& writerInputPort(portIndex_t index) const
+	WriterInputPort& writerInputPort(portIndex_t index) const
 		{assert(index < getWriterInputCount() );return *_writerInputs[index];}
 	/**
 	 * @brief Access to a port.
@@ -162,7 +180,7 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */
-	OutputPort<Writer>& writerOutputPort(portIndex_t index) const
+	WriterOutputPort& writerOutputPort(portIndex_t index) const
 		{assert(index < getWriterOutputCount() );return *_writerOutputs[index];}
 
 	/**
@@ -183,27 +201,60 @@ public:
 	inline unsigned getWriterOutputCount() const {return _readerOutputs.size();}
 	
 	/**
-	 * @brief Returns true if the object is a Filter.
-	 */ 
-	virtual bool isAFilter() { return false; }
-	
-	/**
 	 * @brief Returns true if the layout event is enabled.
 	 * 
 	 * The layout event being enabled means that 
 	 */ 
 	inline bool isLayoutEventEnabled() { return _layoutEvtEnabled; }
 	
-
+	/**
+	 * @brief Returns the index of the port passed in parameter.
+	 * 
+	 * The port must belong to this Node.
+	 */ 
 	portIndex_t indexOf(const ReaderInputPort& port) const;
+	/**
+	 * @brief Returns the index of the port passed in parameter.
+	 * 
+	 * The port must belong to this Node.
+	 */ 
 	portIndex_t indexOf(const WriterInputPort& port) const;
+	/**
+	 * @brief Returns the index of the port passed in parameter.
+	 * 
+	 * The port must belong to this Node.
+	 */ 
 	portIndex_t indexOf(const ReaderOutputPort& port) const;
+	/**
+	 * @brief Returns the index of the port passed in parameter.
+	 * 
+	 * The port must belong to this Node.
+	 */ 
 	portIndex_t indexOf(const WriterOutputPort& port) const;
 	
-
+	/**
+	 * @brief Returns the name of a Reader input port.
+	 * 
+	 * This is one of the methods to override in order to define the port's names.
+	 */ 
 	virtual kiwi::string readerInputName( portIndex_t index );
+	/**
+	 * @brief Returns the name of a Reader output port.
+	 * 
+	 * This is one of the methods to override in order to define the port's names.
+	 */ 
 	virtual kiwi::string readerOutputName( portIndex_t index );
+	/**
+	 * @brief Returns the name of a Writer input port.
+	 * 
+	 * This is one of the methods to override in order to define the port's names.
+	 */ 
 	virtual kiwi::string writerInputName( portIndex_t index );
+	/**
+	 * @brief Returns the name of a Writer output port.
+	 * 
+	 * This is one of the methods to override in order to define the port's names.
+	 */ 
 	virtual kiwi::string writerOutputName( portIndex_t index );
 /*	
 	virtual kiwi::string readerInputPortType( portIndex_t index );
@@ -314,19 +365,60 @@ protected:
 	 * @param toBind The other Node's port.
 	 */ 
 	void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind);
+	/**
+	 * @brief Redirect a port to the port another Node's port.
+	 * 
+	 * bindPort allows a Node to have ports that are in fact pointing 
+	 * to another Node instead of itself.
+	 * Each port contains knows both the Node that contains it and also
+	 * the Node that actuly contains the data.
+	 * This distinction permits to have for instance a Node that 
+	 * contains other Nodes and redirects its ports to the one of the
+	 * contained Node (for exemple Pipelines). 
+	 * Another use of this method is for any Filter that writes in a 
+	 * Node to provide the output readers of the Node in its own
+	 * outputs.
+	 * 
+	 * @param myPort This class's port that has to be redirected to another Node's port.
+	 * @param toBind The other Node's port.
+	 */ 
 	void bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind);
+	/**
+	 * @brief Redirect a port to the port another Node's port.
+	 * 
+	 * bindPort allows a Node to have ports that are in fact pointing 
+	 * to another Node instead of itself.
+	 * Each port contains knows both the Node that contains it and also
+	 * the Node that actuly contains the data.
+	 * This distinction permits to have for instance a Node that 
+	 * contains other Nodes and redirects its ports to the one of the
+	 * contained Node (for exemple Pipelines). 
+	 * Another use of this method is for any Filter that writes in a 
+	 * Node to provide the output readers of the Node in its own
+	 * outputs.
+	 * 
+	 * @param myPort This class's port that has to be redirected to another Node's port.
+	 * @param toBind The other Node's port.
+	 */ 
 	void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind);
+	/**
+	 * @brief Redirect a port to the port another Node's port.
+	 * 
+	 * bindPort allows a Node to have ports that are in fact pointing 
+	 * to another Node instead of itself.
+	 * Each port contains knows both the Node that contains it and also
+	 * the Node that actuly contains the data.
+	 * This distinction permits to have for instance a Node that 
+	 * contains other Nodes and redirects its ports to the one of the
+	 * contained Node (for exemple Pipelines). 
+	 * Another use of this method is for any Filter that writes in a 
+	 * Node to provide the output readers of the Node in its own
+	 * outputs.
+	 * 
+	 * @param myPort This class's port that has to be redirected to another Node's port.
+	 * @param toBind The other Node's port.
+	 */ 
 	void bindPort(WriterInputPort& myPort, WriterInputPort& toBind);
-
-/*	template<typename SlotType>
-	bool isCompatible<SlotType>( portIndex_t index, const ReaderOutputPort& port );
-	
-	template<typename SlotType>
-	bool checkTypeCascade<SlotType>( portIndex_t index, kiwi::string inputType);
-*/
-	// OutputPort<T>.isCompatibe( iPort ) 
-	//	- Node.isCompatible<T>(i, iPort) //overload here
-	//   - checkTypeCascade(...)
 
 // ----------------------------------------------------- private members
 private:
@@ -343,7 +435,6 @@ private:
 public:
 
 	/**
-	 * @class Node::InputPort<Reader|Writer>
 	 * @brief Generic input port class for Reader and Writer interface.
 	 *
 	 * An instance of this class is hold by a kNode for each of it's inputs.
@@ -439,7 +530,6 @@ public:
 	};
 
 	/**
-	 * @class Node::OutputPort<Reader|Writer>
 	 * @brief Generic output port class for Reader and Writer interface.
 	 *
 	 * An instance of this class is hold by a Node for each of it's outputs.
@@ -567,7 +657,7 @@ public:
 //------------------------------------------------------- access classes
 /**
  * @class Reader
- * @brief The base class to read data from Node.
+ * @brief Base class of objects that read data from Node.
  */ 
 class Reader
 {
@@ -577,7 +667,7 @@ public:
 
 /**
  * @class Writer
- * @brief The base class to read and write data from Node.
+ * @brief Base class of objects that read and write data from Node.
  */
 class Writer
 {

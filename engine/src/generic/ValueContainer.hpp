@@ -70,8 +70,9 @@ public:
 	ValueContainer(ValueType init)
 	: _data(init)
 	{
-		addWriterOutputPort(string("value_")+types::str<TValueType>() );
-		addReaderOutputPort(string("value_")+types::str<TValueType>() );
+		// string("value_")+types::str<TValueType>()
+		Node::addWriterOutputPort();
+		Node::addReaderOutputPort();
 	}
 	
 	string readerOutputName(portIndex_t){return string("read");}

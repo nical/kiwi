@@ -101,6 +101,9 @@ public:
 	~ArrayContainer();
 
 
+	kiwi::string readerOutputType(portIndex_t);
+	kiwi::string writerOutputType(portIndex_t);
+
 // -----------------------------------------------------------------
 	/**
 	 * @brief Returns a pointer to the very first element stored in the container.

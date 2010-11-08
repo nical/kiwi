@@ -84,8 +84,8 @@ void ArrayContainer<T,D>::init(unsigned char nameHint)
 			
 	for(unsigned i = 0; i < _nbComponents; ++i)
 	{
-		Node::addWriterOutputPort( sType );
-		Node::addReaderOutputPort( sType );
+		Node::addWriterOutputPort();
+		Node::addReaderOutputPort();
 	}
 	Node::setLayoutEventEnabled(true);
 }
@@ -96,6 +96,25 @@ ArrayContainer<T,D>::~ArrayContainer()
 {
 	if(_deleteDataDestructor) delete[] _data;
 	
+}
+
+template<typename T, unsigned int D>
+kiwi::string
+ArrayContainer<T,D>::readerOutputType(portIndex_t)
+{
+return kiwi::string("array"
+			+ boost::lexical_cast<kiwi::string>(D)+"d_"
+			+ types::str<T>() );
+}
+
+
+template<typename T, unsigned int D>
+kiwi::string
+ArrayContainer<T,D>::writerOutputType(portIndex_t)
+{
+return kiwi::string("array"
+			+ boost::lexical_cast<kiwi::string>(D)+"d_"
+			+ types::str<T>() );
 }
 
 template<typename T, unsigned int D>

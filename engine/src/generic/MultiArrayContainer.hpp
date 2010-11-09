@@ -113,7 +113,6 @@ public:
 	 */
 	~MultiArrayContainer();
 
-
 // -----------------------------------------------------------------
 	/**
 	 * @brief Returns a pointer to the array oh buffers.

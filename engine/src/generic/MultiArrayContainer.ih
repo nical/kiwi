@@ -75,6 +75,8 @@ MultiArrayContainer<T,D>::MultiArrayContainer(
 }
 
 
+
+
 template<typename T, unsigned int D>
 void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 {
@@ -83,16 +85,14 @@ void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 	Container::setLayoutEventEnabled(false);
 	// "compute" the runtime type name of this class in function of
 	// the template parameters
-	kiwi::string sType("array"
-			+ boost::lexical_cast<kiwi::string>(D)+"d_"
-			+ types::str<T>() );
+	
 			
 	for(unsigned i = 0; i < _nbComponents; ++i)
 	{
  		// TODO: WARNING: This has changed (names handling) but unfortunately i didn't push the 
 		//code before stupidly locking myself outside so this will have to be corrected as soon as i can 
-		Node::addWriterOutputPort( sType );
-		Node::addReaderOutputPort( sType );
+		Node::addWriterOutputPort();
+		Node::addReaderOutputPort();
 	}
 	Container::setLayoutEventEnabled(true);
 }
@@ -198,6 +198,7 @@ unsigned int MultiArrayContainer<T,D>::oneBufferSize() const
 	for(unsigned i = 0; i < D; ++i) oneBuffer *= _spanSize(i);
 	return oneBuffer;
 }
+
 
 /*
 template<typename T, unsigned int D>

@@ -36,8 +36,7 @@ namespace core
 
 
 template <typename SlotType>
-Node::OutputPort<SlotType>::OutputPort(
-	Node* myNode, const string& type )
+Node::OutputPort<SlotType>::OutputPort(	Node* myNode )
 	: _enabled(true)
 	, _node(myNode)
 	, _subPort(0)
@@ -72,11 +71,10 @@ template <typename SlotType>
 void 
 Node::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
 {
-	Debug::print() << "port rebinding" << endl();
+	Debug::print() << "port binding" << endl();
 	
 	_subPort = &port;
 
-	_type = port._type;
 	// note that if the binded Node is deleted, trying to acces
 	// this port might cause a segfault
 }
@@ -110,19 +108,25 @@ Node::OutputPort<SlotType>::node() const
 	return _node;
 }
 
-template <typename SlotType>
+template<>
 string 
-Node::OutputPort<SlotType>::type() 
+Node::OutputPort<Reader>::type() 
 { 
-	return _type; 
+	return _node->readerOutputType( index() ); 
+}
+
+template<>
+string 
+Node::OutputPort<Writer>::type() 
+{ 
+	return _node->writerOutputType( index() ); 
 }
 
 template <typename SlotType>
 bool 
-Node::OutputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
+Node::OutputPort<SlotType>::isCompatible(InputPort<SlotType>& input)	
 {
-	return ( type().find(output.type())!= string::npos 
-	|| type().find("any")!= string::npos ); 
+	return input.isCompatible(*this); 
 }
 
 template <typename SlotType>
@@ -146,14 +150,6 @@ Node::OutputPort<SlotType>::connections() const
 	return _connections; 
 }
 
-
-
-template <typename SlotType>
-void 
-Node::OutputPort<SlotType>::setType(const string& type)
-{
-	_type = type;
-}
 
 template <typename SlotType>
 void 

@@ -49,14 +49,14 @@ public:
 		kiwi::string sType( kiwi::string("array")
 			+ boost::lexical_cast<kiwi::string>(TDimension)
 			+"d_"+ types::str<TValueType>() );
-		addReaderInputPort(sType);
-		addReaderInputPort(sType);
+		addReaderInputPort();
+		addReaderInputPort();
 		
-		addWriterInputPort(sType);	
+		addWriterInputPort();	
 		
 		//add a reader output that will be available only when the writer
 		//port is connected
-		addReaderOutputPort(sType);
+		addReaderOutputPort();
 		setPortEnabled(readerOutputPort(0),false);
 		setLayoutEventEnabled(true);
 	}

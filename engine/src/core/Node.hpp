@@ -256,12 +256,32 @@ public:
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
 	virtual kiwi::string writerOutputName( portIndex_t index );
-/*	
-	virtual kiwi::string readerInputPortType( portIndex_t index );
-	virtual kiwi::string readerOutputPortType( portIndex_t index );
-	virtual kiwi::string writerInputPortType( portIndex_t index );
-	virtual kiwi::string writerOutputPortType( portIndex_t index );
-*/	
+	
+	/**
+	 * @brief Returns the type of a Reader input port.
+	 * 
+	 * This is one of the methods to override in order to define the port's types.
+	 */ 
+	virtual kiwi::string readerInputType( portIndex_t index );
+	/**
+	 * @brief Returns the type of a reader output port.
+	 * 
+	 * This is one of the methods to override in order to define the port's types.
+	 */ 
+	virtual kiwi::string readerOutputType( portIndex_t index );
+	/**
+	 * @brief Returns the type of a Writer input port.
+	 * 
+	 * This is one of the methods to override in order to define the port's types.
+	 */ 
+	virtual kiwi::string writerInputType( portIndex_t index );
+	/**
+	 * @brief Returns the type of a Writer output port.
+	 * 
+	 * This is one of the methods to override in order to define the port's types.
+	 */ 
+	virtual kiwi::string writerOutputType( portIndex_t index );
+	
 // --------------------------------------------------- protected methods	
 protected:
 	// port setup
@@ -270,7 +290,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
-	void addReaderInputPort(const string& type);
+	void addReaderInputPort();
 
 	/**
 	 * @brief Remove an input port from this Filter's Reader interface.
@@ -283,7 +303,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
-	void addReaderOutputPort(const string& type);
+	void addReaderOutputPort();
 	/**
 	 * @brief Remove an output port from this Filter's Reader interface.
 	 *
@@ -295,7 +315,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
-	void addWriterInputPort(const string& type);
+	void addWriterInputPort();
 	/**
 	 * @brief Remove an input port from this Filter's Writer interface.
 	 *
@@ -307,7 +327,7 @@ protected:
 	 *
 	 * This is to be used in the initialisation phase of a Node/Filter.
 	 */ 
-	void addWriterOutputPort(const string& type);
+	void addWriterOutputPort();
 	/**
 	 * @brief Remove an output port from this Filter's Writer interface.
 	 *
@@ -452,7 +472,7 @@ public:
 		 * @brief Constructor.
 		 * @todo The second argument will disapear in next version.
 		 */ 
-		InputPort(Node* myNode, const string& type);
+		InputPort(Node* myNode);
 		
 		/**
 		 * @brief Connection method.
@@ -470,6 +490,9 @@ public:
 		 * @brief Returns a pointer to the Node containing this port.
 		 */ 
 		inline Node* node() const ;
+		
+		InputPort<SlotType>* subPort() ;
+		
 		/**
 		 * @brief Returns this port's Name as a string.
 		 */ 
@@ -525,7 +548,7 @@ public:
 		Node* _node;
 		InputPort<SlotType>* _subPort;
 		OutputPort<SlotType>* _connectedNode;
-		string _type;
+//		string _type;
 		bool _enabled;
 	};
 
@@ -552,7 +575,7 @@ public:
 		 * @brief Constructor.
 		 * @todo The second argument will disapear in next version.
 		 */ 
-		OutputPort(Node* myNode, const string& type);
+		OutputPort(Node* myNode);
 		/**
 		 * @brief Returns the index of this port.
 		 */ 
@@ -595,7 +618,7 @@ public:
 		/**
 		 * @brief Port compatibility check based on the type string.
 		 */ 
-		inline bool isCompatible(OutputPort<SlotType>& output);
+		inline bool isCompatible(InputPort<SlotType>& input);
 		/**
 		 * @brief Resturns true if this port is connected.
 		 */ 
@@ -622,7 +645,7 @@ public:
 		/**
 		 * @todo deprecated
 		 */ 
-		inline void setType(const string& type);
+//		inline void setType(const string& type);
 		/**
 		 * @brief Used internally by kiwi::core::Node to perform port binding.
 		 * 
@@ -643,7 +666,7 @@ public:
 		Node* _node;
 		OutputPort<SlotType>* _subPort;
 		connectionList _connections;
-		string _type; // to change
+//		string _type; // to change
 		bool _enabled;
 	};
 

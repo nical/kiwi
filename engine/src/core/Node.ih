@@ -74,35 +74,35 @@ Node::~Node()
 }
 
 
-void Node::addReaderInputPort(const string& type)
+void Node::addReaderInputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderInputCount();
-	_readerInputs.push_back( new InputPort<Reader>(this, type) );
+	_readerInputs.push_back( new InputPort<Reader>(this) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
-void Node::addReaderOutputPort(const string& type)
+void Node::addReaderOutputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderOutputCount();
-	_readerOutputs.push_back( new OutputPort<Reader>(this, type) );
+	_readerOutputs.push_back( new OutputPort<Reader>(this) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
-void Node::addWriterInputPort(const string& type)
+void Node::addWriterInputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterInputCount();
-	_writerInputs.push_back( new InputPort<Writer>(this, type) );
+	_writerInputs.push_back( new InputPort<Writer>(this) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
-void Node::addWriterOutputPort(const string& type)
+void Node::addWriterOutputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterOutputCount();
-	_writerOutputs.push_back( new OutputPort<Writer>(this, type) );
+	_writerOutputs.push_back( new OutputPort<Writer>(this) );
 	if( isLayoutEventEnabled() ) layoutChanged();
 
 }
@@ -259,6 +259,33 @@ kiwi::string
 Node::writerOutputName(portIndex_t index)
 {
 	return kiwi::string("");
+}
+
+// ---------------------------------------------------------- Port types
+
+
+kiwi::string 
+Node::readerInputType(portIndex_t index) 
+{
+	return kiwi::string("any");
+}
+
+kiwi::string 
+Node::readerOutputType(portIndex_t index)
+{
+	return kiwi::string("any");
+}
+
+kiwi::string 
+Node::writerInputType(portIndex_t index)
+{
+	return kiwi::string("any");
+}
+
+kiwi::string 
+Node::writerOutputType(portIndex_t index)
+{
+	return kiwi::string("any");
 }
 
 

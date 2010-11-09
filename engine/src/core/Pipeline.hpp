@@ -47,15 +47,18 @@ namespace core
  * @class Pipeline
  * @brief A meta-Filter class
  * 
+ * The Pipeline Class is designed 
  */ 	
 class Pipeline : public Filter
 {
 public:
 	Pipeline();
 
-	bool contains(Resource* resource);
+	bool contains(Node* node);
 	
-	bool add(Resource* toAdd);
+	bool add(Node* toAdd);
+	
+	bool remove(Node* toRemove);
 
 	void update();
 	
@@ -74,22 +77,7 @@ public:
 	
 	inline bool isReady() {return _ready;}
 	
-	//TODO
-	bool isCompatible(portIndex_t inputIndex, const OutputPort<Reader>& port) const 
-	{
-		return false;
-	}
 	
-	bool isCompatible(portIndex_t inputIndex, const OutputPort<Writer>& port) const
-	{
-		return false;
-	}
-
-	Resource::OutputPort<Reader>& internalReaderInputPort(portIndex_t index);
-	Resource::InputPort<Reader>& internalReaderOutputPort(portIndex_t index);
-	Resource::OutputPort<Writer>& internalWriterInputPort(portIndex_t index);
-	Resource::InputPort<Writer>& internalWriterOutputPort(portIndex_t index);
-
 protected:
 	
 	unsigned int index(unsigned int x, unsigned int y);
@@ -98,10 +86,11 @@ protected:
 	
 private:
 	std::vector<Filter*> _filters;
-	std::vector<char> _status;
-	std::list<Resource*> _resourceList;
-	
+	std::list<Container*> _containers;
 	std::list<constraints> _constraints;
+
+	std::vector<char> _status;
+	
 	
 	char* _lookupTable;
 	unsigned int _lastSize;

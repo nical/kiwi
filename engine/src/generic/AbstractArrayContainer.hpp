@@ -67,6 +67,25 @@ public:
 	 * Returns the size of each span.
 	 */ 
 	virtual Point<unsigned int, TDimension> spanSize() const = 0;
+		
+	
+	kiwi::string
+	readerOutputType(portIndex_t)
+	{
+	return kiwi::string("array"
+				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
+				+ types::str<TValueType>() );
+	}
+
+
+	kiwi::string
+	writerOutputType(portIndex_t)
+	{
+	return kiwi::string("array"
+				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
+				+ types::str<TValueType>() );
+	}
+
 };
 
 

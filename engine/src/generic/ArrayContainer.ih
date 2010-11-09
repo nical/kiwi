@@ -98,24 +98,6 @@ ArrayContainer<T,D>::~ArrayContainer()
 	
 }
 
-template<typename T, unsigned int D>
-kiwi::string
-ArrayContainer<T,D>::readerOutputType(portIndex_t)
-{
-return kiwi::string("array"
-			+ boost::lexical_cast<kiwi::string>(D)+"d_"
-			+ types::str<T>() );
-}
-
-
-template<typename T, unsigned int D>
-kiwi::string
-ArrayContainer<T,D>::writerOutputType(portIndex_t)
-{
-return kiwi::string("array"
-			+ boost::lexical_cast<kiwi::string>(D)+"d_"
-			+ types::str<T>() );
-}
 
 template<typename T, unsigned int D>
 kiwi::string ArrayContainer<T,D>::portName(portIndex_t index

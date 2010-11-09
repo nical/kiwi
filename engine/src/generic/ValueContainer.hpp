@@ -37,6 +37,7 @@
 #include "core/Commons.hpp"
 #include "utils/types.hpp"
 
+
 namespace kiwi
 {
 namespace generic
@@ -58,6 +59,20 @@ public:
 	 * returns the value.
 	 */ 
 	virtual T& getValue(portIndex_t port = 0) = 0;
+	
+	string readerOutputType(portIndex_t)
+	{
+		return string("value_")+types::str<T>() ;
+	}
+	
+	string WriterOutputType(portIndex_t)
+	{
+		return string("value_")+types::str<T>() ;
+	}
+	
+	string readerOutputName(portIndex_t){return string("read");}
+	string WriterOutputName(portIndex_t){return string("write");}
+	
 };
 
 // ------------------------------------------------------------ Container
@@ -75,9 +90,7 @@ public:
 		Node::addReaderOutputPort();
 	}
 	
-	string readerOutputName(portIndex_t){return string("read");}
-	string WriterOutputName(portIndex_t){return string("write");}
-	
+
 	// AbstractValueContainer implementation --------------------------------------
 	virtual ValueType& getValue(portIndex_t port = 0) {return _data;}
 	

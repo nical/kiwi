@@ -45,26 +45,27 @@ Pipeline::Pipeline()
 
 
 
-bool Pipeline::contains(Resource* resource)
+bool Pipeline::contains(Node* node)
 {
 	ScopedBlockMacro(s1, "kiwi::core::Pipeline: contains");
 	Filter* fPtr = dynamic_cast<Filter*>(resource);
 	if(fPtr)
 	{
 		if(findFilter(fPtr) >= 0) return true;
-		else return false;
 	}
+	
 	// TODO findResource
 	return false;
 }
 
-int Pipeline::findFilter(Resource* filter)
+
+int Pipeline::findFilter(Filter* toFind)
 {
 	for (int i = 0; i < _filters.size(); ++i)
-		if(_filters[i] == filter) return i;
-	
+		if(_filters[i] == toFind) return i;
 	return -1; //if not found
 }
+
 
 bool Pipeline::add(Resource* toAdd)
 {

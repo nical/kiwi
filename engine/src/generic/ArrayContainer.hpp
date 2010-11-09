@@ -100,9 +100,7 @@ public:
 	 */
 	~ArrayContainer();
 
-
-	kiwi::string readerOutputType(portIndex_t);
-	kiwi::string writerOutputType(portIndex_t);
+	
 
 // -----------------------------------------------------------------
 	/**

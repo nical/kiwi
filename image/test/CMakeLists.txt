@@ -12,24 +12,14 @@ link_directories (${PROJECT_BINARY_DIR})
 
 #------TESTS subdirectories ------
 
-SET(KIWI_TESTS_SRC
-	TestSuite
-#	core/FilterTest
-#	generic/ArrayContainerTest
-#	generic/PointTest
-#	text/StringContainerTest
-   )
+SET(KIWI_IMAGE_TESTS_SRC
+	cairo/CairoImageContainerTest
+	)
 
-message("Kiwi Library : ${LIBKIWI_NAME}")
+message("Library name: ${LIBKIWIIMAGE_NAME}")
 
-FOREACH(FILE ${KIWI_TESTS_SRC})
+FOREACH(FILE ${KIWI_IMAGE_TESTS_SRC})
   add_executable(${FILE} ${FILE})
-  target_link_libraries (${FILE} ${LIBKIWI_NAME})
+  target_link_libraries (${FILE} ${LIBKIWIIMAGE_NAME} )
 #  add_test(${FILE} ${FILE})
 ENDFOREACH(FILE)
-
-
-#add_subdirectory(audio)
-#add_subdirectory(core)
-#add_subdirectory(image)
-#add_subdirectory(generic)

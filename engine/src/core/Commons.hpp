@@ -32,7 +32,7 @@
 #ifndef KIWI_COMMONS_HPP
 #define KIWI_COMMONS_HPP
 
-
+#include <boost/cstdint.hpp>
 
 #include <string>
 
@@ -40,8 +40,23 @@
 namespace kiwi
 {
 
+
+typedef unsigned int uint;
+
+typedef unsigned char uint8_t;
+typedef boost::uint16_t uint16_t;
+typedef boost::uint32_t uint32_t;
+typedef boost::uint64_t uint64_t;
+
+typedef char int8_t;
+typedef boost::int16_t int16_t;
+typedef boost::int32_t int32_t;
+typedef boost::int64_t int64_t;
+
 typedef std::string string;
 typedef unsigned char portIndex_t;
+
+
 
 }
 

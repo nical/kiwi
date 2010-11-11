@@ -11,9 +11,9 @@ cmake_minimum_required (VERSION 2.4)
 
 
 
-message( "-------------------------------------------------------------------------------" )
-message( "                         Kiwi		                                             " )
-message( "-------------------------------------------------------------------------------" )
+message( "--------------------------------------------------------------" )
+message( "                         Kiwi	  	                            " )
+message( "--------------------------------------------------------------" )
 
 message(STATUS "Source DIR is ${PROJECT_SOURCE_DIR}")
 message(STATUS "Binary DIR is ${PROJECT_BINARY_DIR}")

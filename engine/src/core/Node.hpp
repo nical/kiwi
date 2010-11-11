@@ -444,10 +444,10 @@ protected:
 private:
 
 	// The input/output ports
-	std::vector<InputPort<Reader>* > _readerInputs;
-	std::vector<InputPort<Writer>* > _writerInputs;
-	std::vector<OutputPort<Reader>* > _readerOutputs;
-	std::vector<OutputPort<Writer>* > _writerOutputs;
+	std::vector<ReaderInputPort* > _readerInputs;
+	std::vector<WriterInputPort* > _writerInputs;
+	std::vector<ReaderOutputPort* > _readerOutputs;
+	std::vector<WriterOutputPort* > _writerOutputs;
 	
 	bool _layoutEvtEnabled;
 
@@ -718,12 +718,43 @@ bool operator>>(Node::OutputPort<SlotType>& output, Node::InputPort<SlotType>& i
 
 
 
+// >_< ...
+// I don't know why, this does not link when put in the cpp file ...
+// #cpp build system sucks
+inline void 
+Node::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
+
+inline void 
+Node::bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
+{ 
+	myPort.bind(toBind);
+}
+
+inline void 
+Node::bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
+
+inline void 
+Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
+
+
+
+
+
 }//namespace core
 
 }//namespace kiwi
 
-#include "core/Node.ih"
-#include "core/InputPort.ih"
-#include "core/OutputPort.ih"
+//#include "core/Node.ih"
+#include "core/InputPort.cpp"
+#include "core/OutputPort.cpp"
 
 #endif

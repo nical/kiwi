@@ -27,12 +27,16 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-
+#include "Node.hpp"
 
 namespace kiwi
 {
 namespace core
 {
+
+// explicit template instanciation
+template bool operator>>(Node::OutputPort<Reader>& output, Node::InputPort<Reader>& input );
+template bool operator>>(Node::OutputPort<Writer>& output, Node::InputPort<Writer>& input );
 
 
 
@@ -209,29 +213,29 @@ Node::indexOf(const WriterOutputPort& port) const
 
 // ------------------------------------------------------ port rebinding
 
-inline void 
-Node::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
-{ 
-	myPort.bind(toBind); 
-}
+//inline void 
+//Node::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
+//{ 
+	//myPort.bind(toBind); 
+//}
 
-inline void 
-Node::bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
-{ 
-	myPort.bind(toBind);
-}
+//inline void 
+//Node::bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
+//{ 
+	//myPort.bind(toBind);
+//}
 
-inline void 
-Node::bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
-{ 
-	myPort.bind(toBind); 
-}
+//inline void 
+//Node::bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
+//{ 
+	//myPort.bind(toBind); 
+//}
 
-inline void 
-Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
-{ 
-	myPort.bind(toBind); 
-}
+//inline void 
+//Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
+//{ 
+	//myPort.bind(toBind); 
+//}
 
 
 // ---------------------------------------------------------- port names

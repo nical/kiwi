@@ -754,7 +754,7 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 }//namespace kiwi
 
 //#include "core/Node.ih"
-#include "core/InputPort.cpp"
-#include "core/OutputPort.cpp"
+#include "core/InputPort.ih"
+#include "core/OutputPort.ih"
 
 #endif

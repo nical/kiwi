@@ -1,22 +1,18 @@
 
 include_directories (${PROJECT_SOURCE_DIR}/src)
 
-##Recursive calls
-## each subdir must contain a ModuleSRC.txt file with a set command on the variable ${KIWI_SRC}
+include_directories ( ${CAIRO_INCLUDE_DIR} )
 
 SET(KIWI_SRC ${KIWI_SRC}
 		utils/DebugOutputStream.cpp
 		core/Node.cpp
-#		core/InputPort.cpp
-#		core/OutputPort.cpp
+		cairo/CairoImageContainer/ImageContainer.cpp
 		)
 
-#include(core/ModuleSRC.txt)
-#include(generic/ModuleSRC.txt)
+SET(optionalLibs ${optionalLibs} ${CAIRO_LIBRARIES} )
 
+set(CMAKE_CXX_FLAGS ${CAIRO_CFLAGS})
 # Create a library called "Kiwi".
-message("${LIBKIWI_NAME} Library src = ${KIWI_SRC}")
+message("${LIBKIWI_NAME} library src: ${KIWI_SRC}")
 add_library ( ${LIBKIWI_NAME}  ${KIWI_SRC})
-TARGET_LINK_LIBRARIES(${LIBKIWI_NAME} ${optionalLibs})
-
-SET_TARGET_PROPERTIES(${LIBKIWI_NAME} PROPERTIES LINKER_LANGUAGE C)
+TARGET_LINK_LIBRARIES(${LIBKIWI_NAME} ${optionalLibs} )

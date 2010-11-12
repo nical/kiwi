@@ -55,6 +55,7 @@ if ( Boost_FOUND )
    include_directories( ${Boost_INCLUDE_DIR} )
 endif ( Boost_FOUND )
 
+find_package(Cairo REQUIRED)
 
 
 

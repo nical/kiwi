@@ -750,10 +750,10 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 
 
 }//namespace core
-
 }//namespace kiwi
 
-//#include "core/Node.ih"
+
+
 #include "core/InputPort.ih"
 #include "core/OutputPort.ih"
 

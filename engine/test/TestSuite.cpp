@@ -8,7 +8,8 @@
 #include "core/MetaFilterTest.hpp"
 //#include "audio/AudioBufferTest.hpp"
 //#include "text/StringContainerTest.hpp"
-
+#include "cairo/CairoImageContainer/ImageContainer.hpp"
+#include "generic/Point.hpp"
 
 
 int main()
@@ -75,5 +76,10 @@ int main()
 
 		Debug::endl(3);
 		Debug::print() << "end of the test suite" << endl();
+
+		// temp
+		image::cairo::ARGBImageContainer ic( generic::Point<kiwi::uint32_t,2>(800,600) );
+		
+		// temp
 
 }

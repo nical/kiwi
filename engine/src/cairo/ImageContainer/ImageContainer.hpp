@@ -63,19 +63,37 @@ namespace cairo
  * This Container is compatible with generic::ArrayReader and 
  * generic::ArrayWriter.
  */ 
-class ARGBImageContainer : public generic::AbstractArrayContainer<uint8_t, 2>
+class RGBAImageContainer : public generic::AbstractArrayContainer<uint8_t, 2>
 {
 public:
-	ARGBImageContainer(const generic::Point<uint32_t, 2>& size);
-	~ARGBImageContainer();
+	// ----------------------------------------- Constructors/destructor
+	/**
+	 * @brief Constructor (allocates the data).
+	 */ 
+	RGBAImageContainer(const generic::Point<uint32_t, 2>& size);
+	
+	/**
+	 * @brief Constructor (use pre-allocated data).
+	 */ 
+	RGBAImageContainer(uint8_t* data, const generic::Point<uint32_t, 2>& size);
+	
+	/**
+	 * @brief Destructor.
+	 */ 
+	~RGBAImageContainer();
 	// ------------------------------------------- class specific metods
 	
 	/**
-	 * @brief Returns's this image's context.
+	 * @brief Returns this image's cairo context.
 	 * 
 	 * This is specific to cairo's functionning.
 	 */ 
 	inline cairo_t* getContext();
+	/**
+	 * @brief Returns this image's cairo surface.
+	 * 
+	 * This is specific to cairo's functionning.
+	 */ 
 	inline cairo_surface_t* getSurface();
 
 	/**

@@ -107,5 +107,37 @@ T ArrayWriter<T,D>::get(unsigned int i) const
 }
 
 
+
+template<typename T, unsigned int D>
+ArrayIterator<T> ArrayWriter<T,D>::getIterator() const
+{
+	unsigned size = 1;
+	for(unsigned i = 0; i < D; ++i) size *= _span(i);
+	return ArrayIterator<ValueType>(_data, _data+size*_incs(0)-1, _incs(0) ); 
+}
+
+
+template<typename T, unsigned int D>
+ArrayIterator<T> ArrayWriter<T,D>::getSpanIterator(
+		Point<uint32_t, D> origin
+		, uint8_t dim  
+		) const
+{
+	uint32_t offset = 0;
+	uint32_t size = 1;
+	
+	for(unsigned i = 0; i < D; ++i)
+	{
+		offset += _incs(i)*origin(i);
+		size *= _span(i);
+	}
+	
+	return ArrayIterator<ValueType>(
+			_data+offset
+			, _data+size*_incs(0)-1
+			, _incs(dim) ); 
+}
+
+
 } // namespace
 } // namespace

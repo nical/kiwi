@@ -91,14 +91,19 @@ public:
 	/**
 	 * @brief Returns an iterator to the beguinning of the data.
 	 */ 
-	ArrayIterator<ValueType> getIterator() const
-	{
-		unsigned size = 1;
-		for(unsigned i = 0; i < TDimension; ++i) size *= _span(i);
-		Debug::print() << "Writer::chan size :  " 
-					<< size*_incs(0)-1 << endl();
-		return ArrayIterator<ValueType>( _data, _data + size*_incs(0)-1, _incs(0) );
-	}
+	ArrayIterator<TValueType> getIterator() const ;
+	
+	/**
+	 * @brief Returns an iterator that browses through a span
+	 * 
+	 * @param dim The dimension in which we want to iterate (x,y..)
+	 * @param origin the first element pointed by the span iterator
+	 */ 
+	ArrayIterator<TValueType> getSpanIterator(
+		Point<uint32_t, TDimension> origin
+		, uint8_t dim  
+		) const ;
+	
 	
 protected:
  ValueType* _data;

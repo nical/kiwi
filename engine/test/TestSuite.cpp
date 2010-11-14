@@ -8,7 +8,8 @@
 #include "core/MetaFilterTest.hpp"
 //#include "audio/AudioBufferTest.hpp"
 //#include "text/StringContainerTest.hpp"
-
+#include "image/CairoImageContainerTest.hpp"
+#include "generic/Point.hpp"
 
 
 int main()
@@ -74,6 +75,19 @@ int main()
 		MetaFilterTest<int, 2 ,2>();
 
 		Debug::endl(3);
+		Debug::print() << "----------------------------------------------"
+					<< "MetaFilter Test Ok" << endl();
+		Debug::endl(3);
+
+		
+		CairoImageContainerTest();		
+
+
+		Debug::endl(3);
+		Debug::print() << "----------------------------------------------"
+					<< "Cairo ImageContainer Test Ok" << endl();
+		Debug::endl(3);
+
 		Debug::print() << "end of the test suite" << endl();
 
 }

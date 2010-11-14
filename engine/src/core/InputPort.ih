@@ -28,11 +28,15 @@
 
 
 
+//#include "Node.hpp"
+
 namespace kiwi
 {
 namespace core	
 {
 
+template class Node::InputPort<Reader>;
+template class Node::InputPort<Writer>;
 
 // ----------------------------------------------------------- InputPort
 template <typename SlotType>

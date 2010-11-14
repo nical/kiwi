@@ -104,6 +104,70 @@ ArrayConstIterator<T> ArrayReader<T,D>::getIterator() const
 }
 
 
+template<typename T, unsigned int D>
+ArrayConstIterator<T> 
+ArrayReader<T,D>::getSpanIterator(
+		const Point<uint32_t, D>& origin
+		, uint8_t dim  
+		) const
+{
+	uint32_t offset = 0;
+	uint32_t size = 1;
+	
+	for(unsigned i = 0; i < D; ++i)
+	{
+		offset += _incs(i)*origin(i);
+		size *= _span(i);
+	}
+	
+	return ArrayConstIterator<ValueType>(
+			_data+offset
+			, _data+size*_incs(0)-1
+			, _incs(dim) ); 
+}
+
+
+
+template<typename T, unsigned int D>
+ArrayConstIterator<T> 
+ArrayReader<T,D>::getSpanIterator(
+		const ArrayConstIterator<T>& origin
+		, uint8_t dim  
+		) const
+{
+	uint32_t offset = 0;
+	uint32_t size = 1;
+	
+	for(unsigned i = 0; i < D; ++i)
+	{
+		size *= _span(i);
+	}
+	
+	return ArrayConstIterator<ValueType>(
+			origin.ptr()
+			, _data+size*_incs(0)-1
+			, _incs(dim) ); 
+}
+
+
+template<typename T, unsigned int D>
+Point<uint32_t, D> 
+ArrayReader<T,D>::positionOf(const ArrayConstIterator<T>& it)
+{
+	Point<uint32_t, D> result;
+	T* ptr = it.ptr();
+	kiwi::uint32_t dist = ptr - _data;
+	for(int i = D; i>=0; --i )
+	{
+		result[i] = dist % _incs(i);
+		dist = dist/_incs(i);
+	}
+	return result;
+}
+
+
+
+
 } // namespace
 } // namespace
 

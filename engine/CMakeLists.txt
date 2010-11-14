@@ -11,9 +11,9 @@ cmake_minimum_required (VERSION 2.4)
 
 
 
-message( "-------------------------------------------------------------------------------" )
-message( "                         Kiwi		                                             " )
-message( "-------------------------------------------------------------------------------" )
+message( "--------------------------------------------------------------" )
+message( "                         Kiwi	  	                            " )
+message( "--------------------------------------------------------------" )
 
 message(STATUS "Source DIR is ${PROJECT_SOURCE_DIR}")
 message(STATUS "Binary DIR is ${PROJECT_BINARY_DIR}")
@@ -44,17 +44,17 @@ list( APPEND CMAKE_MODULE_PATH . )
 # -----------------------------------------------------------------------------
 # Check Dependencies
 # -----------------------------------------------------------------------------
-#FIND_PACKAGE(Boost REQUIRED PATHS /opt/local /opt/local/include /opt/local/lib)
+
 set ( CMAKE_PREFIX_PATH "/usr:/usr/local:/opt/local:${CMAKE_PREFIX_PATH}" )
 message( "-- CMAKE_PREFIX_PATH = " ${CMAKE_PREFIX_PATH} )
-#find_path( Boost_DIR include/boost/assert.hpp )
-#message( "Boost_DIR = " ${Boost_DIR} )
+
 FIND_PACKAGE(Boost REQUIRED)
 if ( Boost_FOUND )
    message( "-- Boost found. include=${Boost_INCLUDE_DIR}" )
    include_directories( ${Boost_INCLUDE_DIR} )
 endif ( Boost_FOUND )
 
+find_package(Cairo REQUIRED)
 
 
 
@@ -63,17 +63,6 @@ endif ( Boost_FOUND )
 # -----------------------------------------------------------------------------
 set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 
-
-# -----------------------------------------------------------------------------
-# Parsing cmake options
-# -----------------------------------------------------------------------------
-
-#OPTION(BUILD_SHARED_LIBS "Build shared libraries." ON)
-
-#OPTION(INLINE_FUNCTION_BUILD "Build inline functions." ON)
-
-
-  
 
 #------------------------------------------------------------------------------
 # Configuration of the Config.h
@@ -90,5 +79,3 @@ SET(Kiwi_VERSION_PATCH 2)
 add_subdirectory (src)
 add_subdirectory (test)
 
-
-#add_executable(testFilter ${KIWI_SRC})

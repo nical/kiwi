@@ -86,6 +86,29 @@ public:
 	 */ 
 	ArrayConstIterator<TValueType> getIterator() const ;
 	
+	/**
+	 * @brief Returns an iterator that browses through a span
+	 * 
+	 * @param dim The dimension in which we want to iterate (x,y..)
+	 * @param origin the first element pointed by the span iterator
+	 */ 
+	ArrayConstIterator<TValueType> getSpanIterator(
+		const Point<uint32_t, TDimension>& origin
+		, uint8_t dim  
+		) const ;
+		
+	/**
+	 * @brief Returns an iterator that browses through a span
+	 * 
+	 * @param origin the first element pointed by the span iterator
+	 * @param dim The dimension in which we want to iterate (x,y..)
+	 */ 
+	ArrayConstIterator<TValueType> getSpanIterator(
+		const ArrayConstIterator<TValueType>& origin
+		, uint8_t dim  
+		) const ;
+	
+	Point<uint32_t, TDimension> positionOf(const ArrayConstIterator<TValueType>&);
 	
 protected:
  ValueType* _data;

@@ -95,7 +95,6 @@ template<typename T, unsigned int D>
 ArrayContainer<T,D>::~ArrayContainer()
 {
 	if(_deleteDataDestructor) delete[] _data;
-	
 }
 
 

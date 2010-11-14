@@ -120,7 +120,10 @@ ArrayWriter<T,D>::getIterator() const
 {
 	unsigned size = 1;
 	for(unsigned i = 0; i < D; ++i) size *= _span(i);
-	return ArrayIterator<ValueType>(_data, _data+size*_incs(0)-1, _incs(0) ); 
+	return ArrayIterator<ValueType>(
+			_data
+			, _data + (size-1) * _incs(0)
+			, _incs(0) ); 
 }
 
 
@@ -138,11 +141,14 @@ ArrayWriter<T,D>::getSpanIterator(
 	{
 		offset += _incs(i)*origin(i);
 	}
-	uint32_t diff = _span(dim) - origin(dim);
-	Debug::error() << "spanIterator: inc: " << _incs(dim) << endl();
+	uint32_t diff = _span(dim) - origin(dim) -1;
+	Debug::error() << "spanIterator: inc: " << _incs(0) << " " 
+		<<_incs(1) << " " <<_incs(2)<<endl();
+	Debug::error() << " span(dim): " << _span(dim)
+		<< " origin(dim):" << origin(dim)  << " dim = " << (int)dim<< endl();
 	Debug::error() << "spanIterator: offset " << offset << endl(); 
-	Debug::error() << "spanIterator: diff " 
-		<< offset+diff*_incs(dim) << endl();
+	Debug::error() << "spanIterator: diff = " << diff << endl();
+
 	return ArrayIterator<ValueType>(
 			_data+offset
 			, _data+offset+diff*_incs(dim)
@@ -168,13 +174,14 @@ ArrayWriter<T,D>::positionOf(const ArrayIterator<T>& it) const
 	Point<uint32_t, D> result;
 	T* ptr = it.ptr();
 	kiwi::uint32_t dist = ptr - _data;
-	Debug::print()<<"posOf dist = "<< dist 
+/*	Debug::print()<<"posOf dist = "<< dist 
 		<< " incs " << _incs[0] << " " << _incs[1]
 		<< endl();
-	for(int i = D-1; i>=0; --i )
+*/
+	for(int i = 0; i<D; ++i )
 	{
-		result[i] = dist % _incs(i);
-		dist = dist/_incs(i);
+		result[i] = (dist % _incs(i+1))/_incs(i);
+		dist -= result[i];
 	}
 	Debug::print()<<"posOf "<< result[0] << " " << result[1] << endl();
 	return result;

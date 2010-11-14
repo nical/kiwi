@@ -49,6 +49,7 @@ public:
 	inline bool prev() { return --(*this); }
 	inline ValueType& operator * () { return *_ptr; }
 	inline ValueType& get() { return *_ptr; }
+	inline ValueType* ptr() const { return _ptr; } 
 	bool operator == (const GenericIterator<ValueType>& it)
 		{ return _ptr == it.ptr; }
 	inline bool operator != (const GenericIterator<ValueType>& it) {return !(*this == it); }
@@ -75,6 +76,7 @@ public:
 	inline bool prev() { return ++(*this); }
 	inline ValueType operator * () { return *_ptr;}
 	inline ValueType get() {return *_ptr;}
+	inline const ValueType* const ptr() const { return _ptr; }
 	
 	inline bool operator == (const GenericConstIterator<ValueType>& it)
 		{ return _ptr == it.ptr; }

@@ -100,10 +100,22 @@ public:
 	 * @param origin the first element pointed by the span iterator
 	 */ 
 	ArrayIterator<TValueType> getSpanIterator(
-		Point<uint32_t, TDimension> origin
+		const Point<uint32_t, TDimension>& origin
+		, uint8_t dim  
+		) const ;
+
+	/**
+	 * @brief Returns an iterator that browses through a span
+	 * 
+	 * @param origin the first element pointed by the span iterator
+	 * @param dim The dimension in which we want to iterate (x,y..)
+	 */ 
+	ArrayIterator<TValueType> getSpanIterator(
+		const ArrayIterator<TValueType>& origin
 		, uint8_t dim  
 		) const ;
 	
+	Point<uint32_t,TDimension> positionOf(const ArrayIterator<TValueType>& it) const;
 	
 protected:
  ValueType* _data;

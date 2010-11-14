@@ -22,7 +22,7 @@ ArrayIterator<T>::ArrayIterator(T* dataPtr, T* endPtr, unsigned int increment)
 {
 	assert( dataPtr <= _end );
 	parent::_ptr = dataPtr;
-	Debug::print() << "ArrayIterator::increment = " << _increment <<endl();
+	//Debug::print() << "ArrayIterator::increment = " << _increment <<endl();
 }
 
 template<typename T>

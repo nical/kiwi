@@ -1,6 +1,6 @@
 <h1> Kiwi </h1>
 
-A generic and easy to use pipeline system. 
+A generic and easy to use node compositor library for C++. 
 
 
 <img src='http://img808.imageshack.us/img808/4377/kiwiboxespng01.png' border='0'/>
@@ -26,12 +26,13 @@ kiwi 0.2.2
 Kiwi is still at an early stage, and interfaces are subject to change.
 
 <h3> Implemented </h3>
- - Resource base class with all the connection systeme
- - Filter base class 
+ - The Node base class with all the connection system
+ - Filter and Container base classes 
+ - Some generic Containers (ArrayContainer, MultiArrayContainer, cairo::ImageContainer, Value ...)
 
-<h3> Currently in developement </h3>
- - The generic ArrayData Resource
- - A simple string container
+<h3> Currently in development </h3>
+ - Pipeline classes
+ - Imaging filters using cairo
 
 <h3> TODO </h3>
 What kiwi actually needs:

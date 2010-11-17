@@ -48,10 +48,21 @@ SimplePipeline::SimplePipeline()
 bool SimplePipeline::contains(Node* node)
 {
 	ScopedBlockMacro(s1, "kiwi::core::SimplePipeline: contains");
-	Filter* fPtr = dynamic_cast<Filter*>(node);
-	if(fPtr)
+	
+	for(std::list<Filter*>::iterator it = _filters.begin()
+		; it != _filters.end()
+		; ++it)
 	{
-		if(findFilter(fPtr) >= 0) return true;
+		if( static_cast<Node*>( *it ) == node )
+			return true;
+	}
+	//for (int i = 0; i < _filters.size(); ++i)
+	for(std::list<Container*>::iterator it = _containers.begin()
+		; it != _containers.end()
+		; ++it)
+	{
+		if( static_cast<Node*>( *it ) == node )
+			return true;
 	}
 	
 	// TODO findResource
@@ -96,10 +107,6 @@ bool SimplePipeline::add(Node* toAdd)
 	return false;
 }
 
-unsigned int SimplePipeline::index(unsigned int x, unsigned int y)
-{
-	return x + y * _filters.size();
-}
 
 void SimplePipeline::update()
 {
@@ -113,7 +120,11 @@ void SimplePipeline::update()
 void SimplePipeline::process()
 {
 	ScopedBlockMacro(s1, "kiwi::core::SimplePipeline::process()");
-
+	for(std::list<Filter*>::iterator it = _filters.begin()
+		; it != _filters.end(); ++it)
+	{
+		(*it)->process();
+	}
 
 }
 

@@ -26,7 +26,7 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
+#include "SimplePipeline.hpp"
 #include <set>
 #include <utility>
 
@@ -36,19 +36,19 @@ namespace core
 {
 
 
-Pipeline::Pipeline()
+SimplePipeline::SimplePipeline()
 	: AbstractPipeline()
 {
-	ScopedBlockMacro(s1, "kiwi::core::Pipeline: constructor");
+	ScopedBlockMacro(s1, "kiwi::core::SimplePipeline: constructor");
 
 }
 
 
 
-bool Pipeline::contains(Node* node)
+bool SimplePipeline::contains(Node* node)
 {
-	ScopedBlockMacro(s1, "kiwi::core::Pipeline: contains");
-	Filter* fPtr = dynamic_cast<Filter*>(resource);
+	ScopedBlockMacro(s1, "kiwi::core::SimplePipeline: contains");
+	Filter* fPtr = dynamic_cast<Filter*>(node);
 	if(fPtr)
 	{
 		if(findFilter(fPtr) >= 0) return true;
@@ -59,116 +59,60 @@ bool Pipeline::contains(Node* node)
 }
 
 
-int Pipeline::findFilter(Filter* toFind)
+int SimplePipeline::findFilter(Filter* toFind)
 {
-	for (int i = 0; i < _filters.size(); ++i)
-		if(_filters[i] == toFind) return i;
+	for(std::list<Filter*>::iterator it = _filters.begin()
+		; it != _filters.end(); ++it)
+	{
+		
+	}
+	//for (int i = 0; i < _filters.size(); ++i)
+	for(std::list<Container*>::iterator it = _containers.begin()
+		; it != _containers.end(); ++it)
+	{
+		
+	}
+	
 	return -1; //if not found
 }
 
 
-bool Pipeline::add(Resource* toAdd)
+bool SimplePipeline::add(Node* toAdd)
 {
-	ScopedBlockMacro(s1, "kiwi::core::Pipeline::add()");
+	ScopedBlockMacro(s1, "kiwi::core::SimplePipeline::add()");
 	if(!contains(toAdd))
 	{
-		if(toAdd->isAFilter())
+		if(toAdd->nodeType() == Node::FILTER)
 		{
 			_filters.push_back(static_cast<Filter*>(toAdd));
 			return true;
 		}
 		else
 		{
-			_resourceList.push_front(toAdd);
+			_containers.push_back( static_cast<Container*>(toAdd) );
 			return true;
 		}
 	}
 	return false;
 }
 
-unsigned int Pipeline::index(unsigned int x, unsigned int y)
+unsigned int SimplePipeline::index(unsigned int x, unsigned int y)
 {
 	return x + y * _filters.size();
 }
 
-void Pipeline::update()
+void SimplePipeline::update()
 {
-	unsigned tableSize = _filters.size()*_filters.size();
-	// possibly reallocate the table
-	if(_filters.size() != _lastSize)
-	{
-		delete[] _lookupTable;
-		_lookupTable = new char[tableSize];
-	}
-	// init the table
-	for( unsigned i = 0; i < tableSize; ++i)
-	{
-		_lookupTable[i] = 0;
-	}
-
-	// find direct relations 
-	for(unsigned int i = 0; i < _filters.size();++i)
-	{
-		Filter* F = _filters[i];
-		std::set<unsigned int> prevFilters;
-		for(int j = F->getReaderInputCount() - 1; j >= 0; ++j )
-		{
-			int fi = findFilter( F->readerInputPort(j).resource() );
-			if(fi >= 0) prevFilters.insert( fi );
-		}
-		for(std::set<unsigned int>::iterator it = prevFilters.begin()
-		; it != prevFilters.end()
-		; ++it)
-		{	//TODO  syntaxe error with iterators here
-			_lookupTable[index(i, *it)] = 1;
-			_lookupTable[index(*it, i)] = -1;
-		}
-	}
-
-	// indirect relations
-	for(unsigned int i = 0; i < _filters.size();++i)
-	{
-		updateTableRec(i, i);
-	}
+	
 
 }
 	
 	
 
-void Pipeline::updateTableRec(unsigned index1, unsigned index2)
-{
-	if(index1 != index2)
-	{
-		for(unsigned i3 = 0; i < _filters.size(); ++i)
-			if(_lookupTable[index(index2, i3)] == -1)
-			{
-				if(_lookupTable[index(index1, i3)] != -1;)
-				{
-					_lookupTable[index(index1, i3)] = -2;
-					_lookupTable[index(i3, index1)] = 2;
-				}
-				updateTableRec(index1, i3);
-			}
-	}
-	else
-	{
-		for(unsigned i3 = 0; i < _filters.size(); ++i)
-			if(_lookupTable[index(index2, i3)] == -1)
-			{
-				updateTableRec(index1, i3);
-			}
-	}
-}
 	
-
-void Pipeline::printErrors()
+void SimplePipeline::process()
 {
-	
-}
-
-void Pipeline::process()
-{
-	ScopedBlockMacro(s1, "kiwi::core::Pipeline::process()");
+	ScopedBlockMacro(s1, "kiwi::core::SimplePipeline::process()");
 
 
 }

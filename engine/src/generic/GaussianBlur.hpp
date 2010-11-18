@@ -27,83 +27,70 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+/**
+ * @file GaussianBlur.hpp
+ * @brief Header file for the generic gaussian blur filter
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.2
+ */
+
 #pragma once
 
-#ifndef KIWI_SIMPLEPIPELINE_HPP
-#define KIWI_SIMPLEPIPELINE_HPP
+#ifndef KIWI_GENERIC_GAUSSIANBLUR_HPP
+#define KIWI_GENERIC_GAUSSIANBLUR_HPP
 
-#include "core/Container.hpp"
 #include "core/Filter.hpp"
-#include "core/Commons.hpp"
-#include "AbstractPipeline.hpp"
-
-#include <list>
 
 namespace kiwi
 {
-namespace core
-{
+namespace generic
+{	
 
 /**
- * @class Pipeline
- * @brief A meta-Filter class
+ * @brief Generic gaussian blur Filter.
  * 
- * The Pipeline Class is designed 
- */ 	
-class SimplePipeline : public AbstractPipeline
+ * This Filter can be applied to any array based Container of dimension superior
+ * to zero and with a scalar type that has basic arithmetic operators (+,-,/...).
+ * 
+ * <h2> Input ports </h1>
+ * <h3> Reader </h3>
+ * The first Reader input port corresponds to the blur strength:
+ * <ul>
+ *	<li> if a Value_uint32 is connected, the blur will be applied uniformly.</li>
+ * 	<li> if an ArrayNd_uint8 is connected (with N equal to TDimension), this input
+ * will be used as a mask that regulates the blur radius for each fragment.</li>
+ * <br/>
+ * The next K Reader input ports are the image inputs that we want to blur. They must
+ * be of any type compatible with ArrayReader<TValueType, TDimension> (Container
+ * class deriving from AbstractArrayContainer). The number K of these ports is not
+ * limited.
+ */ 
+template<typename TValueType, unsigned TDimension>
+class GaussianBlur<TValueType, TDimension>
 {
 public:
-	SimplePipeline();
-
-	void process();
-
-	bool contains(Node* node);
-	
-	bool add(Node* toAdd);
-	
-	bool remove(Node* toRemove);
-
 	/**
-	 * @brief Prepares the pipeline before execution.
-	 * 
-	 * isReady will return false and nbErrors() will be different from 0
-	 * if an error occurs while updating.
-	 * In this case these errors, they can be retrieved one by one, 
-	 * calling popError().
+	 * @brief Constructor.
 	 */ 
-	void update();
-		
+	GaussianBlur();
+	
 	/**
-	 * @brief Returns the number of remaining errors since last update.
+	 * @brief Process method.
 	 * 
-	 * This value is decremented each time an error is poped using popError()
-	 */ 	
-	kiwi::uint32_t nbErrors();
+	 * Implements the algorithm.
+	 */ 
+	void process():
 	
 	/**
-	 * @brief Pops an error from the update error's fifo.
+	 * @brief called when a port is connected/disconnected.
 	 */ 
-	kiwi::string popError();
-	
-	
+	void layoutChanged();
 	
 protected:
-	
-	unsigned int index(unsigned int x, unsigned int y);
-	int findFilter(Filter* filter);
-	typedef std::pair< unsigned int, unsigned int> constraints;
-	
-private:
-	std::list<Filter*> _filters;
-	std::list<Container*> _containers;
-	
-	uint32_t _nbErrors;
-	
-};	
+	uint8_t _nbInputImages;
+};
 
-}//namespace core
-}//namespace kiwi
-
-
+} //namespace
+} //namespace
 
 #endif

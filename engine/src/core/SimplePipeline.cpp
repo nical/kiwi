@@ -38,6 +38,7 @@ namespace core
 
 SimplePipeline::SimplePipeline()
 	: AbstractPipeline()
+	, _nbErrors(0)
 {
 	ScopedBlockMacro(s1, "kiwi::core::SimplePipeline: constructor");
 
@@ -56,7 +57,7 @@ bool SimplePipeline::contains(Node* node)
 		if( static_cast<Node*>( *it ) == node )
 			return true;
 	}
-	//for (int i = 0; i < _filters.size(); ++i)
+	
 	for(std::list<Container*>::iterator it = _containers.begin()
 		; it != _containers.end()
 		; ++it)
@@ -64,28 +65,10 @@ bool SimplePipeline::contains(Node* node)
 		if( static_cast<Node*>( *it ) == node )
 			return true;
 	}
-	
-	// TODO findResource
+
 	return false;
 }
 
-
-int SimplePipeline::findFilter(Filter* toFind)
-{
-	for(std::list<Filter*>::iterator it = _filters.begin()
-		; it != _filters.end(); ++it)
-	{
-		
-	}
-	//for (int i = 0; i < _filters.size(); ++i)
-	for(std::list<Container*>::iterator it = _containers.begin()
-		; it != _containers.end(); ++it)
-	{
-		
-	}
-	
-	return -1; //if not found
-}
 
 
 bool SimplePipeline::add(Node* toAdd)
@@ -107,9 +90,35 @@ bool SimplePipeline::add(Node* toAdd)
 	return false;
 }
 
+bool SimplePipeline::remove(Node* toRemove)
+{
+	if( toRemove->nodeType() == Node::FILTER )
+	{
+		_filters.remove( static_cast<Filter*>(toRemove) );
+	}
+	else
+	{
+		_containers.remove( static_cast<Container*>(toRemove) );
+	}
+}
+
+kiwi::uint32_t SimplePipeline::nbErrors()
+{
+	return _nbErrors;
+}
+
+/**
+ * @brief Pops an error from the update error's fifo.
+ */ 
+kiwi::string SimplePipeline::popError()
+{
+	return kiwi::string("not implemented yet...");
+}
+
 
 void SimplePipeline::update()
 {
+	
 	
 
 }

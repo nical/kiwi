@@ -5,7 +5,6 @@
 
 #include "core/Commons.hpp"
 
-#include "core/Filter.hpp"
 #include "core/CanonicalFilter.hpp"
 
 #include "generic/ArrayContainer.hpp"
@@ -237,21 +236,5 @@ void ArrayContainerTest()
 	delete[] preAllocData;
 }
 
-/*
-int main()
-{
-
-ScopedBlockMacro(s2, "kiwi::TestArrayContainer");
-
-Debug::beginBlock("int main() ");
-
-	ArrayTest<int, 2, 2>();
-
-	DEBUG_ONLY( Debug::print() << "woooooat !" << endl; )
-	
-Debug::endBlock();
-	return 0;
-}
-*/
 
 #endif

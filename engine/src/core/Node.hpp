@@ -745,7 +745,10 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 	myPort.bind(toBind); 
 }
 
-
+/**
+ * @brief optionnal macro that produces typedef vType ValueType;
+ */ 
+#define ValueTypeMacro( vType ) typedef vType ValueType;
 
 }//namespace core
 }//namespace kiwi

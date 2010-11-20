@@ -53,7 +53,7 @@ template <typename TInputType>
 class IterativeFilter : public core::CanonicalFilter
 {
 public: 
-	typedef core::CanonicalFilter Parent;
+	ParentMacro(Parent)
 	typedef TInputType InputType;
 	/**
 	 * @brief constructor

@@ -57,6 +57,7 @@ typedef std::string string;
 typedef unsigned char portIndex_t;
 
 
+#define ParentMacro( pClass ) typedef pClass Parent;
 
 }
 

@@ -66,7 +66,7 @@ public:
 	typedef ArrayConstIterator<TValueType> IteratorType;
 	typedef Point<unsigned int, TDimension+1> IncsType;
 	typedef Point<unsigned int, TDimension> Coordinates;
-	// see: template rebinding
+	
 	
 	// -----------------------------------------------------------------
 	/**

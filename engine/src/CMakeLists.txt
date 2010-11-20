@@ -6,6 +6,7 @@ include_directories ( ${CAIRO_INCLUDE_DIR} )
 SET(KIWI_SRC ${KIWI_SRC}
 		utils/DebugOutputStream.cpp
 		core/Node.cpp
+		core/CanonicalFilter.cpp
 		core/SimplePipeline.cpp
 		cairo/ImageContainer/ImageContainer.cpp
 		)

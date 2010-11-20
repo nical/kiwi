@@ -62,7 +62,7 @@ class ArrayIterator : public GenericIterator<ValueTypeT>
 public:
 	// typedefs
 	typedef ValueTypeT ValueType;
-	typedef GenericIterator<ValueTypeT> parent;
+	typedef GenericIterator<ValueTypeT> Parent;
 
 	/** 
 	 * @brief Constructor. 
@@ -130,7 +130,7 @@ class ArrayConstIterator : public GenericConstIterator<ValueTypeT>
 public:
 	// -------------------------------------------------------- typedefs
 	typedef ValueTypeT ValueType;
-	typedef GenericConstIterator<ValueTypeT> parent;
+	typedef GenericConstIterator<ValueTypeT> Parent;
 	// ----------------------------------------------------- constructor
 
 	/** 

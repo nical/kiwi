@@ -36,6 +36,13 @@
 #include "generic/AbstractArrayContainer.hpp"
 
 
+/**
+ * @file ArrayWriter.hpp
+ * @brief Header file for the generic Writer of array based containers.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.1
+ */
+
 namespace kiwi
 {
 namespace generic
@@ -55,6 +62,7 @@ class ArrayWriter : public core::Writer
 {
 public:
 	typedef TValueType ValueType;
+	typedef ArrayConstIterator<TValueType> IteratorType;
 	typedef Point<unsigned int, TDimension+1> IncsType;
 	typedef Point<unsigned int, TDimension> Coordinates;
 	
@@ -86,7 +94,7 @@ public:
 	/**
 	 * @brief Unsafe yet faster access method.
 	 */ 
-	inline const ValueType* getDataPointer() const { return _data; } 	// TODO: const stuff
+	inline const ValueType* getDataPointer() const { return _data; } 
 	
 	/**
 	 * @brief Returns an iterator to the beguinning of the data.

@@ -72,7 +72,7 @@ ArrayConstIterator<T>::ArrayConstIterator(T* dataPtr, T* endPtr, unsigned int in
 {
 	assert( dataPtr <= endPtr );
 	parent::_ptr = dataPtr;
-	Debug::print() << "ArrayConstIterator::increment = " << _increment << endl();
+	//Debug::print() << "ArrayConstIterator::increment = " << _increment << endl();
 }
 
 template<typename T>

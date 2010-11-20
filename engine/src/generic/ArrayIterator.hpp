@@ -29,7 +29,7 @@
 
 /**
  * @file ArrayIterator.hpp
- * @brief Header file for ArrayContainer's iterator.
+ * @brief Header file for ArrayContainer's iterators.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
  * @version 0.1
  */

@@ -26,12 +26,23 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
+/**
+ * @file ArrayContainer.hpp
+ * @brief Header file for an array based Container.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.1
+ */
+
+
 #pragma once
 
 #ifndef KIWI_ARRAYDATA_HPP
 #define KIWI_ARRAYDATA_HPP
 
 #include "generic/AbstractArrayContainer.hpp"
+#include "generic/ArrayReader.hpp"
+#include "generic/ArrayWriter.hpp"
 #include "generic/Point.hpp"
 #include "utils/types.hpp"
 #include <boost/lexical_cast.hpp>
@@ -52,6 +63,12 @@ class ArrayContainer : public AbstractArrayContainer<TValueType, TDimension>
 {
 public:
 	typedef TValueType ValueType;
+	typedef ArrayReader<TValueType, TDimension> ReaderType;
+	typedef ArrayWriter<TValueType, TDimension> WriterType;
+	typedef ArrayConstIterator<TValueType> ConstIteratorType;
+	typedef ArrayIterator<TValueType> IteratorType;
+	typedef AbstractArrayContainer<TValueType, TDimension> Parent;
+	
 	/**
 	 * @brief The Point type used to adress a value in this container.
 	 */ 
@@ -66,7 +83,7 @@ public:
 	/**
 	 * @brief An enum for the constructor's name hint.
 	 */ 
-	enum{ NUMBERS = 0, RVBA = 1, CMJN = 2, XYZ = 3, ABCD = 4, MONO = 5 };
+	enum{ NUMBERS = 0, RGBA = 1, CMYK = 2, XYZ = 3, ABCD = 4, MONO = 5 };
 	enum{ READER_OUT = 0, WRITER_OUT = 1 };
 	
 	/**

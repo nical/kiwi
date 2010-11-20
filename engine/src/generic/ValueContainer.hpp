@@ -43,7 +43,10 @@ namespace kiwi
 namespace generic
 {
 
-using namespace kiwi::core;
+
+
+template<typename TValueType> class ValueReader;
+template<typename TValueType> class ValueWriter;
 
 // ----------------------------------------------------------- Interface
 /**
@@ -52,11 +55,14 @@ using namespace kiwi::core;
  * a Value<T> port type
  */ 
 template <typename T>
-class AbstractValueContainer : public virtual Container
+class AbstractValueContainer : public virtual core::Container
 {
 public:
+	ReaderTypeMacro(ValueReader<T>)
+	WriterTypeMacro(ValueWriter<T>)
+
 	/**
-	 * returns the value.
+	 * @brief returns the value.
 	 */ 
 	virtual T& getValue(portIndex_t port = 0) = 0;
 	
@@ -86,8 +92,8 @@ public:
 	: _data(init)
 	{
 		// string("value_")+types::str<TValueType>()
-		Node::addWriterOutputPort();
-		Node::addReaderOutputPort();
+		core::Node::addWriterOutputPort();
+		core::Node::addReaderOutputPort();
 	}
 	
 
@@ -102,12 +108,12 @@ private:
 
 // ----------------------------------------------------- Reader / Writer
 template<typename TValueType>
-class ValueReader : public Reader
+class ValueReader : public core::Reader
 {
 public:
 	typedef TValueType ValueType;
 	// -----------------------------------------------------------------
-	ValueReader(const Container::ReaderInputPort& port)
+	ValueReader(const core::Container::ReaderInputPort& port)
 	{
 		assert( port.connectedOutput()->subPort()->node() );
 		
@@ -126,6 +132,8 @@ public:
 		_port = port.connectedOutput()->subPort()->index();
 	}
 	
+	uint32_t nbScalarElements() const {return 1;}
+	
 	virtual ValueType get() {return _resource->getValue(_port);}
 private:
 	AbstractValueContainer<ValueType>* _resource;
@@ -133,12 +141,12 @@ private:
 };
 
 template<typename TValueType>
-class ValueWriter : public Writer
+class ValueWriter : public core::Writer
 {
 public:
 	typedef TValueType ValueType;
 	// -----------------------------------------------------------------
-	ValueWriter(const Container::WriterInputPort& port)
+	ValueWriter(const core::Container::WriterInputPort& port)
 	{
 		_resource = dynamic_cast<AbstractValueContainer<TValueType>* >(
 			port.connectedOutput()->subPort()->node() 
@@ -155,6 +163,8 @@ public:
 		)//DEBUG_ONLY
 		_port = port.connectedOutput()->subPort()->index();
 	}
+	
+	uint32_t nbScalarElements() const { return 1; }
 	
 	virtual ValueType get() {return _resource->getValue(_port);}
 	virtual void set(ValueType val) {_resource->getValue(_port) = val; }

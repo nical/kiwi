@@ -26,66 +26,30 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file Contrast.hpp
+ * @brief Header file for a Nd contrast Filter.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.1
+ */
 
 
-namespace kiwi
+#pragma once
+#ifndef KIWI_IMAGE_CONTRAST_HPP
+#ifndef KIWI_IMAGE_CONTRAST_HPP
+
+template<typename TValueType, unsigned int TDimension>
+class Contrast : public IterativeFilter< AbstractArrayContainer<TValueType, TDimension> >
 {
-namespace generic
-{
-
-
-
-template <typename InputType>
-IterativeFilter<InputType>::IterativeFilter(uint32_t nbWriters)
-: Parent(nbWriters)
-{
-	for(unsigned i = 0; i < nbWriters; ++i)
-		addReaderInputPort();
-}
-
-
-
-
-void IterativeFilter<InputType>::process()
-{
-ScopedBlockMacro(__scop, "IterativeFilter::process()")
-
-	uint32_t nbWriters = getWriterInputCount();
-	
-	InputType::ReaderType::IteratorType in[nbWriters]
-	InputType::WriterType::IteratorType out[nbWriters] 
-	
-	for(uint32_t i = 0; i < nbWriters)	
-	{
-		InputType::ReaderType reader( readerInputPort(i) );
-		InputType::WriterType writer( readerInputPort(i) );
-		insize = in[i].nbScalarElements();
-		outsize = out[i].nbScalarElements();
-		if(size == 0) size = insize;
-		if( (size != insize) || (size != outsize) )
-		{
-			Debug::error() << "IterativeFilter::process error. size doesn't match." << endl();
-			assert("IterativeFilter" == "size doesn't match");
-			return;
-		}
-		
-		in[i] = reader.getIterator();
-		out[i] = writer.getIterator();
-	}
-	
-	do{
-		processFragment(in,out,i);
-		for(uint32_t i = 0; i < nbWriters; ++i)
-		{
-			++(out[i])
-			++(in[i]);
-		}
-	while( !out[0].isDone() )
-}
+public:
+// -----------------------------------------------------------------------------
+	typedef TValueType ValueType;
+	typedef AbstractArrayContainer<TValueType, TDimension> InputType;
+// -----------------------------------------------------------------------------
+	Contrast();
+	void processFragment();
 	
 
-	
-	
-	
-}// namsespace
-}// namsespace
+};
+
+#endif

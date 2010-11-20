@@ -26,8 +26,6 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-
 /**
  * @file Node.hpp
  * @brief Header file for the base class of every kiwi resources and filters.
@@ -42,10 +40,10 @@
 #include <list>
 #include <vector>
 
-
-
 #include "Commons.hpp"
 #include <assert.h>
+
+
 /**
  * @namespace kiwi
  * Kiwi's main namespace
@@ -686,6 +684,7 @@ class Reader
 {
 public:
 	virtual ~Reader() {}
+	virtual uint32_t nbScalarElements() const = 0;
 };
 
 /**
@@ -696,6 +695,7 @@ class Writer
 {
 public:
 	virtual ~Writer() {}
+	virtual uint32_t nbScalarElements() const = 0;
 };
 
 
@@ -744,8 +744,6 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 { 
 	myPort.bind(toBind); 
 }
-
-
 
 
 

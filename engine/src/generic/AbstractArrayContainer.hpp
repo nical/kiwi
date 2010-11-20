@@ -34,7 +34,8 @@
 
 #include "core/Container.hpp"
 #include "generic/Point.hpp"
-
+//#include "generic/ArrayReader.hpp"
+//#include "generic/ArrayWriter.hpp"
 
 namespace kiwi
 {
@@ -45,6 +46,8 @@ namespace kiwi
 namespace generic
 {
 
+template <typename TValueType, unsigned int TDimension> class ArrayReader;
+template <typename TValueType, unsigned int TDimension> class ArrayWriter;
 
 /**
  * @brief Interface class for containers based on an array structure.
@@ -54,6 +57,8 @@ class AbstractArrayContainer : public core::Container
 {
 public:
 	typedef TValueType ValueType;
+	typedef ArrayReader<TValueType, TDimension> ReaderType;
+	typedef ArrayWriter<TValueType, TDimension> WriterType;
 	// -----------------------------------------------------------------------
 	/**
 	 * Returns a pointer to the first element associated to a given port.

@@ -86,6 +86,16 @@ public:
 	ValueType get(unsigned int i) const;
 	
 	/**
+	 * @brief span sizes.
+	 */ 
+	const Coordinates& spanSize() const { return _span; }
+	
+	/**
+	 * @brief returns the total amount of data
+	 */ 
+	uint32_t nbScalarElements() const ;
+	
+	/**
 	 * @brief Unsafe yet faster access method.
 	 */ 
 	inline const ValueType* getDataPointer() const { return _data; } 	// TODO: const stuff

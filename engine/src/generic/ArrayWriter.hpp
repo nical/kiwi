@@ -92,6 +92,16 @@ public:
 	void set(unsigned int i, ValueType value);
 	
 	/**
+	 * @brief span sizes.
+	 */ 
+	const Coordinates& spanSize() const { return _span; }
+	
+	/**
+	 * @brief Returns the number of scalar objects in the Container.
+	 */ 
+	uint32_t nbScalarElements() const ;
+	
+	/**
 	 * @brief Unsafe yet faster access method.
 	 */ 
 	inline const ValueType* getDataPointer() const { return _data; } 

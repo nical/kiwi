@@ -49,12 +49,12 @@ namespace generic
 {	
 
 
-template <typename InputType>
+template <typename TInputType>
 class IterativeFilter : public core::CanonicalFilter
 {
 public: 
 	typedef core::CanonicalFilter Parent;
-
+	typedef TInputType InputType;
 	/**
 	 * @brief constructor
 	 */ 
@@ -70,8 +70,8 @@ public:
 	 * @brief The method to override. It is called for each fragment.
 	 */ 
 	virtual void processFragment(
-		const ArrayConstIterator& in
-		, const ArrayIterator& out 
+		InputType::ReaderType::IteratorType* in
+		, InputType::WriterType::IteratorType* out 
 		, uint32_t portIndex ) = 0;
 
 

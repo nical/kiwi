@@ -95,6 +95,18 @@ T ArrayReader<T,D>::get(unsigned int i) const
 	return _data[i];
 }
 
+
+template<typename T, unsigned int D>
+uint32_t
+ArrayReader<T,D>::nbScalarElements() const
+{
+	uint32_t res = _span(0);
+	for(unsigned i = 1; i < D; ++i)
+		res *= _span(i);
+	return res;
+}
+
+
 template<typename T, unsigned int D>
 ArrayConstIterator<T> 
 ArrayReader<T,D>::getIterator() const

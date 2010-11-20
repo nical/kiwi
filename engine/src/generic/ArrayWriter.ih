@@ -113,6 +113,16 @@ ArrayWriter<T,D>::get(unsigned int i) const
 }
 
 
+template<typename T, unsigned int D>
+uint32_t
+ArrayWriter<T,D>::nbScalarElements() const
+{
+	uint32_t res = _span(0);
+	for(unsigned i = 1; i < D; ++i)
+		res *= _span(i);
+	return res;
+}
+
 
 template<typename T, unsigned int D>
 ArrayIterator<T> 

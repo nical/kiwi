@@ -45,27 +45,31 @@ IterativeFilter<InputType>::IterativeFilter(uint32_t nbWriters)
 
 
 
-
+template <typename InputType>
 void IterativeFilter<InputType>::process()
 {
 ScopedBlockMacro(__scop, "IterativeFilter::process()")
 
+	
+
 	uint32_t nbWriters = getWriterInputCount();
 	
-	InputType::ReaderType::IteratorType in[nbWriters]
-	InputType::WriterType::IteratorType out[nbWriters] 
+	InputIteratorType in[nbWriters];
+	OutputIteratorType out[nbWriters];
 	
-	for(uint32_t i = 0; i < nbWriters)	
+	
+	uint32_t size = 0;
+	for(unsigned i = 0; i < nbWriters; ++i)	
 	{
-		InputType::ReaderType reader( readerInputPort(i) );
-		InputType::WriterType writer( readerInputPort(i) );
-		insize = in[i].nbScalarElements();
-		outsize = out[i].nbScalarElements();
-		if(size == 0) size = insize;
+		typename InputType::ReaderType reader( readerInputPort(i) );
+		typename InputType::WriterType writer( writerInputPort(i) );
+		uint32_t insize = reader.nbScalarElements();
+		uint32_t outsize = writer.nbScalarElements();
+		if( size == 0 ) size = insize;
 		if( (size != insize) || (size != outsize) )
 		{
 			Debug::error() << "IterativeFilter::process error. size doesn't match." << endl();
-			assert("IterativeFilter" == "size doesn't match");
+			assert(false);
 			return;
 		}
 		
@@ -73,14 +77,16 @@ ScopedBlockMacro(__scop, "IterativeFilter::process()")
 		out[i] = writer.getIterator();
 	}
 	
+	preProcess();
+	
 	do{
-		processFragment(in,out,i);
+		processFragment(in,out);
 		for(uint32_t i = 0; i < nbWriters; ++i)
 		{
-			++(out[i])
+			++(out[i]);
 			++(in[i]);
 		}
-	while( !out[0].isDone() )
+	}while( !out[0].isDone() );
 }
 	
 

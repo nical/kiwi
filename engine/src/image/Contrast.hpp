@@ -36,10 +36,18 @@
 
 #pragma once
 #ifndef KIWI_IMAGE_CONTRAST_HPP
-#ifndef KIWI_IMAGE_CONTRAST_HPP
+#define KIWI_IMAGE_CONTRAST_HPP
+
+#include "generic/IterativeFilter.hpp"
+#include "generic/ArrayIterator.hpp"
+
+namespace kiwi
+{
+namespace image
+{
 
 template<typename TValueType, unsigned int TDimension>
-class Contrast : public IterativeFilter< AbstractArrayContainer<TValueType, TDimension> >
+class Contrast : public IterativeFilter< AbstractArrayContainer< TValueType, TDimension > >
 {
 public:
 // -----------------------------------------------------------------------------
@@ -47,9 +55,19 @@ public:
 	typedef AbstractArrayContainer<TValueType, TDimension> InputType;
 // -----------------------------------------------------------------------------
 	Contrast();
-	void processFragment();
+	
+	void preProcess();
+	
+	void processFragment(kiwi::generic::ArrayConstIterator<TValueType>* in
+		, kiwi::generic::ArrayIterator<TValueType>* out );
 	
 
 };
+
+
+}// namespace
+}// namespace
+
+#include "Contrast.ih"
 
 #endif

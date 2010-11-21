@@ -1,4 +1,5 @@
 #include "core/Commons.hpp"
+#include "generic/Point.hpp"
 
 #include "generic/PointTest.hpp"
 #include "core/FilterTest.hpp"
@@ -8,7 +9,7 @@
 #include "core/MetaFilterTest.hpp"
 #include "image/CairoImageContainerTest.hpp"
 #include "core/SimplePipelineTest.cpp"
-#include "generic/Point.hpp"
+#include "image/ContrastTest.hpp"
 
 
 int main()

@@ -41,7 +41,7 @@
 #define KIWI_ITERATIVEFILTER_HPP
 
 #include "core/Commons.hpp"
-#include "CanonicalFilter.hpp"
+#include "core/CanonicalFilter.hpp"
 
 namespace kiwi
 {
@@ -53,8 +53,11 @@ template <typename TInputType>
 class IterativeFilter : public core::CanonicalFilter
 {
 public: 
-	ParentMacro(Parent)
+	ParentMacro(core::CanonicalFilter)
 	typedef TInputType InputType;
+	typedef typename InputType::ReaderType::IteratorType InputIteratorType;
+	typedef typename InputType::WriterType::IteratorType OutputIteratorType;
+	
 	/**
 	 * @brief constructor
 	 */ 
@@ -67,12 +70,20 @@ public:
 	void process();
 	
 	/**
+	 * @brief called once, before processFragment()
+	 *
+	 * This method can be overloaded to execute some code before the data is 
+	 * iterated (typically to retrieve data from additionnal input ports).
+	 *  
+	 */ 
+	virtual void preProcess() {}
+	
+	/**
 	 * @brief The method to override. It is called for each fragment.
 	 */ 
 	virtual void processFragment(
-		InputType::ReaderType::IteratorType* in
-		, InputType::WriterType::IteratorType* out 
-		, uint32_t portIndex ) = 0;
+		InputIteratorType* in
+		, OutputIteratorType* out ) = 0;
 
 
 };

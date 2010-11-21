@@ -62,7 +62,7 @@ class ArrayWriter : public core::Writer
 {
 public:
 	typedef TValueType ValueType;
-	typedef ArrayConstIterator<TValueType> IteratorType;
+	typedef ArrayIterator<TValueType> IteratorType;
 	typedef Point<unsigned int, TDimension+1> IncsType;
 	typedef Point<unsigned int, TDimension> Coordinates;
 	

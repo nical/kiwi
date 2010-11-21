@@ -7,19 +7,24 @@ namespace image
 
 
 template<typename T, unsigned D>
-void
 Contrast<T,D>::Contrast()
-: IterativeFilter<InputType>
+: IterativeFilter<InputType>(1)
 {
 	// array input automatically added by IterativeFilter's constructor.
-	addReaderInputPort(); // the value giving the strength parameter.
+	Node::addReaderInputPort(); // the value giving the strength parameter.
 }
 	
 
 template<typename T, unsigned D>
 void
-Contrast<T,D>::processFragment(AbstactArrayContainer<T,D>::ReaderType::IteratorType*
-	, AbstactArrayContainer<T,D>::ReaderType::IteratorType* )
+Contrast<T,D>::preProcess()
+{
+	
+}
+
+template<typename T, unsigned D>
+void
+Contrast<T,D>::processFragment(ArrayConstIterator<T>* in, ArrayIterator<T>* out)
 {
 	
 }

@@ -1,0 +1,78 @@
+
+
+namespace kiwi
+{
+namespace generic
+{
+
+
+
+
+template<typename T, unsigned int D>
+GaussianBlur<T, D>::GaussianBlur()
+{
+	ScopedBlockMacro(scp_block, "generic::GaussianBlur::constructor");
+	
+	setLayoutEventEnabled(false);
+	
+	addReaderInputPort(); // radius - value_uint32 or arrayT_uint_8 - Required
+	addReaderInputPort(); // first image input
+	
+	// TODO: add several ports depending on D
+	addWriterInputPort();	
+	
+	//add a reader output that will be available only when the writer
+	//port is connected
+	addReaderOutputPort();
+	
+	setPortEnabled(readerOutputPort(0),false);
+	setLayoutEventEnabled(true);
+}
+
+
+template<typename T, unsigned int D>
+void GaussianBlur<T, D>::process()
+{
+	// a LOT of things to do !
+	
+	// use some boost::mpl loop for each pass (one per dimension)
+	// if mask as radius input, use precomputed kernels (> singleton ?) ?
+	
+	// static foreach dimension (in a different Container buffer)
+		// foreach input 
+			//apply blur in all the correct spans
+		
+	
+}
+
+
+
+// TODO: this is copied from addArrayFilter and needs to be adapted to the multiplicity
+// of the input ports.
+template<typename T, unsigned int D>
+void GaussianBlur<T, D>::layoutChanged()
+{
+DEBUG_ONLY( ScopedBlockMacro(__scop, "generic::GaussianBlur::layoutChanged");  )
+	if(writerInputPort(0).isConnected() )
+	{
+		if( !readerOutputPort(0).isEnabled() )
+		{
+			setPortEnabled(readerOutputPort(0),true);
+			ReaderOutputPort& op
+			= writerInputPort(0).connectedOutput()->node()->readerOutputPort(0);
+			bindPort( readerOutputPort(0), op );
+		}
+	}
+	else
+	{
+		readerOutputPort(0).disconnect();
+		setPortEnabled(readerOutputPort(0),false);	
+	}
+
+}
+
+
+
+
+}// namespace
+}// namespace

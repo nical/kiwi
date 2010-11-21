@@ -83,7 +83,7 @@ void Node::addReaderInputPort()
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderInputCount();
 	_readerInputs.push_back( new InputPort<Reader>(this) );
-	if( isLayoutEventEnabled() ) layoutChanged();
+//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void Node::addReaderOutputPort()
@@ -91,7 +91,7 @@ void Node::addReaderOutputPort()
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderOutputCount();
 	_readerOutputs.push_back( new OutputPort<Reader>(this) );
-	if( isLayoutEventEnabled() ) layoutChanged();
+//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void Node::addWriterInputPort()
@@ -99,7 +99,7 @@ void Node::addWriterInputPort()
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterInputCount();
 	_writerInputs.push_back( new InputPort<Writer>(this) );
-	if( isLayoutEventEnabled() ) layoutChanged();
+//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void Node::addWriterOutputPort()
@@ -107,7 +107,7 @@ void Node::addWriterOutputPort()
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterOutputCount();
 	_writerOutputs.push_back( new OutputPort<Writer>(this) );
-	if( isLayoutEventEnabled() ) layoutChanged();
+//	if( isLayoutEventEnabled() ) layoutChanged();
 
 }
 
@@ -116,28 +116,28 @@ void
 Node::removeReaderInputPort()
 {
 	_readerInputs.pop_back();
-	if( isLayoutEventEnabled() ) layoutChanged();
+//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void 
 Node::removeReaderOutputPort()
 {
 	_readerOutputs.pop_back();
-	if( isLayoutEventEnabled() ) layoutChanged();
+//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void 
 Node::removeWriterInputPort()
 {
 	_writerInputs.pop_back();
-	if( isLayoutEventEnabled() ) layoutChanged();
+//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void 
 Node::removeWriterOutputPort()
 {
 	_readerOutputs.pop_back();
-	if( isLayoutEventEnabled() ) layoutChanged();
+//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 portIndex_t 

@@ -29,7 +29,7 @@
 
 /**
  * @file ArrayIterator.hpp
- * @brief Header file for ArrayContainer's iterator.
+ * @brief Header file for ArrayContainer's iterators.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
  * @version 0.1
  */
@@ -62,7 +62,7 @@ class ArrayIterator : public GenericIterator<ValueTypeT>
 public:
 	// typedefs
 	typedef ValueTypeT ValueType;
-	typedef GenericIterator<ValueTypeT> parent;
+	typedef GenericIterator<ValueTypeT> Parent;
 
 	/** 
 	 * @brief Constructor. 
@@ -75,20 +75,41 @@ public:
 	ArrayIterator(ValueType* dataPtr
 		, ValueType* endPtr
 		, unsigned int increment=1 );
-	// methods
+
 	/**
-	 * @brief Move forward.
+	 * @brief unsafe default constructor.
 	 * 
-	 * For performances no bounding check is performed.
+	 * Only exists to allow making arrays of iterators. does no initialisation.
 	 */ 
-	bool operator ++ ();
+	ArrayIterator() {}
+	
+	// methods
 	
 	/**
-	 * @brief Move backward.
+	 * @brief Move forward (postfix).
 	 * 
 	 * For performances no bounding check is performed.
 	 */ 
-	bool operator -- ();
+	ArrayIterator<ValueType> operator ++ ();
+	/**
+	 * @brief Move forward (prefix).
+	 * 
+	 * For performances no bounding check is performed.
+	 */ 
+	ArrayIterator<ValueType>& operator ++ (int);
+	
+	/**
+	 * @brief Move backward (postfix).
+	 * 
+	 * For performances no bounding check is performed.
+	 */ 
+	ArrayIterator<ValueType> operator -- ();
+	/**
+	 * @brief Move backward (prefix).
+	 * 
+	 * For performances no bounding check is performed.
+	 */ 
+	ArrayIterator<ValueType>& operator -- (int);
 	
 	/**
 	 * @brief Determines wether or not the iterator has finished 
@@ -130,7 +151,7 @@ class ArrayConstIterator : public GenericConstIterator<ValueTypeT>
 public:
 	// -------------------------------------------------------- typedefs
 	typedef ValueTypeT ValueType;
-	typedef GenericConstIterator<ValueTypeT> parent;
+	typedef GenericConstIterator<ValueTypeT> Parent;
 	// ----------------------------------------------------- constructor
 
 	/** 
@@ -143,20 +164,34 @@ public:
 	 ArrayConstIterator(ValueType* dataPtr
 		, ValueType* endPtr
 		, unsigned int increment=1 );
+	/**
+	 * @brief unsafe default constructor.
+	 * 
+	 * Only exists to allow making arrays of iterators. does no initialisation.
+	 */ 
+	ArrayConstIterator() {}
 	// --------------------------------------------------------- methods
 	/**
 	 * @brief Move forward.
 	 * 
 	 * For performances no bounding check is performed.
 	 */ 
-	bool operator ++ ();
+	ArrayConstIterator<ValueType> operator ++ ();
+	ArrayConstIterator<ValueType>& operator ++ (int);
 	
 	/**
 	 * @brief Move backward.
 	 * 
 	 * For performances no bounding check is performed.
 	 */ 
-	bool operator -- ();
+	ArrayConstIterator<ValueType> operator -- ();
+	/**
+	 * @brief Move backward.
+	 * 
+	 * For performances no bounding check is performed.
+	 */ 
+	ArrayConstIterator<ValueType>& operator -- (int);
+	
 	/**
 	 * @brief Determines wether or not the iterator has finished 
 	 * iterating through the range.

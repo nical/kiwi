@@ -21,36 +21,54 @@ ArrayIterator<T>::ArrayIterator(T* dataPtr, T* endPtr, unsigned int increment)
 : _increment(increment), _end(endPtr)
 {
 	assert( dataPtr <= _end );
-	parent::_ptr = dataPtr;
+	Parent::_ptr = dataPtr;
 	//Debug::print() << "ArrayIterator::increment = " << _increment <<endl();
 }
 
 template<typename T>
-bool ArrayIterator<T>::operator ++ () 
+ArrayIterator<T> ArrayIterator<T>::operator ++ () 
 {
-	assert(parent::_ptr <= _end);
-	parent::_ptr+=_increment;
+	assert(Parent::_ptr <= _end);
+	ArrayIterator<T> temp = *this;
+	Parent::_ptr+=_increment;
+	return temp;
+}
+template<typename T>
+ArrayIterator<T>& ArrayIterator<T>::operator ++ (int) 
+{
+	assert(Parent::_ptr <= _end);
+	Parent::_ptr+=_increment;
+	return *this;
 }
 
 template<typename T>
-bool ArrayIterator<T>::operator -- () 
+ArrayIterator<T> ArrayIterator<T>::operator -- () 
 {
-	assert( parent::_ptr <= _end);
-	parent::_ptr-=_increment;
+	assert( Parent::_ptr <= _end);
+	ArrayIterator<T> temp = *this;
+	Parent::_ptr-=_increment;
+	return temp;
+}
+template<typename T>
+ArrayIterator<T>& ArrayIterator<T>::operator -- (int) 
+{
+	assert( Parent::_ptr <= _end);
+	Parent::_ptr-=_increment;
+	return *this;
 }
 
 
 template<typename T>
 bool ArrayIterator<T>::isDone()
 {
-	return ( parent::_ptr > _end );
+	return ( Parent::_ptr > _end );
 }
 
 template<typename T>
 bool ArrayIterator<T>::onIteration()
 {
-	//assert( parent::_ptr <= _end);
-	if( parent::_ptr < _end )
+	//assert( Parent::_ptr <= _end);
+	if( Parent::_ptr < _end )
 	{
 		++(*this);
 		return true;
@@ -71,36 +89,55 @@ ArrayConstIterator<T>::ArrayConstIterator(T* dataPtr, T* endPtr, unsigned int in
 : _increment(increment), _end(endPtr)
 {
 	assert( dataPtr <= endPtr );
-	parent::_ptr = dataPtr;
-	Debug::print() << "ArrayConstIterator::increment = " << _increment << endl();
+	Parent::_ptr = dataPtr;
+	//Debug::print() << "ArrayConstIterator::increment = " << _increment << endl();
 }
 
 template<typename T>
-bool ArrayConstIterator<T>::operator ++ () 
+ArrayConstIterator<T> ArrayConstIterator<T>::operator ++ () 
 {
-	assert( parent::_ptr <= _end );
-	parent::_ptr+=_increment;
+	assert( Parent::_ptr <= _end );
+	ArrayConstIterator<T> temp = *this;
+	Parent::_ptr+=_increment;
+	return temp;
+} 
+template<typename T>
+ArrayConstIterator<T>& ArrayConstIterator<T>::operator ++ (int) 
+{
+	assert( Parent::_ptr <= _end );
+	ArrayConstIterator<T> temp = *this;
+	Parent::_ptr+=_increment;
+	return *this;
 } 
 
 template<typename T>
-bool ArrayConstIterator<T>::operator -- () 
+ArrayConstIterator<T> ArrayConstIterator<T>::operator -- () 
 {
-	assert( parent::_ptr <= _end );
-	parent::_ptr-=_increment;
+	assert( Parent::_ptr <= _end );
+	ArrayConstIterator<T> temp = *this;
+	Parent::_ptr-=_increment;
+	return temp;
+}
+template<typename T>
+ArrayConstIterator<T>& ArrayConstIterator<T>::operator -- (int) 
+{
+	assert( Parent::_ptr <= _end );
+	Parent::_ptr-=_increment;
+	return *this;
 }
 
 
 template<typename T>
 bool ArrayConstIterator<T>::isDone()
 {
-	return ( parent::_ptr > _end );
+	return ( Parent::_ptr > _end );
 }
 
 template<typename T>
 bool ArrayConstIterator<T>::onIteration()
 {
-	//assert( parent::_ptr <= _end);
-	if( parent::_ptr < _end )
+	//assert( Parent::_ptr <= _end);
+	if( Parent::_ptr < _end )
 	{
 		++(*this);
 		return true;

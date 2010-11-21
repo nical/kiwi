@@ -27,6 +27,14 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+/**
+ * @file ArrayReader.hpp
+ * @brief Header file for the generic Reader of array based containers.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.1
+ */
+
+
 #pragma once
 
 #ifndef KIWI_ARRAYDATAREADER_HPP
@@ -41,7 +49,7 @@ namespace kiwi
 {
 namespace generic
 {
-	
+
 /**
  * @brief Reader class able to read data from any Container inheriting
  * from kiwi::generic::AbstractArrayContainer. 
@@ -55,9 +63,10 @@ class ArrayReader : public core::Reader
 {
 public:
 	typedef TValueType ValueType;
+	typedef ArrayConstIterator<TValueType> IteratorType;
 	typedef Point<unsigned int, TDimension+1> IncsType;
 	typedef Point<unsigned int, TDimension> Coordinates;
-	// see: template rebinding
+	
 	
 	// -----------------------------------------------------------------
 	/**
@@ -75,6 +84,16 @@ public:
 	 * @brief Basic access method.
 	 */ 
 	ValueType get(unsigned int i) const;
+	
+	/**
+	 * @brief span sizes.
+	 */ 
+	const Coordinates& spanSize() const { return _span; }
+	
+	/**
+	 * @brief returns the total amount of data
+	 */ 
+	uint32_t nbScalarElements() const ;
 	
 	/**
 	 * @brief Unsafe yet faster access method.

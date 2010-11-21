@@ -125,22 +125,22 @@ kiwi::string MultiArrayContainer<T,D>::portName(portIndex_t index
 			case 3 : { return "w"; }
 			default : { return "#"; }
 		}
-		case RVBA :
+		case RGBA :
 		switch(index)
 		{
 			case 0 : { return "r"; }
-			case 1 : { return "v"; }
+			case 1 : { return "g"; }
 			case 2 : { return "b"; }
 			case 3 : { return "a"; }
 			default : { return "#"; }
 		}
-		case CMJN :
+		case CMYK :
 		switch(index)
 		{
 			case 0 : { return "c"; }
 			case 1 : { return "m"; }
-			case 2 : { return "j"; }
-			case 3 : { return "n"; }
+			case 2 : { return "y"; }
+			case 3 : { return "k"; }
 			default : { return "#"; }
 		}
 		case ABCD : {
@@ -184,7 +184,7 @@ ArrayIterator<T> MultiArrayContainer<T,D>::getBasicIterator() const
 template<typename T, unsigned int D>
 T* const MultiArrayContainer<T,D>::getDataPointer(portIndex_t index) const
 {
-ScopedBlockMacro(__scop, "ArrayConstIterator::getDataPointer")
+DEBUG_ONLY( ScopedBlockMacro(__scop, "ArrayConstIterator::getDataPointer") )
 
 	return _data[index];
 
@@ -200,25 +200,6 @@ unsigned int MultiArrayContainer<T,D>::oneBufferSize() const
 }
 
 
-/*
-template<typename T, unsigned int D>
-void MultiArrayContainer<T,D>::printState()
-{
-ScopedBlockMacro(__scop, kiwi::string("MultiArrayContainer<")
-	+  types::str<T>() 
-	+ "," + boost::lexical_cast<string>( D )
-	+ ">::printState" )
-	
-	ArrayIterator<ValueType> it = getBasicIterator();
-	
-	do{		
-		Debug::print() << *it;
-	}while ( it.onIteration() );
-
-	Debug::endl();
-	Debug::print() << _totalSize << " elements" << endl(); 
-}
-*/
 
 
 } // namespace

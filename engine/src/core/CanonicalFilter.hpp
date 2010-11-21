@@ -26,79 +26,59 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file CanonicalFilter.hpp
+ * @brief Header file for the base class of Filter's Canonical form.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.1
+ */
+
 
 #pragma once
 
-#ifndef KIWI_ARRAYRESOURCE_HPP
-#define KIWI_ARRAYRESOURCE_HPP
+#ifndef KIWI_CANONICALFILTER_HPP
+#define KIWI_CANONICALFILTER_HPP
 
-#include "core/Commons.hpp"
-#include "core/Container.hpp"
-#include "generic/Point.hpp"
+
+#include "core/Filter.hpp"
 
 
 namespace kiwi
 {
-/**
- * @brief Namespace containing generic classes useful for a different kiwi
- * sub-projects.
- */ 	
-namespace generic
-{
+namespace core
+{	
 
-template <typename T, unsigned int D> class ArrayReader;
-template <typename T, unsigned int D> class ArrayWriter;
-
-/**
- * @brief Interface class for containers based on an array structure.
- */ 
-template <typename TValueType, unsigned int TDimension>
-class AbstractArrayContainer : public core::Container
+class CanonicalFilter : public Filter
 {
 public:
-	ValueTypeMacro( TValueType );
-	typedef ArrayReader<TValueType,TDimension> plop;
-	//ReaderTypeMacro((ArrayReader<TValueType,TDimension>));
-	//WriterTypeMacro((ArrayWriter<TValueType,TDimension>));
-	typedef ArrayReader<TValueType,TDimension> ReaderType;
-	typedef ArrayWriter<TValueType,TDimension> WriterType;
-	// -----------------------------------------------------------------------
-	/**
-	 * Returns a pointer to the first element associated to a given port.
-	 */ 
-	virtual ValueType* const getDataPointer(portIndex_t index) const = 0 ;
-	/**
-	 * Returns the increments or stride.
-	 */ 
-	virtual Point<unsigned int, TDimension+1> increments(portIndex_t index) const = 0;
-	/**
-	 * Returns the size of each span.
-	 */ 
-	virtual Point<unsigned int, TDimension> spanSize() const = 0;
-		
+	typedef Filter Parent;
 	
-	kiwi::string
-	readerOutputType(portIndex_t)
-	{
-	return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
-				+ types::str<TValueType>() );
-	}
+	/**
+	 * @brief Constructor.
+	 * 
+	 * Adds nbWriterInputs Writer input ports and Reader input ports. 
+	 */ 
+	CanonicalFilter(uint32_t nbWriterInputs);
+	
+	/**
+	 * @brief Automatically publishes the Container's ports in this Filter's
+	 * Reader output ports.
+	 * 
+	 * The child classes, if they override this method, *must* call their
+	 * parent's method as the only feature that brings this class is in 
+	 * here.
+	 */ 
+	void layoutChanged();
+	
+	
 
-
-	kiwi::string
-	writerOutputType(portIndex_t)
-	{
-	return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
-				+ types::str<TValueType>() );
-	}
-
+	
 };
 
 
 
-} // neamspace
-} // neamspace
+}// namespace
+}// namespace
+
 
 #endif

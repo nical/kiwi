@@ -27,78 +27,71 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+
+/**
+ * @file IterativeFilter.hpp
+ * @brief Header file for ArrayContainer's iterator.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.1
+ */
+
 #pragma once
 
-#ifndef KIWI_ARRAYRESOURCE_HPP
-#define KIWI_ARRAYRESOURCE_HPP
+#ifndef KIWI_ITERATIVEFILTER_HPP
+#define KIWI_ITERATIVEFILTER_HPP
 
 #include "core/Commons.hpp"
-#include "core/Container.hpp"
-#include "generic/Point.hpp"
-
+#include "core/CanonicalFilter.hpp"
 
 namespace kiwi
 {
-/**
- * @brief Namespace containing generic classes useful for a different kiwi
- * sub-projects.
- */ 	
 namespace generic
-{
+{	
 
-template <typename T, unsigned int D> class ArrayReader;
-template <typename T, unsigned int D> class ArrayWriter;
 
-/**
- * @brief Interface class for containers based on an array structure.
- */ 
-template <typename TValueType, unsigned int TDimension>
-class AbstractArrayContainer : public core::Container
+template <typename TInputType>
+class IterativeFilter : public core::CanonicalFilter
 {
-public:
-	ValueTypeMacro( TValueType );
-	typedef ArrayReader<TValueType,TDimension> plop;
-	//ReaderTypeMacro((ArrayReader<TValueType,TDimension>));
-	//WriterTypeMacro((ArrayWriter<TValueType,TDimension>));
-	typedef ArrayReader<TValueType,TDimension> ReaderType;
-	typedef ArrayWriter<TValueType,TDimension> WriterType;
-	// -----------------------------------------------------------------------
-	/**
-	 * Returns a pointer to the first element associated to a given port.
-	 */ 
-	virtual ValueType* const getDataPointer(portIndex_t index) const = 0 ;
-	/**
-	 * Returns the increments or stride.
-	 */ 
-	virtual Point<unsigned int, TDimension+1> increments(portIndex_t index) const = 0;
-	/**
-	 * Returns the size of each span.
-	 */ 
-	virtual Point<unsigned int, TDimension> spanSize() const = 0;
-		
+public: 
+	ParentMacro(core::CanonicalFilter)
+	typedef TInputType InputType;
+	typedef typename InputType::ReaderType::IteratorType InputIteratorType;
+	typedef typename InputType::WriterType::IteratorType OutputIteratorType;
 	
-	kiwi::string
-	readerOutputType(portIndex_t)
-	{
-	return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
-				+ types::str<TValueType>() );
-	}
+	/**
+	 * @brief constructor
+	 */ 
+	IterativeFilter(uint32_t nbWriters);
+	
+	/**
+	 * @brief Main entry point of the Filter, calls processFragment() for
+	 * each fragment (pixel, voxel...).
+	 */ 
+	void process();
+	
+	/**
+	 * @brief called once, before processFragment()
+	 *
+	 * This method can be overloaded to execute some code before the data is 
+	 * iterated (typically to retrieve data from additionnal input ports).
+	 *  
+	 */ 
+	virtual void preProcess() {}
+	
+	/**
+	 * @brief The method to override. It is called for each fragment.
+	 */ 
+	virtual void processFragment(
+		InputIteratorType* in
+		, OutputIteratorType* out ) = 0;
 
-
-	kiwi::string
-	writerOutputType(portIndex_t)
-	{
-	return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
-				+ types::str<TValueType>() );
-	}
 
 };
 
 
+}// namespace
+}// namespace
 
-} // neamspace
-} // neamspace
+#include "IterativeFilter.ih"
 
 #endif

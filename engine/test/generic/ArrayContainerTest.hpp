@@ -126,27 +126,6 @@ DEBUG_ONLY(		if(!isReady() )
 			&& writerInputPort(0).isConnected() );
 	}
 	
-/*	void layoutChanged()
-	{
-	ScopedBlockMacro(__scop, "TestFiler::layoutChanged")
-		if(writerInputPort(0).isConnected() )
-		{
-			if( !readerOutputPort(0).isEnabled() )
-			{
-				setPortEnabled(readerOutputPort(0),true);
-				ReaderOutputPort& op
-				= writerInputPort(0).connectedOutput()->node()->readerOutputPort(0);
-				bindPort( readerOutputPort(0), op );
-			}
-		}
-		else
-		{
-			readerOutputPort(0).disconnect();
-			setPortEnabled(readerOutputPort(0),false);	
-		}
-
-	}
-	*/ 
 };
 
 

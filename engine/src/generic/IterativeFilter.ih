@@ -27,44 +27,71 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#pragma once
-
-#ifndef KIWI_COMMONS_HPP
-#define KIWI_COMMONS_HPP
-
-#include <boost/cstdint.hpp>
-
-#include <string>
-
 
 namespace kiwi
 {
+namespace generic
+{
 
 
-typedef unsigned int uint;
 
-typedef unsigned char uint8_t;
-typedef boost::uint16_t uint16_t;
-typedef boost::uint32_t uint32_t;
-typedef boost::uint64_t uint64_t;
-
-typedef char int8_t;
-typedef boost::int16_t int16_t;
-typedef boost::int32_t int32_t;
-typedef boost::int64_t int64_t;
-
-typedef std::string string;
-typedef unsigned char portIndex_t;
-
-
-#define ParentMacro( pClass ) typedef pClass Parent;
-
+template <typename InputType>
+IterativeFilter<InputType>::IterativeFilter(uint32_t nbWriters)
+: Parent(nbWriters)
+{
+	for(unsigned i = 0; i < nbWriters; ++i)
+		addReaderInputPort();
 }
 
 
 
-#include "utils/DebugOutputStream.hpp"
+template <typename InputType>
+void IterativeFilter<InputType>::process()
+{
+ScopedBlockMacro(__scop, "IterativeFilter::process()")
 
+	
 
+	uint32_t nbWriters = getWriterInputCount();
+	
+	InputIteratorType in[nbWriters];
+	OutputIteratorType out[nbWriters];
+	
+	
+	uint32_t size = 0;
+	for(unsigned i = 0; i < nbWriters; ++i)	
+	{
+		typename InputType::ReaderType reader( readerInputPort(i) );
+		typename InputType::WriterType writer( writerInputPort(i) );
+		uint32_t insize = reader.nbScalarElements();
+		uint32_t outsize = writer.nbScalarElements();
+		if( size == 0 ) size = insize;
+		if( (size != insize) || (size != outsize) )
+		{
+			Debug::error() << "IterativeFilter::process error. size doesn't match." << endl();
+			assert(false);
+			return;
+		}
+		
+		in[i] = reader.getIterator();
+		out[i] = writer.getIterator();
+	}
+	
+	preProcess();
+	
+	do{
+		processFragment(in,out);
+		for(uint32_t i = 0; i < nbWriters; ++i)
+		{
+			++(out[i]);
+			++(in[i]);
+		}
+	}while( !out[0].isDone() );
+}
+	
 
-#endif
+	
+	
+	
+}// namsespace
+}// namsespace

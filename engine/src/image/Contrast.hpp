@@ -26,67 +26,48 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file Contrast.hpp
+ * @brief Header file for a Nd contrast Filter.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.1
+ */
+
 
 #pragma once
+#ifndef KIWI_IMAGE_CONTRAST_HPP
+#define KIWI_IMAGE_CONTRAST_HPP
 
-#ifndef KIWI_RESOURCE_HPP
-#define KIWI_RESOURCE_HPP
-
-#include "Node.hpp"
-
+#include "generic/IterativeFilter.hpp"
+#include "generic/ArrayIterator.hpp"
 
 namespace kiwi
 {
-namespace core
+namespace image
 {
 
-/**
- * @brief The base class for containers.
- * 
- * At the moment it does not add anything to kiwi::Node's implementation
- * But for semantic and evolutivity purpose Container and Node are distinct. 
- */ 
-class Container : public Node
+template<typename TValueType, unsigned int TDimension>
+class Contrast : public IterativeFilter< AbstractArrayContainer< TValueType, TDimension > >
 {
-public: 
-	Container() : Node() {}
-	int nodeType() { return Node::CONTAINER; };
+public:
+// -----------------------------------------------------------------------------
+	typedef TValueType ValueType;
+	typedef AbstractArrayContainer<TValueType, TDimension> InputType;
+// -----------------------------------------------------------------------------
+	Contrast();
+	
+	void preProcess();
+	
+	void processFragment(kiwi::generic::ArrayConstIterator<TValueType>* in
+		, kiwi::generic::ArrayIterator<TValueType>* out );
+	
+
 };
 
 
-/**
- * @brief helper macro that produces typedef classType ReaderType;
- * 
- * Some filters that have template a parameter on the (Container) input type need
- * to know at compilation time the Container's Reader type to instanciate it
- * correctly. This macro should be used in the public part of every Container class
- * declaration.
- */ 
-#define ReaderTypeMacro(classType) typedef classType ReaderType;
+}// namespace
+}// namespace
 
-/**
- * @brief helper macro that produces typedef classType WriterType;
- * 
- * Some filters that have a template parameter on the (Container) input type need
- * to know at compilation time the Container's Writer type to instanciate it
- * correctly. This macro should be used in the public part of every Container class
- * declaration. 
- */ 
-#define WriterTypeMacro(classType) typedef classType WriterType;
-
-/**
- * @brief helper macro that produces typedef classType ReaderType;
- * 
- * Some filters that have template a parameter on the (Container) input type need
- * to know at compilation time the Container's Reader type to instanciate it
- * correctly. This macro should be used in the public part of every class
- * declaration of containers that are iterable. 
- */ 
-#define IteratorTypeMacro(classType) typedef classType IteratorType;
-
-
-
-} //namespace
-} //namespace
+#include "Contrast.ih"
 
 #endif

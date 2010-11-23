@@ -37,7 +37,7 @@ namespace core
 
 
 Pipeline::Pipeline()
-	:Filter()
+	: AbstractPipeline()
 {
 	ScopedBlockMacro(s1, "kiwi::core::Pipeline: constructor");
 

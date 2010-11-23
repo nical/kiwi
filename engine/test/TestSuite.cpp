@@ -1,4 +1,5 @@
 #include "core/Commons.hpp"
+#include "generic/Point.hpp"
 
 #include "generic/PointTest.hpp"
 #include "core/FilterTest.hpp"
@@ -6,10 +7,9 @@
 #include "generic/MultiArrayContainerTest.hpp"
 #include "generic/ValueContainerTest.hpp"
 #include "core/MetaFilterTest.hpp"
-//#include "audio/AudioBufferTest.hpp"
-//#include "text/StringContainerTest.hpp"
 #include "image/CairoImageContainerTest.hpp"
-#include "generic/Point.hpp"
+#include "core/SimplePipelineTest.cpp"
+#include "image/ContrastTest.hpp"
 
 
 int main()
@@ -86,6 +86,13 @@ int main()
 		Debug::endl(3);
 		Debug::print() << "----------------------------------------------"
 					<< "Cairo ImageContainer Test Ok" << endl();
+		Debug::endl(3);
+
+		SimplePipelineTest();
+
+        Debug::endl(3);
+		Debug::print() << "----------------------------------------------"
+					<< "SimplePipeline Test Ok" << endl();
 		Debug::endl(3);
 
 		Debug::print() << "end of the test suite" << endl();

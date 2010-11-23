@@ -29,76 +29,75 @@
 
 #pragma once
 
-#ifndef KIWI_ARRAYRESOURCE_HPP
-#define KIWI_ARRAYRESOURCE_HPP
+#ifndef KIWI_ABSTRACTPIPELINE_HPP
+#define KIWI_ABSTRACTPIPELINE_HPP
 
+#include "core/Node.hpp"
 #include "core/Commons.hpp"
-#include "core/Container.hpp"
-#include "generic/Point.hpp"
 
 
 namespace kiwi
 {
-/**
- * @brief Namespace containing generic classes useful for a different kiwi
- * sub-projects.
- */ 	
-namespace generic
+namespace core
 {
 
-template <typename T, unsigned int D> class ArrayReader;
-template <typename T, unsigned int D> class ArrayWriter;
-
 /**
- * @brief Interface class for containers based on an array structure.
- */ 
-template <typename TValueType, unsigned int TDimension>
-class AbstractArrayContainer : public core::Container
+ * @class AbstractPipeline
+ * @brief Interface of te meta-Filter classes.
+ * 
+ */ 	
+class AbstractPipeline : public Filter
 {
 public:
-	ValueTypeMacro( TValueType );
-	typedef ArrayReader<TValueType,TDimension> plop;
-	//ReaderTypeMacro((ArrayReader<TValueType,TDimension>));
-	//WriterTypeMacro((ArrayWriter<TValueType,TDimension>));
-	typedef ArrayReader<TValueType,TDimension> ReaderType;
-	typedef ArrayWriter<TValueType,TDimension> WriterType;
-	// -----------------------------------------------------------------------
+	AbstractPipeline() : Filter() {}
+
 	/**
-	 * Returns a pointer to the first element associated to a given port.
+	 * @brief Returns true if the Node has been added to this Pipeline.
 	 */ 
-	virtual ValueType* const getDataPointer(portIndex_t index) const = 0 ;
-	/**
-	 * Returns the increments or stride.
-	 */ 
-	virtual Point<unsigned int, TDimension+1> increments(portIndex_t index) const = 0;
-	/**
-	 * Returns the size of each span.
-	 */ 
-	virtual Point<unsigned int, TDimension> spanSize() const = 0;
-		
+	virtual bool contains(Node* node) = 0;
 	
-	kiwi::string
-	readerOutputType(portIndex_t)
-	{
-	return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
-				+ types::str<TValueType>() );
-	}
+	/**
+	 * @brief Adds a filter to this Pipeline.
+	 */ 
+	virtual bool add(Node* toAdd) = 0;
+	
+	/**
+	 * @brief Removes the node from this Pipeline.
+	 */ 
+	virtual bool remove(Node* toRemove) = 0;
+	
+	/**
+	 * @brief Prepares the pipeline before execution.
+	 * 
+	 * isReady will return false and nbErrors() will be different from 0
+	 * if an error occurs while updating.
+	 * In this case these errors, they can be retrieved one by one, 
+	 * calling popError().
+	 */ 
+	virtual void update() = 0;
+		
+	/**
+	 * @brief Returns the number of remaining errors since last update.
+	 * 
+	 * This value is decremented each tipe an error is poped()
+	 */ 	
+	virtual kiwi::uint32_t nbErrors() = 0;
+	
+	/**
+	 * @brief Pops an error from the update error's fifo.
+	 */ 
+	virtual kiwi::string popError() = 0;
+	
+private:
 
-
-	kiwi::string
-	writerOutputType(portIndex_t)
-	{
-	return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
-				+ types::str<TValueType>() );
-	}
 
 };
 
 
 
-} // neamspace
-} // neamspace
+}//namespace core
+}//namespace kiwi
+
+
 
 #endif

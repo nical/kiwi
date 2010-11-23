@@ -27,12 +27,7 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#pragma once
-
-#ifndef KIWI_RESOURCE_HPP
-#define KIWI_RESOURCE_HPP
-
-#include "Node.hpp"
+#include "CanonicalFilter.hpp"
 
 
 namespace kiwi
@@ -40,53 +35,43 @@ namespace kiwi
 namespace core
 {
 
-/**
- * @brief The base class for containers.
- * 
- * At the moment it does not add anything to kiwi::Node's implementation
- * But for semantic and evolutivity purpose Container and Node are distinct. 
- */ 
-class Container : public Node
+CanonicalFilter::CanonicalFilter(uint32_t nbWriters)
+: Filter()
 {
-public: 
-	Container() : Node() {}
-	int nodeType() { return Node::CONTAINER; };
-};
+ScopedBlockMacro(__scp, "CanonicalFilter::constructor")
+	for(uint32_t i = 0; i < nbWriters; ++i)
+	{
+		addWriterInputPort();
+		addReaderOutputPort();
+		setPortEnabled(readerOutputPort(i),false);
+	}
+}
 
 
-/**
- * @brief helper macro that produces typedef classType ReaderType;
- * 
- * Some filters that have template a parameter on the (Container) input type need
- * to know at compilation time the Container's Reader type to instanciate it
- * correctly. This macro should be used in the public part of every Container class
- * declaration.
- */ 
-#define ReaderTypeMacro(classType) typedef classType ReaderType;
-
-/**
- * @brief helper macro that produces typedef classType WriterType;
- * 
- * Some filters that have a template parameter on the (Container) input type need
- * to know at compilation time the Container's Writer type to instanciate it
- * correctly. This macro should be used in the public part of every Container class
- * declaration. 
- */ 
-#define WriterTypeMacro(classType) typedef classType WriterType;
-
-/**
- * @brief helper macro that produces typedef classType ReaderType;
- * 
- * Some filters that have template a parameter on the (Container) input type need
- * to know at compilation time the Container's Reader type to instanciate it
- * correctly. This macro should be used in the public part of every class
- * declaration of containers that are iterable. 
- */ 
-#define IteratorTypeMacro(classType) typedef classType IteratorType;
+void CanonicalFilter::layoutChanged()
+{
+	uint32_t nbWriters = getWriterInputCount();
+	ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
+	for(uint32_t i = 0; i < nbWriters; ++i)
+	{
+		if(writerInputPort(0).isConnected() )
+		{
+			if( !readerOutputPort(0).isEnabled() )
+			{
+				setPortEnabled(readerOutputPort(0),true);
+				ReaderOutputPort& op
+				= writerInputPort(0).connectedOutput()->node()->readerOutputPort(0);
+				bindPort( readerOutputPort(0), op );
+			}
+		}
+		else
+		{
+			readerOutputPort(0).disconnect();
+			setPortEnabled(readerOutputPort(0),false);	
+		}
+	}
+}
 
 
-
-} //namespace
-} //namespace
-
-#endif
+}// namespace	
+}// namespace	

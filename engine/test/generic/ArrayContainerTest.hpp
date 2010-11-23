@@ -5,7 +5,7 @@
 
 #include "core/Commons.hpp"
 
-#include "core/Filter.hpp"
+#include "core/CanonicalFilter.hpp"
 
 #include "generic/ArrayContainer.hpp"
 #include "generic/ArrayReader.hpp"
@@ -32,7 +32,7 @@ using namespace kiwi::generic;
 
 // compute the sum of two Value<> resources and place it in an other Value<>
 template<typename TValueType, unsigned int TDimension>
-class AddArraysFilter : public Filter
+class AddArraysFilter : public CanonicalFilter
 {
 public:
 	enum{ A = 0, B = 1};
@@ -42,7 +42,7 @@ public:
 	typedef generic::ArrayReader<TValueType, TDimension> myReader;
 	typedef generic::ArrayWriter<TValueType, TDimension> myWriter;
 // ---------------------------------------------------------------------
-	AddArraysFilter() : Filter()
+	AddArraysFilter() : CanonicalFilter(1)
 	{
 	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
 		setLayoutEventEnabled(false);
@@ -52,12 +52,12 @@ public:
 		addReaderInputPort();
 		addReaderInputPort();
 		
-		addWriterInputPort();	
+//+		addWriterInputPort();	
 		
 		//add a reader output that will be available only when the writer
 		//port is connected
-		addReaderOutputPort();
-		setPortEnabled(readerOutputPort(0),false);
+//+		addReaderOutputPort();
+//+		setPortEnabled(readerOutputPort(0),false);
 		setLayoutEventEnabled(true);
 	}
 	~AddArraysFilter() {}
@@ -126,26 +126,6 @@ DEBUG_ONLY(		if(!isReady() )
 			&& writerInputPort(0).isConnected() );
 	}
 	
-	void layoutChanged()
-	{
-	ScopedBlockMacro(__scop, "TestFiler::layoutChanged")
-		if(writerInputPort(0).isConnected() )
-		{
-			if( !readerOutputPort(0).isEnabled() )
-			{
-				setPortEnabled(readerOutputPort(0),true);
-				ReaderOutputPort& op
-				= writerInputPort(0).connectedOutput()->node()->readerOutputPort(0);
-				bindPort( readerOutputPort(0), op );
-			}
-		}
-		else
-		{
-			readerOutputPort(0).disconnect();
-			setPortEnabled(readerOutputPort(0),false);	
-		}
-
-	}
 };
 
 
@@ -210,10 +190,15 @@ void ArrayContainerTest()
 	Debug::endl();
 
 	Debug::beginBlock("connect the ports");
+		// tests that Canonical Form is working
+		assert( !myTest.readerOutputPort(0).isEnabled() );
 		resource1.readerOutputPort(1) >> myTest.readerInputPort(0);
 		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
-		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
 		
+		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
+		// now the reader output port should be enabled
+		assert( myTest.readerOutputPort(0).isEnabled() );
+
 		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
 		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);
 		resourceResult.writerOutputPort(1) >> myTest2.writerInputPort(0);
@@ -230,21 +215,5 @@ void ArrayContainerTest()
 	delete[] preAllocData;
 }
 
-/*
-int main()
-{
-
-ScopedBlockMacro(s2, "kiwi::TestArrayContainer");
-
-Debug::beginBlock("int main() ");
-
-	ArrayTest<int, 2, 2>();
-
-	DEBUG_ONLY( Debug::print() << "woooooat !" << endl; )
-	
-Debug::endBlock();
-	return 0;
-}
-*/
 
 #endif

@@ -55,8 +55,8 @@ public:
 	inline bool operator != (const GenericIterator<ValueType>& it) {return !(*this == it); }
 
 	// virtual
-	virtual bool operator ++ () = 0;
-	virtual bool operator -- () = 0;
+	virtual GenericIterator& operator ++ (int) = 0;
+	virtual GenericIterator& operator -- (int) = 0;
 	
 protected:
 	ValueType* _ptr;
@@ -85,8 +85,8 @@ public:
 		{return !(*this == it); }
 
 
-	virtual bool operator ++ () = 0;
-	virtual bool operator -- () = 0;
+	virtual GenericConstIterator& operator ++ (int) = 0;
+	virtual GenericConstIterator& operator -- (int) = 0;
 
 
 protected:

@@ -58,10 +58,17 @@ public:
 	
 	void preProcess();
 	
-	void processFragment(kiwi::generic::ArrayConstIterator<TValueType>* in
-		, kiwi::generic::ArrayIterator<TValueType>* out );
+	void processFragment(
+		kiwi::generic::ArrayConstIterator<TValueType>* in
+		, kiwi::generic::ArrayIterator<TValueType>* out  );
+		
+	kiwi::string readerInputType(portIndex_t index);
+	kiwi::string readerInputName(portIndex_t index);
 	
-
+protected:
+	TValueType _pivot;
+	TValueType _strength;
+	
 };
 
 

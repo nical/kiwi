@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -25,42 +27,87 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#ifndef KIWI_TEXTCONTAINER_HPP
+#define KIWI_TEXTCONTAINER_HPP
+
+#include "core/Commons.hpp"
+#include "text/AbstractTextContainer.hpp"
+
+
 namespace kiwi
 {
-namespace text
+namespace text	
 {
-
-class StringContainer : public core::Container
+	
+		
+class TextContainer : public AbstractTextContainer
 {
 public:
-	StringContainer(const kiwi::string& str = "") 
-	: _str(str)
+	/**
+	 * @brief Constructor. 
+	 */ 
+	TextContainer();
+
+	/** 
+	 * @brief Returns A pointer to the requested line.
+	 * 
+	 * If the line number doesn't exists in the text, return a null
+	 * pointer.
+	 * The number of the first line is 0.
+	 * 
+	 * @param lineNumber The number of the requested line. 
+	 */ 
+	virtual kiwi::string* getLine(kiwi::uint32_t lineNumber);
+	
+	
+	/**
+	 * @brief Returns the number of lines in the container.
+	 */ 
+	kiwi::uint32_t nbLines() const { return _nbLines; }
+	
+	
+	/**
+	 * @brief Inserts a line.
+	 * 
+	 * @param toInsert The line to copy and insert in the container
+	 * @param position The line will be insterted before the position.
+	 */ 
+	void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position);
+	
+	
+	/**
+	 * @brief Removes a line. 
+	 */
+	void removeLine(kiwi::uint32_t position);
+	
+private:
+
+	/**
+	 * @brief element of double linked list of lines.
+	 */ 
+	struct Line
 	{
-		addReaderOutputPort();
-		addWriterOutputPort();
-	}
+		Line* _next;
+		Line* _prev;
+		kiwi::string _text;
+	};
+	/**
+	 * @brief Returns the position's line.
+	 */ 
+	Line* line(kiwi::uint32_t position);
 	
-	string& getString() { return _str; }
+	uint32_t _nbLines;
+	Line* _first;
+	Line* _last;
 	
-protected:
-	kiwi::string _str;
 };
 
 
-class StringReader : core::Reader
-{
-public:
-	StringReader(const core::Resource::InputPort<Reader>& port);
-	StringReader(const StringContainer& container, portIndex_t index = 0);
-	
-	
-	
-	const kiwi::string& get();
-protected:
-	StringContainer* _resource:
-}
+
+}// namespace
+}// namespace
+
+#endif
 
 
-} //namespace
-} //namespace
-
+// --

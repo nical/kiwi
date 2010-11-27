@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -25,42 +27,40 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include "text/AbstractTextContainer.hpp"
+#include "generic/ArrayIterator.hpp"
+
 namespace kiwi
 {
-namespace text
+namespace text	
 {
 
-class StringContainer : public core::Container
-{
-public:
-	StringContainer(const kiwi::string& str = "") 
-	: _str(str)
-	{
-		addReaderOutputPort();
-		addWriterOutputPort();
-	}
-	
-	string& getString() { return _str; }
-	
-protected:
-	kiwi::string _str;
-};
 
-
-class StringReader : core::Reader
+typedef kiwi::generic::ArrayIterator<kiwi::uint8_t> StringIterator;
+	
+class TextWriter
 {
 public:
-	StringReader(const core::Resource::InputPort<Reader>& port);
-	StringReader(const StringContainer& container, portIndex_t index = 0);
+	TextWriter( const AbstractTextContainer& container );
+	TextWriter( core::Node::WriterInputPort& port );
 	
+	kiwi::uint32_t nbLines() const;
+	kiwi::uint32_t nbChars() const;
+	kiwi::uint32_t currentLine() const;
+	bool gotoLine(kiwi::int32_t lineNumber);
+	bool gotoNextLine();
+	bool gotoPreviousLine();
+	bool endOfText() const;
+	kiwi::string& getLine() const;
+	kiwi::uint8_t getChar(int32_t charNumber) const;
+	kiwi::uint8_t setChar(int32_t charNumber, uint8_t value) const;
 	
+	StringIterator getStringIterator() const;
 	
-	const kiwi::string& get();
-protected:
-	StringContainer* _resource:
-}
-
-
-} //namespace
-} //namespace
+protected:	
+	void init(const AbstractTextContainer& container);
+};		
+	
+}// namespace	
+}// namespace	
 

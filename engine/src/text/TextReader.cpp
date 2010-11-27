@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -25,42 +27,78 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include "TextReader.hpp"
+
+
 namespace kiwi
 {
-namespace text
+namespace text	
 {
 
-class StringContainer : public core::Container
-{
-public:
-	StringContainer(const kiwi::string& str = "") 
-	: _str(str)
-	{
-		addReaderOutputPort();
-		addWriterOutputPort();
-	}
-	
-	string& getString() { return _str; }
-	
-protected:
-	kiwi::string _str;
-};
 
-
-class StringReader : core::Reader
+TextReader::TextReader( const AbstractTextContainer& container )
 {
-public:
-	StringReader(const core::Resource::InputPort<Reader>& port);
-	StringReader(const StringContainer& container, portIndex_t index = 0);
 	
+}
+
+TextReader::TextReader( core::Node::ReaderInputPort& port )
+{
 	
+}
+
+kiwi::uint32_t TextReader::nbLines() const
+{
 	
-	const kiwi::string& get();
-protected:
-	StringContainer* _resource:
+}
+
+kiwi::uint32_t TextReader::nbChars() const
+{
+	
+}
+
+kiwi::uint32_t TextReader::currentLine() const
+{
+	
+}
+
+bool TextReader::gotoLine(kiwi::int32_t lineNumber)
+{
+	
+}
+
+bool TextReader::gotoNextLine()
+{
+	
+}
+
+bool TextReader::gotoPreviousLine()
+{
+	
+}
+
+bool TextReader::endOfText() const
+{
+	
+}
+
+kiwi::string TextReader::getLine() const
+{
+	
+}
+
+kiwi::uint8_t TextReader::getChar(int32_t charNumber) const
+{
+	
+}
+
+StringConstIterator TextReader::getStringIterator() const
+{
+	
 }
 
 
-} //namespace
-} //namespace
+	
+}// namespace	
+}// namespace	
+
 

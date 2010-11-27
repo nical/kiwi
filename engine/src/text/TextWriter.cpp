@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -25,42 +27,77 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include "TextWriter.hpp"
+
 namespace kiwi
 {
-namespace text
+namespace text	
 {
 
-class StringContainer : public core::Container
-{
-public:
-	StringContainer(const kiwi::string& str = "") 
-	: _str(str)
-	{
-		addReaderOutputPort();
-		addWriterOutputPort();
-	}
-	
-	string& getString() { return _str; }
-	
-protected:
-	kiwi::string _str;
-};
 
 
-class StringReader : core::Reader
+TextWriter::TextWriter( const AbstractTextContainer& container )
 {
-public:
-	StringReader(const core::Resource::InputPort<Reader>& port);
-	StringReader(const StringContainer& container, portIndex_t index = 0);
 	
+}
+
+TextWriter::TextWriter( core::Node::WriterInputPort& port )
+{
 	
+}
+
+kiwi::uint32_t TextWriter::nbLines() const
+{
 	
-	const kiwi::string& get();
-protected:
-	StringContainer* _resource:
+}
+
+kiwi::uint32_t TextWriter::nbChars() const
+{
+	
+}
+
+kiwi::uint32_t TextWriter::currentLine() const
+{
+	
+}
+
+bool TextWriter::gotoLine(kiwi::int32_t lineNumber)
+{
+	
+}
+
+bool TextWriter::gotoNextLine()
+{
+	
+}
+
+bool TextWriter::gotoPreviousLine()
+{
+	
+}
+
+bool TextWriter::endOfText() const
+{
+	
+}
+
+kiwi::string& TextWriter::getLine() const
+{
+	
+}
+
+kiwi::uint8_t TextWriter::getChar(int32_t charNumber) const
+{
+	
+}
+
+StringIterator TextWriter::getStringIterator() const
+{
+	
 }
 
 
-} //namespace
-} //namespace
-
+	
+	
+}// namespace	
+}// namespace	

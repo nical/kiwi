@@ -9,6 +9,9 @@ SET(KIWI_SRC ${KIWI_SRC}
 		core/CanonicalFilter.cpp
 		core/SimplePipeline.cpp
 		cairo/ImageContainer/ImageContainer.cpp
+		text/TextContainer.cpp
+		text/TextReader.cpp
+		text/TextWriter.cpp
 		)
 
 SET(optionalLibs ${optionalLibs} ${CAIRO_LIBRARIES} )

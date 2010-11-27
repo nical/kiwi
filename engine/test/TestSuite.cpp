@@ -10,7 +10,7 @@
 #include "image/CairoImageContainerTest.hpp"
 #include "core/SimplePipelineTest.cpp"
 #include "image/ContrastTest.hpp"
-
+#include "text/TextContainerTest.hpp"
 
 int main()
 {
@@ -93,6 +93,13 @@ int main()
         Debug::endl(3);
 		Debug::print() << "----------------------------------------------"
 					<< "SimplePipeline Test Ok" << endl();
+		Debug::endl(3);
+		
+		TextContainerTest();
+		
+        Debug::endl(3);
+		Debug::print() << "----------------------------------------------"
+					<< "TextContainer Test Ok" << endl();
 		Debug::endl(3);
 
 		Debug::print() << "end of the test suite" << endl();

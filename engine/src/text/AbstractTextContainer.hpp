@@ -1,3 +1,5 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
@@ -25,42 +27,60 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+
+#ifndef KIWI_ABSTRACTTEXTCONTAINER_HPP
+#define KIWI_ABSTRACTTEXTCONTAINER_HPP
+
+#include "core/Commons.hpp"
+#include "core/Container.hpp"
+
 namespace kiwi
 {
-namespace text
+namespace text	
 {
-
-class StringContainer : public core::Container
+	
+		
+class AbstractTextContainer : public core::Container
 {
 public:
-	StringContainer(const kiwi::string& str = "") 
-	: _str(str)
-	{
-		addReaderOutputPort();
-		addWriterOutputPort();
-	}
+	/** 
+	 * @brief Returns A pointer to the requested line.
+	 * 
+	 * If the line number doesn't exists in the text, return a null
+	 * pointer.
+	 * The number of the first line is 0.
+	 * 
+	 * @param lineNumber The number of the requested line. 
+	 */ 
+	virtual kiwi::string* getLine(kiwi::uint32_t lineNumber) = 0;
 	
-	string& getString() { return _str; }
+	/**
+	 * @brief Returns the number of lines in the container.
+	 */ 
+	virtual kiwi::uint32_t nbLines() const = 0;
 	
-protected:
-	kiwi::string _str;
+	/**
+	 * @brief Inserts a line.
+	 * 
+	 * @param toInsert The line to copy and insert in the container
+	 * @param position The line will be insterted before the position.
+	 */ 
+	virtual void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position) = 0;
+	
+	/**
+	 * @brief Removes a line. 
+	 */
+	 virtual void removeLine(kiwi::uint32_t position) = 0;
+	 
+	 virtual ~AbstractTextContainer() {}
 };
 
 
-class StringReader : core::Reader
-{
-public:
-	StringReader(const core::Resource::InputPort<Reader>& port);
-	StringReader(const StringContainer& container, portIndex_t index = 0);
-	
-	
-	
-	const kiwi::string& get();
-protected:
-	StringContainer* _resource:
-}
+
+}// namespace
+}// namespace
+
+#endif
 
 
-} //namespace
-} //namespace
-
+// --

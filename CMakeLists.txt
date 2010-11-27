@@ -76,6 +76,6 @@ SET(Kiwi_VERSION_PATCH 2)
 #------------------------------------------------------------------------------
 # Add subdirectories
 #------------------------------------------------------------------------------
-add_subdirectory (src)
+add_subdirectory (src/kiwi)
 add_subdirectory (test)
 

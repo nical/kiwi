@@ -8,7 +8,7 @@
 #include "generic/ValueContainerTest.hpp"
 #include "core/MetaFilterTest.hpp"
 #include "image/CairoImageContainerTest.hpp"
-#include "core/SimplePipelineTest.cpp"
+#include "pipeline/SimplePipelineTest.cpp"
 #include "image/ContrastTest.hpp"
 
 

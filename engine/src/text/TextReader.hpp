@@ -57,7 +57,9 @@ public:
 	StringConstIterator getStringIterator() const;
 	
 protected:	
-	
+	AbstractTextContainer* _container;
+	kiwi::string* _currentLine;
+	uint32_t _currentLineNb;
 };	
 	
 }// namespace	

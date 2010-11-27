@@ -59,8 +59,12 @@ public:
 	
 protected:	
 	void init(const AbstractTextContainer& container);
-};		
 	
+private:
+	AbstractTextContainer* _container;
+};		
+
+
 }// namespace	
 }// namespace	
 

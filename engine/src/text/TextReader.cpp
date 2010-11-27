@@ -48,52 +48,57 @@ TextReader::TextReader( core::Node::ReaderInputPort& port )
 
 kiwi::uint32_t TextReader::nbLines() const
 {
-	
+	return _container->nbLines();
 }
 
 kiwi::uint32_t TextReader::nbChars() const
 {
-	
+	return _currentLine->size();
 }
 
 kiwi::uint32_t TextReader::currentLine() const
 {
-	
+	return _currentLineNb;
 }
 
 bool TextReader::gotoLine(kiwi::int32_t lineNumber)
 {
-	
+	// TODO: modulo opération 
+	// this is really unsafe, i mean really !
+	_currentLine = _container->getLine(lineNumber);
+	if(_currentLine ) _currentLineNb = lineNumber;
 }
 
 bool TextReader::gotoNextLine()
 {
-	
+	gotoLine(_currentLineNb + 1);
 }
 
 bool TextReader::gotoPreviousLine()
 {
-	
+	gotoLine(_currentLineNb - 1);
 }
 
 bool TextReader::endOfText() const
 {
-	
+	return (_currentLineNb >= _container->nbLines() );
 }
 
 kiwi::string TextReader::getLine() const
 {
-	
+	return *_currentLine;
 }
 
 kiwi::uint8_t TextReader::getChar(int32_t charNumber) const
 {
-	
+	return (*_currentLine)[charNumber];
 }
 
 StringConstIterator TextReader::getStringIterator() const
 {
-	
+	return StringConstIterator( &(*_currentLine)[0]
+		, &(*_currentLine)[_currentLine->size()-1]
+		, 1 );
 }
 
 

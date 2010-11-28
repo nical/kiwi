@@ -1,6 +1,6 @@
 <h1> Kiwi </h1>
 
-A generic and easy to use pipeline system. 
+A generic and easy to use node compositor library for C++. 
 
 
 <img src='http://img808.imageshack.us/img808/4377/kiwiboxespng01.png' border='0'/>
@@ -8,11 +8,11 @@ A generic and easy to use pipeline system.
 Checkout the [wiki](http://github.com/nical/kiwi/wiki) !<br/>
 And also the doxygen [class documentation](http://coloc42.dyndns.org/nico/kiwi/doxygen/annotated.html).
 
-<h2> Resources and filters </h2>
+<h2> Containers and filters </h2>
 
 Kiwi features a powerful pipeline system composed of resources and filters : 
 <ul>
-	<li>A <b>resource</b> (kiwi::core::Resource) is an object that contains input and output ports and give access to the data it contains by providing readers and writers throught these ports.</li>
+	<li>A <b>container</b> (kiwi::core::Container) is an object that holds data and give access to the it by providing readers and writers ports (mostly output ports).</li>
 	<li>A <b>Filter</b> (kiwi::core::Filter) is a resource that can be executed using its process() method. Filters inherit from resources their connecting system. </li>
 	<li>A <b>Pipeline</b> (kiwi::core::Pipeline) is a filter that contains other filters (including eventually pipelines) and is responsible for processing each of its filters in the correct order. This is the composite design pattern applied to the kiwi system. </li>
 </ul>
@@ -26,18 +26,21 @@ kiwi 0.2.2
 Kiwi is still at an early stage, and interfaces are subject to change.
 
 <h3> Implemented </h3>
- - Resource base class with all the connection systeme
- - Filter base class 
+ - The Node base class with all the connection system
+ - Filter and Container base classes 
+ - Some generic Containers (ArrayContainer, MultiArrayContainer, cairo::ImageContainer, Value ...)
 
-<h3> Currently in developement </h3>
- - The generic ArrayData Resource
- - A simple string container
+<h3> Currently in development </h3>
+ - Pipeline classes
+ - Imaging filters using cairo
 
 <h3> TODO </h3>
+What kiwi actually needs:
 <ul>
  <li> Pipeline classes. </li>
  <li> A set of resources and filters to demonstrate kiwi's potential ! </li>
  <li> A frontend to connect graphically kiwi boxes and see the result in live. </li>
+ <li> Better automated unit tests with reports (right now it's a huge load of use cases with tons of assert(..) everywhere...)
 </ul> 
 
 <h2> License </h2>

@@ -2,7 +2,7 @@
 #define KIWI_CAIRO_IMAGECONTAINER_TEST
 
 
-#include "cairo/ImageContainer/ImageContainer.hpp"
+#include "image/cairo/ImageContainer/ImageContainer.hpp"
 
 #include "generic/ArrayContainerTest.hpp"
 

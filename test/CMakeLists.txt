@@ -1,10 +1,6 @@
-
-# Make sure the compiler can find include files.
-include_directories (${PROJECT_SOURCE_DIR}/src/)
-# Make sure the compiler can find include files.
+include_directories (${PROJECT_SOURCE_DIR}/src/kiwi/)
 include_directories (${PROJECT_SOURCE_DIR}/test/)
-
-include_directories ( /usr/include/cairo/ )
+include_directories (/usr/include/cairo/)
 
 
 # Make sure the linker can find the library once it is built.

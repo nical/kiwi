@@ -1,5 +1,5 @@
 
-#include "core/SimplePipeline.hpp"
+#include "pipeline/SimplePipeline.hpp"
 
 
 

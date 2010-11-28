@@ -1,0 +1,59 @@
+
+#include "utils/types.hpp"
+#include <boost/lexical_cast.hpp>
+
+namespace kiwi
+{
+namespace image
+{
+
+
+template<typename T, unsigned D>
+Contrast<T,D>::Contrast()
+: IterativeFilter<InputType>(1)
+{
+	// array input automatically added by IterativeFilter's constructor.
+	Node::addReaderInputPort(); // the value giving the strength parameter.
+}
+	
+
+template<typename T, unsigned D>
+void
+Contrast<T,D>::preProcess()
+{
+	if( types::isInteger<T>() )	_pivot = 128;
+	else _pivot = 0.5;
+	
+	generic::ValueReader<T> strengthReader( core::Node::readerInputPort(1) );
+	_strength = strengthReader.get();
+}
+
+template<typename T, unsigned D>
+void
+Contrast<T,D>::processFragment(ArrayConstIterator<T>* in, ArrayIterator<T>* out)
+{
+	*(out[0]) = _pivot + ( *(in[0]) - _pivot ) * _strength;
+}
+
+
+template<typename T, unsigned D>
+kiwi::string
+Contrast<T,D>::readerInputType(portIndex_t index)
+{
+	if(index == 0) return kiwi::string("array"
+				+ boost::lexical_cast<kiwi::string>(D)+"d_"
+				+ types::str<T>() );
+	else return kiwi::string( "Value_" ) + types::str<T>();
+}
+
+
+template<typename T, unsigned D>
+kiwi::string
+Contrast<T,D>::readerInputName(portIndex_t index)
+{
+	return kiwi::string( "Value_" ) + types::str<T>();
+}
+
+
+}// namespace
+}// namespace

@@ -96,9 +96,10 @@ kiwi::uint8_t TextReader::getChar(int32_t charNumber) const
 
 StringConstIterator TextReader::getStringIterator() const
 {
-	return StringConstIterator( &(*_currentLine)[0]
-		, &(*_currentLine)[_currentLine->size()-1]
-		, 1 );
+/*	return StringConstIterator( 
+		&((*_currentLine)[0])
+		, &(*_currentLine[_currentLine->size()-1]) );
+*/
 }
 
 

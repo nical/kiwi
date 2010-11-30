@@ -134,14 +134,13 @@ ScopedBlockMacro(__scop, "TextWriter::insertLine")
 	if(position < 0) position = utils::modulo<int>(position, myNbLines+1 );
 	Debug::print() << ">> " << position<< "  " << myNbLines << endl();
 	
-/*
-	while( position >= myNbLines )
+	while( position-1 >= myNbLines )
 	{
 		_container->insertLine( kiwi::string(""), myNbLines++ );
 		Debug::print() << ">> " << position<< "  " << myNbLines << endl();
 		
 	}
-*/
+
 	_container->insertLine( newLineCopy, position + tag);
 	
 }

@@ -119,12 +119,34 @@ ScopedBlockMacro(__scop, "TextContainer::insertLine")
 
 void TextContainer::removeLine( kiwi::uint32_t position )
 {
+	if(_nbLines == 1) return;
 	if(position >= _nbLines ) return ;
-	Line* it = line(position);
-	it->_prev->_next = it->_next;
-	it->_next->_prev = it->_prev;
-	delete it;
-	--_nbLines;
+	if(position == 0)
+	{
+		_first->_next->_prev = 0;
+		Line* temp = _first;
+		_first = _first->_next;
+		delete temp;
+		--_nbLines;
+		return;
+	}
+	else if(position == _nbLines-1) 
+	{
+		_last->_prev->_next = 0;
+		Line* temp = _last;
+		_last = _last->_prev;
+		delete temp;
+		--_nbLines;
+		return;
+	}
+	else
+	{
+		Line* it = line(position);
+		it->_prev->_next = it->_next;
+		it->_next->_prev = it->_prev;
+		delete it;
+		--_nbLines;
+	}
 }
 
 //-------------------------------------------------------------- private

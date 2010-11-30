@@ -28,7 +28,7 @@
 
 
 #include "TextWriter.hpp"
-
+#include "utils/modulo.hpp"
 namespace kiwi
 {
 namespace text	
@@ -36,67 +36,115 @@ namespace text
 
 
 
-TextWriter::TextWriter( const AbstractTextContainer& container )
+
+TextWriter::TextWriter( AbstractTextContainer& container 
+	, portIndex_t index )
 {
-	
+	init(container, index);
 }
 
 TextWriter::TextWriter( core::Node::WriterInputPort& port )
 {
+	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
+		port.connectedOutput()->subPort()->node() );
 	
+	if( tc ) init( *tc, port.connectedOutput()->subPort()->index() );
+	else
+	{
+		Debug::error() 
+			<< "TextWriter::constructor error:"
+			<<" Unable to determine the Container type."
+			<< endl();
+	}
+}
+
+void TextWriter::init( AbstractTextContainer& container
+	, portIndex_t portIndex )
+{
+	_container = &container;
+	_currentLine = container.getLine(0);
+	_currentLineNb = 0;
 }
 
 kiwi::uint32_t TextWriter::nbLines() const
 {
-	
+	return _container->nbLines();
 }
 
 kiwi::uint32_t TextWriter::nbChars() const
 {
-	
+	return _currentLine->size();
 }
 
 kiwi::uint32_t TextWriter::currentLine() const
 {
-	
+	return _currentLineNb;
 }
 
 bool TextWriter::gotoLine(kiwi::int32_t lineNumber)
 {
-	
+	// TODO: modulo opération 
+	// this is really unsafe, i mean really !
+	_currentLine = _container->getLine(lineNumber);
+	if(_currentLine ) _currentLineNb = lineNumber;
 }
 
 bool TextWriter::gotoNextLine()
 {
-	
+	gotoLine(_currentLineNb + 1);
 }
 
 bool TextWriter::gotoPreviousLine()
 {
-	
+	gotoLine(_currentLineNb - 1);
 }
 
 bool TextWriter::endOfText() const
 {
-	
+	return (_currentLineNb >= _container->nbLines() );
 }
 
 kiwi::string& TextWriter::getLine() const
 {
-	
+	return *_currentLine;
 }
 
 kiwi::uint8_t TextWriter::getChar(int32_t charNumber) const
 {
-	
+	return (*_currentLine)[charNumber];
 }
 
 StringIterator TextWriter::getStringIterator() const
 {
-	
+	return StringIterator( 
+		&((*_currentLine)[0])
+		, &((*_currentLine)[_currentLine->size()-1]) 
+		);
+
 }
 
+void TextWriter::insertLine( 
+	const kiwi::string& newLineCopy
+	, int position 
+	, int tag )
+{
+ScopedBlockMacro(__scop, "TextWriter::insertLine")
 
+	uint32_t myNbLines = nbLines();
+	if(position < 0) position = utils::modulo<int>(position, myNbLines+1 );
+	Debug::print() << ">> " << position<< "  " << myNbLines << endl();
+	
+/*
+	while( position >= myNbLines )
+	{
+		_container->insertLine( kiwi::string(""), myNbLines++ );
+		Debug::print() << ">> " << position<< "  " << myNbLines << endl();
+		
+	}
+*/
+	_container->insertLine( newLineCopy, position + tag);
+	
+}
 	
 	
 }// namespace	

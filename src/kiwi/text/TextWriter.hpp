@@ -36,12 +36,15 @@ namespace text
 {
 
 
-typedef kiwi::generic::ArrayIterator<kiwi::uint8_t> StringIterator;
+typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;
 	
 class TextWriter
 {
 public:
-	TextWriter( const AbstractTextContainer& container );
+	enum { BEFORE = 0, AFTER = 1 }; 
+
+	TextWriter(AbstractTextContainer& container
+		, portIndex_t );
 	TextWriter( core::Node::WriterInputPort& port );
 	
 	kiwi::uint32_t nbLines() const;
@@ -54,14 +57,17 @@ public:
 	kiwi::string& getLine() const;
 	kiwi::uint8_t getChar(int32_t charNumber) const;
 	kiwi::uint8_t setChar(int32_t charNumber, uint8_t value) const;
+	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
 	
 	StringIterator getStringIterator() const;
 	
 protected:	
-	void init(const AbstractTextContainer& container);
-	
+	kiwi::string* _currentLine;
+	uint32_t _currentLineNb;
 private:
 	AbstractTextContainer* _container;
+	void init(AbstractTextContainer& container
+		, portIndex_t );
 };		
 
 

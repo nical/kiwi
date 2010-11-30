@@ -36,14 +36,34 @@ namespace text
 {
 
 
-TextReader::TextReader( const AbstractTextContainer& container )
+TextReader::TextReader( AbstractTextContainer& container 
+	, portIndex_t index )
 {
-	
+	init(container, index);
 }
 
 TextReader::TextReader( core::Node::ReaderInputPort& port )
 {
+	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
+		port.connectedOutput()->subPort()->node() );
 	
+	if( tc ) init( *tc, port.connectedOutput()->subPort()->index() );
+	else
+	{
+		Debug::error() 
+			<< "TextReader::constructor error:"
+			<<" Unable to determine the Container type."
+			<< endl();
+	}
+}
+
+void TextReader::init( AbstractTextContainer& container
+	, portIndex_t portIndex )
+{
+	_container = &container;
+	_currentLine = container.getLine(0);
+	_currentLineNb = 0;
+
 }
 
 kiwi::uint32_t TextReader::nbLines() const
@@ -63,6 +83,7 @@ kiwi::uint32_t TextReader::currentLine() const
 
 bool TextReader::gotoLine(kiwi::int32_t lineNumber)
 {
+	Debug::print() << "gotoLine " << lineNumber << endl();
 	// TODO: modulo opération 
 	// this is really unsafe, i mean really !
 	_currentLine = _container->getLine(lineNumber);
@@ -96,10 +117,11 @@ kiwi::uint8_t TextReader::getChar(int32_t charNumber) const
 
 StringConstIterator TextReader::getStringIterator() const
 {
-/*	return StringConstIterator( 
+	return StringConstIterator( 
 		&((*_currentLine)[0])
-		, &(*_currentLine[_currentLine->size()-1]) );
-*/
+		, &((*_currentLine)[_currentLine->size()-1]) 
+		);
+
 }
 
 

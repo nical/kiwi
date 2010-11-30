@@ -51,7 +51,11 @@ kiwi::string* TextContainer::getLine( kiwi::uint32_t lineNumber )
 {
 ScopedBlockMacro(__scop, "TextContainer::getLine")	
 	// returns 0 if the line doesn't exist.
-	if(lineNumber >= _nbLines ) return 0;
+	if(lineNumber >= _nbLines ) 
+	{
+		DEBUG_ONLY( Debug::print() << "lineNumber >= _nbLines"<<endl(); )
+		return 0;
+	}
 	
 	Line* it = line(lineNumber);
 	
@@ -67,33 +71,39 @@ void TextContainer::insertLine(
 	, kiwi::uint32_t position )
 {
 ScopedBlockMacro(__scop, "TextContainer::insertLine")
-	if( position >= _nbLines ) 
+	Debug::print() << "nbLines:" << _nbLines
+			<< " pos: " << position << endl();
+	if( position > _nbLines ) 
 	{
 		Debug::error() << "TextContainer::insertLine error: line" 
 			<< position << "out of the container (" << _nbLines 
 			<< "lines)."  << endl();
 		return;
 	}
-	if( position == _nbLines-1 ) // last line
+	if( position == _nbLines ) // last line
 	{
+		Debug::print() << "inserting at the end" << endl();
 		Line* temp = _last;
 		_last = new Line;
 		_last->_next = 0;
-		_last->_prev = temp->_prev;
+		_last->_prev = temp;
+		temp->_next = _last;
 		_last->_text = toInsert;
 		++_nbLines;
 		return;
 	}
 	if( position == 0 ) // first line
 	{
+		Debug::print() << "inserting at the beginning" << endl();
 		Line* temp = _first;
 		_first = new Line;
 		_first->_prev = 0;
-		_first->_next = temp->_next;
+		_first->_next = temp;
 		_first->_text = toInsert;
 		++_nbLines;
 		return;
 	}
+	Debug::print() << "inserting in the middle" << endl();
 	// general case
 	Line* thenext = line(position);
 	Line* newline = new Line;
@@ -120,9 +130,14 @@ void TextContainer::removeLine( kiwi::uint32_t position )
 //-------------------------------------------------------------- private
 TextContainer::Line* TextContainer::line(kiwi::uint32_t position)
 {
+ScopedBlockMacro(__scop, kiwi::string("TextContainer::line") )
+	//Debug::print() << position << endl();
 	Line* it = _first;
 	for(kiwi::uint32_t i = 0; i < position; ++i)
+	{
+	//	Debug::print() << "haha " << i << endl();
 		it = it->_next;
+	}
 	return it;
 }
 

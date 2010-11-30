@@ -37,12 +37,12 @@ namespace kiwi
 namespace text	
 {
 
-typedef kiwi::generic::ArrayConstIterator<kiwi::uint8_t> StringConstIterator;
+typedef kiwi::generic::ArrayConstIterator<kiwi::int8_t> StringConstIterator;
 	
 class TextReader
 {
 public:
-	TextReader( const AbstractTextContainer& container );
+	TextReader( AbstractTextContainer& container, portIndex_t index );
 	TextReader( core::Node::ReaderInputPort& port );
 	
 	kiwi::uint32_t nbLines() const;
@@ -54,12 +54,14 @@ public:
 	bool endOfText() const;
 	kiwi::string getLine() const;
 	kiwi::uint8_t getChar(int32_t charNumber) const;
-	StringConstIterator getStringIterator() const;
+	StringConstIterator getStringIterator() const;// ODO
 	
-protected:	
+protected:
 	AbstractTextContainer* _container;
 	kiwi::string* _currentLine;
 	uint32_t _currentLineNb;
+private:
+	void init( AbstractTextContainer& container, portIndex_t index );
 };	
 	
 }// namespace	

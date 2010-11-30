@@ -14,7 +14,7 @@ SET(KIWI_SRC ${KIWI_SRC}
 
 SET(optionalLibs ${optionalLibs} ${CAIRO_LIBRARIES} )
 
-SET(CMAKE_CXX_FLAGS ${CAIRO_CFLAGS})
+SET(CMAKE_CXX_FLAGS ${CAIRO_CFLAGS} -g)
 message("${LIBKIWI_NAME} library src: ${KIWI_SRC}")
 add_library ( ${LIBKIWI_NAME}  ${KIWI_SRC})
 TARGET_LINK_LIBRARIES(${LIBKIWI_NAME} ${optionalLibs} )

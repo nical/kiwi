@@ -38,11 +38,16 @@ namespace kiwi
 {
 namespace text	
 {
-	
+
+class TextReader;
+class TextWriter;
 		
 class TextContainer : public AbstractTextContainer
 {
 public:
+	typedef TextReader ReaderType;
+	typedef TextWriter WriterType;
+
 	/**
 	 * @brief Constructor. 
 	 */ 

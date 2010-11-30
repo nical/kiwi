@@ -145,6 +145,14 @@ ScopedBlockMacro(__scop, "TextWriter::insertLine")
 	_container->insertLine( newLineCopy, position + tag);
 	
 }
+
+void TextWriter::removeLine(kiwi::uint32_t position)
+{
+	uint32_t nbl = nbLines();
+	if(position > nbl ) position = utils::modulo(position, nbl);
+	Debug::print() << "TextWriter::removeLine " << position << endl();
+	_container->removeLine(position);
+}	
 	
 	
 }// namespace	

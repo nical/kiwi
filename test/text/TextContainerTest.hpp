@@ -27,9 +27,15 @@ ScopedBlockMacro(__scp, "kiwi::test::TextContainer")
 	Debug::print() << "#" << reader.getLine() << endl();
 	reader.gotoNextLine();
 	Debug::print() << "#" << reader.getLine() << endl();
-
-	Debug::print() << utils::modulo(-1.0, 1) << endl();
-	Debug::print() << utils::modulo(-1, 1) << endl();
+	writer.removeLine(1);
+	
+	Debug::endl(3);
+	
+	reader.gotoLine(0);
+	Debug::print() << "#" << reader.getLine() << endl();
+	reader.gotoNextLine();
+	Debug::print() << "#" << reader.getLine() << endl();
+	
 	
 }
 

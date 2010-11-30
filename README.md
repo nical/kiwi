@@ -51,7 +51,7 @@ readme.txt file in each sub-project directory for informations about which licen
 
 <h2> Project member(s) </h2>
 
-For know the Kiwi project is designed/developed/maintained by <b>Nicolas Silva</b>.
+For now the Kiwi project is designed/developed/maintained by <b>Nicolas Silva</b>.
 
 I would be very happy to share this experience with anyone who is motivated to create and/or test filters and resources based on kiwi!
 
@@ -60,3 +60,5 @@ To contact me:
 email: nical.silva@gmail.com <br/>
 twitter: [@nicalsilva](http://twitter.com/#!/nicalsilva)<br/>
 my resume [(fr)](http://github.com/nical/resume/raw/master/fr/NicolasSilva.pdf)<br/>
+
+Recently Thibaut Vuillemin (@semprobe) joined the project as a developer !

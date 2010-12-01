@@ -54,22 +54,22 @@ Node::Node()
 Node::~Node()
 {
 	Debug::print() << "Node::destructor"<<endl();
-	while(getReaderInputCount())
+	while(nbReaderInputs())
 	{
 		delete _readerInputs[_readerInputs.size()-1];
 		removeReaderInputPort();
 	}
-	while(getReaderOutputCount())
+	while(nbReaderOutputs())
 	{
 		delete _readerOutputs[_readerOutputs.size()-1];
 		removeReaderOutputPort();
 	}
-	while(getWriterInputCount())
+	while(nbWriterInputs())
 	{
 		delete _writerInputs[_writerInputs.size()-1];
 		removeWriterInputPort();
 	}
-	while(getWriterOutputCount())
+	while(nbWriterOutputs())
 	{
 		delete _writerOutputs[_writerOutputs.size()-1];
 		removeWriterOutputPort();

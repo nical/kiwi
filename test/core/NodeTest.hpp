@@ -78,9 +78,10 @@ void NodeTest()
 	Debug::print() << n.readerInputPort(kiwi::string("foo"))->name() << endl();
 	Debug::print() << n.readerInputPort(kiwi::string("bar"))->name() << endl();
 	
-	assert(n.readerInputPort(kiwi::string("foo"))->index() == 0 );
-	assert(n.readerInputPort(kiwi::string("bar"))->index() == 1 );
-	assert(n.readerInputPort(kiwi::string("mouahaha") ) == 0 );
+	assert(n.readerInputPort("foo")->index() == 0 );
+	assert(n.readerInputPort("bar")->index() == 1 );
+	assert(n.readerOutputPort("plop")->index() == 0 );
+	assert(n.readerInputPort("mouahaha") == 0 );
 }
 
 

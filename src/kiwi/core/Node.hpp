@@ -130,7 +130,7 @@ public:
 	 * @param index The index of the port.
 	 */ 
 	ReaderInputPort& readerInputPort(portIndex_t index) const
-		{assert(index < getReaderInputCount() ); return *_readerInputs[index];}
+		{assert(index < nbReaderInputs() ); return *_readerInputs[index];}
 	/**
 	 * @brief Access to a port.
 	 *
@@ -139,7 +139,7 @@ public:
 	 * @param index The index of the port.
 	 */ 
 	ReaderOutputPort& readerOutputPort(portIndex_t index) const
-		{assert(index < getReaderOutputCount() ); return *_readerOutputs[index];}
+		{assert(index < nbReaderOutputs() ); return *_readerOutputs[index];}
 	
 	/**
 	 * @brief Access to a port.
@@ -149,7 +149,7 @@ public:
 	 * @param index The index of the port.
 	 */
 	WriterInputPort& writerInputPort(portIndex_t index) const
-		{assert(index < getWriterInputCount() );return *_writerInputs[index];}
+		{assert(index < nbWriterInputs() );return *_writerInputs[index];}
 	/**
 	 * @brief Access to a port.
 	 *
@@ -158,7 +158,7 @@ public:
 	 * @param index The index of the port.
 	 */
 	WriterOutputPort& writerOutputPort(portIndex_t index) const
-		{assert(index < getWriterOutputCount() );return *_writerOutputs[index];}
+		{assert(index < nbWriterOutputs() );return *_writerOutputs[index];}
 
 	/**
 	 * @brief Access to a port using port name.
@@ -170,7 +170,7 @@ public:
 	 */ 
 	ReaderInputPort* readerInputPort(const kiwi::string& portName) const
 	{
-		for( kiwi::uint32_t i = 0; i < getReaderInputCount(); ++i )
+		for( kiwi::uint32_t i = 0; i < nbReaderInputs(); ++i )
 		{	
 			if(readerInputName(i) == portName)
 				return _readerInputs[i];
@@ -187,7 +187,7 @@ public:
 	 */ 
 	WriterOutputPort* writerOutputPort(const kiwi::string& portName) const
 	{
-		for( kiwi::uint32_t i = 0; i < getWriterOutputCount(); ++i )
+		for( kiwi::uint32_t i = 0; i < nbWriterOutputs(); ++i )
 		{	
 			if(writerOutputName(i) == portName)
 				return _writerOutputs[i];
@@ -204,7 +204,7 @@ public:
 	 */ 
 	ReaderOutputPort* readerOutputPort(const kiwi::string& portName) const
 	{
-		for( kiwi::uint32_t i = 0; i < getReaderOutputCount(); ++i )
+		for( kiwi::uint32_t i = 0; i < nbReaderOutputs(); ++i )
 		{	
 			if(readerOutputName(i) == portName)
 				return _readerOutputs[i];
@@ -221,7 +221,7 @@ public:
 	 */ 
 	WriterInputPort* writerInputPort(const kiwi::string& portName) const
 	{
-		for( kiwi::uint32_t i = 0; i < getWriterInputCount(); ++i )
+		for( kiwi::uint32_t i = 0; i < nbWriterInputs(); ++i )
 		{	
 			if(writerInputName(i) == portName)
 				return _writerInputs[i];
@@ -233,19 +233,19 @@ public:
 	/**
 	 * @brief Returns the amount of Reader Inputs of this Node.
 	 */ 
-	inline unsigned getReaderInputCount() const {return _readerInputs.size();}
+	inline unsigned nbReaderInputs() const {return _readerInputs.size();}
 	/**
 	 * @brief Returns the amount of Reader Outputs of this Node.
 	 */
-	inline unsigned getReaderOutputCount() const {return _readerOutputs.size();}
+	inline unsigned nbReaderOutputs() const {return _readerOutputs.size();}
 	/**
 	 * @brief Returns the amount of Writer inputs of this Node.
 	 */
-	inline unsigned getWriterInputCount() const {return _writerInputs.size();}
+	inline unsigned nbWriterInputs() const {return _writerInputs.size();}
 	/**
 	 * @brief Returns the amount of Writer outputs of this Node.
 	 */
-	inline unsigned getWriterOutputCount() const {return _readerOutputs.size();}
+	inline unsigned nbWriterOutputs() const {return _readerOutputs.size();}
 	
 	/**
 	 * @brief Returns true if the layout event is enabled.
@@ -552,9 +552,13 @@ public:
 		// a more flexible version is to come with use of polymorphism 
 		// to get compatibility of child classes.
 		/**
-		 * @brief Port compatibility check based on the type string.
+		 * @brief Port compatibility check based on the type tag.
 		 */ 
-		inline bool isCompatible(OutputPort<SlotType>& output) ;
+		inline bool isCompatible(OutputPort<SlotType>& output) ;/**
+		/**
+		 * @brief Port compatibility check based on the type tag.
+		 */ 
+		inline bool isCompatible(const kiwi::string& tag) ;
 		/**
 		 * @brief Resturns true if this port is connected.
 		 */ 

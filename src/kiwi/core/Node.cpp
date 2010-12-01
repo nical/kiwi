@@ -271,25 +271,25 @@ Node::writerOutputName(portIndex_t index)
 kiwi::string 
 Node::readerInputType(portIndex_t index) 
 {
-	return kiwi::string("any");
+	return kiwi::string("#any");
 }
 
 kiwi::string 
 Node::readerOutputType(portIndex_t index)
 {
-	return kiwi::string("any");
+	return kiwi::string("#any");
 }
 
 kiwi::string 
 Node::writerInputType(portIndex_t index)
 {
-	return kiwi::string("any");
+	return kiwi::string("#any");
 }
 
 kiwi::string 
 Node::writerOutputType(portIndex_t index)
 {
-	return kiwi::string("any");
+	return kiwi::string("#any");
 }
 
 

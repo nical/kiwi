@@ -123,7 +123,7 @@ public:
 		) const ;
 
 	/**
-	 * @brief Returns an iterator that browses through a span
+	 * @brief Returns an iterator that browses through a span.
 	 * 
 	 * @param origin the first element pointed by the span iterator
 	 * @param dim The dimension in which we want to iterate (x,y..)

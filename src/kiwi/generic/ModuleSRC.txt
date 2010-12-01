@@ -1,6 +1,0 @@
-SET(KIWI_SRC ${KIWI_SRC} 
-		generic/GenericIterator.hpp
-		generic/ArrayIterator.hpp
-		generic/ArrayContainer.hpp
-		generic/Point.hpp
-		)

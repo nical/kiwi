@@ -161,7 +161,7 @@ inline bool
 Node::InputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
 { 
 	return ( (type().find(output.type())!= string::npos) 
-		|| (type().find("any")!= string::npos) );
+		|| (type().find("#any")!= string::npos) );
 }
 
 template <typename SlotType>

@@ -104,27 +104,6 @@ public:
 
 	virtual int nodeType() = 0;
 
-	/**
-	 * @brief Verifies the compatibility of a given Reader to one of the input ports
-	 *
-	 * Returns true if the output port passed in parameter is compatible with the input ports.
-	 * This method must be implemented by every Node/Filter.
-	 *
-	 * @param inputIndex The index of the input port concerned
-	 * @param port A reference to the output port that is to be checked.
-	 */
-	virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Reader>& port) const {return false;}
-	
-	/**
-	 * @brief Verifies the compatibility of a given Reader to one of the input ports
-	 *
-	 * Returns true if the output port passed in parameter is compatible with the input ports.
-	 * This method must be implemented by every Node/Filter.
-	 *
-	 * @param inputIndex The index of the input port concerned
-	 * @param port A reference to the output port that is to be checked.
-	 */virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Writer>& port) const {return false;}
-
 
 	/**
 	 * @brief Automatically called when port are connected or disconnected.
@@ -135,9 +114,8 @@ public:
 	 * 
 	 * By default it does nothing.
 	 * 
-	 * Note: This method should be overload a least only to call the parent
-	 * class's method in case it does override it and you want to keep
-	 * this behaviour.
+	 * Note: If overloaded this method should call the parent
+	 * class's method in case it does override it, to keep its behaviour.
 	 */  
 	virtual void layoutChanged() { }
 
@@ -718,9 +696,6 @@ bool operator>>(Node::OutputPort<SlotType>& output, Node::InputPort<SlotType>& i
 
 
 
-// >_< ...
-// I don't know why, this does not link when put in the cpp file ...
-// #cpp build system sucks
 inline void 
 Node::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
 { 

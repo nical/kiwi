@@ -71,6 +71,13 @@ ScopedBlockMacro(__scp, "kiwi::test::TextContainer")
 		reader.gotoNextLine();
 	}
 	
+	// remove more lines than the total number of lines
+	for(unsigned i = 0; i < 15; ++i) 
+		writer.removeLine(0);
+	assert(reader.nbLines() == 1);
+	reader.gotoLine(0);
+	assert(reader.getLine() == "");
+	Debug::print() << "NbLines (after deletes): " << reader.nbLines() <<endl();
 	
 }
 

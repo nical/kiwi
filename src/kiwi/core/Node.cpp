@@ -54,22 +54,22 @@ Node::Node()
 Node::~Node()
 {
 	Debug::print() << "Node::destructor"<<endl();
-	while(getReaderInputCount())
+	while(nbReaderInputs())
 	{
 		delete _readerInputs[_readerInputs.size()-1];
 		removeReaderInputPort();
 	}
-	while(getReaderOutputCount())
+	while(nbReaderOutputs())
 	{
 		delete _readerOutputs[_readerOutputs.size()-1];
 		removeReaderOutputPort();
 	}
-	while(getWriterInputCount())
+	while(nbWriterInputs())
 	{
 		delete _writerInputs[_writerInputs.size()-1];
 		removeWriterInputPort();
 	}
-	while(getWriterOutputCount())
+	while(nbWriterOutputs())
 	{
 		delete _writerOutputs[_writerOutputs.size()-1];
 		removeWriterOutputPort();
@@ -215,25 +215,25 @@ Node::indexOf(const WriterOutputPort& port) const
 
 
 kiwi::string 
-Node::readerInputName(portIndex_t index) 
+Node::readerInputName(portIndex_t index) const
 {
 	return kiwi::string("");
 }
 
 kiwi::string 
-Node::readerOutputName(portIndex_t index)
+Node::readerOutputName(portIndex_t index) const
 {
 	return kiwi::string("");
 }
 
 kiwi::string 
-Node::writerInputName(portIndex_t index)
+Node::writerInputName(portIndex_t index) const
 {
 	return kiwi::string("");
 }
 
 kiwi::string 
-Node::writerOutputName(portIndex_t index)
+Node::writerOutputName(portIndex_t index) const
 {
 	return kiwi::string("");
 }
@@ -242,25 +242,25 @@ Node::writerOutputName(portIndex_t index)
 
 
 kiwi::string 
-Node::readerInputType(portIndex_t index) 
+Node::readerInputType(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::readerOutputType(portIndex_t index)
+Node::readerOutputType(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::writerInputType(portIndex_t index)
+Node::writerInputType(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::writerOutputType(portIndex_t index)
+Node::writerOutputType(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }

@@ -50,7 +50,7 @@ ScopedBlockMacro(__scp, "CanonicalFilter::constructor")
 
 void CanonicalFilter::layoutChanged()
 {
-	uint32_t nbWriters = getWriterInputCount();
+	uint32_t nbWriters = nbWriterInputs();
 	ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
 	for(uint32_t i = 0; i < nbWriters; ++i)
 	{

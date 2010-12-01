@@ -165,6 +165,14 @@ Node::InputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)
 
 template <typename SlotType>
 inline bool 
+Node::InputPort<SlotType>::isCompatible(const kiwi::string& tag)	
+{ 
+	return ( (type().find(tag)!= string::npos) 
+		|| (type().find("#any")!= string::npos) );
+}
+
+template <typename SlotType>
+inline bool 
 Node::InputPort<SlotType>::isConnected() const 
 { 
 	return (_connectedNode != 0); 

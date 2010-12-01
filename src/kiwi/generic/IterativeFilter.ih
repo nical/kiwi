@@ -52,7 +52,7 @@ ScopedBlockMacro(__scop, "IterativeFilter::process()")
 
 	
 
-	uint32_t nbWriters = getWriterInputCount();
+	uint32_t nbWriters = nbWriterInputs();
 	
 	InputIteratorType in[nbWriters];
 	OutputIteratorType out[nbWriters];

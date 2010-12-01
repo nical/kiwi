@@ -215,25 +215,25 @@ Node::indexOf(const WriterOutputPort& port) const
 
 
 kiwi::string 
-Node::readerInputName(portIndex_t index) 
+Node::readerInputName(portIndex_t index) const
 {
 	return kiwi::string("");
 }
 
 kiwi::string 
-Node::readerOutputName(portIndex_t index)
+Node::readerOutputName(portIndex_t index) const
 {
 	return kiwi::string("");
 }
 
 kiwi::string 
-Node::writerInputName(portIndex_t index)
+Node::writerInputName(portIndex_t index) const
 {
 	return kiwi::string("");
 }
 
 kiwi::string 
-Node::writerOutputName(portIndex_t index)
+Node::writerOutputName(portIndex_t index) const
 {
 	return kiwi::string("");
 }
@@ -242,25 +242,25 @@ Node::writerOutputName(portIndex_t index)
 
 
 kiwi::string 
-Node::readerInputType(portIndex_t index) 
+Node::readerInputType(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::readerOutputType(portIndex_t index)
+Node::readerOutputType(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::writerInputType(portIndex_t index)
+Node::writerInputType(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::writerOutputType(portIndex_t index)
+Node::writerOutputType(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }

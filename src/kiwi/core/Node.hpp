@@ -37,10 +37,11 @@
 #ifndef KIWI_NODE_HPP
 #define KIWI_NODE_HPP
 
-#include <list>
-#include <vector>
 
 #include "kiwi/core/Commons.hpp"
+
+#include <list>
+#include <vector>
 #include <assert.h>
 
 
@@ -72,12 +73,12 @@ class Node;
 class Node
 {
 public:
-//---------------------------------------  Internal classes declarations
+//-----------------------------------------------  Internal classes declarations
 	
 	template<class SlotType> class InputPort;
 	template<class SlotType> class OutputPort;
 	
-//------------------------------------------------------------- typedefs
+//--------------------------------------------------------------------- typedefs
 	
 	typedef OutputPort<Reader> ReaderOutputPort;
 	typedef InputPort<Reader> ReaderInputPort;
@@ -86,7 +87,7 @@ public:
 
 	enum { FILTER, CONTAINER};
 
-// -------------------------------------------- constructor / Destructor
+// ---------------------------------------------------- constructor / Destructor
 	/**
 	 * @brief Constructor
 	 */ 
@@ -100,7 +101,7 @@ public:
 
 
 
-// ----------------------------------------------------- virtual methods
+// ------------------------------------------------------------- virtual methods
 
 	virtual int nodeType() = 0;
 
@@ -133,13 +134,13 @@ public:
 	/**
 	 * @brief Access to a port.
 	 *
-	 * Retrives the indexth OutputPort of the Node's Reader interface.
+	 * Retrives the indexth InputPort of the Node's Reader interface.
 	 *
 	 * @param index The index of the port.
 	 */ 
 	ReaderOutputPort& readerOutputPort(portIndex_t index) const
-		{assert(index < getReaderOutputCount() );return *_readerOutputs[index];}
-
+		{assert(index < getReaderOutputCount() ); return *_readerOutputs[index];}
+	
 	/**
 	 * @brief Access to a port.
 	 *
@@ -158,6 +159,76 @@ public:
 	 */
 	WriterOutputPort& writerOutputPort(portIndex_t index) const
 		{assert(index < getWriterOutputCount() );return *_writerOutputs[index];}
+
+	/**
+	 * @brief Access to a port using port name.
+	 *
+	 * Retrives the output port corresponding to the given name if the name exists
+	 * and returns a nil pointer otherwise. 
+	 *
+	 * @param portName The name of the port.
+	 */ 
+	ReaderInputPort* readerInputPort(const kiwi::string& portName) const
+	{
+		for( kiwi::uint32_t i = 0; i < getReaderInputCount(); ++i )
+		{	
+			if(readerInputName(i) == portName)
+				return _readerInputs[i];
+		}
+		return 0;
+	}
+	/**
+	 * @brief Access to a port using port name.
+	 *
+	 * Retrives the output port corresponding to the given name if the name exists
+	 * and returns a nil pointer otherwise. 
+	 *
+	 * @param portName The name of the port.
+	 */ 
+	WriterOutputPort* writerOutputPort(const kiwi::string& portName) const
+	{
+		for( kiwi::uint32_t i = 0; i < getWriterOutputCount(); ++i )
+		{	
+			if(writerOutputName(i) == portName)
+				return _writerOutputs[i];
+		}
+		return 0;
+	}
+	/**
+	 * @brief Access to a port using port name.
+	 *
+	 * Retrives the output port corresponding to the given name if the name exists
+	 * and returns a nil pointer otherwise. 
+	 *
+	 * @param portName The name of the port.
+	 */ 
+	ReaderOutputPort* readerOutputPort(const kiwi::string& portName) const
+	{
+		for( kiwi::uint32_t i = 0; i < getReaderOutputCount(); ++i )
+		{	
+			if(readerOutputName(i) == portName)
+				return _readerOutputs[i];
+		}
+		return 0;
+	}
+	/**
+	 * @brief Access to a port using port name.
+	 *
+	 * Retrives the output port corresponding to the given name if the name exists
+	 * and returns a nil pointer otherwise. 
+	 *
+	 * @param portName The name of the port.
+	 */ 
+	WriterInputPort* writerInputPort(const kiwi::string& portName) const
+	{
+		for( kiwi::uint32_t i = 0; i < getWriterInputCount(); ++i )
+		{	
+			if(writerInputName(i) == portName)
+				return _writerInputs[i];
+		}
+		return 0;
+	}
+
 
 	/**
 	 * @brief Returns the amount of Reader Inputs of this Node.
@@ -213,50 +284,50 @@ public:
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string readerInputName( portIndex_t index );
+	virtual kiwi::string readerInputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string readerOutputName( portIndex_t index );
+	virtual kiwi::string readerOutputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string writerInputName( portIndex_t index );
+	virtual kiwi::string writerInputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Writer output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string writerOutputName( portIndex_t index );
+	virtual kiwi::string writerOutputName( portIndex_t index ) const;
 	
 	/**
 	 * @brief Returns the type of a Reader input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string readerInputType( portIndex_t index );
+	virtual kiwi::string readerInputType( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string readerOutputType( portIndex_t index );
+	virtual kiwi::string readerOutputType( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string writerInputType( portIndex_t index );
+	virtual kiwi::string writerInputType( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string writerOutputType( portIndex_t index );
+	virtual kiwi::string writerOutputType( portIndex_t index ) const;
 	
 // --------------------------------------------------- protected methods	
 protected:

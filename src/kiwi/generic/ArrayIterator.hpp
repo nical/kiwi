@@ -39,7 +39,7 @@
 #ifndef KIWI_ARRAYITERATOR_HPP
 #define KIWI_ARRAYITERATOR_HPP
 
-#include "generic/GenericIterator.hpp"
+#include "kiwi/generic/GenericIterator.hpp"
 
 namespace kiwi
 {
@@ -220,6 +220,6 @@ protected:
 
 
 
-#include "generic/ArrayIterator.ih"
+#include "kiwi/generic/ArrayIterator.ih"
 
 #endif

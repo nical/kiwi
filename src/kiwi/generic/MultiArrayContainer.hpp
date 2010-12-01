@@ -40,13 +40,13 @@
 #ifndef KIWI_MULTIARRAYCONTAINER_HPP
 #define KIWI_MULTIARRAYCONTAINER_HPP
 
-#include "generic/ArrayReader.hpp"
-#include "generic/ArrayWriter.hpp"
-#include "generic/Point.hpp"
-#include "utils/types.hpp"
+#include "kiwi/generic/ArrayReader.hpp"
+#include "kiwi/generic/ArrayWriter.hpp"
+#include "kiwi/generic/Point.hpp"
+#include "kiwi/utils/types.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
+#include "kiwi/generic/AbstractArrayContainer.hpp"
 #include <boost/lexical_cast.hpp>
-#include "generic/ArrayIterator.hpp"
-#include "generic/AbstractArrayContainer.hpp"
 
 namespace kiwi
 {

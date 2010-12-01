@@ -41,8 +41,8 @@
 #define KIWI_CAIROIMAGECONTAINER_HPP
 
 #include <cairo.h>
-#include "generic/AbstractArrayContainer.hpp"
-#include "generic/Point.hpp"
+#include "kiwi/generic/AbstractArrayContainer.hpp"
+#include "kiwi/generic/Point.hpp"
 
 
 

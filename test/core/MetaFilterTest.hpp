@@ -4,13 +4,13 @@
 #define KIWI_METAFILTER_TEST
 
 
-#include "core/Commons.hpp"
+#include "kiwi/core/Commons.hpp"
 
-#include "core/Filter.hpp"
+#include "kiwi/core/Filter.hpp"
 
 #include "generic/ArrayContainerTest.hpp"
 
-#include "utils/types.hpp"
+#include "kiwi/utils/types.hpp"
 
 #include <vector>
 

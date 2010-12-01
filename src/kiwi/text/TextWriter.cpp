@@ -28,7 +28,7 @@
 
 
 #include "TextWriter.hpp"
-#include "utils/modulo.hpp"
+#include "kiwi/utils/modulo.hpp"
 namespace kiwi
 {
 namespace text	

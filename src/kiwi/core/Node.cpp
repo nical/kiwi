@@ -211,33 +211,6 @@ Node::indexOf(const WriterOutputPort& port) const
 	return 0;	
 }
 
-// ------------------------------------------------------ port rebinding
-
-//inline void 
-//Node::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
-//{ 
-	//myPort.bind(toBind); 
-//}
-
-//inline void 
-//Node::bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
-//{ 
-	//myPort.bind(toBind);
-//}
-
-//inline void 
-//Node::bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
-//{ 
-	//myPort.bind(toBind); 
-//}
-
-//inline void 
-//Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
-//{ 
-	//myPort.bind(toBind); 
-//}
-
-
 // ---------------------------------------------------------- port names
 
 
@@ -271,38 +244,27 @@ Node::writerOutputName(portIndex_t index)
 kiwi::string 
 Node::readerInputType(portIndex_t index) 
 {
-	return kiwi::string("any");
+	return kiwi::string("#any");
 }
 
 kiwi::string 
 Node::readerOutputType(portIndex_t index)
 {
-	return kiwi::string("any");
+	return kiwi::string("#any");
 }
 
 kiwi::string 
 Node::writerInputType(portIndex_t index)
 {
-	return kiwi::string("any");
+	return kiwi::string("#any");
 }
 
 kiwi::string 
 Node::writerOutputType(portIndex_t index)
 {
-	return kiwi::string("any");
+	return kiwi::string("#any");
 }
 
-
-
-
-
-
-
-
-
-//
-// Implementation of node's inline & template methods.
-//
 
 
 

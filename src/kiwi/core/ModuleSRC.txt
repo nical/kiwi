@@ -1,6 +1,0 @@
-SET(KIWI_SRC ${KIWI_SRC} 
-		core/Node.cpp
-#		core/Filter.hpp
-#		core/Pipeline.hpp
-#		core/Commons.hpp
-		)

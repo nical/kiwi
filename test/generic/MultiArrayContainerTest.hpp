@@ -3,20 +3,20 @@
 #ifndef KIWI_MULTIARRAYCONTAINER_TEST
 #define KIWI_MULTIARRAYCONTAINER_TEST
 
-#include "core/Commons.hpp"
+#include "kiwi/core/Commons.hpp"
 
-#include "core/Filter.hpp"
+#include "kiwi/core/Filter.hpp"
 
-#include "generic/MultiArrayContainer.hpp"
-#include "generic/ArrayReader.hpp"
-#include "generic/ArrayWriter.hpp"
-#include "generic/ArrayIterator.hpp"
+#include "kiwi/generic/MultiArrayContainer.hpp"
+#include "kiwi/generic/ArrayReader.hpp"
+#include "kiwi/generic/ArrayWriter.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
 
 #include "generic/ArrayContainerTest.hpp" // for AddArrays Filter
 
-#include "generic/Point.hpp"
+#include "kiwi/generic/Point.hpp"
 
-#include "utils/types.hpp"
+#include "kiwi/utils/types.hpp"
 
 #include <vector>
 

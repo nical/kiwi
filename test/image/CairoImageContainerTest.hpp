@@ -2,13 +2,13 @@
 #define KIWI_CAIRO_IMAGECONTAINER_TEST
 
 
-#include "image/cairo/ImageContainer/ImageContainer.hpp"
+#include "kiwi/image/cairo/ImageContainer/ImageContainer.hpp"
 
 #include "generic/ArrayContainerTest.hpp"
 
-#include "core/Commons.hpp"
+#include "kiwi/core/Commons.hpp"
 
-#include "core/Filter.hpp"
+#include "kiwi/core/Filter.hpp"
 
 #include "generic/ArrayContainerTest.hpp"
 

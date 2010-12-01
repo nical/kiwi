@@ -40,9 +40,9 @@
 #ifndef KIWI_ARRAYDATAREADER_HPP
 #define KIWI_ARRAYDATAREADER_HPP
 
-#include "core/Container.hpp"
-#include "generic/AbstractArrayContainer.hpp"
-#include "generic/ArrayIterator.hpp"
+#include "kiwi/core/Container.hpp"
+#include "kiwi/generic/AbstractArrayContainer.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
 
 
 namespace kiwi
@@ -142,7 +142,7 @@ protected:
 } // namespace
 
 
-#include "generic/ArrayReader.ih"
+#include "kiwi/generic/ArrayReader.ih"
 
 
 #endif

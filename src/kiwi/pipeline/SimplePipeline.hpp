@@ -32,9 +32,9 @@
 #ifndef KIWI_SIMPLEPIPELINE_HPP
 #define KIWI_SIMPLEPIPELINE_HPP
 
-#include "core/Container.hpp"
-#include "core/Filter.hpp"
-#include "core/Commons.hpp"
+#include "kiwi/core/Container.hpp"
+#include "kiwi/core/Filter.hpp"
+#include "kiwi/core/Commons.hpp"
 #include "AbstractPipeline.hpp"
 
 #include <list>

@@ -1,5 +1,5 @@
-#include "core/Commons.hpp"
-#include "generic/Point.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/generic/Point.hpp"
 
 #include "generic/PointTest.hpp"
 #include "core/FilterTest.hpp"

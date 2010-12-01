@@ -27,8 +27,8 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "text/AbstractTextContainer.hpp"
-#include "generic/ArrayIterator.hpp"
+#include "kiwi/text/AbstractTextContainer.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
 
 namespace kiwi
 {

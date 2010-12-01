@@ -30,8 +30,8 @@
 #ifndef KIWI_TEXTCONTAINER_HPP
 #define KIWI_TEXTCONTAINER_HPP
 
-#include "core/Commons.hpp"
-#include "text/AbstractTextContainer.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/text/AbstractTextContainer.hpp"
 
 
 namespace kiwi

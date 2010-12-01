@@ -40,7 +40,7 @@
 #include <list>
 #include <vector>
 
-#include "Commons.hpp"
+#include "kiwi/core/Commons.hpp"
 #include <assert.h>
 
 
@@ -730,7 +730,7 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 
 
 
-#include "core/InputPort.ih"
-#include "core/OutputPort.ih"
+#include "kiwi/core/InputPort.ih"
+#include "kiwi/core/OutputPort.ih"
 
 #endif

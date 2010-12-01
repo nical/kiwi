@@ -3,19 +3,17 @@
 #ifndef KIWI_FILTERNAME_HPP
 #define KIWI_FILTERNAME_HPP
 
-#include "core/Commons.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/core/CanonicalFilter.hpp"
+#include "kiwi/generic/ArrayContainer.hpp"
+#include "kiwi/generic/ArrayReader.hpp"
+#include "kiwi/generic/ArrayWriter.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
+#include "kiwi/generic/Point.hpp"
+#include "kiwi/utils/types.hpp"
 
-#include "core/CanonicalFilter.hpp"
-
-#include "generic/ArrayContainer.hpp"
-#include "generic/ArrayReader.hpp"
-#include "generic/ArrayWriter.hpp"
-#include "generic/ArrayIterator.hpp"
-
-#include "generic/Point.hpp"
-
-#include "utils/types.hpp"
-
+//optionnal (see readerInputType)
+#include <boost/lexical_cast.hpp>
 
 
 // ---------------------------------------------------------------------

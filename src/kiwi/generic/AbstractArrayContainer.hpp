@@ -32,9 +32,9 @@
 #ifndef KIWI_ARRAYRESOURCE_HPP
 #define KIWI_ARRAYRESOURCE_HPP
 
-#include "core/Commons.hpp"
-#include "core/Container.hpp"
-#include "generic/Point.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Container.hpp"
+#include "kiwi/generic/Point.hpp"
 
 
 namespace kiwi
@@ -80,8 +80,8 @@ public:
 	kiwi::string
 	readerOutputType(portIndex_t)
 	{
-	return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
+	return kiwi::string("#array"
+				+ boost::lexical_cast<kiwi::string>(TDimension)
 				+ types::str<TValueType>() );
 	}
 
@@ -89,8 +89,8 @@ public:
 	kiwi::string
 	writerOutputType(portIndex_t)
 	{
-	return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(TDimension)+"d_"
+	return kiwi::string("#array"
+				+ boost::lexical_cast<kiwi::string>(TDimension)
 				+ types::str<TValueType>() );
 	}
 

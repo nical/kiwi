@@ -32,7 +32,7 @@
 #ifndef KIWI_RESOURCE_HPP
 #define KIWI_RESOURCE_HPP
 
-#include "Node.hpp"
+#include "kiwi/core/Node.hpp"
 
 
 namespace kiwi

@@ -63,7 +63,7 @@ typedef unsigned char portIndex_t;
 
 
 
-#include "utils/DebugOutputStream.hpp"
+#include "kiwi/utils/DebugOutputStream.hpp"
 
 
 

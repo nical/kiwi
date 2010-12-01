@@ -32,7 +32,7 @@
 #define KIWI_DEBUGOUTPUTSTREAM_HPP
 
 #include <iostream>
-#include "core/Commons.hpp"
+#include "kiwi/core/Commons.hpp"
 
 #define DEBUG
 

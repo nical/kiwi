@@ -27,10 +27,10 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "text/AbstractTextContainer.hpp"
-#include "core/Commons.hpp"
-#include "generic/ArrayIterator.hpp"
-#include "core/Node.hpp"
+#include "kiwi/text/AbstractTextContainer.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
+#include "kiwi/core/Node.hpp"
 
 namespace kiwi
 {

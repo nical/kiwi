@@ -33,9 +33,9 @@
 #ifndef KIWI_VALUE_HPP
 #define KIWI_VALUE_HPP
 
-#include "core/Container.hpp"
-#include "core/Commons.hpp"
-#include "utils/types.hpp"
+#include "kiwi/core/Container.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/utils/types.hpp"
 
 
 namespace kiwi

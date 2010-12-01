@@ -38,10 +38,10 @@
 #ifndef KIWI_POINT_HPP
 #define KIWI_POINT_HPP
 
-#include "core/Commons.hpp"
+#include "kiwi/core/Commons.hpp"
 #include <assert.h>
 #include <boost/lexical_cast.hpp>
-#include "utils/types.hpp"
+#include "kiwi/utils/types.hpp"
 
 namespace kiwi
 {

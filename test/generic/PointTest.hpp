@@ -2,11 +2,11 @@
 #ifndef KIWI_POINT_TEST
 #define KIWI_POINT_TEST
 
-#include "generic/Point.hpp"
-#include "core/Commons.hpp"
+#include "kiwi/generic/Point.hpp"
+#include "kiwi/core/Commons.hpp"
 #include <assert.h>
 
-#include "utils/types.hpp"
+#include "kiwi/utils/types.hpp"
 
 using namespace kiwi;
 

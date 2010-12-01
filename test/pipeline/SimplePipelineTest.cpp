@@ -1,5 +1,5 @@
 
-#include "pipeline/SimplePipeline.hpp"
+#include "kiwi/pipeline/SimplePipeline.hpp"
 
 
 

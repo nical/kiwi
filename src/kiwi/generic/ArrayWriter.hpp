@@ -32,8 +32,8 @@
 #ifndef KIWI_ARRAYWRITER_HPP
 #define KIWI_ARRAYWRITER_HPP
 
-#include "core/Container.hpp"
-#include "generic/AbstractArrayContainer.hpp"
+#include "kiwi/core/Container.hpp"
+#include "kiwi/generic/AbstractArrayContainer.hpp"
 
 
 /**
@@ -133,6 +133,9 @@ public:
 		, uint8_t dim  
 		) const ;
 	
+	/**
+	 * @brief Returns the coordinates corresponding to an iterator's position.
+	 */ 
 	Point<uint32_t,TDimension> positionOf(const ArrayIterator<TValueType>& it) const;
 	
 protected:
@@ -148,7 +151,7 @@ protected:
 } // namespace
 
 
-#include "generic/ArrayWriter.ih"
+#include "kiwi/generic/ArrayWriter.ih"
 
 
 #endif

@@ -40,7 +40,7 @@
 #define KIWI_CANONICALFILTER_HPP
 
 
-#include "core/Filter.hpp"
+#include "kiwi/core/Filter.hpp"
 
 
 namespace kiwi

@@ -38,8 +38,8 @@
 #ifndef KIWI_IMAGE_CONTRAST_HPP
 #define KIWI_IMAGE_CONTRAST_HPP
 
-#include "generic/IterativeFilter.hpp"
-#include "generic/ArrayIterator.hpp"
+#include "kiwi/generic/IterativeFilter.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
 
 namespace kiwi
 {

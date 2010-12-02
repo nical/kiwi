@@ -28,7 +28,6 @@
 
 
 
-//#include "Node.hpp"
 
 namespace kiwi
 {
@@ -161,7 +160,15 @@ inline bool
 Node::InputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
 { 
 	return ( (type().find(output.type())!= string::npos) 
-		|| (type().find("any")!= string::npos) );
+		|| (type().find("#any")!= string::npos) );
+}
+
+template <typename SlotType>
+inline bool 
+Node::InputPort<SlotType>::isCompatible(const kiwi::string& tag)	
+{ 
+	return ( (type().find(tag)!= string::npos) 
+		|| (type().find("#any")!= string::npos) );
 }
 
 template <typename SlotType>

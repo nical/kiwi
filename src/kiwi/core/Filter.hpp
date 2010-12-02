@@ -40,7 +40,7 @@
 #ifndef KIWI_FILTER_HPP
 #define KIWI_FILTER_HPP
 
-#include "Node.hpp"
+#include "kiwi/core/Node.hpp"
 
 
 namespace kiwi

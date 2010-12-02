@@ -1,5 +1,5 @@
-#include "core/Commons.hpp"
-#include "generic/Point.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/generic/Point.hpp"
 
 #include "generic/PointTest.hpp"
 #include "core/FilterTest.hpp"
@@ -11,6 +11,7 @@
 #include "pipeline/SimplePipelineTest.cpp"
 #include "image/ContrastTest.hpp"
 #include "text/TextContainerTest.hpp"
+#include "core/NodeTest.hpp"
 
 int main()
 {
@@ -102,6 +103,10 @@ int main()
 					<< "TextContainer Test Ok" << endl();
 		Debug::endl(3);
 
+		NodeTest();
+		
+		
 		Debug::print() << "end of the test suite" << endl();
+		
 
 }

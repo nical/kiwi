@@ -40,8 +40,8 @@
 #ifndef KIWI_ITERATIVEFILTER_HPP
 #define KIWI_ITERATIVEFILTER_HPP
 
-#include "core/Commons.hpp"
-#include "core/CanonicalFilter.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/core/CanonicalFilter.hpp"
 
 namespace kiwi
 {

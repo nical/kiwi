@@ -32,8 +32,8 @@
 #ifndef KIWI_ABSTRACTPIPELINE_HPP
 #define KIWI_ABSTRACTPIPELINE_HPP
 
-#include "core/Node.hpp"
-#include "core/Commons.hpp"
+#include "kiwi/core/Node.hpp"
+#include "kiwi/core/Commons.hpp"
 
 
 namespace kiwi

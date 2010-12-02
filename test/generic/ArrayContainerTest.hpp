@@ -3,18 +3,18 @@
 #ifndef KIWI_ARRAYCONTAINER_TEST
 #define KIWI_ARRAYCONTAINER_TEST
 
-#include "core/Commons.hpp"
+#include "kiwi/core/Commons.hpp"
 
-#include "core/CanonicalFilter.hpp"
+#include "kiwi/core/CanonicalFilter.hpp"
 
-#include "generic/ArrayContainer.hpp"
-#include "generic/ArrayReader.hpp"
-#include "generic/ArrayWriter.hpp"
-#include "generic/ArrayIterator.hpp"
+#include "kiwi/generic/ArrayContainer.hpp"
+#include "kiwi/generic/ArrayReader.hpp"
+#include "kiwi/generic/ArrayWriter.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
 
-#include "generic/Point.hpp"
+#include "kiwi/generic/Point.hpp"
 
-#include "utils/types.hpp"
+#include "kiwi/utils/types.hpp"
 
 #include <vector>
 

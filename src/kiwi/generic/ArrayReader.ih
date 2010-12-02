@@ -27,7 +27,7 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "generic/AbstractArrayContainer.hpp"
+#include "kiwi/generic/AbstractArrayContainer.hpp"
 
 namespace kiwi
 {

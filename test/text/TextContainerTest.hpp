@@ -2,10 +2,10 @@
 #define KIWI_TEST_TEXTCONTAINER_HPP
 
 
-#include "text/TextContainer.hpp"
-#include "text/TextReader.hpp"
-#include "text/TextWriter.hpp"
-#include "utils/modulo.hpp"
+#include "kiwi/text/TextContainer.hpp"
+#include "kiwi/text/TextReader.hpp"
+#include "kiwi/text/TextWriter.hpp"
+#include "kiwi/utils/modulo.hpp"
 
 void TextContainerTest()
 {

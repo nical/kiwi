@@ -37,10 +37,11 @@
 #ifndef KIWI_NODE_HPP
 #define KIWI_NODE_HPP
 
+
+#include "kiwi/core/Commons.hpp"
+
 #include <list>
 #include <vector>
-
-#include "Commons.hpp"
 #include <assert.h>
 
 
@@ -72,12 +73,12 @@ class Node;
 class Node
 {
 public:
-//---------------------------------------  Internal classes declarations
+//-----------------------------------------------  Internal classes declarations
 	
 	template<class SlotType> class InputPort;
 	template<class SlotType> class OutputPort;
 	
-//------------------------------------------------------------- typedefs
+//--------------------------------------------------------------------- typedefs
 	
 	typedef OutputPort<Reader> ReaderOutputPort;
 	typedef InputPort<Reader> ReaderInputPort;
@@ -86,7 +87,7 @@ public:
 
 	enum { FILTER, CONTAINER};
 
-// -------------------------------------------- constructor / Destructor
+// ---------------------------------------------------- constructor / Destructor
 	/**
 	 * @brief Constructor
 	 */ 
@@ -100,30 +101,9 @@ public:
 
 
 
-// ----------------------------------------------------- virtual methods
+// ------------------------------------------------------------- virtual methods
 
 	virtual int nodeType() = 0;
-
-	/**
-	 * @brief Verifies the compatibility of a given Reader to one of the input ports
-	 *
-	 * Returns true if the output port passed in parameter is compatible with the input ports.
-	 * This method must be implemented by every Node/Filter.
-	 *
-	 * @param inputIndex The index of the input port concerned
-	 * @param port A reference to the output port that is to be checked.
-	 */
-	virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Reader>& port) const {return false;}
-	
-	/**
-	 * @brief Verifies the compatibility of a given Reader to one of the input ports
-	 *
-	 * Returns true if the output port passed in parameter is compatible with the input ports.
-	 * This method must be implemented by every Node/Filter.
-	 *
-	 * @param inputIndex The index of the input port concerned
-	 * @param port A reference to the output port that is to be checked.
-	 */virtual bool isCompatible(portIndex_t inputIndex, const OutputPort<Writer>& port) const {return false;}
 
 
 	/**
@@ -135,9 +115,8 @@ public:
 	 * 
 	 * By default it does nothing.
 	 * 
-	 * Note: This method should be overload a least only to call the parent
-	 * class's method in case it does override it and you want to keep
-	 * this behaviour.
+	 * Note: If overloaded this method should call the parent
+	 * class's method in case it does override it, to keep its behaviour.
 	 */  
 	virtual void layoutChanged() { }
 
@@ -151,17 +130,17 @@ public:
 	 * @param index The index of the port.
 	 */ 
 	ReaderInputPort& readerInputPort(portIndex_t index) const
-		{assert(index < getReaderInputCount() ); return *_readerInputs[index];}
+		{assert(index < nbReaderInputs() ); return *_readerInputs[index];}
 	/**
 	 * @brief Access to a port.
 	 *
-	 * Retrives the indexth OutputPort of the Node's Reader interface.
+	 * Retrives the indexth InputPort of the Node's Reader interface.
 	 *
 	 * @param index The index of the port.
 	 */ 
 	ReaderOutputPort& readerOutputPort(portIndex_t index) const
-		{assert(index < getReaderOutputCount() );return *_readerOutputs[index];}
-
+		{assert(index < nbReaderOutputs() ); return *_readerOutputs[index];}
+	
 	/**
 	 * @brief Access to a port.
 	 *
@@ -170,7 +149,7 @@ public:
 	 * @param index The index of the port.
 	 */
 	WriterInputPort& writerInputPort(portIndex_t index) const
-		{assert(index < getWriterInputCount() );return *_writerInputs[index];}
+		{assert(index < nbWriterInputs() );return *_writerInputs[index];}
 	/**
 	 * @brief Access to a port.
 	 *
@@ -179,24 +158,94 @@ public:
 	 * @param index The index of the port.
 	 */
 	WriterOutputPort& writerOutputPort(portIndex_t index) const
-		{assert(index < getWriterOutputCount() );return *_writerOutputs[index];}
+		{assert(index < nbWriterOutputs() );return *_writerOutputs[index];}
+
+	/**
+	 * @brief Access to a port using port name.
+	 *
+	 * Retrives the output port corresponding to the given name if the name exists
+	 * and returns a nil pointer otherwise. 
+	 *
+	 * @param portName The name of the port.
+	 */ 
+	ReaderInputPort* readerInputPort(const kiwi::string& portName) const
+	{
+		for( kiwi::uint32_t i = 0; i < nbReaderInputs(); ++i )
+		{	
+			if(readerInputName(i) == portName)
+				return _readerInputs[i];
+		}
+		return 0;
+	}
+	/**
+	 * @brief Access to a port using port name.
+	 *
+	 * Retrives the output port corresponding to the given name if the name exists
+	 * and returns a nil pointer otherwise. 
+	 *
+	 * @param portName The name of the port.
+	 */ 
+	WriterOutputPort* writerOutputPort(const kiwi::string& portName) const
+	{
+		for( kiwi::uint32_t i = 0; i < nbWriterOutputs(); ++i )
+		{	
+			if(writerOutputName(i) == portName)
+				return _writerOutputs[i];
+		}
+		return 0;
+	}
+	/**
+	 * @brief Access to a port using port name.
+	 *
+	 * Retrives the output port corresponding to the given name if the name exists
+	 * and returns a nil pointer otherwise. 
+	 *
+	 * @param portName The name of the port.
+	 */ 
+	ReaderOutputPort* readerOutputPort(const kiwi::string& portName) const
+	{
+		for( kiwi::uint32_t i = 0; i < nbReaderOutputs(); ++i )
+		{	
+			if(readerOutputName(i) == portName)
+				return _readerOutputs[i];
+		}
+		return 0;
+	}
+	/**
+	 * @brief Access to a port using port name.
+	 *
+	 * Retrives the output port corresponding to the given name if the name exists
+	 * and returns a nil pointer otherwise. 
+	 *
+	 * @param portName The name of the port.
+	 */ 
+	WriterInputPort* writerInputPort(const kiwi::string& portName) const
+	{
+		for( kiwi::uint32_t i = 0; i < nbWriterInputs(); ++i )
+		{	
+			if(writerInputName(i) == portName)
+				return _writerInputs[i];
+		}
+		return 0;
+	}
+
 
 	/**
 	 * @brief Returns the amount of Reader Inputs of this Node.
 	 */ 
-	inline unsigned getReaderInputCount() const {return _readerInputs.size();}
+	inline unsigned nbReaderInputs() const {return _readerInputs.size();}
 	/**
 	 * @brief Returns the amount of Reader Outputs of this Node.
 	 */
-	inline unsigned getReaderOutputCount() const {return _readerOutputs.size();}
+	inline unsigned nbReaderOutputs() const {return _readerOutputs.size();}
 	/**
 	 * @brief Returns the amount of Writer inputs of this Node.
 	 */
-	inline unsigned getWriterInputCount() const {return _writerInputs.size();}
+	inline unsigned nbWriterInputs() const {return _writerInputs.size();}
 	/**
 	 * @brief Returns the amount of Writer outputs of this Node.
 	 */
-	inline unsigned getWriterOutputCount() const {return _readerOutputs.size();}
+	inline unsigned nbWriterOutputs() const {return _readerOutputs.size();}
 	
 	/**
 	 * @brief Returns true if the layout event is enabled.
@@ -235,50 +284,50 @@ public:
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string readerInputName( portIndex_t index );
+	virtual kiwi::string readerInputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string readerOutputName( portIndex_t index );
+	virtual kiwi::string readerOutputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string writerInputName( portIndex_t index );
+	virtual kiwi::string writerInputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Writer output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string writerOutputName( portIndex_t index );
+	virtual kiwi::string writerOutputName( portIndex_t index ) const;
 	
 	/**
 	 * @brief Returns the type of a Reader input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string readerInputType( portIndex_t index );
+	virtual kiwi::string readerInputType( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string readerOutputType( portIndex_t index );
+	virtual kiwi::string readerOutputType( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string writerInputType( portIndex_t index );
+	virtual kiwi::string writerInputType( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string writerOutputType( portIndex_t index );
+	virtual kiwi::string writerOutputType( portIndex_t index ) const;
 	
 // --------------------------------------------------- protected methods	
 protected:
@@ -503,9 +552,13 @@ public:
 		// a more flexible version is to come with use of polymorphism 
 		// to get compatibility of child classes.
 		/**
-		 * @brief Port compatibility check based on the type string.
+		 * @brief Port compatibility check based on the type tag.
 		 */ 
-		inline bool isCompatible(OutputPort<SlotType>& output) ;
+		inline bool isCompatible(OutputPort<SlotType>& output) ;/**
+		/**
+		 * @brief Port compatibility check based on the type tag.
+		 */ 
+		inline bool isCompatible(const kiwi::string& tag) ;
 		/**
 		 * @brief Resturns true if this port is connected.
 		 */ 
@@ -718,9 +771,6 @@ bool operator>>(Node::OutputPort<SlotType>& output, Node::InputPort<SlotType>& i
 
 
 
-// >_< ...
-// I don't know why, this does not link when put in the cpp file ...
-// #cpp build system sucks
 inline void 
 Node::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
 { 
@@ -755,7 +805,7 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 
 
 
-#include "core/InputPort.ih"
-#include "core/OutputPort.ih"
+#include "kiwi/core/InputPort.ih"
+#include "kiwi/core/OutputPort.ih"
 
 #endif

@@ -39,7 +39,7 @@
 #ifndef KIWI_GENERIC_GAUSSIANBLUR_HPP
 #define KIWI_GENERIC_GAUSSIANBLUR_HPP
 
-#include "core/Filter.hpp"
+#include "kiwi/core/Filter.hpp"
 
 namespace kiwi
 {

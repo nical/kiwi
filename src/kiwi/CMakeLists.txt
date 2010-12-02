@@ -1,4 +1,4 @@
-include_directories (${PROJECT_SOURCE_DIR}/src/kiwi)
+include_directories (${PROJECT_SOURCE_DIR}/src)
 include_directories (${CAIRO_INCLUDE_DIR})
 
 SET(KIWI_SRC ${KIWI_SRC}

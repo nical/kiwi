@@ -1,0 +1,179 @@
+// Copyright (c) 2010 Nicolas Silva
+// All rights reserved.
+//      Redistribution and use in source and binary forms, with or without
+//      modification, are permitted provided that the following conditions are
+//      met:
+//      
+//      * Redistributions of source code must retain the above copyright
+//        notice, this list of conditions and the following disclaimer.
+//      * Redistributions in binary form must reproduce the above
+//        copyright notice, this list of conditions and the following disclaimer
+//        in the documentation and/or other materials provided with the
+//        distribution.
+//      * Neither the name of the  nor the names of its
+//        contributors may be used to endorse or promote products derived from
+//        this software without specific prior written permission.
+//      
+//      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+//      "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+//      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+//      A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//      OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//      SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//      LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+//      DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+//      THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+//      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+#include "kiwi/generic/AbstractArrayContainer.hpp"
+
+namespace kiwi
+{
+namespace generic
+{
+
+
+
+template<typename T, unsigned int D>
+ArrayReader<T,D>::ArrayReader(
+	const core::Node::ReaderInputPort& port )
+{
+	AbstractArrayContainer<T,D>* node = 
+		dynamic_cast< AbstractArrayContainer<T,D>* >( 
+			port.connectedOutput()->subPort()->node() 
+		);
+	if(!node)
+	{
+		Debug::error() << "ArrayReader<"
+			<< types::str<T>() 
+			<< ">::Constructor : "
+			<< "enable to determine the Container type" 
+			<< endl();
+	}
+	_port = port.connectedOutput()->index();
+	_data = node->getDataPointer(_port);
+	_incs = node->increments(_port);
+	_span = node->spanSize();
+/*	unsigned csize = 1;
+	for(unsigned i = 0; i < D; ++i) csize*=_span(i);
+	_end = _data + csize;
+*/ 
+}
+
+
+
+template<typename T, unsigned int D>
+ArrayReader<T,D>::ArrayReader( const AbstractArrayContainer<T,D>& resource, portIndex_t portIndex )
+{
+	_port = portIndex;
+	_data = resource.getDataPointer(_port);
+	_incs = resource.increments(_port);
+	_span = resource.spanSize();
+}
+
+
+
+template<typename T, unsigned int D>
+T ArrayReader<T,D>::get(const Point<int,D>& coords) const
+{
+//	ScopedBlockMacro(__scop, "get" );
+	unsigned index = 0;
+	for(unsigned i = 0; i < D; ++i)
+	{
+		index += _incs(i)*coords(i);
+	}
+//	Debug::print() << "index "  << index << endl();
+	return _data[index];
+}
+
+
+template<typename T, unsigned int D>
+T ArrayReader<T,D>::get(unsigned int i) const
+{
+	return _data[i];
+}
+
+
+template<typename T, unsigned int D>
+uint32_t
+ArrayReader<T,D>::nbScalarElements() const
+{
+	uint32_t res = _span(0);
+	for(unsigned i = 1; i < D; ++i)
+		res *= _span(i);
+	return res;
+}
+
+
+template<typename T, unsigned int D>
+ArrayConstIterator<T> 
+ArrayReader<T,D>::getIterator() const
+{
+	unsigned size = 1;
+	for(unsigned i = 0; i < D; ++i) size *= _span(i);
+	return ArrayConstIterator<ValueType>(_data, _data+size*_incs(0)-1, _incs(0) ); 
+}
+
+
+
+template<typename T, unsigned int D>
+ArrayConstIterator<T> 
+ArrayReader<T,D>::getSpanIterator(
+		const Point<uint32_t, D>& origin
+		, uint8_t dim  
+		) const
+{
+	uint32_t offset = 0;
+
+	uint32_t diff = _span(dim) - origin(dim) -1;
+
+	
+	for(unsigned i = 0; i < D; ++i)
+	{
+		offset += _incs(i)*origin(i);
+	}
+
+	return ArrayConstIterator<ValueType>(
+			_data+offset
+			, _data+offset+diff*_incs(dim)
+			, _incs(dim) ); 
+}
+
+
+
+template<typename T, unsigned int D>
+ArrayConstIterator<T> 
+ArrayReader<T,D>::getSpanIterator(
+		const ArrayConstIterator<T>& origin
+		, uint8_t dim  
+		) const
+{
+	return getSpanIterator(positionOf(origin), dim);
+}
+
+
+template<typename T, unsigned int D>
+Point<uint32_t, D> 
+ArrayReader<T,D>::positionOf(const ArrayConstIterator<T>& it)
+{
+	Point<uint32_t, D> result;
+	T* ptr = it.ptr();
+	kiwi::uint32_t dist = ptr - _data;
+
+	for(int i = 0; i<D; ++i )
+	{
+		result[i] = (dist % _incs(i+1))/_incs(i);
+		dist -= result[i];
+	}
+
+	return result;
+}
+
+
+
+
+} // namespace
+} // namespace
+

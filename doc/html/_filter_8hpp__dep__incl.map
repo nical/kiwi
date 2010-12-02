@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$_canonical_filter_8hpp.html" title="Header file for the base class of Filter&#39;s Canonical form." alt="" coords="9,83,361,112"/>
+<area shape="rect" id="node9" href="$_gaussian_blur_8hpp.html" title="Header file for the generic gaussian blur filter." alt="" coords="385,83,748,112"/>
+<area shape="rect" id="node11" href="$_pipeline_8hpp_source.html" title="/home/nico/Dev/kiwi/src/kiwi/pipeline/Pipeline.hpp" alt="" coords="772,83,1103,112"/>
+<area shape="rect" id="node13" href="$_simple_pipeline_8hpp_source.html" title="/home/nico/Dev/kiwi/src/kiwi/pipeline/SimplePipeline.hpp" alt="" coords="1127,83,1500,112"/>
+<area shape="rect" id="node5" href="$_iterative_filter_8hpp.html" title="Header file for ArrayContainer&#39;s iterator." alt="" coords="5,160,365,189"/>
+<area shape="rect" id="node7" href="$_contrast_8hpp.html" title="Header file for a Nd contrast Filter." alt="" coords="21,237,349,267"/>
+</map>

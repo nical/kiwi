@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classkiwi_1_1core_1_1_reader.html" title="Base class of objects that read data from Node." alt="" coords="7,59,137,88"/>
+<area shape="rect" id="node3" href="$classkiwi_1_1generic_1_1_array_reader.html" title="Reader class able to read data from any Container inheriting from kiwi::generic::AbstractArrayContain..." alt="" coords="187,5,555,35"/>
+<area shape="rect" id="node5" href="$classkiwi_1_1generic_1_1_value_reader.html" title="kiwi::generic::ValueReader\&lt; TValueType \&gt;" alt="" coords="228,59,513,88"/>
+<area shape="rect" id="node7" href="$classkiwi_1_1text_1_1_string_reader.html" title="kiwi::text::StringReader" alt="" coords="288,112,453,141"/>
+</map>

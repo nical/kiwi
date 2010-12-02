@@ -6,7 +6,7 @@ A generic and easy to use node compositor library for C++.
 <img src='http://img808.imageshack.us/img808/4377/kiwiboxespng01.png' border='0'/>
 
 Checkout the [wiki](http://github.com/nical/kiwi/wiki) !<br/>
-And also the doxygen [class documentation](http://coloc42.dyndns.org/nico/kiwi/doxygen/annotated.html).
+And also the doxygen [class documentation](http://nical.github.com/kiwi/doc/doxygen/html/annotated.html).
 
 <h2> Containers and filters </h2>
 

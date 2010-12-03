@@ -12,6 +12,8 @@
 #include "image/ContrastTest.hpp"
 #include "text/TextContainerTest.hpp"
 #include "core/NodeTest.hpp"
+#include "core/FactoryTest.hpp"
+
 
 int main()
 {
@@ -104,7 +106,7 @@ int main()
 		Debug::endl(3);
 
 		NodeTest();
-		
+		FactoryTest();
 		
 		Debug::print() << "end of the test suite" << endl();
 		

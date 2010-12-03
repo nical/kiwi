@@ -27,51 +27,63 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
+#include "NodeFactory.hpp"
+
+
 
 namespace kiwi
 {
-namespace text	
+namespace core
 {
 
 
-typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;
-	
-class TextWriter
+
+
+kiwi::core::Node* NodeFactory::newNode(const  kiwi::string& uniqueId)
 {
-public:
-	enum { BEFORE = 0, AFTER = 1 }; 
-
-	TextWriter(AbstractTextContainer& container
-		, portIndex_t );
-	TextWriter( core::Node::WriterInputPort& port );
 	
-	kiwi::uint32_t nbLines() const;
-	kiwi::uint32_t nbChars() const;
-	kiwi::uint32_t currentLine() const;
-	bool gotoLine(kiwi::int32_t lineNumber);
-	bool gotoNextLine();
-	bool gotoPreviousLine();
-	bool endOfText() const;
-	kiwi::string& getLine() const;
-	kiwi::uint8_t getChar(int32_t charNumber) const;
-	void setChar(int32_t charNumber, uint8_t value);
-	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
-	void removeLine(kiwi::uint32_t position);
+}
+
+kiwi::core::Filter* NodeFactory::newFilter(const  kiwi::string& uniqueId)
+{
+	FilterMap::iterator it = _filters.find(uniqueId);
+	if(it == _filters.end() ) return 0;
+	Descriptor<Filter>* desc = it->second;
+	return (desc->creator())();
+}
+
+kiwi::core::Container* NodeFactory::newContainer(const  kiwi::string& uniqueId)
+{
+	ContainerMap::iterator it = _containers.find(uniqueId);
+	if(it == _containers.end() ) return 0;
+	Descriptor<Container>* desc = it->second;
+	return (desc->creator())();
+}
+
+int NodeFactory::exists(const  kiwi::string& uniqueId)
+{
+	if(_containers.find(uniqueId) != _containers.end() ) return CONTAINER;
+	if( _filters.find(uniqueId) != _filters.end() ) return FILTER; 
+	return FALSE;
+}
 	
-	StringIterator getStringIterator() const;
+void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Container> nd)
+{
+	_containers[uniqueId] = new Descriptor<Container>(nd);
+}
+
+void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Filter> nd)
+{
+	_filters[uniqueId] = new Descriptor<Filter>(nd);
+}
 	
-protected:	
-	kiwi::string* _currentLine;
-	uint32_t _currentLineNb;
-private:
-	AbstractTextContainer* _container;
-	void init(AbstractTextContainer& container
-		, portIndex_t );
-};		
+void NodeFactory::unregister(const  kiwi::string& uniqueId)
+{
+	_containers.erase(_containers.find(uniqueId) );
+	_filters.erase(_filters.find(uniqueId) );
+}
 
 
-}// namespace	
-}// namespace	
 
+}//namespace
+}//namespace

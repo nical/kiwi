@@ -5,6 +5,7 @@ SET(KIWI_SRC ${KIWI_SRC}
 		utils/DebugOutputStream.cpp
 		core/Node.cpp
 		core/CanonicalFilter.cpp
+		core/NodeFactory.cpp
 		text/TextContainer.cpp
 		text/TextReader.cpp
 		text/TextWriter.cpp

@@ -85,6 +85,15 @@ public:
 	 */
 	void removeLine(kiwi::uint32_t position);
 	
+	kiwi::string outputReaderType(portIndex_t)
+	{
+			return kiwi::string("#text");
+	}
+	kiwi::string outputWriterType(portIndex_t)
+	{
+			return kiwi::string("#text");
+	}
+	
 private:
 
 	/**

@@ -26,52 +26,82 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 
-#include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
+#ifndef KIWI_NODEFACTORY_HPP
+#define KIWI_NODEFACTORY_HPP
+
+#include "kiwi/core/Node.hpp"
+#include "kiwi/core/Filter.hpp"
+#include "kiwi/core/Container.hpp"
+#include <map>
+#include <list>
+
+
 
 namespace kiwi
 {
-namespace text	
+namespace core
 {
 
-
-typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;
-	
-class TextWriter
+/**
+ * @brief 
+ */ 
+template<typename TValueType>
+class Descriptor
 {
 public:
-	enum { BEFORE = 0, AFTER = 1 }; 
-
-	TextWriter(AbstractTextContainer& container
-		, portIndex_t );
-	TextWriter( core::Node::WriterInputPort& port );
+	typedef TValueType ValueType;
+	typedef TValueType*(*instantiationFunction)(void) ;
 	
-	kiwi::uint32_t nbLines() const;
-	kiwi::uint32_t nbChars() const;
-	kiwi::uint32_t currentLine() const;
-	bool gotoLine(kiwi::int32_t lineNumber);
-	bool gotoNextLine();
-	bool gotoPreviousLine();
-	bool endOfText() const;
-	kiwi::string& getLine() const;
-	kiwi::uint8_t getChar(int32_t charNumber) const;
-	void setChar(int32_t charNumber, uint8_t value);
-	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
-	void removeLine(kiwi::uint32_t position);
+	Descriptor(const kiwi::string& nodeName
+		, instantiationFunction fPtr
+		, const kiwi::string& tags = "" )
+	:_name(nodeName), _tags(tags), _creator(fPtr)
+	{ }
+		
 	
-	StringIterator getStringIterator() const;
+	const kiwi::string& name() const { return _name; }
+	const kiwi::string& tags() const { return _tags; }
+	instantiationFunction creator() {return _creator;}
 	
-protected:	
-	kiwi::string* _currentLine;
-	uint32_t _currentLineNb;
 private:
-	AbstractTextContainer* _container;
-	void init(AbstractTextContainer& container
-		, portIndex_t );
-};		
+	kiwi::string _name;
+	kiwi::string _tags;
+	instantiationFunction _creator;
+};
 
 
-}// namespace	
-}// namespace	
 
+/**
+ * @brief A factory of kiwi::core::Node instances. 
+ */ 
+class NodeFactory
+{
+public:
+	enum{FALSE=0, NODE, FILTER, CONTAINER};
+	
+	kiwi::core::Node* newNode(const  kiwi::string& uniqueId);
+	kiwi::core::Filter* newFilter(const  kiwi::string& uniqueId);
+	kiwi::core::Container* newContainer(const  kiwi::string& uniqueId);
+	
+	int exists(const  kiwi::string& uniqueId);
+	std::list<kiwi::string> searchFromTag(const  kiwi::string& uniqueId);
+	
+	void registerNode(const  kiwi::string& uniqueId, Descriptor<Container> nd);
+	void registerNode(const  kiwi::string& uniqueId, Descriptor<Filter> nd);
+	
+	void unregister(const  kiwi::string& uniqueId);
+
+private:
+	typedef std::map<kiwi::string, Descriptor<Filter>* > FilterMap;
+	typedef std::map<kiwi::string, Descriptor<Container>* > ContainerMap;
+	FilterMap _filters;
+	ContainerMap _containers;
+};
+
+
+}//namespace
+}//namespace
+
+#endif

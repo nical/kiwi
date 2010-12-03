@@ -28,53 +28,77 @@
 
 /**
  * @file Node.hpp
- * @brief File included by most of the library.
+ * @brief Commandline kiwi program.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
  * @version 0.3
  */
-
-#pragma once
-
-#ifndef KIWI_COMMONS_HPP
-#define KIWI_COMMONS_HPP
-
-#include <boost/cstdint.hpp>
-
-#include <string>
+ 
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/core/Filter.hpp"
+#include <iostream>
+using namespace kiwi;
 
 
-#define KIWI_VERSION_MAJOR 0
-#define KIWI_VERSION_MINOR 3
-#define KIWI_VERSION_PATCH 2
 
-namespace kiwi
+using namespace std;
+
+int main(int argc, char *argv[])
 {
+	Debug::init(true, true, 0);
+	//ScopedBlockMacro(__scop,"command line Kiwi")
+	//for(unsigned i = 0; i < argc; ++i)
+	//	std::cout << "| " << argv[i] << std::endl;
+		
+	if(argc > 1)
+	{
+		//if(kiwi::string(argv[1]).find("--version")!= kiwi::string::npos )
+		if(kiwi::string(argv[1]) == kiwi::string("--version") )
+		{
+			cout << "kiwi version " << KIWI_VERSION_MAJOR 
+				<< "." << KIWI_VERSION_MINOR 
+				<< "." << KIWI_VERSION_PATCH
+				<< endl;
+			return 0;
+		}
+		else if(kiwi::string(argv[1]) == kiwi::string("--help") )
+		{
+			cout << endl;
 
-
-typedef unsigned int uint;
-
-typedef unsigned char uint8_t;
-typedef boost::uint16_t uint16_t;
-typedef boost::uint32_t uint32_t;
-typedef boost::uint64_t uint64_t;
-
-typedef char int8_t;
-typedef boost::int16_t int16_t;
-typedef boost::int32_t int32_t;
-typedef boost::int64_t int64_t;
-
-typedef std::string string;
-typedef unsigned char portIndex_t;
-
-
-#define ParentMacro( pClass ) typedef pClass Parent;
-
+			cout << "Synopsis:" << endl << endl;
+			cout << "     kiwi [--help] [--version] [filterName [-i inputs] [-o outputs]]" << endl;
+			
+			
+			cout << endl << "Description:" << endl << endl;
+			cout << "     @TODO" << endl;
+			
+			
+			cout << endl << "Options:" << endl << endl;
+			cout << "     --help" << endl;
+			cout << "        Shows this output" << endl;
+			cout << "     --version"  << endl;
+			cout << "        Prints the installed kiwi version. " << endl;
+			cout << "     -i" << endl;
+			cout << "        Followed by the input arguments." << endl;
+			cout << "     -o " << endl;
+			cout << "        Followed by the output arguments." << endl;
+			cout << endl << endl;
+		}
+		else
+		{
+			kiwi::core::NodeFactory factory;
+			
+			//TODO
+			
+		}
+	}
+	else
+	{
+		cout << "Please specify comandline arguments" << endl;
+		return 1;
+	}
+	
 }
 
 
 
-#include "kiwi/utils/DebugOutputStream.hpp"
-
-
-
-#endif

@@ -26,52 +26,84 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
 
-#include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
-
-namespace kiwi
-{
-namespace text	
-{
+#ifndef KIWI_NODEFACTORY_TEST_HPP
+#define KIWI_NODEFACTORY_TEST_HPP
 
 
-typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;
-	
-class TextWriter
+
+#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/core/Filter.hpp"
+
+
+class testFilterA : public kiwi::core::Filter
 {
 public:
-	enum { BEFORE = 0, AFTER = 1 }; 
+	void process()
+	{
+	ScopedBlockMacro(__scop,"testFilterA::process")
+	}
+};
+class testFilterB : public kiwi::core::Filter
+{
+public:
+	void process()
+	{
+	ScopedBlockMacro(__scop,"testFilterB::process")
+	}
+};
+class testFilterC : public kiwi::core::Filter
+{
+public:
+	void process()
+	{
+	ScopedBlockMacro(__scop,"testFilterC::process")
+	}
+};
 
-	TextWriter(AbstractTextContainer& container
-		, portIndex_t );
-	TextWriter( core::Node::WriterInputPort& port );
+kiwi::core::Filter* __createA(){ return new testFilterA; }
+kiwi::core::Filter* __createB(){ return new testFilterB; }
+kiwi::core::Filter* __createC(){ return new testFilterC; }
+
+void FactoryTest()
+{
+ScopedBlockMacro(__scop, "kiwi::NodeFactory::Test")
 	
-	kiwi::uint32_t nbLines() const;
-	kiwi::uint32_t nbChars() const;
-	kiwi::uint32_t currentLine() const;
-	bool gotoLine(kiwi::int32_t lineNumber);
-	bool gotoNextLine();
-	bool gotoPreviousLine();
-	bool endOfText() const;
-	kiwi::string& getLine() const;
-	kiwi::uint8_t getChar(int32_t charNumber) const;
-	void setChar(int32_t charNumber, uint8_t value);
-	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
-	void removeLine(kiwi::uint32_t position);
+	kiwi::core::NodeFactory factory;
 	
-	StringIterator getStringIterator() const;
+	factory.registerNode(
+		"A", Descriptor<Filter>("testFilterA", &__createA, "#Filter") 
+	);
 	
-protected:	
-	kiwi::string* _currentLine;
-	uint32_t _currentLineNb;
-private:
-	AbstractTextContainer* _container;
-	void init(AbstractTextContainer& container
-		, portIndex_t );
-};		
+	factory.registerNode(
+		"B", Descriptor<Filter>("testFilterB", &__createB, "#Filter") 
+	);
+	
+	factory.registerNode(
+		"C", Descriptor<Filter>("testFilterB", &__createC, "#Filter") 
+	);
+	
+	kiwi::core::Filter* tfa = factory.newFilter("A");
+	assert(tfa != 0);
+	kiwi::core::Filter* tfb = factory.newFilter("B");
+	assert(tfb != 0);
+	kiwi::core::Filter* tfc = factory.newFilter("C");
+	assert(tfc != 0);
+	kiwi::core::Filter* tfx = factory.newFilter("unregistered filter");
+	assert(tfx == 0);
+	
+	assert( factory.exists("A") == NodeFactory::FILTER);
+	assert( factory.exists("A") );
+	assert( !factory.exists("unregistered filter") );
+	
+	tfa->process();
+	tfb->process();
+	tfc->process();
+	
+	delete tfa;
+	delete tfb;
+	delete tfc;
+}
 
-
-}// namespace	
-}// namespace	
-
+#endif

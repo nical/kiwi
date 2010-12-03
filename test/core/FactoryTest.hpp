@@ -93,8 +93,9 @@ ScopedBlockMacro(__scop, "kiwi::NodeFactory::Test")
 	kiwi::core::Filter* tfx = factory.newFilter("unregistered filter");
 	assert(tfx == 0);
 	
-	assert(factory.exists("A") == NodeFactory::FILTER);
-	assert(factory.exists("unregistered filter") == NodeFactory::FALSE);
+	assert( factory.exists("A") == NodeFactory::FILTER);
+	assert( factory.exists("A") );
+	assert( !factory.exists("unregistered filter") );
 	
 	tfa->process();
 	tfb->process();

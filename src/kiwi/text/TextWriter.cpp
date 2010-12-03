@@ -114,6 +114,11 @@ kiwi::uint8_t TextWriter::getChar(int32_t charNumber) const
 	return (*_currentLine)[charNumber];
 }
 
+void TextWriter::setChar(int32_t charNumber, kiwi::uint8_t)
+{
+	
+}
+
 StringIterator TextWriter::getStringIterator() const
 {
 	return StringIterator( 

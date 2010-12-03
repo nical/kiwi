@@ -44,7 +44,9 @@ namespace kiwi
 namespace core
 {
 
-
+/**
+ * @brief 
+ */ 
 template<typename TValueType>
 class Descriptor
 {

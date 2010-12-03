@@ -26,14 +26,20 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file Node.hpp
+ * @brief Commandline kiwi program.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.3
+ */
+ 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/NodeFactory.hpp"
 #include "kiwi/core/Filter.hpp"
 #include <iostream>
 using namespace kiwi;
 
-#define VERSION_MAJOR 0
-#define VERSION_MINOR 3
+
 
 using namespace std;
 
@@ -46,15 +52,49 @@ int main(int argc, char *argv[])
 		
 	if(argc > 1)
 	{
-		if(kiwi::string(argv[1]).find("--version")!= kiwi::string::npos )
+		//if(kiwi::string(argv[1]).find("--version")!= kiwi::string::npos )
+		if(kiwi::string(argv[1]) == kiwi::string("--version") )
 		{
-			std::cout << "kiwi " << VERSION_MAJOR << "." << VERSION_MINOR << std::endl;
+			cout << "kiwi version " << KIWI_VERSION_MAJOR 
+				<< "." << KIWI_VERSION_MINOR 
+				<< "." << KIWI_VERSION_PATCH
+				<< endl;
 			return 0;
+		}
+		else if(kiwi::string(argv[1]) == kiwi::string("--help") )
+		{
+			cout << endl;
+
+			cout << "Synopsis:" << endl << endl;
+			cout << "     kiwi [--help] [--version] [filterName [-i inputs] [-o outputs]]" << endl;
+			
+			
+			cout << endl << "Description:" << endl << endl;
+			cout << "     @TODO" << endl;
+			
+			
+			cout << endl << "Options:" << endl << endl;
+			cout << "     --help" << endl;
+			cout << "        Shows this output" << endl;
+			cout << "     --version"  << endl;
+			cout << "        Prints the installed kiwi version. " << endl;
+			cout << "     -i" << endl;
+			cout << "        Followed by the input arguments." << endl;
+			cout << "     -o " << endl;
+			cout << "        Followed by the output arguments." << endl;
+			cout << endl << endl;
+		}
+		else
+		{
+			kiwi::core::NodeFactory factory;
+			
+			//TODO
+			
 		}
 	}
 	else
 	{
-		std::cout << "please specify comandline arguments" << endl;
+		cout << "Please specify comandline arguments" << endl;
 		return 1;
 	}
 	

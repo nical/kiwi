@@ -56,7 +56,7 @@ public:
 	bool endOfText() const;
 	kiwi::string& getLine() const;
 	kiwi::uint8_t getChar(int32_t charNumber) const;
-	kiwi::uint8_t setChar(int32_t charNumber, uint8_t value) const;
+	void setChar(int32_t charNumber, uint8_t value);
 	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
 	void removeLine(kiwi::uint32_t position);
 	

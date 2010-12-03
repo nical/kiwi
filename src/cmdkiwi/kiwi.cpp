@@ -26,80 +26,39 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
-
-#ifndef KIWI_NODEFACTORY_HPP
-#define KIWI_NODEFACTORY_HPP
-
-#include "kiwi/core/Node.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/core/NodeFactory.hpp"
 #include "kiwi/core/Filter.hpp"
-#include "kiwi/core/Container.hpp"
-#include <map>
-#include <list>
+#include <iostream>
+using namespace kiwi;
 
+#define VERSION_MAJOR 0
+#define VERSION_MINOR 3
 
+using namespace std;
 
-namespace kiwi
+int main(int argc, char *argv[])
 {
-namespace core
-{
-
-
-template<typename TValueType>
-class Descriptor
-{
-public:
-	typedef TValueType ValueType;
-	typedef TValueType*(*instantiationFunction)(void) ;
-	
-	Descriptor(const kiwi::string& nodeName
-		, instantiationFunction fPtr
-		, const kiwi::string& tags = "" )
-	:_name(nodeName), _tags(tags), _creator(fPtr)
-	{ }
+	Debug::init(true, true, 0);
+	//ScopedBlockMacro(__scop,"command line Kiwi")
+	//for(unsigned i = 0; i < argc; ++i)
+	//	std::cout << "| " << argv[i] << std::endl;
 		
+	if(argc > 1)
+	{
+		if(kiwi::string(argv[1]).find("--version")!= kiwi::string::npos )
+		{
+			std::cout << "kiwi " << VERSION_MAJOR << "." << VERSION_MINOR << std::endl;
+			return 0;
+		}
+	}
+	else
+	{
+		std::cout << "please specify comandline arguments" << endl;
+		return 1;
+	}
 	
-	const kiwi::string& name() const { return _name; }
-	const kiwi::string& tags() const { return _tags; }
-	instantiationFunction creator() {return _creator;}
-	
-private:
-	kiwi::string _name;
-	kiwi::string _tags;
-	instantiationFunction _creator;
-};
+}
 
 
 
-/**
- * @brief A factory of kiwi::core::Node instances. 
- */ 
-class NodeFactory
-{
-public:
-	enum{FALSE=0, NODE, FILTER, CONTAINER};
-	
-	kiwi::core::Node* newNode(const  kiwi::string& uniqueId);
-	kiwi::core::Filter* newFilter(const  kiwi::string& uniqueId);
-	kiwi::core::Container* newContainer(const  kiwi::string& uniqueId);
-	
-	int exists(const  kiwi::string& uniqueId);
-	std::list<kiwi::string> searchFromTag(const  kiwi::string& uniqueId);
-	
-	void registerNode(const  kiwi::string& uniqueId, Descriptor<Container> nd);
-	void registerNode(const  kiwi::string& uniqueId, Descriptor<Filter> nd);
-	
-	void unregister(const  kiwi::string& uniqueId);
-
-private:
-	typedef std::map<kiwi::string, Descriptor<Filter>* > FilterMap;
-	typedef std::map<kiwi::string, Descriptor<Container>* > ContainerMap;
-	FilterMap _filters;
-	ContainerMap _containers;
-};
-
-
-}//namespace
-}//namespace
-
-#endif

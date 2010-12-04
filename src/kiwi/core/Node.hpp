@@ -85,7 +85,7 @@ public:
 	typedef OutputPort<Writer> WriterOutputPort;
 	typedef InputPort<Writer> WriterInputPort;
 
-	enum { FILTER, CONTAINER};
+	enum { FILTER, CONTAINER };
 
 // ---------------------------------------------------- constructor / Destructor
 	/**

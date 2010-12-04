@@ -45,6 +45,9 @@ ScopedBlockMacro(__scop, "TextContainer::constructor")
 	_first->_next = 0;
 	_first->_prev = 0;
 	_first->_text = kiwi::string("");
+	
+	addReaderOutputPort();
+	addWriterOutputPort();
 }
 
 kiwi::string* TextContainer::getLine( kiwi::uint32_t lineNumber )

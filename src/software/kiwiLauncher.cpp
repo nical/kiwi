@@ -41,6 +41,8 @@
 #include "kiwi/text/UpperCaseFilter.hpp"
 #include "kiwi/utils/Socket.hpp"
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
 using namespace std;
 
 
@@ -86,7 +88,28 @@ void printHelp()
  */
 int main(int argc, char *argv[])
 {
+
+  //DEBUG ON
   kiwi::Debug::init(true, true, 0);
+  
+
+  //BEGIN : Register all nodes.
+  kiwi::core::NodeFactory factory;
+  kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCaseFilter");
+  //END: Register all nodes.
+
+
+
+  //BEGIN : SERVER REQUEST CASE.
+  if(argc==3)
+  {
+    if (kiwi::string(argv[1])==kiwi::string("--server"))
+    {
+      while (1);
+    }
+  }
+  //END : SERVER REQUEST CASE.
+
 
 
   //BEGIN : ONE ARGUMENT CASE. It should be a "help" or a "version" request.
@@ -112,71 +135,58 @@ int main(int argc, char *argv[])
   
 
   
-  //BEGIN : TWO ARGUMENTS CASE.
-  if(argc==3)
-  {
-    if (kiwi::string(argv[1])==kiwi::string("--server"))
-    {
-      while (1);
-    }
-  }
-  //END : TWO ARGUMENTS CASE.
-
-
-
   //BEGIN : Filter use request.
-  else if (argc>2)
+  else
   {
-    //BEGIN : Find inputs and outputs arguments indexes.
-    int inputsIndex=0;
-    int outputsIndex=0;
-    for (int i=1;i<argc;i++)
-    {
-      if (argv[i]=="-i") inputsIndex=i;
-      else if (argv[i]=="-o") outputsIndex=i;
-    }
 
-    if (
-        (inputsIndex<2) ||
-        (outputsIndex<2) ||
-        (inputsIndex>argc-2) ||
-        (inputsIndex==argc-1) ||
-        (outputsIndex-inputsIndex<2)
-       )
+    //BEGIN : Getting arguments
+    int i;
+    int verbose=0;
+    std::vector<kiwi::string> inputList;
+    std::vector<kiwi::string> outputList;
+    if (strcmp(argv[1],"-v")==0) verbose=1;
+    kiwi::string filterName(argv[verbose+1]);
+    if (strcmp(argv[verbose+2],"-i")!=0)
     {
-      cout << "SYNTAX ERROR : Please check help" << endl;
+      cout << "SYNTAX ERROR : Could not fint input list symbol. Please check help" << endl;
       printHelp();
       return 1;
     }
-    //END : Find inputs and outputs arguments indexes.
+    i=verbose+3;
+    while ((i!=argc)&&((strcmp(argv[i],"-o"))!=0))
+    {
+      inputList.push_back(kiwi::string(argv[i++]));
+    }
+    while (i!=argc)
+    {
+      outputList.push_back(kiwi::string(argv[i++]));
+    }
+    //END: Getting arguments
 
 
-    //BEGIN : Register all nodes.
-    kiwi::core::NodeFactory factory;
-    kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCaseFilter");
-    //END: Register all nodes.
 
-    
-    //Filter instanciation using filter name extracted from arguments
-    kiwi::core::Filter* F = factory.newFilter(argv[inputsIndex-1]);
+    //BEGIN : Filter instanciation using filter name extracted from arguments
+    kiwi::core::Filter* F = factory.newFilter(filterName);
     if (!F)
     {
-      cout << "SYNTAX ERROR : Please check help" << endl;
+      cout << "SYNTAX ERROR : Could not finf this filter. Please check help" << endl;
       printHelp();
       return 1;
     }
+    //END : Filter instanciation using filter name extracted from arguments
+    printf("DEBUG\n");
+
+
 
     //Creation of a basic container, needed to apply the filter
     kiwi::text::TextContainer basicInputContainer;
 
     //Creation of a Writer needed to write the argument in the container
     kiwi::text::TextWriter writer(basicInputContainer,0);
-    writer.getLine() = kiwi::string(argv[inputsIndex+1]); //TODO Change!
+    writer.getLine() = inputList.at(0); //TODO Change!
 
-    //Connexion between the input container and the filter.
+    //Connexion between the input container and the filter, then apply filter
     basicInputContainer.readerOutputPort(0) >> F->readerInputPort(0);
-
-    //Apply filter
     F->process();
 
     //Creation of a Reader needed to read text from a node
@@ -184,17 +194,7 @@ int main(int argc, char *argv[])
     cout << reader.getLine() << endl;
 
   }
-  //&END : Filter use request.
+  //END : Filter use request.
 		
-
-  //BEGIN : Syntax error.
-	else
-	{
-		cout << "SYNTAX ERROR : Please specify comandline arguments" << endl;
-    printHelp();
-		return 1;
-	}
-  //END : Syntax error.
-	
 }
 

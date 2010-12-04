@@ -11,7 +11,6 @@ include_directories (${PROJECT_SOURCE_DIR}/src/cmdkiwi/)
 link_directories (${PROJECT_BINARY_DIR})
 
 
-
 #------TESTS subdirectories ------
 
 SET(KIWI_CMD_SRC

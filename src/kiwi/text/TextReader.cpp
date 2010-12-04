@@ -57,6 +57,21 @@ TextReader::TextReader( core::Node::ReaderInputPort& port )
 	}
 }
 
+TextReader::TextReader( core::Node::ReaderOutputPort& port )
+{
+	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
+		port.subPort()->node() );
+	
+	if( tc ) init( *tc, port.subPort()->index() );
+	else
+	{
+		Debug::error() 
+			<< "TextReader::constructor error:"
+			<<" Unable to determine the Container type."
+			<< endl();
+	}
+}
+
 void TextReader::init( AbstractTextContainer& container
 	, portIndex_t portIndex )
 {

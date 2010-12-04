@@ -26,6 +26,10 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
+
+#ifndef KIWI_TEXTREADER_HPP
+#define KIWI_TEXTREADER_HPP
 
 #include "kiwi/text/AbstractTextContainer.hpp"
 #include "kiwi/core/Commons.hpp"
@@ -44,6 +48,7 @@ class TextReader
 public:
 	TextReader( AbstractTextContainer& container, portIndex_t index );
 	TextReader( core::Node::ReaderInputPort& port );
+	TextReader( core::Node::ReaderOutputPort& port );
 	
 	kiwi::uint32_t nbLines() const;
 	kiwi::uint32_t nbChars() const;
@@ -67,3 +72,4 @@ private:
 }// namespace	
 }// namespace	
 
+#endif

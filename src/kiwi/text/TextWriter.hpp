@@ -46,6 +46,7 @@ public:
 	TextWriter(AbstractTextContainer& container
 		, portIndex_t );
 	TextWriter( core::Node::WriterInputPort& port );
+	TextWriter( core::Node::WriterOutputPort& port );
 	
 	kiwi::uint32_t nbLines() const;
 	kiwi::uint32_t nbChars() const;
@@ -56,7 +57,7 @@ public:
 	bool endOfText() const;
 	kiwi::string& getLine() const;
 	kiwi::uint8_t getChar(int32_t charNumber) const;
-	void setChar(int32_t charNumber, uint8_t value);
+	void setChar(int32_t charNumber, int8_t value);
 	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
 	void removeLine(kiwi::uint32_t position);
 	

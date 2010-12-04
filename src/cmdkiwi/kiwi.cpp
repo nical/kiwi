@@ -36,6 +36,12 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/NodeFactory.hpp"
 #include "kiwi/core/Filter.hpp"
+#include "kiwi/core/NodeFactory.hpp"
+
+
+#include "kiwi/text/UpperCaseFilter.hpp"
+#include "kiwi/text/TextReader.hpp"
+
 #include <iostream>
 using namespace kiwi;
 
@@ -47,8 +53,8 @@ int main(int argc, char *argv[])
 {
 	Debug::init(true, true, 0);
 	//ScopedBlockMacro(__scop,"command line Kiwi")
-	//for(unsigned i = 0; i < argc; ++i)
-	//	std::cout << "| " << argv[i] << std::endl;
+	for(unsigned i = 0; i < argc; ++i)
+		std::cout << "| " << argv[i] << std::endl;
 		
 	if(argc > 1)
 	{
@@ -86,10 +92,37 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
+			
 			kiwi::core::NodeFactory factory;
 			
-			//TODO
+			factory.registerNode("UpperCaseFilter"
+				, kiwi::core::Descriptor<kiwi::core::Filter>(
+					"UpperCaseFilter beta"
+					, kiwi::text::__newUpperCaseFilter
+					, "#Filter#text" )
+			);
+			kiwi::text::TextContainer input;
+			kiwi::text::TextWriter inWriter(input, 0);
 			
+			kiwi::string filterName(argv[1]);
+			if(kiwi::string(argv[2]) == "-i")
+			{
+				inWriter.getLine() = kiwi::string(argv[3]);
+			}else return 1;
+			
+			kiwi::core::Filter* F = factory.newFilter(filterName);
+			if(F)
+			{
+				input.readerOutputPort(0) >> F->readerInputPort(0);
+				F->process();
+				Debug::print()<< "gné" << endl();
+				if(dynamic_cast<kiwi::text::TextContainer*>(F) == 0)
+					Debug::print()<< "meu ?" << endl();
+				
+				kiwi::text::TextReader reader( F->readerOutputPort(0) );
+				Debug::print()<< "tchiwa!" << endl();
+				cout << reader.getLine() << endl();
+			}
 		}
 	}
 	else

@@ -75,8 +75,7 @@ template <typename SlotType>
 void 
 Node::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
 {
-	Debug::print() << "port binding" << endl();
-	
+//	Debug::print() << "port binding" << endl();
 	_subPort = &port;
 
 	// note that if the binded Node is deleted, trying to acces

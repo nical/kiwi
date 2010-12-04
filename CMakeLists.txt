@@ -67,6 +67,6 @@ set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 # Add subdirectories
 #------------------------------------------------------------------------------
 add_subdirectory (src/kiwi)
-add_subdirectory (src/cmdkiwi)
+add_subdirectory (src/software)
 add_subdirectory (test)
 

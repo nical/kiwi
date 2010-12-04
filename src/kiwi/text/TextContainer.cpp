@@ -38,7 +38,7 @@ namespace text
 TextContainer::TextContainer()
 	: _nbLines(1)
 {
-ScopedBlockMacro(__scop, "TextContainer::constructor")	
+//ScopedBlockMacro(__scop, "TextContainer::constructor")	
 	_first = new Line;
 	_last = _first;
 	
@@ -52,7 +52,7 @@ ScopedBlockMacro(__scop, "TextContainer::constructor")
 
 kiwi::string* TextContainer::getLine( kiwi::uint32_t lineNumber )
 {
-ScopedBlockMacro(__scop, "TextContainer::getLine")	
+//ScopedBlockMacro(__scop, "TextContainer::getLine")	
 	// returns 0 if the line doesn't exist.
 	if(lineNumber >= _nbLines ) 
 	{
@@ -73,9 +73,9 @@ void TextContainer::insertLine(
 	const kiwi::string& toInsert
 	, kiwi::uint32_t position )
 {
-ScopedBlockMacro(__scop, "TextContainer::insertLine")
-	Debug::print() << "nbLines:" << _nbLines
-			<< " pos: " << position << endl();
+//ScopedBlockMacro(__scop, "TextContainer::insertLine")
+//	Debug::print() << "nbLines:" << _nbLines
+//			<< " pos: " << position << endl();
 	if( position > _nbLines ) 
 	{
 		Debug::error() << "TextContainer::insertLine error: line" 
@@ -85,7 +85,7 @@ ScopedBlockMacro(__scop, "TextContainer::insertLine")
 	}
 	if( position == _nbLines ) // last line
 	{
-		Debug::print() << "inserting at the end" << endl();
+//		Debug::print() << "inserting at the end" << endl();
 		Line* temp = _last;
 		_last = new Line;
 		_last->_next = 0;
@@ -97,7 +97,7 @@ ScopedBlockMacro(__scop, "TextContainer::insertLine")
 	}
 	if( position == 0 ) // first line
 	{
-		Debug::print() << "inserting at the beginning" << endl();
+//		Debug::print() << "inserting at the beginning" << endl();
 		Line* temp = _first;
 		_first = new Line;
 		_first->_prev = 0;
@@ -106,7 +106,7 @@ ScopedBlockMacro(__scop, "TextContainer::insertLine")
 		++_nbLines;
 		return;
 	}
-	Debug::print() << "inserting in the middle" << endl();
+//	Debug::print() << "inserting in the middle" << endl();
 	// general case
 	Line* thenext = line(position);
 	Line* newline = new Line;
@@ -155,12 +155,11 @@ void TextContainer::removeLine( kiwi::uint32_t position )
 //-------------------------------------------------------------- private
 TextContainer::Line* TextContainer::line(kiwi::uint32_t position)
 {
-ScopedBlockMacro(__scop, kiwi::string("TextContainer::line") )
+//ScopedBlockMacro(__scop, kiwi::string("TextContainer::line") )
 	//Debug::print() << position << endl();
 	Line* it = _first;
 	for(kiwi::uint32_t i = 0; i < position; ++i)
 	{
-	//	Debug::print() << "haha " << i << endl();
 		it = it->_next;
 	}
 	return it;

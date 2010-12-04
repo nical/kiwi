@@ -26,58 +26,40 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
 
-#ifndef KIWI_TEXTWRITER_HPP
-#define KIWI_TEXTWRITER_HPP
+/**
+ * @file Socket.hpp
+ * @brief Header file for the kiwi socket class
+ * @author Semprobe aka Thibaut Vuillemin (mail: contact@thibautvuillemin.com twitter: @Semprobe)
+ */
 
-#include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
+#ifndef KIWI_SOCKET_HPP
+#define KIWI_SOCKET_HPP
+
+#include <iostream>
+#include <ios>
+#include <arpa/inet.h>
 
 namespace kiwi
 {
-namespace text	
+namespace utils  
 {
 
-
-typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;
-	
-class TextWriter
+class Socket 
 {
+
+protected:
+  int genericSocket(int type, int port); 
+
 public:
-	enum { BEFORE = 0, AFTER = 1 }; 
+  int udpSocket();
+  int udpServerSocket(int port);
+  int tcpSocket();
+  int tcpServerSocket(int port, int backlog=10);
 
-	TextWriter(AbstractTextContainer& container
-		, portIndex_t );
-	TextWriter( core::Node::WriterInputPort& port );
-	TextWriter( core::Node::WriterOutputPort& port );
-	
-	kiwi::uint32_t nbLines() const;
-	kiwi::uint32_t nbChars() const;
-	kiwi::uint32_t currentLine() const;
-	bool gotoLine(kiwi::int32_t lineNumber);
-	bool gotoNextLine();
-	bool gotoPreviousLine();
-	bool endOfText() const;
-	kiwi::string& getLine() const;
-	kiwi::uint8_t getChar(int32_t charNumber) const;
-	void setChar(int32_t charNumber, int8_t value);
-	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
-	void removeLine(kiwi::uint32_t position);
-	
-	StringIterator getStringIterator() const;
-	
-protected:	
-	kiwi::string* _currentLine;
-	uint32_t _currentLineNb;
-private:
-	AbstractTextContainer* _container;
-	void init(AbstractTextContainer& container
-		, portIndex_t );
-};		
+};
 
+}
+}
 
-}// namespace	
-}// namespace	
-
-#endif
+#endif //KIWI_SOCKET_HPP

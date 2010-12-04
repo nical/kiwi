@@ -53,7 +53,7 @@ Node::Node()
 
 Node::~Node()
 {
-	Debug::print() << "Node::destructor"<<endl();
+//	Debug::print() << "Node::destructor"<<endl();
 	while(nbReaderInputs())
 	{
 		delete _readerInputs[_readerInputs.size()-1];
@@ -78,37 +78,36 @@ Node::~Node()
 }
 
 
-void Node::addReaderInputPort()
+portIndex_t Node::addReaderInputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderInputCount();
 	_readerInputs.push_back( new InputPort<Reader>(this) );
-//	if( isLayoutEventEnabled() ) layoutChanged();
+	return _readerInputs.size()-1;
 }
 
-void Node::addReaderOutputPort()
+portIndex_t Node::addReaderOutputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderOutputCount();
 	_readerOutputs.push_back( new OutputPort<Reader>(this) );
-//	if( isLayoutEventEnabled() ) layoutChanged();
+	return _readerOutputs.size()-1;
 }
 
-void Node::addWriterInputPort()
+portIndex_t Node::addWriterInputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterInputCount();
 	_writerInputs.push_back( new InputPort<Writer>(this) );
-//	if( isLayoutEventEnabled() ) layoutChanged();
+	return _writerInputs.size()-1;
 }
 
-void Node::addWriterOutputPort()
+portIndex_t Node::addWriterOutputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterOutputCount();
 	_writerOutputs.push_back( new OutputPort<Writer>(this) );
-//	if( isLayoutEventEnabled() ) layoutChanged();
-
+	return _writerOutputs.size()-1;
 }
 
 
@@ -116,28 +115,24 @@ void
 Node::removeReaderInputPort()
 {
 	_readerInputs.pop_back();
-//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void 
 Node::removeReaderOutputPort()
 {
 	_readerOutputs.pop_back();
-//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void 
 Node::removeWriterInputPort()
 {
 	_writerInputs.pop_back();
-//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 void 
 Node::removeWriterOutputPort()
 {
 	_readerOutputs.pop_back();
-//	if( isLayoutEventEnabled() ) layoutChanged();
 }
 
 portIndex_t 

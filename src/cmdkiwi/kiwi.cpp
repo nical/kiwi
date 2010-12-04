@@ -95,12 +95,8 @@ int main(int argc, char *argv[])
 			
 			kiwi::core::NodeFactory factory;
 			
-			factory.registerNode("UpperCaseFilter"
-				, kiwi::core::Descriptor<kiwi::core::Filter>(
-					"UpperCaseFilter beta"
-					, kiwi::text::__newUpperCaseFilter
-					, "#Filter#text" )
-			);
+			kiwi::text::UpperCaseFilter::registerToFactory(factory, "UpperCase");
+			
 			kiwi::text::TextContainer input;
 			kiwi::text::TextWriter inWriter(input, 0);
 			
@@ -115,9 +111,6 @@ int main(int argc, char *argv[])
 			{
 				input.readerOutputPort(0) >> F->readerInputPort(0);
 				F->process();
-				
-				if(dynamic_cast<kiwi::text::TextContainer*>(F) == 0)
-					Debug::print()<< "meu ?" << endl();
 				
 				kiwi::text::TextReader reader( F->readerOutputPort(0) );
 				

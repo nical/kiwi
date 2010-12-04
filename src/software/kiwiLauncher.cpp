@@ -38,6 +38,7 @@
 #include "kiwi/text/TextContainer.hpp"
 #include "kiwi/text/TextReader.hpp"
 #include "kiwi/text/TextWriter.hpp"
+#include "kiwi/text/UpperCaseFilter.hpp"
 #include "kiwi/utils/Socket.hpp"
 #include "printMessages.h"
 #include <iostream>
@@ -116,16 +117,7 @@ int main(int argc, char *argv[])
 
     //BEGIN : Register all nodes.
     kiwi::core::NodeFactory factory;
-    factory.registerNode
-    (
-      "UpperCaseFilter",
-      kiwi::core::Descriptor<kiwi::core::Filter>
-      (
-        "UpperCaseFilter beta",
-        kiwi::text::__newUpperCaseFilter,
-        "#Filter #Text"
-      )
-    );
+    kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCaseFilter");
     //END: Register all nodes.
 
     

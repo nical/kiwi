@@ -33,18 +33,15 @@
  * @version 0.3
  */
  
-#include "kiwi/core/Commons.hpp"
-#include "kiwi/core/NodeFactory.hpp"
-#include "kiwi/core/Filter.hpp"
-#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/core.hpp"
+#include "kiwi/generic.hpp"
+#include "kiwi/text.hpp"
+#include "Help.hpp"
 
-
-#include "kiwi/text/UpperCaseFilter.hpp"
-#include "kiwi/text/TextReader.hpp"
-#include "kiwi/generic/ArrayContainer.hpp"
-#include "kiwi/generic/ValueContainer.hpp"
 
 #include <iostream>
+
+
 using namespace kiwi;
 
 
@@ -71,26 +68,7 @@ int main(int argc, char *argv[])
 		}
 		else if(kiwi::string(argv[1]) == kiwi::string("--help") )
 		{
-			cout << endl;
-
-			cout << "Synopsis:" << endl << endl;
-			cout << "     kiwi [--help] [--version] [filterName [-i inputs] [-o outputs]]" << endl;
-			
-			
-			cout << endl << "Description:" << endl << endl;
-			cout << "     @TODO" << endl;
-			
-			
-			cout << endl << "Options:" << endl << endl;
-			cout << "     --help" << endl;
-			cout << "        Shows this output" << endl;
-			cout << "     --version"  << endl;
-			cout << "        Prints the installed kiwi version. " << endl;
-			cout << "     -i" << endl;
-			cout << "        Followed by the input arguments." << endl;
-			cout << "     -o " << endl;
-			cout << "        Followed by the output arguments." << endl;
-			cout << endl << endl;
+			kiwi::Help::print(cout);
 		}
 		else
 		{

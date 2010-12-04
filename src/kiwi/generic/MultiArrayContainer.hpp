@@ -202,7 +202,7 @@ public:
 	{ assert( "not supported yet" == ""); }
 	
 	
-	static Container* newMultiArrayContainer() 
+	static core::Container* newMultiArrayContainer() 
 	{ 
 		return new MultiArrayContainer<TValueType, TDimension>(Coordinates(128,128),1); 
 	}

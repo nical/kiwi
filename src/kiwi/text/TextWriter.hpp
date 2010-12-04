@@ -26,6 +26,10 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#pragma once
+
+#ifndef KIWI_TEXTWRITER_HPP
+#define KIWI_TEXTWRITER_HPP
 
 #include "kiwi/text/AbstractTextContainer.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
@@ -76,3 +80,4 @@ private:
 }// namespace	
 }// namespace	
 
+#endif

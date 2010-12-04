@@ -32,53 +32,20 @@
  * @author Semprobe aka Thibaut Vuillemin (mail: contact@thibautvuillemin.com twitter: @Semprobe)
  * @version 0.1
  */
-#include "kiwi/core/Commons.hpp"
-#include "kiwi/core/NodeFactory.hpp"
-#include "kiwi/core/Filter.hpp"
-#include "kiwi/text/TextContainer.hpp"
-#include "kiwi/text/TextReader.hpp"
-#include "kiwi/text/TextWriter.hpp"
-#include "kiwi/text/UpperCaseFilter.hpp"
+#include "kiwi/core.hpp"
+#include "kiwi/text.hpp"
+
 #include "kiwi/utils/Socket.hpp"
+
+#include "ArgumentProcessor.hpp"
+
+#include "Help.hpp"
+
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
+
 using namespace std;
-
-
-
-/**
- * Print version on standard outpur.
- */
-void printVersion()
-{
-  cout << "Kiwi version : " << KIWI_VERSION_MAJOR << "." << KIWI_VERSION_MINOR 	<< "." << KIWI_VERSION_PATCH << endl;
-}
-
-
-
-/**
- * Print help text on standard output.
- */
-void printHelp()
-{
-  cout << endl;
-
-  cout << "Synopsis:" << endl << endl;
-  cout << "     kiwi [--help] [--version] [filterName [-i inputs] [-o outputs]]" << endl;
-  cout << endl << "Description:" << endl << endl;
-  cout << "     @TODO" << endl;
-  cout << endl << "Options:" << endl << endl;
-  cout << "     --help" << endl;
-  cout << "        Shows this output" << endl;
-  cout << "     --version"  << endl;
-  cout << "        Prints the installed kiwi version. " << endl;
-  cout << "     -i" << endl;
-  cout << "        Followed by the input arguments." << endl;
-  cout << "     -o " << endl;
-  cout << "        Followed by the output arguments." << endl;
-  cout << endl << endl;
-}
 
 
 
@@ -92,23 +59,44 @@ int main(int argc, char *argv[])
   //DEBUG ON
   kiwi::Debug::init(true, true, 0);
   
+  kiwi::ArgumentProcessor arguments(argc, argv);
 
   //BEGIN : Register all nodes.
   kiwi::core::NodeFactory factory;
   kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCaseFilter");
   //END: Register all nodes.
 
+	if( arguments.invalid() ) 
+	{
+		cerr << "SYNTAX ERROR"<<endl;
+		kiwi::Help::print(cerr);
+		return 1;
+	}
+	
+	if( arguments.helpCmd() )
+	{
+		kiwi::Help::print(cout);
+		return 1;
+	}
+	
+	//BEGIN : SERVER REQUEST CASE.
+	if( arguments.serverCmd() )
+	{
+      cerr << "kiwi server not supported yet" << endl;
+      return 1;
+    } //END : SERVER REQUEST CASE.
 
-
-  //BEGIN : SERVER REQUEST CASE.
-  if(argc==3)
-  {
-    if (kiwi::string(argv[1])==kiwi::string("--server"))
-    {
-      while (1);
-    }
-  }
-  //END : SERVER REQUEST CASE.
+	
+	if( arguments.processCmd() ) cout << "process " << endl;
+	if( arguments.versionCmd() ) cout << "version " << endl;
+	if( arguments.verboseCmd() ) cout << "verbose " << endl;
+	if( arguments.helpCmd() ) cout << "help " << endl;
+	if( arguments.remoteCmd() ) cout << "remote " << endl;
+	if( arguments.serverCmd() ) cout << "server " << endl;
+	cout << "nb inputs " << arguments.getFilterInputs().size() << endl;
+	cout << "nb outputs " << arguments.getFilterOutputs().size() << endl;
+	return 0;
+ /*
 
 
 
@@ -117,20 +105,20 @@ int main(int argc, char *argv[])
 	{
 		if(kiwi::string(argv[1]) == kiwi::string("--version") )
 		{
-      printVersion();
+			kiwi::Help::printVersion(cout);
 			return 0;
 		}
 		else if (kiwi::string(argv[1]) == kiwi::string("--help") )
 		{
-      printHelp();
-      return 0; 
+			kiwi::Help::print(cout);
+			return 0; 
 		}
 		else
 		{
-      printHelp();
-      return 1; 
+			kiwi::Help::print(cout);
+			return 1; 
 		}
-  }
+	}
   //END : ONE ARGUMENT CASE.
   
 
@@ -149,7 +137,7 @@ int main(int argc, char *argv[])
     if (strcmp(argv[verbose+2],"-i")!=0)
     {
       cout << "SYNTAX ERROR : Could not fint input list symbol. Please check help" << endl;
-      printHelp();
+      kiwi::Help::print(cout);
       return 1;
     }
     i=verbose+3;
@@ -166,32 +154,36 @@ int main(int argc, char *argv[])
 
 
     //BEGIN : Filter instanciation using filter name extracted from arguments
-    kiwi::core::Filter* F = factory.newFilter(filterName);
-    if (!F)
-    {
-      cout << "SYNTAX ERROR : Could not finf this filter. Please check help" << endl;
-      printHelp();
-      return 1;
-    }
+   
     //END : Filter instanciation using filter name extracted from arguments
     printf("DEBUG\n");
 
+*/
 
+	if( arguments.processCmd() )
+	{
+		kiwi::core::Filter* F = factory.newFilter(arguments.filterName() );
+		if (!F)
+		{
+		  cout << "SYNTAX ERROR : Could not finf this filter. Please check help" << endl;
+		  kiwi::Help::print(cout);
+		  return 1;
+		}
 
-    //Creation of a basic container, needed to apply the filter
-    kiwi::text::TextContainer basicInputContainer;
+		//Creation of a basic container, needed to apply the filter
+		kiwi::text::TextContainer basicInputContainer;
 
-    //Creation of a Writer needed to write the argument in the container
-    kiwi::text::TextWriter writer(basicInputContainer,0);
-    writer.getLine() = inputList.at(0); //TODO Change!
+		//Creation of a Writer needed to write the argument in the container
+		kiwi::text::TextWriter writer(basicInputContainer,0);
+		writer.getLine() = arguments.getFilterInputs().front();
 
-    //Connexion between the input container and the filter, then apply filter
-    basicInputContainer.readerOutputPort(0) >> F->readerInputPort(0);
-    F->process();
+		//Connexion between the input container and the filter, then apply filter
+		basicInputContainer.readerOutputPort(0) >> F->readerInputPort(0);
+		F->process();
 
-    //Creation of a Reader needed to read text from a node
-    kiwi::text::TextReader reader( F->readerOutputPort(0) );
-    cout << reader.getLine() << endl;
+		//Creation of a Reader needed to read text from a node
+		kiwi::text::TextReader reader( F->readerOutputPort(0) );
+		cout << reader.getLine() << endl;
 
   }
   //END : Filter use request.

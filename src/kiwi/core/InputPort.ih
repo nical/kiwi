@@ -53,7 +53,7 @@ template <typename SlotType>
 void 
 Node::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMetaPort)
 {
-ScopedBlockMacro(__sccop, "Node::InputPort<SlotType>::connect" );
+//ScopedBlockMacro(__sccop, "Node::InputPort<SlotType>::connect" );
 	if( !isEnabled() )
 	{
 		Debug::error() << "InputPort::connect() : input port disabled" << endl();

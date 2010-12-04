@@ -16,12 +16,10 @@ link_directories (${PROJECT_BINARY_DIR})
 
 SET(KIWI_CMD_SRC
   kiwiLauncher
+  ArgumentProcessor
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")
 
-FOREACH(FILE ${KIWI_CMD_SRC})
-  add_executable(${FILE} ${FILE})
-  target_link_libraries (${FILE} ${LIBKIWI_NAME} )
-ENDFOREACH(FILE)
-
+add_executable(kiwi ${KIWI_CMD_SRC})
+target_link_libraries (kiwi ${LIBKIWI_NAME} )

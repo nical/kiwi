@@ -6,7 +6,7 @@ A generic and easy to use node compositor library for C++.
 <img src='http://img808.imageshack.us/img808/4377/kiwiboxespng01.png' border='0'/>
 
 Checkout the [wiki](http://github.com/nical/kiwi/wiki) !<br/>
-And also the doxygen [class documentation](http://coloc42.dyndns.org/nico/kiwi/doxygen/annotated.html).
+And also the doxygen [class documentation](http://nical.github.com/kiwi/doc/doxygen/html/annotated.html).
 
 <h2> Containers and filters </h2>
 
@@ -21,7 +21,7 @@ Kiwi is designed to make the creation of Resources and Filters very easy. Just c
 
 <h2> The project's advancement </h2>
 
-kiwi 0.2.2
+kiwi 0.3.2
 
 Kiwi is still at an early stage, and interfaces are subject to change.
 
@@ -51,7 +51,7 @@ readme.txt file in each sub-project directory for informations about which licen
 
 <h2> Project member(s) </h2>
 
-For know the Kiwi project is designed/developed/maintained by <b>Nicolas Silva</b>.
+For now the Kiwi project is designed/developed/maintained by <b>Nicolas Silva</b>.
 
 I would be very happy to share this experience with anyone who is motivated to create and/or test filters and resources based on kiwi!
 
@@ -60,3 +60,5 @@ To contact me:
 email: nical.silva@gmail.com <br/>
 twitter: [@nicalsilva](http://twitter.com/#!/nicalsilva)<br/>
 my resume [(fr)](http://github.com/nical/resume/raw/master/fr/NicolasSilva.pdf)<br/>
+
+Recently Thibaut Vuillemin (@semprobe) joined the project as a developer !

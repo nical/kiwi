@@ -16,7 +16,6 @@ link_directories (${PROJECT_BINARY_DIR})
 
 SET(KIWI_CMD_SRC
   kiwiLauncher
-  printMessages.h
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")

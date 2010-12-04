@@ -27,10 +27,10 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
- * @file Node.hpp
+ * @file kiwiLauncher.hpp
  * @brief Commandline kiwi program.
- * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
- * @version 0.3
+ * @author Semprobe aka Thibaut Vuillemin (mail: contact@thibautvuillemin.com twitter: @Semprobe)
+ * @version 0.1
  */
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/NodeFactory.hpp"
@@ -40,9 +40,45 @@
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/text/UpperCaseFilter.hpp"
 #include "kiwi/utils/Socket.hpp"
-#include "printMessages.h"
 #include <iostream>
 using namespace std;
+
+
+
+/**
+ * Print version on standard outpur.
+ */
+void printVersion()
+{
+  cout << "Kiwi version : " << KIWI_VERSION_MAJOR << "." << KIWI_VERSION_MINOR 	<< "." << KIWI_VERSION_PATCH << endl;
+}
+
+
+
+/**
+ * Print help text on standard output.
+ */
+void printHelp()
+{
+  cout << endl;
+
+  cout << "Synopsis:" << endl << endl;
+  cout << "     kiwi [--help] [--version] [filterName [-i inputs] [-o outputs]]" << endl;
+  cout << endl << "Description:" << endl << endl;
+  cout << "     @TODO" << endl;
+  cout << endl << "Options:" << endl << endl;
+  cout << "     --help" << endl;
+  cout << "        Shows this output" << endl;
+  cout << "     --version"  << endl;
+  cout << "        Prints the installed kiwi version. " << endl;
+  cout << "     -i" << endl;
+  cout << "        Followed by the input arguments." << endl;
+  cout << "     -o " << endl;
+  cout << "        Followed by the output arguments." << endl;
+  cout << endl << endl;
+}
+
+
 
 
 /**
@@ -50,7 +86,7 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
-  Debug::init(true, true, 0);
+  kiwi::Debug::init(true, true, 0);
 
 
   //BEGIN : ONE ARGUMENT CASE. It should be a "help" or a "version" request.

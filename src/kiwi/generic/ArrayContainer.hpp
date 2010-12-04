@@ -31,7 +31,7 @@
  * @file ArrayContainer.hpp
  * @brief Header file for an array based Container.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
- * @version 0.1
+ * @version 0.3
  */
 
 
@@ -197,7 +197,7 @@ public:
 	bool resize(Coordinates newSize, bool keepData)
 	{ assert( "not supported yet" == ""); }
 	
-	static Container* newArrayContainer() 
+	static kiwi::core::Container* newArrayContainer() 
 	{ 
 		return new ArrayContainer<TValueType, TDimension>(Coordinates(128,128),1); 
 	}

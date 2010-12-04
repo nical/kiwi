@@ -41,6 +41,8 @@
 
 #include "kiwi/text/UpperCaseFilter.hpp"
 #include "kiwi/text/TextReader.hpp"
+#include "kiwi/generic/ArrayContainer.hpp"
+#include "kiwi/generic/ValueContainer.hpp"
 
 #include <iostream>
 using namespace kiwi;
@@ -96,6 +98,9 @@ int main(int argc, char *argv[])
 			kiwi::core::NodeFactory factory;
 			
 			kiwi::text::UpperCaseFilter::registerToFactory(factory, "UpperCase");
+			kiwi::generic::ArrayContainer<int,2>::registerToFactory(factory, "Array2int32");
+			kiwi::generic::ValueContainer<kiwi::int32_t>::registerToFactory(factory, "int32");
+			kiwi::generic::ValueContainer<float>::registerToFactory(factory, "float");
 			
 			kiwi::text::TextContainer input;
 			kiwi::text::TextWriter inWriter(input, 0);

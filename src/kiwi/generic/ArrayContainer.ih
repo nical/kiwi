@@ -72,22 +72,12 @@ ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
 
 template<typename T, unsigned int D>
 void ArrayContainer<T,D>::init(unsigned char nameHint)
-{
-// disable the event so that layoutChanged() is not called from
-	// within the constructor
-	Node::setLayoutEventEnabled(false);
-	// "compute" the runtime type name of this class in function of
-	// the template parameters
-	kiwi::string sType("array"
-			+ boost::lexical_cast<kiwi::string>(D)+"d_"
-			+ types::str<T>() );
-			
+{		
 	for(unsigned i = 0; i < _nbComponents; ++i)
 	{
 		Node::addWriterOutputPort();
 		Node::addReaderOutputPort();
 	}
-	Node::setLayoutEventEnabled(true);
 }
 
 
@@ -209,6 +199,24 @@ ScopedBlockMacro(__scop, kiwi::string("ArrayContainer<")
 	Debug::print() << _totalSize << " elements" << endl(); 
 }
 
+
+template<typename T, unsigned int D>
+void ArrayContainer<T,D>::registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
+{
+	kiwi::string tags("#Container#array");
+	kiwi::string name("ArrayContainer<");
+	
+	tags += boost::lexical_cast<kiwi::string>(D) + types::str<ValueType>();
+	
+	name += boost::lexical_cast<kiwi::string>(D) + "," + types::str<ValueType>() + ">";
+	
+	factory.registerNode( filterId
+			, kiwi::core::Descriptor<kiwi::core::Container>(
+				name
+				, newArrayContainer
+				, tags )
+		);
+}
 
 
 } // namespace

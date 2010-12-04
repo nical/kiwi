@@ -71,6 +71,18 @@ ScopedBlockMacro(__scp, "kiwi::test::TextContainer")
 		reader.gotoNextLine();
 	}
 	
+	writer.gotoLine(3);
+	reader.gotoLine(3);
+	writer.setChar(0,'a');
+	
+	
+	
+	writer.setChar(8, 'h');
+	
+	Debug::print() << reader.getLine() << endl();
+	
+	assert(reader.getChar(0) == 'a');
+	assert(reader.nbChars() == 8);
 	
 }
 

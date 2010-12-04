@@ -85,7 +85,7 @@ public:
 	typedef OutputPort<Writer> WriterOutputPort;
 	typedef InputPort<Writer> WriterInputPort;
 
-	enum { FILTER, CONTAINER};
+	enum { FILTER, CONTAINER };
 
 // ---------------------------------------------------- constructor / Destructor
 	/**
@@ -103,8 +103,11 @@ public:
 
 // ------------------------------------------------------------- virtual methods
 
+	/**
+	 * @brief must return Node::FILTER or Node::CONTAINER.
+	 */ 
 	virtual int nodeType() = 0;
-
+ 
 
 	/**
 	 * @brief Automatically called when port are connected or disconnected.
@@ -335,9 +338,11 @@ protected:
 	/**
 	 * @brief Adds an input port to the Reader interface.
 	 *
-	 * This is to be used in the initialisation phase of a Node/Filter.
+	 * This is meant to be used in the initialisation phase of a Node/Filter.
+	 * 
+	 * @return the index of the added port.
 	 */ 
-	void addReaderInputPort();
+	portIndex_t addReaderInputPort();
 
 	/**
 	 * @brief Remove an input port from this Filter's Reader interface.
@@ -348,9 +353,11 @@ protected:
 	/**
 	 * @brief Adds an output port to the Reader interface.
 	 *
-	 * This is to be used in the initialisation phase of a Node/Filter.
+	 * This is meant to be used in the initialisation phase of a Node/Filter.
+	 * 
+	 * @return the index of the added port.
 	 */ 
-	void addReaderOutputPort();
+	portIndex_t addReaderOutputPort();
 	/**
 	 * @brief Remove an output port from this Filter's Reader interface.
 	 *
@@ -360,9 +367,11 @@ protected:
 	/**
 	 * @brief Adds an input port to the Writer interface.
 	 *
-	 * This is to be used in the initialisation phase of a Node/Filter.
+	 * This is meant to be used in the initialisation phase of a Node/Filter.
+	 * 
+	 * @return the index of the added port.
 	 */ 
-	void addWriterInputPort();
+	portIndex_t addWriterInputPort();
 	/**
 	 * @brief Remove an input port from this Filter's Writer interface.
 	 *
@@ -372,9 +381,11 @@ protected:
 	/**
 	 * @brief Adds an output port to the Writer interface.
 	 *
-	 * This is to be used in the initialisation phase of a Node/Filter.
+	 * This is meant to be used in the initialisation phase of a Node/Filter.
+	 * 
+	 * @return the index of the added port.
 	 */ 
-	void addWriterOutputPort();
+	portIndex_t addWriterOutputPort();
 	/**
 	 * @brief Remove an output port from this Filter's Writer interface.
 	 *
@@ -387,7 +398,7 @@ protected:
 	/**
 	 * @brief Enables/disables port
 	 */
-	template<typename SlotType>
+	template<typename SlotType> 
 	void setPortEnabled(InputPort<SlotType>& port, bool status)
 	{
 		port.setEnabled(status);

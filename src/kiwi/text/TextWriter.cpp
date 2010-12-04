@@ -58,6 +58,21 @@ TextWriter::TextWriter( core::Node::WriterInputPort& port )
 	}
 }
 
+TextWriter::TextWriter( core::Node::WriterOutputPort& port )
+{
+	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
+		port.subPort()->node() );
+	
+	if( tc ) init( *tc, port.subPort()->index() );
+	else
+	{
+		Debug::error() 
+			<< "TextWriter::constructor error:"
+			<<" Unable to determine the Container type."
+			<< endl();
+	}
+}
+
 void TextWriter::init( AbstractTextContainer& container
 	, portIndex_t portIndex )
 {
@@ -114,9 +129,27 @@ kiwi::uint8_t TextWriter::getChar(int32_t charNumber) const
 	return (*_currentLine)[charNumber];
 }
 
-void TextWriter::setChar(int32_t charNumber, kiwi::uint8_t)
+void TextWriter::setChar(int32_t charNumber, kiwi::int8_t value)
 {
-	
+	//ScopedBlockMacro(__scop, "TextWriter::setChar")
+	// TODO: This is really dirty code... we'll have to change it someday..
+	int diff = charNumber - _currentLine->size() ;
+	if(diff >= 0)
+	{
+		//Debug::print() << "adding chars to the line" << endl();
+		for(int i = 0; i < diff-1; ++i)
+		{
+			//Debug::print() << "x" <<endl();
+			char space = ' ';
+			(*_currentLine).append(&space,1);
+		}
+		(*_currentLine).append((char*)&value,1);
+		return;
+	}
+	else
+	{
+		(*_currentLine)[charNumber] = value;
+	}
 }
 
 StringIterator TextWriter::getStringIterator() const
@@ -125,7 +158,6 @@ StringIterator TextWriter::getStringIterator() const
 		&((*_currentLine)[0])
 		, &((*_currentLine)[_currentLine->size()-1]) 
 		);
-
 }
 
 void TextWriter::insertLine( 

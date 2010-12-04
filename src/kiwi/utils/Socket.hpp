@@ -37,6 +37,8 @@
 #define KIWI_SOCKET_HPP
 
 #include <iostream>
+#include <ios>
+#include <arpa/inet.h>
 
 namespace kiwi
 {
@@ -60,3 +62,4 @@ public:
 }
 }
 
+#endif //KIWI_SOCKET_HPP

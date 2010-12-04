@@ -1,7 +1,9 @@
 #include "Socket.hpp"
 
-#define UCP SOCK_DGRAM
+#define UDP SOCK_DGRAM
 #define TCP SOCK_STREAM
+
+using namespace std;
 
 namespace kiwi
 {
@@ -17,7 +19,7 @@ namespace utils
 int Socket::genericSocket(int type, int port)
 {
   int socketDescriptor;
-  int sockaddrLentgh=sizeof(struct sockaddr_in);
+  int sockaddrLength=sizeof(struct sockaddr_in);
   struct sockaddr_in socketAddress;
   
   try
@@ -27,7 +29,7 @@ int Socket::genericSocket(int type, int port)
     socketAddress.sin_family=AF_INET; //Internet address
     socketAddress.sin_addr.s_addr=htonl(INADDR_ANY); //Listen on all network interfaces
     socketAddress.sin_port=htons(port); //Changing Endian code
-    if (bind(socketDescriptor,(struct sockaddr*)&socketAddress,longueur) == -1)
+    if (bind(socketDescriptor,(struct sockaddr*)&socketAddress,sockaddrLength) == -1)
     {
       close(socketDescriptor);
       throw ios_base::failure("Could not attach socket");
@@ -45,9 +47,9 @@ int Socket::genericSocket(int type, int port)
 /**
  * Create a udp client socket.
  */
-int Socket::udpSocket();
+int Socket::udpSocket()
 {
-  return genericSocket(UCP,0);
+  return genericSocket(UDP,0);
 }
 
 
@@ -63,7 +65,7 @@ int Socket::udpServerSocket(int port)
 /**
  * Create a tcp client socket.
  */
-int Socket::tcpSocket();
+int Socket::tcpSocket()
 {
   return genericSocket(TCP,0);
 }
@@ -72,7 +74,7 @@ int Socket::tcpSocket();
 /**
  * Create a tcp server socket.
  */
-int Socket::tcpServerSocket(int port, int backlog);
+int Socket::tcpServerSocket(int port, int backlog)
 {
   int socketDescriptor = genericSocket(TCP,port);
   try

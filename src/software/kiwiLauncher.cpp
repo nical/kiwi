@@ -35,10 +35,12 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/NodeFactory.hpp"
 #include "kiwi/core/Filter.hpp"
+#include "kiwi/text/TextContainer.hpp"
+#include "kiwi/text/TextReader.hpp"
+#include "kiwi/text/TextWriter.hpp"
 #include "kiwi/utils/Socket.hpp"
 #include "printMessages.h"
 #include <iostream>
-using namespace kiwi;
 using namespace std;
 
 
@@ -47,7 +49,6 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
-	
   Debug::init(true, true, 0);
 
 
@@ -79,7 +80,6 @@ int main(int argc, char *argv[])
   {
     if (kiwi::string(argv[1])==kiwi::string("--server"))
     {
-      kiwi::utils::tcpServerSocket(atoi(argv[3]));
       while (1);
     }
   }
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   {
     //BEGIN : Find inputs and outputs arguments indexes.
     int inputsIndex=0;
-    int outpurIndex=0;
+    int outputsIndex=0;
     for (int i=1;i<argc;i++)
     {
       if (argv[i]=="-i") inputsIndex=i;
@@ -125,12 +125,13 @@ int main(int argc, char *argv[])
         kiwi::text::__newUpperCaseFilter,
         "#Filter #Text"
       )
-    )
+    );
     //END: Register all nodes.
 
     
     //Filter instanciation using filter name extracted from arguments
-    if !(kiwi::core::Filter* F = factory.newFilter(argv[inputsIndex-1]))
+    kiwi::core::Filter* F = factory.newFilter(argv[inputsIndex-1]);
+    if (!F)
     {
       cout << "SYNTAX ERROR : Please check help" << endl;
       printHelp();
@@ -151,7 +152,7 @@ int main(int argc, char *argv[])
     F->process();
 
     //Creation of a Reader needed to read text from a node
-    kiwi::text::TextReader reader(F->readerOutputPort(0));
+    kiwi::text::TextReader reader( F->readerOutputPort(0) );
     cout << reader.getLine() << endl;
 
   }

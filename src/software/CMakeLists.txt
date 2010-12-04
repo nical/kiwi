@@ -15,7 +15,8 @@ link_directories (${PROJECT_BINARY_DIR})
 #------TESTS subdirectories ------
 
 SET(KIWI_CMD_SRC
-	kiwi
+  kiwiLauncher
+  printMessages.h
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")

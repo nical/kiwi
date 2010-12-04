@@ -38,7 +38,7 @@ namespace core
 CanonicalFilter::CanonicalFilter(uint32_t nbWriters)
 : Filter()
 {
-ScopedBlockMacro(__scp, "CanonicalFilter::constructor")
+//ScopedBlockMacro(__scp, "CanonicalFilter::constructor")
 	_wNodes = new Node*[nbWriters];
 	_nbWNodes = nbWriters;
 	for(uint32_t i = 0; i < nbWriters; ++i)
@@ -59,7 +59,7 @@ CanonicalFilter::~CanonicalFilter()
 void CanonicalFilter::layoutChanged()
 {
 	uint32_t nbWriters = nbWriterInputs();
-	ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
+	//ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
 	for(uint32_t i = 0; i < nbWriters; ++i)
 	{
 		if(writerInputPort(i).isConnected() )

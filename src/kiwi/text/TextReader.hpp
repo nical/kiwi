@@ -59,7 +59,7 @@ public:
 	bool endOfText() const;
 	kiwi::string getLine() const;
 	kiwi::uint8_t getChar(int32_t charNumber) const;
-	StringConstIterator getStringIterator() const;// ODO
+	StringConstIterator getStringIterator() const;// TODO
 	
 protected:
 	AbstractTextContainer* _container;

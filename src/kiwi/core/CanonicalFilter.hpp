@@ -41,7 +41,7 @@
 
 
 #include "kiwi/core/Filter.hpp"
-
+#include <list>
 
 namespace kiwi
 {
@@ -61,6 +61,11 @@ public:
 	CanonicalFilter(uint32_t nbWriterInputs);
 	
 	/**
+	 * @brief Destructor.
+	 */ 
+	~CanonicalFilter();
+	
+	/**
 	 * @brief Automatically publishes the Container's ports in this Filter's
 	 * Reader output ports.
 	 * 
@@ -70,9 +75,16 @@ public:
 	 */ 
 	void layoutChanged();
 	
+	/**
+	 * 
+	 */ 
+	void addWriteNode(Node* toAdd, portIndex_t writerPort);
 	
-
+	void removeWriteNode( portIndex_t writerPort );
 	
+private:
+	Node** _wNodes;
+	portIndex_t _nbWNodes;
 };
 
 

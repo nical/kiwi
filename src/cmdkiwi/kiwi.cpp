@@ -115,14 +115,14 @@ int main(int argc, char *argv[])
 			{
 				input.readerOutputPort(0) >> F->readerInputPort(0);
 				F->process();
-				Debug::print()<< "gné" << endl();
+				
 				if(dynamic_cast<kiwi::text::TextContainer*>(F) == 0)
 					Debug::print()<< "meu ?" << endl();
 				
 				kiwi::text::TextReader reader( F->readerOutputPort(0) );
-				Debug::print()<< "tchiwa!" << endl();
+				
 				cout << reader.getLine() << endl();
-			}
+			}else { cout << "unknown filter name" << endl; }
 		}
 	}
 	else

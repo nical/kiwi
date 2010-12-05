@@ -69,13 +69,15 @@ void launchServer(int port)
 
   while(1)
   {
-    //Re-initialize "select" function params
+    //BEGIN : Initialize "select" function params
     FD_ZERO(&socketGroup);
     FD_SET(serverSocket,&socketGroup);
     pollingTime.tv_sec=0;
     pollingTime.tv_usec=100;
-   
-    //Simultaneous listen on all sockets 
+    //END: Initialize "select" function params
+
+
+    //BEGIN : Handle client connections
     selectResult=select((serverSocket+1),&socketGroup,NULL,NULL,&pollingTime);
     if (selectResult==-1)
     {
@@ -83,19 +85,70 @@ void launchServer(int port)
     }
     else
     {
-      //Opening a new socket for an incoming client
-      int socket=accept(serverSocket,(struct sockaddr*)&tcp_addr,&(tcp_size));
-      if (socket==-1)
+      //BEGIN : IF a new client attemps to connect
+      if (FD_ISSET(serverSocket,&socketGroup))
       {
-        cerr << "Could not connect to an incoming client." << endl;
+        //BEGIN : New process and new socket for an incoming client
+        if (fork()==0)
+        {
+
+          //BEGIN : Create new socket, buffers, display welcome message
+          int socket=accept(serverSocket,(struct sockaddr*)&tcp_addr,&(tcp_size));
+          if (socket==-1)
+          {
+            cerr << "Could not connect to an incoming client." << endl;
+          }
+          kiwi::string outputBuffer;
+          kiwi::string inputBuffer;
+          outputBuffer = "\r\n-----------------------------------------\r\n---------- Enjoy Cloud Kiwi ! -----------\r\n-----------------------------------------\r\n";
+          writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
+          //END : Create new socket, buffers, display welcome message
+
+
+          //BEGIN : Start interactive terminal
+          bool go = true;
+          while (go)
+          {
+            outputBuffer = "kiwi : remote --> ";
+            writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
+            if (writeResult==-1)
+            {
+              cerr << "Could not write into an client socket." << endl;
+            }
+
+            //BEGIN : Read use request
+            int eol = 0;
+            char c;
+            int length = 0;
+            /* telnet sends '1310' == '\r\n' for each newline          */
+            /* eol == 2 at the end of a line after it receives '13'10' */
+            while (eol < 2)
+            {
+              if (read(socket,&c,sizeof(char)) == -1)
+              {
+                cerr << "Could not read client request" << endl;
+              }
+              else
+              {
+                if (c == '\n' || c == '\r')
+                {
+                  eol ++;
+                }
+                else
+                {
+                  inputBuffer = inputBuffer + c;
+                }
+              }
+            }
+            //END : Read use request
+          }
+          //END : Start interactive terminal
+        }
+        //END : New process and new socket for an incoming client
       }
-      kiwi::string outputBuffer = "\r\n-----------------------------------------\r\n---------- Enjoy Cloud Kiwi ! -----------\r\n-----------------------------------------\r\n\r\nkiwi:remote$";
-      writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
-      if (writeResult==-1)
-      {
-        cerr << "Could not write into an client socket." << endl;
-      }
+      //END : IF a new client attemps to connect
     }
+    //END: Handle client connections
   }
 }
 

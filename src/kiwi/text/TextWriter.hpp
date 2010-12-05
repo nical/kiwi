@@ -72,7 +72,7 @@ public:
 	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
 	void removeLine(kiwi::uint32_t position);
 	
-	void reset() {_container->reset();}
+	void reset();
 	void append(std::istream& inputStream) {_container->append(inputStream);}
 	
 	StringIterator getStringIterator() const;

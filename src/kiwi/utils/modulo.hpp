@@ -13,11 +13,11 @@ namespace utils
 
 
 template <typename T>
-T modulo(T inValue, float modulo)
+T modulo(T inValue, T modulo)
 {
 	T value; //result
 		
-	if(inValue > modulo)
+	if(inValue >= modulo)
 	{
 		kiwi::int32_t division = floor(static_cast<float>( (inValue - modulo ) / (modulo - 0) ) ); //>0
 		value = 0 + (inValue - modulo) -  division*(modulo - 0 );	
@@ -31,6 +31,7 @@ T modulo(T inValue, float modulo)
 	{
 		value = static_cast<T>(inValue);
 	}
+	//Debug::print() << "modulo("<<inValue<<", "<<modulo<<") = " << value << endl();
 	return value;			
 }
 

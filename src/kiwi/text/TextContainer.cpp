@@ -56,7 +56,7 @@ kiwi::string* TextContainer::getLine( kiwi::uint32_t lineNumber )
 	// returns 0 if the line doesn't exist.
 	if(lineNumber >= _nbLines ) 
 	{
-		//sDEBUG_ONLY( Debug::print() << "lineNumber >= _nbLines"<<endl(); )
+		//DEBUG_ONLY( Debug::print() << "lineNumber >= _nbLines"<<endl(); )
 		return 0;
 	}
 	

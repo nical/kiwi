@@ -13,7 +13,7 @@
 #include "text/TextContainerTest.hpp"
 #include "core/NodeTest.hpp"
 #include "core/FactoryTest.hpp"
-
+#include "utils/ModuloTest.hpp"
 
 int main()
 {
@@ -107,6 +107,7 @@ int main()
 
 		NodeTest();
 		FactoryTest();
+		ModulotTest();
 		
 		Debug::print() << "end of the test suite" << endl();
 		

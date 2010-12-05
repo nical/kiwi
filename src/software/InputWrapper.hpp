@@ -38,6 +38,7 @@
 #define KIWI_INPUTWRAPPER_HPP
 
 #include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/text.hpp"
 #include <list>
 #include <string>
 #include <iostream>
@@ -61,7 +62,7 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 		if(boost::filesystem::exists( *it ) && !boost::filesystem::is_directory( *it ) ) 
 		{	
 			
-			std::cout << "input file exists" << std::endl;
+			//std::cout << "input file exists" << std::endl;
 			kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
 
 			std::ifstream file(it->c_str() );
@@ -72,7 +73,21 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
 			
 		}else{
-			std::cout << "input is not a file" << std::endl;
+			//std::cout << "input is not a file" << std::endl;
+			
+			//Creation of a basic container, needed to apply the filter
+			kiwi::text::TextContainer* basicInputContainer = new kiwi::text::TextContainer;
+			
+			 //Creation of a Writer needed to write the argument in the container
+			kiwi::text::TextWriter writer(*basicInputContainer,0);
+			
+			writer.getLine() = inputs.front();
+			std::cout << "debug: " << writer.getLine() << std::endl;
+			//Connexion between the input container and the filter, then apply filter
+			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(0);
+			if(!filter.readerInputPort(0).isConnected() ) 
+				std::cerr << "connection error"<<std::endl;
+
 		}
 		++i;
 		++it;

@@ -88,12 +88,20 @@ namespace kiwi
       int versionCmd() {return _version;}
 
 
+      /**
+       * If kiwi was started as a server, returns the port value.
+       * If not, returns 0.
+       */
+      int getServerPort();
+
+
     private:
       bool _invalid;
       bool _verbose;
-      bool _remote;
       bool _process;
       bool _server;
+      bool _remote;
+      int _port;
       int _version;
       int _help;
       kiwi::string _filterName;

@@ -26,6 +26,7 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 /**
  * @file kiwiLauncher.hpp
  * @brief Commandline kiwi program.
@@ -35,15 +36,69 @@
 
 #include "kiwi/core.hpp"
 #include "kiwi/text.hpp"
-#include "kiwi/utils/Socket.hpp"
+#include "kiwi/utils/SocketCreator.hpp"
 #include "ArgumentProcessor.hpp"
 #include "Help.hpp"
 
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 
 using namespace std;
+
+
+/**
+ * Launch TCP server.
+ */
+void launchServer(int port)
+{
+  //Setting up service socket
+  kiwi::utils::SocketCreator sc;
+  int serverSocket = sc.tcpServerSocket(port);
+
+  //Declaring some variables
+  fd_set socketGroup;
+  struct timeval pollingTime;
+  int selectResult; 
+  struct sockaddr_in tcp_addr;
+  unsigned int tcp_size = sizeof(tcp_addr);
+  int writeResult;
+
+  while(1)
+  {
+    //Re-initialize "select" function params
+    FD_ZERO(&socketGroup);
+    FD_SET(serverSocket,&socketGroup);
+    pollingTime.tv_sec=0;
+    pollingTime.tv_usec=100;
+   
+    //Simultaneous listen on all sockets 
+    selectResult=select((serverSocket+1),&socketGroup,NULL,NULL,&pollingTime);
+    if (selectResult==-1)
+    {
+      cerr << "Error on \"select\" function.";
+    }
+    else
+    {
+      //Opening a new socket for an incoming client
+      int socket=accept(serverSocket,(struct sockaddr*)&tcp_addr,&(tcp_size));
+      if (socket==-1)
+      {
+        cerr << "Could not connect to an incoming client." << endl;
+      }
+      kiwi::string outputBuffer = "\r\n-----------------------------------------\r\n---------- Enjoy Cloud Kiwi ! -----------\r\n-----------------------------------------\r\n\r\nkiwi:remote$";
+      writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
+      if (writeResult==-1)
+      {
+        cerr << "Could not write into an client socket." << endl;
+      }
+    }
+  }
+}
+
 
 
 /**
@@ -82,13 +137,14 @@ int main(int argc, char *argv[])
     cout << "Kiwi version : ???" << endl;
     return 0;
   }
-      
+
 
   //Server request
   if( arguments.serverCmd() )
   {
-    cerr << "Kiwi server mode not supported yet" << endl;
-    return 0;
+    int port = arguments.getServerPort();
+    cout << "Starting kiwi server on port " << port << "..." << endl;
+    launchServer(port);
   }
 
 

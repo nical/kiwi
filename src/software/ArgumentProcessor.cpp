@@ -54,6 +54,14 @@ namespace kiwi
         state = GENERAL;
       }
 
+      //Server state : get port
+      else if(state == SERVER)
+      {
+        _server = true;
+        _port = atoi(argv[i]);
+        state=GENERAL;
+      }
+
       //State changement (process)
       else if( (kiwi::string(argv[i]) == "process") && (state == GENERAL) )
       {
@@ -64,7 +72,7 @@ namespace kiwi
       //State changement (server)
       else if( (kiwi::string(argv[i]) == "server") && (state == GENERAL) )
       {
-        _server = true;
+        state = SERVER;
       }
 
       //State changement (remote)
@@ -76,5 +84,13 @@ namespace kiwi
     //END : Analytic loop
   }
   //END : Constructor
+  
+
+  int ArgumentProcessor::getServerPort()
+  {
+    if (_server) return _port;
+    return 0;
+  }
+
 }
 //END : Namespace

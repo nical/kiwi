@@ -45,7 +45,7 @@ namespace kiwi
 namespace utils  
 {
 
-class Socket 
+class SocketCreator 
 {
 
 protected:

@@ -38,6 +38,7 @@
 #include "kiwi/utils/Socket.hpp"
 
 #include "ArgumentProcessor.hpp"
+#include "InputWrapper.hpp"
 
 #include "Help.hpp"
 

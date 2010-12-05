@@ -6,6 +6,7 @@
 #include "kiwi/text/TextReader.hpp"
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/utils/modulo.hpp"
+#include <fstream>
 
 void TextContainerTest()
 {
@@ -84,6 +85,20 @@ ScopedBlockMacro(__scp, "kiwi::test::TextContainer")
 	assert(reader.getChar(0) == 'a');
 	assert(reader.nbChars() == 8);
 	
+	tc.reset();
+	
+	reader.gotoLine(0);
+	assert( reader.nbLines() == 1);
+	std::ifstream file("./Makefile");
+	
+	assert( file.is_open() );
+	
+	tc.init(file);
+	while(reader.currentLine() < reader.nbLines() - 1)
+	{
+		Debug::print() << "#"<< reader.getLine() << endl();
+		reader.gotoNextLine();
+	}
 }
 
 

@@ -40,6 +40,8 @@
 #include "kiwi/core/NodeFactory.hpp"
 #include <list>
 #include <string>
+#include <iostream>
+#include <fstream>
 #include "boost/filesystem.hpp"
 #include "boost/lexical_cast.hpp"
 
@@ -47,19 +49,29 @@ namespace kiwi
 {
 
 
-void wrapInput(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs)
+void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs)
 {
 	typedef std::list<string> ArgList;
 	ArgList::iterator it = inputs.begin();
 	ArgList::iterator itEnd = inputs.end();
 	while(it != itEnd)
 	{	
-		if(boost::filesystem::exists( *it ) )
+		if(boost::filesystem::exists( *it ) && !boost::filesystem::is_directory( *it ) ) 
 		{	
 			std::cout << "input file exists" << std::endl;
+			kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
+
+			std::ifstream file(it->c_str() );
+			assert( file.is_open() );
+
+			inputText->init(file);
+			
+			inputText->readerOutputPort(0) >> filter.readerInputPort(0);
+			
 		}else{
 			std::cout << "input is not a file" << std::endl;
 		}
+		
 		++it;
 	}
 	

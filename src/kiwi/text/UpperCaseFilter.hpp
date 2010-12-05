@@ -55,11 +55,18 @@ public:
 	
 		TextReader input( readerInputPort(0) );
 		TextWriter result( writerInputPort(0) );
-		
-		for(uint32_t i = 0; i < input.nbChars(); ++i )
+		result.reset();
+		while(input.currentLine() < input.nbLines() - 1)
 		{
-			result.setChar( i, std::toupper(input.getChar(i)) );
+			input.gotoNextLine();
+			result.insertLine("", -1);
+			result.gotoNextLine();
+			for(uint32_t i = 0; i < input.nbChars(); ++i )
+			{
+				result.setChar( i, std::toupper(input.getChar(i)) );
+			}
 		}
+		
 		
 		
 		return;

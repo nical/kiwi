@@ -26,6 +26,12 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file TextReader.hpp
+ * @brief Reader for AbstractTextContainer based containers.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva) 
+ */
+
 #pragma once
 
 #ifndef KIWI_TEXTREADER_HPP

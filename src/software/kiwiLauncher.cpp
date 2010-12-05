@@ -178,8 +178,8 @@ int main(int argc, char *argv[])
       kiwi::Help::print(cout);
       return 1;
     }
-    cout << "Inputs number : " << arguments.getFilterInputs().size() << endl;
-    cout << "Outputs number : " << arguments.getFilterOutputs().size() << endl;
+    //cout << "Inputs number : " << arguments.getFilterInputs().size() << endl;
+    //cout << "Outputs number : " << arguments.getFilterOutputs().size() << endl;
 
     //Creation of a basic container, needed to apply the filter
     kiwi::text::TextContainer basicInputContainer;
@@ -187,6 +187,9 @@ int main(int argc, char *argv[])
     //Creation of a Writer needed to write the argument in the container
     kiwi::text::TextWriter writer(basicInputContainer,0);
     writer.getLine() = arguments.getFilterInputs().front();
+    
+    std::list<kiwi::string> inputArgs = arguments.getFilterInputs();
+	kiwi::wrapInputs(factory, *F, inputArgs );
 
     //Connexion between the input container and the filter, then apply filter
     basicInputContainer.readerOutputPort(0) >> F->readerInputPort(0);
@@ -194,7 +197,13 @@ int main(int argc, char *argv[])
 
     //Creation of a Reader needed to read text from a node
     kiwi::text::TextReader reader( F->readerOutputPort(0) );
-    cout << reader.getLine() << endl;
+    //cout << reader.getLine() << endl;
+	reader.gotoLine(0);
+	while(reader.currentLine() < reader.nbLines() - 1)
+	{
+		cout << "#"<< reader.getLine() << endl;
+		reader.gotoNextLine();
+	}
 
   }
   //END : Filter use request.

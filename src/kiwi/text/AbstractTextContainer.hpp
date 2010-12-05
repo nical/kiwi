@@ -33,6 +33,8 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Container.hpp"
+#include <iostream>
+
 
 namespace kiwi
 {
@@ -72,6 +74,16 @@ public:
 	 */
 	 virtual void removeLine(kiwi::uint32_t position) = 0;
 	 
+	 /**
+	  * @brief Clears the data.
+	  */
+	 virtual void reset() = 0;
+	  
+	   /**
+	  * @brief Clears the data.
+	  */
+	 virtual void append(std::istream& stream) = 0;
+	   
 	 virtual ~AbstractTextContainer() {}
 };
 

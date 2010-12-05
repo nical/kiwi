@@ -98,7 +98,7 @@ kiwi::uint32_t TextReader::currentLine() const
 
 bool TextReader::gotoLine(kiwi::int32_t lineNumber)
 {
-	Debug::print() << "gotoLine " << lineNumber << endl();
+	//Debug::print() << "gotoLine " << lineNumber << endl();
 	// TODO: modulo opération 
 	// this is really unsafe, i mean really !
 	_currentLine = _container->getLine(lineNumber);

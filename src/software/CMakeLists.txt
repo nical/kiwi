@@ -21,7 +21,6 @@ SET(KIWI_CMD_SRC
 message("Kiwi Library : ${LIBKIWI_NAME}")
 
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -lboost_filesystem )
-#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -L/usr/local/lib -lboost_filesystem )
 
 add_executable(kiwi ${KIWI_CMD_SRC})
 target_link_libraries (kiwi ${LIBKIWI_NAME} )

@@ -53,6 +53,12 @@ public:
 	 */ 
 	TextContainer();
 
+	void init(std::istream& inputStream);
+
+	void append(std::istream& inputStream);
+
+	void reset();
+
 	/** 
 	 * @brief Returns A pointer to the requested line.
 	 * 

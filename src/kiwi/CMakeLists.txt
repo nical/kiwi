@@ -3,7 +3,7 @@ include_directories (${CAIRO_INCLUDE_DIR})
 
 SET(KIWI_SRC ${KIWI_SRC}
 		utils/DebugOutputStream.cpp
-		utils/Socket.cpp
+		utils/SocketCreator.cpp
 		core/Node.cpp
 		core/CanonicalFilter.cpp
 		core/NodeFactory.cpp

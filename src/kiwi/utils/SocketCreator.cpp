@@ -1,4 +1,4 @@
-#include "Socket.hpp"
+#include "SocketCreator.hpp"
 
 #define UDP SOCK_DGRAM
 #define TCP SOCK_STREAM
@@ -16,7 +16,7 @@ namespace utils
  * @param type UDP/TCP
  * @param port Connection port 
  */
-int Socket::genericSocket(int type, int port)
+int SocketCreator::genericSocket(int type, int port)
 {
   int socketDescriptor;
   int sockaddrLength=sizeof(struct sockaddr_in);
@@ -47,7 +47,7 @@ int Socket::genericSocket(int type, int port)
 /**
  * Create a udp client socket.
  */
-int Socket::udpSocket()
+int SocketCreator::udpSocket()
 {
   return genericSocket(UDP,0);
 }
@@ -56,7 +56,7 @@ int Socket::udpSocket()
 /**
  * Create a udp server socket.
  */
-int Socket::udpServerSocket(int port)
+int SocketCreator::udpServerSocket(int port)
 {
   return genericSocket(UDP,port);
 }
@@ -65,7 +65,7 @@ int Socket::udpServerSocket(int port)
 /**
  * Create a tcp client socket.
  */
-int Socket::tcpSocket()
+int SocketCreator::tcpSocket()
 {
   return genericSocket(TCP,0);
 }
@@ -74,7 +74,7 @@ int Socket::tcpSocket()
 /**
  * Create a tcp server socket.
  */
-int Socket::tcpServerSocket(int port, int backlog)
+int SocketCreator::tcpServerSocket(int port, int backlog)
 {
   int socketDescriptor = genericSocket(TCP,port);
   try

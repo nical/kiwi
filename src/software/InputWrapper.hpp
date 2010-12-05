@@ -54,10 +54,13 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 	typedef std::list<string> ArgList;
 	ArgList::iterator it = inputs.begin();
 	ArgList::iterator itEnd = inputs.end();
+	int i=0;
 	while(it != itEnd)
 	{	
+		
 		if(boost::filesystem::exists( *it ) && !boost::filesystem::is_directory( *it ) ) 
 		{	
+			
 			std::cout << "input file exists" << std::endl;
 			kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
 
@@ -66,12 +69,12 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 
 			inputText->init(file);
 			
-			inputText->readerOutputPort(0) >> filter.readerInputPort(0);
+			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
 			
 		}else{
 			std::cout << "input is not a file" << std::endl;
 		}
-		
+		++i;
 		++it;
 	}
 	

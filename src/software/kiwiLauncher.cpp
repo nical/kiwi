@@ -268,9 +268,9 @@ int main(int argc, char *argv[])
     kiwi::text::TextReader reader( F->readerOutputPort(0) );
     //cout << reader.getLine() << endl;
 	reader.gotoLine(0);
-	while(reader.currentLine() < reader.nbLines() - 1)
+	while(reader.currentLine() < reader.nbLines() -1 )
 	{
-		cout << "#"<< reader.getLine() << endl;
+		cout << reader.getLine() << endl;
 		reader.gotoNextLine();
 	}
 

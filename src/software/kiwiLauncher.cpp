@@ -120,6 +120,7 @@ void launchServer(int port)
             int eol = 0;
             char c;
             int length = 0;
+            inputBuffer = "";
             /* telnet sends '1310' == '\r\n' for each newline          */
             /* eol == 2 at the end of a line after it receives '13'10' */
             while (eol < 2)
@@ -141,6 +142,21 @@ void launchServer(int port)
               }
             }
             //END : Read use request
+            
+
+            //BEGIN : Request analysis
+            if (inputBuffer=="help")
+            {
+              outputBuffer = "This command should print help, don't u think so ?\r\n";
+              writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
+            }
+            else if (inputBuffer!="")
+            {
+              outputBuffer = "You've just written \"" + inputBuffer +"\". Happy, rn't u ?\r\n"; 
+              writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
+            }
+            //END : Request analysis
+
           }
           //END : Start interactive terminal
         }

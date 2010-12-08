@@ -123,7 +123,11 @@ void TextContainer::insertLine(
 void TextContainer::removeLine( kiwi::uint32_t position )
 {
 	if(_nbLines == 1) return;
-	if(position >= _nbLines ) return ;
+	if(position >= _nbLines )
+	{
+		_first->_text = kiwi::string("");
+		return ;
+	} 
 	if(position == 0)
 	{
 		_first->_next->_prev = 0;

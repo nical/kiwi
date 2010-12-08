@@ -17,6 +17,16 @@ void ModulotTest()
 }
 
 
+#ifdef KIWI_TEST_MAIN
+
+int main()
+{
+	ModulotTest();
+	return 0;
+}
+
+#endif
+
 
 
 

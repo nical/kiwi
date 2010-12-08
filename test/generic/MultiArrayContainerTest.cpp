@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef KIWI_MULTIARRAYCONTAINER_TEST
 #define KIWI_MULTIARRAYCONTAINER_TEST
 
@@ -12,9 +10,10 @@
 #include "kiwi/generic/ArrayWriter.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
 
-#include "generic/ArrayContainerTest.hpp" // for AddArrays Filter
-
 #include "kiwi/generic/Point.hpp"
+
+//#include "generic/ArrayContainerTest.hpp" // for AddArrays Filter
+
 
 #include "kiwi/utils/types.hpp"
 
@@ -122,6 +121,19 @@ void MultiArrayContainerTest()
 			delete[] preAllocData[i];
 	delete[] preAllocData;
 }
+
+
+#ifdef KIWI_TEST_MAIN
+
+int main
+{
+	MultiArrayContainerTest<double, 3, 4>();
+	return 0;
+}
+
+#endif
+
+
 
 
 #endif

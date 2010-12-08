@@ -1,4 +1,3 @@
-#pragma once
 
 #ifndef KIWI_METAFILTER_TEST
 #define KIWI_METAFILTER_TEST
@@ -194,5 +193,15 @@ void MetaFilterTest()
 	delete[] preAllocData;
 }
 
+
+#ifdef KIWI_TEST_MAIN
+
+int main
+{
+	MetaFilterTest<int, 2 ,2>();
+	return 0
+}
+
+#endif
 
 #endif

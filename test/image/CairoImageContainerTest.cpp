@@ -128,5 +128,17 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 
 
 
+#ifdef KIWI_TEST_MAIN
+
+int main
+{
+	CairoImageContainerTest();
+	return 0;
+}
+
+#endif
+
+
+
 
 #endif

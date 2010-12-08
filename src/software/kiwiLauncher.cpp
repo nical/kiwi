@@ -261,11 +261,11 @@ int main(int argc, char *argv[])
     //Creation of a Reader needed to read text from a node
     kiwi::text::TextReader reader( F->readerOutputPort(0) );
 	reader.gotoLine(0);
-	while(reader.currentLine() < reader.nbLines() -1 )
+	do
 	{ 
 		cout << reader.getLine() << endl;
 		reader.gotoNextLine();
-	}
+	} while(reader.currentLine() != reader.nbLines()-1 );
   }
   //END : Filter use request.
 

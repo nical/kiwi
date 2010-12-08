@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef KIWI_ARRAYCONTAINER_TEST
 #define KIWI_ARRAYCONTAINER_TEST
 
@@ -214,6 +212,33 @@ void ArrayContainerTest()
 	//resourceResult.printState();
 	delete[] preAllocData;
 }
+
+
+#ifdef KIWI_TEST_MAIN
+
+int main()
+{
+	ArrayContainerTest<int, 2, 2>();
+	Debug::print() << "----------------------------------------------"
+	<< endl();
+	Debug::print() << "----------------------------------------------"
+	<< endl();
+	ArrayContainerTest<float, 2, 2>();
+	Debug::print() << "----------------------------------------------"
+	<< endl();
+	ArrayContainerTest<unsigned int, 1, 2>();
+	Debug::print() << "----------------------------------------------"
+	<< endl();
+	Debug::print() << "----------------------------------------------"
+	<< endl();
+	ArrayContainerTest<double, 3, 4>();
+	Debug::print() << "----------------------------------------------"
+	<< endl();
+	ArrayContainerTest<long int, 5, 2>();
+	return 0;
+}
+
+#endif
 
 
 #endif

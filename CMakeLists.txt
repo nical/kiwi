@@ -9,6 +9,12 @@
 project (Kiwi)
 cmake_minimum_required (VERSION 2.4) 
 
+set(BUILD_KIWI_TESTS "yes")
+set(BUILD_KIWI_IMAGE "yes")
+set(BUILD_KIWI_TEXT "yes")
+set(BUILD_KIWI_CMDLINE "yes")
+#set(BUILD_DDD_FLAG "yes")
+add_definitions(-DKIWI_TEST_MAIN)
 
 
 message( "--------------------------------------------------------------" )
@@ -67,6 +73,11 @@ set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 # Add subdirectories
 #------------------------------------------------------------------------------
 add_subdirectory (src/kiwi)
-add_subdirectory (src/software)
-add_subdirectory (test)
 
+if(DEFINED BUILD_KIWI_CMDLINE)
+	add_subdirectory (src/software)
+endif(DEFINED BUILD_KIWI_CMDLINE)
+
+if(DEFINED BUILD_KIWI_TESTS)
+	add_subdirectory (test)
+endif(DEFINED BUILD_KIWI_TESTS)

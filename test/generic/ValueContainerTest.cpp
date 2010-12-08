@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef KIWI_VALUECONTAINER_TEST
 #define KIWI_VALUECONTAINER_TEST
 
@@ -7,10 +5,8 @@
 
 #include "kiwi/core/Filter.hpp"
 
-#include "kiwi/generic/ArrayContainer.hpp"
-#include "kiwi/generic/ArrayReader.hpp"
-#include "kiwi/generic/ArrayWriter.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
+#include "kiwi/generic/ValueContainer.hpp"
+
 
 #include "kiwi/generic/Point.hpp"
 
@@ -39,8 +35,8 @@ public:
 	enum{ WRITE = 0};
 	enum{ RESULT = 0};
 	
-	typedef generic::ValueReader<TValueType> myReader;
-	typedef generic::ValueWriter<TValueType> myWriter;
+	typedef kiwi::generic::ValueReader<TValueType> myReader;
+	typedef kiwi::generic::ValueWriter<TValueType> myWriter;
 // ---------------------------------------------------------------------
 	ValueTestFilter() : Filter()
 	{
@@ -179,6 +175,21 @@ ScopedBlockMacro(__scop, "ValueContainerTest")
 
 	
 }
+
+
+#ifdef KIWI_TEST_MAIN
+
+int main()
+{
+	ValueContainerTest<float>();
+	ValueContainerTest<char>();
+	ValueContainerTest<int>();
+	
+	return 0;
+}
+
+#endif
+
 
 
 

@@ -16,7 +16,16 @@ link_directories (${PROJECT_BINARY_DIR})
 #------TESTS subdirectories ------
 
 SET(KIWI_TESTS_SRC
-	TestSuite
+#	TestSuite
+	core/NodeTest
+	core/FactoryTest
+#	core/FilterTest
+#	core/MetaFilterTest
+	generic/PointTest
+	generic/ArrayContainerTest
+#	generic/MultiArrayContainerTest
+	generic/ValueContainerTest
+	
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")

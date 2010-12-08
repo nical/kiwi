@@ -52,17 +52,21 @@ namespace kiwi
 
 void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs)
 {
+
 	typedef std::list<string> ArgList;
 	ArgList::iterator it = inputs.begin();
 	ArgList::iterator itEnd = inputs.end();
-	int i=0;
-	while(it != itEnd)
+	int nbParams = inputs.size();
+	if(nbParams > filter.nbReaderInputs()) nbParams = filter.nbReaderInputs();
+	
+	for(int i = 0; i < nbParams ; ++i)
 	{	
-		
-		if(boost::filesystem::exists( *it ) && !boost::filesystem::is_directory( *it ) ) 
-		{	
+		if((inputArgument == kiwi::string("-ignore")) 
+		{
 			
-			//std::cout << "input file exists" << std::endl;
+		}
+		else if(boost::filesystem::exists( *it ) && !boost::filesystem::is_directory( *it ) ) 
+		{	
 			kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
 
 			std::ifstream file(it->c_str() );
@@ -73,23 +77,28 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
 			
 		}else{
-			//std::cout << "input is not a file" << std::endl;
 			
 			//Creation of a basic container, needed to apply the filter
 			kiwi::text::TextContainer* basicInputContainer = new kiwi::text::TextContainer;
 			
-			 //Creation of a Writer needed to write the argument in the container
-			kiwi::text::TextWriter writer(*basicInputContainer,0);
-			
-			writer.getLine() = inputs.front();
-			std::cout << "debug: " << writer.getLine() << std::endl;
+			kiwi::string inputArgument = inputs.front();
+			inputs.pop_front();
+			if((inputArgument == kiwi::string("cin")) 
+				|| (inputArgument == kiwi::string("--")) )
+			{
+				basicInputContainer->init(std::cin);
+			}
+			else
+			{
+				//Creation of a Writer needed to write the argument in the container
+				kiwi::text::TextWriter writer(*basicInputContainer,0);
+				writer.getLine() = inputArgument;
+			}
 			//Connexion between the input container and the filter, then apply filter
-			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(0);
+			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);
 			if(!filter.readerInputPort(0).isConnected() ) 
 				std::cerr << "connection error"<<std::endl;
-
 		}
-		++i;
 		++it;
 	}
 	

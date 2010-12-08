@@ -53,6 +53,12 @@ public:
 	 */ 
 	TextContainer();
 
+	void init(std::istream& inputStream);
+
+	void append(std::istream& inputStream);
+
+	void reset();
+
 	/** 
 	 * @brief Returns A pointer to the requested line.
 	 * 
@@ -84,6 +90,15 @@ public:
 	 * @brief Removes a line. 
 	 */
 	void removeLine(kiwi::uint32_t position);
+	
+	kiwi::string outputReaderType(portIndex_t)
+	{
+			return kiwi::string("#text");
+	}
+	kiwi::string outputWriterType(portIndex_t)
+	{
+			return kiwi::string("#text");
+	}
 	
 private:
 

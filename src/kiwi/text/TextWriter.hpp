@@ -26,9 +26,20 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file TextWriter.hpp
+ * @brief Writer for AbstractTextContainer based containers.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva) 
+ */
+
+#pragma once
+
+#ifndef KIWI_TEXTWRITER_HPP
+#define KIWI_TEXTWRITER_HPP
 
 #include "kiwi/text/AbstractTextContainer.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
+#include <iostream>
 
 namespace kiwi
 {
@@ -46,6 +57,7 @@ public:
 	TextWriter(AbstractTextContainer& container
 		, portIndex_t );
 	TextWriter( core::Node::WriterInputPort& port );
+	TextWriter( core::Node::WriterOutputPort& port );
 	
 	kiwi::uint32_t nbLines() const;
 	kiwi::uint32_t nbChars() const;
@@ -56,9 +68,12 @@ public:
 	bool endOfText() const;
 	kiwi::string& getLine() const;
 	kiwi::uint8_t getChar(int32_t charNumber) const;
-	kiwi::uint8_t setChar(int32_t charNumber, uint8_t value) const;
+	void setChar(int32_t charNumber, int8_t value);
 	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
 	void removeLine(kiwi::uint32_t position);
+	
+	void reset();
+	void append(std::istream& inputStream) {_container->append(inputStream);}
 	
 	StringIterator getStringIterator() const;
 	
@@ -75,3 +90,4 @@ private:
 }// namespace	
 }// namespace	
 
+#endif

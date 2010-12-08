@@ -26,6 +26,12 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file Node.hpp
+ * @brief File included by most of the library.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.3
+ */
 
 #pragma once
 
@@ -36,6 +42,10 @@
 
 #include <string>
 
+
+#define KIWI_VERSION_MAJOR 0
+#define KIWI_VERSION_MINOR 3
+#define KIWI_VERSION_PATCH 2
 
 namespace kiwi
 {

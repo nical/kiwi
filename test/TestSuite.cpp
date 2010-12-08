@@ -1,17 +1,20 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/generic/Point.hpp"
 
-#include "generic/PointTest.hpp"
-#include "core/FilterTest.hpp"
-#include "generic/ArrayContainerTest.hpp"
-#include "generic/MultiArrayContainerTest.hpp"
-#include "generic/ValueContainerTest.hpp"
-#include "core/MetaFilterTest.hpp"
-#include "image/CairoImageContainerTest.hpp"
+#include "generic/PointTest.cpp"
+#include "core/FilterTest.cpp"
+#include "generic/ArrayContainerTest.cpp"
+#include "generic/MultiArrayContainerTest.cpp"
+#include "generic/ValueContainerTest.cpp"
+#include "core/MetaFilterTest.cpp"
+#include "image/CairoImageContainerTest.cpp"
 #include "pipeline/SimplePipelineTest.cpp"
-#include "image/ContrastTest.hpp"
-#include "text/TextContainerTest.hpp"
-#include "core/NodeTest.hpp"
+#include "image/ContrastTest.cpp"
+#include "text/TextContainerTest.Cpp"
+#include "core/NodeTest.cpp"
+#include "core/FactoryTest.cpp"
+#include "utils/ModuloTest.cpp"
+
 
 int main()
 {
@@ -104,7 +107,8 @@ int main()
 		Debug::endl(3);
 
 		NodeTest();
-		
+		FactoryTest();
+		ModulotTest();
 		
 		Debug::print() << "end of the test suite" << endl();
 		

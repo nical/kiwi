@@ -1,0 +1,35 @@
+Things to do
+-----------------------------------------
+
+# Kiwi in general
+- the unit tests are a big mess...
+- an extension mecanism (using boost::extension)
+- documentation
+- tutorials
+- try to build on windows and mac
+- specify a serialization interface for containers (to text and to binary)
+
+# kiwi::core
+- formalize a way to make requests of readers and writers on a region with a locking mecanism
+
+# kiwi::generic
+- resize canvas method for ArrayContainer and MultiArrayContainer
+- handle ways to access fragments that are out of the buffer (wrapping)
+- tree based container (morton hash tree)
+- gaussian blur filter
+
+# kiwi::text
+- TextContainer + Reader & Writer have been coded rapidly in a "proof of concept" fashion. it needs a better interface and a cleaner implementation 
+- String container needs update 
+
+# kiwi::image
+- loading a .png file into a cairo container
+
+# kiwi standalone application
+- generate containers for the command-line input aguments (currently it only works with text)
+- generate containers for the command-line output aguments
+- specify the clent-server commands 
+
+# Qiwi (Qt front end)
+- well, everything !
+

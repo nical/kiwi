@@ -26,73 +26,25 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file core.hpp
+ * @brief Includes all the kiwi::core sub-project.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
+ * @version 0.3
+ */
 
+#pragma once
 
-#ifndef KIWI_ABSTRACTTEXTCONTAINER_HPP
-#define KIWI_ABSTRACTTEXTCONTAINER_HPP
+#ifndef KIWI_INCLUDE_CORE_HPP
+#define KIWI_INCLUDE_CORE_HPP
+
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/core/Container.hpp"
-#include <iostream>
+#include "kiwi/core/Node.hpp"
+#include "kiwi/core/Filter.hpp"
+#include "kiwi/core/CanonicalFilter.hpp"
+#include "kiwi/core/NodeFactory.hpp"
 
 
-namespace kiwi
-{
-namespace text	
-{
-	
-		
-class AbstractTextContainer : public core::Container
-{
-public:
-	/** 
-	 * @brief Returns A pointer to the requested line.
-	 * 
-	 * If the line number doesn't exists in the text, return a null
-	 * pointer.
-	 * The number of the first line is 0.
-	 * 
-	 * @param lineNumber The number of the requested line. 
-	 */ 
-	virtual kiwi::string* getLine(kiwi::uint32_t lineNumber) = 0;
-	
-	/**
-	 * @brief Returns the number of lines in the container.
-	 */ 
-	virtual kiwi::uint32_t nbLines() const = 0;
-	
-	/**
-	 * @brief Inserts a line.
-	 * 
-	 * @param toInsert The line to copy and insert in the container
-	 * @param position The line will be insterted before the position.
-	 */ 
-	virtual void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position) = 0;
-	
-	/**
-	 * @brief Removes a line. 
-	 */
-	 virtual void removeLine(kiwi::uint32_t position) = 0;
-	 
-	 /**
-	  * @brief Clears the data.
-	  */
-	 virtual void reset() = 0;
-	  
-	   /**
-	  * @brief Clears the data.
-	  */
-	 virtual void append(std::istream& stream) = 0;
-	   
-	 virtual ~AbstractTextContainer() {}
-};
-
-
-
-}// namespace
-}// namespace
 
 #endif
-
-
-// --

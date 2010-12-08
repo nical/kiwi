@@ -36,7 +36,7 @@
 #include "kiwi/core/Container.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/types.hpp"
-
+#include "kiwi/core/NodeFactory.hpp"
 
 namespace kiwi
 {
@@ -97,8 +97,31 @@ public:
 	}
 	
 
-	// AbstractValueContainer implementation --------------------------------------
+	// AbstractValueContainer implementation
 	virtual ValueType& getValue(portIndex_t port = 0) {return _data;}
+	
+	
+	static kiwi::core::Container* newValueContainer() 
+	{ return new ValueContainer<TValueType>(0); }
+	
+	
+	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
+	{
+		kiwi::string tags("#Container#value#");
+		kiwi::string name("ValueContainer<");
+		
+		tags += types::str<ValueType>();
+		
+		name +=  types::str<ValueType>(); 
+		name += ">";
+		
+		factory.registerNode( filterId
+				, kiwi::core::Descriptor<kiwi::core::Container>(
+					name
+					, newValueContainer
+					, tags )
+			);
+	}
 	
 private:	
 	ValueType _data;

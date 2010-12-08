@@ -9,6 +9,12 @@
 project (Kiwi)
 cmake_minimum_required (VERSION 2.4) 
 
+set(BUILD_KIWI_TESTS "yes")
+set(BUILD_KIWI_IMAGE "yes")
+set(BUILD_KIWI_TEXT "yes")
+set(BUILD_KIWI_CMDLINE "yes")
+#set(BUILD_DDD_FLAG "yes")
+add_definitions(-DKIWI_TEST_MAIN)
 
 
 message( "--------------------------------------------------------------" )
@@ -17,9 +23,6 @@ message( "--------------------------------------------------------------" )
 
 message(STATUS "Source DIR is ${PROJECT_SOURCE_DIR}")
 message(STATUS "Binary DIR is ${PROJECT_BINARY_DIR}")
-
-#set(INSTALL_DOC_PATH ${CMAKE_INSTALL_PREFIX}/doc/${CMAKE_PROJECT_NAME} )
-#set(CMAKE_BUILD_TYPE  Debug)
 
 
 # -- Environement variables
@@ -63,13 +66,6 @@ find_package(Cairo REQUIRED)
 # -----------------------------------------------------------------------------
 set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 
-
-#------------------------------------------------------------------------------
-# Configuration of the Config.h
-#------------------------------------------------------------------------------
-SET(Kiwi_VERSION_MAJOR 0)
-SET(Kiwi_VERSION_MINOR 2)
-SET(Kiwi_VERSION_PATCH 2)
 #CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/core/Config.h.in" "${PROJECT_SOURCE_DIR}/src/core/Config.h" IMMEDIATE)
 
 
@@ -77,5 +73,11 @@ SET(Kiwi_VERSION_PATCH 2)
 # Add subdirectories
 #------------------------------------------------------------------------------
 add_subdirectory (src/kiwi)
-add_subdirectory (test)
 
+if(DEFINED BUILD_KIWI_CMDLINE)
+	add_subdirectory (src/software)
+endif(DEFINED BUILD_KIWI_CMDLINE)
+
+if(DEFINED BUILD_KIWI_TESTS)
+	add_subdirectory (test)
+endif(DEFINED BUILD_KIWI_TESTS)

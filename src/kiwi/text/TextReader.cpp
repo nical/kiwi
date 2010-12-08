@@ -28,6 +28,7 @@
 
 
 #include "TextReader.hpp"
+#include "kiwi/utils/modulo.hpp"
 
 
 namespace kiwi
@@ -48,6 +49,21 @@ TextReader::TextReader( core::Node::ReaderInputPort& port )
 		port.connectedOutput()->subPort()->node() );
 	
 	if( tc ) init( *tc, port.connectedOutput()->subPort()->index() );
+	else
+	{
+		Debug::error() 
+			<< "TextReader::constructor error:"
+			<<" Unable to determine the Container type."
+			<< endl();
+	}
+}
+
+TextReader::TextReader( core::Node::ReaderOutputPort& port )
+{
+	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
+		port.subPort()->node() );
+	
+	if( tc ) init( *tc, port.subPort()->index() );
 	else
 	{
 		Debug::error() 
@@ -83,21 +99,19 @@ kiwi::uint32_t TextReader::currentLine() const
 
 bool TextReader::gotoLine(kiwi::int32_t lineNumber)
 {
-	Debug::print() << "gotoLine " << lineNumber << endl();
-	// TODO: modulo opération 
-	// this is really unsafe, i mean really !
+	lineNumber = utils::modulo<int>( lineNumber, nbLines() );
 	_currentLine = _container->getLine(lineNumber);
 	if(_currentLine ) _currentLineNb = lineNumber;
 }
 
 bool TextReader::gotoNextLine()
 {
-	gotoLine(_currentLineNb + 1);
+	gotoLine(  _currentLineNb + 1  );
 }
 
 bool TextReader::gotoPreviousLine()
 {
-	gotoLine(_currentLineNb - 1);
+	gotoLine(  _currentLineNb - 1  );
 }
 
 bool TextReader::endOfText() const

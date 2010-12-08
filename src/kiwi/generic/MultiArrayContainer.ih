@@ -91,8 +91,8 @@ void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 	{
  		// TODO: WARNING: This has changed (names handling) but unfortunately i didn't push the 
 		//code before stupidly locking myself outside so this will have to be corrected as soon as i can 
-		Node::addWriterOutputPort();
-		Node::addReaderOutputPort();
+		core::Node::addWriterOutputPort();
+		core::Node::addReaderOutputPort();
 	}
 	Container::setLayoutEventEnabled(true);
 }
@@ -172,14 +172,6 @@ MultiArrayContainer<T,D>::increments(portIndex_t index) const
 	return incs;
 }
 
-/*
-template<typename T, unsigned int D>
-ArrayIterator<T> MultiArrayContainer<T,D>::getBasicIterator() const
-{ 
-	return ArrayIterator<ValueType>( _data, _data + _totalSize-1, 1 ); 
-}
-*/	
-
 
 template<typename T, unsigned int D>
 T* const MultiArrayContainer<T,D>::getDataPointer(portIndex_t index) const
@@ -200,6 +192,23 @@ unsigned int MultiArrayContainer<T,D>::oneBufferSize() const
 }
 
 
+template<typename T, unsigned int D>
+void MultiArrayContainer<T,D>::registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
+{
+	kiwi::string tags("#Container#array");
+	kiwi::string name("MultiArrayContainer<");
+	
+	tags += boost::lexical_cast<kiwi::string>(D) + types::str<ValueType>();
+	
+	name += boost::lexical_cast<kiwi::string>(D) + "," + types::str<ValueType>() + ">";
+	
+	factory.registerNode( filterId
+			, kiwi::core::Descriptor<kiwi::core::Container>(
+				name
+				, newMultiArrayContainer
+				, tags )
+		);
+}
 
 
 } // namespace

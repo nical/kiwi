@@ -27,72 +27,39 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+/**
+ * @file Socket.hpp
+ * @brief Header file for the kiwi socket class
+ * @author Semprobe aka Thibaut Vuillemin (mail: contact@thibautvuillemin.com twitter: @Semprobe)
+ */
 
-#ifndef KIWI_ABSTRACTTEXTCONTAINER_HPP
-#define KIWI_ABSTRACTTEXTCONTAINER_HPP
+#ifndef KIWI_SOCKET_HPP
+#define KIWI_SOCKET_HPP
 
-#include "kiwi/core/Commons.hpp"
-#include "kiwi/core/Container.hpp"
 #include <iostream>
-
+#include <ios>
+#include <arpa/inet.h>
 
 namespace kiwi
 {
-namespace text	
+namespace utils  
 {
-	
-		
-class AbstractTextContainer : public core::Container
+
+class SocketCreator 
 {
+
+protected:
+  int genericSocket(int type, int port); 
+
 public:
-	/** 
-	 * @brief Returns A pointer to the requested line.
-	 * 
-	 * If the line number doesn't exists in the text, return a null
-	 * pointer.
-	 * The number of the first line is 0.
-	 * 
-	 * @param lineNumber The number of the requested line. 
-	 */ 
-	virtual kiwi::string* getLine(kiwi::uint32_t lineNumber) = 0;
-	
-	/**
-	 * @brief Returns the number of lines in the container.
-	 */ 
-	virtual kiwi::uint32_t nbLines() const = 0;
-	
-	/**
-	 * @brief Inserts a line.
-	 * 
-	 * @param toInsert The line to copy and insert in the container
-	 * @param position The line will be insterted before the position.
-	 */ 
-	virtual void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position) = 0;
-	
-	/**
-	 * @brief Removes a line. 
-	 */
-	 virtual void removeLine(kiwi::uint32_t position) = 0;
-	 
-	 /**
-	  * @brief Clears the data.
-	  */
-	 virtual void reset() = 0;
-	  
-	   /**
-	  * @brief Clears the data.
-	  */
-	 virtual void append(std::istream& stream) = 0;
-	   
-	 virtual ~AbstractTextContainer() {}
+  int udpSocket();
+  int udpServerSocket(int port);
+  int tcpSocket();
+  int tcpServerSocket(int port, int backlog=10);
+
 };
 
+}
+}
 
-
-}// namespace
-}// namespace
-
-#endif
-
-
-// --
+#endif //KIWI_SOCKET_HPP

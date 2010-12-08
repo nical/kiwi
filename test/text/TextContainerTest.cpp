@@ -1,11 +1,12 @@
-#ifndef KIWI_TEST_TEXTCONTAINER_HPP
-#define KIWI_TEST_TEXTCONTAINER_HPP
-
+#include "kiwi/core/Commons.hpp"
 
 #include "kiwi/text/TextContainer.hpp"
 #include "kiwi/text/TextReader.hpp"
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/utils/modulo.hpp"
+#include <fstream>
+
+using namespace kiwi;
 
 void TextContainerTest()
 {
@@ -71,17 +72,42 @@ ScopedBlockMacro(__scp, "kiwi::test::TextContainer")
 		reader.gotoNextLine();
 	}
 	
-	// remove more lines than the total number of lines
-	for(unsigned i = 0; i < 15; ++i) 
-		writer.removeLine(0);
-	assert(reader.nbLines() == 1);
-	reader.gotoLine(0);
-	assert(reader.getLine() == "");
-	Debug::print() << "NbLines (after deletes): " << reader.nbLines() <<endl();
+	writer.gotoLine(3);
+	reader.gotoLine(3);
+	writer.setChar(0,'a');
 	
+	
+	
+	writer.setChar(8, 'h');
+	
+	Debug::print() << reader.getLine() << endl();
+	
+	assert(reader.getChar(0) == 'a');
+	assert(reader.nbChars() == 8);
+	
+	tc.reset();
+	
+	reader.gotoLine(0);
+	assert( reader.nbLines() == 1);
+	std::ifstream file("./Makefile");
+	
+	assert( file.is_open() );
+	
+	tc.init(file);
+	while(reader.currentLine() < reader.nbLines() - 1)
+	{
+		Debug::print() << "#"<< reader.getLine() << endl();
+		reader.gotoNextLine();
+	}
 }
 
 
+#ifdef KIWI_TEST_MAIN
 
+int main()
+{
+	TextContainerTest();
+	return 0;
+}
 
 #endif

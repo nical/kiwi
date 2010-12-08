@@ -21,7 +21,7 @@ Kiwi is designed to make the creation of Resources and Filters very easy. Just c
 
 <h2> The project's advancement </h2>
 
-kiwi 0.2.2
+kiwi 0.3.2
 
 Kiwi is still at an early stage, and interfaces are subject to change.
 

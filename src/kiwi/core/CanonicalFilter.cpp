@@ -38,39 +38,67 @@ namespace core
 CanonicalFilter::CanonicalFilter(uint32_t nbWriters)
 : Filter()
 {
-ScopedBlockMacro(__scp, "CanonicalFilter::constructor")
+//ScopedBlockMacro(__scp, "CanonicalFilter::constructor")
+	_wNodes = new Node*[nbWriters];
+	_nbWNodes = nbWriters;
 	for(uint32_t i = 0; i < nbWriters; ++i)
 	{
 		addWriterInputPort();
 		addReaderOutputPort();
 		setPortEnabled(readerOutputPort(i),false);
+		_wNodes[i] = 0;
 	}
 }
 
+CanonicalFilter::~CanonicalFilter()
+{
+	for(int i = 0; i < _nbWNodes; ++i )
+		removeWriteNode(i);
+}
 
 void CanonicalFilter::layoutChanged()
 {
 	uint32_t nbWriters = nbWriterInputs();
-	ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
+	//ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
 	for(uint32_t i = 0; i < nbWriters; ++i)
 	{
-		if(writerInputPort(0).isConnected() )
+		if(writerInputPort(i).isConnected() )
 		{
-			if( !readerOutputPort(0).isEnabled() )
+			if( !readerOutputPort(i).isEnabled() )
 			{
-				setPortEnabled(readerOutputPort(0),true);
+				setPortEnabled(readerOutputPort(i),true);
+				portIndex_t outIndex = writerInputPort(i).connectedOutput()->index();
 				ReaderOutputPort& op
-				= writerInputPort(0).connectedOutput()->node()->readerOutputPort(0);
-				bindPort( readerOutputPort(0), op );
+				= writerInputPort(i).connectedOutput()->node()->readerOutputPort(outIndex);
+				bindPort( readerOutputPort(i), op );
 			}
 		}
 		else
 		{
-			readerOutputPort(0).disconnect();
-			setPortEnabled(readerOutputPort(0),false);	
+			readerOutputPort(i).disconnect();
+			setPortEnabled(readerOutputPort(i),false);	
 		}
 	}
 }
+
+
+void CanonicalFilter::addWriteNode(Node* toAdd, portIndex_t writerPort)
+{
+	if( _wNodes[writerPort] != 0) return;
+	
+	_wNodes[writerPort] = toAdd;
+	_wNodes[writerPort]->writerOutputPort(0) >> writerInputPort(writerPort);
+}
+
+void CanonicalFilter::removeWriteNode(portIndex_t writerPort)
+{
+	if( _wNodes[writerPort] == 0 ) return;
+	
+	writerInputPort(writerPort).disconnect();
+	delete _wNodes[writerPort];
+	_wNodes[writerPort] = 0;
+}
+
 
 
 }// namespace	

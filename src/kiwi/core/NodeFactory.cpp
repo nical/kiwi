@@ -27,72 +27,63 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include "NodeFactory.hpp"
 
-#ifndef KIWI_ABSTRACTTEXTCONTAINER_HPP
-#define KIWI_ABSTRACTTEXTCONTAINER_HPP
-
-#include "kiwi/core/Commons.hpp"
-#include "kiwi/core/Container.hpp"
-#include <iostream>
 
 
 namespace kiwi
 {
-namespace text	
+namespace core
 {
-	
-		
-class AbstractTextContainer : public core::Container
+
+
+
+
+kiwi::core::Node* NodeFactory::newNode(const  kiwi::string& uniqueId)
 {
-public:
-	/** 
-	 * @brief Returns A pointer to the requested line.
-	 * 
-	 * If the line number doesn't exists in the text, return a null
-	 * pointer.
-	 * The number of the first line is 0.
-	 * 
-	 * @param lineNumber The number of the requested line. 
-	 */ 
-	virtual kiwi::string* getLine(kiwi::uint32_t lineNumber) = 0;
+	// TODO
+}
+
+kiwi::core::Filter* NodeFactory::newFilter(const  kiwi::string& uniqueId)
+{
+	FilterMap::iterator it = _filters.find(uniqueId);
+	if(it == _filters.end() ) return 0;
+	Descriptor<Filter>* desc = it->second;
+	return (desc->creator())();
+}
+
+kiwi::core::Container* NodeFactory::newContainer(const  kiwi::string& uniqueId)
+{
+	ContainerMap::iterator it = _containers.find(uniqueId);
+	if(it == _containers.end() ) return 0;
+	Descriptor<Container>* desc = it->second;
+	return (desc->creator())();
+}
+
+int NodeFactory::exists(const  kiwi::string& uniqueId)
+{
+	if(_containers.find(uniqueId) != _containers.end() ) return CONTAINER;
+	if( _filters.find(uniqueId) != _filters.end() ) return FILTER; 
+	return FALSE;
+}
 	
-	/**
-	 * @brief Returns the number of lines in the container.
-	 */ 
-	virtual kiwi::uint32_t nbLines() const = 0;
+void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Container> nd)
+{
+	_containers[uniqueId] = new Descriptor<Container>(nd);
+}
+
+void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Filter> nd)
+{
+	_filters[uniqueId] = new Descriptor<Filter>(nd);
+}
 	
-	/**
-	 * @brief Inserts a line.
-	 * 
-	 * @param toInsert The line to copy and insert in the container
-	 * @param position The line will be insterted before the position.
-	 */ 
-	virtual void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position) = 0;
-	
-	/**
-	 * @brief Removes a line. 
-	 */
-	 virtual void removeLine(kiwi::uint32_t position) = 0;
-	 
-	 /**
-	  * @brief Clears the data.
-	  */
-	 virtual void reset() = 0;
-	  
-	   /**
-	  * @brief Clears the data.
-	  */
-	 virtual void append(std::istream& stream) = 0;
-	   
-	 virtual ~AbstractTextContainer() {}
-};
+void NodeFactory::unregister(const  kiwi::string& uniqueId)
+{
+	_containers.erase(_containers.find(uniqueId) );
+	_filters.erase(_filters.find(uniqueId) );
+}
 
 
 
-}// namespace
-}// namespace
-
-#endif
-
-
-// --
+}//namespace
+}//namespace

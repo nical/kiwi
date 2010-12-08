@@ -65,7 +65,7 @@ public:
 	 * @brief Inserts a line.
 	 * 
 	 * @param toInsert The line to copy and insert in the container
-	 * @param position The line will be insterted before the position.
+	 * @param position The line will be insterted before the given position.
 	 */ 
 	virtual void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position) = 0;
 	

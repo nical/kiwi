@@ -27,6 +27,11 @@ fi
 # Build and install kiwi. #
 ###########################
 cd build;
+mkdir test &&
+mkdir test/core;
+mkdir test/generic;
+mkdir test/text;
+mkdir test/image;
 cmake .. &&
 make -j4 &&
 cd .. &&

@@ -1,16 +1,19 @@
 include_directories (${PROJECT_SOURCE_DIR}/src)
-include_directories (${CAIRO_INCLUDE_DIR})
+
 
 if(DEFINED BUILD_KIWI_IMAGE )
+	message("build kiwi image")
 	SET(KIWI_SRC ${KIWI_SRC}
 		image/cairo/ImageContainer/ImageContainer.cpp
 		#kiwi::image source files
 	)
-	
+	include_directories (${CAIRO_INCLUDE_DIR})
+	SET(optionalLibs ${optionalLibs} ${CAIRO_LIBRARIES} )
 	SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${CAIRO_CFLAGS})
 endif(DEFINED BUILD_KIWI_IMAGE)
 
 if(DEFINED BUILD_KIWI_TEXT)
+	message("build kiwi text")
 	SET(KIWI_SRC ${KIWI_SRC}
 		text/TextContainer.cpp
 		text/TextReader.cpp
@@ -34,8 +37,6 @@ SET(KIWI_SRC ${KIWI_SRC}
 		pipeline/SimplePipeline.cpp
 		# kiwi::core source files
 		)
-
-SET(optionalLibs ${optionalLibs} ${CAIRO_LIBRARIES} )
 
 
 message("${LIBKIWI_NAME} library src: ${KIWI_SRC}")

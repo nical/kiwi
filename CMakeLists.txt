@@ -57,8 +57,14 @@ if ( Boost_FOUND )
    include_directories( ${Boost_INCLUDE_DIR} )
 endif ( Boost_FOUND )
 
-find_package(Cairo REQUIRED)
 
+if(DEFINED BUILD_KIWI_IMAGE)
+	find_package(Cairo REQUIRED)
+	if ( Cairo_FOUND )
+		message( "-- Cairo found. include=${Cairo_INCLUDE_DIR}" )
+		include_directories( ${Cairo_INCLUDE_DIR} )
+	endif ( Cairo_FOUND )
+endif(DEFINED BUILD_KIWI_IMAGE)
 
 
 # -----------------------------------------------------------------------------
@@ -72,7 +78,7 @@ set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 #------------------------------------------------------------------------------
 # Add subdirectories
 #------------------------------------------------------------------------------
-add_subdirectory (src/kiwi)
+
 
 if(DEFINED BUILD_KIWI_CMDLINE)
 	add_subdirectory (src/software)
@@ -81,3 +87,6 @@ endif(DEFINED BUILD_KIWI_CMDLINE)
 if(DEFINED BUILD_KIWI_TESTS)
 	add_subdirectory (test)
 endif(DEFINED BUILD_KIWI_TESTS)
+
+
+add_subdirectory(src/kiwi)

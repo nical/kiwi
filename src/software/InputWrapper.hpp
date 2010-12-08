@@ -59,11 +59,14 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 	int nbParams = inputs.size();
 	if(nbParams > filter.nbReaderInputs()) nbParams = filter.nbReaderInputs();
 	
-	for(int i = 0; i < nbParams ; ++i)
+	for(int i = 0; i < nbParams ; ++i, ++it)
 	{	
-		if((inputArgument == kiwi::string("-ignore")) 
+		kiwi::string inputArgument = inputs.front();
+		if( inputArgument == kiwi::string("-x") ) 
 		{
-			
+			// ignore argument and make no connection for the 
+			// corresponding input port
+			continue;
 		}
 		else if(boost::filesystem::exists( *it ) && !boost::filesystem::is_directory( *it ) ) 
 		{	
@@ -81,7 +84,7 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 			//Creation of a basic container, needed to apply the filter
 			kiwi::text::TextContainer* basicInputContainer = new kiwi::text::TextContainer;
 			
-			kiwi::string inputArgument = inputs.front();
+			
 			inputs.pop_front();
 			if((inputArgument == kiwi::string("cin")) 
 				|| (inputArgument == kiwi::string("--")) )
@@ -99,7 +102,7 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 			if(!filter.readerInputPort(0).isConnected() ) 
 				std::cerr << "connection error"<<std::endl;
 		}
-		++it;
+		//++it;
 	}
 	
 }

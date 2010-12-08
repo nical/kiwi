@@ -3,7 +3,6 @@
 
 #include "kiwi/core/Commons.hpp"
 
-#include "kiwi/core/Filter.hpp"
 
 #include "kiwi/generic/MultiArrayContainer.hpp"
 #include "kiwi/generic/ArrayReader.hpp"
@@ -11,9 +10,7 @@
 #include "kiwi/generic/ArrayIterator.hpp"
 
 #include "kiwi/generic/Point.hpp"
-
-//#include "generic/ArrayContainerTest.hpp" // for AddArrays Filter
-
+#include "kiwi/core.hpp"
 
 #include "kiwi/utils/types.hpp"
 
@@ -24,6 +21,107 @@ using namespace kiwi;
 using namespace kiwi::core;
 using namespace kiwi::generic;
 
+
+
+
+
+// compute the sum of two Value<> resources and place it in an other Value<>
+template<typename TValueType, unsigned int TDimension>
+class AddArraysFilter : public kiwi::core::CanonicalFilter
+{
+public:
+	enum{ A = 0, B = 1};
+	enum{ WRITE = 0};
+	enum{ RESULT = 0};
+	
+	typedef generic::ArrayReader<TValueType, TDimension> myReader;
+	typedef generic::ArrayWriter<TValueType, TDimension> myWriter;
+// ---------------------------------------------------------------------
+	AddArraysFilter() : CanonicalFilter(1)
+	{
+	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
+		setLayoutEventEnabled(false);
+		kiwi::string sType( kiwi::string("array")
+			+ boost::lexical_cast<kiwi::string>(TDimension)
+			+"d_"+ types::str<TValueType>() );
+		addReaderInputPort();
+		addReaderInputPort();
+		
+//+		addWriterInputPort();	
+		
+		//add a reader output that will be available only when the writer
+		//port is connected
+//+		addReaderOutputPort();
+//+		setPortEnabled(readerOutputPort(0),false);
+		setLayoutEventEnabled(true);
+	}
+	~AddArraysFilter() {}
+
+	
+
+// ---------------------------------------------------------------------
+	void process()
+	{
+	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+
+DEBUG_ONLY(		if(!isReady() )
+		{
+			Debug::error() << "AddArraysFilter::Process error : not ready" 
+				<< endl();
+			return;
+		}
+)
+		Debug::print() << "Allocate Reader #0" << endl();
+		myReader A( readerInputPort(0) );
+		
+		Debug::print() << "Allocate Reader #1" << endl();
+		myReader B( readerInputPort(1) );
+		
+		Debug::print() << "Allocate Writer #0" << endl();
+		myWriter result( writerInputPort(0) );
+		
+		Debug::beginBlock( "compute..");
+			ArrayConstIterator<TValueType> itA = A.getIterator();
+			ArrayConstIterator<TValueType> itB = B.getIterator();
+			ArrayIterator<TValueType> itResult = result.getIterator();
+			
+			Point<int, TDimension> pos(0);
+			result.set( pos , A.get( pos ) + B.get( pos ) );
+			unsigned count = 0;
+			do
+			{
+				if( itA.isDone() ) break;
+				if( itB.isDone() ) break;
+				
+				++count;
+				//Debug::print() << " on iteration " << count << endl();
+				
+				*itResult = *itA + *itB;
+				// this is unsafe crap: you don't iterate through image 
+				// that might not have the same size that way but right
+				// now i'm interested on testing iterators
+				++itA ;
+				++itB ;
+			} while(itResult.onIteration() );
+			
+			Debug::print() << count << " iterations " << endl();
+
+		Debug::endBlock( "compute..");
+		
+		Debug::print() << "end of the method" << endl();
+		return;
+	}
+	
+	
+// ---------------------------------------------------------------------
+	bool readyCondition()
+	{
+		return (readerInputPort(0).isConnected()
+			&& readerInputPort(1).isConnected()
+			&& writerInputPort(0).isConnected() );
+	}
+	
+};
 
 
 // ---------------------------------------------------------------------
@@ -125,7 +223,7 @@ void MultiArrayContainerTest()
 
 #ifdef KIWI_TEST_MAIN
 
-int main
+int main()
 {
 	MultiArrayContainerTest<double, 3, 4>();
 	return 0;

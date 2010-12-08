@@ -1,17 +1,15 @@
-#ifndef KIWI_CAIRO_IMAGECONTAINER_TEST
-#define KIWI_CAIRO_IMAGECONTAINER_TEST
-
 
 #include "kiwi/image/cairo/ImageContainer/ImageContainer.hpp"
 
-#include "generic/ArrayContainerTest.hpp"
+#include "kiwi/generic/ArrayWriter.hpp"
+#include "kiwi/generic/ArrayIterator.hpp"
+
 
 #include "kiwi/core/Commons.hpp"
 
 #include "kiwi/core/Filter.hpp"
 
-#include "generic/ArrayContainerTest.hpp"
-
+using namespace kiwi;
 
 int CairoImageContainerTest()
 {
@@ -34,7 +32,7 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 	
 	
 	myWriter img1Writer0( img1, 0 );
-	ArrayIterator<kiwi::uint8_t> it = img1Writer0.getIterator();
+	generic::ArrayIterator<kiwi::uint8_t> it = img1Writer0.getIterator();
 	do { *it = 0; } while ( it.onIteration() );
 	
 	myWriter img1Writer1( img1, 1 );
@@ -44,10 +42,10 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 	myWriter img1Writer2( img1, 2 );
 	it = img1Writer2.getSpanIterator(Point2u::zero(), 1 );
 	kiwi::uint8_t val = 0;
-	for(Point<kiwi::uint32_t, 2> pos(0,0); pos(1) < 60; pos(1)+=2 )
+	for(generic::Point<kiwi::uint32_t, 2> pos(0,0); pos(1) < 60; pos(1)+=2 )
 	{
 		//Debug::print() << "y = " << pos(1) << endl();
-		ArrayIterator<kiwi::uint8_t> itLine 
+		generic::ArrayIterator<kiwi::uint8_t> itLine 
 			= img1Writer2.getSpanIterator( pos, 0 );
 		// for each line ...	
 		do 
@@ -71,9 +69,9 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 	
 	myWriter img2Writer1( img2, 1 );
 	it = img2Writer1.getSpanIterator( 
-		Point<kiwi::uint32_t, 2>::zero(), 0 );
+		generic::Point<kiwi::uint32_t, 2>::zero(), 0 );
 	do { 
-		ArrayIterator<kiwi::uint8_t> itLine 
+		generic::ArrayIterator<kiwi::uint8_t> itLine 
 			= img2Writer1.getSpanIterator( it, 1 );
 		// for each line ...	
 		do {*itLine = val*255/80; } while ( itLine.onIteration() );
@@ -81,16 +79,16 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 		val++;
 	} while ( it.onIteration() );
 	
-	Point<kiwi::uint32_t,2> pos = Point<kiwi::uint32_t,2>::zero();
+	generic::Point<kiwi::uint32_t,2> pos = generic::Point<kiwi::uint32_t,2>::zero();
 	
 	val = 0;
 	myWriter img2Writer2( img2, 2 );
 	it = img2Writer2.getSpanIterator( 
-		Point<kiwi::uint32_t, 2>::zero(), 1 );
+		generic::Point<kiwi::uint32_t, 2>::zero(), 1 );
 	do { 
 		Debug::beginBlock("spanIterator >");
 		int count = 0;
-		ArrayIterator<kiwi::uint8_t> itLine 
+		generic::ArrayIterator<kiwi::uint8_t> itLine 
 			= img2Writer2.getSpanIterator( it, 0 );
 		// for each line ...	
 		do 
@@ -130,7 +128,7 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 
 #ifdef KIWI_TEST_MAIN
 
-int main
+int main()
 {
 	CairoImageContainerTest();
 	return 0;
@@ -138,7 +136,3 @@ int main
 
 #endif
 
-
-
-
-#endif

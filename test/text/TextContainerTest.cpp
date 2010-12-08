@@ -1,12 +1,12 @@
-#ifndef KIWI_TEST_TEXTCONTAINER_HPP
-#define KIWI_TEST_TEXTCONTAINER_HPP
-
+#include "kiwi/core/Commons.hpp"
 
 #include "kiwi/text/TextContainer.hpp"
 #include "kiwi/text/TextReader.hpp"
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/utils/modulo.hpp"
 #include <fstream>
+
+using namespace kiwi;
 
 void TextContainerTest()
 {
@@ -102,6 +102,12 @@ ScopedBlockMacro(__scp, "kiwi::test::TextContainer")
 }
 
 
+#ifdef KIWI_TEST_MAIN
 
+int main()
+{
+	TextContainerTest();
+	return 0;
+}
 
 #endif

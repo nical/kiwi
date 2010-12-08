@@ -13,9 +13,22 @@ link_directories (${PROJECT_BINARY_DIR})
 
 
 
-#------TESTS subdirectories ------
 
-SET(KIWI_TESTS_SRC
+if(DEFINED BUILD_KIWI_IMAGE)	
+	SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
+		image/CairoImageContainerTest
+#		image/ContrastTest
+	)
+endif(DEFINED BUILD_KIWI_IMAGE)
+
+if(DEFINED BUILD_KIWI_TEXT)	
+	SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
+		text/TextContainerTest
+	)
+endif(DEFINED BUILD_KIWI_TEXT)
+
+
+SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 #	TestSuite
 	core/NodeTest
 	core/FactoryTest
@@ -23,7 +36,7 @@ SET(KIWI_TESTS_SRC
 #	core/MetaFilterTest
 	generic/PointTest
 	generic/ArrayContainerTest
-#	generic/MultiArrayContainerTest
+	generic/MultiArrayContainerTest
 	generic/ValueContainerTest
 	
    )

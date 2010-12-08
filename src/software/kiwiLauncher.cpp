@@ -53,7 +53,7 @@ using namespace std;
 /**
  * Launch TCP server.
  */
-void launchServer(int port)
+int launchServer(int port)
 {
   //Setting up service socket
   kiwi::utils::SocketCreator sc;
@@ -72,8 +72,8 @@ void launchServer(int port)
     //BEGIN : Initialize "select" function params
     FD_ZERO(&socketGroup);
     FD_SET(serverSocket,&socketGroup);
-    pollingTime.tv_sec=0;
-    pollingTime.tv_usec=100;
+    pollingTime.tv_sec=1;
+    pollingTime.tv_usec=0;
     //END: Initialize "select" function params
 
 
@@ -150,6 +150,10 @@ void launchServer(int port)
               outputBuffer = "This command should print help, don't u think so ?\r\n";
               writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
             }
+            else if ((inputBuffer=="quit")||(inputBuffer=="exit"))
+            {
+              go=false;
+            }
             else if (inputBuffer!="")
             {
               outputBuffer = "You've just written \"" + inputBuffer +"\". Happy, rn't u ?\r\n"; 
@@ -159,6 +163,7 @@ void launchServer(int port)
 
           }
           //END : Start interactive terminal
+          return 0;
         }
         //END : New process and new socket for an incoming client
       }
@@ -166,6 +171,7 @@ void launchServer(int port)
     }
     //END: Handle client connections
   }
+  return 0;
 }
 
 
@@ -218,7 +224,7 @@ int main(int argc, char *argv[])
 
 
   //Remote request
-  if( arguments.serverCmd() )
+  if( arguments.remoteCmd() )
   {
     cerr << "Kiwi remote mode not supported yet" << endl;
     return 0;
@@ -226,7 +232,7 @@ int main(int argc, char *argv[])
 
 
   //Verbose request
-  if( arguments.serverCmd() )
+  if( arguments.verboseCmd() )
   {
     cerr << "Kiwi verbose mode not supported yet" << endl;
     return 0;

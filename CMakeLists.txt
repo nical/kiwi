@@ -58,7 +58,7 @@ if ( Boost_FOUND )
 
 if(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
 	SET( MACPORT_BOOST_INCLUDES "/opt/local/includes/boost")	
-	SET( MACPORT_BOOST_LIBS "/opt/local/libs/")	
+	SET( MACPORT_BOOST_LIBS "/opt/local/lib/")	
 
    	include_directories( ${MACPORT_BOOST_INCLUDES} )
    	link_directories( ${MACPORT_BOOST_LIBS} )

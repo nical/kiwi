@@ -56,13 +56,17 @@ if ( Boost_FOUND )
    message( "-- Boost found. include=${Boost_INCLUDE_DIR}" )
    include_directories( ${Boost_INCLUDE_DIR} )
 
+if(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
+	SET( MACPORT_BOOST_INCLUDES "/opt/local/includes/boost")	
+	SET( MACPORT_BOOST_LIBS "/opt/local/libs/")	
 
-   if(DEFINED APPLE) 
-     message( "-- Apple plateform detected : Boost lib path added." )
-     link_directories(/opt/local/lib)
-   endif(DEFINED APPLE)
+   	include_directories( ${MACPORT_BOOST_INCLUDES} )
+   	link_directories( ${MACPORT_BOOST_LIBS} )
+	set( MACPORT_BOOST_FOUND TRUE) 	
+     	
+	message( "-- Apple plateform detected : Boost lib path added." )
+endif(DEFINED APPLE AND NOT DEFINED MACPORT_BOOST_FOUND)
 endif ( Boost_FOUND )
-
 
 if(DEFINED BUILD_KIWI_IMAGE)
 	find_package(Cairo REQUIRED)

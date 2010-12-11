@@ -9,7 +9,7 @@
 project (Kiwi)
 cmake_minimum_required (VERSION 2.4) 
 
-set(BUILD_KIWI_TESTS "yes")
+#set(BUILD_KIWI_TESTS "yes")
 set(BUILD_KIWI_IMAGE "yes")
 set(BUILD_KIWI_TEXT "yes")
 set(BUILD_KIWI_CMDLINE "yes")
@@ -55,6 +55,12 @@ FIND_PACKAGE(Boost REQUIRED)
 if ( Boost_FOUND )
    message( "-- Boost found. include=${Boost_INCLUDE_DIR}" )
    include_directories( ${Boost_INCLUDE_DIR} )
+
+
+   if(DEFINED APPLE) 
+     message( "-- Apple plateform detected : Boost lib path added." )
+     link_directories(/opt/local/lib)
+   endif(DEFINED APPLE)
 endif ( Boost_FOUND )
 
 

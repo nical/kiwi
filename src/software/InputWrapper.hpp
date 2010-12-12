@@ -43,7 +43,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "boost/filesystem.hpp"
+//#include "boost/filesystem.hpp"
 #include "boost/lexical_cast.hpp"
 
 namespace kiwi
@@ -61,6 +61,7 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 	
 	for(int i = 0; i < nbParams ; ++i, ++it)
 	{	
+		std::ifstream file(it->c_str() );
 		kiwi::string inputArgument = inputs.front();
 		if( inputArgument == kiwi::string("-x") ) 
 		{
@@ -68,15 +69,14 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 			// corresponding input port
 			continue;
 		}
-		else if(boost::filesystem::exists( *it ) && !boost::filesystem::is_directory( *it ) ) 
+		else if( file.is_open() ) 
 		{	
 			kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
 
-			std::ifstream file(it->c_str() );
-			assert( file.is_open() );
+			
 
 			inputText->init(file);
-			
+			file.close();
 			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
 			
 		}else{

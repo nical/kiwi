@@ -36,6 +36,7 @@ SET(KIWI_SRC ${KIWI_SRC}
 		core/NodeFactory.cpp
 		pipeline/SimplePipeline.cpp
 		# kiwi::core source files
+		tutorial/FilterSkeleton.cpp
 		)
 
 

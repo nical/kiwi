@@ -1,8 +1,7 @@
 
 #include "DebugOutputStream.hpp"
 
-namespace kiwi
-{
+namespace kiwi{
 
 
 string endl() 
@@ -17,4 +16,4 @@ string endl()
 
 
 
-}
+}//namespace

@@ -29,10 +29,8 @@
 
 #include "Node.hpp"
 
-namespace kiwi
-{
-namespace core
-{
+namespace kiwi{
+namespace core{
 
 // explicit template instanciation
 template bool operator>>(Node::OutputPort<Reader>& output, Node::InputPort<Reader>& input );

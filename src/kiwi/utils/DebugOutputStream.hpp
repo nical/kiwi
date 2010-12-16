@@ -69,8 +69,7 @@
 #define NOT_LINUX( instruction ) instruction
 #endif
 
-namespace kiwi
-{
+namespace kiwi{
 	
 string endl();
 

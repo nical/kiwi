@@ -31,10 +31,8 @@
 #include "kiwi/utils/modulo.hpp"
 
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 
 
 TextReader::TextReader( AbstractTextContainer& container 

@@ -30,10 +30,8 @@
 #include "TextWriter.hpp"
 #include "kiwi/utils/modulo.hpp"
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 
 
 

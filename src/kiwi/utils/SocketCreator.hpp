@@ -40,10 +40,8 @@
 #include <ios>
 #include <arpa/inet.h>
 
-namespace kiwi
-{
-namespace utils  
-{
+namespace kiwi{
+namespace utils{
 
 class SocketCreator 
 {

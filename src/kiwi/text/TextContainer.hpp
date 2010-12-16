@@ -34,10 +34,8 @@
 #include "kiwi/text/AbstractTextContainer.hpp"
 
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 
 class TextReader;
 class TextWriter;

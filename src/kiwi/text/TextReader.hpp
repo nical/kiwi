@@ -42,10 +42,8 @@
 #include "kiwi/generic/ArrayIterator.hpp"
 #include "kiwi/core/Node.hpp"
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 
 typedef kiwi::generic::ArrayConstIterator<kiwi::int8_t> StringConstIterator;
 	

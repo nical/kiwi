@@ -41,10 +41,8 @@
 #include "kiwi/generic/ArrayIterator.hpp"
 #include <iostream>
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 
 
 typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;

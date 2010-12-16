@@ -46,12 +46,9 @@
 
 
 
-namespace kiwi
-{
-namespace image
-{
-namespace cairo
-{	
+namespace kiwi{
+namespace image{
+namespace cairo{	
 
 
 

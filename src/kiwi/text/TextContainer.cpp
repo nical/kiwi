@@ -30,10 +30,8 @@
 #include "TextContainer.hpp"
 
 
-namespace kiwi
-{
-namespace text
-{	
+namespace kiwi{
+namespace text{	
 
 TextContainer::TextContainer()
 	: _nbLines(1)

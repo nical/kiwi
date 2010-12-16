@@ -5,10 +5,8 @@
 
 using namespace std;
 
-namespace kiwi
-{
-namespace utils
-{
+namespace kiwi{
+namespace utils{
 
 /**
  * Internal method of socket creation.

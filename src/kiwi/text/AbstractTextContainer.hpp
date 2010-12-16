@@ -33,6 +33,8 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Container.hpp"
+#include <iostream>
+
 
 namespace kiwi
 {
@@ -63,7 +65,7 @@ public:
 	 * @brief Inserts a line.
 	 * 
 	 * @param toInsert The line to copy and insert in the container
-	 * @param position The line will be insterted before the position.
+	 * @param position The line will be insterted before the given position.
 	 */ 
 	virtual void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position) = 0;
 	
@@ -72,6 +74,16 @@ public:
 	 */
 	 virtual void removeLine(kiwi::uint32_t position) = 0;
 	 
+	 /**
+	  * @brief Clears the data.
+	  */
+	 virtual void reset() = 0;
+	  
+	   /**
+	  * @brief Clears the data.
+	  */
+	 virtual void append(std::istream& stream) = 0;
+	   
 	 virtual ~AbstractTextContainer() {}
 };
 

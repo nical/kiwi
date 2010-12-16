@@ -49,8 +49,8 @@
  * @namespace kiwi
  * Kiwi's main namespace
  */ 
-namespace kiwi
-{
+namespace kiwi{
+
 /**
  * @namespace kiwi::core
  * The namespace for the core of the library.

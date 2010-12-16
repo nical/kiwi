@@ -31,10 +31,8 @@
 
 
 
-namespace kiwi
-{
-namespace core
-{
+namespace kiwi{
+namespace core{
 
 
 

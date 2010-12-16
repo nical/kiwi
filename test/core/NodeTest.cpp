@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef KIWI_NODE_TEST_HPP
 #define KIWI_NODE_TEST_HPP
 
@@ -83,6 +81,18 @@ void NodeTest()
 	assert(n.readerOutputPort("plop")->index() == 0 );
 	assert(n.readerInputPort("mouahaha") == 0 );
 }
+
+
+
+#ifdef KIWI_TEST_MAIN
+
+int main()
+{
+	NodeTest();
+	return 0;
+}
+
+#endif
 
 
 #endif

@@ -1,4 +1,3 @@
-#pragma once
 #ifndef KIWI_POINT_TEST
 #define KIWI_POINT_TEST
 
@@ -40,5 +39,20 @@ void PointTest()
 	Debug::print() << " Point tests : success !" << endl();
 
 }
+
+
+#ifdef KIWI_TEST_MAIN
+
+int main()
+{
+	PointTest<char,2>();
+	PointTest<float,3>();
+	PointTest<double,4>();
+	PointTest<unsigned int,3>();
+	return 0;
+}
+
+#endif
+
 
 #endif

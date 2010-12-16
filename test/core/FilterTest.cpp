@@ -202,15 +202,15 @@ ScopedBlockMacro(__scop, "Filter Test");
 	
 }
 
-/*
+#ifdef KIWI_TEST_MAIN
+
 int main()
 {
-
-ScopedBlockMacro(s2, "kiwi::FilterTest");
-	FilterTest<float>();
 	FilterTest<int>();
-
+	FilterTest<float>();
+	FilterTest<char>();
 	return 0;
 }
 
-*/
+#endif
+

@@ -39,10 +39,8 @@
 
 #include <list>
 
-namespace kiwi
-{
-namespace core
-{
+namespace kiwi{
+namespace core{
 
 /**
  * @class Pipeline

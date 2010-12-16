@@ -29,10 +29,9 @@
 
 #include "TextWriter.hpp"
 #include "kiwi/utils/modulo.hpp"
-namespace kiwi
-{
-namespace text	
-{
+
+namespace kiwi{
+namespace text{
 
 
 
@@ -98,23 +97,24 @@ kiwi::uint32_t TextWriter::currentLine() const
 
 bool TextWriter::gotoLine(kiwi::int32_t lineNumber)
 {
-	// TODO: modulo opération 
-	// this is really unsafe, i mean really !
+	lineNumber  =utils::modulo<int>( lineNumber, nbLines() );
 	_currentLine = _container->getLine(lineNumber);
 	if(_currentLine ) _currentLineNb = lineNumber;
 }
 
 bool TextWriter::gotoNextLine()
 {
-	gotoLine(_currentLineNb + 1);
+	assert(utils::modulo<int>( _currentLineNb + 1, nbLines() ) < nbLines() );
+	gotoLine( utils::modulo<int>( _currentLineNb + 1, nbLines() ) );
 }
 
 bool TextWriter::gotoPreviousLine()
 {
-	gotoLine(_currentLineNb - 1);
+	assert(utils::modulo<int>( _currentLineNb + 1, nbLines() ) < nbLines() );
+	gotoLine( utils::modulo<int>( _currentLineNb - 1, nbLines() ) );
 }
 
-bool TextWriter::endOfText() const
+bool TextWriter::endOfText() const // TODO this won't work abecause of the modulo
 {
 	return (_currentLineNb >= _container->nbLines() );
 }
@@ -165,16 +165,16 @@ void TextWriter::insertLine(
 	, int position 
 	, int tag )
 {
-ScopedBlockMacro(__scop, "TextWriter::insertLine")
+//ScopedBlockMacro(__scop, "TextWriter::insertLine")
 
 	uint32_t myNbLines = nbLines();
 	if(position < 0) position = utils::modulo<int>(position, myNbLines+1 );
-	Debug::print() << ">> " << position<< "  " << myNbLines << endl();
+	//Debug::print() << ">> " << position<< "  " << myNbLines << endl();
 	
 	while( position-1 >= myNbLines )
 	{
 		_container->insertLine( kiwi::string(""), myNbLines++ );
-		Debug::print() << ">> " << position<< "  " << myNbLines << endl();
+		//Debug::print() << ">> " << position<< "  " << myNbLines << endl();
 		
 	}
 
@@ -189,6 +189,12 @@ void TextWriter::removeLine(kiwi::uint32_t position)
 	Debug::print() << "TextWriter::removeLine " << position << endl();
 	_container->removeLine(position);
 }	
+
+void TextWriter::reset() 
+{
+	_container->reset();
+	_currentLineNb = 0;
+}
 	
 	
 }// namespace	

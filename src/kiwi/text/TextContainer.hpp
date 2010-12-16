@@ -34,10 +34,8 @@
 #include "kiwi/text/AbstractTextContainer.hpp"
 
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 
 class TextReader;
 class TextWriter;
@@ -52,6 +50,12 @@ public:
 	 * @brief Constructor. 
 	 */ 
 	TextContainer();
+
+	void init(std::istream& inputStream);
+
+	void append(std::istream& inputStream);
+
+	void reset();
 
 	/** 
 	 * @brief Returns A pointer to the requested line.

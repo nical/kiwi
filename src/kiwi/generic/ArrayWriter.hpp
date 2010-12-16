@@ -34,6 +34,7 @@
 
 #include "kiwi/core/Container.hpp"
 #include "kiwi/generic/AbstractArrayContainer.hpp"
+#include "kiwi/generic/ArrayIterator.hpp" 
 
 
 /**

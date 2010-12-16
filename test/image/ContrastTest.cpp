@@ -11,4 +11,16 @@ void ContrastTest()
 }
 
 
+
+#ifdef KIWI_TEST_MAIN
+
+int main
+{
+	ContrastTest();
+	return 0;
+}
+
+#endif
+
+
 #endif

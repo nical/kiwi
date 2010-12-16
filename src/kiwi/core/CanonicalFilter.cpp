@@ -30,10 +30,8 @@
 #include "CanonicalFilter.hpp"
 
 
-namespace kiwi
-{
-namespace core
-{
+namespace kiwi{
+namespace core{
 
 CanonicalFilter::CanonicalFilter(uint32_t nbWriters)
 : Filter()

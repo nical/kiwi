@@ -30,10 +30,8 @@
 #include <set>
 #include <utility>
 
-namespace kiwi
-{
-namespace core
-{
+namespace kiwi{
+namespace core{
 
 
 SimplePipeline::SimplePipeline()

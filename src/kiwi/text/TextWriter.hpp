@@ -26,6 +26,12 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+/**
+ * @file TextWriter.hpp
+ * @brief Writer for AbstractTextContainer based containers.
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva) 
+ */
+
 #pragma once
 
 #ifndef KIWI_TEXTWRITER_HPP
@@ -33,11 +39,10 @@
 
 #include "kiwi/text/AbstractTextContainer.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
+#include <iostream>
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 
 
 typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;
@@ -64,6 +69,9 @@ public:
 	void setChar(int32_t charNumber, int8_t value);
 	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
 	void removeLine(kiwi::uint32_t position);
+	
+	void reset();
+	void append(std::istream& inputStream) {_container->append(inputStream);}
 	
 	StringIterator getStringIterator() const;
 	

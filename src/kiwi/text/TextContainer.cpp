@@ -30,10 +30,8 @@
 #include "TextContainer.hpp"
 
 
-namespace kiwi
-{
-namespace text
-{	
+namespace kiwi{
+namespace text{	
 
 TextContainer::TextContainer()
 	: _nbLines(1)
@@ -56,7 +54,7 @@ kiwi::string* TextContainer::getLine( kiwi::uint32_t lineNumber )
 	// returns 0 if the line doesn't exist.
 	if(lineNumber >= _nbLines ) 
 	{
-		DEBUG_ONLY( Debug::print() << "lineNumber >= _nbLines"<<endl(); )
+		//DEBUG_ONLY( Debug::print() << "lineNumber >= _nbLines"<<endl(); )
 		return 0;
 	}
 	
@@ -123,7 +121,11 @@ void TextContainer::insertLine(
 void TextContainer::removeLine( kiwi::uint32_t position )
 {
 	if(_nbLines == 1) return;
-	if(position >= _nbLines ) return ;
+	if(position >= _nbLines )
+	{
+		_first->_text = kiwi::string("");
+		return ;
+	} 
 	if(position == 0)
 	{
 		_first->_next->_prev = 0;
@@ -151,6 +153,29 @@ void TextContainer::removeLine( kiwi::uint32_t position )
 		--_nbLines;
 	}
 }
+
+void TextContainer::reset()
+{
+	while( _nbLines > 1 ) removeLine(0);
+	removeLine(0);
+}
+
+void TextContainer::append(std::istream& inputStream)
+{
+	while( !inputStream.eof() )
+	{
+		kiwi::string line;
+		std::getline(inputStream, line);
+		insertLine(line, _nbLines );
+	}
+}
+
+void TextContainer::init(std::istream& inputStream)
+{
+	reset();
+	append(inputStream);
+}
+
 
 //-------------------------------------------------------------- private
 TextContainer::Line* TextContainer::line(kiwi::uint32_t position)

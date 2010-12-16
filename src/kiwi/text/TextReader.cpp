@@ -28,12 +28,11 @@
 
 
 #include "TextReader.hpp"
+#include "kiwi/utils/modulo.hpp"
 
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 
 
 TextReader::TextReader( AbstractTextContainer& container 
@@ -98,21 +97,19 @@ kiwi::uint32_t TextReader::currentLine() const
 
 bool TextReader::gotoLine(kiwi::int32_t lineNumber)
 {
-	Debug::print() << "gotoLine " << lineNumber << endl();
-	// TODO: modulo opération 
-	// this is really unsafe, i mean really !
+	lineNumber = utils::modulo<int>( lineNumber, nbLines() );
 	_currentLine = _container->getLine(lineNumber);
 	if(_currentLine ) _currentLineNb = lineNumber;
 }
 
 bool TextReader::gotoNextLine()
 {
-	gotoLine(_currentLineNb + 1);
+	gotoLine(  _currentLineNb + 1  );
 }
 
 bool TextReader::gotoPreviousLine()
 {
-	gotoLine(_currentLineNb - 1);
+	gotoLine(  _currentLineNb - 1  );
 }
 
 bool TextReader::endOfText() const

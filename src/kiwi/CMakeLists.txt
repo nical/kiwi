@@ -23,11 +23,6 @@ if(DEFINED BUILD_KIWI_TEXT)
 endif(DEFINED BUILD_KIWI_TEXT)
 
 
-if(DEFINED BUILD_DDD_FLAG)
-	# To build with the -g flag for debug using ddd
-	SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -g)
-endif(DEFINED DDD_FLAG)
-
 SET(KIWI_SRC ${KIWI_SRC}
 		utils/DebugOutputStream.cpp
 		utils/SocketCreator.cpp
@@ -36,7 +31,7 @@ SET(KIWI_SRC ${KIWI_SRC}
 		core/NodeFactory.cpp
 		pipeline/SimplePipeline.cpp
 		# kiwi::core source files
-		tutorial/FilterSkeleton.cpp
+    # tutorial/FilterSkeleton.cpp
 		)
 
 

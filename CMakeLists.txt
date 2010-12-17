@@ -85,6 +85,14 @@ set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 #CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/core/Config.h.in" "${PROJECT_SOURCE_DIR}/src/core/Config.h" IMMEDIATE)
 
 
+
+# -----------------------------------------------------------------------------
+# Compile flags 
+# -----------------------------------------------------------------------------
+SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -gdwarf-2)
+
+
+
 #------------------------------------------------------------------------------
 # Add subdirectories
 #------------------------------------------------------------------------------

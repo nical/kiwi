@@ -48,8 +48,95 @@
 #include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <pthread.h>
 
 using namespace std;
+
+
+
+/**
+ * Return the first argument of the select function
+ */
+int selectFirstArgument(int n1, int n2, int n3, int n4, int n5)
+{
+  int retval = n1;
+  if (n2>retval) retval=n2;
+  if (n3>retval) retval=n3;
+  if (n4>retval) retval=n4;
+  if (n5>retval) retval=n5;
+  return retval;
+}
+
+
+
+/**
+ * Start interactive terminal on a data socket.
+ */
+static void * startTelnetTerminal(void * dataSocket)
+{
+  int socket = (int) dataSocket;
+  bool go = true;
+  while (go)
+  {
+    kiwi::string outputBuffer;
+    kiwi::string inputBuffer;
+    outputBuffer = "kiwi : remote --> ";
+    if ((write(socket,outputBuffer.c_str(),outputBuffer.size()))==-1)
+    {
+      cerr << "Could not write into an client socket." << endl;
+    }
+
+    //BEGIN : Read use request
+    int eol = 0;
+    char c;
+    int length = 0;
+    inputBuffer = "";
+    /* telnet sends '1310' == '\r\n' for each newline          */
+    /* eol == 2 at the end of a line after it receives '13'10' */
+    while (eol < 2)
+    {
+      if (read(socket,&c,sizeof(char)) == -1)
+      {
+        cerr << "Could not read client request" << endl;
+      }
+      else
+      {
+        if (c == '\n' || c == '\r')
+        {
+          eol ++;
+        }
+        else
+        {
+          inputBuffer = inputBuffer + c;
+        }
+      }
+    }
+    //END : Read use request
+
+
+    //BEGIN : Request analysis
+    if (inputBuffer=="help")
+    {
+      outputBuffer = "This command should print help, don't u think so ?\r\n";
+      write(socket,outputBuffer.c_str(),outputBuffer.size());
+    }
+    else if ((inputBuffer=="quit")||(inputBuffer=="exit"))
+    {
+      go=false;
+    }
+    else if (inputBuffer!="")
+    {
+      outputBuffer = "You've just written \"" + inputBuffer +"\". Happy, rn't u ?\r\n"; 
+      write(socket,outputBuffer.c_str(),outputBuffer.size());
+    }
+    //END : Request analysis
+
+  }
+  //END : Start interactive terminal
+  close(socket);
+  return 0;
+}
+
 
 
 /**
@@ -59,119 +146,111 @@ int launchServer(int port)
 {
   //Setting up service socket
   kiwi::utils::SocketCreator sc;
-  int serverSocket = sc.tcpServerSocket(port);
+  int serverSocket1 = sc.tcpServerSocket(port);
+  int serverSocket2 = sc.tcpServerSocket(port+1);
+  int serverSocket3 = sc.tcpServerSocket(port+2);
+  int serverSocket4 = sc.tcpServerSocket(port+3);
+  int serverSocket5 = sc.tcpServerSocket(port+4);
 
   //Declaring some variables
-  fd_set socketGroup;
-  struct timeval pollingTime;
-  int selectResult; 
   struct sockaddr_in tcp_addr;
   unsigned int tcp_size = sizeof(tcp_addr);
-  int writeResult;
+  fd_set socketsGroup;
+  struct timeval pollingSleepTime;
 
   while(1)
   {
-    //BEGIN : Initialize "select" function params
-    FD_ZERO(&socketGroup);
-    FD_SET(serverSocket,&socketGroup);
-    pollingTime.tv_sec=1;
-    pollingTime.tv_usec=0;
-    //END: Initialize "select" function params
+    /**
+     * Using SELECT Function.
+     *
+     * Listenning on all sockets at the same time. Queue requests.
+     * Time value is specified by variable pollingSleepTime.
+     *
+     * If you don't understand, RTFM.
+     */
+    FD_ZERO(&socketsGroup);
+    FD_SET(serverSocket1,&socketsGroup);
+    FD_SET(serverSocket2,&socketsGroup);
+    FD_SET(serverSocket3,&socketsGroup);
+    FD_SET(serverSocket4,&socketsGroup);
+    FD_SET(serverSocket5,&socketsGroup);
+    pollingSleepTime.tv_sec=0;
+    pollingSleepTime.tv_usec=1000;
 
-
-    //BEGIN : Handle client connections
-    selectResult=select((serverSocket+1),&socketGroup,NULL,NULL,&pollingTime);
-    if (selectResult==-1)
+    int selfarg = selectFirstArgument(serverSocket1,serverSocket2,serverSocket3,serverSocket4,serverSocket5);
+    if (select(selfarg,&socketsGroup,NULL,NULL,&pollingSleepTime)) //If there's any data
     {
-      cerr << "Error on \"select\" function.";
-    }
-    else
-    {
-      //BEGIN : IF a new client attemps to connect
-      if (FD_ISSET(serverSocket,&socketGroup))
+      if (FD_ISSET(serverSocket1,&socketsGroup))
       {
-        //BEGIN : New process and new socket for an incoming client
-        if (fork()==0)
+        int socket=accept(serverSocket1,(struct sockaddr*)&tcp_addr,&(tcp_size));
+        if (socket==-1)
         {
-
-          //BEGIN : Create new socket, buffers, display welcome message
-          int socket=accept(serverSocket,(struct sockaddr*)&tcp_addr,&(tcp_size));
-          if (socket==-1)
-          {
-            cerr << "Could not connect to an incoming client." << endl;
-          }
-          kiwi::string outputBuffer;
-          kiwi::string inputBuffer;
-          outputBuffer = "\r\n-----------------------------------------\r\n---------- Enjoy Cloud Kiwi ! -----------\r\n-----------------------------------------\r\n";
-          writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
-          //END : Create new socket, buffers, display welcome message
-
-
-          //BEGIN : Start interactive terminal
-          bool go = true;
-          while (go)
-          {
-            outputBuffer = "kiwi : remote --> ";
-            writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
-            if (writeResult==-1)
-            {
-              cerr << "Could not write into an client socket." << endl;
-            }
-
-            //BEGIN : Read use request
-            int eol = 0;
-            char c;
-            int length = 0;
-            inputBuffer = "";
-            /* telnet sends '1310' == '\r\n' for each newline          */
-            /* eol == 2 at the end of a line after it receives '13'10' */
-            while (eol < 2)
-            {
-              if (read(socket,&c,sizeof(char)) == -1)
-              {
-                cerr << "Could not read client request" << endl;
-              }
-              else
-              {
-                if (c == '\n' || c == '\r')
-                {
-                  eol ++;
-                }
-                else
-                {
-                  inputBuffer = inputBuffer + c;
-                }
-              }
-            }
-            //END : Read use request
-            
-
-            //BEGIN : Request analysis
-            if (inputBuffer=="help")
-            {
-              outputBuffer = "This command should print help, don't u think so ?\r\n";
-              writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
-            }
-            else if ((inputBuffer=="quit")||(inputBuffer=="exit"))
-            {
-              go=false;
-            }
-            else if (inputBuffer!="")
-            {
-              outputBuffer = "You've just written \"" + inputBuffer +"\". Happy, rn't u ?\r\n"; 
-              writeResult=write(socket,outputBuffer.c_str(),outputBuffer.size());
-            }
-            //END : Request analysis
-
-          }
-          //END : Start interactive terminal
-          return 0;
+          cerr << "Could not connect to an incoming client." << endl;
         }
-        //END : New process and new socket for an incoming client
+        else
+        {
+          pthread_t th;
+          pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+          pthread_detach(th);
+        }
       }
-      //END : IF a new client attemps to connect
+      if (FD_ISSET(serverSocket2,&socketsGroup))
+      {
+        int socket=accept(serverSocket2,(struct sockaddr*)&tcp_addr,&(tcp_size));
+        if (socket==-1)
+        {
+          cerr << "Could not connect to an incoming client." << endl;
+        }
+        else
+        {
+          pthread_t th;
+          pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+          pthread_detach(th);
+        }
+      }
+      if (FD_ISSET(serverSocket3,&socketsGroup))
+      {
+        int socket=accept(serverSocket3,(struct sockaddr*)&tcp_addr,&(tcp_size));
+        if (socket==-1)
+        {
+          cerr << "Could not connect to an incoming client." << endl;
+        }
+        else
+        {
+          pthread_t th;
+          pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+          pthread_detach(th);
+        }
+      }
+      if (FD_ISSET(serverSocket4,&socketsGroup))
+      {
+        int socket=accept(serverSocket4,(struct sockaddr*)&tcp_addr,&(tcp_size));
+        if (socket==-1)
+        {
+          cerr << "Could not connect to an incoming client." << endl;
+        }
+        else
+        {
+          pthread_t th;
+          pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+          pthread_detach(th);
+        }
+      }
+      if (FD_ISSET(serverSocket5,&socketsGroup))
+      {
+        int socket=accept(serverSocket5,(struct sockaddr*)&tcp_addr,&(tcp_size));
+        if (socket==-1)
+        {
+          cerr << "Could not connect to an incoming client." << endl;
+        }
+        else
+        {
+          pthread_t th;
+          pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+          pthread_detach(th);
+        }
+      }
     }
-    //END: Handle client connections
   }
   return 0;
 }
@@ -253,27 +332,23 @@ int main(int argc, char *argv[])
       kiwi::Help::print(cout);
       return 1;
     }
-    //cout << "Inputs number : " << arguments.getFilterInputs().size() << endl;
-    //cout << "Outputs number : " << arguments.getFilterOutputs().size() << endl;
 
-    
     std::list<kiwi::string> inputArgs = arguments.getFilterInputs();
 
-	kiwi::wrapInputs(factory, *F, inputArgs );
-	
-	// run the filter
-	F->process();
+    kiwi::wrapInputs(factory, *F, inputArgs );
+
+    // run the filter
+    F->process();
 
     //Creation of a Reader needed to read text from a node
     kiwi::text::TextReader reader( F->readerOutputPort(0) );
-	reader.gotoLine(0);
-	do
-	{ 
-		cout << reader.getLine() << endl;
-		reader.gotoNextLine();
-	} while(reader.currentLine() != reader.nbLines()-1 );
+    reader.gotoLine(0);
+    do
+    { 
+      cout << reader.getLine() << endl;
+      reader.gotoNextLine();
+    } while(reader.currentLine() != reader.nbLines()-1 );
   }
   //END : Filter use request.
-
 }
 

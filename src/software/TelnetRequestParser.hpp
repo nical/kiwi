@@ -43,6 +43,11 @@
 
 namespace kiwi
 {
+  /**
+   * This class understands a request from an interactive telnet terminal,
+   * perform the required actions,
+   * then send a reply.
+   */
   class TelnetRequestParser
   {
     public:

@@ -13,7 +13,8 @@ namespace kiwi
   }
 
   /**
-   * Parse a request, return a reply.
+   * Parse a request.
+   * Return a reply.
    */
   kiwi::string TelnetRequestParser::reply(kiwi::string request)
   {

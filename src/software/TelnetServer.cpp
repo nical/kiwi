@@ -6,7 +6,11 @@ namespace kiwi
 {
 
   /**
-   * Constructor, Initialize service sockets and SELECT loop.
+   * Constructor.
+   * Initialize service sockets and SELECT loop.
+   *
+   * @param port.
+   * Kiwi server uses the following range of ports : [port -> (port+5)].
    */
   TelnetServer::TelnetServer(int port)
   {
@@ -165,7 +169,7 @@ namespace kiwi
 
   void TelnetServer::startTelnetTerminal(int dataSocket)
   {
-    int socket = (int) dataSocket;
+    int eol = 0;
     bool go = true;
     kiwi::TelnetRequestParser * myParser = new kiwi::TelnetRequestParser();
 
@@ -174,21 +178,23 @@ namespace kiwi
       kiwi::string outputBuffer;
       kiwi::string inputBuffer;
       outputBuffer = "kiwi : remote --> ";
-      if ((write(socket,outputBuffer.c_str(),outputBuffer.size()))==-1)
+      if ((write(dataSocket,outputBuffer.c_str(),outputBuffer.size()))==-1)
       {
         cerr << "Could not write into an client socket." << endl;
       }
 
-      //BEGIN : Read use request
-      int eol = 0;
+
+      /**
+       * Read and store request into "inputBuffer"
+       * telnet sends '1310' == '\r\n' for each newline 
+       * eol == 2 at the end of a line after it receives '13'10'
+       */
       char c;
       int length = 0;
       inputBuffer = "";
-      /* telnet sends '1310' == '\r\n' for each newline          */
-      /* eol == 2 at the end of a line after it receives '13'10' */
       while (eol < 2)
       {
-        if (read(socket,&c,sizeof(char)) == -1)
+        if (read(dataSocket,&c,sizeof(char)) == -1)
         {
           cerr << "Could not read client request" << endl;
         }
@@ -204,14 +210,26 @@ namespace kiwi
           }
         }
       }
-      //END : Read use request
 
+
+      /**
+       * Sending request to parser.
+       * Getting reply.
+       * Sending reply into the data socket.
+       */
       outputBuffer=myParser->reply(inputBuffer);
-      write(socket,outputBuffer.c_str(),outputBuffer.size());
+      write(dataSocket,outputBuffer.c_str(),outputBuffer.size());
+      if ((write(dataSocket,outputBuffer.c_str(),outputBuffer.size()))==-1)
+      {
+        cerr << "Could not write into an client socket." << endl;
+      }
     }
-    
-    //Don't be dirty.
+
+
+    /**
+     * Doing the cleaning
+     */
     delete(myParser);
-    close(socket);
+    close(dataSocket);
   }
 }//namespace

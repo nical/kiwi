@@ -31,7 +31,6 @@
  * @file kiwiServer.cpp
  * @brief Handle clients connections.
  * @author Semprobe aka Thibaut Vuillemin (mail: contact@thibautvuillemin.com twitter: @Semprobe)
- * @version 0.1
  */
 
 #ifndef KIWI_TELNETSERVER_HPP
@@ -49,6 +48,12 @@
 namespace kiwi
 {
 
+  /**
+   * This class handles client connections.
+   *
+   * It starts a new thread for each new client.
+   * Clients maximum number is 5.
+   */ 
   class TelnetServer
   {
     public:
@@ -65,14 +70,16 @@ namespace kiwi
       int _serverSocket4;
       int _serverSocket5;
   };
-  
-  
+
+
+  /**
+   * Structure used to pass arguments to the threadFunction.
+   */
   struct threadArgStruct
   {
     TelnetServer * objectPtr;
     int dataSocket;
   };
-  
-}// namespace
 
+}// namespace
 #endif //KIWI_TELNETSERVER_HPP

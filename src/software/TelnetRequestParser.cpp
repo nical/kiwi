@@ -19,12 +19,12 @@ namespace kiwi
   {
     if (request=="help")
     {
-      _reply="Help ! I need somebody. Help !";
+      _reply="Help ! I need somebody. Help !\r\n";
       //kiwi::Happy::print(_reply);
     }
     else if ((request=="quit")||(request=="exit"))
     {
-      _reply="Goodbye.";
+      _reply="Goodbye.\r\n";
       _continue=false;
     }
     else if (request!="")

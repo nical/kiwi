@@ -4,7 +4,7 @@ message( "--------------------------------------------------------------" )
 
 
 include_directories (${PROJECT_SOURCE_DIR}/src)
-include_directories (${PROJECT_SOURCE_DIR}/src/cmdkiwi/)
+#include_directories (${PROJECT_SOURCE_DIR}/src/software/)
 
 
 # Make sure the linker can find the library once it is built.
@@ -23,8 +23,6 @@ SET(KIWI_CMD_SRC
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")
-
-#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -lboost_filesystem )
 
 add_executable(kiwi ${KIWI_CMD_SRC})
 target_link_libraries (kiwi ${LIBKIWI_NAME} )

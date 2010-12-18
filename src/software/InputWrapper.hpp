@@ -50,62 +50,62 @@ namespace kiwi
 {
 
 
-void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs)
-{
+  void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs)
+  {
 
-	typedef std::list<string> ArgList;
-	ArgList::iterator it = inputs.begin();
-	ArgList::iterator itEnd = inputs.end();
-	int nbParams = inputs.size();
-	if(nbParams > filter.nbReaderInputs()) nbParams = filter.nbReaderInputs();
-	
-	for(int i = 0; i < nbParams ; ++i, ++it)
-	{	
-		std::ifstream file(it->c_str() );
-		kiwi::string inputArgument = inputs.front();
-		if( inputArgument == kiwi::string("-x") ) 
-		{
-			// ignore argument and make no connection for the 
-			// corresponding input port
-			continue;
-		}
-		else if( file.is_open() ) 
-		{	
-			kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
+    typedef std::list<string> ArgList;
+    ArgList::iterator it = inputs.begin();
+    ArgList::iterator itEnd = inputs.end();
+    int nbParams = inputs.size();
+    if(nbParams > filter.nbReaderInputs()) nbParams = filter.nbReaderInputs();
 
-			
+    for(int i = 0; i < nbParams ; ++i, ++it)
+    {	
+      std::ifstream file(it->c_str() );
+      kiwi::string inputArgument = inputs.front();
+      if( inputArgument == kiwi::string("-x") ) 
+      {
+        // ignore argument and make no connection for the 
+        // corresponding input port
+        continue;
+      }
+      else if( file.is_open() ) 
+      {	
+        kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
 
-			inputText->init(file);
-			file.close();
-			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
-			
-		}else{
-			
-			//Creation of a basic container, needed to apply the filter
-			kiwi::text::TextContainer* basicInputContainer = new kiwi::text::TextContainer;
-			
-			
-			inputs.pop_front();
-			if((inputArgument == kiwi::string("cin")) 
-				|| (inputArgument == kiwi::string("--")) )
-			{
-				basicInputContainer->init(std::cin);
-			}
-			else
-			{
-				//Creation of a Writer needed to write the argument in the container
-				kiwi::text::TextWriter writer(*basicInputContainer,0);
-				writer.getLine() = inputArgument;
-			}
-			//Connexion between the input container and the filter, then apply filter
-			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);
-			if(!filter.readerInputPort(0).isConnected() ) 
-				std::cerr << "connection error"<<std::endl;
-		}
-		//++it;
-	}
-	
-}
+
+
+        inputText->init(file);
+        file.close();
+        inputText->readerOutputPort(0) >> filter.readerInputPort(i);
+
+      }else{
+
+        //Creation of a basic container, needed to apply the filter
+        kiwi::text::TextContainer* basicInputContainer = new kiwi::text::TextContainer;
+
+
+        inputs.pop_front();
+        if((inputArgument == kiwi::string("cin")) 
+            || (inputArgument == kiwi::string("--")) )
+        {
+          basicInputContainer->init(std::cin);
+        }
+        else
+        {
+          //Creation of a Writer needed to write the argument in the container
+          kiwi::text::TextWriter writer(*basicInputContainer,0);
+          writer.getLine() = inputArgument;
+        }
+        //Connexion between the input container and the filter, then apply filter
+        basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);
+        if(!filter.readerInputPort(0).isConnected() ) 
+          std::cerr << "connection error"<<std::endl;
+      }
+      //++it;
+    }
+
+  }
 
 
 }//namespace

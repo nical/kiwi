@@ -16,6 +16,10 @@ link_directories (${PROJECT_BINARY_DIR})
 SET(KIWI_CMD_SRC
   kiwiLauncher
   ArgumentProcessor
+  Help
+  InputWrapper
+  TelnetRequestParser
+  TelnetServer
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")

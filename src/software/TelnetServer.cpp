@@ -11,15 +11,13 @@ namespace kiwi
   TelnetServer::TelnetServer(int port)
   {
     {
-      //Setting up service socket
       kiwi::utils::SocketCreator sc;
-      int serverSocket1 = sc.tcpServerSocket(port);
-      int serverSocket2 = sc.tcpServerSocket(port+1);
-      int serverSocket3 = sc.tcpServerSocket(port+2);
-      int serverSocket4 = sc.tcpServerSocket(port+3);
-      int serverSocket5 = sc.tcpServerSocket(port+4);
+      _serverSocket1 = sc.tcpServerSocket(port);
+      _serverSocket2 = sc.tcpServerSocket(port+1);
+      _serverSocket3 = sc.tcpServerSocket(port+2);
+      _serverSocket4 = sc.tcpServerSocket(port+3);
+      _serverSocket5 = sc.tcpServerSocket(port+4);
 
-      //Declaring some variables
       struct sockaddr_in tcp_addr;
       unsigned int tcp_size = sizeof(tcp_addr);
       fd_set socketsGroup;
@@ -36,20 +34,20 @@ namespace kiwi
          * If you don't understand, RTFM.
          */
         FD_ZERO(&socketsGroup);
-        FD_SET(serverSocket1,&socketsGroup);
-        FD_SET(serverSocket2,&socketsGroup);
-        FD_SET(serverSocket3,&socketsGroup);
-        FD_SET(serverSocket4,&socketsGroup);
-        FD_SET(serverSocket5,&socketsGroup);
+        FD_SET(_serverSocket1,&socketsGroup);
+        FD_SET(_serverSocket2,&socketsGroup);
+        FD_SET(_serverSocket3,&socketsGroup);
+        FD_SET(_serverSocket4,&socketsGroup);
+        FD_SET(_serverSocket5,&socketsGroup);
         pollingSleepTime.tv_sec=0;
         pollingSleepTime.tv_usec=1000;
 
-        int arg1 = resolveSelectFirstArgument(serverSocket1,serverSocket2,serverSocket3,serverSocket4,serverSocket5);
+        int arg1 = resolveSelectFirstArgument(_serverSocket1,_serverSocket2,_serverSocket3,_serverSocket4,_serverSocket5);
         if (select(arg1,&socketsGroup,NULL,NULL,&pollingSleepTime)) //If there's any data
         {
-          if (FD_ISSET(serverSocket1,&socketsGroup))
+          if (FD_ISSET(_serverSocket1,&socketsGroup))
           {
-            int socket=accept(serverSocket1,(struct sockaddr*)&tcp_addr,&(tcp_size));
+            int socket=accept(_serverSocket1,(struct sockaddr*)&tcp_addr,&(tcp_size));
             if (socket==-1)
             {
               cerr << "Could not connect to an incoming client." << endl;
@@ -57,13 +55,16 @@ namespace kiwi
             else
             {
               pthread_t th;
-              pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+              struct threadArgStruct params;
+              params.objectPtr=this;
+              params.dataSocket=socket;
+              pthread_create(&th,NULL,threadFunction,(void*)&params );
               pthread_detach(th);
             }
           }
-          if (FD_ISSET(serverSocket2,&socketsGroup))
+          if (FD_ISSET(_serverSocket2,&socketsGroup))
           {
-            int socket=accept(serverSocket2,(struct sockaddr*)&tcp_addr,&(tcp_size));
+            int socket=accept(_serverSocket2,(struct sockaddr*)&tcp_addr,&(tcp_size));
             if (socket==-1)
             {
               cerr << "Could not connect to an incoming client." << endl;
@@ -71,13 +72,16 @@ namespace kiwi
             else
             {
               pthread_t th;
-              pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+              struct threadArgStruct params;
+              params.objectPtr=this;
+              params.dataSocket=socket;
+              pthread_create(&th,NULL,threadFunction,(void *)&params);
               pthread_detach(th);
             }
           }
-          if (FD_ISSET(serverSocket3,&socketsGroup))
+          if (FD_ISSET(_serverSocket3,&socketsGroup))
           {
-            int socket=accept(serverSocket3,(struct sockaddr*)&tcp_addr,&(tcp_size));
+            int socket=accept(_serverSocket3,(struct sockaddr*)&tcp_addr,&(tcp_size));
             if (socket==-1)
             {
               cerr << "Could not connect to an incoming client." << endl;
@@ -85,13 +89,16 @@ namespace kiwi
             else
             {
               pthread_t th;
-              pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+              struct threadArgStruct params;
+              params.objectPtr=this;
+              params.dataSocket=socket;
+              pthread_create(&th,NULL,threadFunction,(void *)&params);
               pthread_detach(th);
             }
           }
-          if (FD_ISSET(serverSocket4,&socketsGroup))
+          if (FD_ISSET(_serverSocket4,&socketsGroup))
           {
-            int socket=accept(serverSocket4,(struct sockaddr*)&tcp_addr,&(tcp_size));
+            int socket=accept(_serverSocket4,(struct sockaddr*)&tcp_addr,&(tcp_size));
             if (socket==-1)
             {
               cerr << "Could not connect to an incoming client." << endl;
@@ -99,13 +106,16 @@ namespace kiwi
             else
             {
               pthread_t th;
-              pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+              struct threadArgStruct params;
+              params.objectPtr=this;
+              params.dataSocket=socket;
+              pthread_create(&th,NULL,threadFunction,(void *)&params);
               pthread_detach(th);
             }
           }
-          if (FD_ISSET(serverSocket5,&socketsGroup))
+          if (FD_ISSET(_serverSocket5,&socketsGroup))
           {
-            int socket=accept(serverSocket5,(struct sockaddr*)&tcp_addr,&(tcp_size));
+            int socket=accept(_serverSocket5,(struct sockaddr*)&tcp_addr,&(tcp_size));
             if (socket==-1)
             {
               cerr << "Could not connect to an incoming client." << endl;
@@ -113,7 +123,10 @@ namespace kiwi
             else
             {
               pthread_t th;
-              pthread_create(&th,NULL,startTelnetTerminal,(void *)socket);
+              struct threadArgStruct params;
+              params.objectPtr=this;
+              params.dataSocket=socket;
+              pthread_create(&th,NULL,threadFunction,(void *)&params);
               pthread_detach(th);
             }
           }
@@ -125,7 +138,6 @@ namespace kiwi
 
   /**
    * Calculate the first agument of the SELECT function.
-   *
    * @param Service sockets.
    */
   int TelnetServer::resolveSelectFirstArgument(int n1, int n2, int n3, int n4, int n5)
@@ -143,11 +155,21 @@ namespace kiwi
    * Start a new thread for an interactive terminal with a client.
    * Close the data socket once terminated.
    */
-  void * TelnetServer::startTelnetTerminal(void * dataSocket)
+  void * TelnetServer::threadFunction(void * threadArg)
+  {
+    struct threadArgStruct * params = (struct threadArgStruct *)threadArg;
+    TelnetServer* obj = (TelnetServer*) params->objectPtr;
+    int dataSocket = (int) params->dataSocket;
+    obj->startTelnetTerminal(dataSocket);
+  }
+
+  void TelnetServer::startTelnetTerminal(int dataSocket)
   {
     int socket = (int) dataSocket;
     bool go = true;
-    while (go)
+    kiwi::TelnetRequestParser * myParser = new kiwi::TelnetRequestParser();
+
+    while ( myParser->oneMoreLoop() )
     {
       kiwi::string outputBuffer;
       kiwi::string inputBuffer;
@@ -184,28 +206,12 @@ namespace kiwi
       }
       //END : Read use request
 
-
-      //BEGIN : Request analysis
-      if (inputBuffer=="help")
-      {
-        outputBuffer = "This command should print help, don't u think so ?\r\n";
-        write(socket,outputBuffer.c_str(),outputBuffer.size());
-      }
-      else if ((inputBuffer=="quit")||(inputBuffer=="exit"))
-      {
-        go=false;
-      }
-      else if (inputBuffer!="")
-      {
-        outputBuffer = "You've just written \"" + inputBuffer +"\". Happy, rn't u ?\r\n"; 
-        write(socket,outputBuffer.c_str(),outputBuffer.size());
-      }
-      //END : Request analysis
+      outputBuffer=myParser->reply(inputBuffer);
+      write(socket,outputBuffer.c_str(),outputBuffer.size());
     }
-    //END : Start interactive terminal
+    
+    //Don't be dirty.
+    delete(myParser);
     close(socket);
-    return 0;
   }
-
-
 }//namespace

@@ -35,11 +35,9 @@
  */
 
 #include "kiwi/core.hpp"
-#include "kiwi/text.hpp"
-#include "kiwi/utils/SocketCreator.hpp"
 #include "ArgumentProcessor.hpp"
 #include "InputWrapper.hpp"
-#include "TelnetServer.cpp"
+#include "TelnetServer.hpp"
 
 #include "Help.hpp"
 
@@ -49,21 +47,12 @@
 
 using namespace std;
 
-
-/**
- * Main loop.
- */
 int main(int argc, char *argv[])
 {
-
-  //Initialization
   kiwi::Debug::init(true, true, 0);
   kiwi::ArgumentProcessor arguments(argc, argv);
   kiwi::core::NodeFactory factory;
   kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCaseFilter");
-
-
-  //Invalid syntax
   if( arguments.invalid() ) 
   {
     cerr << "SYNTAX ERROR"<<endl;
@@ -71,41 +60,25 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-
-  //Help request
+  
+  /**
+   * Basic requests
+   */
   if( arguments.helpCmd() )
   {
     kiwi::Help::print(cout);
     return 0;
   }
-
-
-  //Version request
   if( arguments.versionCmd() )
   {
     cout << "Kiwi version : ???" << endl;
     return 0;
   }
-
-
-  //Server request
-  if( arguments.serverCmd() )
-  {
-    int port = arguments.getServerPort();
-    cout << "Starting kiwi server on port " << port << "..." << endl;
-    kiwi::TelnetServer ts(port);
-  }
-
-
-  //Remote request
   if( arguments.remoteCmd() )
   {
     cerr << "Kiwi remote mode not supported yet" << endl;
     return 0;
   }
-
-
-  //Verbose request
   if( arguments.verboseCmd() )
   {
     cerr << "Kiwi verbose mode not supported yet" << endl;
@@ -113,11 +86,12 @@ int main(int argc, char *argv[])
   }
 
 
-  //Process request
+  /**
+   * Process request
+   */
   if( arguments.processCmd() )
   {
-
-    //Filter instanciation
+    //Instanciation the filter required
     kiwi::core::Filter* F = factory.newFilter(arguments.filterName() );
     if (!F)
     {
@@ -126,22 +100,32 @@ int main(int argc, char *argv[])
       return 1;
     }
 
+    //Giving the arguments
     std::list<kiwi::string> inputArgs = arguments.getFilterInputs();
-
     kiwi::wrapInputs(factory, *F, inputArgs );
 
-    // run the filter
+    //Running the filter
     F->process();
 
-    //Creation of a Reader needed to read text from a node
+    //Creating a Reader needed to read text from a node
     kiwi::text::TextReader reader( F->readerOutputPort(0) );
     reader.gotoLine(0);
     do
     { 
       cout << reader.getLine() << endl;
       reader.gotoNextLine();
-    } while(reader.currentLine() != reader.nbLines()-1 );
+    }
+    while(reader.currentLine() != reader.nbLines()-1 );
   }
-  //END : Filter use request.
+  
+  
+  /**
+   * Server request
+   */
+  if( arguments.serverCmd() )
+  {
+    int port = arguments.getServerPort();
+    cout << "Starting kiwi server on port " << port << "..." << endl;
+    kiwi::TelnetServer ts(port);
+  }
 }
-

@@ -34,45 +34,26 @@
  * @version 0.1
  */
 
-#ifndef KIWI_TELNETSERVER_HPP
-#define KIWI_TELNETSERVER_HPP
+#ifndef KIWI_TELNETREQUESTPARSER_HPP
+#define KIWI_TELNETREQUESTPARSER_HPP
 
 #include "kiwi/core.hpp"
-#include "kiwi/utils/SocketCreator.hpp"
-#include "TelnetRequestParser.hpp"
+#include "kiwi/text.hpp"
 #include <iostream>
-#include <netdb.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <pthread.h>
 
 namespace kiwi
 {
-
-  class TelnetServer
+  class TelnetRequestParser
   {
     public:
-      TelnetServer(int port);
+      TelnetRequestParser();
+      kiwi::string reply(kiwi::string request);
+      bool oneMoreLoop() {return _continue;}
 
     private:
-      int resolveSelectFirstArgument(int n1, int n2, int n3, int n4, int n5);
-      static void * threadFunction(void * threadArg);
-      void startTelnetTerminal(int dataSocket);
-
-      int _serverSocket1;
-      int _serverSocket2;
-      int _serverSocket3;
-      int _serverSocket4;
-      int _serverSocket5;
+      bool _continue;
+      kiwi::string _reply;
   };
-  
-  
-  struct threadArgStruct
-  {
-    TelnetServer * objectPtr;
-    int dataSocket;
-  };
-  
 }// namespace
 
-#endif //KIWI_TELNETSERVER_HPP
+#endif //KIWI_TELNETREQUESTPARSER

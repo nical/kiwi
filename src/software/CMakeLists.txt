@@ -16,6 +16,7 @@ link_directories (${PROJECT_BINARY_DIR})
 SET(KIWI_CMD_SRC
   kiwiLauncher
   ArgumentProcessor
+  SimpleFilterProcessor
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")

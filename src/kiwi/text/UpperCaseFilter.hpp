@@ -115,10 +115,10 @@ public:
 					, "#Filter#text" )
 			);
 	}
+
 	
 };
 
-kiwi::core::Filter* __newUpperCaseFilter(){return new UpperCaseFilter; }
 
 }// namespace
 }// namespace

@@ -27,30 +27,77 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
- * @file InputWrapper.hpp
- * @brief Wraps the command-line inputs in a format that can be read by the filter to process.
- * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva) 
+ * @file SimpleFilterProcessor.hpp
+ * @brief processes one Filter (standalone app).
+ * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva) * @version 0.1
  */
 
-#pragma once
+#include "SimpleFilterProcessor.hpp"
+#include "ArgumentProcessor.hpp"
 
-#ifndef KIWI_INPUTWRAPPER_HPP
-#define KIWI_INPUTWRAPPER_HPP
+#include "kiwi/core.hpp" 
+#include "kiwi/text.hpp" 
 
-#include "kiwi/core/NodeFactory.hpp"
-#include "kiwi/text.hpp"
-#include <list>
-#include <string>
 #include <iostream>
 #include <fstream>
-//#include "boost/filesystem.hpp"
-#include "boost/lexical_cast.hpp"
 
-namespace kiwi
+
+using namespace std;
+
+namespace kiwi{
+namespace app{
+
+
+SimpleFilterProcessor::SimpleFilterProcessor( const ArgumentProcessor& arguments )
+: arguments(arguments)
 {
+	
+}
+
+int SimpleFilterProcessor::run()
+{
+	kiwi::core::NodeFactory factory;
+	kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCaseFilter");
 
 
-void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs)
+	//Filter instanciation
+	kiwi::core::Filter* F = factory.newFilter(arguments.filterName() );
+	if (!F)
+	{
+		cout << "SYNTAX ERROR : Could not find this filter. Please check help" << endl;
+		return 1;
+	}
+	//cout << "Inputs number : " << arguments.getFilterInputs().size() << endl;
+	//cout << "Outputs number : " << arguments.getFilterOutputs().size() << endl;
+
+
+	std::list<kiwi::string> inputArgs = arguments.getFilterInputs();
+
+	wrapInputs(factory, *F, inputArgs );
+
+	// run the filter
+	if( F->isReady() ) F->process(); 
+	
+	//Creation of a Reader needed to read text from a node
+	if(F->readerOutputPort(0).isEnabled() )
+	{
+		kiwi::text::TextReader reader( F->readerOutputPort(0) );
+		reader.gotoLine(0);
+		do
+		{ 
+			cout << reader.getLine() << std::endl;
+			reader.gotoNextLine();
+		} while(reader.currentLine() != reader.nbLines()-1 );
+	}
+	//END : Filter use request.
+  
+	return 0;
+	
+}
+
+
+
+void SimpleFilterProcessor::wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs)
 {
 
 	typedef std::list<string> ArgList;
@@ -102,12 +149,10 @@ void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<stri
 			if(!filter.readerInputPort(0).isConnected() ) 
 				std::cerr << "connection error"<<std::endl;
 		}
-		//++it;
 	}
 	
 }
 
 
+}//namespaces
 }//namespace
-
-#endif

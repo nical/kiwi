@@ -28,97 +28,51 @@
 
 
 /**
- * @file kiwiLauncher.cpp
- * @brief Commandline kiwi program.
+ * @file kiwiServer.cpp
+ * @brief Handle clients connections.
  * @author Semprobe aka Thibaut Vuillemin (mail: contact@thibautvuillemin.com twitter: @Semprobe)
  * @version 0.1
  */
 
+#ifndef KIWI_TELNETSERVER_HPP
+#define KIWI_TELNETSERVER_HPP
+
 #include "kiwi/core.hpp"
-#include "ArgumentProcessor.hpp"
-#include "SimpleFilterProcessor.hpp"
-#include "TelnetServer.hpp"
-
-#include "Help.hpp"
-
+#include "kiwi/utils/SocketCreator.hpp"
+#include "TelnetRequestParser.hpp"
 #include <iostream>
-#include <stdio.h>
-#include <string.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <pthread.h>
 
-using namespace std;
-
-using namespace kiwi::app;
-
-
-
-
-/**
- * Entry point of the application.
- */
-int main(int argc, char *argv[])
+namespace kiwi
 {
 
-	//Initialization
-	kiwi::Debug::init(true, true, 0);
-	kiwi::app::ArgumentProcessor arguments(argc, argv);
-	
+  class TelnetServer
+  {
+    public:
+      TelnetServer(int port);
 
-	//Invalid syntax
-	if( arguments.invalid() ) 
-	{
-	cerr << "SYNTAX ERROR"<<endl;
-	kiwi::Help::print(cerr);
-	return 1;
-	}
+    private:
+      int resolveSelectFirstArgument(int n1, int n2, int n3, int n4, int n5);
+      static void * threadFunction(void * threadArg);
+      void startTelnetTerminal(int dataSocket);
 
+      int _serverSocket1;
+      int _serverSocket2;
+      int _serverSocket3;
+      int _serverSocket4;
+      int _serverSocket5;
+  };
+  
+  
+  struct threadArgStruct
+  {
+    TelnetServer * objectPtr;
+    int dataSocket;
+  };
+  
+}// namespace
 
-	//Help request
-	if( arguments.helpCmd() )
-	{
-	kiwi::Help::print(cout);
-	return 0;
-	}
-
-
-	//Version request
-	if( arguments.versionCmd() )
-	{
-	cout << "Kiwi version : ???" << endl;
-	return 0;
-	}
-
-
-	//Server request
-	if( arguments.serverCmd() )
-	{
-	int port = arguments.getServerPort();
-    cout << "Starting kiwi server on port " << port << "..." << endl;
-    kiwi::TelnetServer ts(port);
-	}
-
-
-	//Remote request
-	if( arguments.serverCmd() )
-	{
-	cerr << "Kiwi remote mode not supported yet" << endl;
-	return 0;
-	}
-
-
-	//Verbose request
-	if( arguments.serverCmd() )
-	{
-	cerr << "Kiwi verbose mode not supported yet" << endl;
-	return 0;
-	}
-
-
-	//Process request
-	if( arguments.processCmd() )
-	{
-		SimpleFilterProcessor program(arguments);
-		return program.run();
-	}
-	
-	return 0;
-}
+#endif //KIWI_TELNETSERVER_HPP

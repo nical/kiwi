@@ -28,97 +28,32 @@
 
 
 /**
- * @file kiwiLauncher.cpp
- * @brief Commandline kiwi program.
+ * @file kiwiServer.cpp
+ * @brief Handle clients connections.
  * @author Semprobe aka Thibaut Vuillemin (mail: contact@thibautvuillemin.com twitter: @Semprobe)
  * @version 0.1
  */
 
+#ifndef KIWI_TELNETREQUESTPARSER_HPP
+#define KIWI_TELNETREQUESTPARSER_HPP
+
 #include "kiwi/core.hpp"
-#include "ArgumentProcessor.hpp"
-#include "SimpleFilterProcessor.hpp"
-#include "TelnetServer.hpp"
-
-#include "Help.hpp"
-
+#include "kiwi/text.hpp"
 #include <iostream>
-#include <stdio.h>
-#include <string.h>
 
-using namespace std;
-
-using namespace kiwi::app;
-
-
-
-
-/**
- * Entry point of the application.
- */
-int main(int argc, char *argv[])
+namespace kiwi
 {
+  class TelnetRequestParser
+  {
+    public:
+      TelnetRequestParser();
+      kiwi::string reply(kiwi::string request);
+      bool oneMoreLoop() {return _continue;}
 
-	//Initialization
-	kiwi::Debug::init(true, true, 0);
-	kiwi::app::ArgumentProcessor arguments(argc, argv);
-	
+    private:
+      bool _continue;
+      kiwi::string _reply;
+  };
+}// namespace
 
-	//Invalid syntax
-	if( arguments.invalid() ) 
-	{
-	cerr << "SYNTAX ERROR"<<endl;
-	kiwi::Help::print(cerr);
-	return 1;
-	}
-
-
-	//Help request
-	if( arguments.helpCmd() )
-	{
-	kiwi::Help::print(cout);
-	return 0;
-	}
-
-
-	//Version request
-	if( arguments.versionCmd() )
-	{
-	cout << "Kiwi version : ???" << endl;
-	return 0;
-	}
-
-
-	//Server request
-	if( arguments.serverCmd() )
-	{
-	int port = arguments.getServerPort();
-    cout << "Starting kiwi server on port " << port << "..." << endl;
-    kiwi::TelnetServer ts(port);
-	}
-
-
-	//Remote request
-	if( arguments.serverCmd() )
-	{
-	cerr << "Kiwi remote mode not supported yet" << endl;
-	return 0;
-	}
-
-
-	//Verbose request
-	if( arguments.serverCmd() )
-	{
-	cerr << "Kiwi verbose mode not supported yet" << endl;
-	return 0;
-	}
-
-
-	//Process request
-	if( arguments.processCmd() )
-	{
-		SimpleFilterProcessor program(arguments);
-		return program.run();
-	}
-	
-	return 0;
-}
+#endif //KIWI_TELNETREQUESTPARSER

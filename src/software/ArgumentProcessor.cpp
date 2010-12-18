@@ -1,4 +1,3 @@
-
 #include "ArgumentProcessor.hpp"
 
 namespace kiwi

@@ -123,6 +123,19 @@ public:
 	 */  
 	virtual void layoutChanged() { }
 
+	/**
+	 * @brief Optionnal higher level interface. 
+	 * 
+	 * Enables the Node derived classes to react from custom high level 
+	 * interface.
+	 * The command passed to the Node is a string and the result may 
+	 * only return a string.
+	 * The purpose of this is to enable a runtime resolved interface for
+	 * client-server usage. 
+	 */ 
+	virtual kiwi::string metaCommand( const kiwi::string& command);
+	
+	
 // ------------------------------------------------------ pulic methods
 
 	/**
@@ -423,7 +436,7 @@ protected:
 	 * Note that it is useless to disable it if layoutChanged() is not 
 	 * overloaded by the child class.
 	 */ 
-	inline void setLayoutEventEnabled(bool status) { _layoutEvtEnabled = status; }
+	void setLayoutEventEnabled(bool status) { _layoutEvtEnabled = status; }
 	
 	/**
 	 * @brief Redirect a port to the port another Node's port.
@@ -781,30 +794,6 @@ bool operator>>(Node::OutputPort<SlotType>& output, Node::InputPort<SlotType>& i
 
 
 
-
-inline void 
-Node::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
-{ 
-	myPort.bind(toBind); 
-}
-
-inline void 
-Node::bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
-{ 
-	myPort.bind(toBind);
-}
-
-inline void 
-Node::bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
-{ 
-	myPort.bind(toBind); 
-}
-
-inline void 
-Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
-{ 
-	myPort.bind(toBind); 
-}
 
 /**
  * @brief optionnal macro that produces typedef vType ValueType;

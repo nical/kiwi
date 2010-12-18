@@ -204,6 +204,11 @@ Node::indexOf(const WriterOutputPort& port) const
 	return 0;	
 }
 
+kiwi::string Node::metaCommand( const kiwi::string& command )
+{
+	return kiwi::string("kiwi::unknown_command");
+}
+
 // ---------------------------------------------------------- port names
 
 
@@ -258,6 +263,32 @@ Node::writerOutputType(portIndex_t index) const
 	return kiwi::string("#any");
 }
 
+// -------------------------------------------------------- Port binding
+
+
+void 
+Node::bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
+
+void 
+Node::bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind)
+{ 
+	myPort.bind(toBind);
+}
+
+void 
+Node::bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
+
+void 
+Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
+{ 
+	myPort.bind(toBind); 
+}
 
 
 

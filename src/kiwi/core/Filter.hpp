@@ -106,6 +106,24 @@ protected:
 	 * 
 	 */ 
 	void setReady(bool state) {_ready = state;}
+	
+	
+	kiwi::string metaCommand( const kiwi::string& command )
+	{
+		if(command == "process")
+		{
+			if( isReady() ){
+				process();
+				return kiwi::string("done");
+			}else{
+				return "not ready";
+			}
+		}
+		else
+		{
+			return Node::metaCommand( command );
+		}
+	}
 
 // ---------------------------------------------------------------------
 private:

@@ -31,25 +31,20 @@
  * @file kiwiLauncher.cpp
  * @brief Commandline kiwi program.
  * @author Semprobe aka Thibaut Vuillemin (mail: contact@thibautvuillemin.com twitter: @Semprobe)
- * @version 0.1
+ * @version 0.5
  */
 
 #include "kiwi/core.hpp"
 #include "ArgumentProcessor.hpp"
 #include "SimpleFilterProcessor.hpp"
 #include "TelnetServer.hpp"
-
 #include "Help.hpp"
-
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
 
 using namespace std;
-
 using namespace kiwi::app;
-
-
 
 
 /**
@@ -57,68 +52,56 @@ using namespace kiwi::app;
  */
 int main(int argc, char *argv[])
 {
-
-	//Initialization
-	kiwi::Debug::init(true, true, 0);
-	kiwi::app::ArgumentProcessor arguments(argc, argv);
-	
-
-	//Invalid syntax
-	if( arguments.invalid() ) 
-	{
-	cerr << "SYNTAX ERROR"<<endl;
-	kiwi::Help::print(cerr);
-	return 1;
-	}
+  
+  kiwi::Debug::init(true, true, 0);
+  kiwi::app::ArgumentProcessor arguments(argc, argv);
 
 
-	//Help request
-	if( arguments.helpCmd() )
-	{
-	kiwi::Help::print(cout);
-	return 0;
-	}
+  /**
+   * Basic requests
+   */
+  if( arguments.invalid() ) 
+  {
+    cerr << "SYNTAX ERROR"<<endl;
+    kiwi::Help::print(cerr);
+    return 1;
+  }
+  if( arguments.helpCmd() )
+  {
+    kiwi::Help::print(cout);
+    return 0;
+  }
+  if( arguments.versionCmd() )
+  {
+    cout << "Kiwi version : ???" << endl;
+    return 0;
+  }
+  if( arguments.serverCmd() )
+  {
+    cerr << "Kiwi verbose mode not supported yet" << endl;
+    return 0;
+  }
 
 
-	//Version request
-	if( arguments.versionCmd() )
-	{
-	cout << "Kiwi version : ???" << endl;
-	return 0;
-	}
+  /**
+   * Process request
+   */
+  if( arguments.processCmd() )
+  {
+    SimpleFilterProcessor program(arguments);
+    return program.run();
+  }
 
 
-	//Server request
-	if( arguments.serverCmd() )
-	{
-	int port = arguments.getServerPort();
+  /**
+   * Server request
+   */
+  if( arguments.serverCmd() )
+  {
+    int port = arguments.getServerPort();
     cout << "Starting kiwi server on port " << port << "..." << endl;
     kiwi::TelnetServer ts(port);
-	}
-
-
-	//Remote request
-	if( arguments.serverCmd() )
-	{
-	cerr << "Kiwi remote mode not supported yet" << endl;
-	return 0;
-	}
-
-
-	//Verbose request
-	if( arguments.serverCmd() )
-	{
-	cerr << "Kiwi verbose mode not supported yet" << endl;
-	return 0;
-	}
-
-
-	//Process request
-	if( arguments.processCmd() )
-	{
-		SimpleFilterProcessor program(arguments);
-		return program.run();
-	}
-	
-	return 0;
+  }
+  
+  return 0;
 }

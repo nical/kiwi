@@ -5,22 +5,22 @@
 #include "kiwi/core.hpp"
 
 namespace kiwi{
-namespace app{
+  namespace app{
 
-class SimpleFilterProcessor
-{
-public:
-	SimpleFilterProcessor(const ArgumentProcessor& arguments );
-	int run(); 
+    class SimpleFilterProcessor
+    {
+      public:
+        SimpleFilterProcessor(const ArgumentProcessor& arguments );
+        int run(); 
 
-protected:
-	void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs);
+      protected:
+        void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs);
 
-	ArgumentProcessor arguments;
-};
+        ArgumentProcessor arguments;
+    };
 
 
-}//namespace
+  }//namespace
 }//namespace
 
 

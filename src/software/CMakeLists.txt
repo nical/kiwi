@@ -4,15 +4,10 @@ message( "--------------------------------------------------------------" )
 
 
 include_directories (${PROJECT_SOURCE_DIR}/src)
-#include_directories (${PROJECT_SOURCE_DIR}/src/software/)
 
-
-# Make sure the linker can find the library once it is built.
 link_directories (${PROJECT_BINARY_DIR})
 
-
-#------TESTS subdirectories ------
-
+# sources (.cpp files)
 SET(KIWI_CMD_SRC
 	kiwiLauncher
 	ArgumentProcessor

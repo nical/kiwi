@@ -74,34 +74,44 @@ public:
 		c = std::toupper(c);
 		switch( c )
 		{
-			case 'A' : { return kiwi::string(". ___    "); }   
-			case 'B' : { return kiwi::string("___ . . .    "); }
-			case 'C' : { return kiwi::string("___ . ___ .  "); }
-			case 'D' : { return kiwi::string("___ . .   "); }
-			case 'E' : { return kiwi::string(".   "); }
-			case 'F' : { return kiwi::string(". . ___ .   "); }
-			case 'G' : { return kiwi::string("___ ___ .   "); }
-			case 'H' : { return kiwi::string(". . . .   "); }
-			case 'I' : { return kiwi::string(". .   "); }
-			case 'J' : { return kiwi::string(". ___ ___ ___   "); }
-			case 'K' : { return kiwi::string("___ . ___   "); }
-			case 'L' : { return kiwi::string(". ___ . .   "); }
-			case 'M' : { return kiwi::string("___ ___   "); }
-			case 'N' : { return kiwi::string("___ .   "); }
-			case 'O' : { return kiwi::string("___ ___ ___   "); }
-			case 'P' : { return kiwi::string(". ___ ___ .   "); }
-			case 'Q' : { return kiwi::string("___ ___ . ___   "); } 
-			case 'R' : { return kiwi::string(". ___ .   "); }
-			case 'S' : { return kiwi::string(". . .   "); }
-			case 'T' : { return kiwi::string("___   "); }
-			case 'U' : { return kiwi::string(". . ___   "); }
-			case 'V' : { return kiwi::string(". . . ___   "); }
-			case 'W' : { return kiwi::string(". ___ ___   "); }
-			case 'X' : { return kiwi::string("___ . . ___   "); }
-			case 'Y' : { return kiwi::string("___ . ___ ___   "); }
-			case 'Z' : { return kiwi::string("___ ___ . .   "); }
-			case ' ' : { return kiwi::string("       "); }
-			default : return kiwi::string("#   ");
+			case 'A' : return kiwi::string(". ___    ");   
+			case 'B' : return kiwi::string("___ . . .    ");
+			case 'C' : return kiwi::string("___ . ___ .  ");
+			case 'D' : return kiwi::string("___ . .   ");
+			case 'E' : return kiwi::string(".   ");
+			case 'F' : return kiwi::string(". . ___ .   ");
+			case 'G' : return kiwi::string("___ ___ .   ");
+			case 'H' : return kiwi::string(". . . .   ");
+			case 'I' : return kiwi::string(". .   ");
+			case 'J' : return kiwi::string(". ___ ___ ___   ");
+			case 'K' : return kiwi::string("___ . ___   ");
+			case 'L' : return kiwi::string(". ___ . .   ");
+			case 'M' : return kiwi::string("___ ___   ");
+			case 'N' : return kiwi::string("___ .   ");
+			case 'O' : return kiwi::string("___ ___ ___   ");
+			case 'P' : return kiwi::string(". ___ ___ .   ");
+			case 'Q' : return kiwi::string("___ ___ . ___   ");
+			case 'R' : return kiwi::string(". ___ .   ");
+			case 'S' : return kiwi::string(". . .   ");
+			case 'T' : return kiwi::string("___   ");
+			case 'U' : return kiwi::string(". . ___   ");
+			case 'V' : return kiwi::string(". . . ___   ");
+			case 'W' : return kiwi::string(". ___ ___   ");
+			case 'X' : return kiwi::string("___ . . ___   ");
+			case 'Y' : return kiwi::string("___ . ___ ___   ");
+			case 'Z' : return kiwi::string("___ ___ . .   ");
+			case ' ' : return kiwi::string("       "); 
+			case '1' : return kiwi::string(". ___ ___ ___ ___   ");
+			case '2' : return kiwi::string(". . ___ ___ ___   ");
+			case '3' : return kiwi::string(". . . ___ ___   ");
+			case '4' : return kiwi::string(". . . . ___   ");
+			case '5' : return kiwi::string(". . . . .   ");
+			case '6' : return kiwi::string("___ . . . .   ");
+			case '7' : return kiwi::string("___ ___ . . .   ");
+			case '8' : return kiwi::string("___ ___ ___ . .   ");
+			case '9' : return kiwi::string("___ ___ ___ ___ .   ");
+			case '0' : return kiwi::string("___ ___ ___ ___ ___   ");
+			default : return kiwi::string("       ");
 			
 		}
 	}

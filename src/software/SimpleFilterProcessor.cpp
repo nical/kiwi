@@ -35,6 +35,8 @@
 #include "SimpleFilterProcessor.hpp"
 #include "ArgumentProcessor.hpp"
 
+#include "kiwi/text/TextToMorseFilter.hpp"
+
 #include "kiwi/core.hpp" 
 #include "kiwi/text.hpp" 
 
@@ -57,7 +59,8 @@ namespace kiwi{
     int SimpleFilterProcessor::run()
     {
       kiwi::core::NodeFactory factory;
-      kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCaseFilter");
+      kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCase");
+      kiwi::text::TextToMorseFilter::registerToFactory(factory,"MorseCode");
 
 
       //Filter instanciation

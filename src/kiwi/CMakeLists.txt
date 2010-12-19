@@ -18,6 +18,7 @@ if(DEFINED BUILD_KIWI_TEXT)
 		text/TextContainer.cpp
 		text/TextReader.cpp
 		text/TextWriter.cpp
+		utils/TextOperations.cpp
 		#kiwi::text source files
 	)
 endif(DEFINED BUILD_KIWI_TEXT)

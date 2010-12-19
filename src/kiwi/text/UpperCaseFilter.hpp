@@ -11,6 +11,7 @@
 #include "kiwi/utils/types.hpp"
 #include "kiwi/text/TextContainer.hpp"
 #include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/utils/TextOperations.hpp"
 
 
 
@@ -63,7 +64,7 @@ public:
 		{
 			for(uint32_t i = 0; i < input.nbChars(); ++i )
 			{
-				result.setChar( i, std::toupper(input.getChar(i)) );
+				result.setChar( i, utils::upperCase( input.getChar(i) ));
 			}
 			input.gotoNextLine();
 			result.gotoNextLine();

@@ -27,7 +27,7 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
- * @file Node.hpp
+ * @file Commons.hpp
  * @brief File included by most of the library.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
  * @version 0.3

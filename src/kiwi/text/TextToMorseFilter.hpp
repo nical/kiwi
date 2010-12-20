@@ -29,7 +29,10 @@ public:
 		// CanonicalFilter's constructor automatically adds one reader output port
 		// and one writer input port.
 		
-		addReaderInputPort();
+		addReaderInputPort(); // input text
+		addReaderInputPort(); // opt: dot pattern 
+		addReaderInputPort(); // opt: long pattern
+		addReaderInputPort(); // opt: space pattern
 	}
 	
 	~TextToMorseFilter() 
@@ -53,6 +56,27 @@ public:
 		TextReader input( readerInputPort(0) );
 		TextWriter result( writerInputPort(0) );
 		result.reset();
+		kiwi::string dotPattern(".");
+		kiwi::string longPattern("-");
+		kiwi::string spacePattern(" ");
+		
+		if(readerInputPort(1).isConnected() )
+		{
+			TextReader r1( readerInputPort(1) );
+			dotPattern = r1.getLine();
+		}
+		
+		if(readerInputPort(2).isConnected() )
+		{
+			TextReader r2( readerInputPort(2) );
+			longPattern = r2.getLine();
+		}
+		
+		if(readerInputPort(3).isConnected() )
+		{
+			TextReader r3( readerInputPort(3) );
+			spacePattern = r3.getLine();
+		}
 			
 		if(input.nbLines() > 1) result.insertLine("", input.nbLines() -1);	
 		
@@ -60,7 +84,11 @@ public:
 		{
 			for(uint32_t i = 0; i < input.nbChars(); ++i )
 			{
-				result.getLine() += charToMorse(input.getChar(i));
+				kiwi::string morse = charToMorse(input.getChar(i));
+				for(uint32_t j = 0; j < morse.size(); ++j )
+					if(morse[j] == '.') result.getLine() += dotPattern;
+					else if(morse[j] == '-') result.getLine() += longPattern;
+					else result.getLine() += spacePattern;
 			}
 			input.gotoNextLine();
 			result.gotoNextLine();
@@ -139,7 +167,8 @@ public:
 	
 	kiwi::string readerInputType( portIndex_t index )
 	{
-		return kiwi::string("#text");
+		if(index == 0 ) return kiwi::string("#text");
+		else return kiwi::string("#text#opt");
 	}
 	// same idea with writer inputs
 	kiwi::string writerInputType( portIndex_t index )

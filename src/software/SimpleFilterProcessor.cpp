@@ -115,9 +115,10 @@ namespace kiwi{
         kiwi::string inputArgument = inputs.front();
         if( inputArgument == kiwi::string("-x") ) 
         {
-          // ignore argument and make no connection for the 
-          // corresponding input port
-          continue;
+			inputs.pop_front();
+			// ignore argument and make no connection for the 
+			// corresponding input port
+			continue;
         }
         else if( file.is_open() ) 
         {	

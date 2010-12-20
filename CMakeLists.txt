@@ -9,11 +9,14 @@
 project (Kiwi)
 cmake_minimum_required (VERSION 2.4) 
 
-set(BUILD_KIWI_TESTS "yes")
-set(BUILD_KIWI_IMAGE "yes")
-set(BUILD_KIWI_TEXT "yes")
-set(BUILD_KIWI_CMDLINE "yes")
-set(BUILD_DDD_FLAG "yes")
+#comment/uncomment some of the folowing lines to enable/disable part of the projects
+set(BUILD_KIWI_TESTS "yes") #to build the tests (recommended !)
+set(BUILD_KIWI_IMAGE "yes") #to build kiwi::image
+set(BUILD_KIWI_TEXT "yes") #to build kiwi::text
+set(BUILD_KIWI_CMDLINE "yes") #to build the command-line app
+set(BUILD_DDD_FLAG "yes") #to build using -g argument for debug purposes
+
+#so that each test is build with it's own executable
 add_definitions(-DKIWI_TEST_MAIN)
 
 
@@ -40,7 +43,9 @@ endif (APPLE)
 # -----------------------------------------------------------------------------
 # Check packages
 # -----------------------------------------------------------------------------
-# Look for modules
+
+# tell CMake to search first in directories listed in CMAKE_MODULE_PATH when 
+# you use FIND_PACKAGE() or INCLUDE()
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 list( APPEND CMAKE_MODULE_PATH . )
 
@@ -48,9 +53,11 @@ list( APPEND CMAKE_MODULE_PATH . )
 # Check Dependencies
 # -----------------------------------------------------------------------------
 
+# This is used when searching for include files, binaries, or libraries
 set ( CMAKE_PREFIX_PATH "/usr:/usr/local:/opt/local:${CMAKE_PREFIX_PATH}" )
 message( "-- CMAKE_PREFIX_PATH = " ${CMAKE_PREFIX_PATH} )
 
+# Find the boost library 
 FIND_PACKAGE(Boost REQUIRED)
 if ( Boost_FOUND )
    message( "-- Boost found. include=${Boost_INCLUDE_DIR}" )
@@ -68,6 +75,7 @@ if(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
 endif(DEFINED APPLE AND NOT DEFINED MACPORT_BOOST_FOUND)
 endif ( Boost_FOUND )
 
+#Find the cairo library (only if kiwi::image has to be built) 
 if(DEFINED BUILD_KIWI_IMAGE)
 	find_package(Cairo REQUIRED)
 	if ( Cairo_FOUND )
@@ -82,10 +90,6 @@ endif(DEFINED BUILD_KIWI_IMAGE)
 # -----------------------------------------------------------------------------
 set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 
-#CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/src/core/Config.h.in" "${PROJECT_SOURCE_DIR}/src/core/Config.h" IMMEDIATE)
-
-
-
 # -----------------------------------------------------------------------------
 # Compile flags 
 # -----------------------------------------------------------------------------
@@ -97,14 +101,17 @@ SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -gdwarf-2)
 # Add subdirectories
 #------------------------------------------------------------------------------
 
+# Call the CMakeLists.txt in subdirectories
 
+# the library itself
+add_subdirectory(src/kiwi)
+
+# command-line app
 if(DEFINED BUILD_KIWI_CMDLINE)
 	add_subdirectory (src/software)
 endif(DEFINED BUILD_KIWI_CMDLINE)
 
+# tests
 if(DEFINED BUILD_KIWI_TESTS)
 	add_subdirectory (test)
 endif(DEFINED BUILD_KIWI_TESTS)
-
-
-add_subdirectory(src/kiwi)

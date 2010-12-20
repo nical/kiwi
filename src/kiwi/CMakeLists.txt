@@ -12,6 +12,7 @@ if(DEFINED BUILD_KIWI_IMAGE )
 	SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${CAIRO_CFLAGS})
 endif(DEFINED BUILD_KIWI_IMAGE)
 
+
 if(DEFINED BUILD_KIWI_TEXT)
 	message("build kiwi text")
 	SET(KIWI_SRC ${KIWI_SRC}
@@ -36,6 +37,5 @@ SET(KIWI_SRC ${KIWI_SRC}
 		)
 
 
-message("${LIBKIWI_NAME} library src: ${KIWI_SRC}")
 add_library ( ${LIBKIWI_NAME}  ${KIWI_SRC})
 TARGET_LINK_LIBRARIES(${LIBKIWI_NAME} ${optionalLibs} )

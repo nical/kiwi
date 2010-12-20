@@ -122,14 +122,13 @@ namespace kiwi{
         }
         else if( file.is_open() ) 
         {	
-          kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
-
-
-
-          inputText->init(file);
-          file.close();
-          inputText->readerOutputPort(0) >> filter.readerInputPort(i);
-
+			kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
+			cout << "foo" << endl;
+			inputText->init(file);
+			file.close();
+			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
+			inputs.pop_front();
+			cout << "bar" << endl;
         }else{
 
           //Creation of a basic container, needed to apply the filter
@@ -158,5 +157,5 @@ namespace kiwi{
     }
 
 
-  }//namespaces
+  }//namespace
 }//namespace

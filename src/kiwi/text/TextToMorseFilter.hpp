@@ -33,6 +33,7 @@ public:
 		addReaderInputPort(); // opt: dot pattern 
 		addReaderInputPort(); // opt: long pattern
 		addReaderInputPort(); // opt: space pattern
+		addReaderInputPort(); // opt: unknown char pattern
 	}
 	
 	~TextToMorseFilter() 
@@ -59,6 +60,7 @@ public:
 		kiwi::string dotPattern(".");
 		kiwi::string longPattern("-");
 		kiwi::string spacePattern(" ");
+		kiwi::string unknownPattern(" ");
 		
 		if(readerInputPort(1).isConnected() )
 		{
@@ -77,6 +79,12 @@ public:
 			TextReader r3( readerInputPort(3) );
 			spacePattern = r3.getLine();
 		}
+		
+		if(readerInputPort(4).isConnected() )
+		{
+			TextReader r4( readerInputPort(4) );
+			unknownPattern = r4.getLine();
+		}
 			
 		if(input.nbLines() > 1) result.insertLine("", input.nbLines() -1);	
 		
@@ -88,6 +96,7 @@ public:
 				for(uint32_t j = 0; j < morse.size(); ++j )
 					if(morse[j] == '.') result.getLine() += dotPattern;
 					else if(morse[j] == '-') result.getLine() += longPattern;
+					else if(morse[j] == '#') result.getLine() += unknownPattern;
 					else result.getLine() += spacePattern;
 			}
 			input.gotoNextLine();
@@ -128,7 +137,7 @@ public:
 			case 'X' : return kiwi::string("-..- ");
 			case 'Y' : return kiwi::string("-.-- ");
 			case 'Z' : return kiwi::string("--.. ");
-			case ' ' : return kiwi::string("  "); 
+			case ' ' : return kiwi::string(" "); 
 			case '1' : return kiwi::string(".---- ");
 			case '2' : return kiwi::string("..--- ");
 			case '3' : return kiwi::string("...-- ");
@@ -139,7 +148,7 @@ public:
 			case '8' : return kiwi::string("---.. ");
 			case '9' : return kiwi::string("----. ");
 			case '0' : return kiwi::string("----- ");
-			default : return kiwi::string ("      ");
+			default : return kiwi::string ("# ");
 			
 		}
 	}

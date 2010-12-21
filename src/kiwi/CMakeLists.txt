@@ -32,6 +32,7 @@ SET(KIWI_SRC ${KIWI_SRC}
 		core/CanonicalFilter.cpp
 		core/NodeFactory.cpp
 		pipeline/SimplePipeline.cpp
+		core/Tags.cpp
 		# kiwi::core source files
     # tutorial/FilterSkeleton.cpp
 		)

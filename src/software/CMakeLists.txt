@@ -9,13 +9,13 @@ link_directories (${PROJECT_BINARY_DIR})
 
 # sources (.cpp files)
 SET(KIWI_CMD_SRC
-  kiwiLauncher
-  ArgumentProcessor
-  SimpleFilterProcessor
-  Help
-  TelnetRequestParser
-  TelnetServer
-  )
+	kiwiLauncher
+	ArgumentProcessor
+	SimpleFilterProcessor
+	Help
+	TelnetRequestParser
+	TelnetServer
+	)
 
 
 

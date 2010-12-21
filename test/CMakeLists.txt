@@ -32,6 +32,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 #	TestSuite
 	core/NodeTest
 	core/FactoryTest
+	core/TagTest
 #	core/FilterTest
 #	core/MetaFilterTest
 	generic/PointTest

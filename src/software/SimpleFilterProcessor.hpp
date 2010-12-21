@@ -14,7 +14,9 @@ namespace kiwi{
         int run(); 
 
       protected:
-        void wrapInputs(core::NodeFactory& factory, core::Filter& filter, std::list<string>& inputs);
+        void wrapInputs(core::NodeFactory& factory
+			, core::Filter& filter
+			, std::list<string>& inputs );
 
         ArgumentProcessor arguments;
     };

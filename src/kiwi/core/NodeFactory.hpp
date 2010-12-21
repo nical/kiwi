@@ -90,6 +90,10 @@ public:
 	void registerNode(const  kiwi::string& uniqueId, Descriptor<Filter> nd);
 	
 	void unregister(const  kiwi::string& uniqueId);
+	
+	std::list<kiwi::string> availableFilters(const kiwi::string& tags = "#any");
+	std::list<kiwi::string> availableContainers(const kiwi::string& tags = "#any");
+	std::list<kiwi::string> availableNodes(const kiwi::string& tags = "#any");
 
 private:
 	typedef std::map<kiwi::string, Descriptor<Filter>* > FilterMap;

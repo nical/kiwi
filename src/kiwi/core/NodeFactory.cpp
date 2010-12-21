@@ -81,6 +81,23 @@ void NodeFactory::unregister(const  kiwi::string& uniqueId)
 	_filters.erase(_filters.find(uniqueId) );
 }
 
+std::list<kiwi::string> NodeFactory::availableFilters( const kiwi::string& tags )
+{
+	// prepare the tag list
+	std::list<kiwi::string> tagList;
+	while( tags.find("#",1) != kiwi::string::npos )
+	{
+		int sharp = tags.find("#",1);
+		tagList.push_back( tags.substr(0, sharp) );
+	}
+	// look for filters
+	std::list<kiwi::string> result;
+	FilterMap::iterator it = _filters.begin();
+	FilterMap::iterator end = _filters.end();
+	for( ; it != end; ++it)
+		result.push_front( it->first );
+	return result;
+}
 
 
 }//namespace

@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
   }
   if( arguments.versionCmd() )
   {
-    cout << "Kiwi version : ???" << endl;
+    cout << "Kiwi version : 0.3" << endl;
     return 0;
   }
   if( arguments.serverCmd() )

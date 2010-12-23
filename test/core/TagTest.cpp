@@ -3,6 +3,7 @@
 
 #include <assert.h>
 
+using namespace kiwi;
 
 int TagTest()
 {
@@ -25,6 +26,7 @@ int TagTest()
 	assert(tag2.str(1) == kiwi::string("#image") );
 	assert(tag2.str(2) == kiwi::string("#foo") );
 	assert(tag2.str(3) == kiwi::string("#bar") );
+	assert(Tags("#kiwi#kiwi") == Tags("#kiwi") ); 
 	
 	/* Test: equality ( operators == and != )
 	 * Scenario: first check that two different tags anrent equal withs !=.
@@ -39,6 +41,7 @@ int TagTest()
 	assert((tag1==tag1) != (tag1!=tag1));
 	assert((tag1==tag2) == (tag2==tag1));
 	assert((tag1!=tag2) == (tag2!=tag1));
+	assert(Tags("#foo#bar") == Tags("#bar#foo"));
 	
 	/* Test: Copy constroctor
 	 * check the equality between the constructed Tags and its source.
@@ -58,6 +61,12 @@ int TagTest()
 	assert(tag2.str() == kiwi::string("#image#bar") );
 	assert(tag2 == tag4);
 
+	/* Test: union ( operators += and + )
+	 * Scenario: Compute tag2 + tag3 using both operators, check that the result
+	 * is the one expected and that both results are equal. 
+	 */ 	
+	assert((Tags("#foo#bar")+Tags("#bar#plop")) == Tags("#foo#bar#plop"));
+
 	/* Test: number of tokens
 	 * Scenario: check that the number of tags within each object is correct. 
 	 * This test has to be run on objects that have and have not been modified 
@@ -67,10 +76,37 @@ int TagTest()
 	assert(tag2.nb() == 2);
 	assert(tag3.nb() == 2);
 	assert(tag4.nb() == 2);
+
+
+	Tags test("#kiwi#kiwi#foo#bar#plop");
+	test &= Tags("#bar#foo");
+	Debug::print() << "Test: " << test.str() << endl(); 
+
+	/* Test: Intersection (operator &&) 
+	 * Scenario: 
+	 * 
+	 */
+	kiwi::Tags foobar("#foo#bar#plop#haha");
+	kiwi::Tags foo("#foo#plop#hey");
+	kiwi::Tags foo2("#foo#plop#hey");
+	foo2 &= foobar;
+	assert( (foo && foobar) == kiwi::Tags("#foo#plop") );
+	assert( (foo && foobar) == (foobar && foo) );
+	assert( (foo && foobar) == foo2 ); 
+
+	/* Test: hasAll and hasOneOf methods 
+	 * Scenario: 
+	 * 
+	 */
+	assert( Tags("#foo#bar").hasAll( Tags("#foo#bar") ) );
+	assert( !Tags("#foo#bar").hasAll( Tags("#foo#bar#plop") ) );
+	assert( Tags("#foo#bar#plop#haha#kiwi").hasAll( Tags("#kiwi#foo#bar") ) );
+	assert( Tags("#bar#foo#kiwi").hasAll( Tags("#kiwi#foo#bar") ) );
+	assert( Tags("#bar#foo").hasOneOf( Tags("#kiwi#cpp#foo#bar") ) );
+	assert( Tags("#foo").hasOneOf( Tags("#kiwi#cpp#foo#bar") ) );
+	assert( ! Tags("#foo#bar#kiwi").hasOneOf( Tags("#cpp#d_lang#programming") ) );
 	
 
-//	kiwi::Debug::print() << tag2.str() << kiwi::endl();
-	
 	kiwi::Debug::print() << kiwi::endl() << "Tags Test: success !" << kiwi::endl();
 	return 0;
 }

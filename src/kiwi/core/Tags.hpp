@@ -14,13 +14,17 @@ namespace kiwi{
 class Tags
 {
 public:
-	Tags(char const* tagStr = "#any");
+	Tags(){};
+	Tags(char const* tagStr);
 	Tags(const Tags& toCopy);
 	
 	kiwi::string str() const;
 	kiwi::string str(kiwi::uint32_t index) const;
+
 	
-	Tags tag(kiwi::uint32_t index);
+	Tags tag(kiwi::uint32_t index) const;
+	bool hasAll(const Tags& tags) const;
+	bool hasOneOf(const Tags& tags) const;
 	
 	Tags operator+(const Tags& toAdd) const;
 	Tags operator-(const Tags& toSub) const;
@@ -28,6 +32,8 @@ public:
 	Tags& operator-=(const Tags& toSub);
 	bool operator==(const Tags& toComp) const;
 	bool operator!=(const Tags& toComp) const;
+	Tags operator&&(const Tags& toComp) const;
+	Tags& operator&=(const Tags& toComp);
 	/**
 	 * @brief Returns the number of tags.
 	 */ 

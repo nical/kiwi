@@ -14,6 +14,7 @@ namespace kiwi{
 class Tags
 {
 public:
+
 	Tags(){};
 	Tags(char const* tagStr);
 	Tags(const Tags& toCopy);
@@ -38,6 +39,8 @@ public:
 	 * @brief Returns the number of tags.
 	 */ 
 	kiwi::uint32_t nb() const {return _data.size();}
+
+	static Tags ANY() {return Tags("any");}
 
 protected:
 	std::vector<kiwi::string> _data;

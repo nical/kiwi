@@ -325,25 +325,25 @@ public:
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string readerInputType( portIndex_t index ) const;
+	virtual kiwi::string readerInputTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string readerOutputType( portIndex_t index ) const;
+	virtual kiwi::string readerOutputTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string writerInputType( portIndex_t index ) const;
+	virtual kiwi::string writerInputTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string writerOutputType( portIndex_t index ) const;
+	virtual kiwi::string writerOutputTags( portIndex_t index ) const;
 	
 // --------------------------------------------------- protected methods	
 protected:
@@ -571,7 +571,7 @@ public:
 		/**
 		 * @brief Returns this port's Type as a string.
 		 */ 
-		inline string type();
+		inline string tags();
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism 
 		// to get compatibility of child classes.
@@ -687,7 +687,7 @@ public:
 		/**
 		 * @brief Returns this port's Type as a string.
 		 */ 
-		inline string type();
+		inline string tags();
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
 		/**

@@ -240,25 +240,25 @@ Node::writerOutputName(portIndex_t index) const
 
 
 kiwi::string 
-Node::readerInputType(portIndex_t index) const
+Node::readerInputTags(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::readerOutputType(portIndex_t index) const
+Node::readerOutputTags(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::writerInputType(portIndex_t index) const
+Node::writerInputTags(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }
 
 kiwi::string 
-Node::writerOutputType(portIndex_t index) const
+Node::writerOutputTags(portIndex_t index) const
 {
 	return kiwi::string("#any");
 }

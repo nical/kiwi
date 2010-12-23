@@ -113,16 +113,16 @@ Node::OutputPort<SlotType>::node() const
 
 template<>
 string 
-Node::OutputPort<Reader>::type() 
+Node::OutputPort<Reader>::tags() 
 { 
-	return _node->readerOutputType( index() ); 
+	return _node->readerOutputTags( index() ); 
 }
 
 template<>
 string 
-Node::OutputPort<Writer>::type() 
+Node::OutputPort<Writer>::tags() 
 { 
-	return _node->writerOutputType( index() ); 
+	return _node->writerOutputTags( index() ); 
 }
 
 template <typename SlotType>

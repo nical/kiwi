@@ -78,7 +78,7 @@ Node::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMeta
 		else
 		{
 			Debug::error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
-			Debug::error() << outputPort.type() << " >> " << type() << endl();
+			Debug::error() << outputPort.tags() << " >> " << tags() << endl();
 			return;
 		}
 	
@@ -143,32 +143,32 @@ Node::InputPort<SlotType>::subPort()
 
 template<>
 string 
-Node::InputPort<Reader>::type() 
+Node::InputPort<Reader>::tags() 
 {
-	return subPort()->node()->readerInputType( index() );
+	return subPort()->node()->readerInputTags( index() );
 }
 
 template<>
 string 
-Node::InputPort<Writer>::type() 
+Node::InputPort<Writer>::tags() 
 { 
-	return subPort()->node()->writerInputType( index() ); 
+	return subPort()->node()->writerInputTags( index() ); 
 }
 
 template <typename SlotType>
 inline bool 
 Node::InputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
 { 
-	return ( (type().find(output.type())!= string::npos) 
-		|| (type().find("#any")!= string::npos) );
+	return ( (tags().find(output.tags())!= string::npos) 
+		|| (tags().find("#any")!= string::npos) );
 }
 
 template <typename SlotType>
 inline bool 
 Node::InputPort<SlotType>::isCompatible(const kiwi::string& tag)	
 { 
-	return ( (type().find(tag)!= string::npos) 
-		|| (type().find("#any")!= string::npos) );
+	return ( (tags().find(tag)!= string::npos) 
+		|| (tags().find("#any")!= string::npos) );
 }
 
 template <typename SlotType>

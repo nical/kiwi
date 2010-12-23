@@ -78,7 +78,8 @@ Node::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMeta
 		else
 		{
 			Debug::error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
-			Debug::error() << outputPort.tags() << " >> " << tags() << endl();
+			Debug::error() << outputPort.tags().str()
+				<< " >> " << tags().str() << endl();
 			return;
 		}
 	
@@ -130,8 +131,8 @@ Node::InputPort<SlotType>::node() const
 }
 
 template <typename SlotType>
-Node::InputPort<SlotType>* 
-Node::InputPort<SlotType>::subPort()
+const Node::InputPort<SlotType>* 
+Node::InputPort<SlotType>::subPort() const
 {
 	// if there's port rebinding, _subPort != 0 
 	// call the _subPort's method
@@ -142,15 +143,15 @@ Node::InputPort<SlotType>::subPort()
 
 
 template<>
-string 
-Node::InputPort<Reader>::tags() 
+Tags 
+Node::InputPort<Reader>::tags() const
 {
 	return subPort()->node()->readerInputTags( index() );
 }
 
 template<>
-string 
-Node::InputPort<Writer>::tags() 
+Tags 
+Node::InputPort<Writer>::tags() const
 { 
 	return subPort()->node()->writerInputTags( index() ); 
 }
@@ -159,16 +160,14 @@ template <typename SlotType>
 inline bool 
 Node::InputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
 { 
-	return ( (tags().find(output.tags())!= string::npos) 
-		|| (tags().find("#any")!= string::npos) );
+	return ( tags().hasOneOf(output.tags()+Tags("any") ) );
 }
 
 template <typename SlotType>
 inline bool 
-Node::InputPort<SlotType>::isCompatible(const kiwi::string& tag)	
+Node::InputPort<SlotType>::isCompatible(const kiwi::Tags& tag)	
 { 
-	return ( (tags().find(tag)!= string::npos) 
-		|| (tags().find("#any")!= string::npos) );
+	return ( tags().hasOneOf(tag + Tags("any") ) );
 }
 
 template <typename SlotType>
@@ -195,14 +194,14 @@ Node::InputPort<SlotType>::connectedOutput() const
 
 template<>
 kiwi::string 
-Node::InputPort<Reader>::name()
+Node::InputPort<Reader>::name() const
 {
 	return _node->readerInputName(_node->indexOf(*this));
 }
 
 template<>
 kiwi::string 
-Node::InputPort<Writer>::name()
+Node::InputPort<Writer>::name() const
 {
 	return _node->readerInputName(_node->indexOf(*this));
 }

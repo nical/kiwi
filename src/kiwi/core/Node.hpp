@@ -39,6 +39,7 @@
 
 
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Tags.hpp"
 
 #include <list>
 #include <vector>
@@ -325,25 +326,25 @@ public:
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string readerInputTags( portIndex_t index ) const;
+	virtual kiwi::Tags readerInputTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string readerOutputTags( portIndex_t index ) const;
+	virtual kiwi::Tags readerOutputTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string writerInputTags( portIndex_t index ) const;
+	virtual kiwi::Tags writerInputTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::string writerOutputTags( portIndex_t index ) const;
+	virtual kiwi::Tags writerOutputTags( portIndex_t index ) const;
 	
 // --------------------------------------------------- protected methods	
 protected:
@@ -562,16 +563,16 @@ public:
 		 */ 
 		inline Node* node() const ;
 		
-		InputPort<SlotType>* subPort() ;
+		const InputPort<SlotType>* subPort() const ;
 		
 		/**
 		 * @brief Returns this port's Name as a string.
 		 */ 
-		inline string name();
+		inline string name() const;
 		/**
 		 * @brief Returns this port's Type as a string.
 		 */ 
-		inline string tags();
+		inline Tags tags() const;
 		// TODO this is a temporary solution for port compatibility
 		// a more flexible version is to come with use of polymorphism 
 		// to get compatibility of child classes.
@@ -582,7 +583,7 @@ public:
 		/**
 		 * @brief Port compatibility check based on the type tag.
 		 */ 
-		inline bool isCompatible(const kiwi::string& tag) ;
+		inline bool isCompatible(const kiwi::Tags& tag) ;
 		/**
 		 * @brief Resturns true if this port is connected.
 		 */ 
@@ -679,17 +680,16 @@ public:
 		 * you don't know if the node doesn't encapsulate other Nodes that
 		 * actually contain the Data and bind it's ports to it.
 		 */ 
-		OutputPort<SlotType>* subPort() ;//const ;
+		const OutputPort<SlotType>* subPort() const ;
 		/**
 		 * @brief Returns this port's Type as a string.
 		 */ 
-		inline string name();
+		inline string name() const;
 		/**
 		 * @brief Returns this port's Type as a string.
 		 */ 
-		inline string tags();
-		// TODO this is a temporary solution for port compatibility
-		// a more flexible version is to come with use of polymorphism to get compatibility of child classes.
+		inline Tags tags() const;
+		
 		/**
 		 * @brief Port compatibility check based on the type string.
 		 */ 

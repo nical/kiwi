@@ -49,8 +49,8 @@ Node::OutputPort<SlotType>::OutputPort(	Node* myNode )
 }
 
 template <typename SlotType>
-Node::OutputPort<SlotType>* 
-Node::OutputPort<SlotType>::subPort() //const 
+const Node::OutputPort<SlotType>* 
+Node::OutputPort<SlotType>::subPort() const
 {
 	// if there's port rebinding, _subPort != 0 
 	// call the _subPort's method
@@ -85,14 +85,14 @@ Node::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
 
 template<>
 kiwi::string 
-Node::OutputPort<Reader>::name()
+Node::OutputPort<Reader>::name() const
 {
 	return _node->readerOutputName( _node->indexOf(*this) );
 }
 
 template<>
 kiwi::string 
-Node::OutputPort<Writer>::name()
+Node::OutputPort<Writer>::name() const
 {
 	return _node->readerOutputName(	_node->indexOf(*this) );
 }
@@ -112,15 +112,15 @@ Node::OutputPort<SlotType>::node() const
 }
 
 template<>
-string 
-Node::OutputPort<Reader>::tags() 
+Tags 
+Node::OutputPort<Reader>::tags() const
 { 
 	return _node->readerOutputTags( index() ); 
 }
 
 template<>
-string 
-Node::OutputPort<Writer>::tags() 
+Tags 
+Node::OutputPort<Writer>::tags() const
 { 
 	return _node->writerOutputTags( index() ); 
 }

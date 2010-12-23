@@ -239,28 +239,28 @@ Node::writerOutputName(portIndex_t index) const
 // ---------------------------------------------------------- Port types
 
 
-kiwi::string 
+kiwi::Tags 
 Node::readerInputTags(portIndex_t index) const
 {
-	return kiwi::string("#any");
+	return kiwi::Tags("#any");
 }
 
-kiwi::string 
+kiwi::Tags 
 Node::readerOutputTags(portIndex_t index) const
 {
-	return kiwi::string("#any");
+	return kiwi::Tags("#any");
 }
 
-kiwi::string 
+kiwi::Tags 
 Node::writerInputTags(portIndex_t index) const
 {
-	return kiwi::string("#any");
+	return kiwi::Tags("#any");
 }
 
-kiwi::string 
+kiwi::Tags 
 Node::writerOutputTags(portIndex_t index) const
 {
-	return kiwi::string("#any");
+	return kiwi::Tags("#any");
 }
 
 // -------------------------------------------------------- Port binding

@@ -43,7 +43,7 @@
 #include <cairo.h>
 #include "kiwi/generic/AbstractArrayContainer.hpp"
 #include "kiwi/generic/Point.hpp"
-
+#include "kiwi/core/Tags.hpp"
 
 
 namespace kiwi{
@@ -127,8 +127,17 @@ public:
 	 * @brief Returns the size of each span.
 	 */ 
 	generic::Point<uint32_t, 2> spanSize() const ;
+
+	/**
+	 * @brief Returns the port's type tags (#rgba8 and #array2char)
+	 */ 
+	Tags readerOutputTags(portIndex_t);
 	
-	
+	/**
+	 * @brief Returns the port's type tags (#rgba8 and #array2char)
+	 */ 
+	Tags writerOutputTags(portIndex_t);
+
 	
 protected:
 	cairo_surface_t *_surface;

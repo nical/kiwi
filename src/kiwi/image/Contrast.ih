@@ -2,10 +2,8 @@
 #include "kiwi/utils/types.hpp"
 #include <boost/lexical_cast.hpp>
 
-namespace kiwi
-{
-namespace image
-{
+namespace kiwi{
+namespace image{
 
 
 template<typename T, unsigned D>
@@ -37,13 +35,23 @@ Contrast<T,D>::processFragment(ArrayConstIterator<T>* in, ArrayIterator<T>* out)
 
 
 template<typename T, unsigned D>
-kiwi::string
-Contrast<T,D>::readerInputType(portIndex_t index)
+kiwi::Tags
+Contrast<T,D>::readerInputTags(portIndex_t index)
 {
-	if(index == 0) return kiwi::string("array"
-				+ boost::lexical_cast<kiwi::string>(D)+"d_"
+	if(index == 0) return kiwi::Tags( kiwi::string("#array")
+				+ boost::lexical_cast<kiwi::string>(D)
 				+ types::str<T>() );
-	else return kiwi::string( "Value_" ) + types::str<T>();
+	else return kiwi::string( kiwi::string("#") + types::str<T>() );
+}
+
+template<typename T, unsigned D>
+kiwi::Tags
+Contrast<T,D>::writerInputTags(portIndex_t index)
+{
+	if(index == 0) return kiwi::Tags( kiwi::string("#array")
+				+ boost::lexical_cast<kiwi::string>(D)
+				+ types::str<T>() );
+	else return kiwi::string( kiwi::string("#") + types::str<T>() );
 }
 
 
@@ -51,7 +59,7 @@ template<typename T, unsigned D>
 kiwi::string
 Contrast<T,D>::readerInputName(portIndex_t index)
 {
-	return kiwi::string( "Value_" ) + types::str<T>();
+	return kiwi::string( "todo" ) + types::str<T>();
 }
 
 

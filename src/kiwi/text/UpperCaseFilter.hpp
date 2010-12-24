@@ -5,6 +5,7 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/CanonicalFilter.hpp"
+#include "kiwi/core/Tags.hpp"
 #include "kiwi/text/TextReader.hpp"
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/generic/Point.hpp"
@@ -17,10 +18,8 @@
 
 
 
-namespace kiwi
-{
-namespace text
-{
+namespace kiwi{
+namespace text{
 
 
 class UpperCaseFilter : public core::CanonicalFilter
@@ -95,14 +94,14 @@ public:
 		return kiwi::string("out");	
 	}
 	
-	kiwi::string readerInputType( portIndex_t index )
+	kiwi::Tags readerInputTags( portIndex_t index )
 	{
 		return kiwi::string("#text");
 	}
 	// same idea with writer inputs
-	kiwi::string writerInputType( portIndex_t index )
+	kiwi::Tags writerInputTags( portIndex_t index )
 	{
-		return kiwi::string("#text");
+		return kiwi::Tags("#text");
 	}
 	
 	static Filter* newUpperCaseFilter() { return new UpperCaseFilter; }

@@ -31,6 +31,7 @@
 #define KIWI_TEXTCONTAINER_HPP
 
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Tags.hpp"
 #include "kiwi/text/AbstractTextContainer.hpp"
 
 
@@ -89,13 +90,13 @@ public:
 	 */
 	void removeLine(kiwi::uint32_t position);
 	
-	kiwi::string outputReaderType(portIndex_t)
+	kiwi::Tags outputReaderTags(portIndex_t)
 	{
-			return kiwi::string("#text");
+			return kiwi::Tags("#text");
 	}
-	kiwi::string outputWriterType(portIndex_t)
+	kiwi::Tags outputWriterTags(portIndex_t)
 	{
-			return kiwi::string("#text");
+			return kiwi::Tags("#text");
 	}
 	
 private:

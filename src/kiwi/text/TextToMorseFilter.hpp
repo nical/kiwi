@@ -5,6 +5,7 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/CanonicalFilter.hpp"
+#include "kiwi/core/Tags.hpp"
 #include "kiwi/text.hpp"
 #include "kiwi/utils/types.hpp"
 #include "kiwi/core/NodeFactory.hpp"
@@ -13,10 +14,8 @@
 
 
 
-namespace kiwi
-{
-namespace text
-{
+namespace kiwi{
+namespace text{
 
 
 class TextToMorseFilter : public core::CanonicalFilter
@@ -174,15 +173,15 @@ public:
 		return kiwi::string("out");	
 	}
 	
-	kiwi::string readerInputType( portIndex_t index )
+	kiwi::Tags readerInputTags( portIndex_t index )
 	{
-		if(index == 0 ) return kiwi::string("#text");
-		else return kiwi::string("#text#opt");
+		if(index == 0 ) return kiwi::Tags("#text");
+		else return kiwi::Tags("#text#opt");
 	}
 	// same idea with writer inputs
-	kiwi::string writerInputType( portIndex_t index )
+	kiwi::Tags writerInputTags( portIndex_t index )
 	{
-		return kiwi::string("#text");
+		return kiwi::Tags("#text");
 	}
 	
 	static Filter* newTextToMorseFilter() { return new TextToMorseFilter; }

@@ -712,9 +712,13 @@ public:
 		 */ 
 		inline connectionList connections() const ;
 		/**
-		 * @brief Break all of this port's connecions.
+		 * @brief Disconnect from a given port.
+		 *
+		 * If the parameter input id equal to 0, breaks all of this
+		 * port's connecions (this is the default behaviour when no
+		 * input port is specified).
 		 */ 
-		void disconnect();
+		void disconnect( InputPort<SlotType>* input = 0);
 		
 	protected:
 		/**

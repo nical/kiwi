@@ -40,11 +40,10 @@
 
 #include "kiwi/generic/IterativeFilter.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
+#include "kiwi/core/Tags.hpp"
 
-namespace kiwi
-{
-namespace image
-{
+namespace kiwi{
+namespace image{
 
 template<typename TValueType, unsigned int TDimension>
 class Contrast : public IterativeFilter< AbstractArrayContainer< TValueType, TDimension > >
@@ -62,7 +61,8 @@ public:
 		kiwi::generic::ArrayConstIterator<TValueType>* in
 		, kiwi::generic::ArrayIterator<TValueType>* out  );
 		
-	kiwi::string readerInputType(portIndex_t index);
+	kiwi::Tags readerInputTags(portIndex_t index);
+	kiwi::Tags writerInputTags(portIndex_t index);
 	kiwi::string readerInputName(portIndex_t index);
 	
 protected:

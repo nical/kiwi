@@ -52,7 +52,7 @@ template <typename SlotType>
 const Node::OutputPort<SlotType>* 
 Node::OutputPort<SlotType>::subPort() const
 {
-	// if there's port rebinding, _subPort != 0 
+	// if there's port rebinding, _subPort 1!= 0 
 	// call the _subPort's method
 	if(_subPort) return _subPort->subPort();
 	// if this is the "subport" return a pointer to self
@@ -61,13 +61,35 @@ Node::OutputPort<SlotType>::subPort() const
 
 template <typename SlotType>
 void 
-Node::OutputPort<SlotType>::disconnect()
+Node::OutputPort<SlotType>::disconnect( InputPort<SlotType>* input )
 {
-	typename std::list<Node::InputPort<SlotType>*>::iterator it;
-	for(it = _connections.begin(); it!= _connections.end(); ++it)
-	{
-		(*it)->disconnect();
-	}
+//	ScopedBlockMacro(__scop, "Node::OutputPort::disconnect" );
+	if( input == 0 ){
+		std::list<Node::InputPort<SlotType>*> connectionsTempCopy = _connections;
+		_connections.clear();
+		typename std::list<Node::InputPort<SlotType>*>::iterator
+			it = connectionsTempCopy.begin();
+
+		for(int i = 0; i < connectionsTempCopy.size(); ++i)
+		{
+			InputPort<SlotType>* temp = (*it);
+			connectionsTempCopy.erase(it);
+			temp->disconnect();
+			++it;
+		}
+
+	}else
+		for(typename std::list<Node::InputPort<SlotType>*>::iterator
+			it = _connections.begin()
+			; it!= _connections.end()
+			; ++it)
+		{
+			if( (*it) == input ){
+				_connections.erase(it);
+				input->disconnect();
+				return;
+			}
+		}
 }
 
 

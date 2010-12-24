@@ -104,6 +104,16 @@ RGBAImageContainer::spanSize() const
 	return generic::Point<uint32_t, 2>( width(), height() );
 }
 
+Tags RGBAImageContainer::readerOutputTags(portIndex_t)
+{
+	return Tags("#rgba8#array2char");
+}
+
+Tags RGBAImageContainer::writerOutputTags(portIndex_t)
+{
+	return Tags("#rgba8#array2char");
+}
+
 
 } //namespace
 } //namespace

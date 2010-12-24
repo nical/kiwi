@@ -66,14 +66,14 @@ public:
 	 */ 
 	virtual T& getValue(portIndex_t port = 0) = 0;
 	
-	string readerOutputType(portIndex_t)
+	Tags readerOutputTags(portIndex_t)
 	{
-		return string("#")+types::str<T>() ;
+		return Tags( kiwi::string("#") + types::str<T>()) ;
 	}
 	
-	string WriterOutputType(portIndex_t)
+	Tags WriterOutputTags(portIndex_t)
 	{
-		return string("#")+types::str<T>() ;
+		return Tags( kiwi::string("#") + types::str<T>() );
 	}
 	
 	string readerOutputName(portIndex_t){return string("read");}

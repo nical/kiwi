@@ -4,8 +4,7 @@
 
 namespace kiwi{
 
-
-Tags::Tags(char const* str)
+void Tags::init(char const* str)
 {
 	kiwi::uint32_t start = 0;
 	kiwi::uint32_t i = 1;
@@ -26,6 +25,16 @@ Tags::Tags(char const* str)
 		}
 		++i;
 	}
+}
+
+Tags::Tags(char const* str)
+{
+	init( str );
+}
+
+Tags::Tags(const kiwi::string& str)
+{
+	init( str.c_str() );
 }
 
 

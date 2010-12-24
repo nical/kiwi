@@ -185,10 +185,15 @@ public:
 	inline bool isInterleaved() { return _interleaved; }
 	
 	/**
-	 * @brief Rturns an iterator that iterates through all the data.
+	 * @brief Returns an iterator that iterates through all the data.
 	 */ 
 	ArrayIterator<ValueType> getBasicIterator() const;
+
 	
+	
+	/**
+	 * Intended for debug purposes...
+	 */ 
 	void printState();
 	
 	/**

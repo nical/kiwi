@@ -1,6 +1,6 @@
 
 #include "kiwi/core/Tags.hpp"
-
+#include "kiwi/utils/types.hpp"
 #include <assert.h>
 
 using namespace kiwi;
@@ -105,8 +105,10 @@ int TagTest()
 	assert( Tags("#bar#foo").hasOneOf( Tags("#kiwi#cpp#foo#bar") ) );
 	assert( Tags("#foo").hasOneOf( Tags("#kiwi#cpp#foo#bar") ) );
 	assert( ! Tags("#foo#bar#kiwi").hasOneOf( Tags("#cpp#d_lang#programming") ) );
-	
 
+
+	Tags t1( kiwi::string("#")+types::str<int>() );
+	assert( t1.nb() == 1 );
 	kiwi::Debug::print() << kiwi::endl() << "Tags Test: success !" << kiwi::endl();
 	return 0;
 }

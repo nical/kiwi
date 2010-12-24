@@ -35,7 +35,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Container.hpp"
 #include "kiwi/generic/Point.hpp"
-
+#include "kiwi/core/Tags.hpp"
 
 namespace kiwi
 {
@@ -77,21 +77,23 @@ public:
 	virtual Point<unsigned int, TDimension> spanSize() const = 0;
 		
 	
-	kiwi::string
-	readerOutputType(portIndex_t)
+	kiwi::Tags
+	readerOutputTags(portIndex_t)
 	{
-	return kiwi::string("#array"
+	return kiwi::Tags( kiwi::string("#array")
 				+ boost::lexical_cast<kiwi::string>(TDimension)
-				+ types::str<TValueType>() );
+				+ types::str<TValueType>()
+				+ "#array" );
 	}
 
 
-	kiwi::string
-	writerOutputType(portIndex_t)
+	kiwi::Tags
+	writerOutputTags(portIndex_t)
 	{
-	return kiwi::string("#array"
+	return kiwi::Tags( kiwi::string("#array")
 				+ boost::lexical_cast<kiwi::string>(TDimension)
-				+ types::str<TValueType>() );
+				+ types::str<TValueType>()
+				+ "#array" );
 	}
 
 };

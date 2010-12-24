@@ -17,6 +17,7 @@ public:
 
 	Tags(){};
 	Tags(char const* tagStr);
+	Tags(const kiwi::string& tagStr);
 	Tags(const Tags& toCopy);
 	
 	kiwi::string str() const;
@@ -43,6 +44,7 @@ public:
 	static Tags ANY() {return Tags("any");}
 
 protected:
+	void init(char const * str );
 	std::vector<kiwi::string> _data;
 };
 

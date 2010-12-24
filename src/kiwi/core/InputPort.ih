@@ -104,10 +104,10 @@ template <typename SlotType>
 void 
 Node::InputPort<SlotType>::bind(InputPort<SlotType>& port)
 {
-//DEBUG_ONLY(	Debug::print() << "input port rebinding" << endl();  )
+//DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
 	_subPort = &port;
 	// note that if the binded Node is deleted, trying to acces
-	// this port might cause a segfault
+	// this port is unsafe
 }
 
 

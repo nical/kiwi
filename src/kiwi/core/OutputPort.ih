@@ -65,7 +65,8 @@ Node::OutputPort<SlotType>::disconnect( InputPort<SlotType>* input )
 {
 //	ScopedBlockMacro(__scop, "Node::OutputPort::disconnect" );
 	if( input == 0 ){
-		std::list<Node::InputPort<SlotType>*> connectionsTempCopy = _connections;
+		std::list<Node::InputPort<SlotType>*> connectionsTempCopy
+			= _connections;
 		_connections.clear();
 		typename std::list<Node::InputPort<SlotType>*>::iterator
 			it = connectionsTempCopy.begin();

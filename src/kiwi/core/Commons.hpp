@@ -38,14 +38,14 @@
 #ifndef KIWI_COMMONS_HPP
 #define KIWI_COMMONS_HPP
 
+#include "kiwi/utils/Macros.hpp"
+#include "kiwi/config.hpp"
+
 #include <boost/cstdint.hpp>
 
 #include <string>
 
 
-#define KIWI_VERSION_MAJOR 0
-#define KIWI_VERSION_MINOR 3
-#define KIWI_VERSION_PATCH 2
 
 namespace kiwi
 {
@@ -67,7 +67,6 @@ typedef std::string string;
 typedef unsigned char portIndex_t;
 
 
-#define ParentMacro( pClass ) typedef pClass Parent;
 
 }
 

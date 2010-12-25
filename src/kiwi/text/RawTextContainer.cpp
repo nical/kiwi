@@ -38,7 +38,19 @@ RawTextContainer::RawTextContainer()
 	// noting to do
 }
 
-
+Line* RawTextContainer::line(kiwi::uint32_t linePos)
+{
+	// out of bounds...
+	if(linePos > nbLines() ) return 0;
+	
+	//general case
+	std::list<kiwi::text::RawLine>::iterator it = _lines.begin();
+	while( linePos > 0 ){
+		++it;
+		--linePos;
+	}
+	return &(*it);
+}
 
 void RawTextContainer::reset()
 {

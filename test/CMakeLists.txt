@@ -23,7 +23,7 @@ endif(DEFINED BUILD_KIWI_IMAGE)
 
 if(DEFINED BUILD_KIWI_TEXT)	
 	SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
-		text/TextContainerTest
+		text/RawTextContainerTest
 	)
 endif(DEFINED BUILD_KIWI_TEXT)
 

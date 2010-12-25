@@ -9,7 +9,7 @@
 namespace kiwi{
 namespace text{
 
-	
+
 class RawLine : public Line
 {
 public:
@@ -20,6 +20,7 @@ public:
 	kiwi::string str() const;
 	void operator+=( char const* txt );
 	void operator+=( kiwi::string txt );
+
 protected:
 	kiwi::string _data;
 };

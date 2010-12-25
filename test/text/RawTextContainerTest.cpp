@@ -16,7 +16,9 @@ ScopedBlockMacro(__scp, "kiwi::test::RawTextContainer")
 	
 	kiwi::text::RawTextContainer::ReaderType reader(tc,0);
 	kiwi::text::RawTextContainer::WriterType writer(tc,0);
-	
+
+	tc.insertLine( kiwi::text::RawLine( "line foo bar" ), 0  );
+	assert( *tc.line(0) == kiwi::text::RawLine( "line foo bar" ) );
 }
 
 

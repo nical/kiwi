@@ -69,7 +69,7 @@ public:
 	 * 
 	 * @param lineNumber The number of the requested line. 
 	 */ 
-	Line* line(kiwi::uint32_t linePos) {}
+	Line* line(kiwi::uint32_t linePos);
 	
 	
 	/**

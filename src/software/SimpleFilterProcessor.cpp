@@ -91,13 +91,12 @@ int SimpleFilterProcessor::run()
   if(F->readerOutputPort(0).isEnabled() )
   {
 	kiwi::text::TextReader reader( F->readerOutputPort(0) );
-	reader.gotoLine(0);
-	do
+	for(int i = 1; i <= reader.nbLines(); ++i)
 	{ 
-	  cout << reader.getLine() << std::endl;
-	  reader.gotoNextLine();
-	} while(reader.currentLine() != reader.nbLines()-1 );
-  }
+	  std::cout << reader.line(i).str() << std::endl;
+	  
+	}
+}
   //END : Filter use request.
 
   return 0;
@@ -132,14 +131,15 @@ void SimpleFilterProcessor::wrapInputs(
 		}
 		else if( file->is_open() ) 
 		{	
-			kiwi::text::TextContainer* inputText = new kiwi::text::TextContainer;
+			kiwi::text::RawTextContainer* inputText = new kiwi::text::RawTextContainer;
 			inputText->init(*file);
 			file->close();
 			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
 			inputs.pop_front();
 		}else{
 			//Creation of a basic container, needed to apply the filter
-			kiwi::text::TextContainer* basicInputContainer = new kiwi::text::TextContainer;
+			kiwi::text::RawTextContainer* basicInputContainer
+				= new kiwi::text::RawTextContainer;
 
 
 			inputs.pop_front();
@@ -152,7 +152,7 @@ void SimpleFilterProcessor::wrapInputs(
 			{
 				//Creation of a Writer needed to write the argument in the container
 				kiwi::text::TextWriter writer(*basicInputContainer,0);
-				writer.getLine() = inputArgument;
+				writer.line(1) = kiwi::text::RawLine(inputArgument);
 			}
 			//Connexion between the input container and the filter, then apply filter
 			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);

@@ -47,7 +47,7 @@ public:
 	void process()
 	{
 		//ScopedBlockMacro(_cpm, "TextToMorseFilter::process")
-		
+/*		
 		if( !writerInputPort(0).isConnected() )
 		{
 			addWriteNode(new TextContainer, 0);
@@ -102,7 +102,7 @@ public:
 			result.gotoNextLine();
 		} while(input.currentLine() != input.nbLines()-1 );
 		
-		return;
+*/
 	}
 	
 	kiwi::string charToMorse( char c )

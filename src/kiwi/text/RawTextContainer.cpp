@@ -26,61 +26,57 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-/**
- * @file TextReader.hpp
- * @brief Reader for AbstractTextContainer based containers.
- * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva) 
- */
 
-#pragma once
+#include "RawTextContainer.hpp"
 
-#ifndef KIWI_TEXTREADER_HPP
-#define KIWI_TEXTREADER_HPP
-
-#include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/core/Commons.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
-#include "kiwi/core/Node.hpp"
 
 namespace kiwi{
-namespace text{
+namespace text{	
 
-typedef kiwi::generic::ArrayConstIterator<kiwi::int8_t> StringConstIterator;
-	
-class TextReader
+RawTextContainer::RawTextContainer()
 {
-public:
-	TextReader( AbstractTextContainer& container, portIndex_t index );
-	TextReader( core::Node::ReaderInputPort& port );
-	TextReader( core::Node::ReaderOutputPort& port );
+	// noting to do
+}
 
-	typedef kiwi::int8_t char_t;
+
+
+void RawTextContainer::reset()
+{
+	_lines.clear();
+}
+
+void RawTextContainer::append(std::istream& inputStream)
+{
+	while( !inputStream.eof() )
+	{
+		kiwi::string line;
+		std::getline(inputStream, line);
+		insertLine(RawLine(line), nbLines() );
+	}
+}
+
+void RawTextContainer::init(std::istream& inputStream)
+{
+	reset();
+	append(inputStream);
+}
+
+RawTextContainer::lock_t RawTextContainer::lock(kiwi::uint32_t firstLinePos
+		, kiwi::uint32_t lastLinePos )
+{
+
+}			
+
+void RawTextContainer::unlock( RawTextContainer::lock_t id )
+{
 	
-	kiwi::uint32_t nbLines() const;
-	kiwi::uint32_t nbChars() const;
+}
 
-	const kiwi::text::Line& line(kiwi::int32_t lineNb) const {}//todo
-	char_t getChar(int32_t charNumber) const;
+bool RawTextContainer::isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos)
+{
 
-/*
-	LineConstIterator getLineIterator(
-			kiwi::int32_t line
-			, kiwi::int32_t lastLine
-			, bool lock = false	 ) const;
+}
 
-	TextConstIterator getCharIterator(
-			kiwi::int32_t firstline, kiwi::int32_t fCharPos 
-			, kiwi::int32_t lastLine, kiwi::int32_t lCharPos
-			, bool lock = false	 ) const;
-*/
-protected:
-	AbstractTextContainer* _container;
 
-private:
-	void init( AbstractTextContainer& container, portIndex_t index );
-};	
-	
-}// namespace	
-}// namespace	
-
-#endif
+}// namespace
+}// namespace

@@ -76,8 +76,6 @@ void TextWriter::init( AbstractTextContainer& container
 	, portIndex_t portIndex )
 {
 	_container = &container;
-	_currentLine = container.getLine(0);
-	_currentLineNb = 0;
 }
 
 kiwi::uint32_t TextWriter::nbLines() const
@@ -87,113 +85,13 @@ kiwi::uint32_t TextWriter::nbLines() const
 
 kiwi::uint32_t TextWriter::nbChars() const
 {
-	return _currentLine->size();
-}
-
-kiwi::uint32_t TextWriter::currentLine() const
-{
-	return _currentLineNb;
-}
-
-bool TextWriter::gotoLine(kiwi::int32_t lineNumber)
-{
-	lineNumber  =utils::modulo<int>( lineNumber, nbLines() );
-	_currentLine = _container->getLine(lineNumber);
-	if(_currentLine ) _currentLineNb = lineNumber;
-}
-
-bool TextWriter::gotoNextLine()
-{
-	assert(utils::modulo<int>( _currentLineNb + 1, nbLines() ) < nbLines() );
-	gotoLine( utils::modulo<int>( _currentLineNb + 1, nbLines() ) );
-}
-
-bool TextWriter::gotoPreviousLine()
-{
-	assert(utils::modulo<int>( _currentLineNb + 1, nbLines() ) < nbLines() );
-	gotoLine( utils::modulo<int>( _currentLineNb - 1, nbLines() ) );
-}
-
-bool TextWriter::endOfText() const // TODO this won't work abecause of the modulo
-{
-	return (_currentLineNb >= _container->nbLines() );
-}
-
-kiwi::string& TextWriter::getLine() const
-{
-	return *_currentLine;
-}
-
-kiwi::uint8_t TextWriter::getChar(int32_t charNumber) const
-{
-	return (*_currentLine)[charNumber];
-}
-
-void TextWriter::setChar(int32_t charNumber, kiwi::int8_t value)
-{
-	//ScopedBlockMacro(__scop, "TextWriter::setChar")
-	// TODO: This is really dirty code... we'll have to change it someday..
-	int diff = charNumber - _currentLine->size() ;
-	if(diff >= 0)
-	{
-		//Debug::print() << "adding chars to the line" << endl();
-		for(int i = 0; i < diff-1; ++i)
-		{
-			//Debug::print() << "x" <<endl();
-			char space = ' ';
-			(*_currentLine).append(&space,1);
-		}
-		(*_currentLine).append((char*)&value,1);
-		return;
-	}
-	else
-	{
-		(*_currentLine)[charNumber] = value;
-	}
-}
-
-StringIterator TextWriter::getStringIterator() const
-{
-	return StringIterator( 
-		&((*_currentLine)[0])
-		, &((*_currentLine)[_currentLine->size()-1]) 
-		);
-}
-
-void TextWriter::insertLine( 
-	const kiwi::string& newLineCopy
-	, int position 
-	, int tag )
-{
-//ScopedBlockMacro(__scop, "TextWriter::insertLine")
-
-	uint32_t myNbLines = nbLines();
-	if(position < 0) position = utils::modulo<int>(position, myNbLines+1 );
-	//Debug::print() << ">> " << position<< "  " << myNbLines << endl();
-	
-	while( position-1 >= myNbLines )
-	{
-		_container->insertLine( kiwi::string(""), myNbLines++ );
-		//Debug::print() << ">> " << position<< "  " << myNbLines << endl();
-		
-	}
-
-	_container->insertLine( newLineCopy, position + tag);
 	
 }
 
-void TextWriter::removeLine(kiwi::uint32_t position)
-{
-	uint32_t nbl = nbLines();
-	if(position > nbl ) position = utils::modulo(position, nbl);
-	Debug::print() << "TextWriter::removeLine " << position << endl();
-	_container->removeLine(position);
-}	
 
 void TextWriter::reset() 
 {
 	_container->reset();
-	_currentLineNb = 0;
 }
 	
 	

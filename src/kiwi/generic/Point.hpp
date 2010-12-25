@@ -43,10 +43,8 @@
 #include <boost/lexical_cast.hpp>
 #include "kiwi/utils/types.hpp"
 
-namespace kiwi
-{
-namespace generic
-{
+namespace kiwi{
+namespace generic{
 
 /**
  * @brief Generic point/vector class (in the mathematic meaning).

@@ -33,7 +33,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/text/AbstractTextContainer.hpp"
-
+#include "kiwi/text/RawLine.hpp"
 
 namespace kiwi{
 namespace text{
@@ -41,16 +41,18 @@ namespace text{
 class TextReader;
 class TextWriter;
 		
-class TextContainer : public AbstractTextContainer
+class RawTextContainer : public AbstractTextContainer
 {
 public:
 	typedef TextReader ReaderType;
 	typedef TextWriter WriterType;
 
+	typedef kiwi::uint32_t lock_t;
+
 	/**
 	 * @brief Constructor. 
 	 */ 
-	TextContainer();
+	RawTextContainer();
 
 	void init(std::istream& inputStream);
 
@@ -67,57 +69,57 @@ public:
 	 * 
 	 * @param lineNumber The number of the requested line. 
 	 */ 
-	virtual kiwi::string* getLine(kiwi::uint32_t lineNumber);
+	Line* line(kiwi::uint32_t linePos) {}
 	
 	
 	/**
 	 * @brief Returns the number of lines in the container.
 	 */ 
-	kiwi::uint32_t nbLines() const { return _nbLines; }
+	kiwi::uint32_t nbLines() const { return _lines.size(); }
 	
 	
 	/**
 	 * @brief Inserts a line.
 	 * 
 	 * @param toInsert The line to copy and insert in the container
-	 * @param position The line will be insterted before the position.
+	 * @param position The line will be insterted before the given position.
 	 */ 
-	void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position);
+	void insertLine(const Line& toInsert, kiwi::uint32_t position) {}
 	
 	
 	/**
 	 * @brief Removes a line. 
 	 */
-	void removeLine(kiwi::uint32_t position);
+	void removeLine(kiwi::uint32_t position) {}
+
+// ---------------------------------------------------------------------
+// threading tools
+
+	lock_t lock(kiwi::uint32_t firstLinePos
+		, kiwi::uint32_t lastLinePos );
+
+	void unlock( lock_t );
+
+	bool isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos);
+
+// ---------------------------------------------------------------------
+// tags
 	
 	kiwi::Tags outputReaderTags(portIndex_t)
 	{
-			return kiwi::Tags("#text");
+			return kiwi::Tags("#text#rawText");
 	}
 	kiwi::Tags outputWriterTags(portIndex_t)
 	{
-			return kiwi::Tags("#text");
+			return kiwi::Tags("#text#rawText");
 	}
-	
-private:
 
-	/**
-	 * @brief element of double linked list of lines.
-	 */ 
-	struct Line
-	{
-		Line* _next;
-		Line* _prev;
-		kiwi::string _text;
-	};
-	/**
-	 * @brief Returns the position's line.
-	 */ 
-	Line* line(kiwi::uint32_t position);
-	
-	uint32_t _nbLines;
-	Line* _first;
-	Line* _last;
+// ---------------------------------------------------------------------
+// attributes
+
+protected:
+
+	std::list<kiwi::text::RawLine> _lines;
 	
 };
 

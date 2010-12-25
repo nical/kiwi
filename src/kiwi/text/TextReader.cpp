@@ -75,9 +75,6 @@ void TextReader::init( AbstractTextContainer& container
 	, portIndex_t portIndex )
 {
 	_container = &container;
-	_currentLine = container.getLine(0);
-	_currentLineNb = 0;
-
 }
 
 kiwi::uint32_t TextReader::nbLines() const
@@ -87,55 +84,8 @@ kiwi::uint32_t TextReader::nbLines() const
 
 kiwi::uint32_t TextReader::nbChars() const
 {
-	return _currentLine->size();
-}
-
-kiwi::uint32_t TextReader::currentLine() const
-{
-	return _currentLineNb;
-}
-
-bool TextReader::gotoLine(kiwi::int32_t lineNumber)
-{
-	lineNumber = utils::modulo<int>( lineNumber, nbLines() );
-	_currentLine = _container->getLine(lineNumber);
-	if(_currentLine ) _currentLineNb = lineNumber;
-}
-
-bool TextReader::gotoNextLine()
-{
-	gotoLine(  _currentLineNb + 1  );
-}
-
-bool TextReader::gotoPreviousLine()
-{
-	gotoLine(  _currentLineNb - 1  );
-}
-
-bool TextReader::endOfText() const
-{
-	return (_currentLineNb >= _container->nbLines() );
-}
-
-kiwi::string TextReader::getLine() const
-{
-	return *_currentLine;
-}
-
-kiwi::uint8_t TextReader::getChar(int32_t charNumber) const
-{
-	return (*_currentLine)[charNumber];
-}
-
-StringConstIterator TextReader::getStringIterator() const
-{
-	return StringConstIterator( 
-		&((*_currentLine)[0])
-		, &((*_currentLine)[_currentLine->size()-1]) 
-		);
 
 }
-
 
 	
 }// namespace	

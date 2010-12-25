@@ -39,6 +39,7 @@
 
 #include "kiwi/text/AbstractTextContainer.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
+#include "kiwi/text/Line.hpp"
 #include <iostream>
 
 namespace kiwi{
@@ -50,7 +51,7 @@ typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;
 class TextWriter
 {
 public:
-	enum { BEFORE = 0, AFTER = 1 }; 
+	typedef kiwi::int8_t char_t;
 
 	TextWriter(AbstractTextContainer& container
 		, portIndex_t );
@@ -59,15 +60,10 @@ public:
 	
 	kiwi::uint32_t nbLines() const;
 	kiwi::uint32_t nbChars() const;
-	kiwi::uint32_t currentLine() const;
-	bool gotoLine(kiwi::int32_t lineNumber);
-	bool gotoNextLine();
-	bool gotoPreviousLine();
-	bool endOfText() const;
-	kiwi::string& getLine() const;
-	kiwi::uint8_t getChar(int32_t charNumber) const;
-	void setChar(int32_t charNumber, int8_t value);
-	void insertLine(const kiwi::string& newLineCopy, int position = -1, int tag = AFTER -1);
+	kiwi::text::Line& line( kiwi::int32_t linePos ) const {}
+	char_t& getChar(kiwi::int32_t charPos);
+	void setChar(kiwi::int32_t charPos, char_t value);
+	void insertLine(const kiwi::string& newLineCopy, int position = -1);
 	void removeLine(kiwi::uint32_t position);
 	
 	void reset();
@@ -75,9 +71,6 @@ public:
 	
 	StringIterator getStringIterator() const;
 	
-protected:	
-	kiwi::string* _currentLine;
-	uint32_t _currentLineNb;
 private:
 	AbstractTextContainer* _container;
 	void init(AbstractTextContainer& container

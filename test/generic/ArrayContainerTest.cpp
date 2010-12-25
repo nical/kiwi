@@ -1,5 +1,5 @@
-#ifndef KIWI_ARRAYCONTAINER_TEST
-#define KIWI_ARRAYCONTAINER_TEST
+#ifndef KIWI__ARRAYCONTAINER_TEST
+#define KIWI__ARRAYCONTAINER_TEST
 
 #include "kiwi/core/Commons.hpp"
 
@@ -67,7 +67,8 @@ public:
 	{
 	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
 
-DEBUG_ONLY(		if(!isReady() )
+DEBUG_ONLY(
+		if( !isReady() )
 		{
 			Debug::error() << "AddArraysFilter::Process error : not ready" 
 				<< endl();
@@ -236,6 +237,7 @@ int main()
 	<< endl();
 	ArrayContainerTest<long int, 5, 2>();
 	return 0;
+	
 }
 
 #endif

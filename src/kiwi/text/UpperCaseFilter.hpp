@@ -10,7 +10,7 @@
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/utils/types.hpp"
-#include "kiwi/text/TextContainer.hpp"
+#include "kiwi/text/RawTextContainer.hpp"
 #include "kiwi/core/NodeFactory.hpp"
 #include "kiwi/utils/TextOperations.hpp"
 
@@ -47,10 +47,10 @@ public:
 	void process()
 	{
 		//ScopedBlockMacro(_cpm, "UpperCaseFilter::process")
-		
+/*		
 		if( !writerInputPort(0).isConnected() )
 		{
-			addWriteNode(new TextContainer, 0);
+			addWriteNode(new RawTextContainer, 0);
 		}
 	
 		TextReader input( readerInputPort(0) );
@@ -68,8 +68,7 @@ public:
 			input.gotoNextLine();
 			result.gotoNextLine();
 		} while(input.currentLine() != input.nbLines()-1 );
-		
-		return;
+*/		
 	}
 	
 

@@ -15,12 +15,12 @@ endif(DEFINED BUILD_KIWI_IMAGE)
 
 if(DEFINED BUILD_KIWI_TEXT)
 	message("build kiwi text")
-	SET(KIWI_SRC ${KIWI_SRC}
-		text/TextContainer.cpp
+	SET(KIWI_SRC ${KIWI_SRC} 	#kiwi::text source files
+		text/RawTextContainer.cpp
+		text/RawLine.cpp
 		text/TextReader.cpp
 		text/TextWriter.cpp
 		utils/TextOperations.cpp
-		#kiwi::text source files
 	)
 endif(DEFINED BUILD_KIWI_TEXT)
 

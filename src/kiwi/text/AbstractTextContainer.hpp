@@ -33,13 +33,12 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Container.hpp"
+#include "kiwi/text/Line.hpp"
 #include <iostream>
 
 
-namespace kiwi
-{
-namespace text	
-{
+namespace kiwi{
+namespace text{
 	
 		
 class AbstractTextContainer : public core::Container
@@ -54,21 +53,21 @@ public:
 	 * 
 	 * @param lineNumber The number of the requested line. 
 	 */ 
-	virtual kiwi::string* getLine(kiwi::uint32_t lineNumber) = 0;
-	
+	virtual kiwi::text::Line* line(kiwi::uint32_t lineNumber) = 0;
+
 	/**
 	 * @brief Returns the number of lines in the container.
 	 */ 
 	virtual kiwi::uint32_t nbLines() const = 0;
-	
+
 	/**
 	 * @brief Inserts a line.
 	 * 
 	 * @param toInsert The line to copy and insert in the container
 	 * @param position The line will be insterted before the given position.
 	 */ 
-	virtual void insertLine(const kiwi::string& toInsert, kiwi::uint32_t position) = 0;
-	
+	virtual void insertLine(const Line& toCopy, kiwi::uint32_t position) = 0;
+
 	/**
 	 * @brief Removes a line. 
 	 */
@@ -79,10 +78,13 @@ public:
 	  */
 	 virtual void reset() = 0;
 	  
-	   /**
+	 /**
 	  * @brief Clears the data.
 	  */
 	 virtual void append(std::istream& stream) = 0;
+
+	 virtual kiwi::uint32_t lock( kiwi::uint32_t firstLinePos
+		, kiwi::uint32_t lastLinePos ) = 0;
 	   
 	 virtual ~AbstractTextContainer() {}
 };

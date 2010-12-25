@@ -199,8 +199,8 @@ public:
 	/**
 	 * @brief TODO
 	 */ 
-	bool resize(Coordinates newSize, bool keepData)
-	{ assert( "not supported yet" == ""); }
+	bool resize(Coordinates newSize, bool keepData = false);
+	
 	
 	static kiwi::core::Container* newArrayContainer() 
 	{ 

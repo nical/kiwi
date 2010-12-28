@@ -37,63 +37,66 @@ namespace text{
 
 
 TextWriter::TextWriter( AbstractTextContainer& container 
-	, portIndex_t index )
+	, portIndex_t index
+	, kiwi::uint32_t firstLine
+	, kiwi::uint32_t range )
 {
-	init(container, index);
+ScopedBlockMacro(__scop, "TextWriter::constructor")
+	init(container, index, firstLine, range);
 }
 
-TextWriter::TextWriter( core::Node::WriterInputPort& port )
+TextWriter::TextWriter( core::Node::WriterInputPort& port
+	, kiwi::uint32_t firstLine
+	, kiwi::uint32_t range )
 {
+ScopedBlockMacro(__scop, "TextWriter::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.connectedOutput()->subPort()->node() );
 	
-	if( tc ) init( *tc, port.connectedOutput()->subPort()->index() );
+	if( tc ) init( *tc, port.connectedOutput()->subPort()->index()
+		, firstLine, range );
 	else
 	{
 		Debug::error() 
-			<< "TextWriter::constructor error:"
+			<< "TextReader::constructor error:"
 			<<" Unable to determine the Container type."
 			<< endl();
 	}
 }
 
-TextWriter::TextWriter( core::Node::WriterOutputPort& port )
+TextWriter::TextWriter( core::Node::WriterOutputPort& port
+	, kiwi::uint32_t firstLine
+	, kiwi::uint32_t range )
 {
+ScopedBlockMacro(__scop, "TextWriter::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.subPort()->node() );
 	
-	if( tc ) init( *tc, port.subPort()->index() );
+	if( tc ) init( *tc, port.subPort()->index(), firstLine, range );
 	else
 	{
 		Debug::error() 
-			<< "TextWriter::constructor error:"
+			<< "TextReader::constructor error:"
 			<<" Unable to determine the Container type."
 			<< endl();
 	}
 }
 
-void TextWriter::init( AbstractTextContainer& container
-	, portIndex_t portIndex )
+
+
+kiwi::text::Line& TextWriter::line(kiwi::int32_t lineNb)
 {
-	_container = &container;
+	// todo: here we have a problem if the Writer's range is 0 
+	return *(_container->line( _firstLine + position(lineNb) ) );	
 }
 
-kiwi::uint32_t TextWriter::nbLines() const
-{
-	return _container->nbLines();
-}
-
-kiwi::uint32_t TextWriter::nbChars() const
-{
-	
-}
 
 
 void TextWriter::reset() 
 {
 	_container->clear();
 }
-	
+
 	
 }// namespace	
 }// namespace	

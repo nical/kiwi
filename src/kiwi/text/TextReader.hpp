@@ -38,7 +38,8 @@
 #define KIWI_TEXTREADER_HPP
 
 #include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/text/RawTextLine.hpp"
+#include "kiwi/text/PlainTextAccessor.hpp"
+#include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
 #include "kiwi/core/Node.hpp"
@@ -48,7 +49,7 @@ namespace text{
 
 typedef kiwi::generic::ArrayConstIterator<kiwi::int8_t> StringConstIterator;
 	
-class TextReader
+class TextReader : public PlainTextAccessor
 {
 public:
 
@@ -66,8 +67,7 @@ public:
 
 	
 	kiwi::uint32_t nbLines() const { return _containerRange; }
-	kiwi::uint32_t nbChars() const;
-
+	
 	const kiwi::text::Line& line(kiwi::int32_t lineNb) const;
 	char_t getChar(int32_t charNumber) const;
 
@@ -77,16 +77,6 @@ public:
 				, lastLine - firstLine + 1 );
 	}
 
-protected:
-	AbstractTextContainer* _container;
-	kiwi::uint32_t _firstLine;
-	kiwi::uint32_t _containerRange; // the number of lines 
-
-private:
-	void init( AbstractTextContainer& container
-		, portIndex_t index
-		, kiwi::uint32_t firstLine
-		, kiwi::uint32_t range );
 };	
 	
 }// namespace	

@@ -10,7 +10,7 @@
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/utils/types.hpp"
-#include "kiwi/text/RawTextContainer.hpp"
+#include "kiwi/text/PlainTextContainer.hpp"
 #include "kiwi/core/NodeFactory.hpp"
 #include "kiwi/utils/TextOperations.hpp"
 
@@ -50,7 +50,7 @@ public:
 /*		
 		if( !writerInputPort(0).isConnected() )
 		{
-			addWriteNode(new RawTextContainer, 0);
+			addWriteNode(new PlainTextContainer, 0);
 		}
 	
 		TextReader input( readerInputPort(0) );

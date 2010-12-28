@@ -42,7 +42,8 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/text/RawTextContainer.hpp"
+#include "kiwi/text/PlainTextContainer.hpp"
+#include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/text/TextReader.hpp"
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/text/UpperCaseFilter.hpp"

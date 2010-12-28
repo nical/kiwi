@@ -83,45 +83,15 @@ ScopedBlockMacro(__scop, "TextReader::constructor")
 }
 
 
-void TextReader::init( AbstractTextContainer& container
-	, portIndex_t portIndex
-	, kiwi::uint32_t firstLine
-	, kiwi::uint32_t range  )
-{
-	_container = &container;
-	_firstLine = firstLine;
-	if( range == 0 ){
-		_containerRange = _container->nbLines() - firstLine;
-	}else if( range > _container->nbLines() - firstLine ){
-		_containerRange = _container->nbLines() - firstLine;
-	}else{
-		_containerRange = range;
-	}
-/*
-	Debug::print() << "TextReader::init \n first line = " << _firstLine
-		<< "\n range = " << _containerRange << endl();
-*/
-}
+
 
 const kiwi::text::Line& TextReader::line(kiwi::int32_t lineNb) const
 {
 //	Debug::print() << "TextReader::line(" << lineNb << ")\n";
-	if( _containerRange == 0 ) return RawTextLine( "" );
-	else if( lineNb >= (int)_containerRange ) lineNb = _containerRange-1;
-	else if( lineNb + (int)_containerRange < 0 ) lineNb = 0;
-	else if( lineNb < 0 ){ lineNb += (int)_containerRange; }
+	if( _containerRange == 0 ) return PlainTextLine( "" );
 
-	return *(_container->line( _firstLine + lineNb ) );
+	return *(_container->line( _firstLine + position(lineNb) ) );
 	
-}
-
-kiwi::uint32_t TextReader::nbChars() const
-{
-	kiwi::uint32_t result = 0;
-	for(int i = 0; i < _containerRange; ++i){
-		result += _container->line(_containerRange+i)->size();
-	}
-	return result;
 }
 
 

@@ -38,43 +38,49 @@
 #define KIWI_TEXTWRITER_HPP
 
 #include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
-#include "kiwi/text/Line.hpp"
+#include "kiwi/text/PlainTextAccessor.hpp"
+
+#include "kiwi/text/PlainTextLine.hpp"
 #include <iostream>
 
 namespace kiwi{
 namespace text{
 
 
-typedef kiwi::generic::ArrayIterator<kiwi::int8_t> StringIterator;
-	
-class TextWriter
+class TextWriter : public PlainTextAccessor
 {
 public:
 	typedef kiwi::int8_t char_t;
 
 	TextWriter(AbstractTextContainer& container
-		, portIndex_t );
-	TextWriter( core::Node::WriterInputPort& port );
-	TextWriter( core::Node::WriterOutputPort& port );
+		, portIndex_t
+		, kiwi::uint32_t firstLine = 0
+		, kiwi::uint32_t range = 0 );
+	TextWriter( core::Node::WriterInputPort& port
+		, kiwi::uint32_t firstLine = 0
+		, kiwi::uint32_t range = 0 );
+	TextWriter( core::Node::WriterOutputPort& port
+		, kiwi::uint32_t firstLine = 0
+		, kiwi::uint32_t range = 0 );
 	
-	kiwi::uint32_t nbLines() const;
-	kiwi::uint32_t nbChars() const;
-	kiwi::text::Line& line( kiwi::int32_t linePos ) const {}
-	char_t& getChar(kiwi::int32_t charPos);
+
+	kiwi::uint32_t nbLines() const { return _containerRange; }
+	
+	kiwi::text::Line& line(kiwi::int32_t lineNb);
+	
+	TextWriter writerOnRange( kiwi::uint32_t firstLine, kiwi::uint32_t lastLine ){
+		return TextWriter(*_container, 0
+				, _firstLine + firstLine
+				, lastLine - firstLine + 1 );
+	}
+	
 	void setChar(kiwi::int32_t charPos, char_t value);
-	void insertLine(const kiwi::string& newLineCopy, int position = -1);
+	void insertLine(const kiwi::string& lineCopy, kiwi::int32_t position = -1);
 	void removeLine(kiwi::uint32_t position);
 	
 	void reset();
 	void append(std::istream& inputStream) {_container->append(inputStream);}
-	
-	StringIterator getStringIterator() const;
-	
-private:
-	AbstractTextContainer* _container;
-	void init(AbstractTextContainer& container
-		, portIndex_t );
+
 };		
 
 

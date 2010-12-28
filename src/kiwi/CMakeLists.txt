@@ -16,8 +16,9 @@ endif(DEFINED BUILD_KIWI_IMAGE)
 if(DEFINED BUILD_KIWI_TEXT)
 	message("build kiwi text")
 	SET(KIWI_SRC ${KIWI_SRC} 	#kiwi::text source files
-		text/RawTextContainer.cpp
-		text/RawTextLine.cpp
+		text/PlainTextContainer.cpp
+		text/PlainTextLine.cpp
+		text/PlainTextAccessor.cpp
 		text/TextReader.cpp
 		text/TextWriter.cpp
 		utils/TextOperations.cpp

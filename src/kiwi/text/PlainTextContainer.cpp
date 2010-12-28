@@ -27,36 +27,36 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "RawTextContainer.hpp"
+#include "PlainTextContainer.hpp"
 
 
 namespace kiwi{
 namespace text{	
 
-RawTextContainer::RawTextContainer()
+PlainTextContainer::PlainTextContainer()
 {
 	// noting to do
 }
 
-Line* RawTextContainer::line(kiwi::uint32_t linePos)
+Line* PlainTextContainer::line(kiwi::uint32_t linePos)
 {
-//	ScopedBlockMacro(__scop, "RawTextContainer::line" )
+//	ScopedBlockMacro(__scop, "PlainTextContainer::line" )
 	// out of bounds...
 	if(linePos >= nbLines() ) return 0;
 	
 	//general case
-	std::list<kiwi::text::RawTextLine>::iterator it = _lines.begin();
+	std::list<kiwi::text::PlainTextLine>::iterator it = _lines.begin();
 	while( linePos-- > 0 ){ ++it; }
 	return &(*it);
 }
 
-void RawTextContainer::insertLine(kiwi::uint32_t linePos, const RawTextLine& toInsert)
+void PlainTextContainer::insertLine(kiwi::uint32_t linePos, const PlainTextLine& toInsert)
 {
-//	ScopedBlockMacro(__scop, "RawTextContainer::insertLine" )
+//	ScopedBlockMacro(__scop, "PlainTextContainer::insertLine" )
 	if(linePos > nbLines() ) return;
 	
 	//general case, kiwi::uint32_t position
-	std::list<kiwi::text::RawTextLine>::iterator it = _lines.begin();
+	std::list<kiwi::text::PlainTextLine>::iterator it = _lines.begin();
 	while( linePos > 0 ){
 		++it;
 		--linePos;
@@ -64,40 +64,40 @@ void RawTextContainer::insertLine(kiwi::uint32_t linePos, const RawTextLine& toI
 	_lines.insert(it, toInsert);
 }
 
-void RawTextContainer::insertLine(kiwi::uint32_t linePos, const Line& toInsert)
+void PlainTextContainer::insertLine(kiwi::uint32_t linePos, const Line& toInsert)
 {
-	insertLine(linePos, RawTextLine(toInsert.str()) );
+	insertLine(linePos, PlainTextLine(toInsert.str()) );
 }
 
-void RawTextContainer::clear()
+void PlainTextContainer::clear()
 {
 	_lines.clear();
 }
 
-void RawTextContainer::append(std::istream& inputStream)
+void PlainTextContainer::append(std::istream& inputStream)
 {
 	while( !inputStream.eof() )
 	{
 		kiwi::string line;
 		std::getline(inputStream, line);
-		insertLine(nbLines(), RawTextLine(line) );
+		insertLine(nbLines(), PlainTextLine(line) );
 	}
 }
 
-void RawTextContainer::init(std::istream& inputStream)
+void PlainTextContainer::init(std::istream& inputStream)
 {
 	clear();
 	append(inputStream);
 }
 
-void RawTextContainer::removeLine(kiwi::uint32_t linePos)
+void PlainTextContainer::removeLine(kiwi::uint32_t linePos)
 {
-	ScopedBlockMacro(__scop, "RawTextContainer::removeLine" )
+	ScopedBlockMacro(__scop, "PlainTextContainer::removeLine" )
 	// out of bounds...
 	if(linePos >= nbLines() ) return;
 	
 	//general case
-	std::list<kiwi::text::RawTextLine>::iterator it = _lines.begin();
+	std::list<kiwi::text::PlainTextLine>::iterator it = _lines.begin();
 	while( linePos > 1 ){
 		++it;
 		--linePos;
@@ -105,34 +105,34 @@ void RawTextContainer::removeLine(kiwi::uint32_t linePos)
 	_lines.erase(it);
 }
 
-void RawTextContainer::removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine)
+void PlainTextContainer::removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine)
 {
-	ScopedBlockMacro(__scop, "RawTextContainer::removeLines" )
+	ScopedBlockMacro(__scop, "PlainTextContainer::removeLines" )
 	// out of bounds...
 	if(firstLine >= nbLines() ) return;
 	if(lastLine >= nbLines() ) lastLine = nbLines() - 1;
 
 	int i = 0;
-	std::list<kiwi::text::RawTextLine>::iterator itf = _lines.begin();
+	std::list<kiwi::text::PlainTextLine>::iterator itf = _lines.begin();
 	while( i++ < firstLine ){ ++itf; }
-	std::list<kiwi::text::RawTextLine>::iterator itl = itf;
+	std::list<kiwi::text::PlainTextLine>::iterator itl = itf;
 	while( i++ < lastLine ){ ++itl; }
 	_lines.erase(itf,itl);
 }
 
 
-RawTextContainer::lock_t RawTextContainer::lock(kiwi::uint32_t firstLinePos
+PlainTextContainer::lock_t PlainTextContainer::lock(kiwi::uint32_t firstLinePos
 		, kiwi::uint32_t lastLinePos )
 {
 
 }			
 
-void RawTextContainer::unlock( RawTextContainer::lock_t id )
+void PlainTextContainer::unlock( PlainTextContainer::lock_t id )
 {
 	
 }
 
-bool RawTextContainer::isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos) const
+bool PlainTextContainer::isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos) const
 {
 
 }

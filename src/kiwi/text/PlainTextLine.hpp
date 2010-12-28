@@ -27,49 +27,38 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "RawTextLine.hpp"
+#pragma once
+
+#ifndef KIWI_TEXT_RAWTEXTLINE_HPP
+#define KIWI_TEXT_RAWTEXTLINE_HPP
+
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/text/Line.hpp"
 
 namespace kiwi{
 namespace text{
 
 
-kiwi::int8_t RawTextLine::operator[]( kiwi::int32_t pos ) const
+class PlainTextLine : public Line
 {
-	// TODO modulo
-	return _data[pos];
-}
+public:
+	PlainTextLine( const kiwi::string& str )
+	{ _data = str; }
 
-kiwi::int8_t& RawTextLine::operator[]( kiwi::int32_t pos )
-{
-	// TODO modulo
-	return _data[pos];
-}
+	kiwi::int8_t operator[]( kiwi::int32_t pos ) const;
+	kiwi::int8_t& operator[]( kiwi::int32_t pos );
+	uint32_t size() const;
+	kiwi::string str() const;
+	void operator+=( char const* txt );
+	void operator+=( kiwi::string txt );
 
-
-uint32_t RawTextLine::size() const
-{
-	return _data.size();
-}
-
-kiwi::string RawTextLine::str() const
-{
-	return _data;
-}
-
-void RawTextLine::operator+=( char const* txt )
-{
-	_data+= kiwi::string(txt);
-}
-
-void RawTextLine::operator+=( kiwi::string txt )
-{
-	_data+=txt;
-}
-
-
-
+protected:
+	kiwi::string _data;
+};
 
 
 
 }//namespace
 }//namespace
+
+#endif

@@ -131,15 +131,15 @@ void SimpleFilterProcessor::wrapInputs(
 		}
 		else if( file->is_open() ) 
 		{	
-			kiwi::text::RawTextContainer* inputText = new kiwi::text::RawTextContainer;
+			kiwi::text::PlainTextContainer* inputText = new kiwi::text::PlainTextContainer;
 			inputText->init(*file);
 			file->close();
 			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
 			inputs.pop_front();
 		}else{
 			//Creation of a basic container, needed to apply the filter
-			kiwi::text::RawTextContainer* basicInputContainer
-				= new kiwi::text::RawTextContainer;
+			kiwi::text::PlainTextContainer* basicInputContainer
+				= new kiwi::text::PlainTextContainer;
 
 
 			inputs.pop_front();
@@ -152,7 +152,7 @@ void SimpleFilterProcessor::wrapInputs(
 			{
 				//Creation of a Writer needed to write the argument in the container
 				kiwi::text::TextWriter writer(*basicInputContainer,0);
-				writer.line(1) = kiwi::text::RawTextLine(inputArgument);
+				writer.line(1) = kiwi::text::PlainTextLine(inputArgument);
 			}
 			//Connexion between the input container and the filter, then apply filter
 			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);

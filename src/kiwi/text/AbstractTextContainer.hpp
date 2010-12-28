@@ -44,6 +44,8 @@ namespace text{
 class AbstractTextContainer : public core::Container
 {
 public:
+	typedef uint8_t lock_t;
+
 	/** 
 	 * @brief Returns A pointer to the requested line.
 	 * 
@@ -66,25 +68,29 @@ public:
 	 * @param toInsert The line to copy and insert in the container
 	 * @param position The line will be insterted before the given position.
 	 */ 
-	virtual void insertLine(const Line& toCopy, kiwi::uint32_t position) = 0;
+	virtual void insertLine(kiwi::uint32_t position, const Line& toCopy ) = 0;
 
 	/**
 	 * @brief Removes a line. 
 	 */
-	 virtual void removeLine(kiwi::uint32_t position) = 0;
-	 
+	virtual void removeLine(kiwi::uint32_t position) = 0;
+	virtual void removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine) = 0;
 	 /**
 	  * @brief Clears the data.
 	  */
-	 virtual void reset() = 0;
+	virtual void clear() = 0;
 	  
 	 /**
 	  * @brief Clears the data.
 	  */
-	 virtual void append(std::istream& stream) = 0;
+	virtual void append(std::istream& stream) = 0;
 
-	 virtual kiwi::uint32_t lock( kiwi::uint32_t firstLinePos
+	virtual kiwi::uint32_t lock( kiwi::uint32_t firstLinePos
 		, kiwi::uint32_t lastLinePos ) = 0;
+	void unlock( lock_t );
+
+	bool isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos) const;
+
 	   
 	 virtual ~AbstractTextContainer() {}
 };

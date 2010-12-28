@@ -91,7 +91,7 @@ kiwi::uint32_t TextWriter::nbChars() const
 
 void TextWriter::reset() 
 {
-	_container->reset();
+	_container->clear();
 }
 	
 	

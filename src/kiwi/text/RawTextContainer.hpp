@@ -58,7 +58,7 @@ public:
 
 	void append(std::istream& inputStream);
 
-	void reset();
+	void clear();
 
 	/** 
 	 * @brief Returns A pointer to the requested line.
@@ -84,13 +84,14 @@ public:
 	 * @param toInsert The line to copy and insert in the container
 	 * @param position The line will be insterted before the given position.
 	 */ 
-	void insertLine(const Line& toInsert, kiwi::uint32_t position) {}
-	
+	void insertLine(kiwi::uint32_t position, const RawLine& toInsert);
+	void insertLine( kiwi::uint32_t position, const Line& toCopy);
 	
 	/**
 	 * @brief Removes a line. 
 	 */
-	void removeLine(kiwi::uint32_t position) {}
+	void removeLine(kiwi::uint32_t position);
+	void removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine);
 
 // ---------------------------------------------------------------------
 // threading tools
@@ -100,7 +101,7 @@ public:
 
 	void unlock( lock_t );
 
-	bool isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos);
+	bool isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos) const;
 
 // ---------------------------------------------------------------------
 // tags

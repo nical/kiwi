@@ -40,7 +40,7 @@ RawTextContainer::RawTextContainer()
 
 Line* RawTextContainer::line(kiwi::uint32_t linePos)
 {
-	ScopedBlockMacro(__scop, "RawTextContainer::line" )
+//	ScopedBlockMacro(__scop, "RawTextContainer::line" )
 	// out of bounds...
 	if(linePos >= nbLines() ) return 0;
 	
@@ -52,7 +52,7 @@ Line* RawTextContainer::line(kiwi::uint32_t linePos)
 
 void RawTextContainer::insertLine(kiwi::uint32_t linePos, const RawTextLine& toInsert)
 {
-	ScopedBlockMacro(__scop, "RawTextContainer::insertLine" )
+//	ScopedBlockMacro(__scop, "RawTextContainer::insertLine" )
 	if(linePos > nbLines() ) return;
 	
 	//general case, kiwi::uint32_t position

@@ -48,6 +48,8 @@ void RawTextContainerTest()
 	assert( read.line(1) == kiwi::text::RawTextLine( "line1" ) );
 	assert( read.line(2) == kiwi::text::RawTextLine( "line2" ) );
 	assert( read.line(3) == kiwi::text::RawTextLine( "line3" ) );
+	
+	assert( read.line(100) == kiwi::text::RawTextLine( "line9" ) );
 
 	kiwi::text::TextReader read3_6( tc, 0, 3, 4 ); // range: from lines 3 to 6
 	for( int i = 0; i < read3_6.nbLines(); ++i){
@@ -58,14 +60,15 @@ void RawTextContainerTest()
 	assert( read3_6.line(2) == kiwi::text::RawTextLine( "line5" ) );
 	assert( read3_6.line(3) == kiwi::text::RawTextLine( "line6" ) );
 	assert( read3_6.line(-1) == kiwi::text::RawTextLine( "line6" ) );
-	Debug::print() << read3_6.line(-1).str() << endl();
-	Debug::print() << read3_6.line(-2).str() << endl();
-	Debug::print() << read3_6.line(-3).str() << endl();
+
+	assert( read3_6.line(-1) == kiwi::text::RawTextLine( "line6" ) );
 	assert( read3_6.line(-2) == kiwi::text::RawTextLine( "line5" ) );
+	assert( read3_6.line(-3) == kiwi::text::RawTextLine( "line4" ) );
+	assert( read3_6.line(-100) == kiwi::text::RawTextLine( "line3" ) );
 
 	kiwi::text::TextReader subReader = read.readerOnRange(3, 8);
 	for( int i = 0; i < subReader.nbLines(); ++i){
-		Debug::print() << subReader.line(i).str() << endl();
+//		Debug::print() << subReader.line(i).str() << endl();
 	}
 	assert( subReader.nbLines() == 6 );
 }

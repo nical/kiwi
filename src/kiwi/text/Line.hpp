@@ -50,7 +50,6 @@ public:
 
 	bool operator==( const kiwi::text::Line& toComp) const
 	{
-		ScopedBlockMacro(__scop, "Line::operator==")
 		if( size() != toComp.size() ) return false;
 		for(int i = 0; i < size(); ++i)
 		{

@@ -1,6 +1,8 @@
 #ifndef KIWI_MACROS_HPP
 #define KIWI_MACROS_HPP
 
+#include "kiwi/config.hpp"
+
 #define INDENTATION_PATTERN 3
 #define BEGIN_BLOCK_MESSAGE " Begin block "
 #define END_BLOCK_MESSAGE " End block "

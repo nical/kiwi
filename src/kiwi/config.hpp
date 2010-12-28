@@ -3,3 +3,5 @@
 #define KIWI_VERSION_MAJOR 0
 #define KIWI_VERSION_MINOR 3
 #define KIWI_VERSION_PATCH 2
+
+#define DEBUG

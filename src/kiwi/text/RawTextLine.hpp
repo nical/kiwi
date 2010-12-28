@@ -43,10 +43,8 @@ class RawTextLine : public Line
 {
 public:
 	RawTextLine( const kiwi::string& str )
-	{
-		ScopedBlockMacro(__scop, "RawTextLine::constructor")
-		_data = str;
-	}
+	{ _data = str; }
+
 	kiwi::int8_t operator[]( kiwi::int32_t pos ) const;
 	kiwi::int8_t& operator[]( kiwi::int32_t pos );
 	uint32_t size() const;

@@ -107,9 +107,9 @@ const kiwi::text::Line& TextReader::line(kiwi::int32_t lineNb) const
 {
 //	Debug::print() << "TextReader::line(" << lineNb << ")\n";
 	if( _containerRange == 0 ) return RawTextLine( "" );
-	if( lineNb >= _containerRange ) lineNb = _containerRange-1;
-	if( lineNb <= -_containerRange ) lineNb = 0;
-	if( lineNb < 0 ) lineNb = _containerRange + lineNb; 
+	else if( lineNb >= (int)_containerRange ) lineNb = _containerRange-1;
+	else if( lineNb + (int)_containerRange < 0 ) lineNb = 0;
+	else if( lineNb < 0 ){ lineNb += (int)_containerRange; }
 
 	return *(_container->line( _firstLine + lineNb ) );
 	

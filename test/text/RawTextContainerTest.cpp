@@ -42,7 +42,7 @@ void RawTextContainerTest()
 	kiwi::text::TextReader read( tc, 0 );
 
 	for( int i = 0; i < read.nbLines(); ++i){
-//		Debug::print() << read.line(i).str() << endl();
+		Debug::print() << read.line(i).str() << endl();
 	}
 	assert( read.line(0) == kiwi::text::RawTextLine( "line0" ) );
 	assert( read.line(1) == kiwi::text::RawTextLine( "line1" ) );
@@ -57,6 +57,12 @@ void RawTextContainerTest()
 	assert( read3_6.line(1) == kiwi::text::RawTextLine( "line4" ) );
 	assert( read3_6.line(2) == kiwi::text::RawTextLine( "line5" ) );
 	assert( read3_6.line(3) == kiwi::text::RawTextLine( "line6" ) );
+	assert( read3_6.line(-1) == kiwi::text::RawTextLine( "line6" ) );
+	Debug::print() << read3_6.line(-1).str() << endl();
+	Debug::print() << read3_6.line(-2).str() << endl();
+	Debug::print() << read3_6.line(-3).str() << endl();
+	assert( read3_6.line(-2) == kiwi::text::RawTextLine( "line5" ) );
+	
 }
 
 

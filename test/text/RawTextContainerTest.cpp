@@ -62,7 +62,12 @@ void RawTextContainerTest()
 	Debug::print() << read3_6.line(-2).str() << endl();
 	Debug::print() << read3_6.line(-3).str() << endl();
 	assert( read3_6.line(-2) == kiwi::text::RawTextLine( "line5" ) );
-	
+
+	kiwi::text::TextReader subReader = read.readerOnRange(3, 8);
+	for( int i = 0; i < subReader.nbLines(); ++i){
+		Debug::print() << subReader.line(i).str() << endl();
+	}
+	assert( subReader.nbLines() == 6 );
 }
 
 

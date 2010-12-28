@@ -71,6 +71,11 @@ public:
 	const kiwi::text::Line& line(kiwi::int32_t lineNb) const;
 	char_t getChar(int32_t charNumber) const;
 
+	TextReader readerOnRange( kiwi::uint32_t firstLine, kiwi::uint32_t lastLine ){
+		return TextReader(*_container, 0
+				, _firstLine + firstLine
+				, lastLine - firstLine + 1 );
+	}
 
 protected:
 	AbstractTextContainer* _container;

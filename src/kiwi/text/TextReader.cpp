@@ -97,9 +97,10 @@ void TextReader::init( AbstractTextContainer& container
 	}else{
 		_containerRange = range;
 	}
-
+/*
 	Debug::print() << "TextReader::init \n first line = " << _firstLine
 		<< "\n range = " << _containerRange << endl();
+*/
 }
 
 const kiwi::text::Line& TextReader::line(kiwi::int32_t lineNb) const
@@ -107,7 +108,7 @@ const kiwi::text::Line& TextReader::line(kiwi::int32_t lineNb) const
 //	Debug::print() << "TextReader::line(" << lineNb << ")\n";
 	if( _containerRange == 0 ) return RawTextLine( "" );
 	if( lineNb >= _containerRange ) lineNb = _containerRange-1;
-	//if( lineNb <= -_containerRange ) lineNb = 0;
+	if( lineNb <= -_containerRange ) lineNb = 0;
 	if( lineNb < 0 ) lineNb = _containerRange + lineNb; 
 
 	return *(_container->line( _firstLine + lineNb ) );

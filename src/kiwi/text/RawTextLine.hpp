@@ -29,8 +29,8 @@
 
 #pragma once
 
-#ifndef KIWI_TEXT_RAWLINE_HPP
-#define KIWI_TEXT_RAWLINE_HPP
+#ifndef KIWI_TEXT_RAWTEXTLINE_HPP
+#define KIWI_TEXT_RAWTEXTLINE_HPP
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/text/Line.hpp"
@@ -39,12 +39,12 @@ namespace kiwi{
 namespace text{
 
 
-class RawLine : public Line
+class RawTextLine : public Line
 {
 public:
-	RawLine( const kiwi::string& str )
+	RawTextLine( const kiwi::string& str )
 	{
-		ScopedBlockMacro(__scop, "RawLine::constructor")
+		ScopedBlockMacro(__scop, "RawTextLine::constructor")
 		_data = str;
 	}
 	kiwi::int8_t operator[]( kiwi::int32_t pos ) const;

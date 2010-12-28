@@ -17,7 +17,7 @@ if(DEFINED BUILD_KIWI_TEXT)
 	message("build kiwi text")
 	SET(KIWI_SRC ${KIWI_SRC} 	#kiwi::text source files
 		text/RawTextContainer.cpp
-		text/RawLine.cpp
+		text/RawTextLine.cpp
 		text/TextReader.cpp
 		text/TextWriter.cpp
 		utils/TextOperations.cpp

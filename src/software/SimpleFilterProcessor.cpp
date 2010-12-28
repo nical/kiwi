@@ -152,7 +152,7 @@ void SimpleFilterProcessor::wrapInputs(
 			{
 				//Creation of a Writer needed to write the argument in the container
 				kiwi::text::TextWriter writer(*basicInputContainer,0);
-				writer.line(1) = kiwi::text::RawLine(inputArgument);
+				writer.line(1) = kiwi::text::RawTextLine(inputArgument);
 			}
 			//Connexion between the input container and the filter, then apply filter
 			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);

@@ -45,18 +45,18 @@ Line* RawTextContainer::line(kiwi::uint32_t linePos)
 	if(linePos >= nbLines() ) return 0;
 	
 	//general case
-	std::list<kiwi::text::RawLine>::iterator it = _lines.begin();
+	std::list<kiwi::text::RawTextLine>::iterator it = _lines.begin();
 	while( linePos-- > 0 ){ ++it; }
 	return &(*it);
 }
 
-void RawTextContainer::insertLine(kiwi::uint32_t linePos, const RawLine& toInsert)
+void RawTextContainer::insertLine(kiwi::uint32_t linePos, const RawTextLine& toInsert)
 {
 	ScopedBlockMacro(__scop, "RawTextContainer::insertLine" )
 	if(linePos > nbLines() ) return;
 	
 	//general case, kiwi::uint32_t position
-	std::list<kiwi::text::RawLine>::iterator it = _lines.begin();
+	std::list<kiwi::text::RawTextLine>::iterator it = _lines.begin();
 	while( linePos > 0 ){
 		++it;
 		--linePos;
@@ -66,7 +66,7 @@ void RawTextContainer::insertLine(kiwi::uint32_t linePos, const RawLine& toInser
 
 void RawTextContainer::insertLine(kiwi::uint32_t linePos, const Line& toInsert)
 {
-	insertLine(linePos, RawLine(toInsert.str()) );
+	insertLine(linePos, RawTextLine(toInsert.str()) );
 }
 
 void RawTextContainer::clear()
@@ -80,7 +80,7 @@ void RawTextContainer::append(std::istream& inputStream)
 	{
 		kiwi::string line;
 		std::getline(inputStream, line);
-		insertLine(nbLines(), RawLine(line) );
+		insertLine(nbLines(), RawTextLine(line) );
 	}
 }
 
@@ -97,7 +97,7 @@ void RawTextContainer::removeLine(kiwi::uint32_t linePos)
 	if(linePos >= nbLines() ) return;
 	
 	//general case
-	std::list<kiwi::text::RawLine>::iterator it = _lines.begin();
+	std::list<kiwi::text::RawTextLine>::iterator it = _lines.begin();
 	while( linePos > 1 ){
 		++it;
 		--linePos;
@@ -113,9 +113,9 @@ void RawTextContainer::removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t last
 	if(lastLine >= nbLines() ) lastLine = nbLines() - 1;
 
 	int i = 0;
-	std::list<kiwi::text::RawLine>::iterator itf = _lines.begin();
+	std::list<kiwi::text::RawTextLine>::iterator itf = _lines.begin();
 	while( i++ < firstLine ){ ++itf; }
-	std::list<kiwi::text::RawLine>::iterator itl = itf;
+	std::list<kiwi::text::RawTextLine>::iterator itl = itf;
 	while( i++ < lastLine ){ ++itl; }
 	_lines.erase(itf,itl);
 }

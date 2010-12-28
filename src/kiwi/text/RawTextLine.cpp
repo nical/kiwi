@@ -27,41 +27,41 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "RawLine.hpp"
+#include "RawTextLine.hpp"
 
 namespace kiwi{
 namespace text{
 
 
-kiwi::int8_t RawLine::operator[]( kiwi::int32_t pos ) const
+kiwi::int8_t RawTextLine::operator[]( kiwi::int32_t pos ) const
 {
 	// TODO modulo
 	return _data[pos];
 }
 
-kiwi::int8_t& RawLine::operator[]( kiwi::int32_t pos )
+kiwi::int8_t& RawTextLine::operator[]( kiwi::int32_t pos )
 {
 	// TODO modulo
 	return _data[pos];
 }
 
 
-uint32_t RawLine::size() const
+uint32_t RawTextLine::size() const
 {
 	return _data.size();
 }
 
-kiwi::string RawLine::str() const
+kiwi::string RawTextLine::str() const
 {
 	return _data;
 }
 
-void RawLine::operator+=( char const* txt )
+void RawTextLine::operator+=( char const* txt )
 {
 	_data+= kiwi::string(txt);
 }
 
-void RawLine::operator+=( kiwi::string txt )
+void RawTextLine::operator+=( kiwi::string txt )
 {
 	_data+=txt;
 }

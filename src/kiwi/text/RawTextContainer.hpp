@@ -33,7 +33,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/text/AbstractTextContainer.hpp"
-#include "kiwi/text/RawLine.hpp"
+#include "kiwi/text/RawTextLine.hpp"
 
 namespace kiwi{
 namespace text{
@@ -84,7 +84,7 @@ public:
 	 * @param toInsert The line to copy and insert in the container
 	 * @param position The line will be insterted before the given position.
 	 */ 
-	void insertLine(kiwi::uint32_t position, const RawLine& toInsert);
+	void insertLine(kiwi::uint32_t position, const RawTextLine& toInsert);
 	void insertLine( kiwi::uint32_t position, const Line& toCopy);
 	
 	/**
@@ -120,7 +120,7 @@ public:
 
 protected:
 
-	std::list<kiwi::text::RawLine> _lines;
+	std::list<kiwi::text::RawTextLine> _lines;
 	
 };
 

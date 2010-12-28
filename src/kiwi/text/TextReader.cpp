@@ -36,17 +36,22 @@ namespace text{
 
 
 TextReader::TextReader( AbstractTextContainer& container 
-	, portIndex_t index )
+	, portIndex_t index
+	, kiwi::uint32_t firstLine
+	, kiwi::uint32_t range )
 {
-	init(container, index);
+	init(container, index, firstLine, range);
 }
 
-TextReader::TextReader( core::Node::ReaderInputPort& port )
+TextReader::TextReader( core::Node::ReaderInputPort& port
+	, kiwi::uint32_t firstLine
+	, kiwi::uint32_t range )
 {
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.connectedOutput()->subPort()->node() );
 	
-	if( tc ) init( *tc, port.connectedOutput()->subPort()->index() );
+	if( tc ) init( *tc, port.connectedOutput()->subPort()->index()
+		, firstLine, range );
 	else
 	{
 		Debug::error() 
@@ -56,12 +61,15 @@ TextReader::TextReader( core::Node::ReaderInputPort& port )
 	}
 }
 
-TextReader::TextReader( core::Node::ReaderOutputPort& port )
+
+TextReader::TextReader( core::Node::ReaderOutputPort& port
+	, kiwi::uint32_t firstLine
+	, kiwi::uint32_t range )
 {
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.subPort()->node() );
 	
-	if( tc ) init( *tc, port.subPort()->index() );
+	if( tc ) init( *tc, port.subPort()->index(), firstLine, range );
 	else
 	{
 		Debug::error() 
@@ -71,23 +79,41 @@ TextReader::TextReader( core::Node::ReaderOutputPort& port )
 	}
 }
 
+
 void TextReader::init( AbstractTextContainer& container
-	, portIndex_t portIndex )
+	, portIndex_t portIndex
+	, kiwi::uint32_t firstLine
+	, kiwi::uint32_t range  )
 {
 	_container = &container;
+	_firstLine = firstLine;
+	if( range == 0 ) _containerRange = _container->nbLines() - firstLine;
+	else if ( range > _container->nbLines() - firstLine )
+		_containerRange = _container->nbLines() - firstLine;
+	else _containerRange = range;
 }
 
-kiwi::uint32_t TextReader::nbLines() const
+const kiwi::text::Line& TextReader::line(kiwi::int32_t lineNb) const
 {
-	return _container->nbLines();
+	if( _containerRange == 0 ) return RawTextLine( "" );
+	if( lineNb >= _containerRange ) lineNb = _containerRange-1;
+	if( lineNb <= -_containerRange ) lineNb = 0;
+	if( lineNb < 0 ) lineNb = _containerRange + lineNb; 
+
+	return *(_container->line( _firstLine + lineNb ) );
+	
 }
 
 kiwi::uint32_t TextReader::nbChars() const
 {
-
+	kiwi::uint32_t result = 0;
+	for(int i = 0; i < _containerRange; ++i){
+		result += _container->line(_containerRange+i)->size();
+	}
+	return result;
 }
 
-	
+
 }// namespace	
 }// namespace	
 

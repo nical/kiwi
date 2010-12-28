@@ -48,7 +48,7 @@ public:
 	virtual void operator+=( kiwi::string txt ) = 0;
 	virtual ~Line(){}
 
-	bool operator==( const kiwi::text::Line& toComp)
+	bool operator==( const kiwi::text::Line& toComp) const
 	{
 		ScopedBlockMacro(__scop, "Line::operator==")
 		if( size() != toComp.size() ) return false;

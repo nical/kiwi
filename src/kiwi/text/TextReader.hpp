@@ -38,6 +38,7 @@
 #define KIWI_TEXTREADER_HPP
 
 #include "kiwi/text/AbstractTextContainer.hpp"
+#include "kiwi/text/RawTextLine.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
 #include "kiwi/core/Node.hpp"
@@ -50,34 +51,37 @@ typedef kiwi::generic::ArrayConstIterator<kiwi::int8_t> StringConstIterator;
 class TextReader
 {
 public:
-	TextReader( AbstractTextContainer& container, portIndex_t index );
-	TextReader( core::Node::ReaderInputPort& port );
-	TextReader( core::Node::ReaderOutputPort& port );
 
 	typedef kiwi::int8_t char_t;
+
+	TextReader( AbstractTextContainer& container, portIndex_t index
+		, kiwi::uint32_t firstLine = 0
+		, kiwi::uint32_t range = 0 );
+	TextReader( core::Node::ReaderInputPort& port
+		, kiwi::uint32_t firstLine = 0
+		, kiwi::uint32_t range = 0 ); 
+	TextReader( core::Node::ReaderOutputPort& port
+		, kiwi::uint32_t firstLine = 0
+		, kiwi::uint32_t range = 0 );
+
 	
-	kiwi::uint32_t nbLines() const;
+	kiwi::uint32_t nbLines() const { return _containerRange; }
 	kiwi::uint32_t nbChars() const;
 
-	const kiwi::text::Line& line(kiwi::int32_t lineNb) const {}//todo
+	const kiwi::text::Line& line(kiwi::int32_t lineNb) const;
 	char_t getChar(int32_t charNumber) const;
 
-/*
-	LineConstIterator getLineIterator(
-			kiwi::int32_t line
-			, kiwi::int32_t lastLine
-			, bool lock = false	 ) const;
 
-	TextConstIterator getCharIterator(
-			kiwi::int32_t firstline, kiwi::int32_t fCharPos 
-			, kiwi::int32_t lastLine, kiwi::int32_t lCharPos
-			, bool lock = false	 ) const;
-*/
 protected:
 	AbstractTextContainer* _container;
+	kiwi::uint32_t _firstLine;
+	kiwi::uint32_t _containerRange; // the number of lines 
 
 private:
-	void init( AbstractTextContainer& container, portIndex_t index );
+	void init( AbstractTextContainer& container
+		, portIndex_t index
+		, kiwi::uint32_t firstLine
+		, kiwi::uint32_t range );
 };	
 	
 }// namespace	

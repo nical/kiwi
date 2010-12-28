@@ -40,6 +40,7 @@ TextReader::TextReader( AbstractTextContainer& container
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
+ScopedBlockMacro(__scop, "TextReader::constructor")
 	init(container, index, firstLine, range);
 }
 
@@ -47,6 +48,7 @@ TextReader::TextReader( core::Node::ReaderInputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
+ScopedBlockMacro(__scop, "TextReader::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.connectedOutput()->subPort()->node() );
 	
@@ -66,6 +68,7 @@ TextReader::TextReader( core::Node::ReaderOutputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
+ScopedBlockMacro(__scop, "TextReader::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.subPort()->node() );
 	
@@ -87,17 +90,24 @@ void TextReader::init( AbstractTextContainer& container
 {
 	_container = &container;
 	_firstLine = firstLine;
-	if( range == 0 ) _containerRange = _container->nbLines() - firstLine;
-	else if ( range > _container->nbLines() - firstLine )
+	if( range == 0 ){
 		_containerRange = _container->nbLines() - firstLine;
-	else _containerRange = range;
+	}else if( range > _container->nbLines() - firstLine ){
+		_containerRange = _container->nbLines() - firstLine;
+	}else{
+		_containerRange = range;
+	}
+
+	Debug::print() << "TextReader::init \n first line = " << _firstLine
+		<< "\n range = " << _containerRange << endl();
 }
 
 const kiwi::text::Line& TextReader::line(kiwi::int32_t lineNb) const
 {
+//	Debug::print() << "TextReader::line(" << lineNb << ")\n";
 	if( _containerRange == 0 ) return RawTextLine( "" );
 	if( lineNb >= _containerRange ) lineNb = _containerRange-1;
-	if( lineNb <= -_containerRange ) lineNb = 0;
+	//if( lineNb <= -_containerRange ) lineNb = 0;
 	if( lineNb < 0 ) lineNb = _containerRange + lineNb; 
 
 	return *(_container->line( _firstLine + lineNb ) );

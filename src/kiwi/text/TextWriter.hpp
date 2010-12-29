@@ -43,46 +43,92 @@
 #include "kiwi/text/PlainTextLine.hpp"
 #include <iostream>
 
+
 namespace kiwi{
 namespace text{
 
-
+/**
+ * @brief Writer class that can access Plain text Containers
+ */ 
 class TextWriter : public PlainTextAccessor
 {
 public:
 	typedef kiwi::int8_t char_t;
 
+	/**
+	 * @brief Constructor.
+	 */ 
 	TextWriter(AbstractTextContainer& container
 		, portIndex_t
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 );
+	/**
+	 * @brief Constructor.
+	 */
 	TextWriter( core::Node::WriterInputPort& port
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 );
+	/**
+	 * @brief Constructor.
+	 */
 	TextWriter( core::Node::WriterOutputPort& port
 		, kiwi::uint32_t firstLine = 0
-		, kiwi::uint32_t range = 0 );
+	 	, kiwi::uint32_t range = 0 );
 	
+	/**
+	 * @brief Returns the number of lines.
+	 */ 
+	kiwi::uint32_t nbLines() const { return _containerRange+_addedLines; }
 
-	kiwi::uint32_t nbLines() const { return _containerRange; }
-	
+	/**
+	 * @brief 
+	 */ 
 	kiwi::text::Line& line(kiwi::int32_t lineNb);
-	
+
+	/**
+	 * @brief Returns a writer to a subset of this writer's data.
+	 */ 
 	TextWriter writerOnRange( kiwi::uint32_t firstLine, kiwi::uint32_t lastLine ){
 		return TextWriter(*_container, 0
 				, _firstLine + firstLine
 				, lastLine - firstLine + 1 );
 	}
 	
-	void setChar(kiwi::int32_t charPos, char_t value);
 	void insertLine(const kiwi::text::PlainTextLine& lineCopy
 		, kiwi::int32_t position = -1);
-	void removeLine(kiwi::uint32_t position);
-	
-	void clear();
-	void append(std::istream& inputStream) {_container->append(inputStream);}
 
-};		
+	/**
+	 * @brief Removes a line from the container.
+	 *
+	 * If the position passed in parameter is -1, the last line will be
+	 * removed, if -2 the line before, etc...
+	 * If position is greater than the number of lines accessible by the
+	 * writer, nothing will be removed.  
+	 */ 
+	void removeLine(kiwi::int32_t position);
+
+	/**
+	 * @brief removes all the line accessible by the writer.
+	 */ 
+	void clear();
+
+	/**
+	 * @brief Inserts text from a stream into the container. 
+	 */ 
+	void insertStream(std::istream& inputStream
+		, kiwi::int32_t position = -1)
+	{
+		// TODO insert at the given position and get the number of lines
+		// added
+		_container->append(inputStream);
+		//_addedLines += ...
+	}
+
+private:
+	kiwi::int32_t _addedLines; // to keep track of how many line have been
+	//added and removed
+
+};
 
 
 }// namespace	

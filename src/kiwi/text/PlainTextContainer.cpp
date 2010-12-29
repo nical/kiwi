@@ -54,8 +54,14 @@ void PlainTextContainer::insertLine(const PlainTextLine& toInsert
 	, kiwi::uint32_t linePos )
 {
 	ScopedBlockMacro(__scop, "PlainTextContainer::insertLine" )
-	if(linePos > nbLines() ) return;
-	
+	if(linePos > nbLines() ){
+		DEBUG_ONLY(
+			Debug::error() << "required position is out of the container.\n"
+				<< "( " << linePos << " > " << nbLines() << " )\n" 
+				<< " Nothing is inserted.\n";
+		)
+		return;
+	}
 	//general case
 	std::list<kiwi::text::PlainTextLine>::iterator it = _lines.begin();
 	while( linePos > 0 ){

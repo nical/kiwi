@@ -42,14 +42,39 @@ namespace text{
 class PlainTextLine : public Line
 {
 public:
-	PlainTextLine( const kiwi::string& str )
-	{ _data = str; }
+	/**
+	 * @brief Constructor.
+	 */ 
+	PlainTextLine( const kiwi::string& str ) { _data = str; }
 
+	/**
+	 * @brief Const accessor.
+	 */ 
 	kiwi::int8_t operator[]( kiwi::int32_t pos ) const;
+
+	/**
+	 * @brief Reference accessor.
+	 */
 	kiwi::int8_t& operator[]( kiwi::int32_t pos );
+
+	/**
+	 * @brief Returns the number of chars in the line.
+	 */ 
 	uint32_t size() const;
+
+	/**
+	 * @brief Returns a kiwi::string version of the line.
+	 */ 
 	kiwi::string str() const;
+
+	/**
+	 * @brief Concatenation.
+	 */ 
 	void operator+=( char const* txt );
+	
+	/**
+	 * @brief Concatenation.
+	 */ 
 	void operator+=( kiwi::string txt );
 
 protected:

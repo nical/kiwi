@@ -94,13 +94,20 @@ void TextWriter::insertLine( const kiwi::text::PlainTextLine& lineCopy
 	, kiwi::int32_t pos )
 {
 	_container->insertLine( lineCopy, _firstLine + position( pos ) );
+	++_addedLines;
+}
+void TextWriter::removeLine( kiwi::int32_t pos )
+{
+	_container->removeLine( _firstLine + position( pos ) );
+	--_addedLines;
 }
 
 
 void TextWriter::clear() 
 {
 	_container->removeLines(_firstLine, _firstLine + _containerRange);
-	_containerRange = 0;
+	_containerRange;
+	_addedLines = -_containerRange; // TODO ...
 }
 
 	

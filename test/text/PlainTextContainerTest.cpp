@@ -101,8 +101,6 @@ void PlainTextContainerTest()
 	assert( tc.nbLines() == 3 );
 	assert( write.nbLines() == 3 );
 	
-	Debug::print() << write.nbLines() << " " << tc.nbLines() << endl();
-	
 }
 
 #ifdef KIWI_TEST_MAIN

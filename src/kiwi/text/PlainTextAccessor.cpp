@@ -32,7 +32,12 @@ kiwi::uint32_t PlainTextAccessor::nbChars() const
 
 kiwi::uint32_t PlainTextAccessor::position(kiwi::int32_t lineNb) const
 {
-	if( lineNb >= (int)_containerRange ) return _containerRange-1;
+	ScopedBlockMacro(__scop, "PlainTextAccessor::position")
+	Debug::print() << "lineNb = " << lineNb << endl(); 
+	if( lineNb >= (int)_containerRange ){
+		if(_containerRange > 0 ) return _containerRange-1;
+		else return 0;
+	}
 	else if( lineNb + (int)_containerRange < 0 ) return 0;
 	else if( lineNb < 0 ){ return lineNb + (int)_containerRange; }
 	else return lineNb;

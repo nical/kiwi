@@ -68,7 +68,7 @@ public:
 	 * @param toInsert The line to copy and insert in the container
 	 * @param position The line will be insterted before the given position.
 	 */ 
-	virtual void insertLine(kiwi::uint32_t position, const Line& toCopy ) = 0;
+	virtual void insertLine(const Line& toCopy, kiwi::uint32_t position ) = 0;
 
 	/**
 	 * @brief Removes a line. 

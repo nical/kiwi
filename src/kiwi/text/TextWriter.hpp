@@ -75,10 +75,11 @@ public:
 	}
 	
 	void setChar(kiwi::int32_t charPos, char_t value);
-	void insertLine(const kiwi::string& lineCopy, kiwi::int32_t position = -1);
+	void insertLine(const kiwi::text::PlainTextLine& lineCopy
+		, kiwi::int32_t position = -1);
 	void removeLine(kiwi::uint32_t position);
 	
-	void reset();
+	void clear();
 	void append(std::istream& inputStream) {_container->append(inputStream);}
 
 };		

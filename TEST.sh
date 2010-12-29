@@ -9,6 +9,6 @@ cd ./build/test
 ./generic/PointTest &&
 ./generic/ValueContainerTest &&
 ./image/CairoImageContainerTest &&
-./text/TextContainerTest
+./text/PlainTextContainerTest
 
-echo '\n\n--end of the test suite (success)--\n\n'
+echo '\n\n--end of the test suite--\n\n'

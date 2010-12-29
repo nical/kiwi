@@ -50,12 +50,13 @@ Line* PlainTextContainer::line(kiwi::uint32_t linePos)
 	return &(*it);
 }
 
-void PlainTextContainer::insertLine(kiwi::uint32_t linePos, const PlainTextLine& toInsert)
+void PlainTextContainer::insertLine(const PlainTextLine& toInsert
+	, kiwi::uint32_t linePos )
 {
-//	ScopedBlockMacro(__scop, "PlainTextContainer::insertLine" )
+	ScopedBlockMacro(__scop, "PlainTextContainer::insertLine" )
 	if(linePos > nbLines() ) return;
 	
-	//general case, kiwi::uint32_t position
+	//general case
 	std::list<kiwi::text::PlainTextLine>::iterator it = _lines.begin();
 	while( linePos > 0 ){
 		++it;
@@ -64,9 +65,9 @@ void PlainTextContainer::insertLine(kiwi::uint32_t linePos, const PlainTextLine&
 	_lines.insert(it, toInsert);
 }
 
-void PlainTextContainer::insertLine(kiwi::uint32_t linePos, const Line& toInsert)
+void PlainTextContainer::insertLine(const Line& toInsert, kiwi::uint32_t linePos)
 {
-	insertLine(linePos, PlainTextLine(toInsert.str()) );
+	insertLine(PlainTextLine(toInsert.str()), linePos  );
 }
 
 void PlainTextContainer::clear()
@@ -80,7 +81,7 @@ void PlainTextContainer::append(std::istream& inputStream)
 	{
 		kiwi::string line;
 		std::getline(inputStream, line);
-		insertLine(nbLines(), PlainTextLine(line) );
+		insertLine( PlainTextLine(line), nbLines() );
 	}
 }
 
@@ -108,15 +109,17 @@ void PlainTextContainer::removeLine(kiwi::uint32_t linePos)
 void PlainTextContainer::removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine)
 {
 	ScopedBlockMacro(__scop, "PlainTextContainer::removeLines" )
+	Debug::print()<<firstLine << " -> " << lastLine << endl();
 	// out of bounds...
 	if(firstLine >= nbLines() ) return;
 	if(lastLine >= nbLines() ) lastLine = nbLines() - 1;
 
 	int i = 0;
 	std::list<kiwi::text::PlainTextLine>::iterator itf = _lines.begin();
-	while( i++ < firstLine ){ ++itf; }
+	while( i++ < firstLine ){ ++itf;}
 	std::list<kiwi::text::PlainTextLine>::iterator itl = itf;
-	while( i++ < lastLine ){ ++itl; }
+	while( i++ < lastLine + 1 ){ ++itl; }
+	++itl;
 	_lines.erase(itf,itl);
 }
 

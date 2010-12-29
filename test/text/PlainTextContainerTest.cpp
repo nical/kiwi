@@ -14,8 +14,8 @@ void PlainTextContainerTest()
 
 	kiwi::text::PlainTextContainer tc;
 	
-	tc.insertLine( 0, kiwi::text::PlainTextLine( "line foo bar" )  );
-	tc.insertLine( 0, kiwi::text::PlainTextLine( "kiwi rocks" ) );
+	tc.insertLine( kiwi::text::PlainTextLine( "line foo bar" ), 0  );
+	tc.insertLine( kiwi::text::PlainTextLine( "kiwi rocks" ), 0 );
 	Debug::print() << (*(tc.line(1))).str() << endl() ;
 	
 	assert( *tc.line(0) == kiwi::text::PlainTextLine( "kiwi rocks" ) );
@@ -26,16 +26,16 @@ void PlainTextContainerTest()
 	assert( *tc.line(0) == kiwi::text::PlainTextLine( "line foo bar" ) );
 	tc.clear();
 	assert( tc.nbLines() == 0 );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line0" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line1" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line2" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line3" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line4" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line5" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line6" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line7" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line8" ) );
-	tc.insertLine( tc.nbLines(), kiwi::text::PlainTextLine( "line9" ) );
+	tc.insertLine( kiwi::text::PlainTextLine( "line0" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line1" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line2" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line3" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line4" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line5" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line6" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line7" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line8" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line9" ), tc.nbLines() );
 
 	assert( tc.nbLines() == 10 );
 	
@@ -70,9 +70,40 @@ void PlainTextContainerTest()
 //		Debug::print() << subReader.line(i).str() << endl();
 	}
 	assert( subReader.nbLines() == 6 );
-	assert( subReader.nbChars() == 30 ); 
-}
+	assert( subReader.nbChars() == 30 );
 
+	tc.clear();
+	tc.insertLine( kiwi::text::PlainTextLine( "line0" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line1" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line2" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line3" ), tc.nbLines() );
+	tc.insertLine( kiwi::text::PlainTextLine( "line4" ), tc.nbLines() );
+	assert( tc.nbLines() == 5 );
+	tc.removeLines(0, 0);
+	assert( tc.nbLines() == 4 );
+	tc.removeLines(0, 2);
+	assert( tc.nbLines() == 1 );
+	
+	for(int i = 0; i < tc.nbLines(); ++i)
+		Debug::print()<< tc.line(i)->str() << endl();
+		
+	kiwi::text::TextWriter write( tc, 0);
+
+	write.clear();
+	assert( tc.nbLines() == 0 );
+	assert( write.nbLines() == 0 );
+	write.insertLine( kiwi::text::PlainTextLine("haha"), 0);
+	write.insertLine( kiwi::text::PlainTextLine("foo"), 0);
+	write.insertLine( kiwi::text::PlainTextLine("bar"), 0);
+
+	Debug::print() << write.nbLines() << " " << tc.nbLines() << endl();
+	
+	assert( tc.nbLines() == 3 );
+	assert( write.nbLines() == 3 );
+	
+	Debug::print() << write.nbLines() << " " << tc.nbLines() << endl();
+	
+}
 
 #ifdef KIWI_TEST_MAIN
 

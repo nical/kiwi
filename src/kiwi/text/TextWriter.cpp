@@ -90,11 +90,17 @@ kiwi::text::Line& TextWriter::line(kiwi::int32_t lineNb)
 	return *(_container->line( _firstLine + position(lineNb) ) );	
 }
 
-
-
-void TextWriter::reset() 
+void TextWriter::insertLine( const kiwi::text::PlainTextLine& lineCopy
+	, kiwi::int32_t pos )
 {
-	_container->clear();
+	_container->insertLine( lineCopy, _firstLine + position( pos ) );
+}
+
+
+void TextWriter::clear() 
+{
+	_container->removeLines(_firstLine, _firstLine + _containerRange);
+	_containerRange = 0;
 }
 
 	

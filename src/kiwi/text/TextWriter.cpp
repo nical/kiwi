@@ -41,7 +41,7 @@ TextWriter::TextWriter( AbstractTextContainer& container
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-ScopedBlockMacro(__scop, "TextWriter::constructor")
+	//ScopedBlockMacro(__scop, "TextWriter::constructor")
 	init(container, index, firstLine, range);
 }
 
@@ -49,7 +49,7 @@ TextWriter::TextWriter( core::Node::WriterInputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-ScopedBlockMacro(__scop, "TextWriter::constructor")
+	//ScopedBlockMacro(__scop, "TextWriter::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.connectedOutput()->subPort()->node() );
 	
@@ -68,7 +68,7 @@ TextWriter::TextWriter( core::Node::WriterOutputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-ScopedBlockMacro(__scop, "TextWriter::constructor")
+	//ScopedBlockMacro(__scop, "TextWriter::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.subPort()->node() );
 	
@@ -86,6 +86,8 @@ ScopedBlockMacro(__scop, "TextWriter::constructor")
 
 kiwi::text::Line& TextWriter::line(kiwi::int32_t lineNb)
 {
+	if(_container->nbLines() == 0 )	insertLine( PlainTextLine(""), 0);
+	
 	// todo: here we have a problem if the Writer's range is 0 
 	return *(_container->line( _firstLine + position(lineNb) ) );	
 }
@@ -93,21 +95,20 @@ kiwi::text::Line& TextWriter::line(kiwi::int32_t lineNb)
 void TextWriter::insertLine( const kiwi::text::PlainTextLine& lineCopy
 	, kiwi::int32_t pos )
 {
-	_container->insertLine( lineCopy, _firstLine + position( pos ) );
-	++_addedLines;
+	_container->insertLine( lineCopy, _firstLine + positionInsert( pos ) );
+	++_nbLines;
 }
 void TextWriter::removeLine( kiwi::int32_t pos )
 {
 	_container->removeLine( _firstLine + position( pos ) );
-	--_addedLines;
+	--_nbLines;
 }
 
 
 void TextWriter::clear() 
 {
-	_container->removeLines(_firstLine, _firstLine + _containerRange);
-	_containerRange;
-	_addedLines = -_containerRange; // TODO ...
+	_container->removeLines(_firstLine, _firstLine + _nbLines);
+	_nbLines = 0;
 }
 
 	

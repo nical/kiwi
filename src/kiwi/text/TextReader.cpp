@@ -40,7 +40,7 @@ TextReader::TextReader( AbstractTextContainer& container
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-ScopedBlockMacro(__scop, "TextReader::constructor")
+//ScopedBlockMacro(__scop, "TextReader::constructor")
 	init(container, index, firstLine, range);
 }
 
@@ -48,7 +48,7 @@ TextReader::TextReader( core::Node::ReaderInputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-ScopedBlockMacro(__scop, "TextReader::constructor")
+//ScopedBlockMacro(__scop, "TextReader::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.connectedOutput()->subPort()->node() );
 	
@@ -68,7 +68,7 @@ TextReader::TextReader( core::Node::ReaderOutputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-ScopedBlockMacro(__scop, "TextReader::constructor")
+//ScopedBlockMacro(__scop, "TextReader::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
 		port.subPort()->node() );
 	
@@ -88,7 +88,7 @@ ScopedBlockMacro(__scop, "TextReader::constructor")
 const kiwi::text::Line& TextReader::line(kiwi::int32_t lineNb) const
 {
 //	Debug::print() << "TextReader::line(" << lineNb << ")\n";
-	if( _containerRange == 0 ) return PlainTextLine( "" );
+	if( _nbLines == 0 ) return PlainTextLine( "" );
 
 	return *(_container->line( _firstLine + position(lineNb) ) );
 	

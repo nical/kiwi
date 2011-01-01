@@ -92,15 +92,22 @@ void PlainTextContainerTest()
 	write.clear();
 	assert( tc.nbLines() == 0 );
 	assert( write.nbLines() == 0 );
-	write.insertLine( kiwi::text::PlainTextLine("haha"), 0);
-	write.insertLine( kiwi::text::PlainTextLine("foo"), 0);
-	write.insertLine( kiwi::text::PlainTextLine("bar"), 0);
+	write.insertLine( kiwi::text::PlainTextLine("haha"), -1);
+	write.insertLine( kiwi::text::PlainTextLine("foo"), -1);
+	write.insertLine( kiwi::text::PlainTextLine("bar"), -1);
 
 	Debug::print() << write.nbLines() << " " << tc.nbLines() << endl();
-	
+
+	for(int i = 0; i < tc.nbLines(); ++i)
+		Debug::print()<< tc.line(i)->str() << endl();
+
 	assert( tc.nbLines() == 3 );
 	assert( write.nbLines() == 3 );
-	
+
+	assert( *tc.line(0) == kiwi::text::PlainTextLine("haha") );
+	assert( *tc.line(1) == kiwi::text::PlainTextLine("foo") );
+	assert( *tc.line(2) == kiwi::text::PlainTextLine("bar") );
+		
 }
 
 #ifdef KIWI_TEST_MAIN

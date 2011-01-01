@@ -78,7 +78,7 @@ public:
 	/**
 	 * @brief Returns the number of lines.
 	 */ 
-	kiwi::uint32_t nbLines() const { return _containerRange+_addedLines; }
+	kiwi::uint32_t nbLines() const { return _nbLines; }
 
 	/**
 	 * @brief 

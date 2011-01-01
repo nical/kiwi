@@ -35,7 +35,9 @@ namespace text{
 
 PlainTextContainer::PlainTextContainer()
 {
-	// noting to do
+	addReaderOutputPort();
+	addWriterOutputPort();
+	//insertLine(PlainTextLine(""),0);
 }
 
 Line* PlainTextContainer::line(kiwi::uint32_t linePos)
@@ -53,7 +55,7 @@ Line* PlainTextContainer::line(kiwi::uint32_t linePos)
 void PlainTextContainer::insertLine(const PlainTextLine& toInsert
 	, kiwi::uint32_t linePos )
 {
-	ScopedBlockMacro(__scop, "PlainTextContainer::insertLine" )
+//	ScopedBlockMacro(__scop, "PlainTextContainer::insertLine" )
 	if(linePos > nbLines() ){
 		DEBUG_ONLY(
 			Debug::error() << "required position is out of the container.\n"
@@ -99,7 +101,7 @@ void PlainTextContainer::init(std::istream& inputStream)
 
 void PlainTextContainer::removeLine(kiwi::uint32_t linePos)
 {
-	ScopedBlockMacro(__scop, "PlainTextContainer::removeLine" )
+//	ScopedBlockMacro(__scop, "PlainTextContainer::removeLine" )
 	// out of bounds...
 	if(linePos >= nbLines() ) return;
 	
@@ -114,8 +116,8 @@ void PlainTextContainer::removeLine(kiwi::uint32_t linePos)
 
 void PlainTextContainer::removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine)
 {
-	ScopedBlockMacro(__scop, "PlainTextContainer::removeLines" )
-	Debug::print()<<firstLine << " -> " << lastLine << endl();
+//	ScopedBlockMacro(__scop, "PlainTextContainer::removeLines" )
+//	Debug::print()<<firstLine << " -> " << lastLine << endl();
 	// out of bounds...
 	if(firstLine >= nbLines() ) return;
 	if(lastLine >= nbLines() ) lastLine = nbLines() - 1;

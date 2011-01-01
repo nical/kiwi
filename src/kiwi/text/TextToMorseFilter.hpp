@@ -47,15 +47,15 @@ public:
 	void process()
 	{
 		//ScopedBlockMacro(_cpm, "TextToMorseFilter::process")
-/*		
+	
 		if( !writerInputPort(0).isConnected() )
 		{
-			addWriteNode(new TextContainer, 0);
+			addWriteNode(new PlainTextContainer, 0);
 		}
 	
 		TextReader input( readerInputPort(0) );
 		TextWriter result( writerInputPort(0) );
-		result.reset();
+		result.clear();
 		kiwi::string dotPattern(".");
 		kiwi::string longPattern("-");
 		kiwi::string spacePattern(" ");
@@ -64,45 +64,44 @@ public:
 		if(readerInputPort(1).isConnected() )
 		{
 			TextReader r1( readerInputPort(1) );
-			dotPattern = r1.getLine();
+			dotPattern = r1.line(0).str();
 		}
 		
 		if(readerInputPort(2).isConnected() )
 		{
 			TextReader r2( readerInputPort(2) );
-			longPattern = r2.getLine();
+			longPattern = r2.line(0).str();
 		}
 		
 		if(readerInputPort(3).isConnected() )
 		{
 			TextReader r3( readerInputPort(3) );
-			spacePattern = r3.getLine();
+			spacePattern = r3.line(0).str();
 		}
 		
 		if(readerInputPort(4).isConnected() )
 		{
 			TextReader r4( readerInputPort(4) );
-			unknownPattern = r4.getLine();
+			unknownPattern = r4.line(0).str();
 		}
 			
-		if(input.nbLines() > 1) result.insertLine("", input.nbLines() -1);	
+		if(input.nbLines() > 1) result.insertLine(kiwi::text::PlainTextLine(""), input.nbLines() -1);	
 		
-		do
-		{
-			for(uint32_t i = 0; i < input.nbChars(); ++i )
-			{
-				kiwi::string morse = charToMorse(input.getChar(i));
-				for(uint32_t j = 0; j < morse.size(); ++j )
-					if(morse[j] == '.') result.getLine() += dotPattern;
-					else if(morse[j] == '-') result.getLine() += longPattern;
-					else if(morse[j] == '#') result.getLine() += unknownPattern;
-					else result.getLine() += spacePattern;
+		
+		for(uint32_t i = 0; i < input.nbLines(); ++i ){
+			result.insertLine(PlainTextLine(""),-1);
+			for(uint32_t j = 0; j < input.line(j).size(); ++j ){
+				
+				kiwi::string morse = charToMorse(input.line(i).getChar(j));
+				for(uint32_t k = 0; k < morse.size(); ++k )
+					if(morse[k] == '.') result.line(i) += dotPattern;
+					else if(morse[k] == '-') result.line(i) += longPattern;
+					else if(morse[k] == '#') result.line(i) += unknownPattern;
+					else result.line(i) += spacePattern;
 			}
-			input.gotoNextLine();
-			result.gotoNextLine();
-		} while(input.currentLine() != input.nbLines()-1 );
+		}
 		
-*/
+
 	}
 	
 	kiwi::string charToMorse( char c )

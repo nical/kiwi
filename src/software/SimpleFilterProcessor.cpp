@@ -34,7 +34,7 @@
 
 #include "SimpleFilterProcessor.hpp"
 #include "ArgumentProcessor.hpp"
-
+#include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/text/TextToMorseFilter.hpp"
 
 #include "kiwi/core.hpp" 
@@ -82,7 +82,9 @@ int SimpleFilterProcessor::run()
 
   std::list<kiwi::string> inputArgs = arguments.getFilterInputs();
 
+
   wrapInputs(factory, *F, inputArgs );
+
 
   // run the filter
   if( F->isReady() ) F->process(); 
@@ -110,6 +112,7 @@ void SimpleFilterProcessor::wrapInputs(
 	, core::Filter& filter
 	, std::list<string>& inputs )
 {
+//	ScopedBlockMacro(__scop, "SimpleFilterProcessor::wrapInputs");
 
 	typedef std::list<string> ArgList;
 	ArgList::iterator it = inputs.begin();
@@ -119,6 +122,7 @@ void SimpleFilterProcessor::wrapInputs(
 
 	for(int i = 0; i < nbParams ; ++i, ++it)
 	{
+		//Debug::print() << "-- param " << i << "\n";
 		std::ifstream* file = new std::ifstream(it->c_str() );
 		
 		kiwi::string inputArgument = inputs.front();
@@ -126,7 +130,7 @@ void SimpleFilterProcessor::wrapInputs(
 		{
 			inputs.pop_front();
 			// ignore argument and make no connections for the 
-			// corresponding input port
+			// corresponding input portDebug::print() << "-- params --\n";
 			continue;
 		}
 		else if( file->is_open() ) 
@@ -150,14 +154,15 @@ void SimpleFilterProcessor::wrapInputs(
 			}
 			else
 			{
-				//Creation of a Writer needed to write the argument in the container
-				kiwi::text::TextWriter writer(*basicInputContainer,0);
-				writer.line(1) = kiwi::text::PlainTextLine(inputArgument);
+				basicInputContainer->insertLine(
+					kiwi::text::PlainTextLine( inputArgument )
+					,0 );			 
 			}
-			//Connexion between the input container and the filter, then apply filter
+			//Connexion between the input container and the filter, then apply filter	
 			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);
 			if(!filter.readerInputPort(0).isConnected() ) 
 			std::cerr << "connection error"<<std::endl;
+
 		}
 		delete file; 
 	}

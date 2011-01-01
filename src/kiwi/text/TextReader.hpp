@@ -66,7 +66,7 @@ public:
 		, kiwi::uint32_t range = 0 );
 
 	
-	kiwi::uint32_t nbLines() const { return _containerRange; }
+	kiwi::uint32_t nbLines() const { return _nbLines; }
 	
 	const kiwi::text::Line& line(kiwi::int32_t lineNb) const;
 	char_t getChar(int32_t charNumber) const;

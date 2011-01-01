@@ -42,6 +42,8 @@ class Line
 public:
 	virtual kiwi::int8_t operator[]( kiwi::int32_t pos ) const = 0;
 	virtual kiwi::int8_t& operator[]( kiwi::int32_t pos ) = 0;
+	inline kiwi::int8_t getChar(kiwi::int32_t pos) const { return (*this)[pos]; }
+	inline kiwi::int8_t& getChar(kiwi::int32_t pos) { return (*this)[pos]; }
 	virtual uint32_t size() const = 0;
 	virtual kiwi::string str() const = 0;
 	virtual void operator+=( char const* txt ) = 0;

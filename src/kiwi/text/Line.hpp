@@ -46,6 +46,7 @@ public:
 	inline kiwi::int8_t& getChar(kiwi::int32_t pos) { return (*this)[pos]; }
 	virtual uint32_t size() const = 0;
 	virtual kiwi::string str() const = 0;
+	virtual void operator+=( char txt ) = 0;
 	virtual void operator+=( char const* txt ) = 0;
 	virtual void operator+=( kiwi::string txt ) = 0;
 	virtual ~Line(){}

@@ -47,7 +47,7 @@ public:
 	void process()
 	{
 		//ScopedBlockMacro(_cpm, "UpperCaseFilter::process")
-/*		
+	
 		if( !writerInputPort(0).isConnected() )
 		{
 			addWriteNode(new PlainTextContainer, 0);
@@ -55,25 +55,19 @@ public:
 	
 		TextReader input( readerInputPort(0) );
 		TextWriter result( writerInputPort(0) );
-		result.reset();
+		result.clear();
 			
-		if(input.nbLines() > 1) result.insertLine("", input.nbLines() -1);	
+		if(input.nbLines() > 1) result.insertLine(PlainTextLine(""), input.nbLines() -1);	
 		
-		do
-		{
-			for(uint32_t i = 0; i < input.nbChars(); ++i )
-			{
-				result.setChar( i, utils::upperCase( input.getChar(i) ));
+		for(uint32_t i = 0; i < input.nbLines(); ++i ){
+			result.insertLine(PlainTextLine(""),-1);
+			for(uint32_t j = 0; j < input.line(i).size(); ++j ){
+				result.line(i) += utils::upperCase( input.line(i).getChar(j) );
 			}
-			input.gotoNextLine();
-			result.gotoNextLine();
-		} while(input.currentLine() != input.nbLines()-1 );
-*/		
+		}
 	}
 	
 
-	// This is optionnal. Override this method readyCondition() if this filter
-	// needs to perform custom checks to tell if it's ready.
 	bool readyCondition()
 	{
 		return (readerInputPort(0).isConnected() );

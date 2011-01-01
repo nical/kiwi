@@ -66,6 +66,11 @@ void PlainTextLine::operator+=( kiwi::string txt )
 	_data+=txt;
 }
 
+void PlainTextLine::operator+=( kiwi::char_t txt )
+{
+	_data+=txt;
+}
+
 
 
 

@@ -70,7 +70,12 @@ public:
 	/**
 	 * @brief Concatenation.
 	 */ 
-	void operator+=( char const* txt );
+	void operator+=( kiwi::char_t const* txt );
+
+	/**
+	 * @brief Concatenation.
+	 */ 
+	void operator+=( kiwi::char_t txt );
 	
 	/**
 	 * @brief Concatenation.

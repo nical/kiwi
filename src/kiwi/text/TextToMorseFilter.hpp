@@ -90,8 +90,7 @@ public:
 		
 		for(uint32_t i = 0; i < input.nbLines(); ++i ){
 			result.insertLine(PlainTextLine(""),-1);
-			for(uint32_t j = 0; j < input.line(j).size(); ++j ){
-				
+			for(uint32_t j = 0; j < input.line(i).size(); ++j ){
 				kiwi::string morse = charToMorse(input.line(i).getChar(j));
 				for(uint32_t k = 0; k < morse.size(); ++k )
 					if(morse[k] == '.') result.line(i) += dotPattern;

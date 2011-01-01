@@ -135,7 +135,8 @@ void SimpleFilterProcessor::wrapInputs(
 		}
 		else if( file->is_open() ) 
 		{	
-			kiwi::text::PlainTextContainer* inputText = new kiwi::text::PlainTextContainer;
+			kiwi::text::PlainTextContainer* inputText
+				= new kiwi::text::PlainTextContainer;
 			inputText->init(*file);
 			file->close();
 			inputText->readerOutputPort(0) >> filter.readerInputPort(i);

@@ -53,7 +53,8 @@ using namespace kiwi::app;
 int main(int argc, char *argv[])
 {
   
-  kiwi::Debug::init(true, true, 0);
+  //kiwi::Debug::init(true, true, 0);
+  kiwi::Debug::init();
   kiwi::app::ArgumentProcessor arguments(argc, argv);
 
 

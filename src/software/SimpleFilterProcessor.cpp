@@ -58,6 +58,7 @@ SimpleFilterProcessor::SimpleFilterProcessor( const ArgumentProcessor& arguments
 
 int SimpleFilterProcessor::run()
 {
+  ScopedBlockMacro(__scop, "SimpleFilterProcessor::run")	
   kiwi::core::NodeFactory factory;
   kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCase");
   kiwi::text::TextToMorseFilter::registerToFactory(factory,"MorseCode");
@@ -98,7 +99,7 @@ int SimpleFilterProcessor::run()
 	  std::cout << reader.line(i).str() << std::endl;
 	  
 	}
-}
+  }
   //END : Filter use request.
 
   return 0;
@@ -115,17 +116,22 @@ void SimpleFilterProcessor::wrapInputs(
 //	ScopedBlockMacro(__scop, "SimpleFilterProcessor::wrapInputs");
 
 	typedef std::list<string> ArgList;
-	ArgList::iterator it = inputs.begin();
-	ArgList::iterator itEnd = inputs.end();
+
 	int nbParams = inputs.size();
 	if(nbParams > filter.nbReaderInputs()) nbParams = filter.nbReaderInputs();
 
-	for(int i = 0; i < nbParams ; ++i, ++it)
+	for( int i = 0; i < nbParams ; ++i )
 	{
+		ScopedBlockMacro(_forscop, "SimpleFilterProcessor::wrapInputs::for")
 		//Debug::print() << "-- param " << i << "\n";
-		std::ifstream* file = new std::ifstream(it->c_str() );
-		
+		//std::ifstream* file = new std::ifstream(it->c_str() );
+		bool tryFile = false;
 		kiwi::string inputArgument = inputs.front();
+		std::ifstream* file;
+		if(i < 3){
+			 file = new std::ifstream(inputArgument.c_str() );
+			 tryFile = true;
+		}
 		if( inputArgument == kiwi::string("-x") ) 
 		{
 			inputs.pop_front();
@@ -133,8 +139,8 @@ void SimpleFilterProcessor::wrapInputs(
 			// corresponding input portDebug::print() << "-- params --\n";
 			continue;
 		}
-		else if( file->is_open() ) 
-		{	
+		else if( tryFile && file->is_open() ) 
+		{
 			kiwi::text::PlainTextContainer* inputText
 				= new kiwi::text::PlainTextContainer;
 			inputText->init(*file);
@@ -163,9 +169,9 @@ void SimpleFilterProcessor::wrapInputs(
 			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);
 			if(!filter.readerInputPort(0).isConnected() ) 
 			std::cerr << "connection error"<<std::endl;
-
 		}
-		delete file; 
+		if( file->is_open() ) file->close();
+		delete file;
 	}
 
 }

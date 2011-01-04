@@ -58,7 +58,7 @@ SimpleFilterProcessor::SimpleFilterProcessor( const ArgumentProcessor& arguments
 
 int SimpleFilterProcessor::run()
 {
-  ScopedBlockMacro(__scop, "SimpleFilterProcessor::run")	
+//  ScopedBlockMacro(__scop, "SimpleFilterProcessor::run")	
   kiwi::core::NodeFactory factory;
   kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCase");
   kiwi::text::TextToMorseFilter::registerToFactory(factory,"MorseCode");
@@ -122,7 +122,7 @@ void SimpleFilterProcessor::wrapInputs(
 
 	for( int i = 0; i < nbParams ; ++i )
 	{
-		ScopedBlockMacro(_forscop, "SimpleFilterProcessor::wrapInputs::for")
+	//	ScopedBlockMacro(_forscop, "SimpleFilterProcessor::wrapInputs::for")
 		//Debug::print() << "-- param " << i << "\n";
 		//std::ifstream* file = new std::ifstream(it->c_str() );
 		bool tryFile = false;

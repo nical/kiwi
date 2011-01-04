@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 
+#include "Commons.hpp"
+
 namespace Ui {
     class QiwiMainWindow;
 }

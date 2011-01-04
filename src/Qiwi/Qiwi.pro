@@ -12,9 +12,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         QiwiMainWindow.cpp \
-    NodeView.cpp
+    NodeView.cpp \
+    NodePortView.cpp \
+    NodeLinkView.cpp
 
 HEADERS  += QiwiMainWindow.hpp \
-    NodeView.hpp
+    NodeView.hpp \
+    NodePortView.hpp \
+    NodeLinkView.hpp \
+    Commons.hpp
 
 FORMS    += QiwiMainWindow.ui

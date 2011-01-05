@@ -16,8 +16,8 @@ NodeLinkView::NodeLinkView(int type, NodePortView* out, NodePortView* in)
 void NodeLinkView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPainterPath path( _outPort->pos() );
-    path.cubicTo( _inPort->pos().x(), 0
-                 , 0, _inPort->pos().y()
+    path.cubicTo( (_inPort->pos().x()+_outPort->pos().x() )/2.0, _outPort->pos().y()
+                 ,(_inPort->pos().x()+_outPort->pos().x() )/2.0, _inPort->pos().y()
                  , _inPort->pos().x(), _inPort->pos().y()  );
     painter->setPen( QPen(Qt::blue, 3) );
     painter->drawPath( path );
@@ -26,11 +26,13 @@ void NodeLinkView::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setBrush( Qt::transparent );
     painter->setPen( Qt::red );
     painter->drawRect( boundingRect() );
+
+
 }
 
 QRectF NodeLinkView::boundingRect() const
 {
-    return QRectF( QPointF(0,0), _inPort->pos() - _outPort->pos() );
+    return QRectF( _outPort->pos(), _inPort->pos());
 }
 
 void NodeLinkView::updatePosition( int type, const QPointF& position )

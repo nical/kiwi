@@ -14,6 +14,7 @@ QiwiMainWindow::QiwiMainWindow(QWidget *parent) :
 
     ui->graphicsView->setScene( &_scene );
     ui->graphicsView->setRenderHints( QPainter::Antialiasing );
+    ui->graphicsView->setViewportUpdateMode( QGraphicsView::FullViewportUpdate );
 
 
     NodeView* n1 = new NodeView( QPointF(0,0), "node 1", 4, 3, 1, 0);

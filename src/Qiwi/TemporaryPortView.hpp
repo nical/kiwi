@@ -15,6 +15,6 @@ protected:
     void mouseReleaseEvent( QGraphicsSceneMouseEvent* event );
 };
 
-}
+}//namespace
 
 #endif // TEMPORARYPORTVIEW_HPP

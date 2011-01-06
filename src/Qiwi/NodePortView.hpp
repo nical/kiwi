@@ -12,9 +12,9 @@ class NodeLinkView;
 
 class NodePortView : public QGraphicsItem
 {
+friend class NodeLinkView;
 public:
     NodePortView( NodeView* node, PortTypeEnum type, unsigned int index );
-    void disconnect( NodeLinkView* link = 0 );
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
@@ -22,17 +22,26 @@ public:
     unsigned int index() const { return _index; }
     virtual void updatePosition();
     bool connect( NodePortView* p);
+    bool isCompatible( NodePortView* port );
+    bool isCompatible( PortTypeEnum type );
+    QList<NodeLinkView*>::Iterator firstLink() { return _links.begin(); }
+    QList<NodeLinkView*>::Iterator EndLink() { return _links.end(); }
+
+    void disconnect( NodeLinkView* link = 0 );
 
 
 protected:
-    NodePortView( PortTypeEnum type ){ _type = type; }
-    void mousePressEvent( QGraphicsSceneMouseEvent * event );
+    void mouseMoveEvent( QGraphicsSceneMouseEvent * event );
+    void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
+
+    void linkDisconnect( NodeLinkView* link = 0 );
 
     QPointF _pos;
     NodeView* _node;
-    NodeLinkView* _link;
+    QList<NodeLinkView*> _links;
     PortTypeEnum _type;
     unsigned int _index;
+    bool _dragging;
 };
 
 }//namespace

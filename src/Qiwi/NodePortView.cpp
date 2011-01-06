@@ -14,17 +14,47 @@ namespace Qiwi{
 
 NodePortView::NodePortView( NodeView* node, PortTypeEnum type, unsigned int index )
 {
-    _link = 0;
+    _dragging = false;
     _type = type;
     _index = index;
     _node = node;
     updatePosition();
-    setFlags( QGraphicsItem::ItemIsSelectable );
+    setFlags( /*QGraphicsItem::ItemIsSelectable|*/QGraphicsItem::ItemIsMovable );
 }
+
 
 void NodePortView::disconnect( NodeLinkView* link )
 {
-    _link = 0;
+    if( link == 0 ){
+        foreach(NodeLinkView* i, _links){
+            std::cerr << "deleting all links..\n";
+            delete i;
+        }
+        _links.clear();
+    }else{
+        std::cerr << "deleting a link..\n";
+        QList<NodeLinkView*>::Iterator it = _links.begin();
+        QList<NodeLinkView*>::Iterator stop = _links.end();
+        for( ; it != stop; ++it){
+            if( (*it) == link){
+                std::cerr << "found it\n";
+                delete (*it);
+                _links.erase( it );
+                return;
+            }
+        }
+    }
+}
+
+void NodePortView::linkDisconnect( NodeLinkView* link )
+{
+    for(QList<NodeLinkView*>::Iterator it = _links.begin()
+        ; it != _links.end()
+        ; ++it ){
+            if( *it == link ){
+                _links.erase( it );
+            }
+    }
 }
 
 
@@ -66,7 +96,11 @@ void NodePortView::updatePosition(){
                    ,_node->pos().y() + _node->boundingRect().top() );
                 break;
         }
-           if( _link) _link->updatePosition(_type , pos() );
+    }
+
+    NodeLinkView* it;
+    foreach( it, _links){
+        it->updatePosition(_type , pos() );
     }
 }
 
@@ -82,33 +116,64 @@ bool NodePortView::connect( NodePortView* p)
     if( (_type & Qiwi::READER_WRITER_MASK) != (p->portType() & Qiwi::READER_WRITER_MASK) )
         return false; // reader -> writer or writer -> reader
 
-    if(_link != 0){
-        // disconnect
-    }
+    NodeLinkView* link = new NodeLinkView( _type & Qiwi::READER_WRITER_MASK, this, p );
+    _links.append( link );
+    p->_links.append(link );
 
-    _link = new NodeLinkView( _type & Qiwi::READER_WRITER_MASK, this, p );
-    p->_link = _link;
-    scene()->addItem( _link );
+    scene()->addItem( link );
 
 }
 
-void NodePortView::mousePressEvent( QGraphicsSceneMouseEvent * event )
+void NodePortView::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 {
-    //TODO if ctrl not pressed...
-    Qiwi::PortTypeEnum ntype;
-    switch( _type )
-    {
-    case READER_INPUT: {ntype = READER_OUTPUT; break;}
-    case READER_OUTPUT:{ntype = READER_INPUT; break;}
-    case WRITER_INPUT: {ntype = WRITER_OUTPUT; break;}
-    case WRITER_OUTPUT: {ntype = WRITER_INPUT; break;}
+    if( !_dragging ){
+        _dragging = true;
+        std::cerr << "NodePortView::enterMoveEvent\n";
     }
-
-    TemporaryPortView* tpv = new TemporaryPortView( ntype, pos() );
-    scene()->addItem( tpv );
-    tpv->grabMouse();
-    connect( tpv );
+    QGraphicsItem::mouseMoveEvent( event );
 }
 
+void NodePortView::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
+{
+    std::cerr << "NodePortView::mouseReleaseEvent\n";
+   _dragging = false;
+   QGraphicsItem::mouseReleaseEvent( event );
+   QList<QGraphicsItem*> collisions = scene()->collidingItems( this );
+   QList<QGraphicsItem*>::Iterator it = collisions.begin();
+   QList<QGraphicsItem*>::Iterator stop = collisions.end();
+   float distance = 30.0;
+   NodePortView* closestPort = 0;
+   for( ;it != stop; ++it ){
+       std::cerr << "for...\n";
+       NodePortView* collidingPort = dynamic_cast<NodePortView*>(*it);
+       if(collidingPort){
+           float tempDistance = (collidingPort->pos() - pos()).manhattanLength();
+           if( tempDistance < distance ){
+               distance = tempDistance;
+               closestPort = collidingPort;
+           }
+       }
+   }
+
+   if((closestPort) && (closestPort->isCompatible(this) ) ){
+       connect( closestPort );
+   }else{
+       disconnect( 0 );
+   }
+
+   updatePosition();
+}
+
+bool NodePortView::isCompatible( NodePortView* port )
+{
+    return isCompatible( port->portType() );
+}
+
+bool NodePortView::isCompatible( Qiwi::PortTypeEnum type )
+{
+    if( (type & READER_WRITER_MASK) != (_type & READER_WRITER_MASK) ) return false;
+    if( (type & INPUT_OUTPUT_MASK) == (_type & INPUT_OUTPUT_MASK) ) return false;
+    return true;
+}
 
 }//namespace

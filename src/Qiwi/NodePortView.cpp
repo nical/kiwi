@@ -2,6 +2,7 @@
 
 #include "NodeView.hpp"
 #include "NodeLinkView.hpp"
+#include "TemporaryPortView.hpp"
 
 #include <QPainter>
 #include <QLinearGradient>
@@ -11,7 +12,7 @@
 
 namespace Qiwi{
 
-NodePortView::NodePortView( NodeView* node, int type, unsigned int index )
+NodePortView::NodePortView( NodeView* node, PortTypeEnum type, unsigned int index )
 {
     _link = 0;
     _type = type;
@@ -20,6 +21,12 @@ NodePortView::NodePortView( NodeView* node, int type, unsigned int index )
     updatePosition();
     setFlags( QGraphicsItem::ItemIsSelectable );
 }
+
+void NodePortView::disconnect( NodeLinkView* link )
+{
+    _link = 0;
+}
+
 
 void NodePortView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -83,6 +90,24 @@ bool NodePortView::connect( NodePortView* p)
     p->_link = _link;
     scene()->addItem( _link );
 
+}
+
+void NodePortView::mousePressEvent( QGraphicsSceneMouseEvent * event )
+{
+    //TODO if ctrl not pressed...
+    Qiwi::PortTypeEnum ntype;
+    switch( _type )
+    {
+    case READER_INPUT: {ntype = READER_OUTPUT; break;}
+    case READER_OUTPUT:{ntype = READER_INPUT; break;}
+    case WRITER_INPUT: {ntype = WRITER_OUTPUT; break;}
+    case WRITER_OUTPUT: {ntype = WRITER_INPUT; break;}
+    }
+
+    TemporaryPortView* tpv = new TemporaryPortView( ntype, pos() );
+    scene()->addItem( tpv );
+    tpv->grabMouse();
+    connect( tpv );
 }
 
 

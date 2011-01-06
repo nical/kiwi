@@ -26,7 +26,7 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
-    QPointF PortPosition( int type, unsigned int index );
+    QPointF PortPosition( PortTypeEnum type, unsigned int index );
     void initPorts(  unsigned int nbReaderInputs = 0
                    , unsigned int nbReaderOutputs = 0
                    , unsigned int nbWriterInputs = 0
@@ -34,7 +34,7 @@ public:
 
     void addToScene( QGraphicsScene* scene );
 
-    NodePortView* port(int type, unsigned int index);
+    NodePortView* port(PortTypeEnum type, unsigned int index);
 
 protected:
     void mouseMoveEvent( QGraphicsSceneMouseEvent * event );

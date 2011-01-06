@@ -14,12 +14,15 @@ SOURCES += main.cpp\
         QiwiMainWindow.cpp \
     NodeView.cpp \
     NodePortView.cpp \
-    NodeLinkView.cpp
+    NodeLinkView.cpp \
+    TemporaryPortView.cpp \
+    Commons.cpp
 
 HEADERS  += QiwiMainWindow.hpp \
     NodeView.hpp \
     NodePortView.hpp \
     NodeLinkView.hpp \
-    Commons.hpp
+    Commons.hpp \
+    TemporaryPortView.hpp
 
 FORMS    += QiwiMainWindow.ui

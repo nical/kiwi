@@ -26,7 +26,7 @@ void NodeView::initNode( const QPointF& position
                 , unsigned int nbWriterInputs
                 , unsigned int nbWriterOutputs )
 {
-    setFlags(QGraphicsItem::ItemIsMovable|QGraphicsItem::ItemIsSelectable);
+    setFlags(QGraphicsItem::ItemIsMovable /*|QGraphicsItem::ItemIsSelectable*/);
     setPos( position );
     _rect = QRectF( 0, 0, 100.0, 120.0 );
     _name = name;
@@ -57,7 +57,7 @@ QRectF NodeView::boundingRect() const
 }
 
 
-QPointF NodeView::PortPosition( int type, unsigned int index)
+QPointF NodeView::PortPosition( PortTypeEnum type, unsigned int index)
 {
     QPointF result( pos() );
     result += QPointF( _rect.left(), 40.0 + index * 15 );
@@ -130,7 +130,7 @@ void NodeView::addToScene( QGraphicsScene* scene )
     }
 }
 
-NodePortView* NodeView::port(int type, unsigned int index)
+NodePortView* NodeView::port(PortTypeEnum type, unsigned int index)
 {
     switch(type){
     case READER_INPUT: return _readerInputPorts[index];

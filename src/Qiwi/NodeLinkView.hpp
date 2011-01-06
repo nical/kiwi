@@ -10,15 +10,19 @@ namespace Qiwi{
 class NodeLinkView : public QGraphicsItem
 {
 public:
-    NodeLinkView(int type, NodePortView* out, NodePortView* in );
+    NodeLinkView( PortTypeEnum type, NodePortView* out, NodePortView* in );
+    ~NodeLinkView();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
-    int portType() const { return _type; }
-    void updatePosition( int type, const QPointF& pos );
+    PortTypeEnum portType() const { return _type; }
+    void updatePosition( PortTypeEnum type, const QPointF& pos );
+    NodePortView* inPort() const { return _inPort; }
+    NodePortView* outPort() const { return _outPort; }
+    void setPorts( NodePortView* in, NodePortView* out);
 
 private:
-    int _type;
+    PortTypeEnum _type;
     NodePortView* _outPort;
     NodePortView* _inPort;
 };

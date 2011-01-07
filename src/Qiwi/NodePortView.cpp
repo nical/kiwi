@@ -7,7 +7,7 @@
 #include <QPainter>
 #include <QLinearGradient>
 #include <QGraphicsScene>
-
+#include <assert.h>
 #include <iostream>
 
 namespace Qiwi{
@@ -48,24 +48,58 @@ void NodePortView::disconnect( NodeLinkView* link )
 
 void NodePortView::linkDisconnect( NodeLinkView* link )
 {
-    for(QList<NodeLinkView*>::Iterator it = _links.begin()
-        ; it != _links.end()
-        ; ++it ){
-            if( *it == link ){
-                _links.erase( it );
-            }
+    int test = _links.size();
+    std::cerr << "NodePortView::linkDisconnect\n";
+    if( link == 0 ){
+        _links.clear();
+        std::cerr << "erase all links\n";
+    }else{
+        for(QList<NodeLinkView*>::Iterator it = _links.begin()
+            ; it != _links.end()
+            ; ++it ){
+                if( *it == link ){
+                    std::cerr << "erase link\n";
+                    _links.erase( it );
+                }
+        }
     }
+    assert((test != _links.size()) || (test==0));
 }
 
 
 void NodePortView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if( isSelected() ){
-        painter->setPen( QPen(Qt::blue,2) );
-    }else{
-        painter->setPen( QPen(Qt::gray,2) );
+
+    int lr = 0;
+    int lg = 0;
+    int lb = 0;
+    int la = 255;
+
+    int r = 255;
+    int g = 255;
+    int b = 255;
+    int a = 255;
+
+
+
+    NodePortView* grabber = dynamic_cast<NodePortView*>( scene()->mouseGrabberItem() );
+    if( (grabber) && ( !isCompatible(grabber) ) ){
+        a = 100;
+        la = 100;
     }
-    painter->setBrush( Qt::white );
+
+
+    if( isSelected() ){
+        lr = 50;
+        lg = 100;
+        lb = 255;
+    }else{
+        lr = 150;
+        lg = 150;
+        lb = 150;
+    }
+    painter->setPen( QPen( QColor(lr,lg,lb,la),2) );
+    painter->setBrush( QColor(r,g,b,a) );
     painter->drawEllipse( -5, -5, 10, 10 );
 }
 
@@ -155,6 +189,8 @@ void NodePortView::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
        }
    }
 
+
+
    if((closestPort) && (closestPort->isCompatible(this) ) ){
        connect( closestPort );
    }else{
@@ -163,6 +199,12 @@ void NodePortView::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 
    updatePosition();
 }
+
+/*
+mouseMoveEvent( QGraphicsSceneMouseEvent * event )
+{
+}
+*/
 
 bool NodePortView::isCompatible( NodePortView* port )
 {
@@ -174,6 +216,12 @@ bool NodePortView::isCompatible( Qiwi::PortTypeEnum type )
     if( (type & READER_WRITER_MASK) != (_type & READER_WRITER_MASK) ) return false;
     if( (type & INPUT_OUTPUT_MASK) == (_type & INPUT_OUTPUT_MASK) ) return false;
     return true;
+}
+
+NodePortView::~NodePortView()
+{
+    std::cerr << "NodePortView::destructor\n";
+    if( scene() ) scene()->removeItem( this );
 }
 
 }//namespace

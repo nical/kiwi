@@ -16,15 +16,6 @@ NodeLinkView::NodeLinkView(PortTypeEnum type, NodePortView* out, NodePortView* i
 
 void NodeLinkView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    /*
-    QPainterPath path( _outPort->pos() );
-    path.cubicTo( (_inPort->pos().x()+_outPort->pos().x() )/2.0, _outPort->pos().y()
-                 ,(_inPort->pos().x()+_outPort->pos().x() )/2.0, _inPort->pos().y()
-                 , _inPort->pos().x(), _inPort->pos().y()  );
-    painter->setPen( QPen(Qt::blue, 3) );
-    painter->drawPath( path );
-    */
-
     QPainterPath path( _outPort->pos() );
     path.cubicTo( (_inPort->pos().x()+_outPort->pos().x() )/2.0, _outPort->pos().y()
                  ,(_inPort->pos().x()+_outPort->pos().x() )/2.0, _inPort->pos().y()
@@ -66,8 +57,9 @@ void NodeLinkView::setPorts( NodePortView* in, NodePortView* out)
 NodeLinkView::~NodeLinkView()
 {
     std::cerr << "NodeLinkView::destructor\n";
-    _inPort->linkDisconnect();
+    _inPort->linkDisconnect( this);
     _outPort->linkDisconnect( this );
+    //_outPort->linkDisconnect( this );
     if( scene() ) scene()->removeItem( this );
 }
 

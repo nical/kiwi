@@ -89,7 +89,7 @@ void NodeView::initPorts( unsigned int nbReaderInputs
 void NodeView::mouseMoveEvent( QGraphicsSceneMouseEvent* event )
 {
     //std::cerr << "NodeView::mouseMoveEvent\n";
-    // call the parent implementation to keep the frag behavior
+    // call the parent implementation to keep the drag behavior
     QGraphicsItem::mouseMoveEvent( event );
 
     //update each port's position

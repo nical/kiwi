@@ -29,6 +29,7 @@ public:
 
     void disconnect( NodeLinkView* link = 0 );
 
+    ~NodePortView();
 
 protected:
     void mouseMoveEvent( QGraphicsSceneMouseEvent * event );

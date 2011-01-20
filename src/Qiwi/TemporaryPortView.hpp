@@ -13,6 +13,7 @@ public:
 
 protected:
     void mouseReleaseEvent( QGraphicsSceneMouseEvent* event );
+
 };
 
 }

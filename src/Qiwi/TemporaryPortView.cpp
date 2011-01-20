@@ -18,6 +18,8 @@ TemporaryPortView::TemporaryPortView( PortTypeEnum type, const QPointF& position
 
 void TemporaryPortView::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
 {
+    QGraphicsItem::mouseReleaseEvent( event );
+    this->ungrabMouse();
     std::cout << "TemporaryPortView::mouseReleaseEvent\n";
     QList<QGraphicsItem*> collisions = scene()->collidingItems( this );
 
@@ -25,20 +27,20 @@ void TemporaryPortView::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
         std::cerr << "for(..)\n";
         NodePortView* itm = dynamic_cast<NodePortView*>( collisions.front() );
         if( (itm) ){
-            std::cerr << printNodeType( _type ).toStdString() << "\n"
+            std::cerr << printNodeType( _type ).toStdString() << "     "
                     << printNodeType( itm->portType() ).toStdString() << "\n";
 
-            if(itm->portType() == this->portType() ){
+            if((itm->portType() & INPUT_OUTPUT_MASK) == (this->portType() & INPUT_OUTPUT_MASK) ){
                 if( _type & INPUT ){
                     std::cerr << "this = input\n";
                     NodePortView* out = _link->outPort();
-                    out->setSelected(true);
-                    connect( out );
+
+                    itm->connect( out );
                 }else{
                     std::cerr << "this = output\n";
                     NodePortView* in = _link->inPort();
-                    in->setSelected(true);
-                    in->connect( this );
+
+                    itm->connect( in );
                 }
                 break;
             }
@@ -50,7 +52,7 @@ void TemporaryPortView::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
     }
 
     delete _link;
-    this->ungrabMouse();
+
     scene()->removeItem( this );
 
 }

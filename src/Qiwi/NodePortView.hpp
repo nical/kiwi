@@ -12,6 +12,7 @@ class NodeLinkView;
 
 class NodePortView : public QGraphicsItem
 {
+friend class NodeLinkView;
 public:
     NodePortView( NodeView* node, PortTypeEnum type, unsigned int index );
     void disconnect( NodeLinkView* link = 0 );

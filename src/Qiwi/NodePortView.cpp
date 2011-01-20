@@ -25,10 +25,15 @@ NodePortView::NodePortView( NodeView* node, PortTypeEnum type, unsigned int inde
 void NodePortView::disconnect( NodeLinkView* link )
 {
     if(link == 0){
-        _links.clear();
-        return;
+        foreach(NodeLinkView* it, _links){
+            delete it;
+        }
+//        _links.clear();
+    }else{
+        foreach(NodeLinkView* it, _links){
+            if( it == link ) delete link;
+        }
     }
-    // TODO search for a specific connection
 }
 
 bool NodePortView::isConnected() const
@@ -54,7 +59,7 @@ void NodePortView::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     unsigned char lr = 0, lg = 0, lb = 0;
 
     if( isSelected() ){
-        painter->setPen( QPen(QColor(0,0,100, _alpha),2) );
+        painter->setPen( QPen(QColor(50,50,100, _alpha),2) );
     }else{
         painter->setPen( QPen(QColor(100,100,100, _alpha),2) );
     }

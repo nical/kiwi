@@ -14,7 +14,6 @@ class NodePortView;
 class NodeView : public QGraphicsItem
 {
 public:
-    // RWIO
 
     explicit NodeView( const QPointF& position
                      , const QString& name

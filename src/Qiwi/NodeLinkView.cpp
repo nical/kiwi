@@ -54,8 +54,24 @@ void NodeLinkView::setPorts( NodePortView* in, NodePortView* out)
 
 NodeLinkView::~NodeLinkView()
 {
-    _inPort->disconnect();
-    _outPort->disconnect( this );
+    QList<NodeLinkView*>::Iterator it1= _inPort->_links.begin();
+    QList<NodeLinkView*>::Iterator it2= _outPort->_links.begin();
+
+    while(it1 != _inPort->_links.end()){
+        if( *it1 == this ){
+            _inPort->_links.erase( it1 );
+            std::cerr << "disconnect  input\n";
+        }
+        ++it1;
+    }
+    while(it2 != _outPort->_links.end()){
+        if( *it2 == this ){
+            _outPort->_links.erase( it2 );
+            std::cerr << "disconnect  output\n";
+        }
+        ++it2;
+    }
+
     if( scene() ) scene()->removeItem( this );
 }
 

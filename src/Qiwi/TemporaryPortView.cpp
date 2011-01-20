@@ -3,6 +3,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include "NodeLinkView.hpp"
 #include <iostream>
+#include <QPainter>
 
 namespace Qiwi{
 
@@ -12,7 +13,6 @@ TemporaryPortView::TemporaryPortView( PortTypeEnum type, const QPointF& position
 {
     setFlag( QGraphicsItem::ItemIsMovable );
     setPos( position );
-
 }
 
 
@@ -32,9 +32,9 @@ void TemporaryPortView::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
             == (this->portType() & INPUT_OUTPUT_MASK)) ){
             std::cerr << printNodeType( _type ).toStdString() << "     "
                     << printNodeType( itm->portType() ).toStdString() << "\n";
-            double distance = (pos() - itm->pos()).manhattanLength() ;
+            double distance = (pos() - itm->pos()).manhattanLength();
             if( distance < closestDist ){
-                std::cerr << distance<<"\n";
+                std::cerr << distance <<"\n";
                 closestDist = distance;
                 toConnect = itm;
             }
@@ -70,5 +70,35 @@ void TemporaryPortView::updatePosition()
     // do nothing
 }
 
+
+void TemporaryPortView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    _closestPort = 0;
+    _closestDistance = 100;
+    foreach( QGraphicsItem* qItm, collidingItems() ){
+        NodePortView* itm = dynamic_cast<NodePortView*>(qItm);
+        if( itm && ((itm->portType() & INPUT_OUTPUT_MASK)
+            == (this->portType() & INPUT_OUTPUT_MASK)) ){
+            double distance = (pos() - itm->pos()).manhattanLength();
+            if( distance < _closestDistance ){
+                _closestDistance = distance;
+                _closestPort = itm;
+            }
+        }
+    }
+    if(_closestPort)
+    {
+        painter->setPen( QPen(QColor(50,50,255, 100),3) );
+        painter->drawLine( QPointF(0,0), _closestPort->pos() - pos() );
+    }
+    //painter->setBrush( Qt::transparent );
+    //painter->drawRect( boundingRect() );
+}
+
+
+QRectF TemporaryPortView::boundingRect() const
+{
+    return QRectF( -30, -30, 60, 60 );
+}
 
 }//namespace

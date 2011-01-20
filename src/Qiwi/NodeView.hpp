@@ -46,6 +46,7 @@ protected:
                    , unsigned int nbWriterInputs = 0
                    , unsigned int nbWriterOutputs = 0 );
 
+
     QRectF _rect;
     QString _name;
     QGraphicsDropShadowEffect _dropShadow;

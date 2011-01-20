@@ -18,6 +18,7 @@ NodePortView::NodePortView( NodeView* node, PortTypeEnum type, unsigned int inde
     _type = type;
     _index = index;
     _node = node;
+    _alpha = 255;
     updatePosition();
     setFlags( QGraphicsItem::ItemIsSelectable );
 }
@@ -27,15 +28,29 @@ void NodePortView::disconnect( NodeLinkView* link )
     _link = 0;
 }
 
+bool NodePortView::isCompatible( PortTypeEnum pType ) const{
+    if( (_type & Qiwi::INPUT_OUTPUT_MASK) == (pType & Qiwi::INPUT_OUTPUT_MASK) ){
+        std::cerr << "// input -> input or output -> output\n";
+        return false;
+    }
+
+    if( (_type & Qiwi::READER_WRITER_MASK) != (pType & Qiwi::READER_WRITER_MASK) ){
+        std::cerr << "reader -> writer or writer -> reader\n";
+        return false;
+    }
+}
 
 void NodePortView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    unsigned char r = 100, g = 100, b = 100;
+    unsigned char lr = 0, lg = 0, lb = 0;
+
     if( isSelected() ){
-        painter->setPen( QPen(Qt::blue,2) );
+        painter->setPen( QPen(QColor(0,0,100, _alpha),2) );
     }else{
-        painter->setPen( QPen(Qt::gray,2) );
+        painter->setPen( QPen(QColor(100,100,100, _alpha),2) );
     }
-    painter->setBrush( Qt::white );
+    painter->setBrush( QColor(255,255,255, _alpha) );
     painter->drawEllipse( -5, -5, 10, 10 );
 }
 
@@ -114,6 +129,21 @@ void NodePortView::mousePressEvent( QGraphicsSceneMouseEvent * event )
     tpv->grabMouse();
     connect( tpv );
 }
+
+
+void NodePortView::dragMoveEvent ( QGraphicsSceneDragDropEvent * event )
+{
+    TemporaryPortView* dragged = dynamic_cast<TemporaryPortView*>(
+                scene()->selectedItems().front() );
+
+    if( dragged ){
+        PortTypeEnum selectedType = dragged->portType();
+        if( ! isCompatible(selectedType) ){
+            _alpha = 100;
+        }
+    }
+}
+
 
 
 }//namespace

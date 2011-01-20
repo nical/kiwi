@@ -21,13 +21,16 @@ public:
     PortTypeEnum portType() const { return _type; }
     unsigned int index() const { return _index; }
     virtual void updatePosition();
-    bool connect( NodePortView* p);
+    bool connect( NodePortView* p );
+    bool isCompatible( PortTypeEnum pType ) const;
 
 
 protected:
     NodePortView( PortTypeEnum type ){ _type = type; }
     void mousePressEvent( QGraphicsSceneMouseEvent * event );
+    virtual void dragMoveEvent( QGraphicsSceneDragDropEvent * event );
 
+    unsigned char _alpha;
     QPointF _pos;
     NodeView* _node;
     NodeLinkView* _link;

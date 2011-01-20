@@ -34,7 +34,7 @@ void TemporaryPortView::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
                     << printNodeType( itm->portType() ).toStdString() << "\n";
             double distance = (pos() - itm->pos()).manhattanLength() ;
             if( distance < closestDist ){
-                std::cerr << "plop\n";
+                std::cerr << distance<<"\n";
                 closestDist = distance;
                 toConnect = itm;
             }
@@ -53,7 +53,6 @@ void TemporaryPortView::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
         }else{
             std::cerr << "this = output\n";
             NodePortView* in = _link->inPort();
-            if(_link) std::cerr << "nil ptr\n";
             if( !toConnect->connect( in ) ){
                 std::cerr << "error: could not connect ports\n";
             }

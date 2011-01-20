@@ -5,11 +5,19 @@
 namespace Qiwi{
 
 
-NodeLinkView::NodeLinkView(PortTypeEnum type, NodePortView* out, NodePortView* in)
+NodeLinkView::NodeLinkView(PortTypeEnum type, NodePortView* p1, NodePortView* p2)
 {
+    if(!p1){std::cerr << "NodeLinkView::constructor warning p1 = nil ptr\n";}
+    if(!p2){std::cerr << "NodeLinkView::constructor warning p2 = nil ptr\n";}
     _type = type;
-    _inPort = in;
-    _outPort = out;
+    if( p1->portType() & INPUT ){
+        _inPort = p1;
+        _outPort = p2;
+    }else{
+        _inPort = p2;
+        _outPort = p1;
+    }
+
 }
 
 

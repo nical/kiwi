@@ -2,6 +2,7 @@
 #define COMMONS_HPP
 
 #include <QString>
+#include <iostream>
 
 namespace Qiwi{
 /*

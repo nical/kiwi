@@ -14,7 +14,6 @@ namespace Qiwi{
 
 NodePortView::NodePortView( NodeView* node, PortTypeEnum type, unsigned int index )
 {
-    _link = 0;
     _type = type;
     _index = index;
     _node = node;
@@ -25,7 +24,16 @@ NodePortView::NodePortView( NodeView* node, PortTypeEnum type, unsigned int inde
 
 void NodePortView::disconnect( NodeLinkView* link )
 {
-    _link = 0;
+    if(link == 0){
+        _links.clear();
+        return;
+    }
+    // TODO search for a specific connection
+}
+
+bool NodePortView::isConnected() const
+{
+    return !_links.isEmpty();
 }
 
 bool NodePortView::isCompatible( PortTypeEnum pType ) const{
@@ -52,6 +60,8 @@ void NodePortView::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     }
     painter->setBrush( QColor(255,255,255, _alpha) );
     painter->drawEllipse( -5, -5, 10, 10 );
+
+    _alpha = 255;
 }
 
 QRectF NodePortView::boundingRect() const
@@ -81,7 +91,9 @@ void NodePortView::updatePosition(){
                    ,_node->pos().y() + _node->boundingRect().top() );
                 break;
         }
-           if( _link) _link->updatePosition(_type , pos() );
+        foreach(NodeLinkView* link, _links){
+            link->updatePosition(_type , pos() );
+        }
     }
 }
 
@@ -102,13 +114,15 @@ bool NodePortView::connect( NodePortView* p)
         return false;
     }
 
-    if(_link != 0){
+    if( isConnected() ){
         // disconnect
     }
 
-    _link = new NodeLinkView( _type & Qiwi::READER_WRITER_MASK, this, p );
-    p->_link = _link;
-    scene()->addItem( _link );
+    NodeLinkView* nlink = new NodeLinkView( _type & Qiwi::READER_WRITER_MASK, this, p );
+    _links.append( nlink );
+    p->_links.append( nlink );
+    scene()->addItem( nlink );
+    nlink->setZValue( -100 );
     return true;
 }
 
@@ -127,6 +141,7 @@ void NodePortView::mousePressEvent( QGraphicsSceneMouseEvent * event )
     TemporaryPortView* tpv = new TemporaryPortView( ntype, pos() );
     scene()->addItem( tpv );
     tpv->grabMouse();
+    setSelected(true);
     connect( tpv );
 }
 

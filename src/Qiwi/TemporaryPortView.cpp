@@ -47,19 +47,19 @@ void TemporaryPortView::mouseReleaseEvent( QGraphicsSceneMouseEvent* event )
     if( toConnect){
         if( _type & INPUT ){
             std::cerr << "this = input\n";
-            NodePortView* out = _link->outPort();
+            NodePortView* out = _links.front()->outPort();
 
             toConnect->connect( out );
         }else{
             std::cerr << "this = output\n";
-            NodePortView* in = _link->inPort();
+            NodePortView* in = _links.front()->inPort();
             if( !toConnect->connect( in ) ){
                 std::cerr << "error: could not connect ports\n";
             }
         }
     }
 
-    delete _link;
+    delete _links.front();
 
     scene()->removeItem( this );
 

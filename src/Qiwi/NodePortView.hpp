@@ -23,6 +23,7 @@ public:
     virtual void updatePosition();
     bool connect( NodePortView* p );
     bool isCompatible( PortTypeEnum pType ) const;
+    bool isConnected() const;
 
 
 protected:
@@ -33,7 +34,8 @@ protected:
     unsigned char _alpha;
     QPointF _pos;
     NodeView* _node;
-    NodeLinkView* _link;
+    //NodeLinkView* _link;
+    QList<NodeLinkView*> _links;
     PortTypeEnum _type;
     unsigned int _index;
 };

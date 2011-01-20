@@ -21,10 +21,12 @@ QiwiMainWindow::QiwiMainWindow(QWidget *parent) :
     NodeView* n1 = new NodeView( QPointF(0,0), "node 1", 4, 3, 1, 0);
     n1->addToScene(&_scene);
 
-    NodeView* n2 = new NodeView( QPointF(200,0), "node 2", 3, 4, 1, 0);
+    NodeView* n2 = new NodeView( QPointF(150,0), "node 2", 3, 4, 1, 0);
     n2->addToScene(&_scene);
 
-    n1->port(READER_OUTPUT, 0)->connect( n2->port(READER_INPUT, 0) );
+    NodeView* n3 = new NodeView( QPointF(300,0), "node 3", 3, 3, 0, 0);
+    n3->addToScene(&_scene);
+
 }
 
 QiwiMainWindow::~QiwiMainWindow()

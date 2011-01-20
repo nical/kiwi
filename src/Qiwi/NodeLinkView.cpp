@@ -31,13 +31,6 @@ void NodeLinkView::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->setPen( QPen(Qt::blue, 3) );
     painter->drawPath( path );
 
-    //debug
-   /*
-    painter->setBrush( Qt::transparent );
-    painter->setPen( Qt::red );
-    painter->drawRect( boundingRect() );
-    */
-
 }
 
 QRectF NodeLinkView::boundingRect() const
@@ -49,9 +42,6 @@ void NodeLinkView::updatePosition( PortTypeEnum type, const QPointF& position )
 {
     if(type & Qiwi::OUTPUT){
         setPos( position );
-    }else{
-        // nothing to do
-        // check that the item is redrawn maybe ...
     }
 }
 

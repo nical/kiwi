@@ -31,16 +31,18 @@
 #ifndef KIWI_NODEFACTORY_HPP
 #define KIWI_NODEFACTORY_HPP
 
-#include "kiwi/core/Node.hpp"
-#include "kiwi/core/Filter.hpp"
-#include "kiwi/core/Container.hpp"
+
 #include <map>
 #include <list>
-
+#include "kiwi/core/Commons.hpp"
 
 
 namespace kiwi{
 namespace core{
+
+class Node;
+class Filter;
+class Container;
 
 /**
  * @brief 

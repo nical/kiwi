@@ -28,6 +28,9 @@
 
 
 #include "NodeFactory.hpp"
+#include "kiwi/core/Node.hpp"
+#include "kiwi/core/Filter.hpp"
+#include "kiwi/core/Container.hpp"
 
 
 

@@ -86,7 +86,7 @@ public:
 //--------------------------------------------------------------------- typedefs
 
 
-	enum { FILTER, CONTAINER };
+	enum { FILTER, CONTAINER, NODE };
 
 // ---------------------------------------------------- constructor / Destructor
 	/**
@@ -103,8 +103,9 @@ public:
 
 	/**
 	 * @brief must return Node::FILTER or Node::CONTAINER.
+	 * @todo deprecated !
 	 */ 
-	virtual int nodeType() = 0;
+	virtual int nodeType() const { return NODE; }
 
 	virtual bool update(int phase){}
 

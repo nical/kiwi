@@ -69,7 +69,7 @@ public:
 	}
 	
 
-	bool readyCondition()
+	bool isReady() const
 	{
 		return (readerInputPort(0).isConnected() );
 	}

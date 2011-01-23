@@ -84,7 +84,7 @@ public:
 	
 	
 // ---------------------------------------------------------------------
-	bool readyCondition()
+	bool isReady() const
 	{
 		return _subFilter.isReady();
 	}

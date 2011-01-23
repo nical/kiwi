@@ -55,21 +55,13 @@ public:
 
 	int nodeType() { return Node::FILTER; };
 
+	bool update(int) { process(); return true; } 
+
 	/**
 	 * Main entry point of the filter. This is the function you should override to perform
 	 * whatever the filter is supposed to do.
 	 */
 	virtual void process() = 0;
-
-
-	/**
-	 * @brief Returns true if the Filter is reday to process.
-	 *
-	 * This method should be called before calling process().It checks that the boolean
-	 * readiness state is true AND that the optionnal readyCondition returns true as well.
-	 * @see Node::readyCondition()
-	 */
-	bool isReady() { return  readyCondition(); }
 
 
 	Filter():Node()
@@ -83,19 +75,7 @@ public:
 
 // ---------------------------------------------------------------------
 protected:
-	/**
-	 * @brief a method to overload when there is need to test things when checking readiness
-	 *
-	 * This method may optonally be overloaded in some case when it is convenient to
-	 * add an extra condition for checking wether the Filter is ready to compute.
-	 * This is called within isReady() and does not replace setting the ready state with
-	 * void setReady(bool), isReady checks that boths conditions are fulfilled.
-	 *
-	 * by default returns true so that it doesn't interfere with setReady(bool) when the
-	 * method is not overloaded
-	 */
-	virtual bool readyCondition() {return true;}
-
+	
 
 	kiwi::string metaCommand( const kiwi::string& command )
 	{

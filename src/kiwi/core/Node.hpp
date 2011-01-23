@@ -68,10 +68,8 @@ class ReaderInputPort;
 class ReaderOutputPort;
 class WriterInputPort;
 class WriterOutputPort;
-/*
-template<class T> class InputPort;
-template<class T> class OutputPort;
-*/
+
+
 /**
  * @class Node
  * @brief The base class for every kiwi Container and Filter
@@ -85,12 +83,8 @@ class Node
 public:
 	
 //--------------------------------------------------------------------- typedefs
-/*	
-	typedef OutputPort<Reader> ReaderOutputPort;
-	typedef InputPort<Reader> ReaderInputPort;
-	typedef OutputPort<Writer> WriterOutputPort;
-	typedef InputPort<Writer> WriterInputPort;
-*/
+
+
 	enum { FILTER, CONTAINER };
 
 // ---------------------------------------------------- constructor / Destructor
@@ -113,7 +107,15 @@ public:
 	 * @brief must return Node::FILTER or Node::CONTAINER.
 	 */ 
 	virtual int nodeType() = 0;
- 
+
+	virtual bool update(int phase){}
+
+	/**
+	 * @brief Returns true if the Node is reday to update
+	 * (process in the case of a Filter).
+	 *
+	 */
+	bool isReady() const { return true; } // TODO check that Containers are ready
 
 	/**
 	 * @brief Automatically called when port are connected or disconnected.

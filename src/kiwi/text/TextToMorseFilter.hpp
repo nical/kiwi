@@ -152,7 +152,7 @@ public:
 
 	// This is optionnal. Override this method readyCondition() if this filter
 	// needs to perform custom checks to tell if it's ready.
-	bool readyCondition()
+	bool isReady() const
 	{
 		return (readerInputPort(0).isConnected() );
 	}

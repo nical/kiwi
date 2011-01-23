@@ -121,7 +121,7 @@ DEBUG_ONLY(
 	
 	
 // ---------------------------------------------------------------------
-	bool readyCondition()
+	bool isReady() const
 	{
 		return (readerInputPort(0).isConnected()
 			&& readerInputPort(1).isConnected()

@@ -29,8 +29,8 @@
 
 #include "TextReader.hpp"
 #include "kiwi/utils/modulo.hpp"
-#include "kiwi/core/InputPort.hpp"
-#include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/Ports.hpp"
+
 
 namespace kiwi{
 namespace text{
@@ -45,7 +45,7 @@ TextReader::TextReader( AbstractTextContainer& container
 	init(container, index, firstLine, range);
 }
 
-TextReader::TextReader( core::Node::ReaderInputPort& port
+TextReader::TextReader( core::ReaderInputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
@@ -65,7 +65,7 @@ TextReader::TextReader( core::Node::ReaderInputPort& port
 }
 
 
-TextReader::TextReader( core::Node::ReaderOutputPort& port
+TextReader::TextReader( core::ReaderOutputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {

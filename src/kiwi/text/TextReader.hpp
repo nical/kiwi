@@ -58,10 +58,10 @@ public:
 	TextReader( AbstractTextContainer& container, portIndex_t index
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 );
-	TextReader( core::Node::ReaderInputPort& port
+	TextReader( core::ReaderInputPort& port
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 ); 
-	TextReader( core::Node::ReaderOutputPort& port
+	TextReader( core::ReaderOutputPort& port
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 );
 

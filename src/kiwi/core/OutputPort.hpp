@@ -38,7 +38,7 @@
 namespace kiwi{
 namespace core{
 
-export template <class T> class InputPort;
+template <class T> class InputPort;
 class Node;
 
 /**

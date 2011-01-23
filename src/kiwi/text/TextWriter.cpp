@@ -29,8 +29,7 @@
 
 #include "TextWriter.hpp"
 #include "kiwi/utils/modulo.hpp"
-#include "kiwi/core/InputPort.hpp"
-#include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/Ports.hpp"
 
 
 namespace kiwi{
@@ -48,7 +47,7 @@ TextWriter::TextWriter( AbstractTextContainer& container
 	init(container, index, firstLine, range);
 }
 
-TextWriter::TextWriter( core::Node::WriterInputPort& port
+TextWriter::TextWriter( core::WriterInputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
@@ -67,7 +66,7 @@ TextWriter::TextWriter( core::Node::WriterInputPort& port
 	}
 }
 
-TextWriter::TextWriter( core::Node::WriterOutputPort& port
+TextWriter::TextWriter( core::WriterOutputPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {

@@ -71,7 +71,7 @@ public:
 	/**
 	 * @brief Constructor.
 	 */ 
-	ArrayWriter(const core::Container::WriterInputPort& port);
+	ArrayWriter(const core::WriterInputPort& port);
 	ArrayWriter(const AbstractArrayContainer<ValueType,TDimension>& resource, portIndex_t portIndex);
 	
 	/**

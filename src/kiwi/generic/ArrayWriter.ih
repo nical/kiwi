@@ -26,8 +26,8 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "kiwi/core/InputPort.hpp"
-#include "kiwi/core/OutputPort.hpp"
+
+#include "kiwi/core/Ports.hpp"
 
 namespace kiwi
 {
@@ -39,7 +39,7 @@ namespace generic
 
 template<typename T, unsigned int D>
 ArrayWriter<T,D>::ArrayWriter(
-	const core::Container::WriterInputPort& port
+	const core::WriterInputPort& port
 )
 {
 	AbstractArrayContainer<T,D>* node = 

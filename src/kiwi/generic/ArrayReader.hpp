@@ -72,7 +72,7 @@ public:
 	/**
 	 * @brief Constructor.
 	 */ 
-	ArrayReader(const core::Container::ReaderInputPort& port);
+	ArrayReader(const core::ReaderInputPort& port);
 	ArrayReader(const AbstractArrayContainer<ValueType,TDimension>& resource, portIndex_t portIndex);
 	
 	/**

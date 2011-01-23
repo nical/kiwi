@@ -64,8 +64,14 @@ namespace core{
 
 class Reader;
 class Writer;
+class ReaderInputPort;
+class ReaderOutputPort;
+class WriterInputPort;
+class WriterOutputPort;
+/*
 template<class T> class InputPort;
 template<class T> class OutputPort;
+*/
 /**
  * @class Node
  * @brief The base class for every kiwi Container and Filter
@@ -79,12 +85,12 @@ class Node
 public:
 	
 //--------------------------------------------------------------------- typedefs
-	
+/*	
 	typedef OutputPort<Reader> ReaderOutputPort;
 	typedef InputPort<Reader> ReaderInputPort;
 	typedef OutputPort<Writer> WriterOutputPort;
 	typedef InputPort<Writer> WriterInputPort;
-
+*/
 	enum { FILTER, CONTAINER };
 
 // ---------------------------------------------------- constructor / Destructor
@@ -410,18 +416,21 @@ protected:
 	/**
 	 * @brief Enables/disables port
 	 */
-	template<typename SlotType> 
-	void setPortEnabled(InputPort<SlotType>& port, bool status)
-	{
-		port.setEnabled(status);
-	}
-
-	// TODO: warning! template here defined in .cpp
+	void setPortEnabled(ReaderInputPort& port, bool status);
+	
 	/**
 	 * @brief Enables/disables port
 	 */
-	template<typename SlotType>
-	void setPortEnabled(OutputPort<SlotType>& port, bool status);
+	void setPortEnabled(WriterInputPort& port, bool status);
+	
+	/**
+	 * @brief Enables/disables port
+	 */
+	void setPortEnabled(ReaderOutputPort& port, bool status);
+	/**
+	 * @brief Enables/disables port
+	 */
+	void setPortEnabled(WriterOutputPort& port, bool status);
 	
 	
 	/**
@@ -536,8 +545,18 @@ private:
  * 	// connects myNode1's first OutputPort to myNode2's second InputPort
  * 	myNode1.readerOutputPort(0) >> myNode2.readerInputPort(1);
  */ 
-template <typename SlotType>
-bool operator>>(OutputPort<SlotType>& output, InputPort<SlotType>& input );
+bool operator>>(ReaderOutputPort& output, ReaderInputPort& input );
+/**
+ *	@brief Operator for connections between Node.
+ * 
+ * The operator to connect Nodes port in an elegant way.
+ * Corresonds to InputPort::connect(OutputPort<SlotType>& outputPort);
+ *
+ * exemple:
+ * 	// connects myNode1's first OutputPort to myNode2's second InputPort
+ * 	myNode1.readerOutputPort(0) >> myNode2.readerInputPort(1);
+ */ 
+bool operator>>(WriterOutputPort& output, WriterInputPort& input );
 
 
 

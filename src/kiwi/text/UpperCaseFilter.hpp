@@ -13,8 +13,8 @@
 #include "kiwi/text/PlainTextContainer.hpp"
 #include "kiwi/core/NodeFactory.hpp"
 #include "kiwi/utils/TextOperations.hpp"
-#include "kiwi/core/InputPort.hpp"
-#include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/Ports.hpp"
+
 
 
 

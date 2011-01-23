@@ -29,8 +29,8 @@
 
 #include "kiwi/generic/AbstractArrayContainer.hpp"
 
-#include "kiwi/core/InputPort.hpp"
-#include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/ReaderInputPort.hpp"
+#include "kiwi/core/ReaderOutputPort.hpp"
 
 namespace kiwi
 {
@@ -41,7 +41,7 @@ namespace generic
 
 template<typename T, unsigned int D>
 ArrayReader<T,D>::ArrayReader(
-	const core::Node::ReaderInputPort& port )
+	const core::ReaderInputPort& port )
 {
 	AbstractArrayContainer<T,D>* node = 
 		dynamic_cast< AbstractArrayContainer<T,D>* >( 

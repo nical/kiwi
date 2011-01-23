@@ -51,7 +51,7 @@ template<class T> class OutputPort;
  * 
  * Each port has a name which use is facultative has they are also accessed using an integer index.
  */
-export template<class SlotType>
+template<class SlotType>
 class InputPort
 {
 friend class Node;

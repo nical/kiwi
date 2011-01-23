@@ -28,17 +28,13 @@
 
 
 #include "Node.hpp"
-#include "kiwi/core/InputPort.hpp"
-#include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/ReaderInputPort.hpp"
+#include "kiwi/core/ReaderOutputPort.hpp"
+#include "kiwi/core/WriterInputPort.hpp"
+#include "kiwi/core/WriterOutputPort.hpp"
 
 namespace kiwi{
 namespace core{
-
-// explicit template instanciation
-template bool operator>>(OutputPort<Reader>& output, InputPort<Reader>& input );
-template bool operator>>(OutputPort<Writer>& output, InputPort<Writer>& input );
-
-
 
 
 
@@ -79,7 +75,7 @@ portIndex_t Node::addReaderInputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderInputCount();
-	_readerInputs.push_back( new InputPort<Reader>(this) );
+	_readerInputs.push_back( new ReaderInputPort(this) );
 	return _readerInputs.size()-1;
 }
 
@@ -87,7 +83,7 @@ portIndex_t Node::addReaderOutputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderOutputCount();
-	_readerOutputs.push_back( new OutputPort<Reader>(this) );
+	_readerOutputs.push_back( new ReaderOutputPort(this) );
 	return _readerOutputs.size()-1;
 }
 
@@ -95,7 +91,7 @@ portIndex_t Node::addWriterInputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterInputCount();
-	_writerInputs.push_back( new InputPort<Writer>(this) );
+	_writerInputs.push_back( new WriterInputPort(this) );
 	return _writerInputs.size()-1;
 }
 
@@ -103,7 +99,7 @@ portIndex_t Node::addWriterOutputPort()
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterOutputCount();
-	_writerOutputs.push_back( new OutputPort<Writer>(this) );
+	_writerOutputs.push_back( new WriterOutputPort(this) );
 	return _writerOutputs.size()-1;
 }
 
@@ -290,9 +286,23 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 }
 
 
-template<typename SlotType>
 void
-Node::setPortEnabled(OutputPort<SlotType>& port, bool status)
+Node::setPortEnabled(ReaderInputPort& port, bool status)
+{
+	port.setEnabled(status);
+}
+void
+Node::setPortEnabled(WriterInputPort& port, bool status)
+{
+	port.setEnabled(status);
+}
+void
+Node::setPortEnabled(ReaderOutputPort& port, bool status)
+{
+	port.setEnabled(status);
+}
+void
+Node::setPortEnabled(WriterOutputPort& port, bool status)
 {
 	port.setEnabled(status);
 }
@@ -300,9 +310,9 @@ Node::setPortEnabled(OutputPort<SlotType>& port, bool status)
 
 // ----------------------------------------------------------- Operators
 
-template <typename SlotType>
+
 bool 
-operator >> (OutputPort<SlotType>& output, InputPort<SlotType>& input )
+operator >> (ReaderOutputPort& output, ReaderInputPort& input )
 {
 	if(!input.isConnected())
 	{
@@ -310,6 +320,17 @@ operator >> (OutputPort<SlotType>& output, InputPort<SlotType>& input )
 		return true;
 	}else{return false;}
 }
+
+bool 
+operator >> (WriterOutputPort& output, WriterInputPort& input )
+{
+	if(!input.isConnected())
+	{
+		input.connect(output);
+		return true;
+	}else{return false;}
+}
+
 
 
 

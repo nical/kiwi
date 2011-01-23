@@ -37,6 +37,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/types.hpp"
 #include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/core/Ports.hpp"
 
 namespace kiwi
 {
@@ -136,7 +137,7 @@ class ValueReader : public core::Reader
 public:
 	typedef TValueType ValueType;
 	// -----------------------------------------------------------------
-	ValueReader(const core::Container::ReaderInputPort& port)
+	ValueReader(const core::ReaderInputPort& port)
 	{
 		assert( port.connectedOutput()->subPort()->node() );
 		
@@ -169,7 +170,7 @@ class ValueWriter : public core::Writer
 public:
 	typedef TValueType ValueType;
 	// -----------------------------------------------------------------
-	ValueWriter(const core::Container::WriterInputPort& port)
+	ValueWriter(const core::WriterInputPort& port)
 	{
 		_resource = dynamic_cast<AbstractValueContainer<TValueType>* >(
 			port.connectedOutput()->subPort()->node() 

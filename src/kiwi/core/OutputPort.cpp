@@ -26,21 +26,21 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "kiwi/core/Node.hpp"
+
+#include "kiwi/core/Reader.hpp"
+#include "kiwi/core/Writer.hpp"
+
+#include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/InputPort.hpp"
 
 
-namespace kiwi
-{
-namespace core	
-{
-
-
-template class Node::OutputPort<Reader>;
-template class Node::OutputPort<Writer>;
-
+namespace kiwi{
+namespace core{
 
 
 template <typename SlotType>
-Node::OutputPort<SlotType>::OutputPort(	Node* myNode )
+OutputPort<SlotType>::OutputPort( Node* myNode )
 	: _enabled(true)
 	, _node(myNode)
 	, _subPort(0)
@@ -49,8 +49,8 @@ Node::OutputPort<SlotType>::OutputPort(	Node* myNode )
 }
 
 template <typename SlotType>
-const Node::OutputPort<SlotType>* 
-Node::OutputPort<SlotType>::subPort() const
+const OutputPort<SlotType>* 
+OutputPort<SlotType>::subPort() const
 {
 	// if there's port rebinding, _subPort 1!= 0 
 	// call the _subPort's method
@@ -61,14 +61,14 @@ Node::OutputPort<SlotType>::subPort() const
 
 template <typename SlotType>
 void 
-Node::OutputPort<SlotType>::disconnect( InputPort<SlotType>* input )
+OutputPort<SlotType>::disconnect( InputPort<SlotType>* input )
 {
-//	ScopedBlockMacro(__scop, "Node::OutputPort::disconnect" );
+//	ScopedBlockMacro(__scop, "OutputPort::disconnect" );
 	if( input == 0 ){
-		std::list<Node::InputPort<SlotType>*> connectionsTempCopy
+		std::list<InputPort<SlotType>*> connectionsTempCopy
 			= _connections;
 		_connections.clear();
-		typename std::list<Node::InputPort<SlotType>*>::iterator
+		typename std::list<InputPort<SlotType>*>::iterator
 			it = connectionsTempCopy.begin();
 
 		for(int i = 0; i < connectionsTempCopy.size(); ++i)
@@ -80,7 +80,7 @@ Node::OutputPort<SlotType>::disconnect( InputPort<SlotType>* input )
 		}
 
 	}else
-		for(typename std::list<Node::InputPort<SlotType>*>::iterator
+		for(typename std::list<InputPort<SlotType>*>::iterator
 			it = _connections.begin()
 			; it!= _connections.end()
 			; ++it)
@@ -96,7 +96,7 @@ Node::OutputPort<SlotType>::disconnect( InputPort<SlotType>* input )
 
 template <typename SlotType>
 void 
-Node::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
+OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
 {
 //	Debug::print() << "port binding" << endl();
 	_subPort = &port;
@@ -108,70 +108,70 @@ Node::OutputPort<SlotType>::bind(OutputPort<SlotType>& port)
 
 template<>
 kiwi::string 
-Node::OutputPort<Reader>::name() const
+OutputPort<Reader>::name() const
 {
 	return _node->readerOutputName( _node->indexOf(*this) );
 }
 
 template<>
 kiwi::string 
-Node::OutputPort<Writer>::name() const
+OutputPort<Writer>::name() const
 {
 	return _node->readerOutputName(	_node->indexOf(*this) );
 }
 
 template <typename SlotType>
 portIndex_t 
-Node::OutputPort<SlotType>::index() const 
+OutputPort<SlotType>::index() const 
 {
 	return _node->indexOf(*this);
 }
 
 template <typename SlotType>
 Node* 
-Node::OutputPort<SlotType>::node() const 
+OutputPort<SlotType>::node() const 
 {
 	return _node;
 }
 
 template<>
 Tags 
-Node::OutputPort<Reader>::tags() const
+OutputPort<Reader>::tags() const
 { 
 	return _node->readerOutputTags( index() ); 
 }
 
 template<>
 Tags 
-Node::OutputPort<Writer>::tags() const
+OutputPort<Writer>::tags() const
 { 
 	return _node->writerOutputTags( index() ); 
 }
 
 template <typename SlotType>
 bool 
-Node::OutputPort<SlotType>::isCompatible(InputPort<SlotType>& input)	
+OutputPort<SlotType>::isCompatible(InputPort<SlotType>& input)	
 {
 	return input.isCompatible(*this); 
 }
 
 template <typename SlotType>
 bool 
-Node::OutputPort<SlotType>::isConnected() const 
+OutputPort<SlotType>::isConnected() const 
 { 
 	return (_connections.size() != 0); 
 }
 
 template <typename SlotType>
 bool 
-Node::OutputPort<SlotType>::isEnabled() const 
+OutputPort<SlotType>::isEnabled() const 
 { 
 	return _enabled; 
 }
 
 template <typename SlotType>
-typename Node::OutputPort<SlotType>::connectionList 
-Node::OutputPort<SlotType>::connections() const 
+typename OutputPort<SlotType>::connectionList 
+OutputPort<SlotType>::connections() const 
 { 
 	return _connections; 
 }
@@ -179,7 +179,7 @@ Node::OutputPort<SlotType>::connections() const
 
 template <typename SlotType>
 void 
-Node::OutputPort<SlotType>::setEnabled(bool status) 
+OutputPort<SlotType>::setEnabled(bool status) 
 {
 	_enabled = status;
 }

@@ -29,6 +29,9 @@
 
 #include "kiwi/generic/AbstractArrayContainer.hpp"
 
+#include "kiwi/core/InputPort.hpp"
+#include "kiwi/core/OutputPort.hpp"
+
 namespace kiwi
 {
 namespace generic

@@ -26,18 +26,21 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "kiwi/core/Node.hpp"
 
+#include "kiwi/core/Reader.hpp"
+#include "kiwi/core/Writer.hpp"
 
+#include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/InputPort.hpp"
 
 namespace kiwi{
 namespace core{
 
-template class Node::InputPort<Reader>;
-template class Node::InputPort<Writer>;
 
 // ----------------------------------------------------------- InputPort
 template <typename SlotType>
-Node::InputPort<SlotType>::InputPort( Node* myNode )
+InputPort<SlotType>::InputPort( Node* myNode )
 :   _connectedNode(0)
 	, _enabled(true)
 	, _subPort(0)
@@ -49,9 +52,9 @@ Node::InputPort<SlotType>::InputPort( Node* myNode )
 
 template <typename SlotType>
 void 
-Node::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMetaPort)
+InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMetaPort)
 {
-//ScopedBlockMacro(__sccop, "Node::InputPort<SlotType>::connect" );
+//ScopedBlockMacro(__sccop, "InputPort<SlotType>::connect" );
 	if( !isEnabled() )
 	{
 		Debug::error() << "InputPort::connect() : input port disabled" << endl();
@@ -85,9 +88,9 @@ Node::InputPort<SlotType>::connect(OutputPort<SlotType>& outputPort, bool isMeta
 
 template <typename SlotType>
 void 
-Node::InputPort<SlotType>::disconnect()
+InputPort<SlotType>::disconnect()
 {
-//ScopedBlockMacro(scp_block,"Node::InputPort::disconnect");
+//ScopedBlockMacro(scp_block,"InputPort::disconnect");
 	if(_subPort != 0) _subPort->disconnect();
 	if( !isConnected() ) return;
 
@@ -102,7 +105,7 @@ Node::InputPort<SlotType>::disconnect()
 
 template <typename SlotType>
 void 
-Node::InputPort<SlotType>::bind(InputPort<SlotType>& port)
+InputPort<SlotType>::bind(InputPort<SlotType>& port)
 {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
 	_subPort = &port;
@@ -112,22 +115,22 @@ Node::InputPort<SlotType>::bind(InputPort<SlotType>& port)
 
 
 template <typename SlotType>
-inline portIndex_t 
-Node::InputPort<SlotType>::index() const 
+portIndex_t 
+InputPort<SlotType>::index() const 
 {
 	return _node->indexOf(*this);
 }
 
 template <typename SlotType>
-inline Node* 
-Node::InputPort<SlotType>::node() const 
+Node* 
+InputPort<SlotType>::node() const 
 {
 	return _node;
 }
 
 template <typename SlotType>
-const Node::InputPort<SlotType>* 
-Node::InputPort<SlotType>::subPort() const
+const InputPort<SlotType>* 
+InputPort<SlotType>::subPort() const
 {
 	// if there's port rebinding, _subPort != 0 
 	// call the _subPort's method
@@ -139,49 +142,49 @@ Node::InputPort<SlotType>::subPort() const
 
 template<>
 Tags 
-Node::InputPort<Reader>::tags() const
+InputPort<Reader>::tags() const
 {
 	return subPort()->node()->readerInputTags( index() );
 }
 
 template<>
 Tags 
-Node::InputPort<Writer>::tags() const
+InputPort<Writer>::tags() const
 { 
 	return subPort()->node()->writerInputTags( index() ); 
 }
 
 template <typename SlotType>
-inline bool 
-Node::InputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
+bool 
+InputPort<SlotType>::isCompatible(OutputPort<SlotType>& output)	
 { 
 	return ( tags().hasOneOf(output.tags()+Tags("any") ) );
 }
 
 template <typename SlotType>
-inline bool 
-Node::InputPort<SlotType>::isCompatible(const kiwi::Tags& tag)	
+bool 
+InputPort<SlotType>::isCompatible(const kiwi::Tags& tag)	
 { 
 	return ( tags().hasOneOf(tag + Tags("any") ) );
 }
 
 template <typename SlotType>
-inline bool 
-Node::InputPort<SlotType>::isConnected() const 
+bool 
+InputPort<SlotType>::isConnected() const 
 { 
 	return (_connectedNode != 0); 
 }
 
 template <typename SlotType>
-inline bool 
-Node::InputPort<SlotType>::isEnabled() const 
+bool 
+InputPort<SlotType>::isEnabled() const 
 {
 	return _enabled;
 }
 
 template <typename SlotType>
-inline Node::OutputPort<SlotType>* 
-Node::InputPort<SlotType>::connectedOutput() const 
+OutputPort<SlotType>* 
+InputPort<SlotType>::connectedOutput() const 
 { 
 	return _connectedNode; 
 }
@@ -189,14 +192,14 @@ Node::InputPort<SlotType>::connectedOutput() const
 
 template<>
 kiwi::string 
-Node::InputPort<Reader>::name() const
+InputPort<Reader>::name() const
 {
 	return _node->readerInputName(_node->indexOf(*this));
 }
 
 template<>
 kiwi::string 
-Node::InputPort<Writer>::name() const
+InputPort<Writer>::name() const
 {
 	return _node->readerInputName(_node->indexOf(*this));
 }
@@ -209,8 +212,8 @@ Node::InputPort<Writer>::name() const
 
 
 template <typename SlotType>
-inline void 
-Node::InputPort<SlotType>::setEnabled(bool status) 
+void 
+InputPort<SlotType>::setEnabled(bool status) 
 {
 	_enabled = status;
 }

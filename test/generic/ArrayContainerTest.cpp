@@ -10,6 +10,9 @@
 #include "kiwi/generic/ArrayWriter.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
 
+#include "kiwi/core/InputPort.hpp"
+#include "kiwi/core/OutputPort.hpp"
+
 #include "kiwi/generic/Point.hpp"
 
 #include "kiwi/utils/types.hpp"

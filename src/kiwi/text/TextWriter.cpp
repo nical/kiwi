@@ -29,6 +29,9 @@
 
 #include "TextWriter.hpp"
 #include "kiwi/utils/modulo.hpp"
+#include "kiwi/core/InputPort.hpp"
+#include "kiwi/core/OutputPort.hpp"
+
 
 namespace kiwi{
 namespace text{

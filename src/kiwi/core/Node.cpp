@@ -28,20 +28,19 @@
 
 
 #include "Node.hpp"
+#include "kiwi/core/InputPort.hpp"
+#include "kiwi/core/OutputPort.hpp"
 
 namespace kiwi{
 namespace core{
 
 // explicit template instanciation
-template bool operator>>(Node::OutputPort<Reader>& output, Node::InputPort<Reader>& input );
-template bool operator>>(Node::OutputPort<Writer>& output, Node::InputPort<Writer>& input );
+template bool operator>>(OutputPort<Reader>& output, InputPort<Reader>& input );
+template bool operator>>(OutputPort<Writer>& output, InputPort<Writer>& input );
 
 
 
 
-//
-// Implementantion of Node's methods.
-//
 
 Node::Node()
 {
@@ -291,14 +290,19 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 }
 
 
+template<typename SlotType>
+void
+Node::setPortEnabled(OutputPort<SlotType>& port, bool status)
+{
+	port.setEnabled(status);
+}
+
 
 // ----------------------------------------------------------- Operators
 
 template <typename SlotType>
 bool 
-operator >> (
-	Node::OutputPort<SlotType>& output
-	, Node::InputPort<SlotType>& input )
+operator >> (OutputPort<SlotType>& output, InputPort<SlotType>& input )
 {
 	if(!input.isConnected())
 	{

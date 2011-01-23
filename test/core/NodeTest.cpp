@@ -7,7 +7,8 @@
 
 #include "kiwi/utils/types.hpp"
 
-
+#include "kiwi/core/InputPort.hpp"
+#include "kiwi/core/OutputPort.hpp"
 
 using namespace kiwi;
 

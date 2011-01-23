@@ -30,6 +30,8 @@ SET(KIWI_SRC ${KIWI_SRC}
 		utils/DebugOutputStream.cpp
 		utils/SocketCreator.cpp
 		core/Node.cpp
+		core/InputPort.cpp
+		core/OutputPort.cpp
 		core/CanonicalFilter.cpp
 		core/NodeFactory.cpp
 		pipeline/SimplePipeline.cpp

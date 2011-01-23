@@ -41,7 +41,7 @@ public:
 	ValueTestFilter() : Filter()
 	{
 	ScopedBlockMacro(scp_block, "ValueTestFilter::constructor");
-		setLayoutEventEnabled(false);
+	
 		kiwi::string sType( string("value_")+types::str<TValueType>() );
 		addReaderInputPort();
 		addReaderInputPort();
@@ -52,7 +52,6 @@ public:
 		//port is connected
 		addReaderOutputPort();
 		setPortEnabled(readerOutputPort(0),false);
-		setLayoutEventEnabled(true);
 	}
 	~ValueTestFilter() {}
 

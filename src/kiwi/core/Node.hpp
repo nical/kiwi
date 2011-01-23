@@ -43,6 +43,7 @@
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/core/Reader.hpp"
 #include "kiwi/core/Writer.hpp"
+#include "kiwi/core/NodeListener.hpp"
 
 #include <list>
 #include <vector>
@@ -93,13 +94,10 @@ public:
 	 */ 
 	Node();
 
-
 	/**
 	 * @brief Destructor.
 	 */ 
 	virtual ~Node();
-
-
 
 // ------------------------------------------------------------- virtual methods
 
@@ -145,6 +143,24 @@ public:
 	
 	
 // ------------------------------------------------------ pulic methods
+
+	/**
+	 * @brief Set this Node's Listener.
+	 *
+	 * A NodeListener is a class that can listen to a Node in order to
+	 * detect when the Node's layout changes (a port is created etc...).
+	 *
+	 * This feature is intended for user interfaces or controlers, so that
+	 * they can be aware of when a Node changes. 
+	 * kiwi::core::NodeListener is an abstract class that can be inherited
+	 * by any user-defined class.
+	 */ 
+	void setListener( NodeListener* listener ) { _listener = listener; }
+
+	/**
+	 * @brief Returns true if this Node has a Listener.
+	 */ 
+	bool hasListener() const { return _listener != 0; }
 
 	/**
 	 * @brief Access to a port.
@@ -271,13 +287,7 @@ public:
 	 */
 	inline unsigned nbWriterOutputs() const {return _readerOutputs.size();}
 	
-	/**
-	 * @brief Returns true if the layout event is enabled.
-	 * 
-	 * The layout event being enabled means that 
-	 */ 
-	inline bool isLayoutEventEnabled() { return _layoutEvtEnabled; }
-	
+
 	/**
 	 * @brief Returns the index of the port passed in parameter.
 	 * 
@@ -435,16 +445,6 @@ protected:
 	void setPortEnabled(WriterOutputPort& port, bool status);
 	
 	
-	/**
-	 * @brief Enables/disables the automatic call to layoutChanged()
-	 * 
-	 * Disabling layoutChanged() is sometimes necessary, for exemple 
-	 * within the constructor or the destructor as in many cases
-	 * layout changed needs the object to be completely initialized.
-	 * Note that it is useless to disable it if layoutChanged() is not 
-	 * overloaded by the child class.
-	 */ 
-	void setLayoutEventEnabled(bool status) { _layoutEvtEnabled = status; }
 	
 	/**
 	 * @brief Redirect a port to the port another Node's port.
@@ -462,7 +462,8 @@ protected:
 	 * 
 	 * @param myPort This class's port that has to be redirected to another Node's port.
 	 * @param toBind The other Node's port.
-	 */ 
+	 */
+	 
 	void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind);
 	/**
 	 * @brief Redirect a port to the port another Node's port.
@@ -527,8 +528,8 @@ private:
 	std::vector<WriterInputPort* > _writerInputs;
 	std::vector<ReaderOutputPort* > _readerOutputs;
 	std::vector<WriterOutputPort* > _writerOutputs;
-	
-	bool _layoutEvtEnabled;
+
+	NodeListener* _listener;
 
 }; // class Node;
 

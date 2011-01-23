@@ -80,9 +80,6 @@ MultiArrayContainer<T,D>::MultiArrayContainer(
 template<typename T, unsigned int D>
 void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 {
-// disable the event so that layoutChanged() is not called from
-	// within the constructor
-	Container::setLayoutEventEnabled(false);
 	// "compute" the runtime type name of this class in function of
 	// the template parameters
 	
@@ -94,7 +91,6 @@ void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 		core::Node::addWriterOutputPort();
 		core::Node::addReaderOutputPort();
 	}
-	Container::setLayoutEventEnabled(true);
 }
 
 

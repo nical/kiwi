@@ -41,7 +41,7 @@ namespace core{
 Node::Node()
 {
 //	Debug::print() << "Node::constructor"<<endl();
-	_layoutEvtEnabled = true;
+	_listener = 0;
 }
 
 Node::~Node()

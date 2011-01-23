@@ -46,7 +46,6 @@ public:
 	AddArraysFilter() : CanonicalFilter(1)
 	{
 	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
-		setLayoutEventEnabled(false);
 		kiwi::string sType( kiwi::string("array")
 			+ boost::lexical_cast<kiwi::string>(TDimension)
 			+"d_"+ types::str<TValueType>() );
@@ -59,7 +58,6 @@ public:
 		//port is connected
 //+		addReaderOutputPort();
 //+		setPortEnabled(readerOutputPort(0),false);
-		setLayoutEventEnabled(true);
 	}
 	~AddArraysFilter() {}
 

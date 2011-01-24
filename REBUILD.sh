@@ -32,6 +32,8 @@ mkdir test/core;
 mkdir test/generic;
 mkdir test/text;
 mkdir test/image;
+mkdir test/utils;
+mkdir test/audio;
 cmake .. &&
 make -j4 &&
 cd .. &&

@@ -43,14 +43,14 @@ namespace core
 /**
  * @brief The base class for containers.
  * 
- * At the moment it does not add anything to kiwi::Node's implementation
- * But for semantic and evolutivity purpose Container and Node are distinct. 
  */ 
 class Container : public Node
 {
-public: 
-	Container() : Node() {}
-	int nodeType() { return Node::CONTAINER; };
+public:
+	static const uint32_t UNAVAILABLE = 0;
+	
+	//Container() : Node() {}
+	virtual kiwi::uint32_t memoryConsumption() const { return UNAVAILABLE; } ;
 };
 
 

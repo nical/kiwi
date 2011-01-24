@@ -1,0 +1,64 @@
+
+
+// TODO add some concept check
+template<class ThisType, class LinkType>
+class Connector<ThisType, LinkType, 1>
+: public AbstractConnector<ThisType, LinkType>
+{
+public: // -------------------------------------------------------------
+	static const int ALL = 0;
+	typedef AbstractConnector<LinkType, ThisType> AbstractConnectorType;
+	typedef std::list<AbstractConnectorType*> LinkList;	
+	
+
+
+public: // -------------------------------------------------------------
+
+	void disconnect2( AbstractConnectorType* toDisconnect ){
+		_link = 0;
+	}
+	
+	void connect2( AbstractConnectorType* toConnect ){
+		_link = toConnect ;
+	}
+
+	LinkType* connectedInstance(kiwi::uint16_t index = 0) const {
+		if(index > 0) return 0;
+		else return reinterpret_cast<LinkType*>(_link);
+	}
+
+
+public: // -------------------------------------------------------------
+
+	kiwi::uint32_t nbConnections() const {
+		if( _link ) return 1;
+		else return 0; 
+	}
+	
+	bool canConnect() const {
+		return (_link == 0); 
+	}
+/*
+	void connect( AbstractConnectorType* toConnect ){
+		if( toConnect == 0 ) return;
+		if( canConnect() && toConnect->canConnect() ){
+			connect2( toConnect );
+			toConnect->connect2( this );
+		}
+	}
+*/
+	void disconnect( AbstractConnectorType* toDisconnect = ALL ){
+		if( (toDisconnect == ALL) && (toDisconnect == _link) ){
+			_link->disconnect2(this);
+		}
+	}
+	
+	
+	~Connector(){
+		disconnect(ALL);
+	}
+
+private: // ------------------------------------------------------------
+	AbstractConnectorType* _link;
+	
+};

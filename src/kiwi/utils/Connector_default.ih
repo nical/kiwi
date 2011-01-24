@@ -1,0 +1,79 @@
+
+
+// TODO add some concept check
+template<class ThisType, class LinkType, unsigned int TNum>
+class Connector : public AbstractConnector<ThisType, LinkType>
+{
+public: // -------------------------------------------------------------
+	static const int ALL = 0;
+	typedef AbstractConnector<LinkType, ThisType> AbstractConnectorType;
+	typedef std::list<AbstractConnectorType*> LinkList;	
+	
+
+
+public: // -------------------------------------------------------------
+
+	void disconnect2( AbstractConnectorType* toDisconnect ){
+		typename LinkList::iterator it = _linkList.begin();
+		typename LinkList::iterator stop = _linkList.end();
+	for(; it != stop; ++it){
+			_linkList.erase(it);
+		}
+	}
+	
+	void connect2( AbstractConnectorType* toConnect ){
+		_linkList.push_back( toConnect );
+	}
+
+	LinkType* connectedInstance(kiwi::uint16_t index = 0) const {
+		typename LinkList::const_iterator it = _linkList.begin();
+		if( index >= nbConnections() ) return 0;
+		for( int i = 0; i < index; ++i){++it;}
+		return reinterpret_cast<LinkType*>(*it);
+	}
+
+
+public: // -------------------------------------------------------------
+
+	kiwi::uint32_t nbConnections() const {
+		return _linkList.size();
+	}
+	
+	bool canConnect() const {
+		return TNum > nbConnections(); 
+	}
+/*
+	void connect( AbstractConnectorType* toConnect ){
+		if( toConnect == 0 ) return;
+		if( canConnect() && toConnect->canConnect() ){
+			connect2( toConnect );
+			toConnect->connect2( this );
+		}
+	}
+*/	
+	void disconnect( AbstractConnectorType* toDisconnect = ALL ){
+		if( toDisconnect == ALL ){
+			typename LinkList::iterator it = _linkList.begin();
+			typename LinkList::iterator stop = _linkList.end();
+			for(; it != stop; ++it){
+				(*it)->disconnect2(this);
+			}
+			_linkList.clear();
+		}else{
+			typename LinkList::iterator it = _linkList.begin();
+			typename LinkList::iterator stop = _linkList.end();
+			for(; it != stop; ++it){
+				(*it)->disconnect2(this);
+				_linkList.erase(it);
+			}
+		}
+	}
+	
+	~Connector(){
+		disconnect(ALL);
+	}
+
+private: // ------------------------------------------------------------
+	std::list<AbstractConnectorType*> _linkList;
+	
+};

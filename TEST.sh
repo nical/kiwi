@@ -9,6 +9,7 @@ cd ./build/test
 ./generic/PointTest &&
 ./generic/ValueContainerTest &&
 ./image/CairoImageContainerTest &&
-./text/PlainTextContainerTest
+./text/PlainTextContainerTest &&
+./utils/LinkedTest
 
 echo '\n\n--end of the test suite--\n\n'

@@ -39,7 +39,7 @@ SET(KIWI_SRC ${KIWI_SRC}
 		pipeline/SimplePipeline.cpp
 		core/Tags.cpp
 		# kiwi::core source files
-    # tutorial/FilterSkeleton.cpp
+		# tutorial/FilterSkeleton.cpp
 		)
 
 

@@ -14,6 +14,10 @@ public: // -------------------------------------------------------------
 
 public: // -------------------------------------------------------------
 
+	Connector(){
+		_link = 0;
+	}
+
 	void _disconnect_impl( AbstractConnectorType* toDisconnect ){
 		_link = 0;
 	}

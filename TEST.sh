@@ -10,6 +10,6 @@ cd ./build/test
 ./generic/ValueContainerTest &&
 ./image/CairoImageContainerTest &&
 ./text/PlainTextContainerTest &&
-./utils/LinkedTest
+./utils/ConnectorTest
 
 echo '\n\n--end of the test suite--\n\n'

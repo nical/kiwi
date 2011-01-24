@@ -1,5 +1,6 @@
 
 #include <assert.h>
+#include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/Connector.hpp"
 
 class A;
@@ -7,6 +8,8 @@ class B;
 class C;
 class D;
 class E;
+class F;
+class G;
 
 class A : public Connector<A, B, 5>{};
 class B : public Connector<B, A, 2>{};
@@ -19,7 +22,13 @@ public:
 class D : public Connector<D, C, 1>{};
 class E : public Connector<E, C, 4>{};
 
+class F : public Connector<F, G, 1>{};
+class G : public Connector<G, F, 3>{};
+
+using namespace kiwi;
+
 int main(){
+	ScopedBlockMacro(__scop, "Connector::Test")
 	A a1, a2, a3;
 	B b1, b2, b3;
 	C c1;
@@ -32,6 +41,7 @@ int main(){
 	assert( b1.nbConnections() == 1 );
 	
 	a1.connect(&b2);
+	Debug::print() << "A" << endl();
 
 	assert( a1.nbConnections() == 2 );
 	assert( b1.nbConnections() == 1 );
@@ -40,6 +50,8 @@ int main(){
 	assert( b1.connectedInstance(0) == &a1);
 	assert( b2.connectedInstance(0) == &a1);
 	assert( a1.connectedInstance(1) == &b2);
+
+	Debug::print() << "B" << endl();
 	
 	assert( b1.connectedInstance(1) == 0 );
 	b1.connect(&a2);
@@ -47,10 +59,13 @@ int main(){
 	b1.connect(&a3);
 	assert( b1.nbConnections() == 2 );
 
+	Debug::print() << "C" << endl();
+
 	a1.disconnect(&b1);
 	assert( a1.nbConnections() == 1 );
 	assert( b1.nbConnections() == 0 );
 
+	Debug::print() << " multi-connector tests" << endl();
 	// ------------ multi-connector
 
 	c1.Connector1::connect(&d1);
@@ -59,5 +74,28 @@ int main(){
 	assert( c1.Connector2::nbConnections() == 1 );
 	assert( d1.nbConnections() == 1 );
 	assert( e1.nbConnections() == 1 );
+
+	Debug::print() << " One connection only tests" << endl();
+	// ------------ one connection
+
+	F f1;
+	G g1, g2;
+	assert( f1.nbConnections() == 0 );
+	assert( f1.canConnect() );
+	f1.connect(&g1);
+	assert( f1.nbConnections() == 1 );
+	assert( !f1.canConnect() );
+	f1.connect(&g2);
+	assert( f1.nbConnections() == 1 );
+	f1.disconnect( &g2 );
+	assert( f1.nbConnections() == 1 );
+	f1.disconnect( &g1 );
+	assert( f1.nbConnections() == 0 );
+	assert( !f1.canConnect() );
+	f1.connect( &g1 );
+	assert( f1.nbConnections() == 1 );
+	f1.disconnect();
+	
+	
 	
 }

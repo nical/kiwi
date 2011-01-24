@@ -13,7 +13,7 @@ public: // -------------------------------------------------------------
 
 public: // -------------------------------------------------------------
 
-	void disconnect2( AbstractConnectorType* toDisconnect ){
+	void _disconnect_impl( AbstractConnectorType* toDisconnect ){
 		typename LinkList::iterator it = _linkList.begin();
 		typename LinkList::iterator stop = _linkList.end();
 	for(; it != stop; ++it){
@@ -21,9 +21,6 @@ public: // -------------------------------------------------------------
 		}
 	}
 	
-	void connect2( AbstractConnectorType* toConnect ){
-		_linkList.push_back( toConnect );
-	}
 
 	LinkType* connectedInstance(kiwi::uint16_t index = 0) const {
 		typename LinkList::const_iterator it = _linkList.begin();
@@ -42,36 +39,34 @@ public: // -------------------------------------------------------------
 	bool canConnect() const {
 		return TNum > nbConnections(); 
 	}
-/*
-	void connect( AbstractConnectorType* toConnect ){
-		if( toConnect == 0 ) return;
-		if( canConnect() && toConnect->canConnect() ){
-			connect2( toConnect );
-			toConnect->connect2( this );
-		}
-	}
-*/	
+
 	void disconnect( AbstractConnectorType* toDisconnect = ALL ){
 		if( toDisconnect == ALL ){
 			typename LinkList::iterator it = _linkList.begin();
 			typename LinkList::iterator stop = _linkList.end();
 			for(; it != stop; ++it){
-				(*it)->disconnect2(this);
+				(*it)->_disconnect_impl(this);
 			}
 			_linkList.clear();
 		}else{
 			typename LinkList::iterator it = _linkList.begin();
 			typename LinkList::iterator stop = _linkList.end();
 			for(; it != stop; ++it){
-				(*it)->disconnect2(this);
+				(*it)->_disconnect_impl(this);
 				_linkList.erase(it);
 			}
 		}
 	}
-	
-	~Connector(){
+
+	virtual ~Connector(){
 		disconnect(ALL);
 	}
+
+	void _connect_impl( AbstractConnectorType* toConnect ){
+		_linkList.push_back( toConnect );
+	}
+
+	
 
 private: // ------------------------------------------------------------
 	std::list<AbstractConnectorType*> _linkList;

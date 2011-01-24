@@ -14,13 +14,11 @@ public: // -------------------------------------------------------------
 
 public: // -------------------------------------------------------------
 
-	void disconnect2( AbstractConnectorType* toDisconnect ){
+	void _disconnect_impl( AbstractConnectorType* toDisconnect ){
 		_link = 0;
 	}
 	
-	void connect2( AbstractConnectorType* toConnect ){
-		_link = toConnect ;
-	}
+
 
 	LinkType* connectedInstance(kiwi::uint16_t index = 0) const {
 		if(index > 0) return 0;
@@ -38,18 +36,10 @@ public: // -------------------------------------------------------------
 	bool canConnect() const {
 		return (_link == 0); 
 	}
-/*
-	void connect( AbstractConnectorType* toConnect ){
-		if( toConnect == 0 ) return;
-		if( canConnect() && toConnect->canConnect() ){
-			connect2( toConnect );
-			toConnect->connect2( this );
-		}
-	}
-*/
+
 	void disconnect( AbstractConnectorType* toDisconnect = ALL ){
 		if( (toDisconnect == ALL) && (toDisconnect == _link) ){
-			_link->disconnect2(this);
+			_link->_disconnect_impl(this);
 		}
 	}
 	
@@ -57,6 +47,11 @@ public: // -------------------------------------------------------------
 	~Connector(){
 		disconnect(ALL);
 	}
+
+
+	void _connect_impl( AbstractConnectorType* toConnect ){
+		_link = toConnect ;
+	}	
 
 private: // ------------------------------------------------------------
 	AbstractConnectorType* _link;

@@ -9,19 +9,29 @@ class AbstractConnector
 {
 public:
 	typedef AbstractConnector<LinkType,ThisType> AbstractConnectorType;
+	static const int ALL = 0;
+	
 	virtual kiwi::uint32_t nbConnections() const = 0;
 	virtual bool canConnect() const = 0;
-	virtual void connect2( AbstractConnector<LinkType,ThisType>* toConnect ) = 0;
-	virtual void disconnect2( AbstractConnector<LinkType,ThisType>* toDisconnect) = 0;
+
 	virtual LinkType* connectedInstance(kiwi::uint16_t index = 0) const = 0;
 
 	void connect( AbstractConnectorType* toConnect ){
 		if( toConnect == 0 ) return;
 		if( canConnect() && toConnect->canConnect() ){
-			connect2( toConnect );
-			toConnect->connect2( this );
+			_connect_impl( toConnect );
+			toConnect->_connect_impl( this );
 		}
 	}
+	virtual void disconnect( AbstractConnectorType* toDisconnect = ALL ) = 0;
+
+	virtual void _disconnect_impl( AbstractConnectorType* toDisconnect) = 0;
+	virtual void _connect_impl( AbstractConnectorType* toConnect ) = 0;	
+
+	
+
+protected:
+	
 };
 
 /*

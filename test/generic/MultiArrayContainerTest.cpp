@@ -129,6 +129,7 @@ DEBUG_ONLY(		if(!isReady() )
 template<typename T, unsigned Dim, unsigned Comp>
 void MultiArrayContainerTest()
 {
+/*	
 	typedef generic::ArrayReader<T, Dim> myReader;
 	typedef generic::ArrayWriter<T, Dim> myWriter;
 
@@ -216,6 +217,7 @@ void MultiArrayContainerTest()
 	for(unsigned i = 0; i< Comp; ++i)
 			delete[] preAllocData[i];
 	delete[] preAllocData;
+*/ 
 }
 
 

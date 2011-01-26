@@ -146,7 +146,7 @@ void SimpleFilterProcessor::wrapInputs(
 				= new kiwi::text::PlainTextContainer;
 			inputText->init(*file);
 			file->close();
-			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
+//			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
 			inputs.pop_front();
 		}else{
 			//Creation of a basic container, needed to apply the filter
@@ -167,7 +167,7 @@ void SimpleFilterProcessor::wrapInputs(
 					,0 );			 
 			}
 			//Connexion between the input container and the filter, then apply filter	
-			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);
+//			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);
 			if(!filter.readerInputPort(0).isConnected() ) 
 			std::cerr << "connection error"<<std::endl;
 		}

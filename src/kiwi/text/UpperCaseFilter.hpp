@@ -51,7 +51,7 @@ public:
 	
 		if( !writerInputPort(0).isConnected() )
 		{
-			addWriteNode(new PlainTextContainer, 0);
+//			addWriteNode(new PlainTextContainer, 0);
 		}
 	
 		TextReader input( readerInputPort(0) );

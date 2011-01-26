@@ -35,8 +35,8 @@ namespace text{
 
 PlainTextContainer::PlainTextContainer()
 {
-	addReaderOutputPort();
-	addWriterOutputPort();
+//	addReaderOutputPort();
+//	addWriterOutputPort();
 	//insertLine(PlainTextLine(""),0);
 }
 

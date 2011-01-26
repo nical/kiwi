@@ -26,10 +26,8 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-namespace kiwi
-{
-namespace generic
-{
+namespace kiwi{
+namespace generic{
 
 using core::Container;
 
@@ -88,8 +86,8 @@ void MultiArrayContainer<T,D>::init(unsigned char nameHint)
 	{
  		// TODO: WARNING: This has changed (names handling) but unfortunately i didn't push the 
 		//code before stupidly locking myself outside so this will have to be corrected as soon as i can 
-		core::Node::addWriterOutputPort();
-		core::Node::addReaderOutputPort();
+//		core::Node::addWriterOutputPort();
+//		core::Node::addReaderOutputPort();
 	}
 }
 
@@ -204,6 +202,7 @@ void MultiArrayContainer<T,D>::registerToFactory(kiwi::core::NodeFactory& factor
 				, newMultiArrayContainer
 				, tags )
 		);
+		
 }
 
 

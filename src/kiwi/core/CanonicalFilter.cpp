@@ -80,7 +80,7 @@ void CanonicalFilter::layoutChanged()
 	}
 }
 
-
+/*
 void CanonicalFilter::addWriteNode(Node* toAdd, portIndex_t writerPort)
 {
 	if( _wNodes[writerPort] != 0) return;
@@ -88,7 +88,7 @@ void CanonicalFilter::addWriteNode(Node* toAdd, portIndex_t writerPort)
 	_wNodes[writerPort] = toAdd;
 	_wNodes[writerPort]->writerOutputPort(0) >> writerInputPort(writerPort);
 }
-
+*/
 void CanonicalFilter::removeWriteNode(portIndex_t writerPort)
 {
 	if( _wNodes[writerPort] == 0 ) return;

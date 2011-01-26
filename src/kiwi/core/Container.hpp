@@ -44,7 +44,7 @@ namespace core
  * @brief The base class for containers.
  * 
  */ 
-class Container : public Node
+class Container // : public Node
 {
 public:
 	static const uint32_t UNAVAILABLE = 0;

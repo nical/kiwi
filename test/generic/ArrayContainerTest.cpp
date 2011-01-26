@@ -140,7 +140,7 @@ DEBUG_ONLY(
 template<typename T, unsigned Dim, unsigned Comp>
 void ArrayContainerTest()
 {
-
+/*
 	Debug::beginBlock("Allocate the resources");
 		//audio::AudioBuffer<float> audioTest( 128, 1 );
 		
@@ -213,6 +213,7 @@ void ArrayContainerTest()
 
 	//resourceResult.printState();
 	delete[] preAllocData;
+*/ 
 }
 
 

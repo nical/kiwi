@@ -76,7 +76,7 @@ public:
 	/**
 	 * 
 	 */ 
-	void addWriteNode(Node* toAdd, portIndex_t writerPort);
+//	void addWriteNode(Node* toAdd, portIndex_t writerPort);
 	
 	void removeWriteNode( portIndex_t writerPort );
 	

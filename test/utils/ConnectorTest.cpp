@@ -62,7 +62,7 @@ int main(){
 	assert( a1.nbConnections() == 1 );
 	assert( b1.nbConnections() == 1 );
 
-	Debug::print() << " multi-connector tests" << endl();
+	Debug::print() << " test: multi-connector" << endl();
 	// ------------ multi-connector
 
 	c1.Connector1::connect(&d1);
@@ -72,7 +72,7 @@ int main(){
 	assert( d1.nbConnections() == 1 );
 	assert( e1.nbConnections() == 1 );
 
-	Debug::print() << " One connection only tests" << endl();
+	Debug::print() << " test: One to many" << endl();
 	// ------------ one connection
 
 	F f1;
@@ -87,6 +87,10 @@ int main(){
 	
 	f1.connect(&g2); // should not work
 	assert( f1.nbConnections() == 1 );
+	assert( f1.connectedInstance() == &g1 );
+	g2.connect(&f1); // should not work
+	assert( f1.nbConnections() == 1 );
+	assert( g2.nbConnections() == 0 );
 	assert( f1.connectedInstance() == &g1 );
 
 	// then again, this should not disconnect anything as g2 should not
@@ -104,6 +108,17 @@ int main(){
 	f1.connect( &g1 );
 	assert( f1.nbConnections() == 1 );
 	f1.disconnect();
+	
+	assert( f1.nbConnections() == 0 );
+	assert( g1.nbConnections() == 0 );
+	assert( f1.canConnect() );
+	assert( g1.canConnect() );
+	g1.connect( &f1 );
+	assert( f1.nbConnections() == 1 );
+	assert( g1.nbConnections() == 1 );
+	g1.disconnect();
+	assert( f1.nbConnections() == 0 );
+	assert( g1.nbConnections() == 0 );
 	
 	
 	

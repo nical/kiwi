@@ -4,13 +4,13 @@ namespace utils{
 	
 
 // TODO add some concept check
-template<class ThisType, class LinkType>
-class Connector<ThisType, LinkType, 1>
-: public AbstractConnector<ThisType, LinkType>
+template<class ThisType, class LinkType, int LinkTag>
+class Connector<ThisType, LinkType, 1, LinkTag>
+: public AbstractConnector<ThisType, LinkType, LinkTag>
 {
 public: // -------------------------------------------------------------
 	static const int ALL = 0;
-	typedef AbstractConnector<LinkType, ThisType> AbstractConnectorType;
+	typedef AbstractConnector<LinkType, ThisType, LinkTag> AbstractConnectorType;
 	typedef std::list<AbstractConnectorType*> LinkList;	
 	
 

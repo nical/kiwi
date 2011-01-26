@@ -7,11 +7,11 @@
 namespace kiwi{
 namespace utils{
 
-template<class ThisType, class LinkType>
+template<class ThisType, class LinkType, int LinkTag>
 class AbstractConnector
 {
 public:
-	typedef AbstractConnector<LinkType,ThisType> AbstractConnectorType;
+	typedef AbstractConnector<LinkType,ThisType, LinkTag> AbstractConnectorType;
 	static const int ALL = 0;
 	
 	virtual kiwi::uint32_t nbConnections() const = 0;

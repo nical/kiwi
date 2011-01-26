@@ -1,4 +1,7 @@
 
+namespace kiwi{
+namespace utils{
+	
 
 // TODO add some concept check
 template<class ThisType, class LinkType>
@@ -19,14 +22,16 @@ public: // -------------------------------------------------------------
 	}
 
 	void _disconnect_impl( AbstractConnectorType* toDisconnect ){
-		_link = 0;
+		if( (toDisconnect == _link) || (toDisconnect == 0) ) _link = 0;
 	}
 	
 
 
-	LinkType* connectedInstance(kiwi::uint16_t index = 0) const {
-		if(index > 0) return 0;
-		else return reinterpret_cast<LinkType*>(_link);
+	LinkType* connectedInstance(kiwi::uint32_t index = 0) const {
+		ScopedBlockMacro(__scp, "Connector<mono>::connectedInstance")
+		if(index == 0) return reinterpret_cast<LinkType*>(_link);
+		Debug::print() << "invalid index" << endl();
+		return 0;
 	}
 
 
@@ -42,8 +47,11 @@ public: // -------------------------------------------------------------
 	}
 
 	void disconnect( AbstractConnectorType* toDisconnect = ALL ){
-		if( (toDisconnect == ALL) && (toDisconnect == _link) ){
-			_link->_disconnect_impl(this);
+		if( (toDisconnect == ALL) || (toDisconnect == _link) ){
+			if(_link != 0) {
+				_link->_disconnect_impl(this);
+				_disconnect_impl(toDisconnect);
+			}
 		}
 	}
 	
@@ -61,3 +69,7 @@ private: // ------------------------------------------------------------
 	AbstractConnectorType* _link;
 	
 };
+
+
+}//namespace
+}//namespace

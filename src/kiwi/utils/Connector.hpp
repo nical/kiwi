@@ -4,6 +4,9 @@
 #include <list>
 #include "kiwi/core/Commons.hpp"
 
+namespace kiwi{
+namespace utils{
+
 template<class ThisType, class LinkType>
 class AbstractConnector
 {
@@ -14,7 +17,7 @@ public:
 	virtual kiwi::uint32_t nbConnections() const = 0;
 	virtual bool canConnect() const = 0;
 
-	virtual LinkType* connectedInstance(kiwi::uint16_t index = 0) const = 0;
+	virtual LinkType* connectedInstance(kiwi::uint32_t index = 0) const = 0;
 
 	void connect( AbstractConnectorType* toConnect ){
 		if( toConnect == 0 ) return;
@@ -38,6 +41,11 @@ protected:
  * The following files include different implementations of connectors,
  * in function of the MaxConnections template parameters.
  */
+
+
+}//namespace
+}//namespace
+
 
 // default implementation (a std list contains the links) 
 #include "kiwi/utils/Connector_default.ih"

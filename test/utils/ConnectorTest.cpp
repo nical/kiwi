@@ -3,12 +3,14 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/Connector.hpp"
 
+using namespace kiwi::utils;
+
 class A;
 class B;
 class C;
 class D;
 class E;
-class F;
+class F; // TODO
 class G;
 
 class A : public Connector<A, B, 5>{};
@@ -41,7 +43,6 @@ int main(){
 	assert( b1.nbConnections() == 1 );
 	
 	a1.connect(&b2);
-	Debug::print() << "A" << endl();
 
 	assert( a1.nbConnections() == 2 );
 	assert( b1.nbConnections() == 1 );
@@ -51,19 +52,15 @@ int main(){
 	assert( b2.connectedInstance(0) == &a1);
 	assert( a1.connectedInstance(1) == &b2);
 
-	Debug::print() << "B" << endl();
-	
 	assert( b1.connectedInstance(1) == 0 );
 	b1.connect(&a2);
 	assert( !b1.canConnect() );
 	b1.connect(&a3);
 	assert( b1.nbConnections() == 2 );
 
-	Debug::print() << "C" << endl();
-
 	a1.disconnect(&b1);
 	assert( a1.nbConnections() == 1 );
-	assert( b1.nbConnections() == 0 );
+	assert( b1.nbConnections() == 1 );
 
 	Debug::print() << " multi-connector tests" << endl();
 	// ------------ multi-connector
@@ -82,16 +79,28 @@ int main(){
 	G g1, g2;
 	assert( f1.nbConnections() == 0 );
 	assert( f1.canConnect() );
+	
 	f1.connect(&g1);
 	assert( f1.nbConnections() == 1 );
 	assert( !f1.canConnect() );
-	f1.connect(&g2);
+	assert( f1.connectedInstance() == &g1 ); 
+	
+	f1.connect(&g2); // should not work
 	assert( f1.nbConnections() == 1 );
+	assert( f1.connectedInstance() == &g1 );
+
+	// then again, this should not disconnect anything as g2 should not
+	// be connected.
 	f1.disconnect( &g2 );
 	assert( f1.nbConnections() == 1 );
+	assert( f1.connectedInstance() == &g1 );
+	
+
+	// now let's try to disconnect g1, it should work
 	f1.disconnect( &g1 );
+	assert( f1.connectedInstance() == 0 );
 	assert( f1.nbConnections() == 0 );
-	assert( !f1.canConnect() );
+	assert( f1.canConnect() );
 	f1.connect( &g1 );
 	assert( f1.nbConnections() == 1 );
 	f1.disconnect();

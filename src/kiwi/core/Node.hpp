@@ -69,7 +69,7 @@ class ReaderInputPort;
 class ReaderOutputPort;
 class WriterInputPort;
 class WriterOutputPort;
-
+class Container;
 
 /**
  * @class Node
@@ -523,7 +523,9 @@ protected:
 
 // ----------------------------------------------------- private members
 private:
-//	std::vector<Container*> _containers;
+
+	std::vector<Container*> _containers;
+	
 	// The input/output ports
 	std::vector<ReaderInputPort* > _readerInputs;
 	std::vector<WriterInputPort* > _writerInputs;

@@ -43,12 +43,11 @@ namespace core{
 ReaderOutputPort::ReaderOutputPort( Node* myNode )
 	: _enabled(true)
 	, _node(myNode)
-	, _subPort(0)
 {
 	// nothing to do
 }
 
-
+/*
 const ReaderOutputPort* 
 ReaderOutputPort::subPort() const
 {
@@ -58,7 +57,7 @@ ReaderOutputPort::subPort() const
 	// if this is the "subport" return a pointer to self
 	else return this;
 } 
-
+*/
 
 void 
 ReaderOutputPort::disconnect( ReaderInputPort* input )
@@ -99,10 +98,27 @@ void
 ReaderOutputPort::bind(ReaderOutputPort& port)
 {
 //	Debug::print() << "port binding" << endl();
-	_subPort = &port;
+	_container = port._container;
+	port._linkedOutputPorts.add( this );
 
 	// note that if the binded Node is deleted, trying to acces
 	// this port might cause a segfault
+}
+
+void ReaderOutputPort::unBind()
+{
+	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
+		_linkedOutputPorts[i]->unBind();
+		
+	_container = 0;
+}
+
+void ReaderOutputPort::setData( Container* data )
+{
+	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
+		_linkedOutputPorts[i]->setData( data );
+
+	_container = data;
 }
 
 

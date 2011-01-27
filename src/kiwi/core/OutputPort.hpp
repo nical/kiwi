@@ -33,7 +33,7 @@
 
 #include <list>
 #include "kiwi/core/Tags.hpp"
-
+#include "kiwi/utils/UnorderedArray"
 
 namespace kiwi{
 namespace core{
@@ -152,7 +152,9 @@ protected:
 	
 private:
 	Node* _node;
-	OutputPort<SlotType>* _subPort;
+	Container* _container;
+	utils::UnorderedArray<OutputPort<SlotType>*> _linkedOutputPorts; 
+	OutputPort<SlotType>* _subPort; //deprecated
 	connectionList _connections;
 	bool _enabled;
 };

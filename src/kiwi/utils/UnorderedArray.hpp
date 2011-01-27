@@ -25,10 +25,11 @@ public:
 	bool remove(const T& toRemove){
 		kiwi::int32_t pos = find( toRemove );
 		if(pos != NOT_FOUND){
-			remove(pos);
-		}
+			return removeIndex( static_cast<kiwi::uint32_t>(pos) );
+		}else return false;
+			
 	}
-	bool remove( kiwi::uint32_t index ){
+	bool removeIndex( kiwi::uint32_t index ){
 		if(index >= size() ) return false;
 		_data[index] = _data[size()-1];
 		--_nbElements;

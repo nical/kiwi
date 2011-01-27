@@ -33,6 +33,9 @@
 
 #include <list>
 #include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/UnorderedArray.hpp"
+
+
 
 
 namespace kiwi{
@@ -72,6 +75,8 @@ friend class ReaderInputPort;
 	 * @brief Returns a pointer to the Node containing this port.
 	 */ 
 	Node* node() const ;
+
+	Container* data() { return _container; }
 	
 	/**
 	 * @brief Returns a pointer to the port that catually contains the Data.
@@ -140,6 +145,11 @@ protected:
 	 * @see kiwi::core::Node::bindPort
 	 */ 
 	void bind( ReaderOutputPort& port );
+
+	void unBind();
+
+	void setData( Container* data );
+	
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
@@ -147,14 +157,14 @@ protected:
 	 * @see kiwi::core::setReaderOutputPortEnabled
 	 * @see kiwi::core::setWriterInputPortEnabled
 	 * @see kiwi::core::setWriterOutputPortEnabled
-	 */ 
+	 */
 	void setEnabled(bool status);
 	
 private:
 	Node* _node;
-	ReaderOutputPort* _subPort; // TODO: deprecated
+	//ReaderOutputPort* _subPort; // TODO: deprecated
 	Container* _container; //new
-	std::vector<ReaderOutputPort*> _linkedOutputPorts; //new
+	utils::UnorderedArray<ReaderOutputPort*> _linkedOutputPorts; //new
 	connectionList _connections;
 	bool _enabled;
 };

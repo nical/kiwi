@@ -51,8 +51,8 @@ TextReader::TextReader( core::ReaderInputPort& port
 {
 //ScopedBlockMacro(__scop, "TextReader::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
-		port.connectedOutput()->subPort()->node() );
-	
+		port.connectedOutput()->data() );
+/*	TODO
 	if( tc ) init( *tc, port.connectedOutput()->subPort()->index()
 		, firstLine, range );
 	else
@@ -62,6 +62,7 @@ TextReader::TextReader( core::ReaderInputPort& port
 			<<" Unable to determine the Container type."
 			<< endl();
 	}
+*/ 
 }
 
 
@@ -71,8 +72,8 @@ TextReader::TextReader( core::ReaderOutputPort& port
 {
 //ScopedBlockMacro(__scop, "TextReader::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
-		port.subPort()->node() );
-	
+		port.data() );
+/* TODO	
 	if( tc ) init( *tc, port.subPort()->index(), firstLine, range );
 	else
 	{
@@ -81,6 +82,7 @@ TextReader::TextReader( core::ReaderOutputPort& port
 			<<" Unable to determine the Container type."
 			<< endl();
 	}
+*/ 
 }
 
 

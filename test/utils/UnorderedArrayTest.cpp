@@ -6,6 +6,7 @@ using namespace kiwi::utils;
 
 int main()
 {
+kiwi::Debug::init(true,true);
 ScopedBlockMacro(__scop, "UnorderedArray::Test" )	
 	UnorderedArray<int> a;
 
@@ -27,6 +28,10 @@ ScopedBlockMacro(__scop, "UnorderedArray::Test" )
 	assert( a.has(42) );
 	assert( a.has(12) );
 	assert( a.has(5) );
+
+	assert( !a.has( 1337 ) );
+	assert( !a.remove( 1337 ) );
+	assert( a.size() == 3 );
 
 	assert( a.remove( 12 ) );
 	assert( a.size() == 2 );

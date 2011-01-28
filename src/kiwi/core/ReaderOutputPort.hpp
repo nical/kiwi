@@ -34,7 +34,7 @@
 #include <list>
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
-
+#include "kiwi/utils/Connector.hpp"
 
 
 
@@ -54,6 +54,7 @@ class Node;
  * Each port has a name which use is facultative has they are truely accessed using an integer index.
  */ 
 class ReaderOutputPort
+: public kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, READER>
 {
 friend class Node;
 public:
@@ -97,7 +98,7 @@ friend class ReaderInputPort;
 	 * you don't know if the node doesn't encapsulate other Nodes that
 	 * actually contain the Data and bind it's ports to it.
 	 */ 
-	const ReaderOutputPort* subPort() const ;
+//	const ReaderOutputPort* subPort() const ;
 	/**
 	 * @brief Returns this port's Type as a string.
 	 */ 
@@ -128,6 +129,8 @@ friend class ReaderInputPort;
 	 * Returns a std::list<kiwi::core::InputPort<T> of the port connected to this port
 	 */ 
 	connectionList connections() const ;
+ 
+	
 	/**
 	 * @brief Disconnect from a given port.
 	 *
@@ -136,6 +139,8 @@ friend class ReaderInputPort;
 	 * input port is specified).
 	 */ 
 	void disconnect( ReaderInputPort* input = 0 );
+
+	bool connect(ReaderInputPort& inputPort);
 	
 protected:
 
@@ -165,7 +170,7 @@ private:
 	//ReaderOutputPort* _subPort; // TODO: deprecated
 	Container* _container; //new
 	utils::UnorderedArray<ReaderOutputPort*> _linkedOutputPorts; //new
-	connectionList _connections;
+	//connectionList _connections;
 	bool _enabled;
 };
 

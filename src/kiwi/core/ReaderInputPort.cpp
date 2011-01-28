@@ -51,7 +51,7 @@ ReaderInputPort::ReaderInputPort( Node* myNode )
 }
 
 
-
+/*
 void 
 ReaderInputPort::connect(ReaderOutputPort& outputPort, bool isMetaPort)
 {
@@ -86,8 +86,9 @@ ReaderInputPort::connect(ReaderOutputPort& outputPort, bool isMetaPort)
 		}
 	
 }
+*/
 
-
+/*
 void 
 ReaderInputPort::disconnect()
 {
@@ -102,14 +103,19 @@ ReaderInputPort::disconnect()
 	// this from within the method (infinite loop).
 	temp->disconnect(this);
 }
+*/
 
+bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
+{
+	return connect( &outputPort );
+}
 
 
 void 
 ReaderInputPort::bind(ReaderInputPort& port)
 {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
-	_subPort = &port;
+	port._linkedOutputPorts.add(&port);
 	// note that if the binded Node is deleted, trying to acces
 	// this port is unsafe
 }

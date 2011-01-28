@@ -67,7 +67,7 @@ typedef boost::int64_t int64_t;
 typedef std::string string;
 typedef unsigned char portIndex_t;
 
-
+enum{ READER, WRITER };
 
 }
 

@@ -139,10 +139,10 @@ public:
 	// -----------------------------------------------------------------
 	ValueReader(const core::ReaderInputPort& port)
 	{
-		assert( port.connectedOutput()->subPort()->node() );
+		assert( port.connectedOutput()->data() );
 		
 		_resource = dynamic_cast<AbstractValueContainer<TValueType>* >( 
-			port.connectedOutput()->subPort()->node() 
+			port.connectedOutput()->data() 
 		);
 		
 		if(!_resource)
@@ -153,7 +153,7 @@ public:
 				<< "enable to determine the Container type" 
 				<< endl();
 		}
-		_port = port.connectedOutput()->subPort()->index();
+		_port = port.connectedOutput()->data();
 	}
 	
 	uint32_t nbScalarElements() const {return 1;}

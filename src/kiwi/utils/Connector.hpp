@@ -16,15 +16,17 @@ public:
 	
 	virtual kiwi::uint32_t nbConnections() const = 0;
 	virtual bool canConnect() const = 0;
+	bool isConnected() const { return nbConnections() != 0; }
 
 	virtual LinkType* connectedInstance(kiwi::uint32_t index = 0) const = 0;
 
-	void connect( AbstractConnectorType* toConnect ){
-		if( toConnect == 0 ) return;
+	bool connect( AbstractConnectorType* toConnect ){
+		if( toConnect == 0 ) return false;
 		if( canConnect() && toConnect->canConnect() ){
 			_connect_impl( toConnect );
 			toConnect->_connect_impl( this );
-		}
+			return true;
+		}else { return false; }
 	}
 	virtual void disconnect( AbstractConnectorType* toDisconnect = ALL ) = 0;
 

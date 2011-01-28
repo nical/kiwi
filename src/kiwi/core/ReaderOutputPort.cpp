@@ -58,7 +58,7 @@ ReaderOutputPort::subPort() const
 	else return this;
 } 
 */
-
+/*
 void 
 ReaderOutputPort::disconnect( ReaderInputPort* input )
 {
@@ -91,7 +91,7 @@ ReaderOutputPort::disconnect( ReaderInputPort* input )
 			}
 		}
 }
-
+*/
 
 
 void 
@@ -157,12 +157,19 @@ ReaderOutputPort::isCompatible(ReaderInputPort& input)
 }
 
 
+bool ReaderOutputPort::connect(ReaderInputPort& inputPort)
+{
+	return connect( &inputPort);
+}
+
+
+/*
 bool 
 ReaderOutputPort::isConnected() const 
 { 
 	return (_connections.size() != 0); 
 }
-
+*/
 
 bool 
 ReaderOutputPort::isEnabled() const 
@@ -170,13 +177,13 @@ ReaderOutputPort::isEnabled() const
 	return _enabled; 
 }
 
-
+/*
 ReaderOutputPort::connectionList 
 ReaderOutputPort::connections() const 
 { 
 	return _connections; 
 }
-
+*/
 
 
 void 

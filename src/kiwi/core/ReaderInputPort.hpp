@@ -32,12 +32,15 @@
 
 //#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Connector.hpp"
+#include "kiwi/utils/UnorderedArray.hpp"
 
 namespace kiwi{
 namespace core{
 
 class Node;
 class Reader;
+class ReaderInputPort;
 class ReaderOutputPort;
 
 
@@ -52,6 +55,7 @@ class ReaderOutputPort;
  */
 
 class ReaderInputPort
+: public kiwi::utils::Connector<ReaderInputPort, ReaderOutputPort, READER>
 {
 friend class Node;
 public:
@@ -64,7 +68,7 @@ public:
 	/**
 	 * @brief Connection method.
 	 */ 
-	void connect(ReaderOutputPort& outputPort, bool isMetaPort = true);
+	bool connect(ReaderOutputPort& outputPort);
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 
@@ -137,7 +141,8 @@ protected:
 	
 private:
 	Node* _node;
-	ReaderInputPort* _subPort; // TODO -> replace by Container*
+	ReaderInputPort* _subPort; // to remove
+	utils::UnorderedArray<ReaderInputPort*> _linkedOutputPorts;
 	ReaderOutputPort* _connectedNode;
 	bool _enabled;
 };

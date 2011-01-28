@@ -68,9 +68,9 @@ int NodeFactory::exists(const  kiwi::string& uniqueId)
 	return FALSE;
 }
 	
-void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Container> nd)
+void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Node> nd)
 {
-	_containers[uniqueId] = new Descriptor<Container>(nd);
+	_nodes[uniqueId] = new Descriptor<Node>(nd);
 }
 
 void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Filter> nd)

@@ -132,7 +132,7 @@ public:
 template<typename T>
 void ValueContainerTest()
 {
-/*	
+/*
 ScopedBlockMacro(__scop, "ValueContainerTest")
 	Debug::beginBlock("Allocate the resources");
 		

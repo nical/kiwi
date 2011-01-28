@@ -30,8 +30,8 @@
 
 #pragma once
 
-#ifndef KIWI_VALUE_HPP
-#define KIWI_VALUE_HPP
+#ifndef KIWI_GENERIC_VALUE_HPP
+#define KIWI_GENERIC_VALUE_HPP
 
 #include "kiwi/core/Container.hpp"
 #include "kiwi/core/Commons.hpp"
@@ -39,10 +39,8 @@
 #include "kiwi/core/NodeFactory.hpp"
 #include "kiwi/core/Ports.hpp"
 
-namespace kiwi
-{
-namespace generic
-{
+namespace kiwi{
+namespace generic{
 
 
 
@@ -56,7 +54,7 @@ template<typename TValueType> class ValueWriter;
  * a Value<T> port type
  */ 
 template <typename T>
-class AbstractValueContainer : public virtual core::Container
+class AbstractValueContainer : public core::Container
 {
 public:
 	ReaderTypeMacro(ValueReader<T>)
@@ -66,17 +64,10 @@ public:
 	 * @brief returns the value.
 	 */ 
 	virtual T& getValue(portIndex_t port = 0) = 0;
-	
-	Tags readerOutputTags(portIndex_t)
-	{
-		return Tags( kiwi::string("#") + types::str<T>()) ;
-	}
-	
-	Tags WriterOutputTags(portIndex_t)
-	{
-		return Tags( kiwi::string("#") + types::str<T>() );
-	}
-	
+
+	Tags tags() const { return Tags( kiwi::string("#") + types::str<T>());}
+
+		
 	string readerOutputName(portIndex_t){return string("read");}
 	string WriterOutputName(portIndex_t){return string("write");}
 	
@@ -92,18 +83,18 @@ public:
 	ValueContainer(ValueType init)
 	: _data(init)
 	{
-		// string("value_")+types::str<TValueType>()
-		core::Node::addWriterOutputPort();
-		core::Node::addReaderOutputPort();
+		
 	}
-	
-
 	// AbstractValueContainer implementation
 	virtual ValueType& getValue(portIndex_t port = 0) {return _data;}
 	
 	
 	static kiwi::core::Container* newValueContainer() 
-	{ return new ValueContainer<TValueType>(0); }
+	{
+		core::Node* newNode = new core::Node();
+		newNode->addContainer( new ValueContainer<TValueType>(0), true, true );
+		return newNode;
+	}
 	
 	
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
@@ -113,11 +104,11 @@ public:
 		
 		tags += types::str<ValueType>();
 		
-		name +=  types::str<ValueType>(); 
+		name += types::str<ValueType>(); 
 		name += ">";
 		
 		factory.registerNode( filterId
-				, kiwi::core::Descriptor<kiwi::core::Container>(
+				, kiwi::core::Descriptor<kiwi::core::Node>(
 					name
 					, newValueContainer
 					, tags )

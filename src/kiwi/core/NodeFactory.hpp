@@ -88,7 +88,7 @@ public:
 	int exists(const  kiwi::string& uniqueId);
 	std::list<kiwi::string> searchFromTag(const  kiwi::string& uniqueId);
 	
-	void registerNode(const  kiwi::string& uniqueId, Descriptor<Container> nd);
+	void registerNode(const  kiwi::string& uniqueId, Descriptor<Node> nd);
 	void registerNode(const  kiwi::string& uniqueId, Descriptor<Filter> nd);
 	
 	void unregister(const  kiwi::string& uniqueId);
@@ -100,8 +100,10 @@ public:
 private:
 	typedef std::map<kiwi::string, Descriptor<Filter>* > FilterMap;
 	typedef std::map<kiwi::string, Descriptor<Container>* > ContainerMap;
-	FilterMap _filters;
-	ContainerMap _containers;
+	typedef std::map<kiwi::string, Descriptor<Node>* > NodeMap;
+	FilterMap _filters; // deprecated
+	ContainerMap _containers; // deprecated
+	NodeMap _nodes;
 };
 
 

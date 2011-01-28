@@ -40,9 +40,10 @@ namespace core{
 
 
 
-ReaderOutputPort::ReaderOutputPort( Node* myNode )
+ReaderOutputPort::ReaderOutputPort( Node* myNode, Container* data )
 	: _enabled(true)
 	, _node(myNode)
+	, _container(data)
 {
 	// nothing to do
 }

@@ -79,11 +79,11 @@ portIndex_t Node::addReaderInputPort()
 	return _readerInputs.size()-1;
 }
 
-portIndex_t Node::addReaderOutputPort()
+portIndex_t Node::addReaderOutputPort(Container* data)
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getReaderOutputCount();
-	_readerOutputs.push_back( new ReaderOutputPort(this) );
+	_readerOutputs.push_back( new ReaderOutputPort(this, data) );
 	return _readerOutputs.size()-1;
 }
 
@@ -95,13 +95,21 @@ portIndex_t Node::addWriterInputPort()
 	return _writerInputs.size()-1;
 }
 
-portIndex_t Node::addWriterOutputPort()
+portIndex_t Node::addWriterOutputPort(Container* data) // TODO data
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterOutputCount();
 	_writerOutputs.push_back( new WriterOutputPort(this) );
 	return _writerOutputs.size()-1;
 }
+
+void Node::addContainer(Container* data, bool addReader, bool addWriter)
+{
+		_containers.add(data);
+		if(addReader) addReaderOutputPort(data);
+		if(addWriter) addWriterOutputPort(data);
+}
+
 
 
 void 

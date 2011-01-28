@@ -49,60 +49,6 @@ ReaderInputPort::ReaderInputPort( Node* myNode )
 }
 
 
-/*
-void 
-ReaderInputPort::connect(ReaderOutputPort& outputPort, bool isMetaPort)
-{
-//ScopedBlockMacro(__sccop, "ReaderInputPort::connect" );
-	if( !isEnabled() )
-	{
-		Debug::error() << "InputPort::connect() : input port disabled" << endl();
-		return;
-	}
-	if( !outputPort.isEnabled() )
-	{
-		Debug::error() << "InputPort::connect() : output port disabled" << endl();
-		return;
-	}
-	// if it is the subPort
-	
-		if(isCompatible(outputPort) )
-		{
-			if( isConnected() ) disconnect();
-			_connectedNode = &outputPort;
-			if( isMetaPort ) outputPort._connections.push_back(this);
-			if( _subPort != 0 )	_subPort->connect(outputPort, false);
-
-			_node->layoutChanged();
-		}
-		else
-		{
-			Debug::error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
-			Debug::error() << outputPort.tags().str()
-				<< " >> " << tags().str() << endl();
-			return;
-		}
-	
-}
-*/
-
-/*
-void 
-ReaderInputPort::disconnect()
-{
-//ScopedBlockMacro(scp_block,"InputPort::disconnect");
-	if(_subPort != 0) _subPort->disconnect();
-	if( !isConnected() ) return;
-
-	ReaderOutputPort* temp = _connectedNode;
-	_connectedNode = 0;
-	// _connectedNode must be set to zero BEFORE calling disconnect
-	// on the pointed object because it will try to call disconnect on
-	// this from within the method (infinite loop).
-	temp->disconnect(this);
-}
-*/
-
 bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 {
 	ScopedBlockMacro( __scop, "ReaderInputPort::connect" )

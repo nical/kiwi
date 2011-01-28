@@ -52,6 +52,7 @@ template<class T> class OutputPort;
  */
 template<class SlotType>
 class InputPort
+: public kiwi::utils::Connector<WriterInputPort, WriterOutputPort, 1, WRITER>
 {
 friend class Node;
 public:
@@ -64,11 +65,9 @@ public:
 	/**
 	 * @brief Connection method.
 	 */ 
-	void connect(OutputPort<SlotType>& outputPort, bool isMetaPort = true);
-	/**
-	 * @brief Disconnect the port if connected.
-	 */ 
-	void disconnect();
+	void connect( WriterOutputPort& outputPort );
+	void connect( WriterOutputPort* outputPort );
+
 	/**
 	 * @brief Returns the index of this port.
 	 */ 

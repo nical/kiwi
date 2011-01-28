@@ -106,6 +106,10 @@ public:
 // ---------------------------------------------------------------------
 // tags
 	
+	kiwi::Tags tags() const
+	{
+			return kiwi::Tags("#text#rawText");
+	}
 	kiwi::Tags outputReaderTags(portIndex_t)
 	{
 			return kiwi::Tags("#text#rawText");

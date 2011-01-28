@@ -35,10 +35,8 @@
 #include "kiwi/core/Node.hpp"
 
 
-namespace kiwi
-{
-namespace core
-{
+namespace kiwi{
+namespace core{
 
 /**
  * @brief The base class for containers.
@@ -48,9 +46,11 @@ class Container // : public Node
 {
 public:
 	static const uint32_t UNAVAILABLE = 0;
-	
-	//Container() : Node() {}
-	virtual kiwi::uint32_t memoryConsumption() const { return UNAVAILABLE; } ;
+
+	virtual kiwi::uint32_t memoryConsumption() const { return UNAVAILABLE; }
+	virtual kiwi::Tags tags() const = 0;
+	virtual bool hasSubData() const { return false; }
+
 };
 
 

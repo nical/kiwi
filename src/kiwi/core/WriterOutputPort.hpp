@@ -56,14 +56,14 @@ friend class Node;
 public:
 friend class WriterInputPort;
 	// --------------------------------------------------------------------
-	typedef std::list< WriterInputPort* > connectionList;
+	typedef std::list< WriterInputPort* > connectionList; // TODO deprecated
 	
 	// --------------------------------------------------------------------
 	/**
 	 * @brief Constructor.
 	 * @todo The second argument will disapear in next version.
 	 */ 
-	WriterOutputPort(Node* myNode);
+	WriterOutputPort(Node* myNode, Container* data = 0);
 	/**
 	 * @brief Returns the index of this port.
 	 */ 
@@ -153,6 +153,7 @@ protected:
 private:
 	Node* _node;
 	WriterOutputPort* _subPort;
+	Container* _container;
 	connectionList _connections;
 	bool _enabled;
 };

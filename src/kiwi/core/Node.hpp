@@ -30,7 +30,7 @@
  * @file Node.hpp
  * @brief Header file for the base class of every kiwi resources and filters.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
- * @version 0.2
+ * @version 0.4
  */
 
 #pragma once
@@ -44,6 +44,7 @@
 #include "kiwi/core/Reader.hpp"
 #include "kiwi/core/Writer.hpp"
 #include "kiwi/core/NodeListener.hpp"
+#include "kiwi/utils/UnorderedArray.hpp"
 
 #include <list>
 #include <vector>
@@ -388,7 +389,7 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
-	portIndex_t addReaderOutputPort();
+	portIndex_t addReaderOutputPort(Container* data = 0);
 	/**
 	 * @brief Remove an output port from this Filter's Reader interface.
 	 *
@@ -416,13 +417,16 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
-	portIndex_t addWriterOutputPort();
+	portIndex_t addWriterOutputPort(Container* data = 0);
 	/**
 	 * @brief Remove an output port from this Filter's Writer interface.
 	 *
-	 * Removes The last output port (the one oh highest index) from this Filter's Reader interface.
+	 * Removes The last output port (the one on highest index) from this Filter's Reader interface.
 	 */
 	void removeWriterOutputPort();
+
+
+	void addContainer(Container* data, bool addReader = true, bool addWriter = true);
 
 // ------------------------------------------------------
 	
@@ -524,13 +528,12 @@ protected:
 // ----------------------------------------------------- private members
 private:
 
-	std::vector<Container*> _containers;
-	
+	utils::UnorderedArray<Container*> _containers;	
 	// The input/output ports
-	std::vector<ReaderInputPort* > _readerInputs;
-	std::vector<WriterInputPort* > _writerInputs;
-	std::vector<ReaderOutputPort* > _readerOutputs;
-	std::vector<WriterOutputPort* > _writerOutputs;
+	std::vector<ReaderInputPort*> _readerInputs;
+	std::vector<WriterInputPort*> _writerInputs;
+	std::vector<ReaderOutputPort*> _readerOutputs;
+	std::vector<WriterOutputPort*> _writerOutputs;
 
 	NodeListener* _listener;
 
@@ -552,6 +555,7 @@ private:
  * 	myNode1.readerOutputPort(0) >> myNode2.readerInputPort(1);
  */ 
 bool operator>>(ReaderOutputPort& output, ReaderInputPort& input );
+
 /**
  *	@brief Operator for connections between Node.
  * 

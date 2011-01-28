@@ -128,6 +128,8 @@ public:
 	 */ 
 	generic::Point<uint32_t, 2> spanSize() const ;
 
+	Tags tags() const { return Tags("#RGBA"); }
+
 	/**
 	 * @brief Returns the port's type tags (#rgba8 and #array2char)
 	 */ 

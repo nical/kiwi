@@ -50,57 +50,24 @@ WriterInputPort::WriterInputPort( Node* myNode )
 }
 
 
-
-void 
-WriterInputPort::connect(WriterOutputPort& outputPort, bool isMetaPort)
+bool WriterInputPort::connect(WriterOutputPort& outputPort)
 {
-//ScopedBlockMacro(__sccop, "WriterInputPort::connect" );
-	if( !isEnabled() )
-	{
-		Debug::error() << "InputPort::connect() : input port disabled" << endl();
-		return;
-	}
-	if( !outputPort.isEnabled() )
-	{
-		Debug::error() << "InputPort::connect() : output port disabled" << endl();
-		return;
-	}
-	// if it is the subPort
-	
-		if(isCompatible(outputPort) )
-		{
-			if( isConnected() ) disconnect();
-			_connectedNode = &outputPort;
-			if( isMetaPort ) outputPort._connections.push_back(this);
-			if( _subPort != 0 )	_subPort->connect(outputPort, false);
-			
-			_node->layoutChanged();
-		}
-		else
-		{
-			Debug::error() << "InputPort::connect() : uncompatible ports - connection failed" << endl();
-			Debug::error() << outputPort.tags().str()
-				<< " >> " << tags().str() << endl();
-			return;
-		}
-	
+	ScopedBlockMacro( __scop, "WriterInputPort::connect" )
+	if( isEnabled() && outputPort.isEnabled() )
+		if( isCompatible( outputPort.tags() ) )
+			return PortConnector::connect( &outputPort );
+	else return false;
 }
 
-
-void 
-WriterInputPort::disconnect()
+bool WriterInputPort::connect(WriterOutputPort* outputPort)
 {
-//ScopedBlockMacro(scp_block,"InputPort::disconnect");
-	if(_subPort != 0) _subPort->disconnect();
-	if( !isConnected() ) return;
-
-	WriterOutputPort* temp = _connectedNode;
-	_connectedNode = 0;
-	// _connectedNode must be set to zero BEFORE calling disconnect
-	// on the pointed object because it will try to call disconnect on
-	// this from within the method (infinite loop).
-	temp->disconnect(this);
+	ScopedBlockMacro( __scop, "WriterInputPort::connect" )
+	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
+		if( isCompatible( *outputPort ) )
+			return PortConnector::connect( outputPort );
+	else return false;
 }
+
 
 
 

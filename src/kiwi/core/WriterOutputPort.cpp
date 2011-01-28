@@ -40,10 +40,11 @@ namespace core{
 
 
 
-WriterOutputPort::WriterOutputPort( Node* myNode )
+WriterOutputPort::WriterOutputPort( Node* myNode, Container* data )
 	: _enabled(true)
 	, _node(myNode)
 	, _subPort(0)
+	, _container(data)
 {
 	// nothing to do
 }

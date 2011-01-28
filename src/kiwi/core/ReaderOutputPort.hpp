@@ -70,7 +70,7 @@ friend class ReaderInputPort;
 	 * @brief Constructor.
 	 * @todo The second argument will disapear in next version.
 	 */ 
-	ReaderOutputPort(Node* myNode);
+	ReaderOutputPort(Node* myNode, Container* data = 0);
 	/**
 	 * @brief Returns the index of this port.
 	 */ 

@@ -54,13 +54,13 @@ class Node;
  * Each port has a name which use is facultative has they are truely accessed using an integer index.
  */ 
 class ReaderOutputPort
-: public kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, READER>
+: public kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, 100, READER>
 {
 friend class Node;
 public:
 friend class ReaderInputPort;
 
-	typedef kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, READER> PortConnector;
+	typedef kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, 100, READER> PortConnector;
 
 	// --------------------------------------------------------------------
 	typedef std::list< ReaderInputPort* > connectionList;
@@ -115,10 +115,7 @@ friend class ReaderInputPort;
 	 * @brief Port compatibility check based on the type string.
 	 */ 
 	bool isCompatible(ReaderInputPort& input);
-	/**
-	 * @brief Resturns true if this port is connected.
-	 */ 
-	//bool isConnected() const ;
+
 	/**
 	 * @brief returns true if this port is enabled.
 	 * 
@@ -134,16 +131,8 @@ friend class ReaderInputPort;
 	connectionList connections() const ;
  
 	
-	/**
-	 * @brief Disconnect from a given port.
-	 *
-	 * If the parameter input id equal to 0, breaks all of this
-	 * port's connecions (this is the default behaviour when no
-	 * input port is specified).
-	 */ 
-	//void disconnect( ReaderInputPort* input = 0 );
-
 	bool connect(ReaderInputPort& inputPort);
+	bool connect(ReaderInputPort* inputPort);
 	
 protected:
 
@@ -170,10 +159,8 @@ protected:
 	
 private:
 	Node* _node;
-	//ReaderOutputPort* _subPort; // TODO: deprecated
-	Container* _container; //new
-	utils::UnorderedArray<ReaderOutputPort*> _linkedOutputPorts; //new
-	//connectionList _connections;
+	Container* _container; 
+	utils::UnorderedArray<ReaderOutputPort*> _linkedOutputPorts; 
 	bool _enabled;
 };
 

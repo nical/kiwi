@@ -30,7 +30,6 @@
 #ifndef KIWI_CORE_INPUTPORT_HPP
 #define KIWI_CORE_INPUTPORT_HPP
 
-//#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Tags.hpp"
 
 namespace kiwi{

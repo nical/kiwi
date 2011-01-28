@@ -146,6 +146,8 @@ void NodeTest()
 		<< "the next test will provoque an expected error message"
 		<< endl();
 	n.readerOutputPort(0) >> n2.readerInputPort(1);
+	Debug::error() << "n.nbConnections = "
+		<< n.readerOutputPort(0).nbConnections() << endl();
 	assert( ! n.readerOutputPort(0).isConnected() );
 	assert( ! n2.readerInputPort(1).isConnected() );
 

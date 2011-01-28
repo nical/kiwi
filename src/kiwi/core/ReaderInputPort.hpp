@@ -55,12 +55,12 @@ class ReaderOutputPort;
  */
 
 class ReaderInputPort
-: public kiwi::utils::Connector<ReaderInputPort, ReaderOutputPort, READER>
+: public kiwi::utils::Connector<ReaderInputPort, ReaderOutputPort, 1, READER>
 {
 friend class Node;
 public:
 
-	typedef kiwi::utils::Connector<ReaderInputPort, ReaderOutputPort, READER> PortConnector;
+	typedef kiwi::utils::Connector<ReaderInputPort, ReaderOutputPort, 1, READER> PortConnector;
 
 	/**
 	 * @brief Constructor.
@@ -72,6 +72,7 @@ public:
 	 * @brief Connection method.
 	 */ 
 	bool connect(ReaderOutputPort& outputPort);
+	bool connect(ReaderOutputPort* outputPort);
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 
@@ -84,9 +85,7 @@ public:
 	 * @brief Returns a pointer to the Node containing this port.
 	 */ 
 	Node* node() const ;
-	
-	const ReaderInputPort* subPort() const ;
-	
+		
 	/**
 	 * @brief Returns this port's Name as a string.
 	 */ 
@@ -106,10 +105,7 @@ public:
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
 	bool isCompatible(const kiwi::Tags& tag) ;
-	/**
-	 * @brief Resturns true if this port is connected.
-	 */ 
-	bool isConnected() const ;
+
 	/**
 	 * @brief returns true if this port is enabled.
 	 * 
@@ -144,9 +140,7 @@ protected:
 	
 private:
 	Node* _node;
-	ReaderInputPort* _subPort; // to remove
-	utils::UnorderedArray<ReaderInputPort*> _linkedOutputPorts;
-	ReaderOutputPort* _connectedNode;
+	utils::UnorderedArray<ReaderInputPort*> _linkedInputPorts;
 	bool _enabled;
 };
 

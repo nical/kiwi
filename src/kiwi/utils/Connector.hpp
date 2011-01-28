@@ -21,8 +21,10 @@ public:
 	virtual LinkType* connectedInstance(kiwi::uint32_t index = 0) const = 0;
 
 	bool connect( AbstractConnectorType* toConnect ){
+		ScopedBlockMacro(__scop, "Connector::connect") 
 		if( toConnect == 0 ) return false;
 		if( canConnect() && toConnect->canConnect() ){
+			Debug::print() << "can connect\n";
 			_connect_impl( toConnect );
 			toConnect->_connect_impl( this );
 			return true;

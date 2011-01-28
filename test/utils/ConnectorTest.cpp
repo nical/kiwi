@@ -30,6 +30,7 @@ class G : public Connector<G, F, 3>{};
 using namespace kiwi;
 
 int main(){
+	Debug::init(true, true);
 	ScopedBlockMacro(__scop, "Connector::Test")
 	A a1, a2, a3;
 	B b1, b2, b3;
@@ -37,13 +38,22 @@ int main(){
 	D d1;
 	E e1;
 
-	a1.connect(&b1);
+	assert( ! a1.isConnected() );
+	assert( ! b1.isConnected() );
+	assert( ! c1.Connector1::isConnected() );
+	assert( ! c1.Connector2::isConnected() );
+	assert( ! d1.isConnected() );
+	assert( ! e1.isConnected() );
 
+	a1.connect(&b1);
+	assert( a1.isConnected() );
+	assert( b1.isConnected() );
 	assert( a1.nbConnections() == 1 );
 	assert( b1.nbConnections() == 1 );
 	
 	a1.connect(&b2);
 
+	assert( b2.isConnected() );
 	assert( a1.nbConnections() == 2 );
 	assert( b1.nbConnections() == 1 );
 	
@@ -78,48 +88,60 @@ int main(){
 	F f1;
 	G g1, g2;
 	assert( f1.nbConnections() == 0 );
+	assert( !f1.isConnected() );
 	assert( f1.canConnect() );
 	
 	f1.connect(&g1);
 	assert( f1.nbConnections() == 1 );
+	assert( f1.isConnected() );
 	assert( !f1.canConnect() );
 	assert( f1.connectedInstance() == &g1 ); 
 	
 	f1.connect(&g2); // should not work
 	assert( f1.nbConnections() == 1 );
 	assert( f1.connectedInstance() == &g1 );
+	assert( f1.isConnected() );
 	g2.connect(&f1); // should not work
 	assert( f1.nbConnections() == 1 );
 	assert( g2.nbConnections() == 0 );
 	assert( f1.connectedInstance() == &g1 );
+	assert( f1.isConnected() );
+	assert( !g2.isConnected() );
 
 	// then again, this should not disconnect anything as g2 should not
 	// be connected.
 	f1.disconnect( &g2 );
 	assert( f1.nbConnections() == 1 );
 	assert( f1.connectedInstance() == &g1 );
-	
+	assert( f1.isConnected() );
 
 	// now let's try to disconnect g1, it should work
 	f1.disconnect( &g1 );
+	assert( !f1.isConnected() );
 	assert( f1.connectedInstance() == 0 );
 	assert( f1.nbConnections() == 0 );
 	assert( f1.canConnect() );
 	f1.connect( &g1 );
+	assert( f1.isConnected() );
 	assert( f1.nbConnections() == 1 );
-	f1.disconnect();
 	
+	f1.disconnect();
+
+	assert( !f1.isConnected() );
+	assert( !g1.isConnected() );
 	assert( f1.nbConnections() == 0 );
 	assert( g1.nbConnections() == 0 );
 	assert( f1.canConnect() );
 	assert( g1.canConnect() );
 	g1.connect( &f1 );
+	assert( f1.isConnected() );
+	assert( g1.isConnected() );
 	assert( f1.nbConnections() == 1 );
 	assert( g1.nbConnections() == 1 );
 	g1.disconnect();
+	assert( !f1.isConnected() );
+	assert( !g1.isConnected() );
 	assert( f1.nbConnections() == 0 );
 	assert( g1.nbConnections() == 0 );
-	
-	
 	
 }

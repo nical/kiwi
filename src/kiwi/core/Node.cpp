@@ -316,8 +316,8 @@ operator >> (ReaderOutputPort& output, ReaderInputPort& input )
 {
 	if(!input.isConnected())
 	{
-		input.connect(output);
-		return true;
+		Debug::print() << "operator >> " << endl();
+		return input.connect(output);
 	}else{return false;}
 }
 

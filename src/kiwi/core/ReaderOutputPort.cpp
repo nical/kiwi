@@ -47,52 +47,6 @@ ReaderOutputPort::ReaderOutputPort( Node* myNode )
 	// nothing to do
 }
 
-/*
-const ReaderOutputPort* 
-ReaderOutputPort::subPort() const
-{
-	// if there's port rebinding, _subPort 1!= 0 
-	// call the _subPort's method
-	if(_subPort) return _subPort->subPort();
-	// if this is the "subport" return a pointer to self
-	else return this;
-} 
-*/
-/*
-void 
-ReaderOutputPort::disconnect( ReaderInputPort* input )
-{
-//	ScopedBlockMacro(__scop, "OutputPort::disconnect" );
-	if( input == 0 ){
-		std::list<ReaderInputPort*> connectionsTempCopy
-			= _connections;
-		_connections.clear();
-		std::list<ReaderInputPort*>::iterator
-			it = connectionsTempCopy.begin();
-
-		for(int i = 0; i < connectionsTempCopy.size(); ++i)
-		{
-			ReaderInputPort* temp = (*it);
-			connectionsTempCopy.erase(it);
-			temp->disconnect();
-			++it;
-		}
-
-	}else
-		for(std::list<ReaderInputPort*>::iterator
-			it = _connections.begin()
-			; it!= _connections.end()
-			; ++it)
-		{
-			if( (*it) == input ){
-				_connections.erase(it);
-				input->disconnect();
-				return;
-			}
-		}
-}
-*/
-
 
 void 
 ReaderOutputPort::bind(ReaderOutputPort& port)
@@ -159,31 +113,24 @@ ReaderOutputPort::isCompatible(ReaderInputPort& input)
 
 bool ReaderOutputPort::connect(ReaderInputPort& inputPort)
 {
-	return PortConnector::connect( &inputPort);
+	if(isEnabled() && inputPort.isEnabled() )
+		return PortConnector::connect( &inputPort);
+	else return false;
 }
 
-
-/*
-bool 
-ReaderOutputPort::isConnected() const 
-{ 
-	return (_connections.size() != 0); 
+bool ReaderOutputPort::connect(ReaderInputPort* inputPort)
+{
+	if( (inputPort != 0) && isEnabled() && inputPort->isEnabled() )
+		return PortConnector::connect( inputPort);
+	else return false;
 }
-*/
+
 
 bool 
 ReaderOutputPort::isEnabled() const 
 { 
 	return _enabled; 
 }
-
-/*
-ReaderOutputPort::connectionList 
-ReaderOutputPort::connections() const 
-{ 
-	return _connections; 
-}
-*/
 
 
 void 

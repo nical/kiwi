@@ -42,9 +42,7 @@ namespace core{
 // ----------------------------------------------------------- InputPort
 
 ReaderInputPort::ReaderInputPort( Node* myNode )
-:   _connectedNode(0)
-	, _enabled(true)
-	, _subPort(0)
+:	_enabled(true)
 	, _node(myNode)
 {
 	//nothing to do
@@ -107,7 +105,16 @@ ReaderInputPort::disconnect()
 
 bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 {
-	return PortConnector::connect( &outputPort );
+	if( isEnabled() && outputPort.isEnabled() )
+		return PortConnector::connect( &outputPort );
+	else return false;
+}
+
+bool ReaderInputPort::connect(ReaderOutputPort* outputPort)
+{
+	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
+		return PortConnector::connect( outputPort );
+	else return false;
 }
 
 
@@ -115,9 +122,8 @@ void
 ReaderInputPort::bind(ReaderInputPort& port)
 {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
-	port._linkedOutputPorts.add(&port);
-	// note that if the binded Node is deleted, trying to acces
-	// this port is unsafe
+	port._linkedInputPorts.add(&port);
+	
 }
 
 
@@ -136,20 +142,10 @@ ReaderInputPort::node() const
 }
 
 
-const ReaderInputPort* 
-ReaderInputPort::subPort() const
-{
-	// if there's port rebinding, _subPort != 0 
-	// call the _subPort's method
-	if(_subPort) return _subPort->subPort();
-	// if this is the "subport" return a pointer to self
-	else return this;
-} 
-
 
 Tags ReaderInputPort::tags() const
 {
-	return subPort()->node()->readerInputTags( index() );
+	return node()->readerInputTags( index() ); // TODO (subport ?)
 }
 
 bool ReaderInputPort::isCompatible(ReaderOutputPort& output)	
@@ -163,13 +159,13 @@ bool ReaderInputPort::isCompatible(const kiwi::Tags& tag)
 	return ( tags().hasOneOf(tag + Tags("any") ) );
 }
 
-
+/*
 bool 
 ReaderInputPort::isConnected() const 
 { 
 	return (_connectedNode != 0); 
 }
-
+*/
 
 bool 
 ReaderInputPort::isEnabled() const 
@@ -181,7 +177,7 @@ ReaderInputPort::isEnabled() const
 ReaderOutputPort* 
 ReaderInputPort::connectedOutput() const 
 { 
-	return _connectedNode; 
+	return PortConnector::connectedInstance(0);
 }
 
 

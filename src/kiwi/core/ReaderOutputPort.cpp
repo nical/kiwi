@@ -159,7 +159,7 @@ ReaderOutputPort::isCompatible(ReaderInputPort& input)
 
 bool ReaderOutputPort::connect(ReaderInputPort& inputPort)
 {
-	return connect( &inputPort);
+	return PortConnector::connect( &inputPort);
 }
 
 

@@ -59,6 +59,9 @@ class ReaderInputPort
 {
 friend class Node;
 public:
+
+	typedef kiwi::utils::Connector<ReaderInputPort, ReaderOutputPort, READER> PortConnector;
+
 	/**
 	 * @brief Constructor.
 	 * @todo The second argument will disapear in next version.
@@ -72,7 +75,7 @@ public:
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 
-	void disconnect();
+//	void disconnect();
 	/**
 	 * @brief Returns the index of this port.
 	 */ 

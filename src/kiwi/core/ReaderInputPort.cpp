@@ -107,7 +107,7 @@ ReaderInputPort::disconnect()
 
 bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 {
-	return connect( &outputPort );
+	return PortConnector::connect( &outputPort );
 }
 
 

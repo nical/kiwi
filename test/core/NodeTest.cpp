@@ -132,7 +132,7 @@ void NodeTest()
 	Debug::print() << "Node::Test#4" << endl();
 
 	n.readerOutputPort(0) >> n2.readerInputPort(0);
-	assert( n.readerOutputPort(0).connections().size() == 1 );
+	assert( n.readerOutputPort(0).nbConnections() == 1 );
 
 	n.readerOutputPort(0).disconnect();
 

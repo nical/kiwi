@@ -59,6 +59,9 @@ class ReaderOutputPort
 friend class Node;
 public:
 friend class ReaderInputPort;
+
+	typedef kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, READER> PortConnector;
+
 	// --------------------------------------------------------------------
 	typedef std::list< ReaderInputPort* > connectionList;
 	
@@ -115,7 +118,7 @@ friend class ReaderInputPort;
 	/**
 	 * @brief Resturns true if this port is connected.
 	 */ 
-	bool isConnected() const ;
+	//bool isConnected() const ;
 	/**
 	 * @brief returns true if this port is enabled.
 	 * 
@@ -138,7 +141,7 @@ friend class ReaderInputPort;
 	 * port's connecions (this is the default behaviour when no
 	 * input port is specified).
 	 */ 
-	void disconnect( ReaderInputPort* input = 0 );
+	//void disconnect( ReaderInputPort* input = 0 );
 
 	bool connect(ReaderInputPort& inputPort);
 	

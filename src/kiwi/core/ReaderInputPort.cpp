@@ -105,15 +105,19 @@ ReaderInputPort::disconnect()
 
 bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 {
+	ScopedBlockMacro( __scop, "ReaderInputPort::connect" )
 	if( isEnabled() && outputPort.isEnabled() )
-		return PortConnector::connect( &outputPort );
+		if( isCompatible( outputPort.tags() ) )
+			return PortConnector::connect( &outputPort );
 	else return false;
 }
 
 bool ReaderInputPort::connect(ReaderOutputPort* outputPort)
 {
+	ScopedBlockMacro( __scop, "ReaderInputPort::connect" )
 	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
-		return PortConnector::connect( outputPort );
+		if( isCompatible( *outputPort ) )
+			return PortConnector::connect( outputPort );
 	else return false;
 }
 

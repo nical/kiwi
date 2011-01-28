@@ -48,8 +48,7 @@ ReaderOutputPort::ReaderOutputPort( Node* myNode )
 }
 
 
-void 
-ReaderOutputPort::bind(ReaderOutputPort& port)
+void ReaderOutputPort::bind(ReaderOutputPort& port)
 {
 //	Debug::print() << "port binding" << endl();
 	_container = port._container;
@@ -76,36 +75,31 @@ void ReaderOutputPort::setData( Container* data )
 }
 
 
-kiwi::string 
-ReaderOutputPort::name() const
+kiwi::string ReaderOutputPort::name() const
 {
 	return _node->readerOutputName( _node->indexOf(*this) );
 }
 
 
-portIndex_t 
-ReaderOutputPort::index() const 
+portIndex_t ReaderOutputPort::index() const 
 {
 	return _node->indexOf(*this);
 }
 
 
-Node* 
-ReaderOutputPort::node() const 
+Node* ReaderOutputPort::node() const 
 {
 	return _node;
 }
 
 
-Tags 
-ReaderOutputPort::tags() const
+Tags ReaderOutputPort::tags() const
 { 
 	return _node->readerOutputTags( index() ); 
 }
 
 
-bool 
-ReaderOutputPort::isCompatible(ReaderInputPort& input)	
+bool ReaderOutputPort::isCompatible(ReaderInputPort& input)	
 {
 	return input.isCompatible(*this); 
 }
@@ -113,28 +107,32 @@ ReaderOutputPort::isCompatible(ReaderInputPort& input)
 
 bool ReaderOutputPort::connect(ReaderInputPort& inputPort)
 {
-	if(isEnabled() && inputPort.isEnabled() )
-		return PortConnector::connect( &inputPort);
+	ScopedBlockMacro( __scop, "ReaderOutputPort::connect" )
+	if( isEnabled() && inputPort.isEnabled() ){
+		if( isCompatible( inputPort ) )
+			return PortConnector::connect( &inputPort);
+	}
 	else return false;
 }
 
 bool ReaderOutputPort::connect(ReaderInputPort* inputPort)
 {
-	if( (inputPort != 0) && isEnabled() && inputPort->isEnabled() )
-		return PortConnector::connect( inputPort);
+	ScopedBlockMacro( __scop, "ReaderOutputPort::connect" )
+	if( (inputPort != 0) && (isEnabled() && inputPort->isEnabled()) ){
+		if( isCompatible( *inputPort ) )
+			return PortConnector::connect( inputPort );
+	}
 	else return false;
 }
 
 
-bool 
-ReaderOutputPort::isEnabled() const 
+bool ReaderOutputPort::isEnabled() const 
 { 
 	return _enabled; 
 }
 
 
-void 
-ReaderOutputPort::setEnabled(bool status) 
+void ReaderOutputPort::setEnabled(bool status) 
 {
 	_enabled = status;
 }

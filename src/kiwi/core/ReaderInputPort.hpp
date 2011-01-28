@@ -27,8 +27,8 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
-#ifndef KIWI_CORE_INPUTPORT_HPP
-#define KIWI_CORE_INPUTPORT_HPP
+#ifndef KIWI_CORE_READERINPUTPORT_HPP
+#define KIWI_CORE_READERINPUTPORT_HPP
 
 //#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Tags.hpp"

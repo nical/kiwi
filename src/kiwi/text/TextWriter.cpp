@@ -53,8 +53,8 @@ TextWriter::TextWriter( core::WriterInputPort& port
 {
 	//ScopedBlockMacro(__scop, "TextWriter::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
-		port.connectedOutput()->subPort()->node() );
-	
+		port.connectedOutput()->data() );
+/* TODO !	
 	if( tc ) init( *tc, port.connectedOutput()->subPort()->index()
 		, firstLine, range );
 	else
@@ -64,6 +64,7 @@ TextWriter::TextWriter( core::WriterInputPort& port
 			<<" Unable to determine the Container type."
 			<< endl();
 	}
+*/ 
 }
 
 TextWriter::TextWriter( core::WriterOutputPort& port
@@ -72,9 +73,10 @@ TextWriter::TextWriter( core::WriterOutputPort& port
 {
 	//ScopedBlockMacro(__scop, "TextWriter::constructor")
 	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
-		port.subPort()->node() );
-	
-	if( tc ) init( *tc, port.subPort()->index(), firstLine, range );
+		port.data() );
+
+// TODO !	
+/*	if( tc ) init( *tc, port.subPort()->index(), firstLine, range );
 	else
 	{
 		Debug::error() 
@@ -82,6 +84,7 @@ TextWriter::TextWriter( core::WriterOutputPort& port
 			<<" Unable to determine the Container type."
 			<< endl();
 	}
+*/ 
 }
 
 

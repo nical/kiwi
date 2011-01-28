@@ -173,7 +173,7 @@ public:
 	ValueWriter(const core::WriterInputPort& port)
 	{
 		_resource = dynamic_cast<AbstractValueContainer<TValueType>* >(
-			port.connectedOutput()->subPort()->node() 
+			port.connectedOutput()->data() 
 		);
 		DEBUG_ONLY(
 			if(!_resource)
@@ -185,7 +185,7 @@ public:
 					<< endl();
 			}
 		)//DEBUG_ONLY
-		_port = port.connectedOutput()->subPort()->index();
+		//_port = port.connectedOutput()->subPort()->index();
 	}
 	
 	uint32_t nbScalarElements() const { return 1; }

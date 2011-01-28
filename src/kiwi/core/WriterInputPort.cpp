@@ -28,11 +28,12 @@
 
 #include "kiwi/core/Node.hpp"
 
-#include "kiwi/core/Reader.hpp"
+#include "kiwi/core/Writer.hpp"
 #include "kiwi/core/Writer.hpp"
 
 #include "kiwi/core/WriterOutputPort.hpp"
 #include "kiwi/core/WriterInputPort.hpp"
+
 
 namespace kiwi{
 namespace core{
@@ -41,9 +42,7 @@ namespace core{
 // ----------------------------------------------------------- InputPort
 
 WriterInputPort::WriterInputPort( Node* myNode )
-:   _connectedNode(0)
-	, _enabled(true)
-	, _subPort(0)
+:	_enabled(true)
 	, _node(myNode)
 {
 	//nothing to do
@@ -69,15 +68,12 @@ bool WriterInputPort::connect(WriterOutputPort* outputPort)
 }
 
 
-
-
 void 
 WriterInputPort::bind(WriterInputPort& port)
 {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
-	_subPort = &port;
-	// note that if the binded Node is deleted, trying to acces
-	// this port is unsafe
+	port._linkedInputPorts.add(&port);
+	
 }
 
 
@@ -96,43 +92,30 @@ WriterInputPort::node() const
 }
 
 
-const WriterInputPort* 
-WriterInputPort::subPort() const
-{
-	// if there's port rebinding, _subPort != 0 
-	// call the _subPort's method
-	if(_subPort) return _subPort->subPort();
-	// if this is the "subport" return a pointer to self
-	else return this;
-} 
-
 
 Tags WriterInputPort::tags() const
-{ 
-	return subPort()->node()->writerInputTags( index() ); 
+{
+	return node()->writerInputTags( index() ); // TODO (subport ?)
 }
 
-
-bool 
-WriterInputPort::isCompatible(WriterOutputPort& output)	
+bool WriterInputPort::isCompatible(WriterOutputPort& output)	
 { 
 	return ( tags().hasOneOf(output.tags()+Tags("any") ) );
 }
 
 
-bool 
-WriterInputPort::isCompatible(const kiwi::Tags& tag)	
+bool WriterInputPort::isCompatible(const kiwi::Tags& tag)	
 { 
 	return ( tags().hasOneOf(tag + Tags("any") ) );
 }
 
-
+/*
 bool 
 WriterInputPort::isConnected() const 
 { 
 	return (_connectedNode != 0); 
 }
-
+*/
 
 bool 
 WriterInputPort::isEnabled() const 
@@ -144,9 +127,8 @@ WriterInputPort::isEnabled() const
 WriterOutputPort* 
 WriterInputPort::connectedOutput() const 
 { 
-	return _connectedNode; 
+	return PortConnector::connectedInstance(0);
 }
-
 
 
 kiwi::string 
@@ -154,6 +136,7 @@ WriterInputPort::name() const
 {
 	return _node->writerInputName(_node->indexOf(*this));
 }
+
 
 
 

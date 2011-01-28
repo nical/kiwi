@@ -33,6 +33,9 @@
 
 #include <list>
 #include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/UnorderedArray.hpp"
+#include "kiwi/utils/Connector.hpp"
+
 
 
 namespace kiwi{
@@ -42,7 +45,7 @@ class WriterInputPort;
 class Node;
 
 /**
- * @brief Generic output port class for Reader and Writer interface.
+ * @brief Generic output port class for Writer and Writer interface.
  *
  * An instance of this class is hold by a Node for each of it's outputs.
  * Port classes are designed to do most of the external actions on Node/Filter which are
@@ -51,12 +54,16 @@ class Node;
  * Each port has a name which use is facultative has they are truely accessed using an integer index.
  */ 
 class WriterOutputPort
+: public kiwi::utils::Connector<WriterOutputPort, WriterInputPort, 100, WRITER>
 {
 friend class Node;
 public:
 friend class WriterInputPort;
+
+	typedef kiwi::utils::Connector<WriterOutputPort, WriterInputPort, 100, WRITER> PortConnector;
+
 	// --------------------------------------------------------------------
-	typedef std::list< WriterInputPort* > connectionList; // TODO deprecated
+	typedef std::list< WriterInputPort* > connectionList;
 	
 	// --------------------------------------------------------------------
 	/**
@@ -72,6 +79,8 @@ friend class WriterInputPort;
 	 * @brief Returns a pointer to the Node containing this port.
 	 */ 
 	Node* node() const ;
+
+	Container* data() { return _container; }
 	
 	/**
 	 * @brief Returns a pointer to the port that catually contains the Data.
@@ -88,11 +97,11 @@ friend class WriterInputPort;
 	 * the pointer to the corresponding port.
 	 * 
 	 * So this method MUST be used when accessing a Node's data through its
-	 * port (when initializing Readers and Writers for instance) because
+	 * port (when initializing Writers and Writers for instance) because
 	 * you don't know if the node doesn't encapsulate other Nodes that
 	 * actually contain the Data and bind it's ports to it.
 	 */ 
-	const WriterOutputPort* subPort() const ;
+//	const WriterOutputPort* subPort() const ;
 	/**
 	 * @brief Returns this port's Type as a string.
 	 */ 
@@ -106,10 +115,7 @@ friend class WriterInputPort;
 	 * @brief Port compatibility check based on the type string.
 	 */ 
 	bool isCompatible(WriterInputPort& input);
-	/**
-	 * @brief Resturns true if this port is connected.
-	 */ 
-	bool isConnected() const ;
+
 	/**
 	 * @brief returns true if this port is enabled.
 	 * 
@@ -123,14 +129,10 @@ friend class WriterInputPort;
 	 * Returns a std::list<kiwi::core::InputPort<T> of the port connected to this port
 	 */ 
 	connectionList connections() const ;
-	/**
-	 * @brief Disconnect from a given port.
-	 *
-	 * If the parameter input id equal to 0, breaks all of this
-	 * port's connecions (this is the default behaviour when no
-	 * input port is specified).
-	 */ 
-	void disconnect( WriterInputPort* input = 0);
+ 
+	
+	bool connect(WriterInputPort& inputPort);
+	bool connect(WriterInputPort* inputPort);
 	
 protected:
 
@@ -139,24 +141,29 @@ protected:
 	 * 
 	 * @see kiwi::core::Node::bindPort
 	 */ 
-	void bind(WriterOutputPort& port);
+	void bind( WriterOutputPort& port );
+
+	void unBind();
+
+	void setData( Container* data );
+	
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
-	 * @see kiwi::core::setReaderInputPortEnabled
-	 * @see kiwi::core::setReaderOutputPortEnabled
 	 * @see kiwi::core::setWriterInputPortEnabled
 	 * @see kiwi::core::setWriterOutputPortEnabled
-	 */ 
+	 * @see kiwi::core::setWriterInputPortEnabled
+	 * @see kiwi::core::setWriterOutputPortEnabled
+	 */
 	void setEnabled(bool status);
 	
 private:
 	Node* _node;
-	WriterOutputPort* _subPort;
-	Container* _container;
-	connectionList _connections;
+	Container* _container; 
+	utils::UnorderedArray<WriterOutputPort*> _linkedOutputPorts; 
 	bool _enabled;
 };
+
 
 }// namespace
 }// namespace

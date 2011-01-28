@@ -44,7 +44,7 @@ ArrayWriter<T,D>::ArrayWriter(
 {
 	AbstractArrayContainer<T,D>* node = 
 		dynamic_cast< AbstractArrayContainer<T,D>* >( 
-			port.connectedOutput()->subPort()->node()
+			port.connectedOutput()->data()
 		);
 	if(!node)
 	{

@@ -32,18 +32,20 @@
 
 //#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Connector.hpp"
+#include "kiwi/utils/UnorderedArray.hpp"
 
 namespace kiwi{
 namespace core{
 
 class Node;
-class Reader;
 class Writer;
+class WriterInputPort;
 class WriterOutputPort;
 
 
 /**
- * @brief Generic input port class for Reader and Writer interface.
+ * @brief Generic input port class for Writer and Writer interface.
  *
  * An instance of this class is hold by a Node for each of it's inputs.
  * Port classes are designed to do most of the external actions on Node/Filter which are
@@ -53,9 +55,13 @@ class WriterOutputPort;
  */
 
 class WriterInputPort
+: public kiwi::utils::Connector<WriterInputPort, WriterOutputPort, 1, WRITER>
 {
 friend class Node;
 public:
+
+	typedef kiwi::utils::Connector<WriterInputPort, WriterOutputPort, 1, WRITER> PortConnector;
+
 	/**
 	 * @brief Constructor.
 	 * @todo The second argument will disapear in next version.
@@ -65,11 +71,12 @@ public:
 	/**
 	 * @brief Connection method.
 	 */ 
-	void connect(WriterOutputPort& outputPort, bool isMetaPort = true);
+	bool connect(WriterOutputPort& outputPort);
+	bool connect(WriterOutputPort* outputPort);
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 
-	void disconnect();
+//	void disconnect();
 	/**
 	 * @brief Returns the index of this port.
 	 */ 
@@ -78,9 +85,7 @@ public:
 	 * @brief Returns a pointer to the Node containing this port.
 	 */ 
 	Node* node() const ;
-	
-	const WriterInputPort* subPort() const ;
-	
+		
 	/**
 	 * @brief Returns this port's Name as a string.
 	 */ 
@@ -95,15 +100,12 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	bool isCompatible(WriterOutputPort& output) ;/**
+	bool isCompatible(WriterOutputPort& output) ;
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
 	bool isCompatible(const kiwi::Tags& tag) ;
-	/**
-	 * @brief Resturns true if this port is connected.
-	 */ 
-	bool isConnected() const ;
+
 	/**
 	 * @brief returns true if this port is enabled.
 	 * 
@@ -129,8 +131,8 @@ protected:
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
-	 * @see kiwi::core::setReaderInputPortEnabled
-	 * @see kiwi::core::setReaderOutputPortEnabled
+	 * @see kiwi::core::setWriterInputPortEnabled
+	 * @see kiwi::core::setWriterOutputPortEnabled
 	 * @see kiwi::core::setWriterInputPortEnabled
 	 * @see kiwi::core::setWriterOutputPortEnabled
 	 */ 
@@ -138,11 +140,9 @@ protected:
 	
 private:
 	Node* _node;
-	WriterInputPort* _subPort;
-	WriterOutputPort* _connectedNode;
+	utils::UnorderedArray<WriterInputPort*> _linkedInputPorts;
 	bool _enabled;
 };
-
 
 
 }// namespace

@@ -27,22 +27,25 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
-#ifndef KIWI_CORE_INPUTPORT_HPP
-#define KIWI_CORE_INPUTPORT_HPP
+#ifndef KIWI_CORE_WRITERINPUTPORT_HPP
+#define KIWI_CORE_WRITERINPUTPORT_HPP
 
+//#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Connector.hpp"
+#include "kiwi/utils/UnorderedArray.hpp"
 
 namespace kiwi{
 namespace core{
 
 class Node;
-class Reader;
 class Writer;
-template<class T> class OutputPort;
+class WriterInputPort;
+class WriterOutputPort;
 
 
 /**
- * @brief Generic input port class for Reader and Writer interface.
+ * @brief Generic input port class for Writer and Writer interface.
  *
  * An instance of this class is hold by a Node for each of it's inputs.
  * Port classes are designed to do most of the external actions on Node/Filter which are
@@ -50,24 +53,30 @@ template<class T> class OutputPort;
  * 
  * Each port has a name which use is facultative has they are also accessed using an integer index.
  */
-template<class SlotType>
-class InputPort
-: public kiwi::utils::Connector<WriterInputPort, WriterOutputPort, 1, WRITER>
+
+class WriterInputPort
+: public kiwi::utils::Connector<WriterInputPort, ReaderOutputPort, 1, WRITER>
 {
 friend class Node;
 public:
+
+	typedef kiwi::utils::Connector<WriterInputPort, ReaderOutputPort, 1, WRITER> PortConnector;
+
 	/**
 	 * @brief Constructor.
 	 * @todo The second argument will disapear in next version.
 	 */ 
-	InputPort(Node* myNode);
+	WriterInputPort(Node* myNode);
 	
 	/**
 	 * @brief Connection method.
 	 */ 
-	void connect( WriterOutputPort& outputPort );
-	void connect( WriterOutputPort* outputPort );
-
+	bool connect(WriterOutputPort& outputPort);
+	bool connect(WriterOutputPort* outputPort);
+	/**
+	 * @brief Disconnect the port if connected.
+	 */ 
+//	void disconnect();
 	/**
 	 * @brief Returns the index of this port.
 	 */ 
@@ -76,9 +85,7 @@ public:
 	 * @brief Returns a pointer to the Node containing this port.
 	 */ 
 	Node* node() const ;
-	
-	const InputPort<SlotType>* subPort() const ;
-	
+		
 	/**
 	 * @brief Returns this port's Name as a string.
 	 */ 
@@ -93,15 +100,12 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	bool isCompatible(OutputPort<SlotType>& output) ;/**
+	bool isCompatible(WriterOutputPort& output) ;
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
 	bool isCompatible(const kiwi::Tags& tag) ;
-	/**
-	 * @brief Resturns true if this port is connected.
-	 */ 
-	bool isConnected() const ;
+
 	/**
 	 * @brief returns true if this port is enabled.
 	 * 
@@ -114,7 +118,7 @@ public:
 	 * 
 	 * Returns 0 if not connected. 
 	 */ 
-	OutputPort<SlotType>* connectedOutput() const ;
+	WriterOutputPort* connectedOutput() const ;
 	
 protected:
 	void setType(const string& type);
@@ -123,12 +127,12 @@ protected:
 	 * 
 	 * @see kiwi::core::Node::bindPort
 	 */ 
-	void bind( InputPort<SlotType>& port);
+	void bind( WriterInputPort& port);
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
-	 * @see kiwi::core::setReaderInputPortEnabled
-	 * @see kiwi::core::setReaderOutputPortEnabled
+	 * @see kiwi::core::setWriterInputPortEnabled
+	 * @see kiwi::core::setWriterOutputPortEnabled
 	 * @see kiwi::core::setWriterInputPortEnabled
 	 * @see kiwi::core::setWriterOutputPortEnabled
 	 */ 
@@ -136,14 +140,9 @@ protected:
 	
 private:
 	Node* _node;
-	InputPort<SlotType>* _subPort;
-	OutputPort<SlotType>* _connectedNode;
+	utils::UnorderedArray<WriterInputPort*> _linkedInputPorts;
 	bool _enabled;
 };
-
-
-template class InputPort<Reader>;
-template class InputPort<Writer>;
 
 
 }// namespace

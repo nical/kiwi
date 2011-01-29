@@ -450,7 +450,9 @@ protected:
 	 * @brief Enables/disables port
 	 */
 	void setPortEnabled(WriterOutputPort& port, bool status);
-	
+
+	void setPortContainer(ReaderOutputPort& port, Container* container);
+	void setPortContainer(WriterOutputPort& port, Container* container);
 	
 	
 	/**

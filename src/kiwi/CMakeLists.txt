@@ -34,7 +34,6 @@ SET(KIWI_SRC ${KIWI_SRC}
 		core/ReaderOutputPort.cpp
 		core/WriterInputPort.cpp
 		core/WriterOutputPort.cpp
-		core/CanonicalFilter.cpp
 		core/NodeFactory.cpp
 		pipeline/SimplePipeline.cpp
 		core/Tags.cpp

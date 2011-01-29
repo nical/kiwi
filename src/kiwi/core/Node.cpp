@@ -325,6 +325,15 @@ Node::setPortEnabled(WriterOutputPort& port, bool status)
 	port.setEnabled(status);
 }
 
+void Node::setPortContainer(ReaderOutputPort& port, Container* container)
+{
+	port.setData( container );
+}
+
+void Node::setPortContainer(WriterOutputPort& port, Container* container)
+{
+	port.setData( container );
+}
 
 // ---------------------------------------------------- Node initializer
 

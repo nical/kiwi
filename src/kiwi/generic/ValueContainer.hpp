@@ -68,7 +68,7 @@ public:
 
 	Tags tags() const
 	{
-		return Tags( kiwi::string("#") + types::str<T>());
+		return Tags( kiwi::string("#scalar#") + types::str<T>());
 	}
 	
 };

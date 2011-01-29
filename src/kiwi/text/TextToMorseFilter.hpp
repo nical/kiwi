@@ -18,11 +18,11 @@ namespace kiwi{
 namespace text{
 
 
-class TextToMorseFilter : public core::CanonicalFilter
+class TextToMorseFilter : public core::Filter
 {
 public:
 	
-	TextToMorseFilter() : CanonicalFilter(1)
+	TextToMorseFilter() : Filter(/*1*/)
 	{
 	//ScopedBlockMacro(scp_block, "TextToMorseFilter::constructor");
 		// CanonicalFilter's constructor automatically adds one reader output port

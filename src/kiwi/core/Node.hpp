@@ -71,6 +71,7 @@ class ReaderOutputPort;
 class WriterInputPort;
 class WriterOutputPort;
 class Container;
+class NodeInitializer;
 
 /**
  * @class Node
@@ -94,6 +95,7 @@ public:
 	 * @brief Constructor
 	 */ 
 	Node();
+	Node( const NodeInitializer& init);
 
 	/**
 	 * @brief Destructor.
@@ -569,6 +571,20 @@ bool operator>>(ReaderOutputPort& output, ReaderInputPort& input );
 bool operator>>(WriterOutputPort& output, WriterInputPort& input );
 
 
+
+class NodeInitializer
+{
+public:
+	void addContainer(Container* data, bool addReader = true, bool addWrier = false);
+	kiwi::uint32_t nbContainers() const;
+	Container* container(kiwi::uint32_t index) const;
+	bool addReader(kiwi::uint32_t index) const;
+	bool addWriter(kiwi::uint32_t index) const;
+	
+private:	
+	struct ContainerInit{ Container* container; bool addReader; bool addWriter; };
+	utils::UnorderedArray<ContainerInit> _data;
+};
 
 
 

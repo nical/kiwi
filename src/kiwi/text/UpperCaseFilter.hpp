@@ -23,11 +23,11 @@ namespace kiwi{
 namespace text{
 
 
-class UpperCaseFilter : public core::CanonicalFilter
+class UpperCaseFilter : public core::Filter
 {
 public:
 	
-	UpperCaseFilter() : CanonicalFilter(1)
+	UpperCaseFilter() : Filter(/*1*/)
 	{
 	//ScopedBlockMacro(scp_block, "UpperCaseFilter::constructor");
 		// CanonicalFilter's constructor automatically adds one reader output port

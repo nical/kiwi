@@ -39,12 +39,15 @@
 #ifndef KIWI_CANONICALFILTER_HPP
 #define KIWI_CANONICALFILTER_HPP
 
+#ifdef notdefined_its_deprecated
 
 #include "kiwi/core/Filter.hpp"
 #include <list>
 
 namespace kiwi{
 namespace core{	
+
+
 
 class CanonicalFilter : public Filter
 {
@@ -90,5 +93,6 @@ private:
 }// namespace
 }// namespace
 
+#endif // deprecated
 
 #endif

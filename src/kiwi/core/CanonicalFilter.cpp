@@ -27,6 +27,8 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#ifdef notdefinedDeprecated
+
 #include "CanonicalFilter.hpp"
 #include "kiwi/core/Ports.hpp"
 
@@ -102,3 +104,5 @@ void CanonicalFilter::removeWriteNode(portIndex_t writerPort)
 
 }// namespace	
 }// namespace	
+
+#endif

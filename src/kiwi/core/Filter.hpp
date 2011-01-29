@@ -41,12 +41,10 @@
 #define KIWI_FILTER_HPP
 
 #include "kiwi/core/Node.hpp"
+#include "kiwi/core/Ports.hpp"
 
-
-namespace kiwi
-{
-namespace core
-{
+namespace kiwi{
+namespace core{
 
 
 class Filter : public Node
@@ -63,6 +61,34 @@ public:
 	 */
 	virtual void process() = 0;
 
+	/**
+	 * @brief Automatically publishes the Container's ports in this Filter's
+	 * Reader output ports.
+	 * 
+	 * The child classes, if they override this method, *must* call their
+	 * parent's method as the only feature that brings this class is in 
+	 * here.
+	 */ 
+	void layoutChanged()
+	{
+		uint32_t nbWriters = nbWriterInputs();
+		//ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
+		for(uint32_t i = 0; i < nbWriters; ++i){
+			if( writerInputPort(i).isConnected() ){
+				if( !readerOutputPort(i).isEnabled() ){
+					setPortEnabled(readerOutputPort(i),true);
+					portIndex_t outIndex = writerInputPort(i).connectedOutput()->index();
+					ReaderOutputPort& op
+						= writerInputPort(i).connectedOutput()->node()->readerOutputPort(outIndex);
+					bindPort( readerOutputPort(i), op );
+				}
+			}else{
+				readerOutputPort(i).disconnect();
+				setPortEnabled(readerOutputPort(i),false);	
+			}
+		}
+	}
+	
 
 	Filter():Node()
 	{

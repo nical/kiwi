@@ -44,6 +44,16 @@ Node::Node()
 	_listener = 0;
 }
 
+Node::Node( const NodeInitializer& init)
+{
+	for( kiwi::uint32_t i = 0; i < init.nbContainers(); ++i){
+		addContainer(init.container(i)
+				, init.addReader(i)
+				, init.addWriter(i) );
+	}
+	_listener = 0;
+}
+
 Node::~Node()
 {
 //	Debug::print() << "Node::destructor"<<endl();
@@ -315,6 +325,38 @@ Node::setPortEnabled(WriterOutputPort& port, bool status)
 	port.setEnabled(status);
 }
 
+
+// ---------------------------------------------------- Node initializer
+
+
+void NodeInitializer::addContainer(Container* theContainer, bool hasReader, bool hasWriter)
+{
+	ContainerInit n;
+	n.container = theContainer;
+	n.addReader = hasReader;
+	n.addWriter = hasWriter;
+	_data.add( n );
+}
+
+kiwi::uint32_t NodeInitializer::nbContainers() const
+{
+	return _data.size();
+}
+
+Container* NodeInitializer::container(kiwi::uint32_t index) const
+{
+	return _data[index].container;
+}
+
+bool NodeInitializer::addReader(kiwi::uint32_t index) const
+{
+	return _data[index].addReader;
+}
+
+bool NodeInitializer::addWriter(kiwi::uint32_t index) const
+{
+	return _data[index].addWriter;
+}
 
 // ----------------------------------------------------------- Operators
 

@@ -3,7 +3,7 @@
 
 #include "kiwi/core/Commons.hpp"
 
-#include "kiwi/core/CanonicalFilter.hpp"
+#include "kiwi/core/Filter.hpp"
 
 #include "kiwi/generic/ArrayContainer.hpp"
 #include "kiwi/generic/ArrayReader.hpp"
@@ -33,7 +33,7 @@ using namespace kiwi::generic;
 
 // compute the sum of two Value<> resources and place it in an other Value<>
 template<typename TValueType, unsigned int TDimension>
-class AddArraysFilter : public CanonicalFilter
+class AddArraysFilter : public Filter
 {
 public:
 	enum{ A = 0, B = 1};
@@ -43,7 +43,7 @@ public:
 	typedef generic::ArrayReader<TValueType, TDimension> myReader;
 	typedef generic::ArrayWriter<TValueType, TDimension> myWriter;
 // ---------------------------------------------------------------------
-	AddArraysFilter() : CanonicalFilter(1)
+	AddArraysFilter() : Filter(/*1*/)
 	{
 	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
 		kiwi::string sType( kiwi::string("array")

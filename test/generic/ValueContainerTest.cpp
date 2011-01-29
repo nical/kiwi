@@ -132,6 +132,24 @@ public:
 template<typename T>
 void ValueContainerTest()
 {
+	ScopedBlockMacro(__scop, "ValueContainer::Test<>")
+
+	NodeInitializer init1;
+	init1.addContainer( new ValueContainer<T>(0), true, true );
+	core::Node* n1 = new core::Node( init1 );
+
+	NodeInitializer init2;
+	init2.addContainer( new ValueContainer<T>(5), true, true );
+	core::Node* n2 = new core::Node( init2 );	
+	
+	assert( n1->nbReaderOutputs() == 1 );
+	assert( n1->nbWriterOutputs() == 1 );
+	assert( n1->nbReaderInputs() == 0 );
+	assert( n1->nbWriterInputs() == 0 );
+
+	assert( dynamic_cast<ValueContainer<T>* >(n1->readerOutputPort(0).data())->getValue() == 0 );
+	assert( dynamic_cast<ValueContainer<T>* >(n2->readerOutputPort(0).data())->getValue() == 5 );
+	
 /*
 ScopedBlockMacro(__scop, "ValueContainerTest")
 	Debug::beginBlock("Allocate the resources");
@@ -181,6 +199,8 @@ ScopedBlockMacro(__scop, "ValueContainerTest")
 
 int main()
 {
+	Debug::init();	
+	ScopedBlockMacro(__scop, "ValueContainer::Test")
 	ValueContainerTest<float>();
 	ValueContainerTest<char>();
 	ValueContainerTest<int>();

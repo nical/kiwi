@@ -63,13 +63,13 @@ public:
 	/**
 	 * @brief returns the value.
 	 */ 
-	virtual T& getValue(portIndex_t port = 0) = 0;
+	virtual T& getValue() = 0;
+	virtual const T& getValue() const = 0;
 
-	Tags tags() const { return Tags( kiwi::string("#") + types::str<T>());}
-
-		
-	string readerOutputName(portIndex_t){return string("read");}
-	string WriterOutputName(portIndex_t){return string("write");}
+	Tags tags() const
+	{
+		return Tags( kiwi::string("#") + types::str<T>());
+	}
 	
 };
 
@@ -80,14 +80,10 @@ class ValueContainer : public AbstractValueContainer<TValueType>
 public:
 	typedef TValueType ValueType;
 
-	ValueContainer(ValueType init)
-	: _data(init)
-	{
-		
-	}
-	// AbstractValueContainer implementation
-	virtual ValueType& getValue(portIndex_t port = 0) {return _data;}
+	ValueContainer(ValueType init)	: _data(init)	{	}
 	
+	virtual ValueType& getValue() {return _data;}
+	virtual const ValueType& getValue() const {return _data;}
 	
 	static kiwi::core::Container* newValueContainer() 
 	{
@@ -96,14 +92,11 @@ public:
 		return newNode;
 	}
 	
-	
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
 	{
 		kiwi::string tags("#Container#value#");
-		kiwi::string name("ValueContainer<");
-		
+		kiwi::string name("ValueContainer<");		
 		tags += types::str<ValueType>();
-		
 		name += types::str<ValueType>(); 
 		name += ">";
 		
@@ -117,10 +110,9 @@ public:
 	
 private:	
 	ValueType _data;
-	
 };
 
-
+/*
 // ----------------------------------------------------- Reader / Writer
 template<typename TValueType>
 class ValueReader : public core::Reader
@@ -179,16 +171,14 @@ public:
 		//_port = port.connectedOutput()->subPort()->index();
 	}
 	
-	uint32_t nbScalarElements() const { return 1; }
 	
-	virtual ValueType get() {return _resource->getValue(_port);}
+	virtual ValueType& get() const {return _container->getValue(_port);}
 	virtual void set(ValueType val) {_resource->getValue(_port) = val; }
 private:
-	AbstractValueContainer<ValueType>* _resource;
-	portIndex_t _port;
+	AbstractValueContainer<ValueType>* _container;
 };
 
-
+*/
 
 }//namespace
 }

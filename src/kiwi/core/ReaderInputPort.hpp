@@ -119,6 +119,8 @@ public:
 	 * Returns 0 if not connected. 
 	 */ 
 	ReaderOutputPort* connectedOutput() const ;
+
+	Container* data() const;
 	
 protected:
 	void setType(const string& type);

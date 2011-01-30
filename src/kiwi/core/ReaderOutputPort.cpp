@@ -127,6 +127,7 @@ bool ReaderOutputPort::connect(ReaderInputPort* inputPort)
 }
 
 
+
 bool ReaderOutputPort::isEnabled() const 
 { 
 	return _enabled; 

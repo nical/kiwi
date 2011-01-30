@@ -75,29 +75,28 @@ bool ReaderInputPort::connect(ReaderOutputPort* outputPort)
 }
 
 
-void 
-ReaderInputPort::bind(ReaderInputPort& port)
+void ReaderInputPort::bind(ReaderInputPort& port)
 {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
 	port._linkedInputPorts.add(&port);
-	
 }
 
 
 
-portIndex_t 
-ReaderInputPort::index() const 
+portIndex_t ReaderInputPort::index() const 
 {
 	return _node->indexOf(*this);
 }
 
 
-Node* 
-ReaderInputPort::node() const 
+Node* ReaderInputPort::node() const 
 {
 	return _node;
 }
-
+Container* ReaderInputPort::data() const{
+		if( isConnected() )	return connectedOutput()->data();
+		else return 0;
+}
 
 
 Tags ReaderInputPort::tags() const
@@ -116,30 +115,18 @@ bool ReaderInputPort::isCompatible(const kiwi::Tags& tag)
 	return ( tags().hasOneOf(tag + Tags("any") ) );
 }
 
-/*
-bool 
-ReaderInputPort::isConnected() const 
-{ 
-	return (_connectedNode != 0); 
-}
-*/
-
-bool 
-ReaderInputPort::isEnabled() const 
+bool ReaderInputPort::isEnabled() const 
 {
 	return _enabled;
 }
 
 
-ReaderOutputPort* 
-ReaderInputPort::connectedOutput() const 
+ReaderOutputPort* ReaderInputPort::connectedOutput() const 
 { 
 	return PortConnector::connectedInstance(0);
 }
 
-
-kiwi::string 
-ReaderInputPort::name() const
+kiwi::string ReaderInputPort::name() const
 {
 	return _node->readerInputName(_node->indexOf(*this));
 }

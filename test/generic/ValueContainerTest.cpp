@@ -43,8 +43,8 @@ void ValueContainerTest()
 	assert( n1->nbReaderInputs() == 0 );
 	assert( n1->nbWriterInputs() == 0 );
 
-	assert( dynamic_cast<ValueContainer<T>* >(n1->readerOutputPort(0).data())->value() == 10 );
-	assert( dynamic_cast<ValueContainer<T>* >(n2->readerOutputPort(0).data())->value() == 5 );
+	assert( dynamic_cast<AbstractValueContainer<T>* >(n1->readerOutputPort(0).data())->value() == 10 );
+	assert( dynamic_cast<AbstractValueContainer<T>* >(n2->readerOutputPort(0).data())->value() == 5 );
 
 	arithmetic::AddFilter addition;
 
@@ -68,7 +68,7 @@ void ValueContainerTest()
 	addition.process();
 	Debug::print() << "after filter processing\n";
 
-	assert( dynamic_cast<ValueContainer<T>* >(addition.readerOutputPort(0).data())->value() == 15 );
+	assert( dynamic_cast<AbstractValueContainer<T>* >(addition.readerOutputPort(0).data())->value() == 15 );
 
 	Debug::print() << "Test passed successfuly!\n";
 	

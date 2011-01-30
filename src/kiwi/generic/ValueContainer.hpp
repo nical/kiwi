@@ -33,7 +33,7 @@
 #ifndef KIWI_GENERIC_VALUE_HPP
 #define KIWI_GENERIC_VALUE_HPP
 
-#include "kiwi/core/Container.hpp"
+#include "kiwi/generic/AbstractValueContainer.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/types.hpp"
 #include "kiwi/core/NodeFactory.hpp"
@@ -46,32 +46,6 @@ namespace generic{
 
 template<typename TValueType> class ValueReader;
 template<typename TValueType> class ValueWriter;
-
-// ----------------------------------------------------------- Interface
-/**
- * @class kiwi::core::AbstractValueContainer<T>
- * Interface that must be implemented by any Container that provide 
- * a Value<T> port type
- */ 
-template <typename T>
-class AbstractValueContainer : public core::Container
-{
-public:
-	ReaderTypeMacro(ValueReader<T>)
-	WriterTypeMacro(ValueWriter<T>)
-
-	/**
-	 * @brief returns the value.
-	 */ 
-	virtual T& value() = 0;
-	virtual const T& value() const = 0;
-
-	Tags tags() const
-	{
-		return Tags( kiwi::string("#scalar#") + types::str<T>());
-	}
-	
-};
 
 // ------------------------------------------------------------ Container
 template <typename TValueType>
@@ -112,73 +86,7 @@ private:
 	ValueType _data;
 };
 
-/*
-// ----------------------------------------------------- Reader / Writer
-template<typename TValueType>
-class ValueReader : public core::Reader
-{
-public:
-	typedef TValueType ValueType;
-	// -----------------------------------------------------------------
-	ValueReader(const core::ReaderInputPort& port)
-	{
-		assert( port.connectedOutput()->data() );
-		
-		_resource = dynamic_cast<AbstractValueContainer<TValueType>* >( 
-			port.connectedOutput()->data() 
-		);
-		
-		if(!_resource)
-		{
-			Debug::error() << "ValueReader<"
-				<< types::str<ValueType>() 
-				<< ">::Constructor : "
-				<< "enable to determine the Container type" 
-				<< endl();
-		}
-		_port = port.connectedOutput()->data();
-	}
-	
-	uint32_t nbScalarElements() const {return 1;}
-	
-	virtual ValueType get() {return _resource->value(_port);}
-private:
-	AbstractValueContainer<ValueType>* _resource;
-	portIndex_t _port;
-};
 
-template<typename TValueType>
-class ValueWriter : public core::Writer
-{
-public:
-	typedef TValueType ValueType;
-	// -----------------------------------------------------------------
-	ValueWriter(const core::WriterInputPort& port)
-	{
-		_resource = dynamic_cast<AbstractValueContainer<TValueType>* >(
-			port.connectedOutput()->data() 
-		);
-		DEBUG_ONLY(
-			if(!_resource)
-			{
-				Debug::error() << "ValueWriter<"
-					<< types::str<ValueType>() 
-					<< ">::Constructor : "
-					<< "enable to determine the Container type" 
-					<< endl();
-			}
-		)//DEBUG_ONLY
-		//_port = port.connectedOutput()->subPort()->index();
-	}
-	
-	
-	virtual ValueType& get() const {return _container->value(_port);}
-	virtual void set(ValueType val) {_resource->value(_port) = val; }
-private:
-	AbstractValueContainer<ValueType>* _container;
-};
-
-*/
 
 }//namespace
 }

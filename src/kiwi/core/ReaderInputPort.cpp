@@ -55,7 +55,14 @@ bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 	if( isEnabled() && outputPort.isEnabled() )
 		if( isCompatible( outputPort.tags() ) )
 			return PortConnector::connect( &outputPort );
-	else return false;
+		else{
+			Debug::error() << "ReaderInputPort::connect error: uncompatible port tags!" << endl();
+			return false;
+		}
+	else{
+		Debug::error() << "ReaderInputPort::connect error: one of the port is disabled!" << endl();
+		return false;
+	}
 }
 
 bool ReaderInputPort::connect(ReaderOutputPort* outputPort)

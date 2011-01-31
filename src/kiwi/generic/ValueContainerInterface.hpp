@@ -2,7 +2,7 @@
 #ifndef KIWI_GENERIC_ABSTRACTVALUECONAINER_HPP
 #define KIWI_GENERIC_ABSTRACTVALUECONAINER_HPP
 
-#include "kiwi/core/Container.hpp" 
+#include "kiwi/core/Container.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/types.hpp"
 
@@ -13,7 +13,7 @@ template<typename T> class ValueReader;
 template<typename T> class ValueWriter;
 
 template <typename TValueType>
-class AbstractValueContainer : public core::Container
+class ValueContainerInterface : public core::Container
 {
 public:
 	typedef TValueType ValueType;
@@ -22,15 +22,15 @@ public:
 
 	/**
 	 * @brief returns the value.
-	 */ 
-	virtual ValueType& value() = 0;
-	virtual const ValueType& value() const = 0;
+	 */
+	virtual ValueType getValue() const = 0;
+	virtual void setValue( ValueType v ) = 0;
 
 	Tags tags() const
 	{
-		return Tags( kiwi::string("#scalar#") + types::str<ValueType>());
+		return Tags( kiwi::string("#value#") + types::str<ValueType>());
 	}
-	
+
 };
 
 

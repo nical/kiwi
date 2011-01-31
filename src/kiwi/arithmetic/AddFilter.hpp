@@ -16,25 +16,25 @@ public:
 		addReaderInputPort(); // B
 		addReaderOutputPort( _result );
 	}
-	
+
 	void process(){
 		ScopedBlockMacro( __scrop,"AddFilter::process()" );
 		if( _result ){
 			Debug::print() << "get data A\n";
-			kiwi::generic::AbstractValueContainer<int>* ca
-				= dynamic_cast<kiwi::generic::AbstractValueContainer<int>*>(readerInputPort(0).connectedOutput()->data() );
+			kiwi::generic::ValueContainerInterface<int>* ca
+				= dynamic_cast<kiwi::generic::ValueContainerInterface<int>*>(readerInputPort(0).connectedOutput()->data() );
 			Debug::print() << "get data A\n";
-			kiwi::generic::AbstractValueContainer<int>* cb
-				= dynamic_cast<kiwi::generic::AbstractValueContainer<int>*>(readerInputPort(1).connectedOutput()->data() );
+			kiwi::generic::ValueContainerInterface<int>* cb
+				= dynamic_cast<kiwi::generic::ValueContainerInterface<int>*>(readerInputPort(1).connectedOutput()->data() );
 			Debug::print() << "get value A\n";
 			int A = 0;
-			if(ca) A = ca->value();
+			if(ca) A = ca->getValue();
 			Debug::print() << "get value A\n";
 			int B = 0;
-			if(cb) B = cb->value();
+			if(cb) B = cb->getValue();
 
-			_result->value() = A + B ;
-				 
+			_result->setValue( A + B );
+
 		}
 	}
 
@@ -61,7 +61,7 @@ public:
 
 
 protected:
-	kiwi::generic::AbstractValueContainer<int>* _result;
+	kiwi::generic::ValueContainerInterface<int>* _result;
 	template<typename T1,typename T2> void process2();
 };
 

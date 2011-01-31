@@ -14,24 +14,24 @@ public:
 	ValueReader(const core::ReaderInputPort& port)
 	{
 		assert( port.connectedOutput()->data() );
-		
-		_container = dynamic_cast<AbstractValueContainer<TValueType>* >( 
-			port.data() 
-		);	
+
+		_container = dynamic_cast<ValueContainerInterface<TValueType>* >(
+			port.data()
+		);
 		if(!_container)
 		{
 			Debug::error() << "ValueReader<"
-				<< types::str<ValueType>() 
+				<< types::str<ValueType>()
 				<< ">::Constructor : "
-				<< "enable to determine the Container type" 
+				<< "enable to determine the Container type"
 				<< endl();
 		}
 	}
-	
+
 	ValueType value() const {return _container->value();}
-	
+
 private:
-	AbstractValueContainer<ValueType>* _container;
+	ValueContainerInterface<ValueType>* _container;
 };
 
 

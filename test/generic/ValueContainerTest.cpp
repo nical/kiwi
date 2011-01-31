@@ -36,15 +36,15 @@ void ValueContainerTest()
 
 	NodeInitializer init2;
 	init2.addContainer( new ValueContainer<T>(5), true, true );
-	core::Node* n2 = new core::Node( init2 );	
-	
+	core::Node* n2 = new core::Node( init2 );
+
 	assert( n1->nbReaderOutputs() == 1 );
 	assert( n1->nbWriterOutputs() == 1 );
 	assert( n1->nbReaderInputs() == 0 );
 	assert( n1->nbWriterInputs() == 0 );
 
-	assert( dynamic_cast<AbstractValueContainer<T>* >(n1->readerOutputPort(0).data())->value() == 10 );
-	assert( dynamic_cast<AbstractValueContainer<T>* >(n2->readerOutputPort(0).data())->value() == 5 );
+	assert( dynamic_cast<ValueContainerInterface<T>* >(n1->readerOutputPort(0).data())->getValue() == 10 );
+	assert( dynamic_cast<ValueContainerInterface<T>* >(n2->readerOutputPort(0).data())->getValue() == 5 );
 
 	arithmetic::AddFilter addition;
 
@@ -63,15 +63,15 @@ void ValueContainerTest()
 	assert( n2->readerOutputPort(0).isConnected() );
 	assert( addition.readerInputPort(0).isConnected() );
 	assert( addition.readerInputPort(1).isConnected() );
-	
+
 	Debug::print() << "filter will process...\n";
 	addition.process();
 	Debug::print() << "after filter processing\n";
 
-	assert( dynamic_cast<AbstractValueContainer<T>* >(addition.readerOutputPort(0).data())->value() == 15 );
+	assert( dynamic_cast<ValueContainerInterface<T>* >(addition.readerOutputPort(0).data())->getValue() == 15 );
 
 	Debug::print() << "Test passed successfuly!\n";
-	
+
 }
 
 
@@ -79,12 +79,12 @@ void ValueContainerTest()
 
 int main()
 {
-	Debug::init();	
+	Debug::init();
 	ScopedBlockMacro(__scop, "ValueContainer::Test")
 	//ValueContainerTest<float>();
 	//ValueContainerTest<char>();
 	ValueContainerTest<int>();
-	
+
 	return 0;
 }
 

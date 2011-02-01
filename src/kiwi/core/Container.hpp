@@ -3,7 +3,7 @@
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
-//      
+//
 //      * Redistributions of source code must retain the above copyright
 //        notice, this list of conditions and the following disclaimer.
 //      * Redistributions in binary form must reproduce the above
@@ -13,7 +13,7 @@
 //      * Neither the name of the  nor the names of its
 //        contributors may be used to endorse or promote products derived from
 //        this software without specific prior written permission.
-//      
+//
 //      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 //      "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 //      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -40,48 +40,49 @@ namespace core{
 
 /**
  * @brief The base class for containers.
- * 
- */ 
-class Container // : public Node
+ *
+ */
+class Container
 {
 public:
 	static const uint32_t UNAVAILABLE = 0;
 
-	virtual kiwi::uint32_t memoryConsumption() const { return UNAVAILABLE; }
+	virtual kiwi::uint32_t memoryEstimation() const = 0
 	virtual kiwi::Tags tags() const = 0;
-	virtual bool hasSubData() const { return false; }
+	virtual bool hasSubData() const = 0;
+	virtual kiwi::uint32_t size() const = 0;
 
 };
 
 
 /**
  * @brief helper macro that produces typedef classType ReaderType;
- * 
+ *
  * Some filters that have template a parameter on the (Container) input type need
  * to know at compilation time the Container's Reader type to instanciate it
  * correctly. This macro should be used in the public part of every Container class
  * declaration.
- */ 
+ */
 #define ReaderTypeMacro(classType) typedef classType ReaderType;
 
 /**
  * @brief helper macro that produces typedef classType WriterType;
- * 
+ *
  * Some filters that have a template parameter on the (Container) input type need
  * to know at compilation time the Container's Writer type to instanciate it
  * correctly. This macro should be used in the public part of every Container class
- * declaration. 
- */ 
+ * declaration.
+ */
 #define WriterTypeMacro(classType) typedef classType WriterType;
 
 /**
  * @brief helper macro that produces typedef classType ReaderType;
- * 
+ *
  * Some filters that have template a parameter on the (Container) input type need
  * to know at compilation time the Container's Reader type to instanciate it
  * correctly. This macro should be used in the public part of every class
- * declaration of containers that are iterable. 
- */ 
+ * declaration of containers that are iterable.
+ */
 #define IteratorTypeMacro(classType) typedef classType IteratorType;
 
 

@@ -59,6 +59,11 @@ public:
 	virtual ValueType getValue() const { return _data; }
 	virtual void setValue(ValueType value) {_data = value;}
 
+  kiwi::uint32_t memoryEstimation() const {return sizeof(this)+sizeof(ValueType);}
+
+  bool hasSubData() const { return false; };
+
+
 	static kiwi::core::Node* newValueContainer()
 	{
 		core::Node* newNode = new core::Node();

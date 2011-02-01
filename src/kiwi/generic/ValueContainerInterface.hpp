@@ -31,6 +31,8 @@ public:
 		return Tags( kiwi::string("#value#") + types::str<ValueType>());
 	}
 
+	kiwi::uint32_t size() const {return 1;}
+
 };
 
 

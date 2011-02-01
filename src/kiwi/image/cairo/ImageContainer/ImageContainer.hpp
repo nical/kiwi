@@ -130,6 +130,9 @@ public:
 
 	Tags tags() const { return Tags("#RGBA"); }
 
+	virtual bool hasSubData() const { return true; }
+  virtual kiwi::uint32_t size() const {return spanSize()[0]*spanSize()[1];}
+  virtual kiwi::uint32_t memoryEstimation() const {return size()*sizeof(kiwi::uint8_t)*4;}
 	/**
 	 * @brief Returns the port's type tags (#rgba8 and #array2char)
 	 */

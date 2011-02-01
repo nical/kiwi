@@ -3,7 +3,7 @@
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
 //      met:
-//      
+//
 //      * Redistributions of source code must retain the above copyright
 //        notice, this list of conditions and the following disclaimer.
 //      * Redistributions in binary form must reproduce the above
@@ -13,7 +13,7 @@
 //      * Neither the name of the  nor the names of its
 //        contributors may be used to endorse or promote products derived from
 //        this software without specific prior written permission.
-//      
+//
 //      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 //      "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 //      LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -40,7 +40,7 @@ namespace text{
 
 class TextReader;
 class TextWriter;
-		
+
 class PlainTextContainer : public AbstractTextContainer
 {
 public:
@@ -50,8 +50,8 @@ public:
 	typedef kiwi::uint32_t lock_t;
 
 	/**
-	 * @brief Constructor. 
-	 */ 
+	 * @brief Constructor.
+	 */
 	PlainTextContainer();
 
 	void init(std::istream& inputStream);
@@ -60,35 +60,41 @@ public:
 
 	void clear();
 
-	/** 
+	bool hasSubData() const {return false;}
+	kiwi::uint32_t memoryEstimation() const {return 0;}//TODO
+	kiwi::uint32_t size() const {return 0;}//TODO
+
+
+
+	/**
 	 * @brief Returns A pointer to the requested line.
-	 * 
+	 *
 	 * If the line number doesn't exists in the text, return a null
 	 * pointer.
 	 * The number of the first line is 0.
-	 * 
-	 * @param lineNumber The number of the requested line. 
-	 */ 
+	 *
+	 * @param lineNumber The number of the requested line.
+	 */
 	Line* line(kiwi::uint32_t linePos);
-	
-	
+
+
 	/**
 	 * @brief Returns the number of lines in the container.
-	 */ 
+	 */
 	kiwi::uint32_t nbLines() const { return _lines.size(); }
-	
-	
+
+
 	/**
 	 * @brief Inserts a line.
-	 * 
+	 *
 	 * @param toInsert The line to copy and insert in the container
 	 * @param position The line will be insterted before the given position.
-	 */ 
+	 */
 	void insertLine( const PlainTextLine& toInsert, kiwi::uint32_t position);
 	void insertLine( const Line& toCopy, kiwi::uint32_t position);
-	
+
 	/**
-	 * @brief Removes a line. 
+	 * @brief Removes a line.
 	 */
 	void removeLine(kiwi::uint32_t position);
 	void removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine);
@@ -105,7 +111,7 @@ public:
 
 // ---------------------------------------------------------------------
 // tags
-	
+
 	kiwi::Tags tags() const
 	{
 			return kiwi::Tags("#text#rawText");
@@ -125,7 +131,7 @@ public:
 protected:
 
 	std::list<kiwi::text::PlainTextLine> _lines;
-	
+
 };
 
 

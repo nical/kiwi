@@ -47,7 +47,7 @@ class Container
 public:
 	static const uint32_t UNAVAILABLE = 0;
 
-	virtual kiwi::uint32_t memoryEstimation() const = 0
+	virtual kiwi::uint32_t memoryEstimation() const = 0;
 	virtual kiwi::Tags tags() const = 0;
 	virtual bool hasSubData() const = 0;
 	virtual kiwi::uint32_t size() const = 0;

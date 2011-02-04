@@ -33,10 +33,38 @@
  */
 
 
-#ifndef TYPES_HPP
-#define TYPES_HPP
+#ifndef KIWI_UTILS_TYPES_HPP
+#define KIWI_UTILS_TYPES_HPP
 
 #include <limits.h>
+
+
+
+
+
+#define SwitchTypeMacro( __kiwi_call )  \
+case types::KIWI_INT8_T : { typedef kiwi::int8_t KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_UINT8_T : { typedef kiwi::uint8_t KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_INT16_T : { typedef kiwi::int16_t KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_UINT16_T : { typedef kiwi::uint16_t KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_INT32_T : { typedef kiwi::int32_t KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_UINT32_T : { typedef kiwi::uint32_t KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_INT64_T : { typedef kiwi::int64_t KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_UINT64_T : { typedef kiwi::uint64_t KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_FLOAT_T : { typedef float KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} \
+case types::KIWI_DOUBLE_T : { typedef double KIWI_SWITCH_TYPE;\
+ __kiwi_call; break;} 
+
+#define SwitchTypeMacro2( __kiwi_call ) case 1 : { int a = 0; break;}
 
 
 /**
@@ -45,6 +73,11 @@
  */
 namespace types
 {
+	
+enum{ KIWI_UNDEFINED_T, KIWI_INT8_T, KIWI_UINT8_T, KIWI_INT16_T, KIWI_UINT16_T
+	, KIWI_INT32_T, KIWI_UINT32_T, KIWI_INT64_T, KIWI_UINT64_T
+	, KIWI_FLOAT_T, KIWI_DOUBLE_T };
+	
 /**
  * @brief Returns the highest value that can be stored in the type passed as template parameter
  */ 
@@ -69,9 +102,14 @@ template<typename T> inline bool isSigned(T var = 0){ return true; }
 template<typename T> inline bool isInteger(T var = 0) { return true; }
 
 /**
- * @brief Returns true if the type passed as template parameter is integer
+ * @brief Returns true if the type passed as template parameter is a pointer
  */ 
 template<typename T> inline bool isPointer(T var = 0){ return true; }
+
+/**
+ * @brief Returns true if the type passed as template parameter is a number
+ */ 
+template<typename T> inline bool isNumber(T var = 0){ return false; }
 
 /**
  * @brief Returns a string containing the name of the template type
@@ -175,6 +213,17 @@ template <> inline const char* str<float*>(float*){ return "float*"; }
 template <> inline const char* str<double*>(double*){ return "double*"; }
 template <> inline const char* str<void*>(void*){ return "void*"; }
 
+//----------------------------------------------------------------------
+template <> inline bool isNumber<int>(int){ return true; }
+template <> inline bool isNumber<unsigned int>(unsigned int){ return true; }
+template <> inline bool isNumber<char>(char){ return true; }
+template <> inline bool isNumber<unsigned char>(unsigned char){ return true; }
+template <> inline bool isNumber<short>(short){ return true; }
+template <> inline bool isNumber<unsigned short>(unsigned short){ return true; }
+template <> inline bool isNumber<long>(long){ return true; }
+template <> inline bool isNumber<unsigned long>(unsigned long){ return true; }
+template <> inline bool isNumber<float>(float){ return true; }
+template <> inline bool isNumber<double>(double){ return true; }
 
 }
 /*

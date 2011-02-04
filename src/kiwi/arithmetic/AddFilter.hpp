@@ -38,6 +38,12 @@ public:
 		}
 	}
 
+	template<typename TypeR>
+	void processTemplate()
+	{
+
+	}
+
 	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{
 		return kiwi::Tags("#number#any");// TODO
 	}

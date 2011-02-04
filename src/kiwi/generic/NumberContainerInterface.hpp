@@ -5,6 +5,7 @@
 #define KIWI_GENERIC_NUMBERCONTAINERINTERFACE_HPP
 
 #include "kiwi/core/Container.hpp"
+#include "kiwi/utils/types.hpp"
 
 namespace kiwi{	
 namespace generic{

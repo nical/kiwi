@@ -14,7 +14,7 @@ using namespace kiwi;
 int CairoImageContainerTest()
 {
 ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
-
+/*
 	typedef kiwi::generic::Point<kiwi::uint32_t,2> Point2u;
 	typedef kiwi::generic::ArrayWriter<kiwi::uint8_t, 2> myWriter;
 	
@@ -119,7 +119,7 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 	
 	
 	
-	
+*/
 	
 	return 0;
 }

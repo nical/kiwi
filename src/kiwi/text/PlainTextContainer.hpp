@@ -60,7 +60,8 @@ public:
 
 	void clear();
 
-	bool hasSubData() const {return false;}
+	bool isComposite() const {return false;}
+	kiwi::uint32_t nbSubContainers() const { return  0; }
 	kiwi::uint32_t memoryEstimation() const {return 0;}//TODO
 	kiwi::uint32_t size() const {return 0;}//TODO
 

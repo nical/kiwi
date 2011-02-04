@@ -115,7 +115,7 @@ void SimpleFilterProcessor::wrapInputs(
 	, std::list<string>& inputs )
 {
 //	ScopedBlockMacro(__scop, "SimpleFilterProcessor::wrapInputs");
-
+/*
 	typedef std::list<string> ArgList;
 
 	int nbParams = inputs.size();
@@ -174,7 +174,7 @@ void SimpleFilterProcessor::wrapInputs(
 		if( file->is_open() ) file->close();
 		delete file;
 	}
-
+*/
 }
 
 

@@ -2,7 +2,7 @@
 #define KIWI_ARITHMETIC_ADDFILTER_HPP
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/generic/ValueContainer.hpp"
+#include "kiwi/generic/NumberContainer.hpp"
 
 namespace kiwi{
 namespace arithmetic{
@@ -11,7 +11,7 @@ class AddFilter : public kiwi::core::Filter
 {
 public:
 	AddFilter(){
-		_result = new kiwi::generic::ValueContainer<int>(12);
+		_result = new kiwi::generic::NumberContainer<int>(12);
 		addReaderInputPort(); // A
 		addReaderInputPort(); // B
 		addReaderOutputPort( _result );
@@ -21,11 +21,11 @@ public:
 		ScopedBlockMacro( __scrop,"AddFilter::process()" );
 		if( _result ){
 			Debug::print() << "get data A\n";
-			kiwi::generic::ValueContainerInterface<int>* ca
-				= dynamic_cast<kiwi::generic::ValueContainerInterface<int>*>(readerInputPort(0).connectedOutput()->data() );
+			kiwi::generic::NumberContainerInterface<int>* ca
+				= dynamic_cast<kiwi::generic::NumberContainerInterface<int>*>(readerInputPort(0).connectedOutput()->data() );
 			Debug::print() << "get data A\n";
-			kiwi::generic::ValueContainerInterface<int>* cb
-				= dynamic_cast<kiwi::generic::ValueContainerInterface<int>*>(readerInputPort(1).connectedOutput()->data() );
+			kiwi::generic::NumberContainerInterface<int>* cb
+				= dynamic_cast<kiwi::generic::NumberContainerInterface<int>*>(readerInputPort(1).connectedOutput()->data() );
 			Debug::print() << "get value A\n";
 			int A = 0;
 			if(ca) A = ca->getValue();
@@ -39,14 +39,14 @@ public:
 	}
 
 	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{
-		return kiwi::Tags("#scalar#any");// TODO
+		return kiwi::Tags("#number#any");// TODO
 	}
 
 	void layoutChanged(){
 		if( readerInputPort(0).isConnected()
 		&& readerInputPort(1).isConnected() ){
 			if( _result == 0 ){
-				_result = new kiwi::generic::ValueContainer<int>( 0 );
+				_result = new kiwi::generic::NumberContainer<int>( 0 );
 				setPortContainer( readerOutputPort(0), _result );
 				setPortEnabled( readerOutputPort(0), false );
 			}
@@ -61,7 +61,7 @@ public:
 
 
 protected:
-	kiwi::generic::ValueContainerInterface<int>* _result;
+	kiwi::generic::NumberContainerInterface<int>* _result;
 	template<typename T1,typename T2> void process2();
 };
 

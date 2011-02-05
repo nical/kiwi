@@ -12,5 +12,6 @@ cd ./build/test
 ./text/PlainTextContainerTest &&
 ./utils/ConnectorTest &&
 ./utils/UnorderedArrayTest &&
+./utils/typesTest &&
 
 echo '\n\n--end of the test suite--\n\n'

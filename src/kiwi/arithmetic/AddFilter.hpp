@@ -3,15 +3,18 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/generic/NumberContainer.hpp"
+#include "kiwi/utils/types.hpp"
 
 namespace kiwi{
 namespace arithmetic{
+
+#define KIWI_ADDFILTER_TYPE kiwi::float_t
 
 class AddFilter : public kiwi::core::Filter
 {
 public:
 	AddFilter(){
-		_result = new kiwi::generic::NumberContainer<int>(12);
+		_result = new kiwi::generic::NumberContainer<KIWI_ADDFILTER_TYPE>();
 		addReaderInputPort(); // A
 		addReaderInputPort(); // B
 		addReaderOutputPort( _result );
@@ -21,11 +24,11 @@ public:
 		ScopedBlockMacro( __scrop,"AddFilter::process()" );
 		if( _result ){
 			Debug::print() << "get data A\n";
-			kiwi::generic::NumberContainerInterface<int>* ca
-				= dynamic_cast<kiwi::generic::NumberContainerInterface<int>*>(readerInputPort(0).connectedOutput()->data() );
+			kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>* ca
+				= dynamic_cast<kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>*>(readerInputPort(0).connectedOutput()->data() );
 			Debug::print() << "get data A\n";
-			kiwi::generic::NumberContainerInterface<int>* cb
-				= dynamic_cast<kiwi::generic::NumberContainerInterface<int>*>(readerInputPort(1).connectedOutput()->data() );
+			kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>* cb
+				= dynamic_cast<kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>*>(readerInputPort(1).connectedOutput()->data() );
 			Debug::print() << "get value A\n";
 			int A = 0;
 			if(ca) A = ca->getValue();
@@ -52,7 +55,7 @@ public:
 		if( readerInputPort(0).isConnected()
 		&& readerInputPort(1).isConnected() ){
 			if( _result == 0 ){
-				_result = new kiwi::generic::NumberContainer<int>( 0 );
+				_result = new kiwi::generic::NumberContainer<KIWI_ADDFILTER_TYPE>( 0 );
 				setPortContainer( readerOutputPort(0), _result );
 				setPortEnabled( readerOutputPort(0), false );
 			}
@@ -67,7 +70,7 @@ public:
 
 
 protected:
-	kiwi::generic::NumberContainerInterface<int>* _result;
+	kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>* _result;
 	template<typename T1,typename T2> void process2();
 };
 

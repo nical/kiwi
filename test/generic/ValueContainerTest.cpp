@@ -81,9 +81,8 @@ int main()
 {
 	Debug::init();
 	ScopedBlockMacro(__scop, "NumberContainer::Test")
-	//NumberContainerTest<float>();
 	//NumberContainerTest<char>();
-	NumberContainerTest<int>();
+	NumberContainerTest<float>(); // Right now only works with floats
 
 	return 0;
 }

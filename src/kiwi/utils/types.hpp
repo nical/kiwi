@@ -37,12 +37,18 @@
 #define KIWI_UTILS_TYPES_HPP
 
 #include <limits.h>
+#include "kiwi/core/Commons.hpp"
 
 
+/* 
+ * To use this macro:
+ * switch ( types::id<T>() )
+ * {
+ *   SwitchTypeMacro( whatIwantToCall<KIWI_SWITCH_TYPE>() )
+ * };
+ */ 
 
-
-
-#define SwitchTypeMacro( __kiwi_call )  \
+#define TypeSwitchMacro( __kiwi_call )  \
 case types::KIWI_INT8_T : { typedef kiwi::int8_t KIWI_SWITCH_TYPE;\
  __kiwi_call; break;} \
 case types::KIWI_UINT8_T : { typedef kiwi::uint8_t KIWI_SWITCH_TYPE;\
@@ -64,8 +70,6 @@ case types::KIWI_FLOAT_T : { typedef float KIWI_SWITCH_TYPE;\
 case types::KIWI_DOUBLE_T : { typedef double KIWI_SWITCH_TYPE;\
  __kiwi_call; break;} 
 
-#define SwitchTypeMacro2( __kiwi_call ) case 1 : { int a = 0; break;}
-
 
 /**
  * @namespace types
@@ -74,7 +78,7 @@ case types::KIWI_DOUBLE_T : { typedef double KIWI_SWITCH_TYPE;\
 namespace types
 {
 	
-enum{ KIWI_UNDEFINED_T, KIWI_INT8_T, KIWI_UINT8_T, KIWI_INT16_T, KIWI_UINT16_T
+enum typeEnum{ KIWI_UNDEFINED_T, KIWI_INT8_T, KIWI_UINT8_T, KIWI_INT16_T, KIWI_UINT16_T
 	, KIWI_INT32_T, KIWI_UINT32_T, KIWI_INT64_T, KIWI_UINT64_T
 	, KIWI_FLOAT_T, KIWI_DOUBLE_T };
 	
@@ -110,6 +114,20 @@ template<typename T> inline bool isPointer(T var = 0){ return true; }
  * @brief Returns true if the type passed as template parameter is a number
  */ 
 template<typename T> inline bool isNumber(T var = 0){ return false; }
+
+/**
+ * @brief Returns an id of the template type if it is a number.
+ */ 
+template<typename T> inline typeEnum id() { return KIWI_UNDEFINED_T; }
+
+template<typename T1, typename T2> inline typeEnum
+compatibleType(T1 t1 = 0,T2 t2 = 0)
+{
+	// TODO
+	return KIWI_DOUBLE_T;
+}
+
+
 
 /**
  * @brief Returns a string containing the name of the template type
@@ -224,6 +242,17 @@ template <> inline bool isNumber<long>(long){ return true; }
 template <> inline bool isNumber<unsigned long>(unsigned long){ return true; }
 template <> inline bool isNumber<float>(float){ return true; }
 template <> inline bool isNumber<double>(double){ return true; }
+
+template <> inline typeEnum id<kiwi::int8_t>() { return KIWI_INT8_T; }
+template <> inline typeEnum id<kiwi::uint8_t>() { return KIWI_UINT8_T; }
+template <> inline typeEnum id<kiwi::int16_t>() { return KIWI_INT16_T; }
+template <> inline typeEnum id<kiwi::uint16_t>() { return KIWI_UINT16_T; }
+template <> inline typeEnum id<kiwi::int32_t>() { return KIWI_INT32_T; }
+template <> inline typeEnum id<kiwi::uint32_t>() { return KIWI_UINT32_T; }
+template <> inline typeEnum id<kiwi::int64_t>() { return KIWI_INT64_T; }
+template <> inline typeEnum id<kiwi::uint64_t>() { return KIWI_UINT64_T; }
+template <> inline typeEnum id<kiwi::float_t>() { return KIWI_FLOAT_T; }
+template <> inline typeEnum id<kiwi::double_t>() { return KIWI_DOUBLE_T; }
 
 }
 /*

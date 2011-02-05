@@ -80,7 +80,7 @@ namespace types
 	
 enum typeEnum{ KIWI_UNDEFINED_T, KIWI_INT8_T, KIWI_UINT8_T, KIWI_INT16_T, KIWI_UINT16_T
 	, KIWI_INT32_T, KIWI_UINT32_T, KIWI_INT64_T, KIWI_UINT64_T
-	, KIWI_FLOAT_T, KIWI_DOUBLE_T };
+	, KIWI_FLOAT_T, KIWI_DOUBLE_T, KIWI_BOOL_T };
 	
 /**
  * @brief Returns the highest value that can be stored in the type passed as template parameter
@@ -149,25 +149,25 @@ template<typename T1, typename T2> inline bool sameType()
 
 
 // ---------------------------------------------------------------------
-template <> inline int sup<int>(int){ return INT_MAX; }
-template <> inline int inf<int>(int){ return INT_MIN; }
-template <> inline unsigned int sup<unsigned int>(unsigned int){ return UINT_MAX; }
-template <> inline unsigned int inf<unsigned int>(unsigned int){ return 0; }
+template <> inline kiwi::int32_t sup<kiwi::int32_t>(kiwi::int32_t){ return INT_MAX; }
+template <> inline kiwi::int32_t inf<kiwi::int32_t>(kiwi::int32_t){ return INT_MIN; }
+template <> inline kiwi::uint32_t sup<kiwi::uint32_t>(kiwi::uint32_t){ return UINT_MAX; }
+template <> inline kiwi::uint32_t inf<kiwi::uint32_t>(kiwi::uint32_t){ return 0; }
 
-template <> inline short sup<short>(short){ return SHRT_MAX; }
-template <> inline short inf<short>(short){ return SHRT_MIN; }
-template <>	inline unsigned short sup<unsigned short>(unsigned short){ return USHRT_MAX; }
-template <> inline unsigned short inf<unsigned short>(unsigned short){ return 0; }
+template <> inline kiwi::int16_t sup<kiwi::int16_t>(kiwi::int16_t){ return SHRT_MAX; }
+template <> inline kiwi::int16_t inf<kiwi::int16_t>(kiwi::int16_t){ return SHRT_MIN; }
+template <>	inline kiwi::uint16_t sup<kiwi::uint16_t>(kiwi::uint16_t){ return USHRT_MAX; }
+template <> inline kiwi::uint16_t inf<kiwi::uint16_t>(kiwi::uint16_t){ return 0; }
 
-template <> inline char sup<char>(char){ return SCHAR_MAX; }
-template <> inline char inf<char>(char){ return SCHAR_MIN; }
-template <>	inline unsigned char sup<unsigned char>(unsigned char){ return UCHAR_MAX; }
-template <> inline unsigned char inf<unsigned char>(unsigned char){ return 0; }
+template <> inline char sup<kiwi::int8_t>(kiwi::int8_t){ return SCHAR_MAX; }
+template <> inline char inf<kiwi::int8_t>(kiwi::int8_t){ return SCHAR_MIN; }
+template <>	inline kiwi::uint8_t sup<kiwi::uint8_t>(kiwi::uint8_t){ return UCHAR_MAX; }
+template <> inline kiwi::uint8_t inf<kiwi::uint8_t>(kiwi::uint8_t){ return 0; }
 
-template <> inline long sup<long>(long){ return LONG_MAX; }
-template <> inline long inf<long>(long){ return LONG_MIN; }
-template <>	inline unsigned long sup<unsigned long>(unsigned long){ return ULONG_MAX; }
-template <> inline unsigned long inf<unsigned long>(unsigned long){ return 0; }
+template <> inline kiwi::int64_t sup<kiwi::int64_t>(kiwi::int64_t){ return LONG_MAX; }
+template <> inline kiwi::int64_t inf<kiwi::int64_t>(kiwi::int64_t){ return LONG_MIN; }
+template <>	inline kiwi::uint64_t sup<kiwi::uint64_t>(kiwi::uint64_t){ return ULONG_MAX; }
+template <> inline kiwi::uint64_t inf<kiwi::uint64_t>(kiwi::uint64_t){ return 0; }
 
 template <> inline bool sup<bool>(bool){ return true; }
 template <> inline bool inf<bool>(bool){ return false; }
@@ -176,72 +176,74 @@ template <> inline bool inf<bool>(bool){ return false; }
 
 // ---------------------------------------------------------------------
 
-template <> inline bool isSigned<unsigned int>(unsigned int){ return false; }
-template <> inline bool isSigned<unsigned char>(unsigned char){ return false; }
-template <> inline bool isSigned<unsigned short>(unsigned short){ return false; }
-template <> inline bool isSigned<unsigned long>(unsigned long){ return false; }
+template <> inline bool isSigned<kiwi::uint8_t>(kiwi::uint8_t){ return false; }
+template <> inline bool isSigned<kiwi::uint16_t>(kiwi::uint16_t){ return false; }
+template <> inline bool isSigned<kiwi::uint32_t>(kiwi::uint32_t){ return false; }
+template <> inline bool isSigned<kiwi::uint64_t>(kiwi::uint64_t){ return false; }
 template <> inline bool isSigned<bool>(bool){ return false; }
 //template <> inline bool isSigned<void>(){ return false; }
 
 
 // ---------------------------------------------------------------------
 
-template <> inline bool isInteger<float>(float){ return false; }
-template <> inline bool isInteger<double>(double){ return false; }
+template <> inline bool isInteger<kiwi::float_t>(kiwi::float_t){ return false; }
+template <> inline bool isInteger<kiwi::double_t>(kiwi::double_t){ return false; }
 //template <> inline bool isInteger<void>(){ return false; }
 
 
 
 // ---------------------------------------------------------------------
-template <> inline bool isPointer<int>(int){ return false; }
-template <> inline bool isPointer<unsigned int>(unsigned int){ return false; }
-template <> inline bool isPointer<short>(short){ return false; }
-template <> inline bool isPointer<unsigned short>(unsigned short){ return false; }
-template <> inline bool isPointer<char>(char){ return false; }
-template <> inline bool isPointer<unsigned char>(unsigned char){ return false; }
-template <> inline bool isPointer<long>(long){ return false; }
-template <> inline bool isPointer<unsigned long>(unsigned long){ return false; }
-template <> inline bool isPointer<float>(float){ return false; }
-template <> inline bool isPointer<double>(double){ return false; }
+template <> inline bool isPointer<kiwi::int8_t>(kiwi::int8_t){ return false; }
+template <> inline bool isPointer<kiwi::uint8_t>(kiwi::uint8_t){ return false; }
+template <> inline bool isPointer<kiwi::int16_t>(kiwi::int16_t){ return false; }
+template <> inline bool isPointer<kiwi::uint16_t>(kiwi::uint16_t){ return false; }
+template <> inline bool isPointer<kiwi::int32_t>(kiwi::int32_t){ return false; }
+template <> inline bool isPointer<kiwi::uint32_t>(kiwi::uint32_t){ return false; }
+template <> inline bool isPointer<kiwi::int64_t>(kiwi::int64_t){ return false; }
+template <> inline bool isPointer<kiwi::uint64_t>(kiwi::uint64_t){ return false; }
+template <> inline bool isPointer<kiwi::float_t>(kiwi::float_t){ return false; }
+template <> inline bool isPointer<kiwi::double_t>(kiwi::double_t){ return false; }
+template <> inline bool isPointer<bool>(bool){ return false; }
 //template <> inline bool isPointer<void>(){ return false; }
 
 
 // ---------------------------------------------------------------------
 template <> inline const char* str<bool>(bool){ return "bool"; }
-template <> inline const char* str<int>(int){ return "int"; }
-template <> inline const char* str<unsigned int>(unsigned int){ return "unsigned int"; }
-template <> inline const char* str<short>(short){ return "short"; }
-template <> inline const char* str<unsigned short>(unsigned short){ return "unsigned short"; }
-template <> inline const char* str<char>(char){ return "char"; }
-template <> inline const char* str<unsigned char>(unsigned char){ return "unsigned char"; }
-template <> inline const char* str<long>(long){ return "long"; }
-template <> inline const char* str<unsigned long>(unsigned long){ return "unsigned long"; }
-template <> inline const char* str<float>(float){ return "float"; }
-template <> inline const char* str<double>(double){ return "double"; }
+template <> inline const char* str<kiwi::int8_t>(kiwi::int8_t){ return "int8"; }
+template <> inline const char* str<kiwi::uint8_t>(kiwi::uint8_t){ return "uint8"; }
+template <> inline const char* str<kiwi::int16_t>(kiwi::int16_t){ return "int16"; }
+template <> inline const char* str<kiwi::uint16_t>(kiwi::uint16_t){ return "uint16"; }
+template <> inline const char* str<kiwi::int32_t>(kiwi::int32_t){ return "int32"; }
+template <> inline const char* str<kiwi::uint32_t>(kiwi::uint32_t){ return "uint32"; }
+template <> inline const char* str<kiwi::int64_t>(kiwi::int64_t){ return "int64"; }
+template <> inline const char* str<kiwi::uint64_t>(kiwi::uint64_t){ return "uint64"; }
+template <> inline const char* str<float>(kiwi::float_t){ return "float"; }
+template <> inline const char* str<double>(kiwi::double_t){ return "double"; }
 //template <> inline const char* str<void>(){ return "void"; }
+template <> inline const char* str<bool*>(bool*){ return "bool*"; }
+template <> inline const char* str<kiwi::int8_t*>(kiwi::int8_t*){ return "int8*"; }
+template <> inline const char* str<kiwi::uint8_t*>(kiwi::uint8_t*){ return "uint8*"; }
+template <> inline const char* str<kiwi::int16_t*>(kiwi::int16_t*){ return "int16*"; }
+template <> inline const char* str<kiwi::uint16_t*>(kiwi::uint16_t*){ return "uint16*"; }
+template <> inline const char* str<kiwi::int32_t*>(kiwi::int32_t*){ return "int32*"; }
+template <> inline const char* str<kiwi::uint32_t*>(kiwi::uint32_t*){ return "uint32*"; }
+template <> inline const char* str<kiwi::int64_t*>(kiwi::int64_t*){ return "int64*"; }
+template <> inline const char* str<kiwi::uint64_t*>(kiwi::uint64_t*){ return "uint64*"; }
+template <> inline const char* str<float*>(kiwi::float_t*){ return "float*"; }
+template <> inline const char* str<double*>(kiwi::double_t*){ return "double*"; }
 
-template <> inline const char* str<int*>(int*){ return "int*"; }
-template <> inline const char* str<unsigned int*>(unsigned int*){ return "unsigned int*"; }
-template <> inline const char* str<short*>(short*){ return "short*"; }
-template <> inline const char* str<unsigned short*>(unsigned short*){ return "unsigned short*"; }
-template <> inline const char* str<char*>(char*){ return "char*"; }
-template <> inline const char* str<unsigned char*>(unsigned char*){ return "unsigned char*"; }
-template <> inline const char* str<long*>(long*){ return "long*"; }
-template <> inline const char* str<float*>(float*){ return "float*"; }
-template <> inline const char* str<double*>(double*){ return "double*"; }
-template <> inline const char* str<void*>(void*){ return "void*"; }
 
 //----------------------------------------------------------------------
-template <> inline bool isNumber<int>(int){ return true; }
-template <> inline bool isNumber<unsigned int>(unsigned int){ return true; }
-template <> inline bool isNumber<char>(char){ return true; }
-template <> inline bool isNumber<unsigned char>(unsigned char){ return true; }
-template <> inline bool isNumber<short>(short){ return true; }
-template <> inline bool isNumber<unsigned short>(unsigned short){ return true; }
-template <> inline bool isNumber<long>(long){ return true; }
-template <> inline bool isNumber<unsigned long>(unsigned long){ return true; }
-template <> inline bool isNumber<float>(float){ return true; }
-template <> inline bool isNumber<double>(double){ return true; }
+template <> inline bool isNumber<kiwi::int8_t>(kiwi::int8_t){ return true; }
+template <> inline bool isNumber<kiwi::uint8_t>(kiwi::uint8_t){ return true; }
+template <> inline bool isNumber<kiwi::int16_t>(kiwi::int16_t){ return true; }
+template <> inline bool isNumber<kiwi::uint16_t>(kiwi::uint16_t){ return true; }
+template <> inline bool isNumber<kiwi::int32_t>(kiwi::int32_t){ return true; }
+template <> inline bool isNumber<kiwi::uint32_t>(kiwi::uint32_t){ return true; }
+template <> inline bool isNumber<kiwi::int64_t>(kiwi::int64_t){ return true; }
+template <> inline bool isNumber<kiwi::uint64_t>(kiwi::uint64_t){ return true; }
+template <> inline bool isNumber<kiwi::float_t>(kiwi::float_t){ return true; }
+template <> inline bool isNumber<kiwi::double_t>(kiwi::double_t){ return true; }
 
 template <> inline typeEnum id<kiwi::int8_t>() { return KIWI_INT8_T; }
 template <> inline typeEnum id<kiwi::uint8_t>() { return KIWI_UINT8_T; }
@@ -253,45 +255,132 @@ template <> inline typeEnum id<kiwi::int64_t>() { return KIWI_INT64_T; }
 template <> inline typeEnum id<kiwi::uint64_t>() { return KIWI_UINT64_T; }
 template <> inline typeEnum id<kiwi::float_t>() { return KIWI_FLOAT_T; }
 template <> inline typeEnum id<kiwi::double_t>() { return KIWI_DOUBLE_T; }
+template <> inline typeEnum id<bool>() { return KIWI_BOOL_T; }
 
 }
-/*
+
 
 template < typename typeT >
 struct type
 {
-	enum { sup = 0
-	, inf = 0
-	, nBits = sizeOf(typeT)<<3
+	enum { max = 0
+	, min = 0
+	, nBits = sizeof(typeT)<<3
 	, isSigned = 0
 	, isInteger = 0
-	, isPointer = 0
-	, staticTypeId = 0
+	, isPointer = -1
+	, id = types::KIWI_UNDEFINED_T
 	};
 };
 
-template <> struct type<int>
+template <> struct type<kiwi::int8_t>
 {
-	enum { sup = INT_MAX
-	, inf = INT_MIN
+	enum { max = 128
+	, min = -127
+	, nBits = sizeof(kiwi::int8_t)<<3
 	, isSigned = 1
 	, isInteger = 1
 	, isPointer = 0
-	, staticTypeId = 1
+	, id = types::KIWI_INT8_T
 	};
 };
-
-template <> struct type<unsigned int>
+template <> struct type<kiwi::uint8_t>
 {
-	enum { sup = INT_MAX
-	, inf = INT_MIN
+	enum { max = 255
+	, min = 0
+	, nBits = sizeof(kiwi::uint8_t)<<3
+	, isSigned = 0
+	, isInteger = 1
+	, isPointer = 0
+	, id = types::KIWI_UINT8_T
+	};
+};
+template <> struct type<kiwi::int16_t>
+{
+	enum { max = SHRT_MAX
+	, min = SHRT_MIN
+	, nBits = sizeof(kiwi::int16_t)<<3
+	, isSigned = 0
+	, isInteger = 1
+	, isPointer = 0
+	, id = types::KIWI_INT16_T
+	};
+};
+template <> struct type<kiwi::uint16_t>
+{
+	enum { max = USHRT_MAX
+	, min = 0
+	, nBits = sizeof(kiwi::uint16_t)<<3
+	, isSigned = 0
+	, isInteger = 1
+	, isPointer = 0
+	, id = types::KIWI_UINT16_T
+	};
+};
+template <> struct type<kiwi::int32_t>
+{
+	enum { max = INT_MAX
+	, min = INT_MIN
+	, nBits = sizeof(kiwi::int32_t)<<3
 	, isSigned = 1
 	, isInteger = 1
 	, isPointer = 0
-	, staticTypeId = 1
+	, id = types::KIWI_INT32_T
 	};
 };
-
-*/
-
+template <> struct type<kiwi::uint32_t>
+{
+	enum { max = UINT_MAX
+	, min = 0
+	, nBits = sizeof(kiwi::int32_t)<<3
+	, isSigned = 0
+	, isInteger = 1
+	, isPointer = 0
+	, id = types::KIWI_INT32_T
+	};
+};
+template <> struct type<kiwi::int64_t>
+{
+	enum { max = INT_MAX
+	, min = INT_MIN
+	, nBits = sizeof(kiwi::int64_t)<<3
+	, isSigned = 1
+	, isInteger = 1
+	, isPointer = 0
+	, id = types::KIWI_INT64_T
+	};
+};
+template <> struct type<kiwi::uint64_t>
+{
+	enum { max = UINT_MAX
+	, min = 0
+	, nBits = sizeof(kiwi::int64_t)<<3
+	, isSigned = 0
+	, isInteger = 1
+	, isPointer = 0
+	, id = types::KIWI_INT64_T
+	};
+};
+template <> struct type<kiwi::float_t>
+{
+	enum { max = 99999999// TODO !
+	, min = -99999999
+	, nBits = sizeof(kiwi::float_t)<<3
+	, isSigned = 1
+	, isInteger = 0
+	, isPointer = 0
+	, id = types::KIWI_FLOAT_T
+	};
+};
+template <> struct type<kiwi::double_t>
+{
+	enum { max = 99999999
+	, min = -99999999
+	, nBits = sizeof(kiwi::double_t)<<3
+	, isSigned = 1
+	, isInteger = 0
+	, isPointer = 0
+	, id = types::KIWI_DOUBLE_T
+	};
+};
 #endif

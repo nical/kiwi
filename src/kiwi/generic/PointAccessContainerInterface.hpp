@@ -12,7 +12,7 @@ class PointAccessContainerInterface : public RandomAccessContainerInterface<TVal
 {
 public:
   typedef TValueType ValueType;
-  typedef kiwi::generic::Point<kiwi::int32_t, TDimension> Point;
+  typedef kiwi::generic::Point<kiwi::uint32_t, TDimension> Point;
   static const unsigned int Dimension = TDimension;
   // -----
   virtual ValueType getValue( const Point& point ) const = 0;

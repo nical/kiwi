@@ -59,6 +59,14 @@ public:
 	static const unsigned int Dimension = TDimension;
 	//zero value
 	static Point<CoordType, Dimension> zero(){return Point<CoordType, Dimension>(0.0);}
+	static Point<CoordType, Dimension> random(){return Point<CoordType, Dimension>(12.0);} //TODO
+	static Point<CoordType, Dimension> cube(CoordType val){
+		Point<CoordType, Dimension> point;
+		for(int i = 0; i < TDimension; ++i){
+			point(i) = val;
+		}
+		return point;
+	}
 	//constructors
 	/**
 	 * @brief Constructor (copy from an array)

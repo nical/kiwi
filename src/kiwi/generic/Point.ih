@@ -27,10 +27,8 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-namespace kiwi
-{
-namespace generic
-{
+namespace kiwi{
+namespace generic{
 
 template <typename T, unsigned int D>
 Point<T,D>::Point(CoordType* data)

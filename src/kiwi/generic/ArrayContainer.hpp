@@ -140,7 +140,29 @@ public:
 	 */
 	inline CoordinateVector spanSize() const { return _spanSize; }
 
+	kiwi::uint32_t memoryEstimation() const { return size()*sizeof(ValueType);}
+	bool isComposite() const {return false;}
+	kiwi::uint32_t nbSubContainers() const {return 0;}
 
+	ValueType getValue( kiwi::uint32_t pos ) const {
+		return *(_data + pos * _stride(0));
+	}
+	void setValue( kiwi::uint32_t pos, ValueType value ){
+		*(_data + pos * _stride(0)) = value;
+	}
+	ValueType getValue( const CoordinateVector& pos ) const {
+		ValueType* ptrPos = _data;
+		for(kiwi::uint32_t i = 0; i < TDimension; ++i)
+			ptrPos += pos(i)*_stride(i);
+		return *ptrPos;
+	}
+	void setValue( const CoordinateVector& pos, ValueType value ){
+		ValueType* ptrPos = _data;
+		for(kiwi::uint32_t i = 0; i < TDimension; ++i)
+			ptrPos += pos(i)*_stride(i);
+		*ptrPos = value;
+	}
+	
 	/**
 	 * @brief Returns this container's stride.
 	 *

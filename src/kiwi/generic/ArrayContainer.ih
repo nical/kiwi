@@ -30,16 +30,12 @@ namespace kiwi{
 namespace generic{
 
 template<typename T, unsigned int D>
-ArrayContainer<T,D>::ArrayContainer(Coordinates size
-	, unsigned char nbComponents
-	, bool interleaved 
-	, unsigned char nameHint)
-:_interleaved(interleaved), _nbComponents(nbComponents)
+ArrayContainer<T,D>::ArrayContainer( const CoordinateVector& size ) 
 {
 	_deleteDataDestructor = true;
 	_spanSize = size;
 	// compute the total size
-	_totalSize = nbComponents;
+	_totalSize = 1;
 	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
 	
 	DEBUG_ONLY(	Debug::print() << "allocate " << _totalSize << endl(); )
@@ -47,38 +43,33 @@ ArrayContainer<T,D>::ArrayContainer(Coordinates size
 	// allocate the data
 	_data = new T[_totalSize];
 	
-	init(nameHint);
+
+	_stride(0) = 1;
+	unsigned temp = 1;
+	for(unsigned i = 0; i < D; ++i)
+	{
+		temp *= _spanSize(i);
+		_stride(i+1) = temp;
+	}
+	
 }
 
 template<typename T, unsigned int D>
 ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
-	, Coordinates size
-	, unsigned char nbComponents
-	, bool interleaved
-	, unsigned char nameHint)
-:_interleaved(interleaved), _nbComponents(nbComponents )
+	, const CoordinateVector& size
+	, const StrideVector& stride )
+:_stride(stride)
 {
 	_deleteDataDestructor = false;
 	_spanSize = size;
 	// compute the total size
-	_totalSize = nbComponents;
+	_totalSize =  1;
 	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
 
 	_data = dataPtr;
 	
-	init(nameHint);
 }
 
-
-template<typename T, unsigned int D>
-void ArrayContainer<T,D>::init(unsigned char nameHint)
-{		
-	for(unsigned i = 0; i < _nbComponents; ++i)
-	{
-		core::Node::addWriterOutputPort();
-		core::Node::addReaderOutputPort();
-	}
-}
 
 
 template<typename T, unsigned int D>
@@ -137,19 +128,10 @@ kiwi::string ArrayContainer<T,D>::portName(portIndex_t index
 
 template<typename T, unsigned int D>
 Point<unsigned int, D+1>
-ArrayContainer<T,D>::increments(portIndex_t index) const
+ArrayContainer<T,D>::stride() const
 {
 	
-	IncsType incs;
-	if(_interleaved) incs(0) = _nbComponents;
-	else incs(0) = 1;
-	unsigned temp = incs(0);
-	for(unsigned i = 0; i < D; ++i)
-	{
-		temp *= _spanSize(i);
-		incs(i+1) = temp;
-	}
-	return incs;
+	
 }
 
 template<typename T, unsigned int D>
@@ -159,27 +141,6 @@ ArrayIterator<T> ArrayContainer<T,D>::getBasicIterator() const
 }
 	
 
-
-template<typename T, unsigned int D>
-T* const ArrayContainer<T,D>::getDataPointer(portIndex_t index) const
-{
-ScopedBlockMacro(__scop, "ArrayConstIterator::getDataPointer")
-	if(_interleaved)
-		return _data + index;
-	else
-	{
-		return _data + index * oneBufferSize();
-	}
-}
-
-
-template<typename T, unsigned int D>
-unsigned int ArrayContainer<T,D>::oneBufferSize() const
-{
-	unsigned int oneBuffer = 1;
-	for(unsigned i = 0; i < D; ++i) oneBuffer *= _spanSize(i);
-	return oneBuffer;
-}
 
 template<typename T, unsigned int D>
 void ArrayContainer<T,D>::printState()
@@ -221,7 +182,7 @@ void ArrayContainer<T,D>::registerToFactory(kiwi::core::NodeFactory& factory, co
 
 template<typename T, unsigned int D>
 bool
-ArrayContainer<T,D>::resize(Coordinates newSize, bool keepData)
+ArrayContainer<T,D>::resize(const CoordinateVector& newSize, bool keepData)
 {
 	ScopedBlockMacro(__scop, "ArrayContainer::resize")
 	kiwi::uint32_t nTotalSize = 1;
@@ -233,10 +194,8 @@ ArrayContainer<T,D>::resize(Coordinates newSize, bool keepData)
 	// allocate the data
 	T* tempData = new T[nTotalSize];
 	if(keepData){
-		for(int i = 0; i < _nbComponents; ++i){
-			for(int d = 0; d < D; ++d){
-			// TODO
-			}
+		for(int d = 0; d < D; ++d){
+		// TODO
 		}
 	}
 }

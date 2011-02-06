@@ -67,18 +67,17 @@ public:
 	typedef ArrayWriter<TValueType, TDimension> WriterType;
 	typedef ArrayConstIterator<TValueType> ConstIteratorType;
 	typedef ArrayIterator<TValueType> IteratorType;
-	typedef AbstractArrayContainer<TValueType, TDimension> Parent;
 
 	/**
 	 * @brief The Point type used to adress a value in this container.
 	 */
-	typedef Point<unsigned int, TDimension> Coordinates;
+	typedef Point<unsigned int, TDimension> CoordinateVector;
 
 	/**
 	 * @brief The Point type used to contain the increments of this
 	 * container.
 	 */
-	typedef Point<unsigned int, TDimension+1> IncsType;
+	typedef Point<unsigned int, TDimension+1> StrideVector;
 
 	/**
 	 * @brief An enum for the constructor's name hint.
@@ -89,14 +88,9 @@ public:
 	/**
 	 * @brief Constructor (allocates the data).
 	 *
-	 * @param nbComponents The number of components (and also the number of output ports).
-	 * @param interleaved Defines wether or not buffer are interleaved (if nbComponents > 1).
-	 * @param nameHint a hint to choose the ports names (see the enums).
 	 */
-	ArrayContainer(Coordinates size
-		, unsigned char nbComponents = 1
-		, bool interleaved = false
-		, unsigned char nameHint = 0 );
+	ArrayContainer( const CoordinateVector& size );
+	ArrayContainer( const CoordinateVector& size, ValueType defaultValue );
 
 	/**
 	 * @brief Constructor (use pre allocated data).
@@ -107,10 +101,9 @@ public:
 	 * @param nameHint a hint to choose the ports names (see the enums).
 	 */
 	ArrayContainer(ValueType* dataPtr
-		, Coordinates size
-		, unsigned char nbComponents = 1
-		, bool interleaved = false
-		, unsigned char nameHint = 0 );
+		, const CoordinateVector& nbElements
+		, const StrideVector& stride
+			);
 
 	/**
 	 * @brief Destructor.
@@ -126,42 +119,27 @@ public:
 	ValueType * const getDataPointer() const
 		{ return _data; }
 
-	/**
-	 * Returns a pointer to the data of a given port.
-	 *
-	 * Note that if the data is interleaved, the value next to the one
-	 * pointed by the returned pointer does not belong to the data
-	 * associated to the port
-	 * @see increments
-	 * @see isInterleaved
-	 */
-	ValueType * const getDataPointer(portIndex_t index) const;
-
+	
 	/**
 	 * @brief Returns the total size of the container.
 	 *
 	 * Equals the number of atomic vale stored.
 	 *  = number of components * product of each span size
 	 */
-	inline unsigned int size() const {return _totalSize;}
+	inline kiwi::uint32_t size() const {return _totalSize;}
 
 	/**
 	 * @brief Returns the size of a given span.
 	 */
-	inline unsigned int spanSize(unsigned int dimension) const
+	inline kiwi::uint32_t spanSize(kiwi::uint32_t dimension) const
 		{ return _spanSize(dimension); }
 
 	/**
 	 * @brief Returns a Point<uint32, Dimension> containing the dimensions
 	 * of the ArrayConatiner.
 	 */
-	inline Coordinates spanSize() const { return _spanSize; }
+	inline CoordinateVector spanSize() const { return _spanSize; }
 
-	/**
-	 * @brief Returns the amount of scalar object referring to one port.
-	 *
-	 */
-	unsigned int oneBufferSize() const;
 
 	/**
 	 * @brief Returns this container's stride.
@@ -174,13 +152,13 @@ public:
 	 * stride[3] = stride[2] * width * height * depth
 	 * etc.
 	 */
-	Point<unsigned,TDimension+1> increments(portIndex_t index) const;
+	StrideVector stride() const;
 
 	/**
 	 * @brief Returns true if the buffers are interleaved.
 	 *
 	 */
-	inline bool isInterleaved() { return _interleaved; }
+	inline bool isInterleaved() { return (_stride[0] != 1); }
 
 	/**
 	 * @brief Returns an iterator that iterates through all the data.
@@ -197,12 +175,12 @@ public:
 	/**
 	 * @brief TODO
 	 */
-	bool resize(Coordinates newSize, bool keepData = false);
+	bool resize(const CoordinateVector& newSize, bool keepData = false);
 
 
 	static kiwi::core::Container* newArrayContainer()
 	{
-		return new ArrayContainer<TValueType, TDimension>(Coordinates(128,128),1);
+		return new ArrayContainer<TValueType, TDimension>(CoordinateVector(128,128),1);
 	}
 
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
@@ -232,10 +210,9 @@ private:
 
 	ValueType* _data;
 	bool _deleteDataDestructor;
-	bool _interleaved;
 	unsigned int _totalSize;
-	unsigned char _nbComponents;
-	Coordinates _spanSize;
+	CoordinateVector _spanSize;
+	StrideVector _stride;
 
 };
 

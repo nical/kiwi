@@ -57,45 +57,31 @@ class AbstractArrayContainer : public PointAccessContainerInterface<TValueType, 
 {
 public:
 	ValueTypeMacro( TValueType );
-	typedef ArrayReader<TValueType,TDimension> plop;
-	//ReaderTypeMacro((ArrayReader<TValueType,TDimension>));
-	//WriterTypeMacro((ArrayWriter<TValueType,TDimension>));
 	typedef ArrayReader<TValueType,TDimension> ReaderType;
 	typedef ArrayWriter<TValueType,TDimension> WriterType;
+	typedef Point<unsigned int, TDimension> CoordinateVector;
+	typedef Point<unsigned int, TDimension+1> StrideVector;
 	// -----------------------------------------------------------------------
 	/**
 	 * Returns a pointer to the first element associated to a given port.
 	 */
-	virtual ValueType* const getDataPointer(portIndex_t index) const = 0 ;
+	virtual ValueType* const getDataPointer() const = 0 ;
 	/**
-	 * Returns the increments or stride.
+	 * Returns the stride.
 	 */
-	virtual Point<unsigned int, TDimension+1> increments(portIndex_t index) const = 0;
+	virtual StrideVector stride() const = 0;
 	/**
 	 * Returns the size of each span.
 	 */
-	virtual Point<unsigned int, TDimension> spanSize() const = 0;
+	virtual CoordinateVector spanSize() const = 0;
 
-
-	kiwi::Tags
-	readerOutputTags(portIndex_t)
+	kiwi::Tags tags() const
 	{
 	return kiwi::Tags( kiwi::string("#array")
 				+ boost::lexical_cast<kiwi::string>(TDimension)
 				+ types::str<TValueType>()
 				+ "#array" );
 	}
-
-
-	kiwi::Tags
-	writerOutputTags(portIndex_t)
-	{
-	return kiwi::Tags( kiwi::string("#array")
-				+ boost::lexical_cast<kiwi::string>(TDimension)
-				+ types::str<TValueType>()
-				+ "#array" );
-	}
-
 };
 
 

@@ -69,7 +69,11 @@ public:
 	/**
 	 * Returns the stride.
 	 */
-	virtual StrideVector stride() const = 0;
+	virtual StrideVector stride() const = 0;	
+	/**
+	 * Returns the stride of a given dimension.
+	 */
+	virtual kiwi::uint32_t stride(kiwi::uint32_t dimension) const = 0;
 	/**
 	 * Returns the size of each span.
 	 */

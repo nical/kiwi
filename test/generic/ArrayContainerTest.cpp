@@ -35,8 +35,24 @@ using namespace kiwi::generic;
 template<class ArrayType>
 void ArrayContainerTest()
 {
-	typename ArrayType::CoordinateVector size = ArrayType::CoordinateVector::cube(100);
+	typedef typename ArrayType::CoordinateVector CoordinateVector;
+	typedef typename ArrayType::ValueType ValueType;
+	
+	CoordinateVector size = CoordinateVector::cube(100);
 	ArrayType array(size);
+
+	for(int i = 0; i < 1000; ++i){
+		CoordinateVector pos = CoordinateVector::random();
+		array.setValue(pos, static_cast<ValueType>(i) );
+		assert( array.getValue(pos) == static_cast<ValueType>(i) );
+	}
+
+	for(int i = 0; i < array.size(); ++i ){
+		array.setValue(i, static_cast<ValueType>(i) );
+	}
+	for(int i = 0; i < array.size(); ++i ){
+		assert( array.getValue(i) == static_cast<ValueType>(i) );
+	}
 }
 
 
@@ -44,9 +60,14 @@ void ArrayContainerTest()
 
 int main()
 {
-	ArrayContainerTest< ArrayContainer<int, 2> >();
-
+	Debug::init(true,true);
+	ScopedBlockMacro(_scop, "ArrayContainer::Test")
 	
+	ArrayContainerTest< ArrayContainer<kiwi::int8_t, 1> >();
+	ArrayContainerTest< ArrayContainer<kiwi::int32_t, 2> >();
+	ArrayContainerTest< ArrayContainer<double, 3> >();
+
+	assert(false);
 	return 0;
 	
 }

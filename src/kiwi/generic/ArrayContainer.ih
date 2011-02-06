@@ -62,12 +62,12 @@ ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
 {
 	_deleteDataDestructor = false;
 	_spanSize = size;
+	_stride = stride;
 	// compute the total size
 	_totalSize =  1;
-	for(unsigned i = 0; i < D; ++i)	_totalSize*= size(i);
+	for(unsigned i = 0; i < D; ++i)	_totalSize*= size[i];
 
 	_data = dataPtr;
-	
 }
 
 
@@ -79,59 +79,17 @@ ArrayContainer<T,D>::~ArrayContainer()
 }
 
 
-template<typename T, unsigned int D>
-kiwi::string ArrayContainer<T,D>::portName(portIndex_t index
-	, unsigned char nameHint
-	, unsigned char portType) const
-{
-	switch(nameHint)
-	{
-		case XYZ :
-		switch(index)
-		{
-			case 0 : { return "x"; }
-			case 1 : { return "y"; }
-			case 2 : { return "z"; }
-			case 3 : { return "w"; }
-			default : { return "#"; }
-		}
-		case RGBA :
-		switch(index)
-		{
-			case 0 : { return "r"; }
-			case 1 : { return "g"; }
-			case 2 : { return "b"; }
-			case 3 : { return "a"; }
-			default : { return "#"; }
-		}
-		case CMYK :
-		switch(index)
-		{
-			case 0 : { return "c"; }
-			case 1 : { return "m"; }
-			case 2 : { return "y"; }
-			case 3 : { return "k"; }
-			default : { return "#"; }
-		}
-		case ABCD : {
-			char a = 97+index;
-			return kiwi::string( &a );
-		}
-		case MONO : {
-			if(portType == READER_OUT) return "read";
-			else return "write";
-		}
-		default : return boost::lexical_cast<kiwi::string>(index);
-	}
-}	
-
 
 template<typename T, unsigned int D>
-Point<unsigned int, D+1>
-ArrayContainer<T,D>::stride() const
+Point<unsigned int, D+1> ArrayContainer<T,D>::stride() const
 {
-	
-	
+	return _stride;
+}
+
+template<typename T, unsigned int D>
+kiwi::uint32_t ArrayContainer<T,D>::stride(kiwi::uint32_t dimension) const
+{
+	return _stride(dimension);
 }
 
 template<typename T, unsigned int D>

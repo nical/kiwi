@@ -176,6 +176,8 @@ public:
 	 */
 	StrideVector stride() const;
 
+	kiwi::uint32_t stride(kiwi::uint32_t dimension) const;
+
 	/**
 	 * @brief Returns true if the buffers are interleaved.
 	 *
@@ -208,27 +210,7 @@ public:
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
 
 
-protected:
-
-	/**
-	 * @brief A helper method that automatically set the port names given
-	 * a family of names.
-	 *
-	 * @param index The index of the port.
-	 * @param nameHint the kind of object you are manipulating (see the
-	 * enum at the beguinning of the class definition).
-	 * @param the port type (Reader/Writer... cf the enum as well).
-	 */
-	virtual kiwi::string portName(portIndex_t index
-		, unsigned char nameHint
-		, unsigned char portType = READER_OUT ) const;
-
-
 private:
-	/**
-	 * @brief Initializes the container. (called from within the constructors)
-	 */
-	void init(unsigned char nameHint);
 
 	ValueType* _data;
 	bool _deleteDataDestructor;

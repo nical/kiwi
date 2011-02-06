@@ -297,8 +297,8 @@ template <> struct type<kiwi::uint8_t>
 };
 template <> struct type<kiwi::int16_t>
 {
-	enum { max = SHRT_MAX
-	, min = SHRT_MIN
+	enum { max = 32767
+	, min = -32767
 	, nBits = sizeof(kiwi::int16_t)<<3
 	, isSigned = 0
 	, isInteger = 1
@@ -308,7 +308,7 @@ template <> struct type<kiwi::int16_t>
 };
 template <> struct type<kiwi::uint16_t>
 {
-	enum { max = USHRT_MAX
+	enum { max = 65535
 	, min = 0
 	, nBits = sizeof(kiwi::uint16_t)<<3
 	, isSigned = 0
@@ -374,7 +374,7 @@ template <> struct type<kiwi::float_t>
 };
 template <> struct type<kiwi::double_t>
 {
-	enum { max = 99999999
+	enum { max = 99999999 // TODO
 	, min = -99999999
 	, nBits = sizeof(kiwi::double_t)<<3
 	, isSigned = 1

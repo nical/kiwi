@@ -48,7 +48,7 @@ void NumberContainerTest()
 
 	arithmetic::AddFilter addition;
 
-	assert( addition.nbReaderInputs() == 2 );
+	assert( addition.nbReaderInputs() == 2 );	
 	assert( n1->nbReaderOutputs() == 1 );
 	assert( n2->nbReaderOutputs() == 1 );
 	Debug::print() << "connections\n";

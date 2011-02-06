@@ -53,7 +53,7 @@ template <typename T, unsigned int D> class ArrayWriter;
  * @brief Interface class for containers based on an array structure.
  */
 template <typename TValueType, unsigned int TDimension>
-class AbstractArrayContainer : public core::Container
+class AbstractArrayContainer : public PointAccessContainerInterface<TValueType, TDimension>
 {
 public:
 	ValueTypeMacro( TValueType );

@@ -269,6 +269,7 @@ struct type
 	, isSigned = 0
 	, isInteger = 0
 	, isPointer = -1
+	, isNumber = 0
 	, id = types::KIWI_UNDEFINED_T
 	};
 };
@@ -281,6 +282,7 @@ template <> struct type<kiwi::int8_t>
 	, isSigned = 1
 	, isInteger = 1
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_INT8_T
 	};
 };
@@ -292,6 +294,7 @@ template <> struct type<kiwi::uint8_t>
 	, isSigned = 0
 	, isInteger = 1
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_UINT8_T
 	};
 };
@@ -303,6 +306,7 @@ template <> struct type<kiwi::int16_t>
 	, isSigned = 0
 	, isInteger = 1
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_INT16_T
 	};
 };
@@ -314,6 +318,7 @@ template <> struct type<kiwi::uint16_t>
 	, isSigned = 0
 	, isInteger = 1
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_UINT16_T
 	};
 };
@@ -325,6 +330,7 @@ template <> struct type<kiwi::int32_t>
 	, isSigned = 1
 	, isInteger = 1
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_INT32_T
 	};
 };
@@ -336,6 +342,7 @@ template <> struct type<kiwi::uint32_t>
 	, isSigned = 0
 	, isInteger = 1
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_INT32_T
 	};
 };
@@ -347,6 +354,7 @@ template <> struct type<kiwi::int64_t>
 	, isSigned = 1
 	, isInteger = 1
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_INT64_T
 	};
 };
@@ -358,6 +366,7 @@ template <> struct type<kiwi::uint64_t>
 	, isSigned = 0
 	, isInteger = 1
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_INT64_T
 	};
 };
@@ -369,6 +378,7 @@ template <> struct type<kiwi::float_t>
 	, isSigned = 1
 	, isInteger = 0
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_FLOAT_T
 	};
 };
@@ -380,6 +390,7 @@ template <> struct type<kiwi::double_t>
 	, isSigned = 1
 	, isInteger = 0
 	, isPointer = 0
+	, isNumber = 1
 	, id = types::KIWI_DOUBLE_T
 	};
 };

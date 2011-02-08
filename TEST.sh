@@ -13,5 +13,6 @@ cd ./build/test
 ./utils/ConnectorTest &&
 ./utils/UnorderedArrayTest &&
 ./utils/typesTest &&
+./utils/randomTest &&
 
 echo '\n\n--end of the test suite--\n\n'

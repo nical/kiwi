@@ -36,6 +36,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	utils/ConnectorTest
 	utils/UnorderedArrayTest
 	utils/typesTest
+	utils/randomTest
 #	core/FilterTest
 #	core/MetaFilterTest
 	generic/PointTest

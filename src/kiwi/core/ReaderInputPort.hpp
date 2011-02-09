@@ -34,6 +34,7 @@
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/utils/Connector.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
+#include "kiwi/core/ReaderOutputPort.hpp"
 
 namespace kiwi{
 namespace core{
@@ -120,7 +121,12 @@ public:
 	 */ 
 	ReaderOutputPort* connectedOutput() const ;
 
-	Container* data() const;
+	template<class T>
+	T* getContainer() const{
+		if( isConnected() )	return connectedOutput()->getContainer<T>();
+		else return 0;
+	}
+
 	
 protected:
 	void setType(const string& type);

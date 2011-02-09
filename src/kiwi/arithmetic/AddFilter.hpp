@@ -24,15 +24,18 @@ public:
 		ScopedBlockMacro( __scrop,"AddFilter::process()" );
 		if( _result ){
 			Debug::print() << "get data A\n";
-			kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>* ca
-				= dynamic_cast<kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>*>(readerInputPort(0).connectedOutput()->data() );
-			Debug::print() << "get data A\n";
-			kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>* cb
-				= dynamic_cast<kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>*>(readerInputPort(1).connectedOutput()->data() );
+			typedef kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE> NumberContainer_T;
+			
+			NumberContainer_T* ca = readerInputPort(0).connectedOutput()->getContainer<NumberContainer_T>();
+
+			Debug::print() << "get data B\n";
+			NumberContainer_T* cb = readerInputPort(1).connectedOutput()->getContainer<NumberContainer_T>();
+
+			
 			Debug::print() << "get value A\n";
 			int A = 0;
 			if(ca) A = ca->getValue();
-			Debug::print() << "get value A\n";
+			Debug::print() << "get value B\n";
 			int B = 0;
 			if(cb) B = cb->getValue();
 

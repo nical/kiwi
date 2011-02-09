@@ -52,7 +52,7 @@ namespace generic
 
 /**
  * @brief Reader class able to read data from any Container inheriting
- * from kiwi::generic::AbstractArrayContainer.
+ * from kiwi::generic::ArrayContainerInterface.
  *
  * (like kiwi::generic::ArrayContainer, kiwi::generic::MultiArrayContainer
  * or kiwi::image::CairoImageContainer).
@@ -73,7 +73,7 @@ public:
 	 * @brief Constructor.
 	 */
 	ArrayReader(const core::ReaderInputPort& port);
-	ArrayReader(const AbstractArrayContainer<ValueType,TDimension>& resource, portIndex_t portIndex);
+	ArrayReader(const ArrayContainerInterface<ValueType,TDimension>& resource, portIndex_t portIndex);
 
 	/**
 	 * @brief Basic access method.

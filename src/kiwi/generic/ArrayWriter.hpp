@@ -51,7 +51,7 @@ namespace generic
 
 /**
  * @brief Writer class able to read and write data in any Container inheriting
- * from kiwi::generic::AbstractArrayContainer.
+ * from kiwi::generic::ArrayContainerInterface.
  *
  *
  * (like kiwi::generic::ArrayContainer, kiwi::generic::MultiArrayContainer
@@ -72,7 +72,7 @@ public:
 	 * @brief Constructor.
 	 */
 	ArrayWriter(const core::WriterInputPort& port);
-	ArrayWriter(const AbstractArrayContainer<ValueType,TDimension>& resource, portIndex_t portIndex);
+	ArrayWriter(const ArrayContainerInterface<ValueType,TDimension>& resource, portIndex_t portIndex);
 
 	/**
 	 * @brief Basic access method.

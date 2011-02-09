@@ -93,10 +93,6 @@ Node* ReaderInputPort::node() const
 {
 	return _node;
 }
-Container* ReaderInputPort::data() const{
-		if( isConnected() )	return connectedOutput()->data();
-		else return 0;
-}
 
 
 Tags ReaderInputPort::tags() const

@@ -72,7 +72,7 @@ namespace generic
  * as a set of audio buffers without copying all the data at the construction.
  */
 template<typename TValueType, unsigned int TDimension>
-class MultiArrayContainer : public AbstractArrayContainer<TValueType,TDimension>
+class MultiArrayContainer : public ArrayContainerInterface<TValueType,TDimension>
 {
 public:
 	typedef TValueType ValueType;
@@ -80,7 +80,7 @@ public:
 	typedef ArrayWriter<TValueType, TDimension> WriterType;
 	typedef ArrayConstIterator<TValueType> ConstIteratorType;
 	typedef ArrayIterator<TValueType> IteratorType;
-	typedef AbstractArrayContainer<TValueType, TDimension> Parent;
+	typedef ArrayContainerInterface<TValueType, TDimension> Parent;
 	/**
 	 * @brief The Point type used to adress a value in this container.
 	 */

@@ -37,14 +37,12 @@
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/core/Tags.hpp"
 
-namespace kiwi
-{
+namespace kiwi{
 /**
  * @brief Namespace containing generic classes useful for a different kiwi
  * sub-projects.
  */
-namespace generic
-{
+namespace generic{
 
 template <typename T, unsigned int D> class ArrayReader;
 template <typename T, unsigned int D> class ArrayWriter;
@@ -53,7 +51,7 @@ template <typename T, unsigned int D> class ArrayWriter;
  * @brief Interface class for containers based on an array structure.
  */
 template <typename TValueType, unsigned int TDimension>
-class AbstractArrayContainer : public PointAccessContainerInterface<TValueType, TDimension>
+class ArrayContainerInterface : public PointAccessContainerInterface<TValueType, TDimension>
 {
 public:
 	ValueTypeMacro( TValueType );

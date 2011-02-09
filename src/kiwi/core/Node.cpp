@@ -54,6 +54,12 @@ Node::Node( const NodeInitializer& init)
 	_listener = 0;
 }
 
+Node::Node( Container* init)
+{
+	addContainer( init, true, true );
+	_listener = 0;
+}
+
 Node::~Node()
 {
 //	Debug::print() << "Node::destructor"<<endl();

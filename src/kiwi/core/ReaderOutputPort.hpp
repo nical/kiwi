@@ -80,7 +80,8 @@ friend class ReaderInputPort;
 	 */ 
 	Node* node() const ;
 
-	Container* data() { return _container; }
+	template<class T>
+	T* getContainer() { return dynamic_cast<T*>(_container); }
 	
 	/**
 	 * @brief Returns a pointer to the port that catually contains the Data.

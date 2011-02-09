@@ -28,17 +28,15 @@ namespace random{
 
 	char init(int seed = time(0));
 
-	template<class T> T generate(){
+	template<class T> T generate(T max = type<T>::max ){
 		if( type<T>::isNumber ){
 			if( type<T>::isInteger ) {
-				return rand() % type<T>::max;
+				return rand() % (int)max;
 			}else{
-				return (kiwi::float_t)rand()/(kiwi::float_t)RAND_MAX;
+				return static_cast<kiwi::float_t>(rand())
+					/ static_cast<kiwi::float_t>(RAND_MAX) * max;
 			}
 		}
-/*		else{
-			return T::random();
-		} */
 	}
 	
 

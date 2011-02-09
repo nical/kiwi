@@ -92,10 +92,18 @@ public:
 
 // ---------------------------------------------------- constructor / Destructor
 	/**
-	 * @brief Constructor
+	 * @brief Constructor.
 	 */ 
 	Node();
 	Node( const NodeInitializer& init);
+
+	/**
+	 * @brief Constructor.
+	 *
+	 * Initializes the Node with one container, adding one reader output
+	 * port and one writer output port. (convenient shortcut)
+	 */ 
+	Node( Container* init);
 
 	/**
 	 * @brief Destructor.

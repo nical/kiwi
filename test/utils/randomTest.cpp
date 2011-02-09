@@ -12,16 +12,26 @@ int main()
 	Debug::init(true, true);
 	ScopedBlockMacro(__scop_, "random::Test");
 	float totf = 0;
+	int toti = 0;
 	for(int i = 0; i < 100; ++i)
 	{
-		float rf = random::generate<float>();
+		float rf = random::generate<float>(1.0);
+		int ri = random::generate<int>(100);
 		totf += rf;
-		Debug::print() << rf << endl();
-		Debug::print() << random::generate<int>() << endl();
-		//Debug::print() << random::generate<generic::Point<2,int>()[0] << endl();
+		toti += ri;
+		assert(rf >= 0.0);
+		assert(rf <= 1.0);
+		assert(ri >= 0);
+		assert(ri <= 100);
 	}
 	totf = totf / 100.f;
+	toti = toti / 100;
 
+	assert( totf > 0.4 );
+	assert( totf < 0.6 );
+	assert( toti > 40 );
+	assert( toti < 60 );
+	
 	Debug::print() << "average float rand value: " << totf << endl();
 
 

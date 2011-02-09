@@ -60,7 +60,7 @@ namespace cairo{
  * This Container is compatible with generic::ArrayReader and
  * generic::ArrayWriter.
  */
-class RGBAImageContainer : public generic::AbstractArrayContainer<uint8_t, 2>
+class RGBAImageContainer : public generic::ArrayContainerInterface<uint8_t, 2>
 {
 public:
 	// ----------------------------------------- Constructors/destructor

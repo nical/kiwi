@@ -30,21 +30,20 @@ void NumberContainerTest()
 {
 	ScopedBlockMacro(__scop, "NumberContainer::Test<>")
 
-	NodeInitializer init1;
-	init1.addContainer( new NumberContainer<T>(10), true, true );
-	core::Node* n1 = new core::Node( init1 );
+	// allocate two container nodes with one container each
+	Node* n1 = new Node( new NumberContainer<T>(10) );
+	Node* n2 = new Node( new NumberContainer<T>(5) );
 
-	NodeInitializer init2;
-	init2.addContainer( new NumberContainer<T>(5), true, true );
-	core::Node* n2 = new core::Node( init2 );
 
+	// check that the number of ports is correct
 	assert( n1->nbReaderOutputs() == 1 );
 	assert( n1->nbWriterOutputs() == 1 );
 	assert( n1->nbReaderInputs() == 0 );
 	assert( n1->nbWriterInputs() == 0 );
 
-	assert( dynamic_cast<NumberContainerInterface<T>* >(n1->readerOutputPort(0).data())->getValue() == 10 );
-	assert( dynamic_cast<NumberContainerInterface<T>* >(n2->readerOutputPort(0).data())->getValue() == 5 );
+	assert( n1->readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 10 );
+	assert( n2->readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 5 );
+	
 
 	arithmetic::AddFilter addition;
 
@@ -68,7 +67,7 @@ void NumberContainerTest()
 	addition.process();
 	Debug::print() << "after filter processing\n";
 
-	assert( dynamic_cast<NumberContainerInterface<T>* >(addition.readerOutputPort(0).data())->getValue() == 15 );
+	assert( addition.readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 15 );
 
 	Debug::print() << "Test passed successfuly!\n";
 

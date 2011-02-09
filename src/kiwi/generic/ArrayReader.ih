@@ -32,10 +32,8 @@
 #include "kiwi/core/ReaderInputPort.hpp"
 #include "kiwi/core/ReaderOutputPort.hpp"
 
-namespace kiwi
-{
-namespace generic
-{
+namespace kiwi{
+namespace generic{
 
 
 
@@ -43,10 +41,8 @@ template<typename T, unsigned int D>
 ArrayReader<T,D>::ArrayReader(
 	const core::ReaderInputPort& port )
 {
-	AbstractArrayContainer<T,D>* node =
-		dynamic_cast< AbstractArrayContainer<T,D>* >(
-			port.connectedOutput()->data()
-		);
+	ArrayContainerInterface<T,D>* node
+		= port.connectedOutput()->getContainer< ArrayContainerInterface<T,D> >();
 	if(!node)
 	{
 		Debug::error() << "ArrayReader<"
@@ -68,7 +64,7 @@ ArrayReader<T,D>::ArrayReader(
 
 
 template<typename T, unsigned int D>
-ArrayReader<T,D>::ArrayReader( const AbstractArrayContainer<T,D>& resource, portIndex_t portIndex )
+ArrayReader<T,D>::ArrayReader( const ArrayContainerInterface<T,D>& resource, portIndex_t portIndex )
 {
 	_port = portIndex;
 	_data = resource.getDataPointer(_port);

@@ -9,7 +9,7 @@ namespace cairo{
 //using namespace generic;
 
 RGBAImageContainer::RGBAImageContainer(const generic::Point<uint32_t, 2>& size) 
-	: generic::AbstractArrayContainer<uint8_t, 2>()
+	: generic::ArrayContainerInterface<uint8_t, 2>()
 {			
 	_surface = cairo_image_surface_create(
 		CAIRO_FORMAT_ARGB32
@@ -21,7 +21,7 @@ RGBAImageContainer::RGBAImageContainer(const generic::Point<uint32_t, 2>& size)
 RGBAImageContainer::RGBAImageContainer(
 	uint8_t* data
 	, const generic::Point<uint32_t, 2>& size ) 
-		: generic::AbstractArrayContainer<uint8_t, 2>()
+		: generic::ArrayContainerInterface<uint8_t, 2>()
 {	
 	uint32_t stride = cairo_format_stride_for_width(
 		CAIRO_FORMAT_ARGB32

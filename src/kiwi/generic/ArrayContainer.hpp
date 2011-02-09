@@ -59,7 +59,7 @@ namespace generic{
  *
  */
 template<typename TValueType, unsigned int TDimension>
-class ArrayContainer : public AbstractArrayContainer<TValueType, TDimension>
+class ArrayContainer : public ArrayContainerInterface<TValueType, TDimension>
 {
 public:
 	typedef TValueType ValueType;

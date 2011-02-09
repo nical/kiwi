@@ -41,9 +41,9 @@ namespace kiwi{
 	
 string endl();
 
-static unsigned _indentation;	
-static bool _showEndBlock;
-static bool _showBeginBlock;
+static unsigned _indentation = 0;	
+static bool _showEndBlock = true;
+static bool _showBeginBlock = true;
 
 class DebugOutputStream
 {

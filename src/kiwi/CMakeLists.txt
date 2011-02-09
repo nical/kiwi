@@ -29,6 +29,7 @@ endif(DEFINED BUILD_KIWI_TEXT)
 SET(KIWI_SRC ${KIWI_SRC}
 		utils/DebugOutputStream.cpp
 		utils/SocketCreator.cpp
+		utils/random.cpp
 		core/Node.cpp
 		core/ReaderInputPort.cpp
 		core/ReaderOutputPort.cpp

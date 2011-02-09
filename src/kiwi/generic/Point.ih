@@ -83,6 +83,26 @@ Point<T,D>::Point(const Point<CoordType,Dimension>& point)
 	for(unsigned i = 0; i < D; ++i) _coordinates[i] = point._coordinates[i];
 }
 
+
+template <typename T, unsigned int D>
+Point<T,D> Point<T,D>::random()
+{
+	Point<T,D> p;
+	for(kiwi::uint32_t i = 0; i < D; ++i){
+		p(i) = utils::random::generate<T>();
+	}
+	return p;
+}
+
+template <typename T, unsigned int D>
+Point<T,D> Point<T,D>::cube(CoordType val){
+		Point<T,D> point;
+		for(int i = 0; i < D; ++i){
+			point(i) = val;
+		}
+		return point;
+	}
+
 template <typename T, unsigned int D>
 Point<T,D> Point<T,D>::operator + (const Point<T,D>& point)
 {
@@ -104,6 +124,15 @@ Point<T,D> Point<T,D>::operator - (const Point<T,D>& point)
 	Point<T,D> res;
 	for(unsigned int i = 0; i < D; ++ i)
 		res[i] = _coordinates[i] - point._coordinates[i];
+	return res;
+}
+
+template <typename T, unsigned int D>
+Point<T,D> Point<T,D>::operator % (const Point<T,D>& point)
+{
+	Point<T,D> res;
+	for(unsigned int i = 0; i < D; ++ i)
+		res[i] = _coordinates[i] % point._coordinates[i];
 	return res;
 }
 

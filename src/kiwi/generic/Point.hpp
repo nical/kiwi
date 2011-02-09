@@ -42,6 +42,7 @@
 #include <assert.h>
 #include <boost/lexical_cast.hpp>
 #include "kiwi/utils/types.hpp"
+#include "kiwi/utils/random.hpp"
 
 namespace kiwi{
 namespace generic{
@@ -58,15 +59,9 @@ public:
 	typedef TCoordType CoordType;
 	static const unsigned int Dimension = TDimension;
 	//zero value
-	static Point<CoordType, Dimension> zero(){return Point<CoordType, Dimension>(0.0);}
-	static Point<CoordType, Dimension> random(){return Point<CoordType, Dimension>(12.0);} //TODO
-	static Point<CoordType, Dimension> cube(CoordType val){
-		Point<CoordType, Dimension> point;
-		for(int i = 0; i < TDimension; ++i){
-			point(i) = val;
-		}
-		return point;
-	}
+	static Point<CoordType, TDimension> zero(){return Point<CoordType, Dimension>(0.0);}
+	static Point<CoordType, TDimension> random();
+	static Point<CoordType, TDimension> cube(CoordType val);
 	//constructors
 	/**
 	 * @brief Constructor (copy from an array)
@@ -148,6 +143,8 @@ public:
 	 * @brief Returns the difference between two vectors.
 	 */ 
 	Point<CoordType,TDimension> operator - (const Point<CoordType,TDimension>& point);
+
+	Point<CoordType,TDimension> operator % (const Point<CoordType,TDimension>& point);
 	
 	/**
 	 * @brief Increment this vector with another vector.

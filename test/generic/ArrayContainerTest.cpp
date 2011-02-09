@@ -42,7 +42,7 @@ void ArrayContainerTest()
 	ArrayType array(size);
 
 	for(int i = 0; i < 1000; ++i){
-		CoordinateVector pos = CoordinateVector::random();
+		CoordinateVector pos = CoordinateVector::random() % size;
 		array.setValue(pos, static_cast<ValueType>(i) );
 		assert( array.getValue(pos) == static_cast<ValueType>(i) );
 	}

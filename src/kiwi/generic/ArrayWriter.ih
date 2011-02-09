@@ -42,10 +42,8 @@ ArrayWriter<T,D>::ArrayWriter(
 	const core::WriterInputPort& port
 )
 {
-	ArrayContainerInterface<T,D>* node = 
-		dynamic_cast< ArrayContainerInterface<T,D>* >( 
-			port.connectedOutput()->data()
-		);
+	ArrayContainerInterface<T,D>* node = port.connectedOutput()->getContainer<ArrayContainerInterface<T,D> >();
+	
 	if(!node)
 	{
 		Debug::error() << "ArrayWriter<"

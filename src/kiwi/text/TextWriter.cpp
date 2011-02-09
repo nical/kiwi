@@ -52,8 +52,7 @@ TextWriter::TextWriter( core::WriterInputPort& port
 	, kiwi::uint32_t range )
 {
 	//ScopedBlockMacro(__scop, "TextWriter::constructor")
-	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
-		port.connectedOutput()->data() );
+	AbstractTextContainer* tc = port.connectedOutput()->getContainer<AbstractTextContainer>();
 /* TODO !	
 	if( tc ) init( *tc, port.connectedOutput()->subPort()->index()
 		, firstLine, range );
@@ -72,8 +71,7 @@ TextWriter::TextWriter( core::WriterOutputPort& port
 	, kiwi::uint32_t range )
 {
 	//ScopedBlockMacro(__scop, "TextWriter::constructor")
-	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
-		port.data() );
+	AbstractTextContainer* tc = port.getContainer<AbstractTextContainer>() ;
 
 // TODO !	
 /*	if( tc ) init( *tc, port.subPort()->index(), firstLine, range );

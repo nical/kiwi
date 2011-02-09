@@ -119,6 +119,12 @@ public:
 	 * Returns 0 if not connected. 
 	 */ 
 	WriterOutputPort* connectedOutput() const ;
+
+	template<class T>
+	T* getContainer() const{
+		if( isConnected() )	return connectedOutput()->getContainer<T>();
+		else return 0;
+	}
 	
 protected:
 	void setType(const string& type);

@@ -113,8 +113,7 @@ public:
 	 */
 	MultiArrayContainer(ValueType** dataPtr
 		, Coordinates size
-		, unsigned char nbComponents = 1
-		, unsigned char nameHint = NUMBERS );
+		, unsigned char nbComponents = 1 );
 
 	/**
 	 * @brief Destructor.
@@ -202,19 +201,6 @@ public:
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
 
 protected:
-
-	/**
-	 * @brief A helper method that automatically set the port names given
-	 * a family of names.
-	 *
-	 * @param index The index of the port.
-	 * @param nameHint the kind of object you are manipulating (see the
-	 * enum at the beguinning of the class definition).
-	 * @param the port type (Reader/Writer... cf the enum as well).
-	 */
-	virtual kiwi::string portName(portIndex_t index
-		, unsigned char nameHint
-		, unsigned char portType = READER_OUT ) const;
 
 
 private:

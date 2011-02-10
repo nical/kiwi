@@ -99,10 +99,9 @@ Tags ReaderOutputPort::tags() const
 {
 	if(_container){
 		return _container->tags(); 
-	}else{
+	}else{		// TODO : The following call may be removed in the future
 		return _node->readerOutputTags( index() );
 	}
-	
 }
 
 

@@ -39,11 +39,13 @@ public:
 				Debug::error()
 					<< "AddFilter::process(): error \n"
 					<<"could not get the frist input container"  << endl();
+				return;
 			}
 			if(!cb){
 				Debug::error()
 					<< "AddFilter::process(): error \n"
 					<<"could not get the second input container" << endl();
+				return;
 			}
 
 

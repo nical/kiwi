@@ -47,11 +47,35 @@ class Container
 public:
 	static const uint32_t UNAVAILABLE = 0;
 
-	virtual kiwi::uint32_t memoryEstimation() const = 0;
-	virtual kiwi::Tags tags() const = 0;
-	virtual bool isComposite() const = 0;
-	virtual kiwi::uint32_t nbSubContainers() const = 0;
+	/**
+	 * @brief Returns an estimation of the memory consumed by the container.
+	 */ 
+	virtual kiwi::uint32_t memoryEstimation() const { return UNAVAILABLE; }
+
+	/**
+	 * @brief Returns the number of scalar elements in the container.
+	 */ 
 	virtual kiwi::uint32_t size() const = 0;
+
+	/**
+	 * @brief Returns this container's tags used for runtime compatibility check.
+	 */ 
+	virtual kiwi::Tags tags() const = 0;
+
+	/**
+	 * @brief Returns true if the container is composed of sub-containers.
+	 */ 
+	virtual bool isComposite() const { return false; }
+
+	/**
+	 * @brief Returns the number of sub-containers (if any)
+	 */ 
+	virtual kiwi::uint32_t nbSubContainers() const { return 0; }
+
+	/**
+	 * @brief Returns the nth subContrainer, or a nil pointer if it does not exist.
+	 */ 
+	virtual Container* subContainer(kiwi::uint32_t index = 0) const { return 0; }
 
 };
 

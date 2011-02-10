@@ -84,22 +84,14 @@ public:
 	/**
 	 * @brief The Point type used to adress a value in this container.
 	 */
-	typedef Point<unsigned int, TDimension> Coordinates;
+	typedef Point<kiwi::uint32_t, TDimension> Coordinates;
 
 	/**
 	 * @brief The Point type used to contain the increments of this
 	 * container.
 	 */
-	typedef Point<unsigned int, TDimension+1> IncsType;
+	typedef Point<kiwi::uint32_t, TDimension+1> StrideVector;
 
-	/**
-	 * @brief An enum for the constructor's name hint.
-	 */
-	enum{ NUMBERS = 0, RGBA = 1, CMYK = 2, XYZ = 3, ABCD = 4, MONO = 5 };
-	/**
-	 * @brief An enum for the constructor's name hint.
-	 */
-	enum{ READER_OUT = 0, WRITER_OUT = 1 };
 
 	/**
 	 * @brief Constructor (allocates the data).

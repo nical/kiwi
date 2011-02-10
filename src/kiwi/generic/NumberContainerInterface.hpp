@@ -64,7 +64,7 @@ public:
 
 	Tags tags() const
 	{
-		return Tags( kiwi::string("#number#") + types::str<ValueType>());
+		return Tags( kiwi::string("#") + types::str<ValueType>());
 	}
 	
 	kiwi::uint32_t size() const { return 1; }

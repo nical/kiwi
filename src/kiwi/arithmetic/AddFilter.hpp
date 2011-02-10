@@ -5,6 +5,7 @@
 #include "kiwi/generic/NumberContainer.hpp"
 #include "kiwi/utils/types.hpp"
 
+
 namespace kiwi{
 namespace arithmetic{
 
@@ -23,21 +24,32 @@ public:
 	void process(){
 		ScopedBlockMacro( __scrop,"AddFilter::process()" );
 		if( _result ){
-			Debug::print() << "get data A\n";
+			
 			typedef kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE> NumberContainer_T;
 			
-			NumberContainer_T* ca = readerInputPort(0).connectedOutput()->getContainer<NumberContainer_T>();
+			NumberContainer_T* ca
+				= readerInputPort(0).connectedOutput()
+					->getContainer<NumberContainer_T>();
 
-			Debug::print() << "get data B\n";
-			NumberContainer_T* cb = readerInputPort(1).connectedOutput()->getContainer<NumberContainer_T>();
+			NumberContainer_T* cb
+				= readerInputPort(1).connectedOutput()
+					->getContainer<NumberContainer_T>();
 
-			
-			Debug::print() << "get value A\n";
-			int A = 0;
-			if(ca) A = ca->getValue();
-			Debug::print() << "get value B\n";
-			int B = 0;
-			if(cb) B = cb->getValue();
+			if(!ca){
+				Debug::error()
+					<< "AddFilter::process(): error \n"
+					<<"could not get the frist input container"  << endl();
+			}
+			if(!cb){
+				Debug::error()
+					<< "AddFilter::process(): error \n"
+					<<"could not get the second input container" << endl();
+			}
+
+
+			int A = ca->getValue();
+
+			int B = cb->getValue();
 
 			_result->setValue( A + B );
 
@@ -51,7 +63,8 @@ public:
 	}
 
 	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{
-		return kiwi::Tags("#number#any");// TODO
+		Debug::print() << "AddFilter::Tags" << endl();
+		return kiwi::Tags("#float");// TODO
 	}
 
 	void layoutChanged(){

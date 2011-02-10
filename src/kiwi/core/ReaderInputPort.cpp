@@ -56,7 +56,10 @@ bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 		if( isCompatible( outputPort.tags() ) )
 			return PortConnector::connect( &outputPort );
 		else{
-			Debug::error() << "ReaderInputPort::connect error: uncompatible port tags!" << endl();
+			Debug::error()
+				<< "ReaderInputPort::connect error: uncompatible port tags!" <<endl()
+				<< "   input: " << tags().str() <<endl()
+				<< "   soutput: " << outputPort.tags().str() << endl();
 			return false;
 		}
 	else{

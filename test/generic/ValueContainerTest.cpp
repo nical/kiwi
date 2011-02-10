@@ -35,39 +35,45 @@ void NumberContainerTest()
 	Node* n2 = new Node( new NumberContainer<T>(5) );
 
 
-	// check that the number of ports is correct
-	assert( n1->nbReaderOutputs() == 1 );
-	assert( n1->nbWriterOutputs() == 1 );
-	assert( n1->nbReaderInputs() == 0 );
-	assert( n1->nbWriterInputs() == 0 );
+		// check that the number of ports is correct
+		assert( n1->nbReaderOutputs() == 1 );
+		assert( n1->nbWriterOutputs() == 1 );
+		assert( n1->nbReaderInputs() == 0 );
+		assert( n1->nbWriterInputs() == 0 );
 
-	assert( n1->readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 10 );
-	assert( n2->readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 5 );
+		// check that the values within the containers are correct
+		assert( n1->readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 10 );
+		assert( n2->readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 5 );
 	
-
+	// create a filter
 	arithmetic::AddFilter addition;
 
-	assert( addition.nbReaderInputs() == 2 );	
-	assert( n1->nbReaderOutputs() == 1 );
-	assert( n2->nbReaderOutputs() == 1 );
+		assert( addition.nbReaderInputs() == 2 );	
+		assert( n1->nbReaderOutputs() == 1 );
+		assert( n2->nbReaderOutputs() == 1 );
+
+
 	Debug::print() << "connections\n";
 	n1->readerOutputPort(0) >> addition.readerInputPort(0);
 	n2->readerOutputPort(0) >> addition.readerInputPort(1);
 
-	assert( addition.nbReaderInputs() == 2 );
-	assert( n1->nbReaderOutputs() == 1 );
-	assert( n2->nbReaderOutputs() == 1 );
+		
+		assert( addition.nbReaderInputs() == 2 );
+		assert( n1->nbReaderOutputs() == 1 );
+		assert( n2->nbReaderOutputs() == 1 );
 
-	assert( n1->readerOutputPort(0).isConnected() );
-	assert( n2->readerOutputPort(0).isConnected() );
-	assert( addition.readerInputPort(0).isConnected() );
-	assert( addition.readerInputPort(1).isConnected() );
+		assert( n1->readerOutputPort(0).isConnected() );
+		assert( n2->readerOutputPort(0).isConnected() );
+		assert( addition.readerInputPort(0).isConnected() );
+		assert( addition.readerInputPort(1).isConnected() );
 
 	Debug::print() << "filter will process...\n";
+
 	addition.process();
+
 	Debug::print() << "after filter processing\n";
 
-	assert( addition.readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 15 );
+		assert( addition.readerOutputPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 15 );
 
 	Debug::print() << "Test passed successfuly!\n";
 

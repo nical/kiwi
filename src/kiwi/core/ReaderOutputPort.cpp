@@ -34,6 +34,7 @@
 #include "kiwi/core/ReaderOutputPort.hpp"
 #include "kiwi/core/ReaderInputPort.hpp"
 
+#include "kiwi/core/Container.hpp"
 
 namespace kiwi{
 namespace core{
@@ -95,8 +96,13 @@ Node* ReaderOutputPort::node() const
 
 
 Tags ReaderOutputPort::tags() const
-{ 
-	return _node->readerOutputTags( index() ); 
+{
+	if(_container){
+		return _container->tags(); 
+	}else{
+		return _node->readerOutputTags( index() );
+	}
+	
 }
 
 

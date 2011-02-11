@@ -60,7 +60,7 @@ public:
 	/**
 	 * @brief Returns this container's tags used for runtime compatibility check.
 	 */ 
-	virtual kiwi::Tags tags() const = 0;
+	virtual kiwi::Tags tags() const { return kiwi::Tags(); }
 
 	/**
 	 * @brief Returns true if the container is composed of sub-containers.
@@ -75,7 +75,7 @@ public:
 	/**
 	 * @brief Returns the nth subContrainer, or a nil pointer if it does not exist.
 	 */ 
-	virtual Container* subContainer(kiwi::uint32_t index = 0) const { return 0; }
+	virtual Container* subContainer(kiwi::uint32_t index = 0){ return 0; }
 
 
 	/**

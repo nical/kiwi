@@ -41,6 +41,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 #	core/MetaFilterTest
 	generic/PointTest
 	generic/ArrayContainerTest
+	generic/StructuredArrayContainerTest
 	generic/MultiArrayContainerTest
 	generic/ValueContainerTest
 	

@@ -5,6 +5,7 @@
 #define KIWI_GENERIC_NUMBERCONTAINER_HPP
 
 #include "kiwi/generic/NumberContainerInterface.hpp"
+#include "kiwi/utils/types.hpp"
 
 namespace kiwi{
 namespace generic{
@@ -40,12 +41,12 @@ public:
 	 * @brief Register the Container to the ContainerFactory
 	 */
 	virtual bool registerToFactory(kiwi::core::NodeFactory& factory){
-		factory.registerNode( "number"
-		, kiwi::core::Descriptor<kiwi::core::Node>("NumberContainer"
+		factory.registerNode( kiwi::string(types::str<ValueType>()) + "Number"
+		, kiwi::core::Descriptor<kiwi::core::Node>(kiwi::string(types::str<ValueType>())+"NumberContainer"
 			, &internals::__newNumberContainer<TValueType>
 			, "#Container") 
-		);	
-		return false;
+		);
+		return true;
 	}
 	
 

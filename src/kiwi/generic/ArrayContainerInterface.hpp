@@ -58,7 +58,7 @@ public:
 	typedef ArrayReader<TValueType,TDimension> ReaderType;
 	typedef ArrayWriter<TValueType,TDimension> WriterType;
 	typedef Point<unsigned int, TDimension> CoordinateVector;
-	typedef Point<unsigned int, TDimension+1> StrideVector;
+	typedef Point<unsigned int, TDimension> StrideVector;
 	// -----------------------------------------------------------------------
 	/**
 	 * Returns a pointer to the first element associated to a given port.
@@ -79,7 +79,7 @@ public:
 
 	kiwi::Tags tags() const
 	{
-	return kiwi::Tags( kiwi::string("#array")
+		return kiwi::Tags( kiwi::string("#array")
 				+ boost::lexical_cast<kiwi::string>(TDimension)
 				+ types::str<TValueType>()
 				+ "#array" );

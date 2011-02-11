@@ -26,6 +26,7 @@
 //      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include <boost/lexical_cast.hpp>
 
 namespace kiwi{
 namespace generic{
@@ -83,6 +84,16 @@ Point<T,D>::Point(const Point<CoordType,Dimension>& point)
 	for(unsigned i = 0; i < D; ++i) _coordinates[i] = point._coordinates[i];
 }
 
+template <typename T, unsigned int D>
+kiwi::string Point<T,D>::toStr() const
+{
+	kiwi::string result("{");
+	for(kiwi::uint32_t i = 0; i < D-1; ++i){
+		result += boost::lexical_cast<kiwi::string>(_coordinates[i]) + ",";
+	}
+	result += boost::lexical_cast<kiwi::string>(_coordinates[D-1]) + "}";
+	return result;
+}
 
 template <typename T, unsigned int D>
 Point<T,D> Point<T,D>::random()

@@ -29,6 +29,15 @@
 namespace kiwi{
 namespace generic{
 
+
+template<typename T, unsigned int D>
+ArrayContainer<T,D>::ArrayContainer()
+{
+	_data = 0;
+	_deleteDataDestructor = false;
+	_totalSize = 0;
+}
+
 template<typename T, unsigned int D>
 ArrayContainer<T,D>::ArrayContainer( const CoordinateVector& size ) 
 {
@@ -46,10 +55,10 @@ ArrayContainer<T,D>::ArrayContainer( const CoordinateVector& size )
 
 	_stride(0) = 1;
 	unsigned temp = 1;
-	for(unsigned i = 0; i < D; ++i)
+	for(unsigned i = 1; i < D; ++i)
 	{
 		temp *= _spanSize(i);
-		_stride(i+1) = temp;
+		_stride(i) = temp;
 	}
 	
 }
@@ -81,7 +90,7 @@ ArrayContainer<T,D>::~ArrayContainer()
 
 
 template<typename T, unsigned int D>
-Point<unsigned int, D+1> ArrayContainer<T,D>::stride() const
+Point<kiwi::uint32_t, D> ArrayContainer<T,D>::stride() const
 {
 	return _stride;
 }

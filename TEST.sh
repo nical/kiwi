@@ -5,7 +5,7 @@ cd ./build/test
 ./core/FactoryTest  &&
 ./core/NodeTest &&
 ./generic/ArrayContainerTest && 
-./generic/MultiArrayContainerTest && 
+./generic/StructuredArrayContainerTest && 
 ./generic/PointTest &&
 ./generic/ValueContainerTest &&
 ./image/CairoImageContainerTest &&

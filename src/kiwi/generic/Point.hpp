@@ -170,6 +170,12 @@ public:
 	 * @brief Affectation operator.
 	 */ 
 	Point<CoordType,TDimension>& operator = (const Point<CoordType, TDimension>& p);
+
+	/**
+	 * @brief Returns a string representing this Point.
+	 */
+	kiwi::string toStr() const;
+
 	
 protected:
 	CoordType _coordinates[Dimension];

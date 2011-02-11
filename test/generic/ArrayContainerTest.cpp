@@ -66,8 +66,7 @@ int main()
 	ArrayContainerTest< ArrayContainer<kiwi::int8_t, 1> >();
 	ArrayContainerTest< ArrayContainer<kiwi::int32_t, 2> >();
 	ArrayContainerTest< ArrayContainer<double, 3> >();
-
-	//assert(false);
+	
 	return 0;
 	
 }

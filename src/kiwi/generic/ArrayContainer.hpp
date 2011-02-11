@@ -77,18 +77,13 @@ public:
 	 * @brief The Point type used to contain the increments of this
 	 * container.
 	 */
-	typedef Point<unsigned int, TDimension+1> StrideVector;
+	typedef Point<unsigned int, TDimension> StrideVector;
 
-	/**
-	 * @brief An enum for the constructor's name hint.
-	 */
-	enum{ NUMBERS = 0, RGBA = 1, CMYK = 2, XYZ = 3, ABCD = 4, MONO = 5 };
-	enum{ READER_OUT = 0, WRITER_OUT = 1 };
 
 	/**
 	 * @brief Constructor (allocates the data).
-	 *
 	 */
+	ArrayContainer();
 	ArrayContainer( const CoordinateVector& size );
 	ArrayContainer( const CoordinateVector& size, ValueType defaultValue );
 
@@ -210,11 +205,11 @@ public:
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
 
 
-private:
+protected:
 
 	ValueType* _data;
 	bool _deleteDataDestructor;
-	unsigned int _totalSize;
+	kiwi::uint32_t _totalSize;
 	CoordinateVector _spanSize;
 	StrideVector _stride;
 

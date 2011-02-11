@@ -46,78 +46,148 @@ class StructuredArrayContainer
 public:
 	typedef TValueType ValueType;
 	static const kiwi::uint32_t Dimension = TDimension;
-	
+	typedef ArrayContainer<TValueType, TDimension> MotherClass;
+	typedef typename MotherClass::CoordinateVector CoordinateVector;
+	typedef typename MotherClass::StrideVector StrideVector;
 
+
+
+
+	/**
+	 * @brief Constructor.
+	 */ 
 	StructuredArrayContainer(
 			const CoordinateVector& perArraySize
 			, const kiwi::string& description )
 	{
-		init(perArraySize, description );
+		init(0, perArraySize, description );
+	}
+
+	/**
+	 *	@brief Destructor. 
+	 */ 
+	~StructuredArrayContainer()
+	{
+		for(kiwi::uint32_t i = 0; i < _subContainers.size(); ++i){
+			delete _subContainers[i];
+		}
 	}
 	
-	virtual bool isComposite() const {return true};
+	virtual bool isComposite() const {return true;}
 	
 	virtual kiwi::uint32_t nbSubContainers() const {
 		return _subContainers.size();
 	}
-	
-	virtual Container* subContainer(kiwi::uint32_t index) const{
-		if(index > nbSubContainers() ){
-			return &_subContainers[index];
+
+	virtual core::Container* subContainer(kiwi::uint32_t index){
+		if(index < nbSubContainers() ){
+			return _subContainers[index];
 		}else{ return 0; }
 	}
 
 protected:
 	bool init(ValueType* dataPtr, CoordinateVector perArraySize, const kiwi::string& description )
 	{
+	ScopedBlockMacro(___, "StructuredArrayContainer::init")
+
+	// setup the main container's size
+	MotherClass::_totalSize = 1;
+	for(kiwi::uint32_t i = 0; i < Dimension; ++i)
+		MotherClass::_totalSize *= perArraySize(i);
+
+	// if we have to allocate the data
+	if(!dataPtr){ 
+		//first see how many subArrays we have in order to determine the total size
+		kiwi::uint32_t nbArrays = 1;
+		for(kiwi::uint32_t i = 0; i < description.size(); ++i){
+			if((description[i] == '|') || (description[i] == '%')){
+				++nbArrays;
+			}
+		}
+	
+			
+		MotherClass::_data = new ValueType[nbArrays*MotherClass::_totalSize];
+		MotherClass::_deleteDataDestructor = true;
+	}else{
+		MotherClass::_deleteDataDestructor = false;
+	}
+
+	
 	kiwi::uint32_t count = 0;
 	kiwi::uint32_t pos = 0;
-		while( pos > description.size() ){
+	kiwi::char_t lastSymbol = '|';
+		while( pos < description.size() ){
+			Debug::print() << "while...\n";
 			if(description[pos] == '|'){
-				_subContainers.push_back(
-					new ArrayContainer(
-						dataPtr + pos * perArraySize(0)
-						, perArraySize(0)
-						, size2stride( perArraySize, 1) )
-				);
+				Debug::print() << "found '|'\n";
+				if(lastSymbol == '|'){
+					Debug::print() << "adding classic array\n";				_subContainers.push_back(
+						new ArrayContainer<ValueType,Dimension>(
+							dataPtr + pos * perArraySize(0)
+							, perArraySize(0)
+							, size2stride( perArraySize, 1) )
+					);
+				}
+				lastSymbol = '|';
 			}else if(description[pos] == '%'){
-				kiwi::uint32_t interleavedCount = 0;
+				Debug::print() << "found '%'\n";
+				lastSymbol = '%';
+				kiwi::uint32_t interleavedCount = 1;
 				kiwi::uint32_t pos2 = 0;
 				do{
 					++pos2;
-					if(description[pos+pos2] == '%') ++interleavedCount;
-				}while( (description[pos+pos2])||(pos+pos2 > description.size()) );
+					if(description[pos+pos2] == '%'){
+						Debug::print() << "found '%'\n";
+						++interleavedCount;
+					}
+				}while( (description[pos+pos2] != '|')
+					&&(pos+pos2 < description.size()) );
 
-				for(kiwi::uint32_t i = 0; i < pos2; ++i){
+				for(kiwi::uint32_t i = 0; i <= interleavedCount; ++i){
+					Debug::print() << "adding interleaved array\n";
 					_subContainers.push_back(
-						new ArrayContainer(
+						new ArrayContainer<ValueType,Dimension>(
 							dataPtr + pos * perArraySize(0) + i
 							, perArraySize(0)
-							, size2stride( perArraySize, pos2+1))
+							, size2stride( perArraySize, interleavedCount+1))
 					);
 				}
+				pos+=pos2-1;
 			}
+			++pos;
+		}
+		if(lastSymbol == '|'){
+			Debug::print() << "adding classic array\n";
+			_subContainers.push_back(
+				new ArrayContainer<ValueType,Dimension>(
+					dataPtr + pos * perArraySize(0)
+					, perArraySize(0)
+					, size2stride( perArraySize, 1) )
+			);
+		}else if(lastSymbol == '%'){
+
 		}
 	}
 
+	StrideVector size2stride(const CoordinateVector& size, kiwi::uint32_t nbInteleavedArrays = 1)
+	{
+		ScopedBlockMacro(____, "StructuredArrayContainer::size2stride")
+		StrideVector result(nbInteleavedArrays);
+		for(kiwi::uint32_t i = 1; i < Dimension; ++i)
+		{
+			result(i) = result(i-1) * size(i-1);
+		}
+		return result;
+	}
+
 private:
-	SplitDescription _split;
-	std::vector<ArrayContainer*> _subContainers;
+	std::vector<ArrayContainer<ValueType,Dimension>*> _subContainers;
 };
 
 
 
-
-
 }//namespace
 }//namespace
 
-
-/*
-[|%%|%]
-[a|b%c%d|c%d]
-
-
-*/
 
 #endif

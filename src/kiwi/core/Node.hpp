@@ -118,7 +118,7 @@ public:
 	 */ 
 	virtual int nodeType() const { return NODE; }
 
-	virtual bool update(int phase){}
+	virtual bool update(int phase = 0){}
 
 	/**
 	 * @brief Returns true if the Node is reday to update

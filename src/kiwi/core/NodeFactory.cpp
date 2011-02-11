@@ -42,14 +42,9 @@ namespace core{
 
 kiwi::core::Node* NodeFactory::newNode(const  kiwi::string& uniqueId)
 {
-	// TODO
-}
-
-kiwi::core::Filter* NodeFactory::newFilter(const  kiwi::string& uniqueId)
-{
-	FilterMap::iterator it = _filters.find(uniqueId);
-	if(it == _filters.end() ) return 0;
-	Descriptor<Filter>* desc = it->second;
+	NodeMap::iterator it = _nodes.find(uniqueId);
+	if(it == _nodes.end() ) return 0;
+	Descriptor<Node>* desc = it->second;
 	return (desc->creator())();
 }
 
@@ -64,7 +59,7 @@ kiwi::core::Container* NodeFactory::newContainer(const  kiwi::string& uniqueId)
 int NodeFactory::exists(const  kiwi::string& uniqueId)
 {
 	if(_containers.find(uniqueId) != _containers.end() ) return CONTAINER;
-	if( _filters.find(uniqueId) != _filters.end() ) return FILTER; 
+	if( _nodes.find(uniqueId) != _nodes.end() ) return FILTER; 
 	return FALSE;
 }
 	
@@ -73,18 +68,14 @@ void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Node> nd
 	_nodes[uniqueId] = new Descriptor<Node>(nd);
 }
 
-void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Filter> nd)
-{
-	_filters[uniqueId] = new Descriptor<Filter>(nd);
-}
-	
-void NodeFactory::unregister(const  kiwi::string& uniqueId)
+bool NodeFactory::unregister(const  kiwi::string& uniqueId)
 {
 	_containers.erase(_containers.find(uniqueId) );
-	_filters.erase(_filters.find(uniqueId) );
+	_nodes.erase(_nodes.find(uniqueId) );
+	return true; // TODO;
 }
 
-std::list<kiwi::string> NodeFactory::availableFilters( const kiwi::string& tags )
+std::list<kiwi::string> NodeFactory::availableNodes( const kiwi::string& tags )
 {
 	// prepare the tag list
 	std::list<kiwi::string> tagList;
@@ -95,8 +86,8 @@ std::list<kiwi::string> NodeFactory::availableFilters( const kiwi::string& tags 
 	}
 	// look for filters
 	std::list<kiwi::string> result;
-	FilterMap::iterator it = _filters.begin();
-	FilterMap::iterator end = _filters.end();
+	NodeMap::iterator it = _nodes.begin();
+	NodeMap::iterator end = _nodes.end();
 	for( ; it != end; ++it)
 		result.push_front( it->first );
 	return result;

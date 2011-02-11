@@ -181,12 +181,12 @@ public:
 		return kiwi::Tags("#text");
 	}
 	
-	static Filter* newTextToMorseFilter() { return new TextToMorseFilter; }
+	static Node* newTextToMorseFilter() { return new TextToMorseFilter; }
 	
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
 	{
 		factory.registerNode( filterId
-				, kiwi::core::Descriptor<kiwi::core::Filter>(
+				, kiwi::core::Descriptor<kiwi::core::Node>(
 					"TextToMorseFilter"
 					, newTextToMorseFilter
 					, "#Filter#text" )

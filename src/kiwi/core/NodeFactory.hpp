@@ -44,25 +44,21 @@ class Node;
 class Filter;
 class Container;
 
-/**
- * @brief 
- */ 
-template<typename TValueType>
+
+template<typename T>
 class Descriptor
 {
 public:
-	typedef TValueType ValueType;
-	typedef TValueType*(*instantiationFunction)(void) ;
+	typedef T*(*instantiationFunction)(void) ;
 	
-	Descriptor(const kiwi::string& nodeName
+	Descriptor(const kiwi::string& name
 		, instantiationFunction fPtr
 		, const kiwi::string& tags = "" )
-	:_name(nodeName), _tags(tags), _creator(fPtr)
+	:_name(name), _tags(tags), _creator(fPtr)
 	{ }
-		
 	
-	const kiwi::string& name() const { return _name; }
-	const kiwi::string& tags() const { return _tags; }
+	kiwi::string& name() const { return _name; }
+	kiwi::string tags() const { return _tags; }
 	instantiationFunction creator() {return _creator;}
 	
 private:
@@ -82,28 +78,24 @@ public:
 	enum{FALSE=0, NODE, FILTER, CONTAINER};
 	
 	kiwi::core::Node* newNode(const  kiwi::string& uniqueId);
-	kiwi::core::Filter* newFilter(const  kiwi::string& uniqueId);
 	kiwi::core::Container* newContainer(const  kiwi::string& uniqueId);
 	
 	int exists(const  kiwi::string& uniqueId);
 	std::list<kiwi::string> searchFromTag(const  kiwi::string& uniqueId);
 	
 	void registerNode(const  kiwi::string& uniqueId, Descriptor<Node> nd);
-	void registerNode(const  kiwi::string& uniqueId, Descriptor<Filter> nd);
+	void registerContainer(const  kiwi::string& uniqueId, Descriptor<Container> nd);
 	
-	void unregister(const  kiwi::string& uniqueId);
+	bool unregister(const  kiwi::string& uniqueId);
 	
-	std::list<kiwi::string> availableFilters(const kiwi::string& tags = "#any");
 	std::list<kiwi::string> availableContainers(const kiwi::string& tags = "#any");
 	std::list<kiwi::string> availableNodes(const kiwi::string& tags = "#any");
 
 private:
-	typedef std::map<kiwi::string, Descriptor<Filter>* > FilterMap;
 	typedef std::map<kiwi::string, Descriptor<Container>* > ContainerMap;
 	typedef std::map<kiwi::string, Descriptor<Node>* > NodeMap;
-	FilterMap _filters; // deprecated
-	ContainerMap _containers; // deprecated
 	NodeMap _nodes;
+	ContainerMap _containers;
 };
 
 

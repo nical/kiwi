@@ -32,9 +32,9 @@ public:
 	}
 };
 
-kiwi::core::Filter* __createA(){ return new testFilterA; }
-kiwi::core::Filter* __createB(){ return new testFilterB; }
-kiwi::core::Filter* __createC(){ return new testFilterC; }
+kiwi::core::Node* __createA(){ return new testFilterA; }
+kiwi::core::Node* __createB(){ return new testFilterB; }
+kiwi::core::Node* __createC(){ return new testFilterC; }
 
 void FactoryTest()
 {
@@ -43,33 +43,33 @@ ScopedBlockMacro(__scop, "kiwi::NodeFactory::Test")
 	kiwi::core::NodeFactory factory;
 	
 	factory.registerNode(
-		"A", kiwi::core::Descriptor<kiwi::core::Filter>("testFilterA", &__createA, "#Filter") 
+		"A", kiwi::core::Descriptor<kiwi::core::Node>("testFilterA", &__createA, "#Filter") 
 	);
 	
 	factory.registerNode(
-		"B", kiwi::core::Descriptor<kiwi::core::Filter>("testFilterB", &__createB, "#Filter") 
+		"B", kiwi::core::Descriptor<kiwi::core::Node>("testFilterB", &__createB, "#Filter") 
 	);
 	
 	factory.registerNode(
-		"C", kiwi::core::Descriptor<kiwi::core::Filter>("testFilterB", &__createC, "#Filter") 
+		"C", kiwi::core::Descriptor<kiwi::core::Node>("testFilterB", &__createC, "#Filter") 
 	);
 	
-	kiwi::core::Filter* tfa = factory.newFilter("A");
+	kiwi::core::Node* tfa = factory.newNode("A");
 	assert(tfa != 0);
-	kiwi::core::Filter* tfb = factory.newFilter("B");
+	kiwi::core::Node* tfb = factory.newNode("B");
 	assert(tfb != 0);
-	kiwi::core::Filter* tfc = factory.newFilter("C");
+	kiwi::core::Node* tfc = factory.newNode("C");
 	assert(tfc != 0);
-	kiwi::core::Filter* tfx = factory.newFilter("unregistered filter");
+	kiwi::core::Node* tfx = factory.newNode("unregistered filter");
 	assert(tfx == 0);
 	
-	assert( factory.exists("A") == kiwi::core::NodeFactory::FILTER);
+	//assert( factory.exFilterists("A") == kiwi::core::NodeFactory::FILTER);
 	assert( factory.exists("A") );
 	assert( !factory.exists("unregistered filter") );
 	
-	tfa->process();
-	tfb->process();
-	tfc->process();
+	tfa->update();
+	tfb->update();
+	tfc->update();
 	
 	delete tfa;
 	delete tfb;

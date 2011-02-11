@@ -9,6 +9,12 @@
 namespace kiwi{
 namespace generic{
 
+namespace internals{
+	//forward declaration
+	template<typename T> kiwi::core::Node* __newNumberContainer();
+}
+
+
 template<typename TValueType>
 class NumberContainer : public NumberContainerInterface<TValueType>
 {
@@ -30,10 +36,29 @@ public:
 	kiwi::uint32_t nbSubContainers() const { return 0; }
 	kiwi::uint32_t memoryEstimation() const { return sizeof(*this); }
 
+	/**
+	 * @brief Register the Container to the ContainerFactory
+	 */
+	virtual bool registerToFactory(kiwi::core::NodeFactory& factory){
+		factory.registerNode( "number"
+		, kiwi::core::Descriptor<kiwi::core::Node>("NumberContainer"
+			, &internals::__newNumberContainer<TValueType>
+			, "#Container") 
+		);	
+		return false;
+	}
+	
+
 private:
 	TValueType _data;
 };
-	
+
+namespace internals{
+	template<typename T>
+	kiwi::core::Node* __newNumberContainer(){
+		return new kiwi::core::Node( new NumberContainer<T>(0) );
+	}
+}
 
 }//namespace
 }//namespace

@@ -66,7 +66,7 @@ int SimpleFilterProcessor::run()
 
 
   //Filter instanciation
-  kiwi::core::Filter* F = factory.newFilter(arguments.filterName() );
+  kiwi::core::Node* F = factory.newNode(arguments.filterName() );
   if (!F)
   {
 	cout << "ERROR : Could not find this filter." << std::endl

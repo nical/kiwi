@@ -97,12 +97,12 @@ public:
 		return kiwi::Tags("#text");
 	}
 	
-	static Filter* newUpperCaseFilter() { return new UpperCaseFilter; }
+	static Node* newUpperCaseFilter() { return new UpperCaseFilter; }
 	
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
 	{
 		factory.registerNode( filterId
-				, kiwi::core::Descriptor<kiwi::core::Filter>(
+				, kiwi::core::Descriptor<kiwi::core::Node>(
 					"UpperCaseFilter"
 					, newUpperCaseFilter
 					, "#Filter#text" )

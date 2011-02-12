@@ -91,12 +91,9 @@ public:
 	 * @brief Constructor (use pre allocated data).
 	 *
 	 * @param dataPtr a pointer to the pre allocated data.
-	 * @param nbComponents The number of components (and also the number of output ports).
-	 * @param interleaved Defines wether or not buffer are interleaved (if nbComponents > 1).
-	 * @param nameHint a hint to choose the ports names (see the enums).
 	 */
 	ArrayContainer(ValueType* dataPtr
-		, const CoordinateVector& nbElements
+		, const CoordinateVector& size
 		, const StrideVector& stride
 			);
 
@@ -152,9 +149,11 @@ public:
 		return *ptrPos;
 	}
 	void setValue( const CoordinateVector& pos, ValueType value ){
+		ScopedBlockMacro(plop, "ArrayContainer::setValue")
 		ValueType* ptrPos = _data;
 		for(kiwi::uint32_t i = 0; i < TDimension; ++i)
 			ptrPos += pos(i)*_stride(i);
+		Debug::print() << static_cast<int>( ptrPos - _data ) << endl(); 
 		*ptrPos = value;
 	}
 	

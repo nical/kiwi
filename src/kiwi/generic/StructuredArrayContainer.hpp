@@ -86,32 +86,44 @@ public:
 	}
 
 protected:
-	bool init(ValueType* dataPtr, CoordinateVector perArraySize, const kiwi::string& description )
+	bool init(ValueType* dataPtr
+			, CoordinateVector perArraySize
+			, const kiwi::string& description )
 	{
 	ScopedBlockMacro(___, "StructuredArrayContainer::init")
 
 	// setup the main container's size
-	MotherClass::_totalSize = 1;
-	for(kiwi::uint32_t i = 0; i < Dimension; ++i)
-		MotherClass::_totalSize *= perArraySize(i);
+	
 
-	// if we have to allocate the data
-	if(!dataPtr){ 
-		//first see how many subArrays we have in order to determine the total size
-		kiwi::uint32_t nbArrays = 1;
-		for(kiwi::uint32_t i = 0; i < description.size(); ++i){
+	kiwi::uint32_t nbArrays = 1;
+	for(kiwi::uint32_t i = 0; i < description.size(); ++i){
 			if((description[i] == '|') || (description[i] == '%')){
 				++nbArrays;
 			}
 		}
-	
-			
+
+	MotherClass::_totalSize = nbArrays;
+	for(kiwi::uint32_t i = 0; i < Dimension; ++i)
+		MotherClass::_totalSize *= perArraySize(i);
+		
+	// if we have to allocate the data
+	if(!dataPtr){
 		MotherClass::_data = new ValueType[nbArrays*MotherClass::_totalSize];
 		MotherClass::_deleteDataDestructor = true;
 	}else{
 		MotherClass::_deleteDataDestructor = false;
 	}
 
+	// Note: this may change. The thing is that having noninterleaved and
+	// interleaved arrays in the same block makes it hard to find a regular way
+	// to browse through the block using increments and taking dimensions into
+	// account.
+	// The actual implementation works best when the structure is all "interleaved"
+	MotherClass::_stride = size2stride(perArraySize, nbArrays);
+	MotherClass::_stride(0) = 1;
+
+	MotherClass::_spanSize = perArraySize;
+	MotherClass::_spanSize(0) = perArraySize(0)*nbArrays;
 	
 	kiwi::uint32_t count = 0;
 	kiwi::uint32_t pos = 0;
@@ -121,10 +133,11 @@ protected:
 			if(description[pos] == '|'){
 				Debug::print() << "found '|'\n";
 				if(lastSymbol == '|'){
-					Debug::print() << "adding classic array\n";				_subContainers.push_back(
+					Debug::print() << "adding classic array\n";
+					_subContainers.push_back(
 						new ArrayContainer<ValueType,Dimension>(
-							dataPtr + pos * perArraySize(0)
-							, perArraySize(0)
+							MotherClass::_data + pos * perArraySize(0)
+							, perArraySize
 							, size2stride( perArraySize, 1) )
 					);
 				}
@@ -147,8 +160,8 @@ protected:
 					Debug::print() << "adding interleaved array\n";
 					_subContainers.push_back(
 						new ArrayContainer<ValueType,Dimension>(
-							dataPtr + pos * perArraySize(0) + i
-							, perArraySize(0)
+							MotherClass::_data + pos * perArraySize(0) + i
+							, perArraySize
 							, size2stride( perArraySize, interleavedCount+1))
 					);
 				}
@@ -160,8 +173,8 @@ protected:
 			Debug::print() << "adding classic array\n";
 			_subContainers.push_back(
 				new ArrayContainer<ValueType,Dimension>(
-					dataPtr + pos * perArraySize(0)
-					, perArraySize(0)
+					MotherClass::_data + pos * perArraySize(0)
+					, perArraySize
 					, size2stride( perArraySize, 1) )
 			);
 		}else if(lastSymbol == '%'){

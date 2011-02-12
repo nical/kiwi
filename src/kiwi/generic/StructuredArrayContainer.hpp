@@ -169,7 +169,7 @@ protected:
 					);
 				}
 				pos += pos2-1;
-				nthArray += interleavedCount;
+				nthArray += interleavedCount+1;
 			}
 			++pos;
 		}

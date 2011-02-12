@@ -102,10 +102,11 @@ protected:
 			}
 		}
 
-	MotherClass::_totalSize = nbArrays;
+	
+	kiwi::uint32_t perArrayTotalSize = 1;
 	for(kiwi::uint32_t i = 0; i < Dimension; ++i)
-		MotherClass::_totalSize *= perArraySize(i);
-		
+		perArrayTotalSize *= perArraySize(i);
+	MotherClass::_totalSize = perArrayTotalSize * nbArrays;	
 	// if we have to allocate the data
 	if(!dataPtr){
 		MotherClass::_data = new ValueType[nbArrays*MotherClass::_totalSize];
@@ -127,6 +128,7 @@ protected:
 	
 	kiwi::uint32_t count = 0;
 	kiwi::uint32_t pos = 0;
+	kiwi::uint32_t nthArray = 0;
 	kiwi::char_t lastSymbol = '|';
 		while( pos < description.size() ){
 			Debug::print() << "while...\n";
@@ -136,10 +138,11 @@ protected:
 					Debug::print() << "adding classic array\n";
 					_subContainers.push_back(
 						new ArrayContainer<ValueType,Dimension>(
-							MotherClass::_data + pos * perArraySize(0)
+							MotherClass::_data + nthArray * perArrayTotalSize
 							, perArraySize
-							, size2stride( perArraySize, 1) )
+							, size2stride(perArraySize, 1) )
 					);
+					++nthArray;
 				}
 				lastSymbol = '|';
 			}else if(description[pos] == '%'){
@@ -160,12 +163,13 @@ protected:
 					Debug::print() << "adding interleaved array\n";
 					_subContainers.push_back(
 						new ArrayContainer<ValueType,Dimension>(
-							MotherClass::_data + pos * perArraySize(0) + i
+							MotherClass::_data + nthArray * perArrayTotalSize + i
 							, perArraySize
 							, size2stride( perArraySize, interleavedCount+1))
 					);
 				}
-				pos+=pos2-1;
+				pos += pos2-1;
+				nthArray += interleavedCount;
 			}
 			++pos;
 		}
@@ -173,7 +177,7 @@ protected:
 			Debug::print() << "adding classic array\n";
 			_subContainers.push_back(
 				new ArrayContainer<ValueType,Dimension>(
-					MotherClass::_data + pos * perArraySize(0)
+					MotherClass::_data + nthArray * perArrayTotalSize
 					, perArraySize
 					, size2stride( perArraySize, 1) )
 			);

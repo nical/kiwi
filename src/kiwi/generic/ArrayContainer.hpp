@@ -149,11 +149,12 @@ public:
 		return *ptrPos;
 	}
 	void setValue( const CoordinateVector& pos, ValueType value ){
-		ScopedBlockMacro(plop, "ArrayContainer::setValue")
 		ValueType* ptrPos = _data;
 		for(kiwi::uint32_t i = 0; i < TDimension; ++i)
 			ptrPos += pos(i)*_stride(i);
-		Debug::print() << static_cast<int>( ptrPos - _data ) << endl(); 
+			
+		Debug::print() << static_cast<int>( ptrPos - _data ) << endl();
+		
 		*ptrPos = value;
 	}
 	

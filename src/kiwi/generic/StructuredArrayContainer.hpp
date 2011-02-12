@@ -72,13 +72,22 @@ public:
 			delete _subContainers[i];
 		}
 	}
-	
+
+	/**
+	 * @brief Returns true because this is a composite container.
+	 */ 
 	virtual bool isComposite() const {return true;}
-	
+
+	/**
+	 * @brief Returns the number of sub-arrays.
+	 */ 
 	virtual kiwi::uint32_t nbSubContainers() const {
 		return _subContainers.size();
 	}
 
+	/**
+	 * @brief Returns the ArrayContainers that are part of this structured container.
+	 */ 
 	virtual core::Container* subContainer(kiwi::uint32_t index){
 		if(index < nbSubContainers() ){
 			return _subContainers[index];
@@ -95,7 +104,7 @@ public:
 	 * So given the binary representation of the structure, for a 4 buffers
 	 * StructuredArrayContainer, 111 means 4 interleaved buffers, 000 means 4
 	 * adjacent buffers, 010 means two interleaved buffers nex to two interleaved
-	 * buffers, etc.
+	 * buffers, 100 means two interleaved buffers next to two normal buffers, etc.
 	 *
 	 * This methods is mostly used to quickly compare two structured arrays layout
 	 */ 

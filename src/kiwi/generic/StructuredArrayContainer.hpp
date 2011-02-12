@@ -85,24 +85,40 @@ public:
 		}else{ return 0; }
 	}
 
+	/**
+	 * @brief Returns an unsigned integer in which the container's layout is
+	 * encoded.
+	 *
+	 * For each bit corresponds a flag: 1 means "interleaved"(%) and 0 means
+	 * normal(|).
+	 *
+	 * So given the binary representation of the structure, for a 4 buffers
+	 * StructuredArrayContainer, 111 means 4 interleaved buffers, 000 means 4
+	 * adjacent buffers, 010 means two interleaved buffers nex to two interleaved
+	 * buffers, etc.
+	 *
+	 * This methods is mostly used to quickly compare two structured arrays layout
+	 */ 
+	kiwi::uint32_t layout() const {return _layout;}
+
 protected:
 	bool init(ValueType* dataPtr
 			, CoordinateVector perArraySize
 			, const kiwi::string& description )
 	{
 	ScopedBlockMacro(___, "StructuredArrayContainer::init")
-
-	// setup the main container's size
-	
+	_layout = 0;
 
 	kiwi::uint32_t nbArrays = 1;
 	for(kiwi::uint32_t i = 0; i < description.size(); ++i){
-			if((description[i] == '|') || (description[i] == '%')){
+			if(description[i] == '|'){
+				++nbArrays;
+			}else if(description[i] == '%'){
+				_layout |= 0x1 << nbArrays-1;
 				++nbArrays;
 			}
 		}
 
-	
 	kiwi::uint32_t perArrayTotalSize = 1;
 	for(kiwi::uint32_t i = 0; i < Dimension; ++i)
 		perArrayTotalSize *= perArraySize(i);
@@ -199,6 +215,7 @@ protected:
 
 private:
 	std::vector<ArrayContainer<ValueType,Dimension>*> _subContainers;
+	kiwi::uint32_t _layout;
 };
 
 

@@ -9,31 +9,41 @@ namespace cairo{
 //using namespace generic;
 
 RGBAImageContainer::RGBAImageContainer(const generic::Point<uint32_t, 2>& size) 
-	: generic::ArrayContainerInterface<uint8_t, 2>()
-{			
+	: generic::StructuredArrayContainer<uint8_t, 2>()
+{
+	//allocate the cairo surface	
 	_surface = cairo_image_surface_create(
 		CAIRO_FORMAT_ARGB32
 		, size(0), size(1) );
-		
+
+	// create the cairo context
 	_context = cairo_create( _surface );
+
+	//get the data pointer
+	_data = cairo_image_surface_get_data (_surface);
+	
+	//init the mother class stuff (includes creating subcontainers)
+	MotherClass::init(_data ,size,"[R%G%B%A]");
 }
 
 RGBAImageContainer::RGBAImageContainer(
 	uint8_t* data
 	, const generic::Point<uint32_t, 2>& size ) 
-		: generic::ArrayContainerInterface<uint8_t, 2>()
-{	
+		: MotherClass()
+{
 	uint32_t stride = cairo_format_stride_for_width(
 		CAIRO_FORMAT_ARGB32
 		, size(0) );
-		
+	
 	_surface = cairo_image_surface_create_for_data(
 		data
 		, CAIRO_FORMAT_ARGB32
 		, size(0), size(1)
 		, stride );
-		
+
 	_context = cairo_create( _surface );
+
+	MotherClass::init(data ,size,"[R%G%B%A]");
 }
 
 inline 
@@ -57,14 +67,13 @@ RGBAImageContainer::saveToPng(string path)
 	cairo_surface_write_to_png( _surface, path.c_str() );
 }
 
-inline 
+
 uint32_t 
 RGBAImageContainer::width() const
 {
 	return cairo_image_surface_get_width( _surface );
 }
 
-inline 
 uint32_t 
 RGBAImageContainer::height() const
 {
@@ -77,42 +86,15 @@ RGBAImageContainer::~RGBAImageContainer()
 	cairo_surface_destroy( _surface );
 }
 
-
+/*
 uint8_t* const 
 RGBAImageContainer::getDataPointer(portIndex_t index) const
 {
 	return cairo_image_surface_get_data( _surface ) + index;   
 }
+*/
 
 
-
-generic::Point<uint32_t, 3>
-RGBAImageContainer::increments(portIndex_t index) const
-{
-	uint32_t c1 = 4;//cairo_image_surface_get_stride( _surface );
-	c1 /= sizeof(uint8_t);
-	uint32_t c2 = c1 * width();
-	uint32_t c3 = c2 * height();
-	return generic::Point<uint32_t, 3>(c1,c2,c3);
-}
-
-
-
-generic::Point<uint32_t, 2>
-RGBAImageContainer::spanSize() const 
-{
-	return generic::Point<uint32_t, 2>( width(), height() );
-}
-
-Tags RGBAImageContainer::readerOutputTags(portIndex_t)
-{
-	return Tags("#rgba8#array2char");
-}
-
-Tags RGBAImageContainer::writerOutputTags(portIndex_t)
-{
-	return Tags("#rgba8#array2char");
-}
 
 
 } //namespace

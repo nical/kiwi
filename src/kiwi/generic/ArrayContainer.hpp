@@ -83,7 +83,6 @@ public:
 	/**
 	 * @brief Constructor (allocates the data).
 	 */
-	ArrayContainer();
 	ArrayContainer( const CoordinateVector& size );
 	ArrayContainer( const CoordinateVector& size, ValueType defaultValue );
 
@@ -204,7 +203,8 @@ public:
 
 
 protected:
-
+	ArrayContainer();
+	
 	ValueType* _data;
 	bool _deleteDataDestructor;
 	kiwi::uint32_t _totalSize;

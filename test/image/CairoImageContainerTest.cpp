@@ -1,5 +1,5 @@
 
-#include "kiwi/image/cairo/ImageContainer/ImageContainer.hpp"
+#include "kiwi/image/cairo/ImageContainer.hpp"
 
 #include "kiwi/generic/ArrayWriter.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
@@ -10,10 +10,22 @@
 #include "kiwi/core/Filter.hpp"
 
 using namespace kiwi;
+using namespace kiwi::image;
+using namespace kiwi::image::cairo;
 
 int CairoImageContainerTest()
 {
 ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
+	//typedef kiwi::generic::Point<kiwi::uint32_t,2> Point2u;
+	typedef RGBAImageContainer::CoordinateVector CoordinateVector;
+
+	RGBAImageContainer img1( CoordinateVector(80,60) );
+	assert( img1.width() == img1.spanSize()[0] );
+	assert( img1.width() == 80 );
+
+	assert( img1.height() == img1.spanSize()[1] );
+	assert( img1.height() == 60 );
+
 /*
 	typedef kiwi::generic::Point<kiwi::uint32_t,2> Point2u;
 	typedef kiwi::generic::ArrayWriter<kiwi::uint8_t, 2> myWriter;

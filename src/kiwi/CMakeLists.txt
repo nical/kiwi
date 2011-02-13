@@ -4,7 +4,7 @@ include_directories (${PROJECT_SOURCE_DIR}/src)
 if(DEFINED BUILD_KIWI_IMAGE )
 	message("build kiwi image")
 	SET(KIWI_SRC ${KIWI_SRC}
-		image/cairo/ImageContainer/ImageContainer.cpp
+		image/cairo/ImageContainer.cpp
 		#kiwi::image source files
 	)
 	include_directories (${CAIRO_INCLUDE_DIR})

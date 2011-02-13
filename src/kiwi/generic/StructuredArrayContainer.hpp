@@ -62,6 +62,14 @@ public:
 	{
 		init(0, perArraySize, description );
 	}
+	
+	StructuredArrayContainer(
+			ValueType* srcPtr
+			, const CoordinateVector& perArraySize
+			, const kiwi::string& description )
+	{
+		init(srcPtr, perArraySize, description );
+	}
 
 	/**
 	 *	@brief Destructor. 
@@ -222,6 +230,8 @@ protected:
 		return result;
 	}
 
+	// protected constructor for child class to init before this
+	StructuredArrayContainer(){};
 private:
 	std::vector<ArrayContainer<ValueType,Dimension>*> _subContainers;
 	kiwi::uint32_t _layout;

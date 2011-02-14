@@ -37,6 +37,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	utils/UnorderedArrayTest
 	utils/typesTest
 	utils/randomTest
+	image/ImageContainerTest
 #	core/FilterTest
 #	core/MetaFilterTest
 	generic/PointTest
@@ -44,7 +45,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	generic/StructuredArrayContainerTest
 	generic/MultiArrayContainerTest
 	generic/ValueContainerTest
-	
+	plop
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")

@@ -79,10 +79,12 @@ public:
 
 	kiwi::Tags tags() const
 	{
+		/* TODO : error with pixel types
 		return kiwi::Tags( kiwi::string("#array")
 				+ boost::lexical_cast<kiwi::string>(TDimension)
 				+ types::str<TValueType>()
 				+ "#array" );
+		*/ 
 	}
 };
 

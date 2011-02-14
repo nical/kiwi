@@ -14,5 +14,7 @@ cd ./build/test
 ./utils/UnorderedArrayTest &&
 ./utils/typesTest &&
 ./utils/randomTest &&
+./image/ImageContainerTest &&
+./image/MixedImageTest &&
 
 echo '\n\n--end of the test suite--\n\n'

@@ -48,6 +48,18 @@ public:
 	 * @brief Constructor (allocates the data).
 	 */
 	RGBAImageContainer(const CoordinateVector& size);
+	
+	/**
+	 * @brief Constructor (allocates the data).
+	 */
+	RGBAImageContainer(const kiwi::string& file){
+		loadPng(file);
+		_data = cairo_image_surface_get_data (_surface);
+		
+		MotherClass::init( _data
+			, CoordinateVector(width(), height())
+			,"[R%G%B%A]");
+	}
 
 	/**
 	 * @brief Constructor (use pre-allocated data).
@@ -76,7 +88,9 @@ public:
 	/**
 	 * @brief Saves the surface into a .png file.
 	 */
-	void saveToPng(string path);
+	void saveToPng(const kiwi::string& path);
+
+	void loadPng(const kiwi::string& path);
 
 	/**
 	 * @brief Returns the image's width.
@@ -100,7 +114,9 @@ public:
 	{
 		return size()*sizeof(kiwi::uint8_t)*4;
 	}
-	
+
+
+	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
 
 
 protected:

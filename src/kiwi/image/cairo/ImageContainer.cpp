@@ -6,7 +6,11 @@ namespace kiwi{
 namespace image{
 namespace cairo{	
 
-//using namespace generic;
+/*
+kiwi::core::Node* newCairoImageNode(){
+	return new kiwi::core::Node( new RGBAImageContainer( generic::Point<uint32_t, 2>() ));
+}
+*/
 
 RGBAImageContainer::RGBAImageContainer(const generic::Point<uint32_t, 2>& size) 
 	: generic::StructuredArrayContainer<uint8_t, 2>()
@@ -62,9 +66,15 @@ RGBAImageContainer::getSurface()
 
 
 void 
-RGBAImageContainer::saveToPng(string path)
+RGBAImageContainer::saveToPng(const kiwi::string& path)
 {
 	cairo_surface_write_to_png( _surface, path.c_str() );
+}
+
+void
+RGBAImageContainer::loadPng(const kiwi::string& path)
+{
+	_surface = cairo_image_surface_create_from_png(path.c_str() );
 }
 
 
@@ -80,6 +90,20 @@ RGBAImageContainer::height() const
 	return cairo_image_surface_get_height( _surface );
 }
 
+/*
+void RGBAImageContainer::registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
+{
+	kiwi::string tags("#Container#cairo");
+	kiwi::string name("CairoImageContainer");
+
+	factory.registerNode( filterId
+			, kiwi::core::Descriptor<kiwi::core::Node>(
+				name
+				, newCairoImageContainer
+				, tags )
+		);
+}
+*/
 RGBAImageContainer::~RGBAImageContainer()
 {
 	cairo_destroy( _context );

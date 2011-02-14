@@ -41,10 +41,8 @@
 
 #include "kiwi/core/Filter.hpp"
 
-namespace kiwi
-{
-namespace generic
-{	
+namespace kiwi{
+namespace image{	
 
 /**
  * @brief Generic gaussian blur Filter.
@@ -65,8 +63,8 @@ namespace generic
  * class deriving from AbstractArrayContainer). The number K of these ports is not
  * limited.
  */ 
-template<typename TValueType, unsigned TDimension>
-class GaussianBlur<TValueType, TDimension>
+
+class GaussianBlur : public core::Filter
 {
 public:
 	/**
@@ -79,15 +77,10 @@ public:
 	 * 
 	 * Implements the algorithm.
 	 */ 
-	void process():
+	void process();
 	
-	/**
-	 * @brief called when a port is connected/disconnected.
-	 */ 
-	void layoutChanged();
+
 	
-protected:
-	uint8_t _nbInputImages;
 };
 
 } //namespace

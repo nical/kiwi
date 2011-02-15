@@ -97,6 +97,9 @@ friend class WriterInputPort;
 	T* getContainer() { return dynamic_cast<T*>(_container); }
 
 	ReaderOutputPort* associatedReaderOutputPort(){
+		ScopedBlockMacro( ___scp, "WriterOutputPort::associatedReaderOutputPort");
+		if(!_associatedReaderOutputPort)
+			Debug::print() << "warning: no associated port\n";
 		return _associatedReaderOutputPort;
 	}
 	
@@ -173,7 +176,7 @@ protected:
 	 * @see kiwi::core::setWriterInputPortEnabled
 	 * @see kiwi::core::setWriterOutputPortEnabled
 	 */
-	void setEnabled(bool status);
+	void setEnabled(bool status); // deprecated
 	
 private:
 	Node* _node;
@@ -184,7 +187,7 @@ private:
 	utils::UnorderedArray<WriterOutputPort*> _subPorts;
 	// to associate Writer and Reader of the same data
 	ReaderOutputPort* _associatedReaderOutputPort;
-	// internal state
+	// internal state (deprecated)
 	bool _enabled;
 };
 

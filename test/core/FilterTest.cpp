@@ -25,10 +25,29 @@ public:
 
 	void process(){
 		ScopedBlockMacro(__scop, "DummyFilter::Process")
-	}
+		
+		NumberContainer* ca
+			= readerInputPort(0).connectedOutput()
+				->getContainer<NumberContainer>();
 
-	virtual kiwi::Tags readerInputTags( portIndex_t index ) const{
-		return kiwi::Tags("#any");
+		NumberContainer* cb
+			= readerInputPort(1).connectedOutput()
+				->getContainer<NumberContainer>();
+		
+		kiwi::core::Container* resultc
+			= writerInputPort(0).connectedOutput()
+				->getContainer<kiwi::core::Container>();
+
+		assert(ca);
+		assert(cb);
+		assert(resultc);
+		NumberContainer* result = dynamic_cast<NumberContainer*>(resultc);
+		assert(result);
+
+		int A = ca->getValue();
+		int B = cb->getValue();
+		result->setValue( A + B );
+		assert(result->getValue() == 11);
 	}
 };
 
@@ -40,6 +59,8 @@ int main()
 	DummyFilter filter;
 
 	assert( !filter.readerOutputPort(0).isEnabled() );
+	assert( filter.readerInputPort(0).isEnabled() );
+	assert( filter.readerInputPort(1).isEnabled() );
 
 	NumberContainer A(5);
 	NumberContainer B(6);
@@ -48,8 +69,28 @@ int main()
 
 	kiwi::core::Node nA( &A );
 	kiwi::core::Node nB( &B );
+	kiwi::core::Node nR( &R );
 
-	filter.process(); // same as process()
+	// check that association are made correctly
+	assert( nA.writerOutputPort(0).associatedReaderOutputPort()
+		== &nA.readerOutputPort(0) );
+	assert( nB.writerOutputPort(0).associatedReaderOutputPort()
+		== &nB.readerOutputPort(0) );
+	assert( nR.writerOutputPort(0).associatedReaderOutputPort()
+		== &nR.readerOutputPort(0) );
+
+	nA.readerOutputPort(0) >> filter.readerInputPort(0);	
+	nB.readerOutputPort(0) >> filter.readerInputPort(1);
+	nR.writerOutputPort(0) >> filter.writerInputPort(0);
+
+	assert( filter.readerInputPort(0).isConnected() );
+	assert( filter.readerInputPort(1).isConnected() );
+	assert( filter.writerInputPort(0).isConnected() );
+
+	filter.process();
+
+	Debug::print() << R.getValue() << endl();
+	assert( R.getValue() == 11 );
 
 	return 0;
 }

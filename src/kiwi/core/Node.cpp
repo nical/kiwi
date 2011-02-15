@@ -56,6 +56,8 @@ Node::Node( const NodeInitializer& init)
 
 Node::Node( Container* init)
 {
+	ScopedBlockMacro(scop,"Node::constructor(Container*)")
+	if(!init) Debug::print() << "warning: the init parameter is nil\n";
 	addContainer( init, true, true );
 	_listener = 0;
 }
@@ -115,18 +117,19 @@ portIndex_t Node::addWriterOutputPort(Container* data) // TODO data
 {
 //ScopedBlockMacro(scop_b,"addWriterOutputPort("+name+")");
 //	portIndex_t index = getWriterOutputCount();
-	_writerOutputs.push_back( new WriterOutputPort(this) );
+	_writerOutputs.push_back( new WriterOutputPort(this, data) );
 	return _writerOutputs.size()-1;
 }
 
 void Node::addContainer(Container* data, bool addReader, bool addWriter)
 {
-//	ScopedBlockMacro(__scop, "Node::addContainer" )
+	ScopedBlockMacro(__scop, "Node::addContainer" )
+	if(!data) Debug::print() << "warning: the init parameter is nil\n";
 	_containers.add(data);
 	portIndex_t reader, writer;
 	if(addReader){
 		 reader = addReaderOutputPort(data);
-	 }
+	}
 	if(addWriter){
 		 writer = addWriterOutputPort(data);
 	}
@@ -403,6 +406,7 @@ operator >> (WriterOutputPort& output, WriterInputPort& input )
 {
 	if(!input.isConnected())
 	{
+		Debug::print() << "operator >> " << endl();
 		input.connect(output);
 		return true;
 	}else{return false;}

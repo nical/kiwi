@@ -105,13 +105,13 @@ Tags ReaderInputPort::tags() const
 
 bool ReaderInputPort::isCompatible(ReaderOutputPort& output)	
 { 
-	return ( tags().hasOneOf(output.tags()+Tags("any") ) );
+	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
 }
 
 
 bool ReaderInputPort::isCompatible(const kiwi::Tags& tag)	
 { 
-	return ( tags().hasOneOf(tag + Tags("any") ) );
+	return ( tags().hasOneOf(tag + Tags("#any") ) );
 }
 
 bool ReaderInputPort::isEnabled() const 

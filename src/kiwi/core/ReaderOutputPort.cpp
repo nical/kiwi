@@ -46,6 +46,9 @@ ReaderOutputPort::ReaderOutputPort( Node* myNode, Container* data )
 	, _node(myNode)
 	, _container(data)
 {
+	if(!data){
+		Debug::print() << "ReaderOutputPort::constructor: warning: data = 0\n";
+	}
 	// nothing to do
 }
 
@@ -70,11 +73,13 @@ void ReaderOutputPort::unBind()
 
 void ReaderOutputPort::setData( Container* data )
 {
+	ScopedBlockMacro(scop, "ReaderOutputPort::setData");
+	if(!data) Debug::print() << "warning: param data = 0\n";
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
 		_linkedOutputPorts[i]->setData( data );
 
 	_container = data;
-	if( data->isComposite() ){
+	if( (data) && (data->isComposite()) ){
 		for(kiwi::uint32_t i = 0; i < data->nbSubContainers(); ++i){
 			_subPorts.add(new ReaderOutputPort(_node, data->subContainer(i)));
 		}

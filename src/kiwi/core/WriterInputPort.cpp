@@ -47,8 +47,7 @@ WriterInputPort::WriterInputPort( Node* myNode )
 	, _node(myNode)
 	, _associatedReaderOutputPort(0)
 {
-	//nothing to do
-	//(everything is in the initialization above)
+	
 }
 
 
@@ -57,7 +56,10 @@ bool WriterInputPort::connect(WriterOutputPort& outputPort)
 	ScopedBlockMacro( __scop, "WriterInputPort::connect" )
 	if( isEnabled() && outputPort.isEnabled() )
 		if( isCompatible( outputPort.tags() ) ){
-			if( _associatedReaderOutputPort ){
+			if( _associatedReaderOutputPort
+				&& outputPort.associatedReaderOutputPort() )
+			{
+				Debug::print() << "--- plop --- \n";
 				_associatedReaderOutputPort->bind(
 					*outputPort.associatedReaderOutputPort() );
 			}	

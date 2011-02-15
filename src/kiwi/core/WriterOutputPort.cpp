@@ -47,6 +47,10 @@ WriterOutputPort::WriterOutputPort( Node* myNode, Container* data )
 	, _container(data)
 	, _associatedReaderOutputPort(0)
 {
+	ScopedBlockMacro(scop, "WriterOutputPort::constructor")
+	if(!data){
+		Debug::print() << "WriterOutputPort::constructor: warning: data = 0\n";
+	}
 	// nothing else to do
 }
 

@@ -92,6 +92,10 @@ int main()
 	Debug::print() << R.getValue() << endl();
 	assert( R.getValue() == 11 );
 
+	NumberContainer* pr = filter.readerOutputPort(0).getContainer<NumberContainer>();
+	assert( pr );
+	assert( pr->getValue() == 11 );
+
 	return 0;
 }
 

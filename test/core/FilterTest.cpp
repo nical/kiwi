@@ -24,7 +24,7 @@ public:
 	}
 
 	void process(){
-		ScopedBlockMacro(__scop, "DummyFilter::Process")
+		ScopedBlockMacro(scop, "DummyFilter::Process")
 		
 		NumberContainer* ca
 			= readerInputPort(0).connectedOutput()
@@ -34,20 +34,18 @@ public:
 			= readerInputPort(1).connectedOutput()
 				->getContainer<NumberContainer>();
 		
-		kiwi::core::Container* resultc
+		NumberContainer* result
 			= writerInputPort(0).connectedOutput()
-				->getContainer<kiwi::core::Container>();
+				->getContainer<NumberContainer>();
 
 		assert(ca);
 		assert(cb);
-		assert(resultc);
-		NumberContainer* result = dynamic_cast<NumberContainer*>(resultc);
 		assert(result);
 
 		int A = ca->getValue();
 		int B = cb->getValue();
 		result->setValue( A + B );
-		assert(result->getValue() == 11);
+		assert( result->getValue() == 11 );
 	}
 };
 

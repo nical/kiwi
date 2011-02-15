@@ -106,8 +106,11 @@ void RGBAImageContainer::registerToFactory(kiwi::core::NodeFactory& factory, con
 */
 RGBAImageContainer::~RGBAImageContainer()
 {
+	// TODO: generates an error within reference counting cairo internals
+	/*
 	cairo_destroy( _context );
 	cairo_surface_destroy( _surface );
+	*/ 
 }
 
 /*

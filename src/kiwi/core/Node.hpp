@@ -537,6 +537,9 @@ protected:
 	 */ 
 	void bindPort(WriterInputPort& myPort, WriterInputPort& toBind);
 
+
+	
+
 // ----------------------------------------------------- private members
 private:
 

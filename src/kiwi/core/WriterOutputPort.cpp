@@ -27,6 +27,7 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kiwi/core/Node.hpp"
+#include "kiwi/core/Container.hpp"
 
 #include "kiwi/core/Writer.hpp"
 #include "kiwi/core/Writer.hpp"
@@ -44,8 +45,9 @@ WriterOutputPort::WriterOutputPort( Node* myNode, Container* data )
 	: _enabled(true)
 	, _node(myNode)
 	, _container(data)
+	, _associatedReaderOutputPort(0)
 {
-	// nothing to do
+	// nothing else to do
 }
 
 
@@ -54,9 +56,6 @@ void WriterOutputPort::bind(WriterOutputPort& port)
 //	Debug::print() << "port binding" << endl();
 	_container = port._container;
 	port._linkedOutputPorts.add( this );
-
-	// note that if the binded Node is deleted, trying to acces
-	// this port might cause a segfault
 }
 
 void WriterOutputPort::unBind()
@@ -73,8 +72,16 @@ void WriterOutputPort::setData( Container* data )
 		_linkedOutputPorts[i]->setData( data );
 
 	_container = data;
+	if( data->isComposite() ){
+		for(kiwi::uint32_t i = 0; i < data->nbSubContainers(); ++i){
+			_subPorts.add(new WriterOutputPort(_node, data->subContainer(i)));
+		}
+	}
 }
 
+bool  WriterOutputPort::isComposite() const{
+	return (_subPorts.size() > 1 );
+}
 
 kiwi::string WriterOutputPort::name() const
 {

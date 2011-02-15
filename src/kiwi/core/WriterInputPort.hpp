@@ -58,6 +58,7 @@ class WriterInputPort
 : public kiwi::utils::Connector<WriterInputPort, WriterOutputPort, 1, WRITER>
 {
 friend class Node;
+friend class Filter;
 public:
 
 	typedef kiwi::utils::Connector<WriterInputPort, WriterOutputPort, 1, WRITER> PortConnector;
@@ -137,10 +138,15 @@ protected:
 	 * @see kiwi::core::setWriterOutputPortEnabled
 	 */ 
 	void setEnabled(bool status);
+
+	void associateReaderPort(ReaderOutputPort* reader){
+		_associatedReaderOutputPort = reader;
+	}
 	
 private:
 	Node* _node;
 	utils::UnorderedArray<WriterInputPort*> _linkedInputPorts;
+	ReaderOutputPort* _associatedReaderOutputPort;
 	bool _enabled;
 };
 

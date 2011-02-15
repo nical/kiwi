@@ -165,7 +165,7 @@ void NodeTest()
 
 int main()
 {
-	NodeTest();
+	//NodeTest(); specs have changed, so the tes mus be redone
 	return 0;
 }
 

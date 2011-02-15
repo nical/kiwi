@@ -80,8 +80,25 @@ friend class WriterInputPort;
 	 */ 
 	Node* node() const ;
 
+	/**
+	 * @brief Returns true if this port has sub-ports.
+	 *
+	 * This happens when the port is associated to a composite Container. 
+	 */ 
+	bool isComposite() const;
+
+	WriterOutputPort& subPort(kiwi::uint32_t i){
+		if(i >= _subPorts.size() )
+			return *this;
+		return *_subPorts[i];
+	}
+
 	template<class T>
 	T* getContainer() { return dynamic_cast<T*>(_container); }
+
+	ReaderOutputPort* associatedReaderOutputPort(){
+		return _associatedReaderOutputPort;
+	}
 	
 	/**
 	 * @brief Returns a pointer to the port that catually contains the Data.
@@ -160,8 +177,14 @@ protected:
 	
 private:
 	Node* _node;
-	Container* _container; 
-	utils::UnorderedArray<WriterOutputPort*> _linkedOutputPorts; 
+	Container* _container;
+	// port binding
+	utils::UnorderedArray<WriterOutputPort*> _linkedOutputPorts;
+	// to use with composite containers  
+	utils::UnorderedArray<WriterOutputPort*> _subPorts;
+	// to associate Writer and Reader of the same data
+	ReaderOutputPort* _associatedReaderOutputPort;
+	// internal state
 	bool _enabled;
 };
 

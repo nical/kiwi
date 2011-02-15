@@ -51,7 +51,7 @@ class Filter : public Node
 {
 public:
 
-	int nodeType() { return Node::FILTER; };
+	int nodeType() { return Node::FILTER; }; // TODO: DEPRECATED
 
 	bool update(int) { process(); return true; } 
 
@@ -87,6 +87,19 @@ public:
 				setPortEnabled(readerOutputPort(i),false);	
 			}
 		}
+	}
+
+
+	/**
+	 * @brief Allows to associate a Reader Output with a Writer Input port.
+	 *
+	 * Basically what it does is make the writer port aware that if it connects
+	 * to a port, the associated reader should read the data that the writer 
+	 * accesses.
+	 */ 
+	void associateWriterToReader(WriterInputPort& writer, ReaderOutputPort& reader) const
+	{
+		writer.associateReaderPort( &reader );
 	}
 	
 

@@ -74,6 +74,11 @@ void ReaderOutputPort::setData( Container* data )
 		_linkedOutputPorts[i]->setData( data );
 
 	_container = data;
+	if( data->isComposite() ){
+		for(kiwi::uint32_t i = 0; i < data->nbSubContainers(); ++i){
+			_subPorts.add(new ReaderOutputPort(_node, data->subContainer(i)));
+		}
+	}
 }
 
 
@@ -88,6 +93,9 @@ portIndex_t ReaderOutputPort::index() const
 	return _node->indexOf(*this);
 }
 
+bool  ReaderOutputPort::isComposite() const{
+	return (_subPorts.size() > 1 );
+}
 
 Node* ReaderOutputPort::node() const 
 {
@@ -135,11 +143,11 @@ bool ReaderOutputPort::connect(ReaderInputPort* inputPort)
 
 bool ReaderOutputPort::isEnabled() const 
 { 
-	return _enabled; 
+	return _container != 0; 
 }
 
 
-void ReaderOutputPort::setEnabled(bool status) 
+void ReaderOutputPort::setEnabled(bool status) // DEPRECATED
 {
 	_enabled = status;
 }

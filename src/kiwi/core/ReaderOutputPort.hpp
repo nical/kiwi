@@ -59,6 +59,7 @@ class ReaderOutputPort
 friend class Node;
 public:
 friend class ReaderInputPort;
+friend class WriterInputPort;
 
 	typedef kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, 100, READER> PortConnector;
 
@@ -79,6 +80,19 @@ friend class ReaderInputPort;
 	 * @brief Returns a pointer to the Node containing this port.
 	 */ 
 	Node* node() const ;
+
+	/**
+	 * @brief Returns true if this port has sub-ports.
+	 *
+	 * This happens when the port is associated to a composite Container. 
+	 */ 
+	bool isComposite() const ;
+
+	ReaderOutputPort& subPort(kiwi::uint32_t i){
+		if(i >= _subPorts.size() )
+			return *this;
+		return *_subPorts[i];
+	}
 
 	template<class T>
 	T* getContainer() { return dynamic_cast<T*>(_container); }
@@ -161,7 +175,8 @@ protected:
 private:
 	Node* _node;
 	Container* _container; 
-	utils::UnorderedArray<ReaderOutputPort*> _linkedOutputPorts; 
+	utils::UnorderedArray<ReaderOutputPort*> _linkedOutputPorts;
+	utils::UnorderedArray<ReaderOutputPort*> _subPorts;
 	bool _enabled;
 };
 

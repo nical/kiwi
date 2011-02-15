@@ -121,9 +121,21 @@ portIndex_t Node::addWriterOutputPort(Container* data) // TODO data
 
 void Node::addContainer(Container* data, bool addReader, bool addWriter)
 {
-		_containers.add(data);
-		if(addReader) addReaderOutputPort(data);
-		if(addWriter) addWriterOutputPort(data);
+//	ScopedBlockMacro(__scop, "Node::addContainer" )
+	_containers.add(data);
+	portIndex_t reader, writer;
+	if(addReader){
+		 reader = addReaderOutputPort(data);
+	 }
+	if(addWriter){
+		 writer = addWriterOutputPort(data);
+	}
+	if( addReader && addWriter ){
+//		Debug::print() << "readerId: " << (int)reader
+//			<< "writererId: " << (int)writer << endl();
+		writerOutputPort(reader)._associatedReaderOutputPort
+			= &readerOutputPort(writer);
+	}
 }
 
 

@@ -33,6 +33,7 @@
 
 #include "kiwi/core/WriterOutputPort.hpp"
 #include "kiwi/core/WriterInputPort.hpp"
+#include "kiwi/core/ReaderOutputPort.hpp"
 
 
 namespace kiwi{
@@ -44,8 +45,10 @@ namespace core{
 WriterInputPort::WriterInputPort( Node* myNode )
 :	_enabled(true)
 	, _node(myNode)
+	, _associatedReaderOutputPort(0)
 {
 	//nothing to do
+	//(everything is in the initialization above)
 }
 
 
@@ -53,8 +56,13 @@ bool WriterInputPort::connect(WriterOutputPort& outputPort)
 {
 	ScopedBlockMacro( __scop, "WriterInputPort::connect" )
 	if( isEnabled() && outputPort.isEnabled() )
-		if( isCompatible( outputPort.tags() ) )
+		if( isCompatible( outputPort.tags() ) ){
+			if( _associatedReaderOutputPort ){
+				_associatedReaderOutputPort->bind(
+					*outputPort.associatedReaderOutputPort() );
+			}	
 			return PortConnector::connect( &outputPort );
+		}else return false;
 	else return false;
 }
 

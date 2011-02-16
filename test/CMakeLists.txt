@@ -39,6 +39,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	utils/randomTest
 	image/ImageContainerTest
 	image/MixedImageTest
+	image/CopyImageTest
 	core/FilterTest
 #	core/MetaFilterTest
 	generic/PointTest

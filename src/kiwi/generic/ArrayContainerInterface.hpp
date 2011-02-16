@@ -72,10 +72,7 @@ public:
 	 * Returns the stride of a given dimension.
 	 */
 	virtual kiwi::uint32_t stride(kiwi::uint32_t dimension) const = 0;
-	/**
-	 * Returns the size of each span.
-	 */
-	virtual CoordinateVector spanSize() const = 0;
+	
 
 	kiwi::Tags tags() const
 	{

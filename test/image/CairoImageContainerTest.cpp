@@ -1,12 +1,6 @@
 
 #include "kiwi/image/cairo/ImageContainer.hpp"
-
-#include "kiwi/generic/ArrayWriter.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
-
-
 #include "kiwi/core/Commons.hpp"
-
 #include "kiwi/core/Filter.hpp"
 
 using namespace kiwi;

@@ -16,6 +16,7 @@ cd ./build/test
 ./utils/randomTest &&
 ./image/ImageContainerTest &&
 ./image/MixedImageTest &&
+./image/CopyImageTest &&
 ./core/FilterTest &&
 
 echo '\n\n--end of the test suite--\n\n'

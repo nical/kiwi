@@ -12,11 +12,16 @@ class PointAccessContainerInterface : public RandomAccessContainerInterface<TVal
 {
 public:
   typedef TValueType ValueType;
-  typedef kiwi::generic::Point<kiwi::uint32_t, TDimension> Point;
+  typedef kiwi::generic::Point<kiwi::uint32_t, TDimension> CoordinateVector;
   static const unsigned int Dimension = TDimension;
   // -----
-  virtual ValueType getValue( const Point& point ) const = 0;
-  virtual void setValue( const Point& point, ValueType value ) = 0;
+  virtual ValueType getValue( const CoordinateVector& point ) const = 0;
+  virtual void setValue( const CoordinateVector& point, ValueType value ) = 0;
+
+  /**
+  * Returns the size of each span.
+  */
+  virtual CoordinateVector spanSize() const = 0;
   //TODO: bounds, resize
 
 };

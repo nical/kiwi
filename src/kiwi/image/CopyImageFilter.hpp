@@ -32,10 +32,12 @@ public:
 
 	void process(){
 		ScopedBlockMacro(scop,"CopyImageFilter::process")
-		typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> ColorBuffer;
+		//typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> ColorBuffer;
+		typedef kiwi::generic::ArrayContainer<kiwi::uint8_t,2> ColorBuffer;
 		typedef kiwi::generic::Point<kiwi::uint32_t, 2> CoordinateVector;
 
-			
+		Debug::print() << "\n\n";
+		Debug::beginBlock();
 		ColorBuffer* r
 			= readerInputPort(R).connectedOutput()
 				->getContainer<ColorBuffer>();
@@ -48,6 +50,12 @@ public:
 		ColorBuffer* a
 			= readerInputPort(A).connectedOutput()
 				->getContainer<ColorBuffer>();
+		Debug::endBlock();
+		Debug::print() << "\n\n";
+
+		Debug::error() << "\n   r.stride = " << r->stride().toStr() << endl(); 		
+		Debug::error() << "\n   g.stride = " << g->stride().toStr() << endl(); 		
+		Debug::error() << "\n   b.stride = " << b->stride().toStr() << endl(); 		
 
 		kiwi::image::cairo::RGBAImageContainer* result
 			= writerInputPort(0).connectedOutput()
@@ -74,6 +82,7 @@ public:
 			result = new kiwi::image::cairo::RGBAImageContainer(size);
 			setPortContainer(readerOutputPort(0), result );
 		}
+		cairo_surface_flush( result->getSurface() );
 		
 		//debug:
 			a = 0;// b = 0; r = 0; g = 0;
@@ -91,6 +100,7 @@ public:
 				result->setValue(CoordinateVector(x*4+2,y), vr);
 				result->setValue(CoordinateVector(x*4+3,y), va);
 			}
+		cairo_surface_mark_dirty(result->getSurface() );
 
 	}
 

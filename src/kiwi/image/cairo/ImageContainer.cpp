@@ -15,6 +15,7 @@ kiwi::core::Node* newCairoImageNode(){
 RGBAImageContainer::RGBAImageContainer(const generic::Point<uint32_t, 2>& size) 
 	: generic::StructuredArrayContainer<uint8_t, 2>()
 {
+	ScopedBlockMacro(scop,"RGBAImageContainer::constructor")
 	//allocate the cairo surface	
 	_surface = cairo_image_surface_create(
 		CAIRO_FORMAT_ARGB32
@@ -25,9 +26,9 @@ RGBAImageContainer::RGBAImageContainer(const generic::Point<uint32_t, 2>& size)
 
 	//get the data pointer
 	_data = cairo_image_surface_get_data (_surface);
-	
+	Debug::print() << "size = " << size.toStr()<<endl();
 	//init the mother class stuff (includes creating subcontainers)
-	MotherClass::init(_data ,size,"[R%G%B%A]");
+	MotherClass::init(_data, size, "[R%G%B%A]");
 }
 
 RGBAImageContainer::RGBAImageContainer(

@@ -51,6 +51,7 @@ void test2()
 	SubArray* subArray1 =  (SubArray*)array1.subContainer(1);
 	SubArray* subArray2 =  (SubArray*)array1.subContainer(2);
 	SubArray* subArray3 =  (SubArray*)array1.subContainer(3);
+	
 	CoordinateVector expectedStride(1,5,50);
 
 	assert(subArray0 != 0);

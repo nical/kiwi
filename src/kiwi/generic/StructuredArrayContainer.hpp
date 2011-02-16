@@ -125,7 +125,7 @@ protected:
 	{
 	ScopedBlockMacro(___, "StructuredArrayContainer::init")
 	_layout = 0;
-
+	Debug::print() << "perArraySize: " << perArraySize.toStr() << endl();
 	kiwi::uint32_t nbArrays = 1;
 	for(kiwi::uint32_t i = 0; i < description.size(); ++i){
 			if(description[i] == '|'){
@@ -222,11 +222,14 @@ protected:
 	StrideVector size2stride(const CoordinateVector& size, kiwi::uint32_t nbInteleavedArrays = 1)
 	{
 		ScopedBlockMacro(____, "StructuredArrayContainer::size2stride")
+		Debug::print() << "size: " << size.toStr() << endl();
+		Debug::print() << "nbInterleaved: " << nbInteleavedArrays << endl();
 		StrideVector result(nbInteleavedArrays);
 		for(kiwi::uint32_t i = 1; i < Dimension; ++i)
 		{
 			result(i) = result(i-1) * size(i-1);
 		}
+		Debug::print() << "result: " << result.toStr() << endl();
 		return result;
 	}
 

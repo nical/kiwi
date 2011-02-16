@@ -69,6 +69,7 @@ ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
 	, const StrideVector& stride )
 :_stride(stride)
 {
+	ScopedBlockMacro(scop,"ArrayContainer::constructor")
 	_deleteDataDestructor = false;
 	_spanSize = size;
 	_stride = stride;
@@ -77,6 +78,8 @@ ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
 	for(unsigned i = 0; i < D; ++i)	_totalSize*= size[i];
 
 	_data = dataPtr;
+
+	Debug::print() << "stride: " << _stride.toStr() << endl(); 
 }
 
 

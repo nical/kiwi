@@ -26,7 +26,7 @@ GaussianBlur::GaussianBlur()
 	//port is connected
 	addReaderOutputPort();
 	
-	setPortEnabled(readerOutputPort(0),false);
+//	setPortEnabled(readerOutputPort(0),false);
 
 }
 

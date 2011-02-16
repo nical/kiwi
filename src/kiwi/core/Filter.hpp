@@ -76,7 +76,7 @@ public:
 		for(uint32_t i = 0; i < nbWriters; ++i){
 			if( writerInputPort(i).isConnected() ){
 				if( !readerOutputPort(i).isEnabled() ){
-					setPortEnabled(readerOutputPort(i),true);
+//					setPortEnabled(readerOutputPort(i),true);
 					portIndex_t outIndex = writerInputPort(i).connectedOutput()->index();
 					ReaderOutputPort& op
 						= writerInputPort(i).connectedOutput()->node()->readerOutputPort(outIndex);
@@ -84,7 +84,7 @@ public:
 				}
 			}else{
 				readerOutputPort(i).disconnect();
-				setPortEnabled(readerOutputPort(i),false);	
+//				setPortEnabled(readerOutputPort(i),false);	
 			}
 		}
 	}

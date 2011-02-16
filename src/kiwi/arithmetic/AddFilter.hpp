@@ -75,13 +75,13 @@ public:
 			if( _result == 0 ){
 				_result = new kiwi::generic::NumberContainer<KIWI_ADDFILTER_TYPE>( 0 );
 				setPortContainer( readerOutputPort(0), _result );
-				setPortEnabled( readerOutputPort(0), false );
+//				setPortEnabled( readerOutputPort(0), false );
 			}
 		}else{
 			if( _result != 0){
 				delete _result;
 				_result = 0;
-				setPortEnabled( readerOutputPort(0), false );
+				setPortContainer( readerOutputPort(0), 0 );
 			}
 		}
 	}

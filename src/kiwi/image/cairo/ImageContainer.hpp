@@ -77,13 +77,13 @@ public:
 	 *
 	 * This is specific to cairo's functionning.
 	 */
-	inline cairo_t* getContext();
+	cairo_t* getContext();
 	/**
 	 * @brief Returns this image's cairo surface.
 	 *
 	 * This is specific to cairo's functionning.
 	 */
-	inline cairo_surface_t* getSurface();
+	cairo_surface_t* getSurface();
 
 	/**
 	 * @brief Saves the surface into a .png file.

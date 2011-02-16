@@ -324,7 +324,7 @@ Node::bindPort(WriterInputPort& myPort, WriterInputPort& toBind)
 	myPort.bind(toBind); 
 }
 
-
+/*
 void
 Node::setPortEnabled(ReaderInputPort& port, bool status)
 {
@@ -345,7 +345,7 @@ Node::setPortEnabled(WriterOutputPort& port, bool status)
 {
 	port.setEnabled(status);
 }
-
+*/
 void Node::setPortContainer(ReaderOutputPort& port, Container* container)
 {
 	port.setData( container );

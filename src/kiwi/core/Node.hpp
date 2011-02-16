@@ -443,21 +443,21 @@ protected:
 	/**
 	 * @brief Enables/disables port
 	 */
-	void setPortEnabled(ReaderInputPort& port, bool status);
+//	void setPortEnabled(ReaderInputPort& port, bool status);
 	
 	/**
 	 * @brief Enables/disables port
 	 */
-	void setPortEnabled(WriterInputPort& port, bool status);
+//	void setPortEnabled(WriterInputPort& port, bool status);
 	
 	/**
 	 * @brief Enables/disables port
 	 */
-	void setPortEnabled(ReaderOutputPort& port, bool status);
+//	void setPortEnabled(ReaderOutputPort& port, bool status);
 	/**
 	 * @brief Enables/disables port
 	 */
-	void setPortEnabled(WriterOutputPort& port, bool status);
+//	void setPortEnabled(WriterOutputPort& port, bool status);
 
 	void setPortContainer(ReaderOutputPort& port, Container* container);
 	void setPortContainer(WriterOutputPort& port, Container* container);

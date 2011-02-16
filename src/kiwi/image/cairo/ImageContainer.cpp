@@ -50,14 +50,14 @@ RGBAImageContainer::RGBAImageContainer(
 	MotherClass::init(data ,size,"[R%G%B%A]");
 }
 
-inline 
+
 cairo_t* 
 RGBAImageContainer::getContext() 
 { 
 	return _context; 
 }
 
-inline 
+
 cairo_surface_t* 
 RGBAImageContainer::getSurface() 
 { 

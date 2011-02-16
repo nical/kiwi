@@ -74,7 +74,10 @@ public:
 			result = new kiwi::image::cairo::RGBAImageContainer(size);
 			setPortContainer(readerOutputPort(0), result );
 		}
-
+		
+		//debug:
+			a = 0;// b = 0; r = 0; g = 0;
+		//
 		for(kiwi::uint32_t x = 0; x < result->width(); ++x)
 			for(kiwi::uint32_t y = 0; y < result->height(); ++y){
 

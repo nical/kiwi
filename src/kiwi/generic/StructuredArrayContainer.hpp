@@ -97,9 +97,14 @@ public:
 	 * @brief Returns the ArrayContainers that are part of this structured container.
 	 */ 
 	virtual core::Container* subContainer(kiwi::uint32_t index){
+		ScopedBlockMacro(scop, "StructuredArrayContainer::subContainer")
 		if(index < nbSubContainers() ){
 			return _subContainers[index];
-		}else{ return 0; }
+		}else{
+			Debug::error() << "StructuredArrayContainer::subContainer: warning:\n"
+				<< "index paramettr out of bounds ("<<(int)index<<")\n";
+			return 0;
+		}
 	}
 
 	/**

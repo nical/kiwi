@@ -94,6 +94,8 @@ friend class WriterInputPort;
 		return *_subPorts[i];
 	}
 
+	kiwi::uint32_t nbSubPort() const { return _subPorts.size(); }
+
 	template<class T>
 	T* getContainer() { return dynamic_cast<T*>(_container); }
 	

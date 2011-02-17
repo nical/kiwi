@@ -134,11 +134,12 @@ void Node::addContainer(Container* data, bool addReader, bool addWriter)
 		 writer = addWriterOutputPort(data);
 	}
 	if( addReader && addWriter ){
+		Debug::print() << "Node::addContainer: associating ports\n"; 
 //		Debug::print() << "readerId: " << (int)reader
 //			<< "writererId: " << (int)writer << endl();
-		writerOutputPort(reader)._associatedReaderOutputPort
+		writerOutputPort(reader)._associatedReaderOutputPort // todo investigate from this
 			= &readerOutputPort(writer);
-	}
+	}else{Debug::error() << "Node::addContainer: woops ?\n";} 
 }
 
 

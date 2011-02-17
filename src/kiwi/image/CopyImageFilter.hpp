@@ -53,6 +53,10 @@ public:
 		Debug::endBlock();
 		Debug::print() << "\n\n";
 
+		//Debug
+		kiwi::generic::StructuredArrayContainer<kiwi::uint8_t,2>* plop = dynamic_cast<kiwi::generic::StructuredArrayContainer<kiwi::uint8_t,2>*>(a);
+		assert(!plop);
+
 		Debug::error() << "\n   r.stride = " << r->stride().toStr() << endl(); 		
 		Debug::error() << "\n   g.stride = " << g->stride().toStr() << endl(); 		
 		Debug::error() << "\n   b.stride = " << b->stride().toStr() << endl(); 		

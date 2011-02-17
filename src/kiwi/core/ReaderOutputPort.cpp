@@ -71,7 +71,7 @@ void ReaderOutputPort::unBind()
 	_container = 0;
 }
 
-void ReaderOutputPort::setData( Container* data )
+void ReaderOutputPort::setData( Container* data ) // TODO bugtracking stride here
 {
 	ScopedBlockMacro(scop, "ReaderOutputPort::setData");
 	if(!data) Debug::print() << "warning: param data = 0\n";
@@ -80,6 +80,7 @@ void ReaderOutputPort::setData( Container* data )
 
 	_container = data;
 	if( (data) && (data->isComposite()) ){
+		Debug::print() << "the data is composite ("<<data->nbSubContainers()<<")\n"; 
 		for(kiwi::uint32_t i = 0; i < data->nbSubContainers(); ++i){
 			_subPorts.add(new ReaderOutputPort(_node, data->subContainer(i)));
 		}

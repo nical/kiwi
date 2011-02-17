@@ -39,7 +39,7 @@ RGBAImageContainer::RGBAImageContainer(
 	uint32_t stride = cairo_format_stride_for_width(
 		CAIRO_FORMAT_ARGB32
 		, size(0) );
-	
+	Debug::error() << "cairo_format_stride = " << stride << endl();
 	_surface = cairo_image_surface_create_for_data(
 		data
 		, CAIRO_FORMAT_ARGB32

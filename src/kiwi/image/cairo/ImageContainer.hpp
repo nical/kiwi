@@ -115,6 +115,8 @@ public:
 		return size()*sizeof(kiwi::uint8_t)*4;
 	}
 
+	virtual bool isComposite() const { return true; }
+
 
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
 

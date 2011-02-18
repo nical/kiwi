@@ -395,9 +395,9 @@ bool NodeInitializer::addWriter(kiwi::uint32_t index) const
 bool 
 operator >> (ReaderOutputPort& output, ReaderInputPort& input )
 {
+	ScopedBlockMacro(scop, "operator >> (reader)" )
 	if(!input.isConnected())
 	{
-		Debug::print() << "operator >> " << endl();
 		return input.connect(output);
 	}else{return false;}
 }
@@ -405,9 +405,9 @@ operator >> (ReaderOutputPort& output, ReaderInputPort& input )
 bool 
 operator >> (WriterOutputPort& output, WriterInputPort& input )
 {
+	ScopedBlockMacro(scop, "operator >> (writer)" )
 	if(!input.isConnected())
 	{
-		Debug::print() << "operator >> " << endl();
 		input.connect(output);
 		return true;
 	}else{return false;}

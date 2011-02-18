@@ -6,13 +6,14 @@ namespace kiwi{
 
 void Tags::init(char const* str)
 {
+	Debug::error() << "Tags::init :)\n";
 	kiwi::uint32_t start = 0;
 	kiwi::uint32_t i = 1;
 	kiwi::uint32_t nbTags = 0;
 	
 	while(1)
 	{
-		if((str[i] == '#')||(str[i] == '\0'))
+		if( (str[i] == '#')||(str[i] == '\0') )
 		{
 			bool found = false;
 			kiwi::string toAdd = kiwi::string( str + start, i - start );
@@ -29,11 +30,13 @@ void Tags::init(char const* str)
 
 Tags::Tags(char const* str)
 {
+	ScopedBlockMacro(scop,"Tags::constructor(char*)")
 	init( str );
 }
 
 Tags::Tags(const kiwi::string& str)
 {
+	ScopedBlockMacro(scop,"Tags::constructor(string)")
 	init( str.c_str() );
 }
 
@@ -50,7 +53,8 @@ Tags Tags::tag(kiwi::uint32_t index) const
 
 kiwi::string Tags::str() const
 {
-	kiwi::string result;
+	ScopedBlockMacro( scop, "Tags::str" ) // TODOTODTODO segfault here
+	kiwi::string result("");
 	for(uint32_t i = 0; i < _data.size(); ++i)
 		result += _data[i];
 	return result;
@@ -109,12 +113,13 @@ Tags& Tags::operator+=(const Tags& toAdd)
 {
 	for(uint32_t i = 0; i < toAdd.nb(); ++i ){
 		bool add = true;
-		for(uint32_t j = 0; j < nb(); ++j )
+		for(uint32_t j = 0; j < nb(); ++j ){
 			// if the tag is already in this, don't add it
 			if(_data[j] == toAdd._data[i]){
 				add = false;
 				break;
 			}
+		}
 		if(add) _data.push_back( toAdd._data[i] );
 	}
 }

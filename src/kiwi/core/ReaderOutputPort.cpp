@@ -113,10 +113,13 @@ Node* ReaderOutputPort::node() const
 
 Tags ReaderOutputPort::tags() const
 {
+	ScopedBlockMacro(scop, "ReaderOutputPort::tags")
 	if(_container){
+		ScopedBlockMacro(scop2, "hot spot...")
 		return _container->tags(); 
-	}else{		// TODO : The following call may be removed in the future
-		return _node->readerOutputTags( index() );
+	}else{
+		Debug::error() << "ReaderOutputPort::tags: warning: no container available\n"; 
+		return Tags("#undefined"); // very restrictive but should not occur
 	}
 }
 
@@ -129,7 +132,7 @@ bool ReaderOutputPort::isCompatible(ReaderInputPort& input)
 
 bool ReaderOutputPort::connect(ReaderInputPort& inputPort)
 {
-	ScopedBlockMacro( __scop, "ReaderOutputPort::connect" )
+	ScopedBlockMacro( scop, "ReaderOutputPort::connect" )
 	if( isEnabled() && inputPort.isEnabled() ){
 		if( isCompatible( inputPort ) )
 			return PortConnector::connect( &inputPort);
@@ -139,7 +142,7 @@ bool ReaderOutputPort::connect(ReaderInputPort& inputPort)
 
 bool ReaderOutputPort::connect(ReaderInputPort* inputPort)
 {
-	ScopedBlockMacro( __scop, "ReaderOutputPort::connect" )
+	ScopedBlockMacro( scop, "ReaderOutputPort::connect" )
 	if( (inputPort != 0) && (isEnabled() && inputPort->isEnabled()) ){
 		if( isCompatible( *inputPort ) )
 			return PortConnector::connect( inputPort );

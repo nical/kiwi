@@ -108,6 +108,11 @@ public:
 
 	}
 
+	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{
+		Debug::print() << "CopyImageFilter::Tags" << endl();
+		return kiwi::Tags("#any");// TODO
+	}
+
 protected:
 	
 };

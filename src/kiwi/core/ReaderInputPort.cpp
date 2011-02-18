@@ -52,17 +52,19 @@ ReaderInputPort::ReaderInputPort( Node* myNode )
 bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 {
 	ScopedBlockMacro( __scop, "ReaderInputPort::connect" )
-	if( isEnabled() && outputPort.isEnabled() )
-		if( isCompatible( outputPort.tags() ) )
+	if( isEnabled() && outputPort.isEnabled() ){
+		Debug::print() << "youhou\n";
+		if( isCompatible( outputPort.tags() ) ){ // TODO segfault here
+			Debug::print() << "zoouuup\n";
 			return PortConnector::connect( &outputPort );
-		else{
+		}else{
 			Debug::error()
 				<< "ReaderInputPort::connect error: uncompatible port tags!" <<endl()
 				<< "   input: " << tags().str() <<endl()
 				<< "   soutput: " << outputPort.tags().str() << endl();
 			return false;
 		}
-	else{
+	}else{
 		Debug::error() << "ReaderInputPort::connect error: one of the port is disabled!" << endl();
 		return false;
 	}
@@ -70,7 +72,7 @@ bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 
 bool ReaderInputPort::connect(ReaderOutputPort* outputPort)
 {
-	ScopedBlockMacro( __scop, "ReaderInputPort::connect" )
+	ScopedBlockMacro( __scop, "ReaderInputPort::connect*" )
 	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
 		if( isCompatible( *outputPort ) )
 			return PortConnector::connect( outputPort );
@@ -100,17 +102,20 @@ Node* ReaderInputPort::node() const
 
 Tags ReaderInputPort::tags() const
 {
+	ScopedBlockMacro(scop,"ReaderInputPort::tags")
 	return node()->readerInputTags( index() ); // TODO (subport ?)
 }
 
 bool ReaderInputPort::isCompatible(ReaderOutputPort& output)	
-{ 
+{
+	ScopedBlockMacro(scop, "ReaderInputPort::isCompatible");
 	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
 }
 
 
 bool ReaderInputPort::isCompatible(const kiwi::Tags& tag)	
-{ 
+{
+	ScopedBlockMacro(scop, "ReaderInputPort::isCompatible");
 	return ( tags().hasOneOf(tag + Tags("#any") ) );
 }
 

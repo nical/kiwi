@@ -71,7 +71,9 @@ public:
 	/**
 	 * Returns the stride of a given dimension.
 	 */
-	virtual kiwi::uint32_t stride(kiwi::uint32_t dimension) const = 0;
+	virtual kiwi::uint32_t stride(kiwi::uint32_t dimension) const {
+		stride().coordinate(dimension);
+	}
 	
 
 	kiwi::Tags tags() const

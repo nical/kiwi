@@ -13,9 +13,10 @@
 #define KIWI_CAIROIMAGECONTAINER_HPP
 
 #include <cairo.h>
-#include "kiwi/generic/StructuredArrayContainer.hpp"
+#include "kiwi/generic/ArrayContainer.hpp"
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/core/Tags.hpp"
+#include "kiwi/image/RGBA32Fragment.hpp"
 
 
 namespace kiwi{
@@ -32,13 +33,14 @@ namespace cairo{
  * This Container is compatible with generic::ArrayReader and
  * generic::ArrayWriter.
  */
-class RGBAImageContainer : public generic::StructuredArrayContainer<uint8_t, 2>
+class RGBAImageContainer : public generic::ArrayContainerInterface<RGBA32Fragment, 2>
 {
 public:
 
-	typedef uint32_t ValueType;
+	typedef RGBA32Fragment ValueType;
 	static const kiwi::uint32_t Dimension = 2;
-	typedef generic::StructuredArrayContainer<uint8_t, 2> MotherClass;
+	typedef generic::ArrayContainerInterface<uint8_t, 2> MotherClass;
+	typedef generic::ArrayContainer<uint8_t, 2> ColorChannel;
 	typedef MotherClass::CoordinateVector CoordinateVector;
 	typedef MotherClass::StrideVector StrideVector;
 
@@ -52,19 +54,12 @@ public:
 	/**
 	 * @brief Constructor (allocates the data).
 	 */
-	RGBAImageContainer(const kiwi::string& file){
-		loadPng(file);
-		_data = cairo_image_surface_get_data (_surface);
-		
-		MotherClass::init( _data
-			, CoordinateVector(width(), height())
-			,"[R%G%B%A]");
-	}
+	RGBAImageContainer(const kiwi::string& file);
 
 	/**
 	 * @brief Constructor (use pre-allocated data).
 	 */
-	RGBAImageContainer(kiwi::uint8_t* data, const CoordinateVector& size);
+	RGBAImageContainer(RGBA32Fragment* data, const CoordinateVector& size);
 
 	/**
 	 * @brief Destructor.
@@ -95,12 +90,12 @@ public:
 	/**
 	 * @brief Returns the image's width.
 	 */
-	kiwi::uint32_t width() const; // { return _spanSize(0); }
+	kiwi::uint32_t width() const;
 
 	/**
 	 * @brief Returns the image's height.
 	 */
-	kiwi::uint32_t height() const; // { return _spanSize(1); }
+	kiwi::uint32_t height() const;
 
 
 
@@ -117,14 +112,39 @@ public:
 
 	virtual bool isComposite() const { return true; }
 
+	virtual kiwi::uint32_t nbSubContainers() const { return 4; }
 
+	virtual kiwi::core::Container* subContainer(kiwi::uint32_t index);
+
+	
+	virtual kiwi::uint32_t size() const { return width() * height(); }
+	
+	virtual CoordinateVector spanSize() const;
+
+
+	//data access
+	virtual RGBA32Fragment* const getDataPointer() const;
+
+	virtual StrideVector stride() const;
+	
+	virtual RGBA32Fragment getValue( kiwi::uint32_t pos ) const ;
+	virtual void setValue( kiwi::uint32_t pos, RGBA32Fragment value ) ;
+
+	virtual RGBA32Fragment getValue( const CoordinateVector& pos ) const;
+	virtual void setValue( const CoordinateVector& pos, RGBA32Fragment value );
+
+	
+	//factory
 	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
 
 
 protected:
 	cairo_surface_t *_surface;
 	cairo_t* _context;
+	RGBA32Fragment* _dataPtr;
+	std::vector<ColorChannel*> _subContainers;
 
+	void initSubContainers();
 };
 
 

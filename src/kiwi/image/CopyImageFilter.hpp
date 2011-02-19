@@ -53,10 +53,6 @@ public:
 		Debug::endBlock();
 		Debug::print() << "\n\n";
 
-		//Debug
-		kiwi::generic::StructuredArrayContainer<kiwi::uint8_t,2>* plop = dynamic_cast<kiwi::generic::StructuredArrayContainer<kiwi::uint8_t,2>*>(a);
-		assert(!plop);
-
 		Debug::error() << "\n   r.stride = " << r->stride().toStr() << endl(); 		
 		Debug::error() << "\n   g.stride = " << g->stride().toStr() << endl(); 		
 		Debug::error() << "\n   b.stride = " << b->stride().toStr() << endl(); 		
@@ -69,6 +65,8 @@ public:
 		if(!r) Debug::print() << "red channel not found\n";
 		if(!g) Debug::print() << "green channel not found\n";
 		if(!b) Debug::print() << "blue channel not found\n";
+
+		Debug::print() << "looouuutre\n";
 
 		if(!result){
 			Debug::print() << "Allocate result container\n";
@@ -87,22 +85,23 @@ public:
 			setPortContainer(readerOutputPort(0), result );
 		}
 		cairo_surface_flush( result->getSurface() );
+
+		Debug::print() << "looouuutre\n";
 		
 		//debug:
-			a = 0;// b = 0; r = 0; g = 0;
+			//a = 0;// b = 0; r = 0; g = 0;
 		//
 		for(kiwi::uint32_t x = 0; x < result->width(); ++x)
 			for(kiwi::uint32_t y = 0; y < result->height(); ++y){
-
+				//Debug::print() << "#";
 				kiwi::uint8_t va = a? a->getValue(CoordinateVector(x,y)) : 255; 
 				kiwi::uint8_t vr = r? r->getValue(CoordinateVector(x,y)) : 0; 
 				kiwi::uint8_t vg = g? g->getValue(CoordinateVector(x,y)) : 0; 
 				kiwi::uint8_t vb = b? b->getValue(CoordinateVector(x,y)) : 0; 
-				
-				result->setValue(CoordinateVector(x*4,y), vb);
-				result->setValue(CoordinateVector(x*4+1,y), vg);
-				result->setValue(CoordinateVector(x*4+2,y), vr);
-				result->setValue(CoordinateVector(x*4+3,y), va);
+				//Debug::print() << "x";
+				RGBA32Fragment f(vr,vg,vb,va);
+				result->setValue(CoordinateVector(x,y), f);
+				//Debug::print() << "-";
 			}
 		cairo_surface_mark_dirty(result->getSurface() );
 

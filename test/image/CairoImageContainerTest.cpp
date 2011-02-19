@@ -1,5 +1,6 @@
 
 #include "kiwi/image/cairo/ImageContainer.hpp"
+#include "kiwi/generic/ArrayContainer.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Filter.hpp"
 
@@ -16,20 +17,26 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 
 	RGBAImageContainer img1( CoordinateVector(80,60) );
 	Debug::print() << img1.width() << " "<< img1.spanSize()[0] << endl();
-	assert( img1.width()*4 == img1.spanSize()[0] );
+	assert( img1.width() == img1.spanSize()[0] );
 	assert( img1.width() == 80 );
 
 	assert( img1.height() == img1.spanSize()[1] );
 	assert( img1.height() == 60 );
+
+	Debug::print() << "plop\n";
 
 	ChannelBuffer* B = (ChannelBuffer*)img1.subContainer(0);
 	ChannelBuffer* G = (ChannelBuffer*)img1.subContainer(1);
 	ChannelBuffer* R = (ChannelBuffer*)img1.subContainer(2);
 	ChannelBuffer* A = (ChannelBuffer*)img1.subContainer(3);
 
+	Debug::print() << "plop\n";
+
 	for(int i = 0; i < img1.size(); ++i ){
-		img1.setValue(i, 0);
+		img1.setValue(i, RGBA32Fragment(0,0,0,255) );
 	}
+
+	Debug::print() << "plop\n";
 
 	for(kiwi::uint32_t i = 0; i < R->spanSize(0); ++i)
 		for(kiwi::uint32_t j = 0; j < R->spanSize(1); ++j){
@@ -57,7 +64,7 @@ ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
 		}
 
 	for(int i = 0; i < img1.size(); ++i ){
-		Debug::print() << (int)img1.getValue(i);
+		Debug::print() << img1.getValue(i).toStr();
 	}
 
 	img1.saveToPng("imgTest1.png");

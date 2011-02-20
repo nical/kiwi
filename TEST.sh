@@ -8,6 +8,7 @@ cd ./build/test
 ./generic/StructuredArrayContainerTest && 
 ./generic/PointTest &&
 ./generic/ValueContainerTest &&
+./generic/PointVectorContainerTest &&
 ./image/CairoImageContainerTest &&
 ./text/PlainTextContainerTest &&
 ./utils/ConnectorTest &&

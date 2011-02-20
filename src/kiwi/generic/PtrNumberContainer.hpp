@@ -16,7 +16,7 @@ class PtrNumberContainer : public NumberContainerInterface<TValueType>
 {
 public:
 	typedef TValueType ValueType;
-new 
+
 	PtrNumberContainer( ValueType* ptr ) : _data(ptr) {}
 	PtrNumberContainer(){
 		_data = 0;

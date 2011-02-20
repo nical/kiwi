@@ -47,6 +47,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	generic/StructuredArrayContainerTest
 	generic/MultiArrayContainerTest
 	generic/ValueContainerTest
+	generic/PointVectorContainerTest
    )
 
 message("Kiwi Library : ${LIBKIWI_NAME}")

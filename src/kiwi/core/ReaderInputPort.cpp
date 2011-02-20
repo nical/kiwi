@@ -103,7 +103,7 @@ Node* ReaderInputPort::node() const
 Tags ReaderInputPort::tags() const
 {
 	ScopedBlockMacro(scop,"ReaderInputPort::tags")
-	return node()->readerInputTags( index() ); // TODO (subport ?)
+	return node()->readerInputTags( index() );
 }
 
 bool ReaderInputPort::isCompatible(ReaderOutputPort& output)	

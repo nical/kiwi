@@ -65,7 +65,7 @@ public:
 
 	/**
 	 * @brief Constructor.
-	 * @todo The second argument will disapear in next version.
+	 * 
 	 */ 
 	ReaderInputPort(Node* myNode);
 	
@@ -95,9 +95,7 @@ public:
 	 * @brief Returns this port's Type as a string.
 	 */ 
 	Tags tags() const;
-	// TODO this is a temporary solution for port compatibility
-	// a more flexible version is to come with use of polymorphism 
-	// to get compatibility of child classes.
+
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 

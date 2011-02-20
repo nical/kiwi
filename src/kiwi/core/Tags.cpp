@@ -6,7 +6,6 @@ namespace kiwi{
 
 void Tags::init(char const* str)
 {
-	Debug::error() << "Tags::init :)\n";
 	kiwi::uint32_t start = 0;
 	kiwi::uint32_t i = 1;
 	kiwi::uint32_t nbTags = 0;
@@ -53,7 +52,7 @@ Tags Tags::tag(kiwi::uint32_t index) const
 
 kiwi::string Tags::str() const
 {
-	ScopedBlockMacro( scop, "Tags::str" ) // TODOTODTODO segfault here
+	//ScopedBlockMacro( scop, "Tags::str" )
 	kiwi::string result("");
 	for(uint32_t i = 0; i < _data.size(); ++i)
 		result += _data[i];

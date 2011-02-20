@@ -43,7 +43,7 @@ public:
 	typedef generic::ArrayContainer<uint8_t, 2> ColorChannel;
 	typedef MotherClass::CoordinateVector CoordinateVector;
 	typedef MotherClass::StrideVector StrideVector;
-
+	enum{ R = 0, V = 1, B = 2, A = 3 };
 	
 	// ----------------------------------------- Constructors/destructor
 	/**

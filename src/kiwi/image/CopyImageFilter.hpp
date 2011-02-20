@@ -86,22 +86,14 @@ public:
 		}
 		cairo_surface_flush( result->getSurface() );
 
-		Debug::print() << "looouuutre\n";
-		
-		//debug:
-			//a = 0;// b = 0; r = 0; g = 0;
-		//
 		for(kiwi::uint32_t x = 0; x < result->width(); ++x)
 			for(kiwi::uint32_t y = 0; y < result->height(); ++y){
-				//Debug::print() << "#";
 				kiwi::uint8_t va = a? a->getValue(CoordinateVector(x,y)) : 255; 
 				kiwi::uint8_t vr = r? r->getValue(CoordinateVector(x,y)) : 0; 
 				kiwi::uint8_t vg = g? g->getValue(CoordinateVector(x,y)) : 0; 
 				kiwi::uint8_t vb = b? b->getValue(CoordinateVector(x,y)) : 0; 
-				//Debug::print() << "x";
 				RGBA32Fragment f(vr,vg,vb,va);
 				result->setValue(CoordinateVector(x,y), f);
-				//Debug::print() << "-";
 			}
 		cairo_surface_mark_dirty(result->getSurface() );
 

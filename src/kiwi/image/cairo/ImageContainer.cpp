@@ -4,7 +4,7 @@
 
 namespace kiwi{
 namespace image{
-namespace cairo{	
+namespace cairo{
 
 /*
 kiwi::core::Node* newCairoImageNode(){
@@ -191,19 +191,12 @@ RGBAImageContainer::~RGBAImageContainer()
 {
 	// TODO: generates an error within reference counting cairo internals
 	// see cairo_surface_make_dirty or something like this, it might help...
-	/*
+	
 	cairo_destroy( _context );
 	cairo_surface_destroy( _surface );
-	*/ 
+	 
 }
 
-/*
-uint8_t* const 
-RGBAImageContainer::getDataPointer(portIndex_t index) const
-{
-	return cairo_image_surface_get_data( _surface ) + index;   
-}
-*/
 
 
 

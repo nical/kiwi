@@ -11,7 +11,6 @@ namespace utils
 {	
 
 
-
 template <typename T>
 T modulo(T inValue, T modulo)
 {
@@ -39,6 +38,12 @@ T modulo(T inValue, T modulo)
 } // namespace
 } // namespace
 
+
+// TODO, see how this might help
+int fastModulo(int edge) // modulo 3
+{
+     return ((edge&1)<<1) | ((~(edge+1)&2) >>1);
+}
 
 
 /*

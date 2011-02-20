@@ -29,8 +29,6 @@
 #ifndef KIWI_CORE_WRITEROUTPUTPORT_HPP
 #define KIWI_CORE_WRITEROUTPUTPORT_HPP
 
-//#include "kiwi/core/Node.hpp"
-
 #include <list>
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
@@ -103,26 +101,7 @@ friend class WriterInputPort;
 		return _associatedReaderOutputPort;
 	}
 	
-	/**
-	 * @brief Returns a pointer to the port that catually contains the Data.
-	 * 
-	 * If this port is binded to another port, then this method returns
-	 * A pointer to this other port. If this port is not binded, then
-	 * this returns a pointer to self.
-	 * 
-	 * This method is to be used whenever you need to access the port that
-	 * is directly linked to the data. When a port A is binded to another
-	 * port B, it means that A's Node doesn't contain the data whereas B
-	 * (or another port C that B is binded to) has it. subPort() is called
-	 * recursively untill the Node containing the data is found and returns
-	 * the pointer to the corresponding port.
-	 * 
-	 * So this method MUST be used when accessing a Node's data through its
-	 * port (when initializing Writers and Writers for instance) because
-	 * you don't know if the node doesn't encapsulate other Nodes that
-	 * actually contain the Data and bind it's ports to it.
-	 */ 
-//	const WriterOutputPort* subPort() const ;
+
 	/**
 	 * @brief Returns this port's Type as a string.
 	 */ 
@@ -168,15 +147,6 @@ protected:
 
 	void setData( Container* data );
 	
-	/**
-	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
-	 * 
-	 * @see kiwi::core::setWriterInputPortEnabled
-	 * @see kiwi::core::setWriterOutputPortEnabled
-	 * @see kiwi::core::setWriterInputPortEnabled
-	 * @see kiwi::core::setWriterOutputPortEnabled
-	 */
-	void setEnabled(bool status); // deprecated
 	
 private:
 	Node* _node;
@@ -187,8 +157,6 @@ private:
 	utils::UnorderedArray<WriterOutputPort*> _subPorts;
 	// to associate Writer and Reader of the same data
 	ReaderOutputPort* _associatedReaderOutputPort;
-	// internal state (deprecated)
-	bool _enabled;
 };
 
 

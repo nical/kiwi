@@ -43,7 +43,6 @@ ScopedBlockMacro(__scp, "kiwi::ImageContainer Test" );
 	int count = 0;
 	for(kiwi::uint32_t i = 0; i < R->spanSize(0); ++i)
 		for(kiwi::uint32_t j = 0; j < R->spanSize(1); ++j){
-			//Debug::print() << "R"<< count++;
 			R->setValue(CoordinateVector(i,j), 42 );
 		}
 
@@ -63,8 +62,15 @@ ScopedBlockMacro(__scp, "kiwi::ImageContainer Test" );
 			A->setValue(CoordinateVector(i,j), 255 );
 		}
 
-	for(int i = 0; i < img1.size(); ++i ){
-		Debug::print() << img1.getValue(i).toStr();
+	Pixel expected(42,222,111,255);
+	for(kiwi::uint32_t i = 0; i < img1.width(); ++i)
+		for(kiwi::uint32_t j = 0; j < img1.height(); ++j){
+			Debug::print() << img1.getValue( CoordinateVector(i,j) ).toStr();
+			Pixel pix = img1.getValue( CoordinateVector(i,j) );
+			assert(pix.r == expected.r);
+			assert(pix.g == expected.g);
+			assert(pix.b == expected.b);
+			assert(pix.a == expected.a);
 	}
 
 	

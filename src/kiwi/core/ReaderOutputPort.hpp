@@ -69,7 +69,6 @@ friend class WriterInputPort;
 	// --------------------------------------------------------------------
 	/**
 	 * @brief Constructor.
-	 * @todo The second argument will disapear in next version.
 	 */ 
 	ReaderOutputPort(Node* myNode, Container* data = 0);
 	/**
@@ -99,26 +98,6 @@ friend class WriterInputPort;
 	template<class T>
 	T* getContainer() { return dynamic_cast<T*>(_container); }
 	
-	/**
-	 * @brief Returns a pointer to the port that catually contains the Data.
-	 * 
-	 * If this port is binded to another port, then this method returns
-	 * A pointer to this other port. If this port is not binded, then
-	 * this returns a pointer to self.
-	 * 
-	 * This method is to be used whenever you need to access the port that
-	 * is directly linked to the data. When a port A is binded to another
-	 * port B, it means that A's Node doesn't contain the data whereas B
-	 * (or another port C that B is binded to) has it. subPort() is called
-	 * recursively untill the Node containing the data is found and returns
-	 * the pointer to the corresponding port.
-	 * 
-	 * So this method MUST be used when accessing a Node's data through its
-	 * port (when initializing Readers and Writers for instance) because
-	 * you don't know if the node doesn't encapsulate other Nodes that
-	 * actually contain the Data and bind it's ports to it.
-	 */ 
-//	const ReaderOutputPort* subPort() const ;
 	/**
 	 * @brief Returns this port's Type as a string.
 	 */ 
@@ -162,24 +141,16 @@ protected:
 
 	void unBind();
 
-	void setData( Container* data );
-	
 	/**
-	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
-	 * 
-	 * @see kiwi::core::setReaderInputPortEnabled
-	 * @see kiwi::core::setReaderOutputPortEnabled
-	 * @see kiwi::core::setWriterInputPortEnabled
-	 * @see kiwi::core::setWriterOutputPortEnabled
-	 */
-	void setEnabled(bool status);
+	 * @brief Sets this port's container.
+	 */ 
+	void setData( Container* data );
 	
 private:
 	Node* _node;
 	Container* _container; 
 	utils::UnorderedArray<ReaderOutputPort*> _linkedOutputPorts;
 	utils::UnorderedArray<ReaderOutputPort*> _subPorts;
-	bool _enabled;
 };
 
 

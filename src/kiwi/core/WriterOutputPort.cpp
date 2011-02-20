@@ -42,8 +42,7 @@ namespace core{
 
 
 WriterOutputPort::WriterOutputPort( Node* myNode, Container* data )
-	: _enabled(true)
-	, _node(myNode)
+	: _node(myNode)
 	, _container(data)
 	, _associatedReaderOutputPort(0)
 {
@@ -51,13 +50,11 @@ WriterOutputPort::WriterOutputPort( Node* myNode, Container* data )
 	if(!data){
 		Debug::print() << "WriterOutputPort::constructor: warning: data = 0\n";
 	}
-	// nothing else to do
 }
 
 
 void WriterOutputPort::bind(WriterOutputPort& port)
 {
-//	Debug::print() << "port binding" << endl();
 	_container = port._container;
 	port._linkedOutputPorts.add( this );
 }
@@ -140,13 +137,7 @@ bool WriterOutputPort::connect(WriterInputPort* inputPort)
 
 bool WriterOutputPort::isEnabled() const 
 { 
-	return _enabled; 
-}
-
-
-void WriterOutputPort::setEnabled(bool status) 
-{
-	_enabled = status;
+	_container != 0; 
 }
 
 }// namespace

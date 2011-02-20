@@ -42,8 +42,7 @@ namespace core{
 
 
 ReaderOutputPort::ReaderOutputPort( Node* myNode, Container* data )
-	: _enabled(true)
-	, _node(myNode)
+	:_node(myNode)
 {
 	ScopedBlockMacro(scop,"ReaderOutputPort::constructor")
 	if(!data){
@@ -113,13 +112,11 @@ Node* ReaderOutputPort::node() const
 
 Tags ReaderOutputPort::tags() const
 {
-	ScopedBlockMacro(scop, "ReaderOutputPort::tags")
 	if(_container){
-		ScopedBlockMacro(scop2, "hot spot...")
 		return _container->tags(); 
 	}else{
 		Debug::error() << "ReaderOutputPort::tags: warning: no container available\n"; 
-		return Tags("#undefined"); // very restrictive but should not occur
+		return Tags("#undefined");
 	}
 }
 
@@ -155,12 +152,6 @@ bool ReaderOutputPort::connect(ReaderInputPort* inputPort)
 bool ReaderOutputPort::isEnabled() const 
 { 
 	return _container != 0; 
-}
-
-
-void ReaderOutputPort::setEnabled(bool status) // DEPRECATED
-{
-	_enabled = status;
 }
 
 }// namespace

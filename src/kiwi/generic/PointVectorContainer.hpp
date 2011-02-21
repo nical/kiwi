@@ -17,9 +17,22 @@ class PointVectorContainer
 	: public kiwi::core::Container
 	, public kiwi::generic::Point<TValueType, TDimension>
 {
+public:
 	typedef TValueType ValueType;
+	typedef kiwi::generic::Point<TValueType, TDimension> PointType;
 	enum{ Dimension = TDimension };
+
+	PointVectorContainer(){
+		for(kiwi::uint32_t i = 0; i < Dimension; ++i)
+			PointType::coordinate(i) = 0;
+		initSubContainers();
+	}
 	
+	PointVectorContainer( PointType init ){
+		for(kiwi::uint32_t i = 0; i < Dimension; ++i)
+			PointType::coordinate(i) = init.coordinate(i);
+		initSubContainers();	
+	}
 	
 	virtual Tags tags()const{
 		return Tags("#point#vector");
@@ -45,6 +58,11 @@ class PointVectorContainer
 
 protected:
 	kiwi::generic::PtrNumberContainer<ValueType> _subContainers[Dimension] ;
+
+	inline void initSubContainers(){
+		for(kiwi::uint32_t i = 0; i < Dimension; ++i)
+			_subContainers[i].init(&PointType::_coordinates[i]);
+	}
 };
 
 }//namespace

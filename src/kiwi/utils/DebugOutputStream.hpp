@@ -100,6 +100,19 @@ public:
 	{
 		return std::cerr << prefixEmphase() << indent() ;
 	}
+
+	static void plop()
+	{
+		print() << "plop\n";
+	}
+	static void foo()
+	{
+		print() << "foo\n";
+	}
+	static void bar()
+	{
+		print() << "bar\n";
+	}
 	
 	static void endl(char n = 1)
 	{

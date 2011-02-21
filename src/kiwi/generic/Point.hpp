@@ -120,6 +120,10 @@ public:
 	/**
 	 * @brief Returns a reference to the index'th coordinate.
 	 */ 
+	inline CoordType coordinate(unsigned int index) const {return _coordinates[index];}
+	/**
+	 * @brief Returns a reference to the index'th coordinate.
+	 */ 
 	inline CoordType& operator[](unsigned int index){return _coordinates[index];}
 	/**
 	 * @brief Returns a copy of the index'th coordinate.

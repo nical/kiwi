@@ -59,7 +59,6 @@ bool WriterInputPort::connect(WriterOutputPort& outputPort)
 			if( _associatedReaderOutputPort
 				&& outputPort.associatedReaderOutputPort() )
 			{
-				Debug::print() << "--- plop --- \n";
 				_associatedReaderOutputPort->bind(
 					*outputPort.associatedReaderOutputPort() );
 			}	

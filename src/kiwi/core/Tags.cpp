@@ -29,13 +29,13 @@ void Tags::init(char const* str)
 
 Tags::Tags(char const* str)
 {
-	ScopedBlockMacro(scop,"Tags::constructor(char*)")
+	//ScopedBlockMacro(scop,"Tags::constructor(char*)")
 	init( str );
 }
 
 Tags::Tags(const kiwi::string& str)
 {
-	ScopedBlockMacro(scop,"Tags::constructor(string)")
+	//ScopedBlockMacro(scop,"Tags::constructor(string)")
 	init( str.c_str() );
 }
 

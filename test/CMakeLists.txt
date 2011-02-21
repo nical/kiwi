@@ -40,6 +40,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	image/ImageContainerTest
 	image/MixedImageTest
 	image/CopyImageTest
+	image/ChannelOffsetFilterTest
 	core/FilterTest
 #	core/MetaFilterTest
 	generic/PointTest

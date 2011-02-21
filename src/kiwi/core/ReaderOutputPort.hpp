@@ -88,12 +88,14 @@ friend class WriterInputPort;
 	bool isComposite() const ;
 
 	ReaderOutputPort& subPort(kiwi::uint32_t i){
-		if(i >= _subPorts.size() )
+		if(i >= _subPorts.size() ){
+			Debug::error() << "ReaderOutputPort::subPort: subPort not found!\n";
 			return *this;
+		}
 		return *_subPorts[i];
 	}
 
-	kiwi::uint32_t nbSubPort() const { return _subPorts.size(); }
+	kiwi::uint32_t nbSubPorts() const { return _subPorts.size(); }
 
 	template<class T>
 	T* getContainer() { return dynamic_cast<T*>(_container); }

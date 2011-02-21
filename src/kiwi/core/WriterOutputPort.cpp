@@ -43,13 +43,13 @@ namespace core{
 
 WriterOutputPort::WriterOutputPort( Node* myNode, Container* data )
 	: _node(myNode)
-	, _container(data)
 	, _associatedReaderOutputPort(0)
 {
 	ScopedBlockMacro(scop, "WriterOutputPort::constructor")
 	if(!data){
 		Debug::print() << "WriterOutputPort::constructor: warning: data = 0\n";
 	}
+	setData(data);
 }
 
 
@@ -69,11 +69,14 @@ void WriterOutputPort::unBind()
 
 void WriterOutputPort::setData( Container* data )
 {
+	ScopedBlockMacro(scop,"WriterOutputPort::setData")
+	if(!data) Debug::print() << "warning: param data = 0\n";
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
 		_linkedOutputPorts[i]->setData( data );
 
 	_container = data;
 	if( data->isComposite() ){
+		Debug::print() << "the data is composite ("<<data->nbSubContainers()<<")\n"; 
 		for(kiwi::uint32_t i = 0; i < data->nbSubContainers(); ++i){
 			_subPorts.add(new WriterOutputPort(_node, data->subContainer(i)));
 		}
@@ -104,7 +107,12 @@ Node* WriterOutputPort::node() const
 
 Tags WriterOutputPort::tags() const
 { 
-	return _node->writerOutputTags( index() ); 
+	if(_container){
+		return _container->tags(); 
+	}else{
+		Debug::error() << "WriterOutputPort::tags: warning: no container available\n"; 
+		return Tags("#undefined");
+	}
 }
 
 
@@ -116,7 +124,7 @@ bool WriterOutputPort::isCompatible(WriterInputPort& input)
 
 bool WriterOutputPort::connect(WriterInputPort& inputPort)
 {
-	ScopedBlockMacro( __scop, "WriterOutputPort::connect" )
+	ScopedBlockMacro(scop, "WriterOutputPort::connect" )
 	if( isEnabled() && inputPort.isEnabled() ){
 		if( isCompatible( inputPort ) )
 			return PortConnector::connect( &inputPort);
@@ -126,7 +134,7 @@ bool WriterOutputPort::connect(WriterInputPort& inputPort)
 
 bool WriterOutputPort::connect(WriterInputPort* inputPort)
 {
-	ScopedBlockMacro( __scop, "WriterOutputPort::connect" )
+	ScopedBlockMacro(scop, "WriterOutputPort::connect" )
 	if( (inputPort != 0) && (isEnabled() && inputPort->isEnabled()) ){
 		if( isCompatible( *inputPort ) )
 			return PortConnector::connect( inputPort );

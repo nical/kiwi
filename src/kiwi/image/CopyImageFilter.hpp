@@ -32,12 +32,10 @@ public:
 
 	void process(){
 		ScopedBlockMacro(scop,"CopyImageFilter::process")
-		//typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> ColorBuffer;
-		typedef kiwi::generic::ArrayContainer<kiwi::uint8_t,2> ColorBuffer;
+		typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> ColorBuffer;
+		//typedef kiwi::generic::ArrayContainer<kiwi::uint8_t,2> ColorBuffer;
 		typedef kiwi::generic::Point<kiwi::uint32_t, 2> CoordinateVector;
 
-		Debug::print() << "\n\n";
-		Debug::beginBlock();
 		ColorBuffer* r
 			= readerInputPort(R).connectedOutput()
 				->getContainer<ColorBuffer>();
@@ -50,13 +48,7 @@ public:
 		ColorBuffer* a
 			= readerInputPort(A).connectedOutput()
 				->getContainer<ColorBuffer>();
-		Debug::endBlock();
-		Debug::print() << "\n\n";
-
-		Debug::error() << "\n   r.stride = " << r->stride().toStr() << endl(); 		
-		Debug::error() << "\n   g.stride = " << g->stride().toStr() << endl(); 		
-		Debug::error() << "\n   b.stride = " << b->stride().toStr() << endl(); 		
-
+		
 		kiwi::image::cairo::RGBAImageContainer* result
 			= writerInputPort(0).connectedOutput()
 				->getContainer<kiwi::image::cairo::RGBAImageContainer>();
@@ -65,8 +57,6 @@ public:
 		if(!r) Debug::print() << "red channel not found\n";
 		if(!g) Debug::print() << "green channel not found\n";
 		if(!b) Debug::print() << "blue channel not found\n";
-
-		Debug::print() << "looouuutre\n";
 
 		if(!result){
 			Debug::print() << "Allocate result container\n";
@@ -96,16 +86,12 @@ public:
 				result->setValue(CoordinateVector(x,y), f);
 			}
 		cairo_surface_mark_dirty(result->getSurface() );
-
 	}
 
 	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{
-		Debug::print() << "CopyImageFilter::Tags" << endl();
-		return kiwi::Tags("#any");// TODO
+		return kiwi::Tags("#any");
 	}
 
-protected:
-	
 };
 
 

@@ -53,15 +53,13 @@ bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
 {
 	ScopedBlockMacro( __scop, "ReaderInputPort::connect" )
 	if( isEnabled() && outputPort.isEnabled() ){
-		Debug::print() << "youhou\n";
-		if( isCompatible( outputPort.tags() ) ){ // TODO segfault here
-			Debug::print() << "zoouuup\n";
+		if( isCompatible( outputPort.tags() ) ){
 			return PortConnector::connect( &outputPort );
 		}else{
 			Debug::error()
 				<< "ReaderInputPort::connect error: uncompatible port tags!" <<endl()
 				<< "   input: " << tags().str() <<endl()
-				<< "   soutput: " << outputPort.tags().str() << endl();
+				<< "   output: " << outputPort.tags().str() << endl();
 			return false;
 		}
 	}else{

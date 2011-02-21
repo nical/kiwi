@@ -117,10 +117,12 @@ Point<T,D> Point<T,D>::cube(CoordType val){
 template <typename T, unsigned int D>
 Point<T,D> Point<T,D>::operator + (const Point<T,D>& point)
 {
+/*	
 ScopedBlockMacro(__scop, kiwi::string("Point<")
 		+types::str<T>()+","
 		+boost::lexical_cast<kiwi::string>(D)
 		+">::operator + (Point)")
+*/ 
 	Point<T,D> res;
 	for(unsigned int i = 0; i < D; ++i)
 	{
@@ -164,11 +166,12 @@ void Point<T,D>::operator -= (const Point<T,D>& point)
 template <typename T, unsigned int D>
 bool Point<T,D>::operator == (const Point<T,D>& point)
 {
-
+/*
 ScopedBlockMacro(__scop, kiwi::string("Point<")
 		+types::str<T>()+","
 		+boost::lexical_cast<kiwi::string>(D)
 		+">::operator == (Point)")
+*/
 	for(unsigned int i = 0; i < D; ++ i)
 	{
 		if(_coordinates[i] != point._coordinates[i]) return false;

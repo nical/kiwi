@@ -48,7 +48,10 @@ public:
 		ColorBuffer* a
 			= readerInputPort(A).connectedOutput()
 				->getContainer<ColorBuffer>();
+
+		Debug::plop();
 		
+		assert( writerInputPort(0).connectedOutput() );
 		kiwi::image::cairo::RGBAImageContainer* result
 			= writerInputPort(0).connectedOutput()
 				->getContainer<kiwi::image::cairo::RGBAImageContainer>();
@@ -57,6 +60,8 @@ public:
 		if(!r) Debug::print() << "red channel not found\n";
 		if(!g) Debug::print() << "green channel not found\n";
 		if(!b) Debug::print() << "blue channel not found\n";
+
+		Debug::plop();
 
 		if(!result){
 			Debug::print() << "Allocate result container\n";
@@ -75,6 +80,8 @@ public:
 			setPortContainer(readerOutputPort(0), result );
 		}
 		cairo_surface_flush( result->getSurface() );
+
+		Debug::plop();
 
 		for(kiwi::uint32_t x = 0; x < result->width(); ++x)
 			for(kiwi::uint32_t y = 0; y < result->height(); ++y){

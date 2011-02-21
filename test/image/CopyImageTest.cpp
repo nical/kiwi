@@ -45,15 +45,14 @@ void CopyImageTest()
 	inputDataNode.readerOutputPort(0).subPort(2) >> filter.readerInputPort(2);
 	inputDataNode.readerOutputPort(0).subPort(3) >> filter.readerInputPort(3);
 
-	//inputData.subContainer(0)->readerInputPort(0);
-	
-
 	cairo::RGBAImageContainer result(
 		CoordinateVector( inputData.width(), inputData.height() ) );
 		
 	kiwi::core::Node resultNode(&result);
 
 	resultNode.writerOutputPort(0) >> filter.writerInputPort(0);
+
+	assert( filter.writerInputPort(0).isConnected() );
 
 	filter.process();
 

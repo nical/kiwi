@@ -54,21 +54,25 @@ WriterInputPort::WriterInputPort( Node* myNode )
 bool WriterInputPort::connect(WriterOutputPort& outputPort)
 {
 	ScopedBlockMacro( __scop, "WriterInputPort::connect" )
-	if( isEnabled() && outputPort.isEnabled() )
+	if( isEnabled() && outputPort.isEnabled() ){
 		if( isCompatible( outputPort.tags() ) ){
 			if( _associatedReaderOutputPort
 				&& outputPort.associatedReaderOutputPort() )
 			{
 				_associatedReaderOutputPort->bind(
 					*outputPort.associatedReaderOutputPort() );
-			}	
+			}
 			return PortConnector::connect( &outputPort );
-		}else return false;
-	else return false;
+		}else{
+			Debug::error() << "WriterInputPort::connect: uncompatible port tags\n";
+			return false;
+		}
+	}else return false;
 }
 
 bool WriterInputPort::connect(WriterOutputPort* outputPort)
 {
+	assert(false);
 	ScopedBlockMacro( __scop, "WriterInputPort::connect" )
 	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
 		if( isCompatible( *outputPort ) )
@@ -104,18 +108,18 @@ WriterInputPort::node() const
 
 Tags WriterInputPort::tags() const
 {
-	return node()->writerInputTags( index() ); // TODO (subport ?)
+	return node()->writerInputTags( index() );
 }
 
 bool WriterInputPort::isCompatible(WriterOutputPort& output)	
 { 
-	return ( tags().hasOneOf(output.tags()+Tags("any") ) );
+	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
 }
 
 
 bool WriterInputPort::isCompatible(const kiwi::Tags& tag)	
 { 
-	return ( tags().hasOneOf(tag + Tags("any") ) );
+	return ( tags().hasOneOf(tag + Tags("#any") ) );
 }
 
 /*

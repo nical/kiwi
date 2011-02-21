@@ -36,7 +36,7 @@ void ChannelOffsetTest()
 	resultNode.writerOutputPort(0).subPort(0)		>> f1.writerInputPort(0);
 
 	//typedef kiwi::core::Container TestType;
-	typedef kiwi::generic::ArrayContainerInterface<kiwi::uint8_t,2> TestType;
+	typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> TestType;
 	TestType* ptr =	resultNode.writerOutputPort(0).subPort(0).getContainer<TestType>() ;
 	assert( ptr );
 

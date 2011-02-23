@@ -28,25 +28,29 @@ public:
 		initSubContainers();
 	}
 	
-	PointVectorContainer( PointType init ){
+	PointVectorContainer( const PointType& point ){
+		init( point );
+		initSubContainers();
+	}
+
+	void init( const PointType& point ){
 		for(kiwi::uint32_t i = 0; i < Dimension; ++i)
-			PointType::coordinate(i) = init.coordinate(i);
-		initSubContainers();	
+			PointType::coordinate(i) = point.coordinate(i);
 	}
 	
-	virtual Tags tags()const{
+	virtual Tags tags() const {
 		return Tags("#point#vector");
 	}
 
-	virtual kiwi::uint32_t size() const{
+	virtual kiwi::uint32_t size() const {
 		return Dimension;
 	}
 	
-	virtual kiwi::uint32_t memoryEstimation() const{
+	virtual kiwi::uint32_t memoryEstimation() const {
 		return sizeof(*this);
 	}
 	
-	virtual bool isComposite() const {return true;}
+	virtual bool isComposite() const { return true; }
 
 	virtual kiwi::uint32_t nbSubContainers() const {
 		return Dimension;

@@ -55,7 +55,7 @@ public:
 	/**
 	 * @brief Returns the number of scalar elements in the container.
 	 */ 
-	virtual kiwi::uint32_t size() const = 0;
+	virtual kiwi::uint32_t size() const { return 0; }
 
 	/**
 	 * @brief Returns this container's tags used for runtime compatibility check.

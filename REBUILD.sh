@@ -5,9 +5,9 @@
 # Test if a symbolic link to executable already exist. #
 # If it's true, then remove it.                        #
 ########################################################
-if [ -L "kiwi" ];
+if [ -L "kiwi" ]
 then
-  rm kiwi;
+  rm kiwi
 fi
 
 
@@ -15,9 +15,9 @@ fi
 # Test if a build directory already exist.  #
 # If it's true, then remove it recursively. #
 #############################################
-if [ -d "build" ];
+if [ -d "build" ]
 then
-  rm -rf build/*;
+  rm -rf build/*
 else
   mkdir build;
 fi
@@ -26,16 +26,17 @@ fi
 ###########################
 # Build and install kiwi. #
 ###########################
-cd build;
+cd build
 mkdir test &&
-mkdir test/core;
-mkdir test/generic;
-mkdir test/text;
-mkdir test/image;
-mkdir test/utils;
-mkdir test/audio;
+mkdir test/core
+mkdir test/generic
+mkdir test/text
+mkdir test/image
+mkdir test/utils
+mkdir test/audio
+cp ../utils/inputImageTransp.png test/
 cmake .. &&
 make -j4 &&
 cd .. &&
-ln -s build/src/software/kiwi kiwi;
+ln -s build/src/software/kiwi kiwi
 

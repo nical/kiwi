@@ -1,0 +1,7 @@
+*.cmake
+*.pro.user
+*Makefile*
+*CMakeFiles*
+build/*
+codeblocks/*
+*-build-desktop*

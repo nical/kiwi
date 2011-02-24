@@ -9,6 +9,7 @@
 #include "kiwi/core/Container.hpp"
 #include "kiwi/generic/PtrNumberContainer.hpp"
 
+
 namespace kiwi{
 namespace generic{
 
@@ -20,6 +21,7 @@ class PointVectorContainer
 public:
 	typedef TValueType ValueType;
 	typedef kiwi::generic::Point<TValueType, TDimension> PointType;
+	typedef PointVectorContainer<TValueType, TDimension> Self;
 	enum{ Dimension = TDimension };
 
 	PointVectorContainer(){
@@ -28,14 +30,15 @@ public:
 		initSubContainers();
 	}
 	
+	template<typename T>
+	void init( const Point<T,TDimension>& point ){
+		for(kiwi::uint32_t i = 0; i < Dimension; ++i)
+			PointType::coordinate(i) = point.coordinate(i);
+	}
+
 	PointVectorContainer( const PointType& point ){
 		init( point );
 		initSubContainers();
-	}
-
-	void init( const PointType& point ){
-		for(kiwi::uint32_t i = 0; i < Dimension; ++i)
-			PointType::coordinate(i) = point.coordinate(i);
 	}
 	
 	virtual Tags tags() const {

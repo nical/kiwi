@@ -21,7 +21,7 @@ public:
 	ChannelOffsetFilter(){
 		addReaderInputPort(); // Channel
 		addReaderInputPort(); // displacement vector
-		//addReaderInputPort(); // region
+		addReaderInputPort(); // region
 
 		// Result (channel)
 		kiwi::portIndex_t w_in = addWriterInputPort(); 
@@ -34,29 +34,25 @@ public:
 		typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> ColorBuffer;
 		typedef kiwi::generic::PointVectorContainer<kiwi::uint32_t, 2> PointVectorContainer;
 		typedef kiwi::generic::Point<kiwi::uint32_t, 2> CoordinateVector;
-		typedef kiwi::generic::RectangleContainer<2> RegionContainer;
+		typedef kiwi::generic::RectangleContainer<kiwi::int32_t, 2> RegionContainer;
 
 
-		ColorBuffer* chan
-			= readerInputPort(0).connectedOutput()
-				->getContainer<ColorBuffer>();
+		ColorBuffer* chan = readerInputPort(0).getContainer<ColorBuffer>();
 				
 		PointVectorContainer* vect
-			= readerInputPort(1).connectedOutput()
-				->getContainer<PointVectorContainer>();
-/*
+			= readerInputPort(1).getContainer<PointVectorContainer>();
+
 		RegionContainer* regionInput
-			= readerInputPort(2).connectedOutput()
-				->getContainer<RegionContainer>();
-*/
-		ColorBuffer* result
-			= writerInputPort(0).connectedOutput()
-				->getContainer<ColorBuffer>();
+			= readerInputPort(2).getContainer<RegionContainer>();
+
+		ColorBuffer* result	= writerInputPort(0).getContainer<ColorBuffer>();
 				
 		if(!chan) Debug::print() << "input channel not found\n";
 		if(!vect) Debug::print() << "input offset vector not found\n";
-//		if(!regionInput) Debug::print() << "input region not found\n";
+		if(!regionInput) Debug::print() << "input region not found\n";
 		if(!result) Debug::print() << "output channel not found\n";
+
+		Debug::plop();
 
 		if(!result){
 			Debug::print() << "Allocate result container\n";
@@ -66,16 +62,24 @@ public:
 				setPortContainer(readerOutputPort(0), result );
 			}else { return; }
 		}
-/*
-		CoordinateVector topLeft;
-
-		if(!regionInput){
-			topLeft = 
+		
+		Debug::plop();
+		
+		generic::Rect<kiwi::int32_t,2> region;
+		if(regionInput){
+			region = regionInput->rect();
+		}else{
+			region.position(0) = 0;
+			region.position(1) = 0;
+			region.size(0) =  result->spanSize()[0];
+			region.size(1) =  result->spanSize()[1];
 		}
-*/		
+
+		Debug::plop();
+		
 		CoordinateVector pos;
-		for(pos(0) = 0; pos(0) < result->spanSize()[0]; ++pos(0))
-			for(pos(1) = 0; pos(1) < result->spanSize()[1]; ++pos(1)){
+		for(pos(0) = region.position(0); pos(0) < region.size(0); ++pos(0))
+			for(pos(1) = region.position(1); pos(1) < region.size(1); ++pos(1)){
 				kiwi::uint32_t val = chan->getValue(pos);
 				CoordinateVector newpos = (pos+*vect) % result->spanSize();
 				result->setValue(newpos, val);

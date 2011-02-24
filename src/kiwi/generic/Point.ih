@@ -32,10 +32,18 @@ namespace kiwi{
 namespace generic{
 
 template <typename T, unsigned int D>
-Point<T,D>::Point(CoordType* data)
+Point<T,D>::Point(CoordType* dataPtr)
 {
-	for(unsigned i = 0; i < D; ++i) _coordinates[i] = data[i];
+	assert(D>0);
+	init(dataPtr);
 }
+
+template <typename T, unsigned int D>
+void Point<T,D>::init(CoordType* dataPtr)
+{
+	for(kiwi::uint32_t i = 0; i < D; ++i) _coordinates[i] = dataPtr[i];
+}
+
 template <typename T, unsigned int D>
 Point<T,D>::Point()
 {
@@ -84,6 +92,7 @@ Point<T,D>::Point(const Point<CoordType,Dimension>& point)
 	for(unsigned i = 0; i < D; ++i) _coordinates[i] = point._coordinates[i];
 }
 
+
 template <typename T, unsigned int D>
 kiwi::string Point<T,D>::toStr() const
 {
@@ -115,7 +124,7 @@ Point<T,D> Point<T,D>::cube(CoordType val){
 	}
 
 template <typename T, unsigned int D>
-Point<T,D> Point<T,D>::operator + (const Point<T,D>& point)
+Point<T,D> Point<T,D>::operator + (const Point<T,D>& point) const
 {
 /*	
 ScopedBlockMacro(__scop, kiwi::string("Point<")
@@ -132,7 +141,7 @@ ScopedBlockMacro(__scop, kiwi::string("Point<")
 }
 
 template <typename T, unsigned int D>
-Point<T,D> Point<T,D>::operator - (const Point<T,D>& point)
+Point<T,D> Point<T,D>::operator - (const Point<T,D>& point) const
 {
 	Point<T,D> res;
 	for(unsigned int i = 0; i < D; ++ i)
@@ -141,7 +150,7 @@ Point<T,D> Point<T,D>::operator - (const Point<T,D>& point)
 }
 
 template <typename T, unsigned int D>
-Point<T,D> Point<T,D>::operator % (const Point<T,D>& point)
+Point<T,D> Point<T,D>::operator % (const Point<T,D>& point) const
 {
 	Point<T,D> res;
 	for(unsigned int i = 0; i < D; ++ i)

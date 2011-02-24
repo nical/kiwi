@@ -7,12 +7,12 @@
 namespace kiwi{
 namespace generic{
 
-template<typename TValueType, unsigned int TDimension>
+template<typename TValueType, unsigned int TDimension, typename AccessType = kiwi::uint32_t>
 class PointAccessContainerInterface : public RandomAccessContainerInterface<TValueType>
 {
 public:
   typedef TValueType ValueType;
-  typedef kiwi::generic::Point<kiwi::uint32_t, TDimension> CoordinateVector;
+  typedef kiwi::generic::Point<AccessType, TDimension> CoordinateVector;
   static const unsigned int Dimension = TDimension;
   // -----
   virtual ValueType getValue( const CoordinateVector& point ) const = 0;

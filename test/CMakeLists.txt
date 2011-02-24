@@ -19,7 +19,8 @@ if(DEFINED BUILD_KIWI_IMAGE)
 		image/CairoImageContainerTest
 		image/MixedImageTest
 		image/CopyImageTest
-		image/ChannelOffsetFilterTest		
+		image/ChannelOffsetFilterTest
+		image/LinearGradientContainerTest
 #		image/ContrastTest
 	)
 endif(DEFINED BUILD_KIWI_IMAGE)

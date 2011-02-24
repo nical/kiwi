@@ -40,6 +40,7 @@
 
 #include "kiwi/core/Commons.hpp"
 #include <assert.h>
+#include <math.h>
 #include <boost/lexical_cast.hpp>
 #include "kiwi/utils/types.hpp"
 #include "kiwi/utils/random.hpp"
@@ -57,6 +58,7 @@ class Point
 public:
 	//typedefs
 	typedef TCoordType CoordType;
+	typedef TCoordType ValueType;
 	static const unsigned int Dimension = TDimension;
 	//zero value
 	static Point<CoordType, TDimension> zero(){return Point<CoordType, Dimension>(0.0);}
@@ -70,6 +72,8 @@ public:
 	 * contain at least TDimension values 
 	 */ 
 	Point(CoordType* data);
+
+	void init( CoordType* data ) ;
 	
 	/**
 	 * @brief Constructor (no initialization)
@@ -141,14 +145,14 @@ public:
 	/**
 	 * @brief Returns the sum of two vectors.
 	 */ 
-	Point<CoordType,TDimension> operator + (const Point<CoordType,TDimension>& point);
+	Point<CoordType,TDimension> operator + (const Point<CoordType,TDimension>& point) const;
 	
 	/**
 	 * @brief Returns the difference between two vectors.
 	 */ 
-	Point<CoordType,TDimension> operator - (const Point<CoordType,TDimension>& point);
+	Point<CoordType,TDimension> operator - (const Point<CoordType,TDimension>& point) const;
 
-	Point<CoordType,TDimension> operator % (const Point<CoordType,TDimension>& point);
+	Point<CoordType,TDimension> operator % (const Point<CoordType,TDimension>& point) const;
 	
 	/**
 	 * @brief Increment this vector with another vector.
@@ -179,6 +183,17 @@ public:
 	 * @brief Returns a string representing this Point.
 	 */
 	kiwi::string toStr() const;
+
+	float length()const{
+		return manhatanLength(); // TODO
+	}
+
+	ValueType manhatanLength() const{
+		ValueType result = 0;
+		for(kiwi::uint32_t i = 0; i < TDimension; ++i){
+			result+=abs(_coordinates[i]);
+		}
+	} 
 
 	
 protected:

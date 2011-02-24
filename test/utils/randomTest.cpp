@@ -15,8 +15,8 @@ int main()
 	int toti = 0;
 	for(int i = 0; i < 100; ++i)
 	{
-		float rf = random::generate<float>(1.0);
-		int ri = random::generate<int>(100);
+		float rf = kiwi::utils::random::generate<float>(1.0);
+		int ri = kiwi::utils::random::generate<int>(100);
 		totf += rf;
 		toti += ri;
 		assert(rf >= 0.0);

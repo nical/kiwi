@@ -17,6 +17,9 @@ link_directories (${PROJECT_BINARY_DIR})
 if(DEFINED BUILD_KIWI_IMAGE)	
 	SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 		image/CairoImageContainerTest
+		image/MixedImageTest
+		image/CopyImageTest
+		image/ChannelOffsetFilterTest		
 #		image/ContrastTest
 	)
 endif(DEFINED BUILD_KIWI_IMAGE)
@@ -37,10 +40,6 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	utils/UnorderedArrayTest
 	utils/typesTest
 	utils/randomTest
-	image/ImageContainerTest
-	image/MixedImageTest
-	image/CopyImageTest
-	image/ChannelOffsetFilterTest
 	core/FilterTest
 #	core/MetaFilterTest
 	generic/PointTest

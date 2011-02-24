@@ -15,6 +15,7 @@
 #include <cairo.h>
 #include "kiwi/generic/ArrayContainer.hpp"
 #include "kiwi/generic/Point.hpp"
+#include "kiwi/generic/PointVectorContainer.hpp"
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/image/RGBA32Fragment.hpp"
 
@@ -116,7 +117,6 @@ public:
 
 	virtual kiwi::core::Container* subContainer(kiwi::uint32_t index);
 
-	
 	virtual kiwi::uint32_t size() const { return width() * height(); }
 	
 	virtual CoordinateVector spanSize() const;
@@ -143,6 +143,7 @@ protected:
 	cairo_t* _context;
 	RGBA32Fragment* _dataPtr;
 	std::vector<ColorChannel*> _subContainers;
+	kiwi::generic::PointVectorContainer<kiwi::uint32_t,2> _sizeContainer;
 
 	void initSubContainers();
 };

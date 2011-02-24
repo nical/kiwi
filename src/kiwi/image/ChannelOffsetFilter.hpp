@@ -6,6 +6,7 @@
 #include "kiwi/core/Filter.hpp"
 #include "kiwi/generic/PointAccessContainerInterface.hpp"
 #include "kiwi/generic/PointVectorContainer.hpp"
+#include "kiwi/generic/RectangleContainer.hpp"
 #include "kiwi/generic/ArrayContainer.hpp"
 
 namespace kiwi{
@@ -20,6 +21,7 @@ public:
 	ChannelOffsetFilter(){
 		addReaderInputPort(); // Channel
 		addReaderInputPort(); // displacement vector
+		//addReaderInputPort(); // region
 
 		// Result (channel)
 		kiwi::portIndex_t w_in = addWriterInputPort(); 
@@ -32,6 +34,8 @@ public:
 		typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> ColorBuffer;
 		typedef kiwi::generic::PointVectorContainer<kiwi::uint32_t, 2> PointVectorContainer;
 		typedef kiwi::generic::Point<kiwi::uint32_t, 2> CoordinateVector;
+		typedef kiwi::generic::RectangleContainer<2> RegionContainer;
+
 
 		ColorBuffer* chan
 			= readerInputPort(0).connectedOutput()
@@ -40,16 +44,20 @@ public:
 		PointVectorContainer* vect
 			= readerInputPort(1).connectedOutput()
 				->getContainer<PointVectorContainer>();
-
+/*
+		RegionContainer* regionInput
+			= readerInputPort(2).connectedOutput()
+				->getContainer<RegionContainer>();
+*/
 		ColorBuffer* result
 			= writerInputPort(0).connectedOutput()
 				->getContainer<ColorBuffer>();
-
+				
 		if(!chan) Debug::print() << "input channel not found\n";
 		if(!vect) Debug::print() << "input offset vector not found\n";
+//		if(!regionInput) Debug::print() << "input region not found\n";
 		if(!result) Debug::print() << "output channel not found\n";
-		
-		Debug::print() << vect->toStr() <<"\n";
+
 		if(!result){
 			Debug::print() << "Allocate result container\n";
 			CoordinateVector size;
@@ -58,7 +66,13 @@ public:
 				setPortContainer(readerOutputPort(0), result );
 			}else { return; }
 		}
-		
+/*
+		CoordinateVector topLeft;
+
+		if(!regionInput){
+			topLeft = 
+		}
+*/		
 		CoordinateVector pos;
 		for(pos(0) = 0; pos(0) < result->spanSize()[0]; ++pos(0))
 			for(pos(1) = 0; pos(1) < result->spanSize()[1]; ++pos(1)){

@@ -16,6 +16,13 @@ void RectangleContainerTest()
 	rect.setPosition( Point(42,12) );
 	assert( rect.getPosition() == Point(42,12) );
 
+	
+	RectangleContainer<2> rect2(Point(-10,100),Point(-800,-600));
+
+	assert( rect2.getPosition() == Point(-810,-500) );
+	assert( rect2.getSize() == Point(800,600) );
+
+
 }
 
 

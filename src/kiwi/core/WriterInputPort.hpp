@@ -34,6 +34,7 @@
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/utils/Connector.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
+#include "kiwi/core/WriterOutputPort.hpp"
 
 namespace kiwi{
 namespace core{
@@ -41,7 +42,7 @@ namespace core{
 class Node;
 class Writer;
 class WriterInputPort;
-class WriterOutputPort;
+//class WriterOutputPort;
 
 
 /**
@@ -120,6 +121,12 @@ public:
 	 * Returns 0 if not connected. 
 	 */ 
 	WriterOutputPort* connectedOutput() const ;
+
+	template<class T>
+	T* getContainer() const{
+		if( isConnected() )	return connectedOutput()->getContainer<T>();
+		else return 0;
+	}
 	
 protected:
 	void setType(const string& type);

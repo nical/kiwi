@@ -88,10 +88,12 @@ void RGBAImageContainer::initSubContainers()
 			, spanSize()
 			, StrideVector( 4, 4*width() )
 		) );
-	
+
+	_sizeContainer.init( spanSize() );
 }
 
 kiwi::core::Container* RGBAImageContainer::subContainer(kiwi::uint32_t index){
+	if(index == 4) return &_sizeContainer;
 	if(index < nbSubContainers() ) return _subContainers[index];
 	else return 0;
 }
@@ -191,9 +193,10 @@ RGBAImageContainer::~RGBAImageContainer()
 {
 	// TODO: generates an error within reference counting cairo internals
 	// see cairo_surface_make_dirty or something like this, it might help...
-	
+	/*
 	cairo_destroy( _context );
 	cairo_surface_destroy( _surface );
+	*/
 	 
 }
 

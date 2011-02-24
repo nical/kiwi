@@ -1,9 +1,6 @@
 #!/bin/sh
 
-generic="yes"
-core="yes"
-image="yes"
-text="yes"
+generic="yes"; core="yes"; image="yes"; text="yes"
 
 if [ "$1" = "generic" ]
 then
@@ -34,14 +31,16 @@ then
 ./generic/PointTest &&
 ./generic/ValueContainerTest &&
 ./generic/PointVectorContainerTest &&
-./generic/RectangleContainerTest
+./generic/RectangleContainerTest ||
+exit
 fi
 
 if [ "$core" = "yes" ]
 then
 ./core/FactoryTest  &&
 ./core/NodeTest &&
-./core/FilterTest
+./core/FilterTest ||
+exit
 fi
 
 if [ "$utils" = "yes" ]
@@ -49,7 +48,8 @@ then
 ./utils/ConnectorTest &&
 ./utils/UnorderedArrayTest &&
 ./utils/typesTest &&
-./utils/randomTest
+./utils/randomTest ||
+exit
 fi
 
 if [ "$image" = "yes" ]
@@ -58,12 +58,14 @@ then
 ./image/ImageContainerTest &&
 ./image/MixedImageTest &&
 ./image/CopyImageTest &&
-./image/ChannelOffsetFilterTest
+./image/ChannelOffsetFilterTest ||
+exit
 fi
 
 if [ "$text" = "yes" ]
 then
-./text/PlainTextContainerTest
+./text/PlainTextContainerTest ||
+exit
 fi
 
 echo '\n\n end of the test suite--\n\n'

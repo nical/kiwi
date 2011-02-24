@@ -9,7 +9,7 @@ using namespace kiwi::image;
 int main()
 {
 	ScopedBlockMacro(____, "MixedImageTests")
-
+	/*
 	typedef cairo::RGBAImageContainer::CoordinateVector CoordinateVector;
 	typedef cairo::RGBAImageContainer::ValueType ValueType;
 	typedef generic::ArrayContainer<kiwi::uint32_t,2> ChannelBuffer;
@@ -33,6 +33,6 @@ int main()
 	cairoImg.saveToPng("outputImage1.png");
 	
 	Debug::print() << "Saved outputImage1.png\n";	
-
+	*/
 
 }

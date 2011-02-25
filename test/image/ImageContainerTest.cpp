@@ -7,11 +7,21 @@ using namespace kiwi::image;
 
 int ImageContainerTest()
 {
-ScopedBlockMacro(__scp, "kiwi::ImageContainer Test" );
+ScopedBlockMacro(__scp, "kiwi::ImageContainer::Test" );
 
 	typedef RGBAImageContainer<>::CoordinateVector CoordinateVector;
 	typedef RGBAImageContainer<>::ColorChannel ColorChannel;
 	typedef RGBAImageContainer<>::ValueType Pixel;
+
+	Pixel pix1(100,200,50,100);
+	Pixel pix2(200,200,50,100);
+	Pixel pix3 = pix1 + pix2;
+	Pixel pix4(10,10,10,10);
+	assert( pix1 + pix4 == Pixel(110,210,60,110));
+	assert( pix3 == Pixel(255,255,100,200) );
+	Debug::print() << (pix1 - pix2).toStr();
+	assert( pix1 - pix2 == Pixel(0,0,0,0) );	
+	Debug::foo();
 
 	unsigned WIDTH = 12;
 	unsigned HEIGHT = 8;
@@ -65,14 +75,13 @@ ScopedBlockMacro(__scp, "kiwi::ImageContainer Test" );
 	Pixel expected(42,222,111,255);
 	for(kiwi::uint32_t i = 0; i < img1.width(); ++i)
 		for(kiwi::uint32_t j = 0; j < img1.height(); ++j){
-			Debug::print() << img1.getValue( CoordinateVector(i,j) ).toStr();
+			//Debug::print() << img1.getValue( CoordinateVector(i,j) ).toStr();
 			Pixel pix = img1.getValue( CoordinateVector(i,j) );
 			assert(pix.r == expected.r);
 			assert(pix.g == expected.g);
 			assert(pix.b == expected.b);
 			assert(pix.a == expected.a);
 	}
-
 	
 	return 0;
 }

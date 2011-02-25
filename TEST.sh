@@ -55,11 +55,11 @@ fi
 if [ "$image" = "yes" ]
 then
 ./image/CairoImageContainerTest &&
-./image/ImageContainerTest &&
 ./image/MixedImageTest &&
 ./image/CopyImageTest &&
 ./image/LinearGradientContainerTest &&
-./image/ChannelOffsetFilterTest ||
+./image/ChannelOffsetFilterTest &&
+./image/ImageContainerTest ||
 exit
 fi
 

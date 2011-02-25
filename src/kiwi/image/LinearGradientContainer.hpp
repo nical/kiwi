@@ -37,14 +37,13 @@ public:
 	}
 
 	virtual ValueType getValue( const PointType& pos ) const{
-		float dx = 1; //_point2(0) - _point1(0);
-		float dy = 1; //_point2(1) - _point1(1);
-		float xS = _point1(0) / dx;
-		float yS = _point1(1) / dy; 
-		float xE = _point2(0) / dx;
-		float yE = _point2(1) / dy; 
-		float imageX = (float)pos(0) / dx; 
-		float imageY = (float)pos(1) / dy;
+		float xS = _point1(0);
+		float yS = _point1(1); 
+		float xE = _point2(0);
+		float yE = _point2(1); 
+		float imageX = pos(0); 
+		float imageY = pos(1);
+		
 		float xD = xE - xS; 
 		float yD = yE - yS; 
 		float mod = 1.0f / ( xD * xD + yD * yD ); 

@@ -27,6 +27,56 @@ public:
 			+ boost::lexical_cast<kiwi::string>((int)b) + ","
 			+ boost::lexical_cast<kiwi::string>((int)a) + ")";
 	}
+
+	bool operator == (RGBA32Fragment f) const{
+		return (r == f.r) && (g == f.g) && (b == f.b) && (a == f.a);
+	}
+
+	bool operator != (RGBA32Fragment f) const{
+		return (r != f.r) || (g != f.g) || (b != f.b) || (a != f.a);
+	}
+
+	RGBA32Fragment operator + (RGBA32Fragment f) const{
+		return RGBA32Fragment(
+			  (r+f.r) < 255 ? (r+f.r) : 255
+			, (g+f.g) < 255 ? (g+f.g) : 255
+			, (b+f.b) < 255 ? (b+f.b) : 255
+			, (a+f.a) < 255 ? (a+f.a) : 255  );
+	}
+	
+	RGBA32Fragment operator - (RGBA32Fragment f) const{
+		return RGBA32Fragment(
+			  (r > f.r) ? (r-f.r) : 0
+			, (g > f.g) ? (g-f.g) : 0
+			, (b > f.b) ? (b-f.b) : 0
+			, (a > f.a) ? (a-f.a) : 0 );
+	}
+	
+	template<typename T>
+	RGBA32Fragment operator / (T val) const{
+		return RGBA32Fragment(r/val, g/val, b/val, a/val);
+	}
+	
+	template<typename T>
+	RGBA32Fragment operator * (T val) const{
+		return RGBA32Fragment(r*val, g*val, b*val, a*val);
+	}
+
+	RGBA32Fragment operator += (RGBA32Fragment f){
+		r = (r+f.r) < 255 ? (r+f.r) : 255;
+		g = (g+f.g) < 255 ? (g+f.g) : 255;
+		b = (b+f.b) < 255 ? (b+f.b) : 255;
+		a = (a+f.a) < 255 ? (a+f.a) : 255;
+		return *this;
+	}
+	
+	RGBA32Fragment operator -= (RGBA32Fragment f){
+		r = (r > f.r) ? (r-f.r) : 0;
+		g = (g > f.g) ? (g-f.g) : 0;
+		b = (b > f.b) ? (b-f.b) : 0;
+		a = (a > f.a) ? (a-f.a) : 0;
+		return *this;
+	}
 	
 	ColorElement b;
 	ColorElement g;

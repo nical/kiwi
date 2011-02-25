@@ -16,19 +16,11 @@ void CopyImageTest()
 
 	cairo::RGBAImageContainer inputData("inputImageTransp.png");
 	kiwi::core::Node inputDataNode(&inputData);
-/*
-	assert(cairo_image_surface_get_format( inputData.getSurface() )
-		== CAIRO_FORMAT_ARGB32);
-*/
+
 	assert(inputDataNode.readerOutputPort(0).isComposite());
 	assert(inputDataNode.readerOutputPort(0).nbSubPorts() == 4);
 
-	Debug::print() << "\n\nloutriplop\n" << endl();
-	
 	Debug::print() << inputDataNode.readerOutputPort(0).subPort(0).tags().str();
-
-	Debug::print() << "\nloutriplop\n\n" << endl();
-	
 
 	CopyImageFilter filter;
 
@@ -37,8 +29,6 @@ void CopyImageTest()
 	assert( inputDataNode.readerOutputPort(0).subPort(0).getContainer<kiwi::core::Container>() == inputData.subContainer(0) );
 
 	Debug::print() << inputDataNode.readerOutputPort(0).subPort(0).nbSubPorts();
-
-	Debug::print() << "plop\n" << endl();
 	
 	inputDataNode.readerOutputPort(0).subPort(0) >> filter.readerInputPort(0);
 	inputDataNode.readerOutputPort(0).subPort(1) >> filter.readerInputPort(1);

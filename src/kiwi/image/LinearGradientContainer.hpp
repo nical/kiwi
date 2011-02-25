@@ -37,12 +37,23 @@ public:
 	}
 
 	virtual ValueType getValue( const PointType& pos ) const{
-		float d1 = (_point1-pos).manhatanLength();
-		float d2 = (_point2-pos).manhatanLength();
-		return (d1*_color1 + d2*_color2)/(d1*d2);
+		float dx = 1; //_point2(0) - _point1(0);
+		float dy = 1; //_point2(1) - _point1(1);
+		float xS = _point1(0) / dx;
+		float yS = _point1(1) / dy; 
+		float xE = _point2(0) / dx;
+		float yE = _point2(1) / dy; 
+		float imageX = (float)pos(0) / dx; 
+		float imageY = (float)pos(1) / dy;
+		float xD = xE - xS; 
+		float yD = yE - yS; 
+		float mod = 1.0f / ( xD * xD + yD * yD ); 
+		float gradPos = ( ( imageX - xS ) * xD + ( imageY - yS ) * yD ) * mod;
+		float mag = gradPos > 0 ? gradPos < 1.0f ? gradPos : 1.0f : 0.0f; 
+		return _color1*(1-mag) + _color2*(mag); 
 	}
 
-	virtual void setValue( const PointType&, ValueType ){}
+	virtual void setValue( const PointType&, ValueType ) {}
 	virtual ValueType getValue( kiwi::uint32_t pos ) const {}
 	virtual void setValue( kiwi::uint32_t, ValueType ) {}
 	PointType spanSize() const { return PointType::zero(); }

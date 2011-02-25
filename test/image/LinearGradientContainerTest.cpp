@@ -1,18 +1,44 @@
 
 #include "kiwi/image/LinearGradientContainer.hpp"
+#include "kiwi/image/cairo/ImageContainer.hpp"
+#include "kiwi/image/CopyImageFilter.hpp"
 
 using namespace kiwi;
 using namespace kiwi::image;
 
 void LinearGradientContainerTest(){
 
-	typedef LinearGradientContainer<kiwi::uint8_t,2,float> GradientContainer;
+	typedef LinearGradientContainer<kiwi::uint8_t,2,kiwi::uint32_t> GradientContainer;
 	typedef GradientContainer::PointType Point;
 	
-	GradientContainer gradient1( Point(50,0), 0,  Point(400,200), 250 );
+	image::LinearGradientContainer<kiwi::uint8_t,2,kiwi::uint32_t>
+		gradient1( Point(0,0), 0,  Point(600,10), 255 );
 
-	
+	//kiwi::core::Container* test = dynamic_cast<kiwi::core::Container>(gradient)
 
+	kiwi::core::Node gradient1Node( &gradient1 );
+
+	cairo::RGBAImageContainer inputData("inputImageTransp.png");
+	kiwi::core::Node inputDataNode(&inputData);
+		
+	cairo::RGBAImageContainer result("inputImageTransp.png" );	
+	kiwi::core::Node resultNode(&result);
+
+	CopyImageFilter filter;
+
+	gradient1Node.readerOutputPort(0)			 >> filter.readerInputPort(0);
+	gradient1Node.readerOutputPort(0) 			 >> filter.readerInputPort(1);
+	gradient1Node.readerOutputPort(0)			 >> filter.readerInputPort(2);
+	inputDataNode.readerOutputPort(0).subPort(3) >> filter.readerInputPort(3);
+
+	resultNode.writerOutputPort(0) >> filter.writerInputPort(0);
+
+
+	assert( gradient1Node.readerOutputPort(0).isConnected() );
+
+	filter.process();
+
+	result.saveToPng("GradientOutputImage.png");
 }
 
 

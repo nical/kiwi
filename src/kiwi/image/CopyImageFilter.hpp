@@ -79,7 +79,7 @@ public:
 			result = new kiwi::image::cairo::RGBAImageContainer(size);
 			setPortContainer(readerOutputPort(0), result );
 		}
-		cairo_surface_flush( result->getSurface() );
+		//cairo_surface_flush( result->getSurface() ); // TODO
 
 		Debug::plop();
 
@@ -92,7 +92,7 @@ public:
 				RGBA32Fragment f(vr,vg,vb,va);
 				result->setValue(CoordinateVector(x,y), f);
 			}
-		cairo_surface_mark_dirty(result->getSurface() );
+		//cairo_surface_mark_dirty(result->getSurface() ); // TODO
 	}
 
 	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{

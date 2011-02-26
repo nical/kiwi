@@ -59,7 +59,7 @@ public:
 	
 	template<typename T>
 	RGBA32Fragment operator * (T val) const{
-		return RGBA32Fragment(r*val, g*val, b*val, a*val);
+		return RGBA32Fragment(max(r*val), max(g*val), max(b*val), max(a*val));
 	}
 
 	RGBA32Fragment operator += (RGBA32Fragment f){
@@ -76,6 +76,13 @@ public:
 		b = (b > f.b) ? (b-f.b) : 0;
 		a = (a > f.a) ? (a-f.a) : 0;
 		return *this;
+	}
+
+	inline ColorElement max(kiwi::int32_t c){
+		return ( c < 255 )? c : 255; 
+	}
+	inline ColorElement min(kiwi::int32_t c){
+		return ( c > 0 )? c : 0;
 	}
 	
 	ColorElement b;

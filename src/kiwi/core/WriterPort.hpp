@@ -41,7 +41,7 @@ namespace core{
 
 class Node;
 class Writer;
-class WriterInputPort;
+class WriterPort;
 //class WriterOutputPort;
 
 
@@ -55,20 +55,20 @@ class WriterInputPort;
  * Each port has a name which use is facultative has they are also accessed using an integer index.
  */
 
-class WriterInputPort
-: public kiwi::utils::Connector<WriterInputPort, WriterOutputPort, 1, WRITER>
+class WriterPort
+: public kiwi::utils::Connector<WriterPort, WriterOutputPort, 1, WRITER>
 {
 friend class Node;
 friend class Filter;
 public:
 
-	typedef kiwi::utils::Connector<WriterInputPort, WriterOutputPort, 1, WRITER> PortConnector;
+	typedef kiwi::utils::Connector<WriterPort, WriterOutputPort, 1, WRITER> PortConnector;
 
 	/**
 	 * @brief Constructor.
 	 * @todo The second argument will disapear in next version.
 	 */ 
-	WriterInputPort(Node* myNode);
+	WriterPort(Node* myNode);
 	
 	/**
 	 * @brief Connection method.
@@ -135,25 +135,25 @@ protected:
 	 * 
 	 * @see kiwi::core::Node::bindPort
 	 */ 
-	void bind( WriterInputPort& port);
+	void bind( WriterPort& port);
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
-	 * @see kiwi::core::setWriterInputPortEnabled
+	 * @see kiwi::core::setWriterPortEnabled
 	 * @see kiwi::core::setWriterOutputPortEnabled
-	 * @see kiwi::core::setWriterInputPortEnabled
+	 * @see kiwi::core::setWriterPortEnabled
 	 * @see kiwi::core::setWriterOutputPortEnabled
 	 */ 
 	void setEnabled(bool status);
 
-	void associateReaderPort(ReaderOutputPort* reader){
-		_associatedReaderOutputPort = reader;
+	void associateReaderPort(DataPort* reader){
+		_associatedDataPort = reader;
 	}
 	
 private:
 	Node* _node;
-	utils::UnorderedArray<WriterInputPort*> _linkedInputPorts;
-	ReaderOutputPort* _associatedReaderOutputPort;
+	utils::UnorderedArray<WriterPort*> _linkedInputPorts;
+	DataPort* _associatedDataPort;
 	bool _enabled;
 };
 

@@ -31,8 +31,8 @@
 #include "kiwi/core/Reader.hpp"
 #include "kiwi/core/Writer.hpp"
 
-#include "kiwi/core/ReaderOutputPort.hpp"
-#include "kiwi/core/ReaderInputPort.hpp"
+#include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/ReaderPort.hpp"
 
 
 namespace kiwi{
@@ -41,7 +41,7 @@ namespace core{
 
 // ----------------------------------------------------------- InputPort
 
-ReaderInputPort::ReaderInputPort( Node* myNode )
+ReaderPort::ReaderPort( Node* myNode )
 :	_enabled(true)
 	, _node(myNode)
 {
@@ -49,28 +49,28 @@ ReaderInputPort::ReaderInputPort( Node* myNode )
 }
 
 
-bool ReaderInputPort::connect(ReaderOutputPort& outputPort)
+bool ReaderPort::connect(DataPort& outputPort)
 {
-	ScopedBlockMacro( __scop, "ReaderInputPort::connect" )
+	ScopedBlockMacro( __scop, "ReaderPort::connect" )
 	if( isEnabled() && outputPort.isEnabled() ){
 		if( isCompatible( outputPort.tags() ) ){
 			return PortConnector::connect( &outputPort );
 		}else{
 			Debug::error()
-				<< "ReaderInputPort::connect error: uncompatible port tags!" <<endl()
+				<< "ReaderPort::connect error: uncompatible port tags!" <<endl()
 				<< "   input: " << tags().str() <<endl()
 				<< "   output: " << outputPort.tags().str() << endl();
 			return false;
 		}
 	}else{
-		Debug::error() << "ReaderInputPort::connect error: one of the port is disabled!" << endl();
+		Debug::error() << "ReaderPort::connect error: one of the port is disabled!" << endl();
 		return false;
 	}
 }
 
-bool ReaderInputPort::connect(ReaderOutputPort* outputPort)
+bool ReaderPort::connect(DataPort* outputPort)
 {
-	ScopedBlockMacro( __scop, "ReaderInputPort::connect*" )
+	ScopedBlockMacro( __scop, "ReaderPort::connect*" )
 	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
 		if( isCompatible( *outputPort ) )
 			return PortConnector::connect( outputPort );
@@ -78,7 +78,7 @@ bool ReaderInputPort::connect(ReaderOutputPort* outputPort)
 }
 
 
-void ReaderInputPort::bind(ReaderInputPort& port)
+void ReaderPort::bind(ReaderPort& port)
 {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
 	port._linkedInputPorts.add(&port);
@@ -86,49 +86,49 @@ void ReaderInputPort::bind(ReaderInputPort& port)
 
 
 
-portIndex_t ReaderInputPort::index() const 
+portIndex_t ReaderPort::index() const 
 {
 	return _node->indexOf(*this);
 }
 
 
-Node* ReaderInputPort::node() const 
+Node* ReaderPort::node() const 
 {
 	return _node;
 }
 
 
-Tags ReaderInputPort::tags() const
+Tags ReaderPort::tags() const
 {
-	ScopedBlockMacro(scop,"ReaderInputPort::tags")
+	ScopedBlockMacro(scop,"ReaderPort::tags")
 	return node()->readerInputTags( index() );
 }
 
-bool ReaderInputPort::isCompatible(ReaderOutputPort& output)	
+bool ReaderPort::isCompatible(DataPort& output)	
 {
-	ScopedBlockMacro(scop, "ReaderInputPort::isCompatible");
+	ScopedBlockMacro(scop, "ReaderPort::isCompatible");
 	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
 }
 
 
-bool ReaderInputPort::isCompatible(const kiwi::Tags& tag)	
+bool ReaderPort::isCompatible(const kiwi::Tags& tag)	
 {
-	ScopedBlockMacro(scop, "ReaderInputPort::isCompatible");
+	ScopedBlockMacro(scop, "ReaderPort::isCompatible");
 	return ( tags().hasOneOf(tag + Tags("#any") ) );
 }
 
-bool ReaderInputPort::isEnabled() const 
+bool ReaderPort::isEnabled() const 
 {
 	return _enabled;
 }
 
 
-ReaderOutputPort* ReaderInputPort::connectedOutput() const 
+DataPort* ReaderPort::connectedOutput() const 
 { 
 	return PortConnector::connectedInstance(0);
 }
 
-kiwi::string ReaderInputPort::name() const
+kiwi::string ReaderPort::name() const
 {
 	return _node->readerInputName(_node->indexOf(*this));
 }
@@ -143,7 +143,7 @@ kiwi::string ReaderInputPort::name() const
 
 
 void 
-ReaderInputPort::setEnabled(bool status) 
+ReaderPort::setEnabled(bool status) 
 {
 	_enabled = status;
 }

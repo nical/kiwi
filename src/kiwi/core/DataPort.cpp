@@ -31,8 +31,8 @@
 #include "kiwi/core/Reader.hpp"
 #include "kiwi/core/Writer.hpp"
 
-#include "kiwi/core/ReaderOutputPort.hpp"
-#include "kiwi/core/ReaderInputPort.hpp"
+#include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/ReaderPort.hpp"
 
 #include "kiwi/core/Container.hpp"
 
@@ -41,19 +41,19 @@ namespace core{
 
 
 
-ReaderOutputPort::ReaderOutputPort( Node* myNode, Container* data )
+DataPort::DataPort( Node* myNode, Container* data )
 	:_node(myNode)
 {
-	ScopedBlockMacro(scop,"ReaderOutputPort::constructor")
+	ScopedBlockMacro(scop,"DataPort::constructor")
 	if(!data){
-		Debug::print() << "ReaderOutputPort::constructor: warning: data = 0\n";
+		Debug::print() << "DataPort::constructor: warning: data = 0\n";
 	}
 	setData(data);
 	// nothing to do
 }
 
 
-void ReaderOutputPort::bind(ReaderOutputPort& port)
+void DataPort::bind(DataPort& port)
 {
 //	Debug::print() << "port binding" << endl();
 	_container = port._container;
@@ -63,7 +63,7 @@ void ReaderOutputPort::bind(ReaderOutputPort& port)
 	// this port might cause a segfault
 }
 
-void ReaderOutputPort::unBind()
+void DataPort::unBind()
 {
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
 		_linkedOutputPorts[i]->unBind();
@@ -71,9 +71,9 @@ void ReaderOutputPort::unBind()
 	_container = 0;
 }
 
-void ReaderOutputPort::setData( Container* data )
+void DataPort::setContainer( Container* data )
 {
-	ScopedBlockMacro(scop, "ReaderOutputPort::setData");
+	ScopedBlockMacro(scop, "DataPort::setData");
 	if(!data) Debug::print() << "warning: param data = 0\n";
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
 		_linkedOutputPorts[i]->setData( data );
@@ -83,73 +83,93 @@ void ReaderOutputPort::setData( Container* data )
 	if( (data) && (data->isComposite()) ){
 		Debug::print() << "the data is composite ("<<data->nbSubContainers()<<")\n"; 
 		for(kiwi::uint32_t i = 0; i < data->nbSubContainers(); ++i){
-			_subPorts.add(new ReaderOutputPort(_node, data->subContainer(i)));
+			_subPorts.add(new DataPort(_node, data->subContainer(i)));
 		}
 	}
 }
 
 
-kiwi::string ReaderOutputPort::name() const
+kiwi::string DataPort::name() const
 {
 	return _node->readerOutputName( _node->indexOf(*this) );
 }
 
 
-portIndex_t ReaderOutputPort::index() const 
+portIndex_t DataPort::index() const 
 {
 	return _node->indexOf(*this);
 }
 
-bool  ReaderOutputPort::isComposite() const{
+bool  DataPort::isComposite() const{
 	return (_subPorts.size() > 1 );
 }
 
-Node* ReaderOutputPort::node() const 
+Node* DataPort::node() const 
 {
 	return _node;
 }
 
 
-Tags ReaderOutputPort::tags() const
+Tags DataPort::tags() const
 {
 	if(_container){
 		return _container->tags(); 
 	}else{
-		Debug::error() << "ReaderOutputPort::tags: warning: no container available\n"; 
+		Debug::error() << "DataPort::tags: warning: no container available\n"; 
 		return Tags("#undefined");
 	}
 }
 
 
-bool ReaderOutputPort::isCompatible(ReaderInputPort& input)	
+bool DataPort::isCompatible(ReaderPort& input)	
 {
 	return input.isCompatible(*this); 
 }
 
 
-bool ReaderOutputPort::connect(ReaderInputPort& inputPort)
+bool DataPort::connect(ReaderPort& inputPort)
 {
-	ScopedBlockMacro( scop, "ReaderOutputPort::connect" )
+	ScopedBlockMacro( scop, "DataPort::connect" )
 	if( isEnabled() && inputPort.isEnabled() ){
 		if( isCompatible( inputPort ) )
-			return PortConnector::connect( &inputPort);
+			return ReaderConnector::connect( &inputPort);
 	}
 	else return false;
 }
 
-bool ReaderOutputPort::connect(ReaderInputPort* inputPort)
+bool DataPort::connect(ReaderPort* inputPort)
 {
-	ScopedBlockMacro( scop, "ReaderOutputPort::connect" )
+	ScopedBlockMacro( scop, "DataPort::connect" )
 	if( (inputPort != 0) && (isEnabled() && inputPort->isEnabled()) ){
 		if( isCompatible( *inputPort ) )
-			return PortConnector::connect( inputPort );
+			return ReaderConnector::connect( inputPort );
+	}
+	else return false;
+}
+
+bool DataPort::connect(WriterPort& inputPort)
+{
+	ScopedBlockMacro( scop, "DataPort::connect" )
+	if( isEnabled() && inputPort.isEnabled() ){
+		if( isCompatible( inputPort ) )
+			return WriterConnector::connect( &inputPort);
+	}
+	else return false;
+}
+
+bool DataPort::connect(WriterPort* inputPort)
+{
+	ScopedBlockMacro( scop, "DataPort::connect" )
+	if( (inputPort != 0) && (isEnabled() && inputPort->isEnabled()) ){
+		if( isCompatible( *inputPort ) )
+			return WriterConnector::connect( inputPort );
 	}
 	else return false;
 }
 
 
 
-bool ReaderOutputPort::isEnabled() const 
+bool DataPort::isEnabled() const 
 { 
 	return _container != 0; 
 }

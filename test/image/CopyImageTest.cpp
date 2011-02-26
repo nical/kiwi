@@ -35,6 +35,19 @@ void CopyImageTest()
 	inputDataNode.readerOutputPort(0).subPort(2) >> filter.readerInputPort(2);
 	inputDataNode.readerOutputPort(0).subPort(3) >> filter.readerInputPort(3);
 
+	/*
+	inputDataNode.dataPort(0) >> filter.inputPort(0);
+	inputDataNode.dataPort(1) >> filter.inputPort(1);
+	result.dataPort(0) 		  >> filter.destinationPort(0);
+	//
+	inputDataNode.dataPort(0) >> filter.readerPort(0);
+	inputDataNode.dataPort(1) >> filter.writerPort(1);
+	result.dataPort(0) 		  >> filter.destinationPort(0);
+	//
+	inputDataNode.data(0) >> filter.source(0);
+	inputDataNode.data(1) >> filter.source(1);
+	result.dataPort(0) 	  >> filter.destination(0);
+	*/
 	cairo::RGBAImageContainer result(
 		CoordinateVector( inputData.width(), inputData.height() ) );
 		

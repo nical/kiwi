@@ -66,10 +66,9 @@ namespace core{
 
 class Reader;
 class Writer;
-class ReaderInputPort;
-class ReaderOutputPort;
-class WriterInputPort;
-class WriterOutputPort;
+class ReaderPort;
+class WriterPort;
+class DataPort;
 class Container;
 class NodeInitializer;
 
@@ -181,17 +180,9 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */ 
-	ReaderInputPort& readerInputPort(portIndex_t index) const
-		{assert(index < nbReaderInputs() ); return *_readerInputs[index];}
-	/**
-	 * @brief Access to a port.
-	 *
-	 * Retrives the indexth InputPort of the Node's Reader interface.
-	 *
-	 * @param index The index of the port.
-	 */ 
-	ReaderOutputPort& readerOutputPort(portIndex_t index) const
-		{assert(index < nbReaderOutputs() ); return *_readerOutputs[index];}
+	ReaderPort& readerPort(portIndex_t index) const
+		{assert(index < nbReaderPorts() ); return *_readerPorts[index];}
+	
 	
 	/**
 	 * @brief Access to a port.
@@ -200,8 +191,8 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */
-	WriterInputPort& writerInputPort(portIndex_t index) const
-		{assert(index < nbWriterInputs() );return *_writerInputs[index];}
+	WriterPort& writerPort(portIndex_t index) const
+		{assert(index < nbWriterPorts() );return *_writerPorts[index];}
 	/**
 	 * @brief Access to a port.
 	 *
@@ -209,17 +200,18 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */
-	WriterOutputPort& writerOutputPort(portIndex_t index) const
-		{assert(index < nbWriterOutputs() );return *_writerOutputs[index];}
+	DataPort& dataPort(portIndex_t index) const
+		{assert(index < nbDataPorts() );return *_dataPorts[index];}
 
 	/**
 	 * @brief Access to a port using port name.
 	 *
 	 * Retrives the output port corresponding to the given name if the name exists
 	 * and returns a nil pointer otherwise. 
-	 *
+	 * @todo
 	 * @param portName The name of the port.
 	 */ 
+/*
 	ReaderInputPort* readerInputPort(const kiwi::string& portName) const
 	{
 		for( kiwi::uint32_t i = 0; i < nbReaderInputs(); ++i )
@@ -229,6 +221,7 @@ public:
 		}
 		return 0;
 	}
+*/ 
 	/**
 	 * @brief Access to a port using port name.
 	 *
@@ -237,6 +230,7 @@ public:
 	 *
 	 * @param portName The name of the port.
 	 */ 
+/*
 	WriterOutputPort* writerOutputPort(const kiwi::string& portName) const
 	{
 		for( kiwi::uint32_t i = 0; i < nbWriterOutputs(); ++i )
@@ -246,6 +240,7 @@ public:
 		}
 		return 0;
 	}
+*/
 	/**
 	 * @brief Access to a port using port name.
 	 *
@@ -254,6 +249,7 @@ public:
 	 *
 	 * @param portName The name of the port.
 	 */ 
+/*
 	ReaderOutputPort* readerOutputPort(const kiwi::string& portName) const
 	{
 		for( kiwi::uint32_t i = 0; i < nbReaderOutputs(); ++i )
@@ -263,6 +259,7 @@ public:
 		}
 		return 0;
 	}
+*/ 
 	/**
 	 * @brief Access to a port using port name.
 	 *
@@ -271,6 +268,7 @@ public:
 	 *
 	 * @param portName The name of the port.
 	 */ 
+/*
 	WriterInputPort* writerInputPort(const kiwi::string& portName) const
 	{
 		for( kiwi::uint32_t i = 0; i < nbWriterInputs(); ++i )
@@ -280,24 +278,21 @@ public:
 		}
 		return 0;
 	}
-
+*/
 
 	/**
-	 * @brief Returns the amount of Reader Inputs of this Node.
+	 * @brief Returns the amount of data ports of this Node.
 	 */ 
-	inline unsigned nbReaderInputs() const {return _readerInputs.size();}
+	inline kiwi::portIndex_t nbDataPorts() const {return _dataPorts.size();}
 	/**
-	 * @brief Returns the amount of Reader Outputs of this Node.
+	 * @brief Returns the amount of Reader inputs of this Node.
 	 */
-	inline unsigned nbReaderOutputs() const {return _readerOutputs.size();}
+	inline kiwi::portIndex_t nbReaderPorts() const {return _readerPorts.size();}
 	/**
 	 * @brief Returns the amount of Writer inputs of this Node.
 	 */
-	inline unsigned nbWriterInputs() const {return _writerInputs.size();}
-	/**
-	 * @brief Returns the amount of Writer outputs of this Node.
-	 */
-	inline unsigned nbWriterOutputs() const {return _readerOutputs.size();}
+	inline kiwi::portIndex_t nbWriterPorts() const {return _writerPorts.size();}
+	
 	
 
 	/**
@@ -305,75 +300,63 @@ public:
 	 * 
 	 * The port must belong to this Node.
 	 */ 
-	portIndex_t indexOf(const ReaderInputPort& port) const;
+	portIndex_t indexOf(const DataPort& port) const;
 	/**
 	 * @brief Returns the index of the port passed in parameter.
 	 * 
 	 * The port must belong to this Node.
 	 */ 
-	portIndex_t indexOf(const WriterInputPort& port) const;
+	portIndex_t indexOf(const WriterPort& port) const;
 	/**
 	 * @brief Returns the index of the port passed in parameter.
 	 * 
 	 * The port must belong to this Node.
 	 */ 
-	portIndex_t indexOf(const ReaderOutputPort& port) const;
-	/**
-	 * @brief Returns the index of the port passed in parameter.
-	 * 
-	 * The port must belong to this Node.
-	 */ 
-	portIndex_t indexOf(const WriterOutputPort& port) const;
+	portIndex_t indexOf(const ReaderPort& port) const;
 	
 	/**
 	 * @brief Returns the name of a Reader input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string readerInputName( portIndex_t index ) const;
+	//virtual kiwi::string readerInputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string readerOutputName( portIndex_t index ) const;
+	//virtual kiwi::string readerOutputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string writerInputName( portIndex_t index ) const;
+	//virtual kiwi::string writerInputName( portIndex_t index ) const;
 	/**
 	 * @brief Returns the name of a Writer output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's names.
 	 */ 
-	virtual kiwi::string writerOutputName( portIndex_t index ) const;
+	//virtual kiwi::string writerOutputName( portIndex_t index ) const;
 	
 	/**
 	 * @brief Returns the type of a Reader input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::Tags readerInputTags( portIndex_t index ) const;
+	virtual kiwi::Tags readerTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::Tags readerOutputTags( portIndex_t index ) const;
+	virtual kiwi::Tags writerTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::Tags writerInputTags( portIndex_t index ) const;
-	/**
-	 * @brief Returns the type of a Writer output port.
-	 * 
-	 * This is one of the methods to override in order to define the port's types.
-	 */ 
-	virtual kiwi::Tags writerOutputTags( portIndex_t index ) const;
+	virtual kiwi::Tags DataTags( portIndex_t index ) const;
 	
 // --------------------------------------------------- protected methods	
 protected:
@@ -384,14 +367,14 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
-	portIndex_t addReaderInputPort();
+	portIndex_t addReaderPort();
 
 	/**
 	 * @brief Remove an input port from this Filter's Reader interface.
 	 *
 	 * Removes The last input port (the one oh highest index) from this Filter's Reader interface.
 	 */
-	void removeReaderInputPort();
+	void removeReaderPort();
 	/**
 	 * @brief Adds an output port to the Reader interface.
 	 *
@@ -399,13 +382,13 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
-	portIndex_t addReaderOutputPort(Container* data = 0);
+	portIndex_t addDataPort(Container* data = 0);
 	/**
 	 * @brief Remove an output port from this Filter's Reader interface.
 	 *
 	 * Removes The last output port (the one oh highest index) from this Filter's Reader interface.
 	 */
-	void removeReaderOutputPort();
+	void removeDataPort();
 	/**
 	 * @brief Adds an input port to the Writer interface.
 	 *
@@ -413,13 +396,13 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
-	portIndex_t addWriterInputPort();
+	portIndex_t addWriterPort();
 	/**
 	 * @brief Remove an input port from this Filter's Writer interface.
 	 *
 	 * Removes The last input port (the one oh highest index) from this Filter's Reader interface.
 	 */
-	void removeWriterInputPort();
+	void removeWriterPort();
 	/**
 	 * @brief Adds an output port to the Writer interface.
 	 *
@@ -427,40 +410,14 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
-	portIndex_t addWriterOutputPort(Container* data = 0);
-	/**
-	 * @brief Remove an output port from this Filter's Writer interface.
-	 *
-	 * Removes The last output port (the one on highest index) from this Filter's Reader interface.
-	 */
-	void removeWriterOutputPort();
+	
 
-
-	void addContainer(Container* data, bool addReader = true, bool addWriter = true);
+	void addContainer(Container* data, bool addPort = true, kiwi::uint8_t flags = 3);
 
 // ------------------------------------------------------
 	
-	/**
-	 * @brief Enables/disables port
-	 */
-//	void setPortEnabled(ReaderInputPort& port, bool status);
-	
-	/**
-	 * @brief Enables/disables port
-	 */
-//	void setPortEnabled(WriterInputPort& port, bool status);
-	
-	/**
-	 * @brief Enables/disables port
-	 */
-//	void setPortEnabled(ReaderOutputPort& port, bool status);
-	/**
-	 * @brief Enables/disables port
-	 */
-//	void setPortEnabled(WriterOutputPort& port, bool status);
 
-	void setPortContainer(ReaderOutputPort& port, Container* container);
-	void setPortContainer(WriterOutputPort& port, Container* container);
+	void setDataPortContainer(DataPort& port, Container* container);
 	
 	
 	/**
@@ -481,7 +438,7 @@ protected:
 	 * @param toBind The other Node's port.
 	 */
 	 
-	void bindPort(ReaderOutputPort& myPort, ReaderOutputPort& toBind);
+	void bindPort(DataPort& myPort, DataPort& toBind);
 	/**
 	 * @brief Redirect a port to the port another Node's port.
 	 * 
@@ -499,7 +456,8 @@ protected:
 	 * @param myPort This class's port that has to be redirected to another Node's port.
 	 * @param toBind The other Node's port.
 	 */ 
-	void bindPort(WriterOutputPort& myPort, WriterOutputPort& toBind);
+	
+	void bindPort(ReaderPort& myPort, ReaderPort& toBind);
 	/**
 	 * @brief Redirect a port to the port another Node's port.
 	 * 
@@ -517,25 +475,7 @@ protected:
 	 * @param myPort This class's port that has to be redirected to another Node's port.
 	 * @param toBind The other Node's port.
 	 */ 
-	void bindPort(ReaderInputPort& myPort, ReaderInputPort& toBind);
-	/**
-	 * @brief Redirect a port to the port another Node's port.
-	 * 
-	 * bindPort allows a Node to have ports that are in fact pointing 
-	 * to another Node instead of itself.
-	 * Each port contains knows both the Node that contains it and also
-	 * the Node that actuly contains the data.
-	 * This distinction permits to have for instance a Node that 
-	 * contains other Nodes and redirects its ports to the one of the
-	 * contained Node (for exemple Pipelines). 
-	 * Another use of this method is for any Filter that writes in a 
-	 * Node to provide the output readers of the Node in its own
-	 * outputs.
-	 * 
-	 * @param myPort This class's port that has to be redirected to another Node's port.
-	 * @param toBind The other Node's port.
-	 */ 
-	void bindPort(WriterInputPort& myPort, WriterInputPort& toBind);
+	void bindPort(WriterPort& myPort, WriterPort& toBind);
 
 
 	
@@ -545,11 +485,10 @@ private:
 
 	utils::UnorderedArray<Container*> _containers;	
 	// The input/output ports
-	std::vector<ReaderInputPort*> _readerInputs;
-	std::vector<WriterInputPort*> _writerInputs;
-	std::vector<ReaderOutputPort*> _readerOutputs;
-	std::vector<WriterOutputPort*> _writerOutputs;
-
+	std::vector<ReaderPort*> _readerPorts;
+	std::vector<WriterPort*> _writerPorts;
+	std::vector<DataPort*> _dataPorts;
+	
 	NodeListener* _listener;
 
 }; // class Node;
@@ -569,7 +508,7 @@ private:
  * 	// connects myNode1's first OutputPort to myNode2's second InputPort
  * 	myNode1.readerOutputPort(0) >> myNode2.readerInputPort(1);
  */ 
-bool operator>>(ReaderOutputPort& output, ReaderInputPort& input );
+bool operator >> (DataPort& output, ReaderPort& input );
 
 /**
  *	@brief Operator for connections between Node.
@@ -581,7 +520,7 @@ bool operator>>(ReaderOutputPort& output, ReaderInputPort& input );
  * 	// connects myNode1's first OutputPort to myNode2's second InputPort
  * 	myNode1.readerOutputPort(0) >> myNode2.readerInputPort(1);
  */ 
-bool operator>>(WriterOutputPort& output, WriterInputPort& input );
+bool operator>>(DataPort& output, WriterPort& input );
 
 
 

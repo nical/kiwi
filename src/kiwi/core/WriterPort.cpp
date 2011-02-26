@@ -32,8 +32,8 @@
 #include "kiwi/core/Writer.hpp"
 
 #include "kiwi/core/WriterOutputPort.hpp"
-#include "kiwi/core/WriterInputPort.hpp"
-#include "kiwi/core/ReaderOutputPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
+#include "kiwi/core/DataPort.hpp"
 
 
 namespace kiwi{
@@ -42,38 +42,38 @@ namespace core{
 
 // ----------------------------------------------------------- InputPort
 
-WriterInputPort::WriterInputPort( Node* myNode )
+WriterPort::WriterPort( Node* myNode )
 :	_enabled(true)
 	, _node(myNode)
-	, _associatedReaderOutputPort(0)
+	, _associatedDataPort(0)
 {
 	
 }
 
 
-bool WriterInputPort::connect(WriterOutputPort& outputPort)
+bool WriterPort::connect(WriterOutputPort& outputPort)
 {
-	ScopedBlockMacro( __scop, "WriterInputPort::connect" )
+	ScopedBlockMacro( __scop, "WriterPort::connect" )
 	if( isEnabled() && outputPort.isEnabled() ){
 		if( isCompatible( outputPort.tags() ) ){
-			if( _associatedReaderOutputPort
-				&& outputPort.associatedReaderOutputPort() )
+			if( _associatedDataPort
+				&& outputPort.associatedDataPort() )
 			{
-				_associatedReaderOutputPort->bind(
-					*outputPort.associatedReaderOutputPort() );
+				_associatedDataPort->bind(
+					*outputPort.associatedDataPort() );
 			}
 			return PortConnector::connect( &outputPort );
 		}else{
-			Debug::error() << "WriterInputPort::connect: uncompatible port tags\n";
+			Debug::error() << "WriterPort::connect: uncompatible port tags\n";
 			return false;
 		}
 	}else return false;
 }
 
-bool WriterInputPort::connect(WriterOutputPort* outputPort)
+bool WriterPort::connect(WriterOutputPort* outputPort)
 {
 	assert(false);
-	ScopedBlockMacro( __scop, "WriterInputPort::connect" )
+	ScopedBlockMacro( __scop, "WriterPort::connect" )
 	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
 		if( isCompatible( *outputPort ) )
 			return PortConnector::connect( outputPort );
@@ -82,7 +82,7 @@ bool WriterInputPort::connect(WriterOutputPort* outputPort)
 
 
 void 
-WriterInputPort::bind(WriterInputPort& port)
+WriterPort::bind(WriterPort& port)
 {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
 	port._linkedInputPorts.add(&port);
@@ -92,60 +92,60 @@ WriterInputPort::bind(WriterInputPort& port)
 
 
 portIndex_t 
-WriterInputPort::index() const 
+WriterPort::index() const 
 {
 	return _node->indexOf(*this);
 }
 
 
 Node* 
-WriterInputPort::node() const 
+WriterPort::node() const 
 {
 	return _node;
 }
 
 
 
-Tags WriterInputPort::tags() const
+Tags WriterPort::tags() const
 {
 	return node()->writerInputTags( index() );
 }
 
-bool WriterInputPort::isCompatible(WriterOutputPort& output)	
+bool WriterPort::isCompatible(WriterOutputPort& output)	
 { 
 	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
 }
 
 
-bool WriterInputPort::isCompatible(const kiwi::Tags& tag)	
+bool WriterPort::isCompatible(const kiwi::Tags& tag)	
 { 
 	return ( tags().hasOneOf(tag + Tags("#any") ) );
 }
 
 /*
 bool 
-WriterInputPort::isConnected() const 
+WriterPort::isConnected() const 
 { 
 	return (_connectedNode != 0); 
 }
 */
 
 bool 
-WriterInputPort::isEnabled() const 
+WriterPort::isEnabled() const 
 {
 	return _enabled;
 }
 
 
 WriterOutputPort* 
-WriterInputPort::connectedOutput() const 
+WriterPort::connectedOutput() const 
 { 
 	return PortConnector::connectedInstance(0);
 }
 
 
 kiwi::string 
-WriterInputPort::name() const
+WriterPort::name() const
 {
 	return _node->writerInputName(_node->indexOf(*this));
 }
@@ -160,7 +160,7 @@ WriterInputPort::name() const
 
 
 void 
-WriterInputPort::setEnabled(bool status) 
+WriterPort::setEnabled(bool status) 
 {
 	_enabled = status;
 }

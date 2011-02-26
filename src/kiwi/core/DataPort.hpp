@@ -41,7 +41,7 @@
 namespace kiwi{
 namespace core{
 
-class ReaderInputPort;
+class ReaderPort;
 class Node;
 
 /**
@@ -53,24 +53,23 @@ class Node;
  * 
  * Each port has a name which use is facultative has they are truely accessed using an integer index.
  */ 
-class ReaderOutputPort
-: public kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, 100, READER>
+class DataPort
+: public kiwi::utils::Connector<DataPort, ReaderPort, 32, READER>
+, public kiwi::utils::Connector<DataPort, WriterPort, 32, READER>
 {
 friend class Node;
 public:
-friend class ReaderInputPort;
-friend class WriterInputPort;
+friend class ReaderPort;
+friend class WriterPort;
 
-	typedef kiwi::utils::Connector<ReaderOutputPort, ReaderInputPort, 100, READER> PortConnector;
+	typedef kiwi::utils::Connector<DataPort, ReaderPort, 32, READER> ReaderConnector;
+	typedef kiwi::utils::Connector<DataPort, WriterPort, 32, WRITER> WriterConnector;
 
-	// --------------------------------------------------------------------
-	typedef std::list< ReaderInputPort* > connectionList;
-	
 	// --------------------------------------------------------------------
 	/**
 	 * @brief Constructor.
 	 */ 
-	ReaderOutputPort(Node* myNode, Container* data = 0);
+	DataPort(Node* myNode, Container* data = 0);
 	/**
 	 * @brief Returns the index of this port.
 	 */ 
@@ -87,9 +86,9 @@ friend class WriterInputPort;
 	 */ 
 	bool isComposite() const ;
 
-	ReaderOutputPort& subPort(kiwi::uint32_t i){
+	DataPort& subPort(kiwi::uint32_t i){
 		if(i >= _subPorts.size() ){
-			Debug::error() << "ReaderOutputPort::subPort: subPort not found!\n";
+			Debug::error() << "DataPort::subPort: subPort not found!\n";
 			return *this;
 		}
 		return *_subPorts[i];
@@ -112,7 +111,7 @@ friend class WriterInputPort;
 	/**
 	 * @brief Port compatibility check based on the type string.
 	 */ 
-	bool isCompatible(ReaderInputPort& input);
+	bool isCompatible(ReaderPort& input);
 
 	/**
 	 * @brief returns true if this port is enabled.
@@ -126,11 +125,14 @@ friend class WriterInputPort;
 	 * 
 	 * Returns a std::list<kiwi::core::InputPort<T> of the port connected to this port
 	 */ 
-	connectionList connections() const ;
+	//connectionList connections() const ;
  
 	
-	bool connect(ReaderInputPort& inputPort);
-	bool connect(ReaderInputPort* inputPort);
+	bool connect(ReaderPort& port);
+	bool connect(ReaderPort* port);
+	
+	bool connect(WriterPort& port);
+	bool connect(WriterPort* port);
 	
 protected:
 
@@ -139,20 +141,20 @@ protected:
 	 * 
 	 * @see kiwi::core::Node::bindPort
 	 */ 
-	void bind( ReaderOutputPort& port );
+	void bind( DataPort& port );
 
 	void unBind();
 
 	/**
 	 * @brief Sets this port's container.
 	 */ 
-	void setData( Container* data );
+	void setContainer( Container* data );
 	
 private:
 	Node* _node;
 	Container* _container; 
-	utils::UnorderedArray<ReaderOutputPort*> _linkedOutputPorts;
-	utils::UnorderedArray<ReaderOutputPort*> _subPorts;
+	utils::UnorderedArray<DataPort*> _linkedOutputPorts;
+	utils::UnorderedArray<DataPort*> _subPorts;
 };
 
 

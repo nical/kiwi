@@ -34,15 +34,15 @@
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/utils/Connector.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
-#include "kiwi/core/ReaderOutputPort.hpp"
+#include "kiwi/core/DataPort.hpp"
 
 namespace kiwi{
 namespace core{
 
 class Node;
 class Reader;
-class ReaderInputPort;
-class ReaderOutputPort;
+class ReaderPort;
+class DataPort;
 
 
 /**
@@ -55,25 +55,25 @@ class ReaderOutputPort;
  * Each port has a name which use is facultative has they are also accessed using an integer index.
  */
 
-class ReaderInputPort
-: public kiwi::utils::Connector<ReaderInputPort, ReaderOutputPort, 1, READER>
+class ReaderPort
+: public kiwi::utils::Connector<ReaderPort, DataPort, 1, READER>
 {
 friend class Node;
 public:
 
-	typedef kiwi::utils::Connector<ReaderInputPort, ReaderOutputPort, 1, READER> PortConnector;
+	typedef kiwi::utils::Connector<ReaderPort, DataPort, 1, READER> PortConnector;
 
 	/**
 	 * @brief Constructor.
 	 * 
 	 */ 
-	ReaderInputPort(Node* myNode);
+	ReaderPort(Node* myNode);
 	
 	/**
 	 * @brief Connection method.
 	 */ 
-	bool connect(ReaderOutputPort& outputPort);
-	bool connect(ReaderOutputPort* outputPort);
+	bool connect(DataPort& outputPort);
+	bool connect(DataPort* outputPort);
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 
@@ -99,7 +99,7 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	bool isCompatible(ReaderOutputPort& output) ;
+	bool isCompatible(DataPort& output) ;
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
@@ -117,7 +117,7 @@ public:
 	 * 
 	 * Returns 0 if not connected. 
 	 */ 
-	ReaderOutputPort* connectedOutput() const ;
+	DataPort* connectedOutput() const ;
 
 	template<class T>
 	T* getContainer() const{
@@ -133,20 +133,20 @@ protected:
 	 * 
 	 * @see kiwi::core::Node::bindPort
 	 */ 
-	void bind( ReaderInputPort& port);
+	void bind( ReaderPort& port);
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
-	 * @see kiwi::core::setReaderInputPortEnabled
-	 * @see kiwi::core::setReaderOutputPortEnabled
-	 * @see kiwi::core::setWriterInputPortEnabled
+	 * @see kiwi::core::setReaderPortEnabled
+	 * @see kiwi::core::setDataPortEnabled
+	 * @see kiwi::core::setWriterPortEnabled
 	 * @see kiwi::core::setWriterOutputPortEnabled
 	 */ 
 	void setEnabled(bool status);
 	
 private:
 	Node* _node;
-	utils::UnorderedArray<ReaderInputPort*> _linkedInputPorts;
+	utils::UnorderedArray<ReaderPort*> _linkedInputPorts;
 	bool _enabled;
 };
 

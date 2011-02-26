@@ -124,8 +124,10 @@ public:
 
 	template<class T>
 	T* getContainer() const{
-		if( isConnected() )	return connectedOutput()->getContainer<T>();
-		else return 0;
+	ScopedBlockMacro(scop,"WriterPort::getContainer")
+		if( isConnected() ){
+			return connectedOutput()->getContainer<T>();	
+		}	else return 0;
 	}
 	
 protected:

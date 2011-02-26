@@ -37,7 +37,6 @@ void NumberContainerTest()
 	Debug::print() << "assert: number of ports in the container\n";
 		// check that the number of ports is correct
 		assert( n1->nbDataPorts() == 1 );
-		assert( n1->nbDataPorts() == 1 );
 		assert( n1->nbReaderPorts() == 0 );
 		assert( n1->nbWriterPorts() == 0 );
 
@@ -55,7 +54,7 @@ void NumberContainerTest()
 
 
 	Debug::print() << "connections\n";
-	n1->dataPort(0) >> addition.readerPort(0);
+	assert( n1->dataPort(0) >> addition.readerPort(0) );
 	n2->dataPort(0) >> addition.readerPort(1);
 
 		

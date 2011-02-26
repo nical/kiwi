@@ -27,16 +27,13 @@ public:
 		ScopedBlockMacro(scop, "DummyFilter::Process")
 		
 		NumberContainer* ca
-			= readerPort(0).connectedOutput()
-				->getContainer<NumberContainer>();
+			= readerPort(0).getContainer<NumberContainer>();
 
 		NumberContainer* cb
-			= readerPort(1).connectedOutput()
-				->getContainer<NumberContainer>();
+			= readerPort(1).getContainer<NumberContainer>();
 		
 		NumberContainer* result
-			= writerPort(0).connectedOutput()
-				->getContainer<NumberContainer>();
+			= writerPort(0).getContainer<NumberContainer>();
 
 		assert(ca);
 		assert(cb);
@@ -53,21 +50,26 @@ public:
 
 int main()
 {
-
+	ScopedBlockMacro(scop, "Filter::Test")
 	DummyFilter filter;
 
+	Debug::foo();
+	
 	assert( !filter.dataPort(0).isEnabled() );
 	assert( filter.readerPort(0).isEnabled() );
 	assert( filter.readerPort(1).isEnabled() );
 
 	NumberContainer A(5);
 	NumberContainer B(6);
-	
 	NumberContainer R(0);
 
 	kiwi::core::Node nA( &A );
 	kiwi::core::Node nB( &B );
 	kiwi::core::Node nR( &R );
+
+	assert( nA.dataPort(0).getContainer<kiwi::core::Container>() );
+	assert( nB.dataPort(0).getContainer<kiwi::core::Container>() );
+	assert( nR.dataPort(0).getContainer<kiwi::core::Container>() );
 /*
 	// check that association are made correctly
 	assert( nA.dataPort(0).associatedReaderOutputPort()
@@ -77,6 +79,10 @@ int main()
 	assert( nR.dataPort(0).associatedReaderOutputPort()
 		== &nR.dataPort(0) );
 */
+	assert( !filter.readerPort(0).isConnected() );
+	assert( !filter.readerPort(1).isConnected() );
+	assert( !filter.writerPort(0).isConnected() );
+
 	nA.dataPort(0) >> filter.readerPort(0);	
 	nB.dataPort(0) >> filter.readerPort(1);
 	nR.dataPort(0) >> filter.writerPort(0);
@@ -84,6 +90,12 @@ int main()
 	assert( filter.readerPort(0).isConnected() );
 	assert( filter.readerPort(1).isConnected() );
 	assert( filter.writerPort(0).isConnected() );
+
+	assert( nR.dataPort(0).getContainer<kiwi::core::Container>() );
+
+	assert( filter.writerPort(0).connectedOutput() );
+	assert( filter.writerPort(0).connectedOutput()->node() );
+	assert( filter.writerPort(0).connectedOutput()->node() == &nR );
 
 	filter.process();
 

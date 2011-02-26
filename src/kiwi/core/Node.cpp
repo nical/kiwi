@@ -58,7 +58,7 @@ Node::Node( Container* init)
 {
 	ScopedBlockMacro(scop,"Node::constructor(Container*)")
 	if(!init) Debug::print() << "warning: the init parameter is nil\n";
-	addContainer( init, true, true );
+	addContainer( init, true, 3 ); // 3 is READ | WRITE access
 	_listener = 0;
 }
 
@@ -99,6 +99,8 @@ portIndex_t Node::addWriterPort()
 
 portIndex_t Node::addDataPort(Container* data, kiwi::uint8_t flags)
 {
+	ScopedBlockMacro(scop,"Node::addDataPort");
+	if(!data) Debug::error() << "warning: data param is nil\n";
 	// TODO: flags
 	_dataPorts.push_back( new DataPort(this, data) );
 	return _dataPorts.size()-1;
@@ -107,11 +109,12 @@ portIndex_t Node::addDataPort(Container* data, kiwi::uint8_t flags)
 void Node::addContainer(Container* data, bool addPort, kiwi::uint8_t flags)
 {
 	ScopedBlockMacro(__scop, "Node::addContainer" )
-	if(!data) Debug::print() << "warning: the init parameter is nil\n";
+	if(!data) Debug::error() << "warning: the init parameter is nil\n";
 	_containers.add(data);
-	portIndex_t reader, writer;
 	if(addPort){
-		 reader = addDataPort(data,flags);
+		 addDataPort(data,flags);
+	}else{
+		Debug::error() << "Node::addContainer: warning added a container without port\n";
 	}
 }
 
@@ -320,8 +323,7 @@ operator >> (DataPort& output, WriterPort& input )
 	ScopedBlockMacro(scop, "operator >> (writer)" )
 	if(!input.isConnected())
 	{
-		input.connect(output);
-		return true;
+		return input.connect(output);
 	}else{return false;}
 }
 

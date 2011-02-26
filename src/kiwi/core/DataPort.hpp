@@ -97,7 +97,14 @@ friend class WriterPort;
 	kiwi::uint32_t nbSubPorts() const { return _subPorts.size(); }
 
 	template<class T>
-	T* getContainer() { return dynamic_cast<T*>(_container); }
+	T* getContainer() {
+		ScopedBlockMacro(scop,"DataPort::getContainer")
+		if(!_container) Debug::error() << "no Container\n";
+		DEBUG_ONLY(
+			if(!dynamic_cast<T*>(_container)) Debug::error() << "cast failed\n" ;
+			)
+		return dynamic_cast<T*>(_container);
+	}
 	
 	/**
 	 * @brief Returns this port's Type as a string.
@@ -142,7 +149,7 @@ friend class WriterPort;
 		return WriterConnector::isConnected();
 	}
 	bool isConnected() const{
-		return isConnectedToReader() && isConnectedToWriter();
+		return isConnectedToReader() || isConnectedToWriter();
 	}
 
 	void disconnectReader( ReaderPort* port = 0);

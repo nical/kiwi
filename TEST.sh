@@ -29,7 +29,7 @@ then
 ./generic/ArrayContainerTest && 
 ./generic/StructuredArrayContainerTest && 
 ./generic/PointTest &&
-./generic/ValueContainerTest &&
+./generic/NumberContainerTest &&
 ./generic/PointVectorContainerTest &&
 ./generic/RectangleContainerTest ||
 exit
@@ -37,7 +37,7 @@ fi
 
 if [ "$core" = "yes" ]
 then
-./core/FactoryTest  &&
+#./core/FactoryTest  &&
 ./core/NodeTest &&
 ./core/FilterTest ||
 exit

@@ -48,7 +48,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	generic/ArrayContainerTest
 	generic/StructuredArrayContainerTest
 	generic/MultiArrayContainerTest
-	generic/ValueContainerTest
+	generic/NumberContainerTest
 	generic/PointVectorContainerTest
 	generic/RectangleContainerTest
    )

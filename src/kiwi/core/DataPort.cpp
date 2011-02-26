@@ -158,7 +158,7 @@ bool DataPort::connect(WriterPort& inputPort)
 	ScopedBlockMacro( scop, "DataPort::connect" )
 	if( isEnabled() && inputPort.isEnabled() ){
 		if( isCompatible( inputPort ) )
-			return WriterConnector::connect( &inputPort);
+			return WriterConnector::connect( &inputPort );
 	}
 	else return false;
 }

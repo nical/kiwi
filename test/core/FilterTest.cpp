@@ -90,9 +90,14 @@ int main()
 	assert( filter.readerPort(0).isConnected() );
 	assert( filter.readerPort(1).isConnected() );
 	assert( filter.writerPort(0).isConnected() );
+	assert( nA.dataPort(0).isConnectedToReader() );
+	assert( nB.dataPort(0).isConnectedToReader() );
+	assert( nR.dataPort(0).isConnectedToWriter() );
 
-	assert( nR.dataPort(0).getContainer<kiwi::core::Container>() );
+	assert( nR.dataPort(0).getContainer<NumberContainer>()->getValue() == 0 );
 
+	assert( nR.dataPort(0).node() );
+	//assert( &nR.dataPort(0) == filter.writerPort(0).connectedOutput() );
 	assert( filter.writerPort(0).connectedOutput() );
 	assert( filter.writerPort(0).connectedOutput()->node() );
 	assert( filter.writerPort(0).connectedOutput()->node() == &nR );

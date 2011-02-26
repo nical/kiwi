@@ -38,7 +38,7 @@ fi
 if [ "$core" = "yes" ]
 then
 #./core/FactoryTest  &&
-./core/NodeTest &&
+#./core/NodeTest &&
 ./core/FilterTest ||
 exit
 fi

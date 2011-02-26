@@ -34,7 +34,7 @@
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/utils/Connector.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
-#include "kiwi/core/WriterOutputPort.hpp"
+#include "kiwi/core/DataPort.hpp"
 
 namespace kiwi{
 namespace core{
@@ -42,7 +42,7 @@ namespace core{
 class Node;
 class Writer;
 class WriterPort;
-//class WriterOutputPort;
+//class DataPort;
 
 
 /**
@@ -56,13 +56,13 @@ class WriterPort;
  */
 
 class WriterPort
-: public kiwi::utils::Connector<WriterPort, WriterOutputPort, 1, WRITER>
+: public kiwi::utils::Connector<WriterPort, DataPort, 1, WRITER>
 {
 friend class Node;
 friend class Filter;
 public:
 
-	typedef kiwi::utils::Connector<WriterPort, WriterOutputPort, 1, WRITER> PortConnector;
+	typedef kiwi::utils::Connector<WriterPort, DataPort, 1, WRITER> PortConnector;
 
 	/**
 	 * @brief Constructor.
@@ -73,8 +73,8 @@ public:
 	/**
 	 * @brief Connection method.
 	 */ 
-	bool connect(WriterOutputPort& outputPort);
-	bool connect(WriterOutputPort* outputPort);
+	bool connect(DataPort& outputPort);
+	bool connect(DataPort* outputPort);
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 
@@ -102,7 +102,7 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	bool isCompatible(WriterOutputPort& output) ;
+	bool isCompatible(DataPort& output) ;
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
@@ -120,7 +120,7 @@ public:
 	 * 
 	 * Returns 0 if not connected. 
 	 */ 
-	WriterOutputPort* connectedOutput() const ;
+	DataPort* connectedOutput() const ;
 
 	template<class T>
 	T* getContainer() const{
@@ -140,9 +140,9 @@ protected:
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
 	 * @see kiwi::core::setWriterPortEnabled
-	 * @see kiwi::core::setWriterOutputPortEnabled
+	 * @see kiwi::core::setDataPortEnabled
 	 * @see kiwi::core::setWriterPortEnabled
-	 * @see kiwi::core::setWriterOutputPortEnabled
+	 * @see kiwi::core::setDataPortEnabled
 	 */ 
 	void setEnabled(bool status);
 

@@ -19,13 +19,13 @@ class ChannelOffsetFilter : public kiwi::core::Filter
 public:
 
 	ChannelOffsetFilter(){
-		addReaderInputPort(); // Channel
-		addReaderInputPort(); // displacement vector
-		addReaderInputPort(); // region
+		addReaderPort(); // Channel
+		addReaderPort(); // displacement vector
+		addReaderPort(); // region
 
 		// Result (channel)
-		kiwi::portIndex_t w_in = addWriterInputPort(); 
-		kiwi::portIndex_t r_out = addReaderOutputPort();
+		kiwi::portIndex_t w_in = addWriterPort(); 
+		kiwi::portIndex_t r_out = addDataPort();
 		associateWriterToReader( writerInputPort(w_in) , readerOutputPort(r_out) );
 	}
 

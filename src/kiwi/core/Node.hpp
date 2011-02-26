@@ -231,7 +231,7 @@ public:
 	 * @param portName The name of the port.
 	 */ 
 /*
-	WriterOutputPort* writerOutputPort(const kiwi::string& portName) const
+	DataPort* writerOutputPort(const kiwi::string& portName) const
 	{
 		for( kiwi::uint32_t i = 0; i < nbWriterOutputs(); ++i )
 		{	

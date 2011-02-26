@@ -20,8 +20,8 @@ if(DEFINED BUILD_KIWI_TEXT)
 		text/PlainTextContainer.cpp
 		text/PlainTextLine.cpp
 		text/PlainTextAccessor.cpp
-		text/TextReader.cpp
-		text/TextWriter.cpp
+#		text/TextReader.cpp
+#		text/TextWriter.cpp
 		utils/TextOperations.cpp
 	)
 endif(DEFINED BUILD_KIWI_TEXT)

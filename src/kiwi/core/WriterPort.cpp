@@ -31,7 +31,6 @@
 #include "kiwi/core/Writer.hpp"
 #include "kiwi/core/Writer.hpp"
 
-#include "kiwi/core/WriterOutputPort.hpp"
 #include "kiwi/core/WriterPort.hpp"
 #include "kiwi/core/DataPort.hpp"
 
@@ -51,17 +50,11 @@ WriterPort::WriterPort( Node* myNode )
 }
 
 
-bool WriterPort::connect(WriterOutputPort& outputPort)
+bool WriterPort::connect(DataPort& outputPort)
 {
 	ScopedBlockMacro( __scop, "WriterPort::connect" )
 	if( isEnabled() && outputPort.isEnabled() ){
 		if( isCompatible( outputPort.tags() ) ){
-			if( _associatedDataPort
-				&& outputPort.associatedDataPort() )
-			{
-				_associatedDataPort->bind(
-					*outputPort.associatedDataPort() );
-			}
 			return PortConnector::connect( &outputPort );
 		}else{
 			Debug::error() << "WriterPort::connect: uncompatible port tags\n";
@@ -70,7 +63,7 @@ bool WriterPort::connect(WriterOutputPort& outputPort)
 	}else return false;
 }
 
-bool WriterPort::connect(WriterOutputPort* outputPort)
+bool WriterPort::connect(DataPort* outputPort)
 {
 	assert(false);
 	ScopedBlockMacro( __scop, "WriterPort::connect" )
@@ -111,7 +104,7 @@ Tags WriterPort::tags() const
 	return node()->writerInputTags( index() );
 }
 
-bool WriterPort::isCompatible(WriterOutputPort& output)	
+bool WriterPort::isCompatible(DataPort& output)	
 { 
 	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
 }
@@ -137,7 +130,7 @@ WriterPort::isEnabled() const
 }
 
 
-WriterOutputPort* 
+DataPort* 
 WriterPort::connectedOutput() const 
 { 
 	return PortConnector::connectedInstance(0);

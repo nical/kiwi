@@ -101,7 +101,7 @@ Node* ReaderPort::node() const
 Tags ReaderPort::tags() const
 {
 	ScopedBlockMacro(scop,"ReaderPort::tags")
-	return node()->readerInputTags( index() );
+	return node()->readerTags( index() );
 }
 
 bool ReaderPort::isCompatible(DataPort& output)	
@@ -130,7 +130,7 @@ DataPort* ReaderPort::connectedOutput() const
 
 kiwi::string ReaderPort::name() const
 {
-	return _node->readerInputName(_node->indexOf(*this));
+	return _node->readerName(_node->indexOf(*this));
 }
 
 

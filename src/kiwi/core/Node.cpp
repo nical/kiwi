@@ -86,8 +86,8 @@ portIndex_t Node::addReaderPort()
 {
 //ScopedBlockMacro(scop_b,"addDataPort("+name+")");
 //	portIndex_t index = getReaderInputCount();
-	_readerInputs.push_back( new ReaderPort(this) );
-	return _readerInputs.size()-1;
+	_readerPorts.push_back( new ReaderPort(this) );
+	return _readerPorts.size()-1;
 }
 
 
@@ -103,25 +103,15 @@ portIndex_t Node::addDataPort(Container* data)
 	return _dataPorts.size()-1;
 }
 
-void Node::addContainer(Container* data, bool addReader, bool addWriter)
+void Node::addContainer(Container* data, bool addPort, kiwi::uint8_t flags)
 {
 	ScopedBlockMacro(__scop, "Node::addContainer" )
 	if(!data) Debug::print() << "warning: the init parameter is nil\n";
 	_containers.add(data);
 	portIndex_t reader, writer;
-	if(addReader){
-		 reader = addDataPort(data);
+	if(addPort){
+		 reader = addDataPort(data,flag);
 	}
-	if(addWriter){
-		 writer = addDataPort(data);
-	}
-	if( addReader && addWriter ){
-		Debug::print() << "Node::addContainer: associating ports\n"; 
-//		Debug::print() << "readerId: " << (int)reader
-//			<< "writererId: " << (int)writer << endl();
-		writerOutputPort(reader)._associatedDataPort // todo investigate from this
-			= &readerOutputPort(writer);
-	}else{Debug::error() << "Node::addContainer: woops ?\n";} 
 }
 
 

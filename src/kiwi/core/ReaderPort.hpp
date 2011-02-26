@@ -140,7 +140,7 @@ protected:
 	 * @see kiwi::core::setReaderPortEnabled
 	 * @see kiwi::core::setDataPortEnabled
 	 * @see kiwi::core::setWriterPortEnabled
-	 * @see kiwi::core::setWriterOutputPortEnabled
+	 * @see kiwi::core::setDataPortEnabled
 	 */ 
 	void setEnabled(bool status);
 	

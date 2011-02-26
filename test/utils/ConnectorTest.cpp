@@ -15,14 +15,15 @@ class G;
 
 class A : public Connector<A, B, 5>{};
 class B : public Connector<B, A, 2>{};
-class C : public Connector<C, D, 2>, public Connector<C, E, 6>
+
+class C : public Connector<C, D, 1, 1>, public Connector<C, E, 2, 2>
 {
 public:
-	typedef Connector<C, D, 2> Connector1;
-	typedef Connector<C, E, 6> Connector2;
+	typedef Connector<C, D, 1, 1> Connector1;
+	typedef Connector<C, E, 2, 2> Connector2;
 } ;
-class D : public Connector<D, C, 1>{};
-class E : public Connector<E, C, 4>{};
+class D : public Connector<D, C, 2, 1>{};
+class E : public Connector<E, C, 4, 2>{};
 
 class F : public Connector<F, G, 1>{};
 class G : public Connector<G, F, 3>{};
@@ -75,12 +76,20 @@ int main(){
 	Debug::print() << " test: multi-connector" << endl();
 	// ------------ multi-connector
 
-	c1.Connector1::connect(&d1);
-	c1.Connector2::connect(&e1);
+	//c1.Connector1::connect(&d1);
+	//c1.Connector2::connect(&e1);
+	d1.connect(&c1);
+	e1.connect(&c1);
+	Debug::print() << ((int)e1.connectedInstance(0)) - ((int)d1.connectedInstance(0))<<"\n";
 	assert( c1.Connector1::nbConnections() == 1 );
 	assert( c1.Connector2::nbConnections() == 1 );
 	assert( d1.nbConnections() == 1 );
 	assert( e1.nbConnections() == 1 );
+	assert( c1.Connector1::connectedInstance(0) == &d1);
+	assert( c1.Connector2::connectedInstance(0) == &e1);
+	assert( d1.connectedInstance(0) == &c1 );
+	assert( e1.connectedInstance(0) == &c1 );
+	
 
 	Debug::print() << " test: One to many" << endl();
 	// ------------ one connection

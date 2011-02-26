@@ -100,12 +100,12 @@ public:
 	 * to a port, the associated reader should read the data that the writer 
 	 * accesses.
 	 */ 
-/*
-	void //associateWriterToReader(WriterInputPort& writer, ReaderOutputPort& reader) const
+
+	void associateWriterToDataPort(WriterPort& writer, DataPort& reader) const
 	{
 		writer.associateReaderPort( &reader );
 	}
-*/	
+	
 
 	Filter():Node()
 	{

@@ -33,6 +33,7 @@
 
 #include "kiwi/core/WriterPort.hpp"
 #include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/Container.hpp"
 
 
 namespace kiwi{
@@ -55,12 +56,19 @@ bool WriterPort::connect(DataPort& outputPort)
 	ScopedBlockMacro( __scop, "WriterPort::connect" )
 	if( isEnabled() && outputPort.isEnabled() ){
 		if( isCompatible( outputPort.tags() ) ){
-			return PortConnector::connect( &outputPort );
+			bool status = PortConnector::connect( &outputPort );
+			if(status && _associatedDataPort)
+				_associatedDataPort->setContainer(
+					outputPort.getContainer<Container>() );
+			return status;
 		}else{
-			Debug::error() << "WriterPort::connect: uncompatible port tags\n";
+			Debug::error() << "WriterPort::connect: uncompatible port tags\n";	
 			return false;
 		}
-	}else return false;
+	}else{
+		Debug::error() << "ReaderPort::connect error: one of the port is disabled!" << endl();
+		return false;
+	}
 }
 
 bool WriterPort::connect(DataPort* outputPort)

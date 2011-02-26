@@ -30,7 +30,8 @@ public: // -------------------------------------------------------------
 		typename LinkList::const_iterator it = _linkList.begin();
 		if( index >= nbConnections() ) return 0;
 		for( int i = 0; i < index; ++i){++it;}
-		return reinterpret_cast<LinkType*>(*it);
+		//return reinterpret_cast<LinkType*>(*it);
+		return dynamic_cast<LinkType*>(*it);
 	}
 
 
@@ -68,6 +69,7 @@ public: // -------------------------------------------------------------
 	}
 
 	void _connect_impl( AbstractConnectorType* toConnect ){
+		ScopedBlockMacro(scop,"Connector<multi>::_connect_impl")
 		_linkList.push_back( toConnect );
 	}
 

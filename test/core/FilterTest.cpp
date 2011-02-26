@@ -19,7 +19,7 @@ public:
 
 		portIndex_t w_in = addWriterPort();
 		portIndex_t r_out = addDataPort();
-		//associateWriterToReader(writerPort(w_in), dataPort(r_out));
+		associateWriterToDataPort(writerPort(w_in), dataPort(r_out));
 		
 	}
 
@@ -83,9 +83,9 @@ int main()
 	assert( !filter.readerPort(1).isConnected() );
 	assert( !filter.writerPort(0).isConnected() );
 
-	nA.dataPort(0) >> filter.readerPort(0);	
-	nB.dataPort(0) >> filter.readerPort(1);
-	nR.dataPort(0) >> filter.writerPort(0);
+	assert( nA.dataPort(0) >> filter.readerPort(0) );	
+	assert( nB.dataPort(0) >> filter.readerPort(1) );
+	assert( nR.dataPort(0) >> filter.writerPort(0) );
 
 	assert( filter.readerPort(0).isConnected() );
 	assert( filter.readerPort(1).isConnected() );
@@ -96,10 +96,13 @@ int main()
 
 	assert( nR.dataPort(0).getContainer<NumberContainer>()->getValue() == 0 );
 
+	assert( filter.readerPort(0).connectedOutput()->node() );
+
 	assert( nR.dataPort(0).node() );
-	//assert( &nR.dataPort(0) == filter.writerPort(0).connectedOutput() );
+	assert( nR.dataPort(0).WriterConnector::connectedInstance() == &filter.writerPort(0) ); 
+	assert( &nR.dataPort(0) == filter.writerPort(0).PortConnector::connectedInstance() ); //fail
 	assert( filter.writerPort(0).connectedOutput() );
-	assert( filter.writerPort(0).connectedOutput()->node() );
+	assert( filter.writerPort(0).connectedOutput()->node() ); // fail
 	assert( filter.writerPort(0).connectedOutput()->node() == &nR );
 
 	filter.process();

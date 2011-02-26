@@ -79,9 +79,9 @@ public:
 			if( writerPort(i).isConnected() ){
 				if( !dataPort(i).isEnabled() ){
 //					setPortEnabled(dataPort(i),true);
-					portIndex_t outIndex = writerPort(i).connectedOutput()->index();
+					portIndex_t outIndex = writerPort(i).connectedPort()->index();
 					DataPort& op
-						= writerPort(i).connectedOutput()->node()->dataPort(outIndex);
+						= writerPort(i).connectedPort()->node()->dataPort(outIndex);
 					bindPort( dataPort(i), op );
 				}
 			}else{
@@ -120,7 +120,7 @@ public:
 protected:
 	
 
-	kiwi::string metaCommand( const kiwi::string& command )
+	kiwi::string strCommand( const kiwi::string& command )
 	{
 		if(command == "process")
 		{
@@ -133,7 +133,7 @@ protected:
 		}
 		else
 		{
-			return Node::metaCommand( command );
+			return Node::strCommand( command );
 		}
 	}
 

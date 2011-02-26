@@ -37,23 +37,23 @@ public:
 		typedef kiwi::generic::Point<kiwi::uint32_t, 2> CoordinateVector;
 
 		ColorBuffer* r
-			= readerPort(R).connectedOutput()
+			= readerPort(R).connectedPort()
 				->getContainer<ColorBuffer>();
 		ColorBuffer* g
-			= readerPort(G).connectedOutput()
+			= readerPort(G).connectedPort()
 				->getContainer<ColorBuffer>();
 		ColorBuffer* b
-			= readerPort(B).connectedOutput()
+			= readerPort(B).connectedPort()
 				->getContainer<ColorBuffer>();
 		ColorBuffer* a
-			= readerPort(A).connectedOutput()
+			= readerPort(A).connectedPort()
 				->getContainer<ColorBuffer>();
 
 		Debug::plop();
 		
-		assert( writerPort(0).connectedOutput() );
+		assert( writerPort(0).connectedPort() );
 		kiwi::image::cairo::RGBAImageContainer* result
-			= writerPort(0).connectedOutput()
+			= writerPort(0).connectedPort()
 				->getContainer<kiwi::image::cairo::RGBAImageContainer>();
 
 		if(!a) Debug::print() << "alpha channel not found\n";

@@ -117,11 +117,11 @@ public:
 	 * 
 	 * Returns 0 if not connected. 
 	 */ 
-	DataPort* connectedOutput() const ;
+	DataPort* connectedPort() const ;
 
 	template<class T>
 	T* getContainer() const{
-		if( isConnected() )	return connectedOutput()->getContainer<T>();
+		if( isConnected() )	return connectedPort()->getContainer<T>();
 		else return 0;
 	}
 

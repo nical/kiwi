@@ -120,13 +120,13 @@ public:
 	 * 
 	 * Returns 0 if not connected. 
 	 */ 
-	DataPort* connectedOutput() const ;
+	DataPort* connectedPort() const ;
 
 	template<class T>
 	T* getContainer() const{
 	ScopedBlockMacro(scop,"WriterPort::getContainer")
 		if( isConnected() ){
-			return connectedOutput()->getContainer<T>();	
+			return connectedPort()->getContainer<T>();	
 		}	else return 0;
 	}
 	

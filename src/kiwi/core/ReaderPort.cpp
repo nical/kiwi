@@ -123,7 +123,7 @@ bool ReaderPort::isEnabled() const
 }
 
 
-DataPort* ReaderPort::connectedOutput() const 
+DataPort* ReaderPort::connectedPort() const 
 { 
 	return PortConnector::connectedInstance(0);
 }

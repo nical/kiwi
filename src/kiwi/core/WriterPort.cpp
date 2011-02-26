@@ -139,7 +139,7 @@ WriterPort::isEnabled() const
 
 
 DataPort* 
-WriterPort::connectedOutput() const 
+WriterPort::connectedPort() const 
 { 
 	return PortConnector::connectedInstance(0);
 }

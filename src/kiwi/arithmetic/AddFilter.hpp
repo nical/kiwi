@@ -28,11 +28,11 @@ public:
 			typedef kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE> NumberContainer_T;
 			
 			NumberContainer_T* ca
-				= readerPort(0).connectedOutput()
+				= readerPort(0).connectedPort()
 					->getContainer<NumberContainer_T>();
 
 			NumberContainer_T* cb
-				= readerPort(1).connectedOutput()
+				= readerPort(1).connectedPort()
 					->getContainer<NumberContainer_T>();
 
 			if(!ca){

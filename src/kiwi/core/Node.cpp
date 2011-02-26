@@ -193,7 +193,7 @@ Node::indexOf(const DataPort& port) const
 	return 0;	
 }
 
-kiwi::string Node::metaCommand( const kiwi::string& command )
+kiwi::string Node::strCommand( const kiwi::string& command )
 {
 	return kiwi::string("kiwi::unknown_command");
 }

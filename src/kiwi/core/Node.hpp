@@ -83,11 +83,7 @@ class NodeInitializer;
 class Node
 {
 public:
-	
 //--------------------------------------------------------------------- typedefs
-
-
-	enum { FILTER, CONTAINER, NODE };
 
 // ---------------------------------------------------- constructor / Destructor
 	/**
@@ -110,12 +106,6 @@ public:
 	virtual ~Node();
 
 // ------------------------------------------------------------- virtual methods
-
-	/**
-	 * @brief must return Node::FILTER or Node::CONTAINER.
-	 * @todo deprecated !
-	 */ 
-	virtual int nodeType() const { return NODE; }
 
 	virtual bool update(int phase = 0){}
 
@@ -150,7 +140,7 @@ public:
 	 * The purpose of this is to enable a runtime resolved interface for
 	 * client-server usage. 
 	 */ 
-	virtual kiwi::string metaCommand( const kiwi::string& command);
+	virtual kiwi::string strCommand( const kiwi::string& command);
 	
 	
 // ------------------------------------------------------ pulic methods
@@ -204,83 +194,6 @@ public:
 		{assert(index < nbDataPorts() );return *_dataPorts[index];}
 
 	/**
-	 * @brief Access to a port using port name.
-	 *
-	 * Retrives the output port corresponding to the given name if the name exists
-	 * and returns a nil pointer otherwise. 
-	 * @todo
-	 * @param portName The name of the port.
-	 */ 
-/*
-	ReaderInputPort* readerPort(const kiwi::string& portName) const
-	{
-		for( kiwi::uint32_t i = 0; i < nbReaderPorts(); ++i )
-		{	
-			if(readerInputName(i) == portName)
-				return _readerInputs[i];
-		}
-		return 0;
-	}
-*/ 
-	/**
-	 * @brief Access to a port using port name.
-	 *
-	 * Retrives the output port corresponding to the given name if the name exists
-	 * and returns a nil pointer otherwise. 
-	 *
-	 * @param portName The name of the port.
-	 */ 
-/*
-	DataPort* dataPort(const kiwi::string& portName) const
-	{
-		for( kiwi::uint32_t i = 0; i < nbDataPorts(); ++i )
-		{	
-			if(writerOutputName(i) == portName)
-				return _writerOutputs[i];
-		}
-		return 0;
-	}
-*/
-	/**
-	 * @brief Access to a port using port name.
-	 *
-	 * Retrives the output port corresponding to the given name if the name exists
-	 * and returns a nil pointer otherwise. 
-	 *
-	 * @param portName The name of the port.
-	 */ 
-/*
-	ReaderOutputPort* dataPort(const kiwi::string& portName) const
-	{
-		for( kiwi::uint32_t i = 0; i < nbDataPorts(); ++i )
-		{	
-			if(readerOutputName(i) == portName)
-				return _readerOutputs[i];
-		}
-		return 0;
-	}
-*/ 
-	/**
-	 * @brief Access to a port using port name.
-	 *
-	 * Retrives the output port corresponding to the given name if the name exists
-	 * and returns a nil pointer otherwise. 
-	 *
-	 * @param portName The name of the port.
-	 */ 
-/*
-	WriterInputPort* writerPort(const kiwi::string& portName) const
-	{
-		for( kiwi::uint32_t i = 0; i < nbWriterPorts(); ++i )
-		{	
-			if(writerInputName(i) == portName)
-				return _writerInputs[i];
-		}
-		return 0;
-	}
-*/
-
-	/**
 	 * @brief Returns the amount of data ports of this Node.
 	 */ 
 	inline kiwi::portIndex_t nbDataPorts() const {return _dataPorts.size();}
@@ -314,30 +227,7 @@ public:
 	 */ 
 	portIndex_t indexOf(const ReaderPort& port) const;
 	
-	/**
-	 * @brief Returns the name of a Reader input port.
-	 * 
-	 * This is one of the methods to override in order to define the port's names.
-	 */ 
-	//virtual kiwi::string readerInputName( portIndex_t index ) const;
-	/**
-	 * @brief Returns the name of a Reader output port.
-	 * 
-	 * This is one of the methods to override in order to define the port's names.
-	 */ 
-	//virtual kiwi::string readerOutputName( portIndex_t index ) const;
-	/**
-	 * @brief Returns the name of a Writer input port.
-	 * 
-	 * This is one of the methods to override in order to define the port's names.
-	 */ 
-	//virtual kiwi::string writerInputName( portIndex_t index ) const;
-	/**
-	 * @brief Returns the name of a Writer output port.
-	 * 
-	 * This is one of the methods to override in order to define the port's names.
-	 */ 
-	//virtual kiwi::string writerOutputName( portIndex_t index ) const;
+	
 	
 	/**
 	 * @brief Returns the type of a Reader input port.
@@ -403,13 +293,7 @@ protected:
 	 * Removes The last input port (the one oh highest index) from this Filter's Reader interface.
 	 */
 	void removeWriterPort();
-	/**
-	 * @brief Adds an output port to the Writer interface.
-	 *
-	 * This is meant to be used in the initialisation phase of a Node/Filter.
-	 * 
-	 * @return the index of the added port.
-	 */ 
+	
 	
 
 	void addContainer(Container* data, bool addPort = true, kiwi::uint8_t flags = 3);
@@ -437,8 +321,8 @@ protected:
 	 * @param myPort This class's port that has to be redirected to another Node's port.
 	 * @param toBind The other Node's port.
 	 */
-	 
 	void bindPort(DataPort& myPort, DataPort& toBind);
+	
 	/**
 	 * @brief Redirect a port to the port another Node's port.
 	 * 
@@ -456,8 +340,8 @@ protected:
 	 * @param myPort This class's port that has to be redirected to another Node's port.
 	 * @param toBind The other Node's port.
 	 */ 
-	
 	void bindPort(ReaderPort& myPort, ReaderPort& toBind);
+
 	/**
 	 * @brief Redirect a port to the port another Node's port.
 	 * 

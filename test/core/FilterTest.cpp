@@ -96,14 +96,14 @@ int main()
 
 	assert( nR.dataPort(0).getContainer<NumberContainer>()->getValue() == 0 );
 
-	assert( filter.readerPort(0).connectedOutput()->node() );
+	assert( filter.readerPort(0).connectedPort()->node() );
 
 	assert( nR.dataPort(0).node() );
 	assert( nR.dataPort(0).WriterConnector::connectedInstance() == &filter.writerPort(0) ); 
 	assert( &nR.dataPort(0) == filter.writerPort(0).PortConnector::connectedInstance() ); //fail
-	assert( filter.writerPort(0).connectedOutput() );
-	assert( filter.writerPort(0).connectedOutput()->node() ); // fail
-	assert( filter.writerPort(0).connectedOutput()->node() == &nR );
+	assert( filter.writerPort(0).connectedPort() );
+	assert( filter.writerPort(0).connectedPort()->node() ); // fail
+	assert( filter.writerPort(0).connectedPort()->node() == &nR );
 
 	filter.process();
 

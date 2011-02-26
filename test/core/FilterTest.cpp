@@ -14,12 +14,12 @@ class DummyFilter : public kiwi::core::Filter
 {
 public:
 	DummyFilter(){
-		addReaderInputPort();
-		addReaderInputPort();
+		addReaderPort();
+		addReaderPort();
 
-		portIndex_t w_in = addWriterInputPort();
-		portIndex_t r_out = addReaderOutputPort();
-		associateWriterToReader(writerInputPort(w_in), readerOutputPort(r_out));
+		portIndex_t w_in = addWriterPort();
+		portIndex_t r_out = addDataPort();
+		//associateWriterToReader(writerPort(w_in), dataPort(r_out));
 		
 	}
 
@@ -27,15 +27,15 @@ public:
 		ScopedBlockMacro(scop, "DummyFilter::Process")
 		
 		NumberContainer* ca
-			= readerInputPort(0).connectedOutput()
+			= readerPort(0).connectedOutput()
 				->getContainer<NumberContainer>();
 
 		NumberContainer* cb
-			= readerInputPort(1).connectedOutput()
+			= readerPort(1).connectedOutput()
 				->getContainer<NumberContainer>();
 		
 		NumberContainer* result
-			= writerInputPort(0).connectedOutput()
+			= writerPort(0).connectedOutput()
 				->getContainer<NumberContainer>();
 
 		assert(ca);
@@ -56,9 +56,9 @@ int main()
 
 	DummyFilter filter;
 
-	assert( !filter.readerOutputPort(0).isEnabled() );
-	assert( filter.readerInputPort(0).isEnabled() );
-	assert( filter.readerInputPort(1).isEnabled() );
+	assert( !filter.dataPort(0).isEnabled() );
+	assert( filter.readerPort(0).isEnabled() );
+	assert( filter.readerPort(1).isEnabled() );
 
 	NumberContainer A(5);
 	NumberContainer B(6);
@@ -68,29 +68,29 @@ int main()
 	kiwi::core::Node nA( &A );
 	kiwi::core::Node nB( &B );
 	kiwi::core::Node nR( &R );
-
+/*
 	// check that association are made correctly
-	assert( nA.writerOutputPort(0).associatedReaderOutputPort()
-		== &nA.readerOutputPort(0) );
-	assert( nB.writerOutputPort(0).associatedReaderOutputPort()
-		== &nB.readerOutputPort(0) );
-	assert( nR.writerOutputPort(0).associatedReaderOutputPort()
-		== &nR.readerOutputPort(0) );
+	assert( nA.dataPort(0).associatedReaderOutputPort()
+		== &nA.dataPort(0) );
+	assert( nB.dataPort(0).associatedReaderOutputPort()
+		== &nB.dataPort(0) );
+	assert( nR.dataPort(0).associatedReaderOutputPort()
+		== &nR.dataPort(0) );
+*/
+	nA.dataPort(0) >> filter.readerPort(0);	
+	nB.dataPort(0) >> filter.readerPort(1);
+	nR.dataPort(0) >> filter.writerPort(0);
 
-	nA.readerOutputPort(0) >> filter.readerInputPort(0);	
-	nB.readerOutputPort(0) >> filter.readerInputPort(1);
-	nR.writerOutputPort(0) >> filter.writerInputPort(0);
-
-	assert( filter.readerInputPort(0).isConnected() );
-	assert( filter.readerInputPort(1).isConnected() );
-	assert( filter.writerInputPort(0).isConnected() );
+	assert( filter.readerPort(0).isConnected() );
+	assert( filter.readerPort(1).isConnected() );
+	assert( filter.writerPort(0).isConnected() );
 
 	filter.process();
 
 	Debug::print() << R.getValue() << endl();
 	assert( R.getValue() == 11 );
 
-	NumberContainer* pr = filter.readerOutputPort(0).getContainer<NumberContainer>();
+	NumberContainer* pr = filter.dataPort(0).getContainer<NumberContainer>();
 	assert( pr );
 	assert( pr->getValue() == 11 );
 

@@ -33,6 +33,7 @@
 
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
 
 #include "kiwi/core/Container.hpp"
 
@@ -48,7 +49,7 @@ DataPort::DataPort( Node* myNode, Container* data )
 	if(!data){
 		Debug::print() << "DataPort::constructor: warning: data = 0\n";
 	}
-	setData(data);
+	setContainer(data);
 	// nothing to do
 }
 
@@ -73,10 +74,10 @@ void DataPort::unBind()
 
 void DataPort::setContainer( Container* data )
 {
-	ScopedBlockMacro(scop, "DataPort::setData");
+	ScopedBlockMacro(scop, "DataPort::setContainer");
 	if(!data) Debug::print() << "warning: param data = 0\n";
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
-		_linkedOutputPorts[i]->setData( data );
+		_linkedOutputPorts[i]->setContainer( data );
 
 	_container = data;
 	
@@ -91,7 +92,7 @@ void DataPort::setContainer( Container* data )
 
 kiwi::string DataPort::name() const
 {
-	return _node->readerOutputName( _node->indexOf(*this) );
+//	return _node->readerOutputName( _node->indexOf(*this) ); // TODO
 }
 
 
@@ -122,6 +123,11 @@ Tags DataPort::tags() const
 
 
 bool DataPort::isCompatible(ReaderPort& input)	
+{
+	return input.isCompatible(*this); 
+}
+
+bool DataPort::isCompatible(WriterPort& input)	
 {
 	return input.isCompatible(*this); 
 }
@@ -167,6 +173,13 @@ bool DataPort::connect(WriterPort* inputPort)
 	else return false;
 }
 
+void DataPort::disconnectReader( ReaderPort* port ){
+	ReaderConnector::disconnect( port );
+}
+
+void DataPort::disconnectWriter( WriterPort* port ){
+	WriterConnector::disconnect( port );
+}
 
 
 bool DataPort::isEnabled() const 

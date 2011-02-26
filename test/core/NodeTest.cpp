@@ -7,7 +7,9 @@
 
 #include "kiwi/utils/types.hpp"
 
-#include "kiwi/core/Ports.hpp"
+#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
+#include "kiwi/core/DataPort.hpp"
 
 
 using namespace kiwi;
@@ -22,19 +24,17 @@ public:
 	{
 	ScopedBlockMacro(scp_block, "MyNodeTest::constructor");
 	
-	addReaderInputPort();
-	addReaderInputPort();
-	addReaderInputPort();
-	addReaderInputPort();
+	addReaderPort();
+	addReaderPort();
+	addReaderPort();
+	addReaderPort();
 		
-	addWriterInputPort();	
+	addWriterPort();	
 	
-	addWriterOutputPort();
+	addDataPort();
+	addDataPort();
 		
-	addReaderOutputPort();
-	addReaderOutputPort();
-	addReaderOutputPort();
-
+	
 	}
 	~MyNodeTest() {}
 	
@@ -104,40 +104,40 @@ void NodeTest()
 	
 	MyNodeTest n;
 	
-	Debug::print() << n.readerInputPort(kiwi::string("foo"))->name() << endl();
-	Debug::print() << n.readerInputPort(kiwi::string("bar"))->name() << endl();
+	Debug::print() << n.readerPort(kiwi::string("foo"))->name() << endl();
+	Debug::print() << n.readerPort(kiwi::string("bar"))->name() << endl();
 
 	Debug::print() << "Node::Test#1" << endl();
 	
-	assert(n.readerInputPort("foo")->index() == 0 );
-	assert(n.readerInputPort("bar")->index() == 1 );
-	assert(n.readerOutputPort("plop")->index() == 0 );
-	assert(n.readerInputPort("mouahaha") == 0 );
+	assert(n.readerPort("foo")->index() == 0 );
+	assert(n.readerPort("bar")->index() == 1 );
+	assert(n.dataPort("plop")->index() == 0 );
+	assert(n.readerPort("mouahaha") == 0 );
 
 	MyNodeTest n2;
 
 	Debug::print() << "Node::Test#2" << endl();
 
-	n.readerOutputPort(0) >> n2.readerInputPort(0);
-	assert( n.readerOutputPort(0).isConnected() );
-	assert( n2.readerInputPort(0).isConnected() );
+	n.dataPort(0) >> n2.readerPort(0);
+	assert( n.dataPort(0).isConnected() );
+	assert( n2.readerPort(0).isConnected() );
 
 	Debug::print() << "Node::Test#3" << endl();
 	
-	n2.readerInputPort(0).disconnect();
+	n2.readerPort(0).disconnect();
 
-	assert( ! n.readerOutputPort(0).isConnected() );
-	assert( ! n2.readerInputPort(0).isConnected() );
+	assert( ! n.dataPort(0).isConnected() );
+	assert( ! n2.readerPort(0).isConnected() );
 
 	Debug::print() << "Node::Test#4" << endl();
 
-	n.readerOutputPort(0) >> n2.readerInputPort(0);
-	assert( n.readerOutputPort(0).nbConnections() == 1 );
+	n.dataPort(0) >> n2.readerPort(0);
+	assert( n.dataPort(0).nbConnections() == 1 );
 
-	n.readerOutputPort(0).disconnect();
+	n.dataPort(0).disconnect();
 
-	assert( ! n.readerOutputPort(0).isConnected() );
-	assert( ! n2.readerInputPort(0).isConnected() );
+	assert( ! n.dataPort(0).isConnected() );
+	assert( ! n2.readerPort(0).isConnected() );
 
 	Debug::print() << "Node::Test#5" << endl();
 	
@@ -145,17 +145,17 @@ void NodeTest()
 	Debug::print()
 		<< "the next test will provoque an expected error message"
 		<< endl();
-	n.readerOutputPort(0) >> n2.readerInputPort(1);
+	n.dataPort(0) >> n2.readerPort(1);
 	Debug::error() << "n.nbConnections = "
-		<< n.readerOutputPort(0).nbConnections() << endl();
-	assert( ! n.readerOutputPort(0).isConnected() );
-	assert( ! n2.readerInputPort(1).isConnected() );
+		<< n.dataPort(0).nbConnections() << endl();
+	assert( ! n.dataPort(0).isConnected() );
+	assert( ! n2.readerPort(1).isConnected() );
 
 	Debug::print() << "Node::Test#6" << endl();
 
-	n.readerOutputPort(2) >> n2.readerInputPort(3);
-	assert( n.readerOutputPort(2).isConnected() );
-	assert( n2.readerInputPort(3).isConnected() );
+	n.dataPort(2) >> n2.readerPort(3);
+	assert( n.dataPort(2).isConnected() );
+	assert( n2.readerPort(3).isConnected() );
 	
 }
 

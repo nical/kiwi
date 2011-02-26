@@ -65,13 +65,13 @@ public:
 	/**
 	 * @brief Constructor.
 	 */
-	TextWriter( core::WriterInputPort& port
+	TextWriter( core::WriterPort& port
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 );
 	/**
 	 * @brief Constructor.
 	 */
-	TextWriter( core::WriterOutputPort& port
+	TextWriter( core::DataPort& port
 		, kiwi::uint32_t firstLine = 0
 	 	, kiwi::uint32_t range = 0 );
 	

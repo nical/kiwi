@@ -97,8 +97,9 @@ portIndex_t Node::addWriterPort()
 	return _writerPorts.size()-1;
 }
 
-portIndex_t Node::addDataPort(Container* data)
+portIndex_t Node::addDataPort(Container* data, kiwi::uint8_t flags)
 {
+	// TODO: flags
 	_dataPorts.push_back( new DataPort(this, data) );
 	return _dataPorts.size()-1;
 }
@@ -110,7 +111,7 @@ void Node::addContainer(Container* data, bool addPort, kiwi::uint8_t flags)
 	_containers.add(data);
 	portIndex_t reader, writer;
 	if(addPort){
-		 reader = addDataPort(data,flag);
+		 reader = addDataPort(data,flags);
 	}
 }
 
@@ -236,50 +237,37 @@ Node::writerTags(portIndex_t index) const
 	return kiwi::Tags("#any");
 }
 
-/*
+
 kiwi::Tags 
-Node::DataTags(portIndex_t index) const
+Node::dataTags(portIndex_t index) const
 {
 	return kiwi::Tags("#any");
 }
-*/
+
 // -------------------------------------------------------- Port binding
 
 
-void 
-Node::bindPort(DataPort& myPort, DataPort& toBind)
-{ 
-	myPort.bind(toBind); 
-}
-
-void 
-Node::bindPort(DataPort& myPort, DataPort& toBind)
+void Node::bindPort(DataPort& myPort, DataPort& toBind)
 { 
 	myPort.bind(toBind);
 }
 
-void 
-Node::bindPort(ReaderPort& myPort, ReaderPort& toBind)
+void Node::bindPort(ReaderPort& myPort, ReaderPort& toBind)
 { 
 	myPort.bind(toBind); 
 }
 
-void 
-Node::bindPort(WriterPort& myPort, WriterPort& toBind)
+void Node::bindPort(WriterPort& myPort, WriterPort& toBind)
 { 
 	myPort.bind(toBind); 
 }
 
 
-void Node::setPortContainer(DataPort& port, Container* container)
+void Node::setDataPortContainer(DataPort& port, Container* container)
 {
-	port.setData( container );
+	port.setContainer( container );
 }
 
-void Node::setPortContainer(DataPort& port, Container* container)
-{
-	port.setData( container );
-}
 
 // ---------------------------------------------------- Node initializer
 

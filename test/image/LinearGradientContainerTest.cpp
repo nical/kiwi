@@ -26,15 +26,15 @@ void LinearGradientContainerTest(){
 
 	CopyImageFilter filter;
 
-	gradient1Node.readerOutputPort(0)			 >> filter.readerInputPort(0);
-	gradient1Node.readerOutputPort(0) 			 >> filter.readerInputPort(1);
-	gradient1Node.readerOutputPort(0)			 >> filter.readerInputPort(2);
-	inputDataNode.readerOutputPort(0).subPort(3) >> filter.readerInputPort(3);
+	gradient1Node.dataPort(0)			 >> filter.readerPort(0);
+	gradient1Node.dataPort(0) 			 >> filter.readerPort(1);
+	gradient1Node.dataPort(0)			 >> filter.readerPort(2);
+	inputDataNode.dataPort(0).subPort(3) >> filter.readerPort(3);
 
-	resultNode.writerOutputPort(0) >> filter.writerInputPort(0);
+	resultNode.dataPort(0) >> filter.writerPort(0);
 
 
-	assert( gradient1Node.readerOutputPort(0).isConnected() );
+	assert( gradient1Node.dataPort(0).isConnected() );
 
 	filter.process();
 

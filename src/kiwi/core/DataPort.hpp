@@ -55,7 +55,7 @@ class Node;
  */ 
 class DataPort
 : public kiwi::utils::Connector<DataPort, ReaderPort, 32, READER>
-, public kiwi::utils::Connector<DataPort, WriterPort, 32, READER>
+, public kiwi::utils::Connector<DataPort, WriterPort, 32, WRITER>
 {
 friend class Node;
 public:
@@ -112,6 +112,7 @@ friend class WriterPort;
 	 * @brief Port compatibility check based on the type string.
 	 */ 
 	bool isCompatible(ReaderPort& input);
+	bool isCompatible(WriterPort& input);
 
 	/**
 	 * @brief returns true if this port is enabled.
@@ -133,6 +134,23 @@ friend class WriterPort;
 	
 	bool connect(WriterPort& port);
 	bool connect(WriterPort* port);
+
+	bool isConnectedToReader() const{
+		return ReaderConnector::isConnected();
+	}
+	bool isConnectedToWriter() const{
+		return WriterConnector::isConnected();
+	}
+	bool isConnected() const{
+		return isConnectedToReader() && isConnectedToWriter();
+	}
+
+	void disconnectReader( ReaderPort* port = 0);
+	void disconnectWriter( WriterPort* port = 0);
+	void disconnectAll(){
+		disconnectReader(0);
+		disconnectWriter(0);
+	}
 	
 protected:
 

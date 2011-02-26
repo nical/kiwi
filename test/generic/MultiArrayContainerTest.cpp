@@ -43,15 +43,15 @@ public:
 		kiwi::string sType( kiwi::string("array")
 			+ boost::lexical_cast<kiwi::string>(TDimension)
 			+"d_"+ types::str<TValueType>() );
-		addReaderInputPort();
-		addReaderInputPort();
+		addReaderPort();
+		addReaderPort();
 		
 //+		addWriterInputPort();	
 		
 		//add a reader output that will be available only when the writer
 		//port is connected
 //+		addReaderOutputPort();
-//+		setPortEnabled(readerOutputPort(0),false);
+//+		setPortEnabled(dataPort(0),false);
 	}
 	~AddArraysFilter() {}
 
@@ -70,13 +70,13 @@ DEBUG_ONLY(		if(!isReady() )
 		}
 )
 		Debug::print() << "Allocate Reader #0" << endl();
-		myReader A( readerInputPort(0) );
+		myReader A( readerPort(0) );
 		
 		Debug::print() << "Allocate Reader #1" << endl();
-		myReader B( readerInputPort(1) );
+		myReader B( readerPort(1) );
 		
 		Debug::print() << "Allocate Writer #0" << endl();
-		myWriter result( writerInputPort(0) );
+		myWriter result( writerPort(0) );
 		
 		Debug::beginBlock( "compute..");
 			ArrayConstIterator<TValueType> itA = A.getIterator();
@@ -114,9 +114,9 @@ DEBUG_ONLY(		if(!isReady() )
 // ---------------------------------------------------------------------
 	bool isReady() const
 	{
-		return (readerInputPort(0).isConnected()
-			&& readerInputPort(1).isConnected()
-			&& writerInputPort(0).isConnected() );
+		return (readerPort(0).isConnected()
+			&& readerPort(1).isConnected()
+			&& writerPort(0).isConnected() );
 	}
 	
 };
@@ -185,10 +185,10 @@ void MultiArrayContainerTest()
 		it = wr10.getIterator();
 		do { *it = 0; } while ( it.onIteration() );
 		
-		assert( myTest.indexOf( myTest.readerInputPort(0) ) == 0 );
-		assert( myTest.indexOf( myTest.readerInputPort(1) ) == 1 );
-		assert( resource1.indexOf( resource1.writerOutputPort(0) ) == 0 );
-		assert( resource1.indexOf( resource1.writerOutputPort(1) ) == 1 );
+		assert( myTest.indexOf( myTest.readerPort(0) ) == 0 );
+		assert( myTest.indexOf( myTest.readerPort(1) ) == 1 );
+		assert( resource1.indexOf( resource1.dataPort(0) ) == 0 );
+		assert( resource1.indexOf( resource1.dataPort(1) ) == 1 );
 		
 		//resource1.printState();
 		//resource2.printState();
@@ -198,13 +198,13 @@ void MultiArrayContainerTest()
 	Debug::endl();
 
 	Debug::beginBlock("connect the ports");
-		resource1.readerOutputPort(1) >> myTest.readerInputPort(0);
-		resource2.readerOutputPort(0) >> myTest.readerInputPort(1);
-		resourceResult.writerOutputPort(0) >> myTest.writerInputPort(0);
+		resource1.dataPort(1) >> myTest.readerPort(0);
+		resource2.dataPort(0) >> myTest.readerPort(1);
+		resourceResult.dataPort(0) >> myTest.writerInputPort(0);
 		
-		resource1.readerOutputPort(0) >> myTest2.readerInputPort(0);
-		myTest.readerOutputPort(0) >> myTest2.readerInputPort(1);
-		resourceResult.writerOutputPort(1) >> myTest2.writerInputPort(0);
+		resource1.dataPort(0) >> myTest2.readerPort(0);
+		myTest.dataPort(0) >> myTest2.readerPort(1);
+		resourceResult.dataPort(1) >> myTest2.writerInputPort(0);
 	Debug::endBlock("connect the ports");
 
 	Debug::print() << endl();

@@ -27,7 +27,7 @@ public:
 		// RGBA result of the copy
 		kiwi::portIndex_t w_in = addWriterPort(); 
 		kiwi::portIndex_t r_out = addDataPort();
-		associateWriterToReader( writerInputPort(w_in) , readerOutputPort(r_out) );
+		//associateWriterToReader( writerPort(w_in) , dataPort(r_out) );
 	}
 
 	void process(){
@@ -37,23 +37,23 @@ public:
 		typedef kiwi::generic::Point<kiwi::uint32_t, 2> CoordinateVector;
 
 		ColorBuffer* r
-			= readerInputPort(R).connectedOutput()
+			= readerPort(R).connectedOutput()
 				->getContainer<ColorBuffer>();
 		ColorBuffer* g
-			= readerInputPort(G).connectedOutput()
+			= readerPort(G).connectedOutput()
 				->getContainer<ColorBuffer>();
 		ColorBuffer* b
-			= readerInputPort(B).connectedOutput()
+			= readerPort(B).connectedOutput()
 				->getContainer<ColorBuffer>();
 		ColorBuffer* a
-			= readerInputPort(A).connectedOutput()
+			= readerPort(A).connectedOutput()
 				->getContainer<ColorBuffer>();
 
 		Debug::plop();
 		
-		assert( writerInputPort(0).connectedOutput() );
+		assert( writerPort(0).connectedOutput() );
 		kiwi::image::cairo::RGBAImageContainer* result
-			= writerInputPort(0).connectedOutput()
+			= writerPort(0).connectedOutput()
 				->getContainer<kiwi::image::cairo::RGBAImageContainer>();
 
 		if(!a) Debug::print() << "alpha channel not found\n";
@@ -77,7 +77,7 @@ public:
 			}else { return; }
 
 			result = new kiwi::image::cairo::RGBAImageContainer(size);
-			setPortContainer(readerOutputPort(0), result );
+			setDataPortContainer(dataPort(0), result );
 		}
 		//cairo_surface_flush( result->getSurface() ); // TODO
 

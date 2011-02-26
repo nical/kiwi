@@ -212,9 +212,9 @@ public:
 	 * @param portName The name of the port.
 	 */ 
 /*
-	ReaderInputPort* readerInputPort(const kiwi::string& portName) const
+	ReaderInputPort* readerPort(const kiwi::string& portName) const
 	{
-		for( kiwi::uint32_t i = 0; i < nbReaderInputs(); ++i )
+		for( kiwi::uint32_t i = 0; i < nbReaderPorts(); ++i )
 		{	
 			if(readerInputName(i) == portName)
 				return _readerInputs[i];
@@ -231,9 +231,9 @@ public:
 	 * @param portName The name of the port.
 	 */ 
 /*
-	DataPort* writerOutputPort(const kiwi::string& portName) const
+	DataPort* dataPort(const kiwi::string& portName) const
 	{
-		for( kiwi::uint32_t i = 0; i < nbWriterOutputs(); ++i )
+		for( kiwi::uint32_t i = 0; i < nbDataPorts(); ++i )
 		{	
 			if(writerOutputName(i) == portName)
 				return _writerOutputs[i];
@@ -250,9 +250,9 @@ public:
 	 * @param portName The name of the port.
 	 */ 
 /*
-	ReaderOutputPort* readerOutputPort(const kiwi::string& portName) const
+	ReaderOutputPort* dataPort(const kiwi::string& portName) const
 	{
-		for( kiwi::uint32_t i = 0; i < nbReaderOutputs(); ++i )
+		for( kiwi::uint32_t i = 0; i < nbDataPorts(); ++i )
 		{	
 			if(readerOutputName(i) == portName)
 				return _readerOutputs[i];
@@ -269,9 +269,9 @@ public:
 	 * @param portName The name of the port.
 	 */ 
 /*
-	WriterInputPort* writerInputPort(const kiwi::string& portName) const
+	WriterInputPort* writerPort(const kiwi::string& portName) const
 	{
-		for( kiwi::uint32_t i = 0; i < nbWriterInputs(); ++i )
+		for( kiwi::uint32_t i = 0; i < nbWriterPorts(); ++i )
 		{	
 			if(writerInputName(i) == portName)
 				return _writerInputs[i];
@@ -356,7 +356,7 @@ public:
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::Tags DataTags( portIndex_t index ) const;
+	virtual kiwi::Tags dataTags( portIndex_t index ) const;
 	
 // --------------------------------------------------- protected methods	
 protected:
@@ -382,7 +382,7 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
-	portIndex_t addDataPort(Container* data = 0);
+	portIndex_t addDataPort(Container* data = 0, kiwi::uint8_t flags = 3);
 	/**
 	 * @brief Remove an output port from this Filter's Reader interface.
 	 *
@@ -506,7 +506,7 @@ private:
  *
  * exemple:
  * 	// connects myNode1's first OutputPort to myNode2's second InputPort
- * 	myNode1.readerOutputPort(0) >> myNode2.readerInputPort(1);
+ * 	myNode1.dataPort(0) >> myNode2.readerPort(1);
  */ 
 bool operator >> (DataPort& output, ReaderPort& input );
 
@@ -518,7 +518,7 @@ bool operator >> (DataPort& output, ReaderPort& input );
  *
  * exemple:
  * 	// connects myNode1's first OutputPort to myNode2's second InputPort
- * 	myNode1.readerOutputPort(0) >> myNode2.readerInputPort(1);
+ * 	myNode1.dataPort(0) >> myNode2.readerPort(1);
  */ 
 bool operator>>(DataPort& output, WriterPort& input );
 

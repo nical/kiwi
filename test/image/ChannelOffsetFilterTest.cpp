@@ -30,22 +30,22 @@ void ChannelOffsetTest()
 	kiwi::image::ChannelOffsetFilter f1;
 
 
-	assert( inputDataNode.writerOutputPort(0).isComposite() );
-	assert( inputDataNode.writerOutputPort(0).nbSubPorts() == 4 );
+	assert( inputDataNode.dataPort(0).isComposite() );
+	assert( inputDataNode.dataPort(0).nbSubPorts() == 4 );
 	
-	inputDataNode.readerOutputPort(0).subPort(0) 	>> f1.readerInputPort(0);
-	displacement1Node.readerOutputPort(0) 			>> f1.readerInputPort(1);
-	regionNode.readerOutputPort(0) 			>> f1.readerInputPort(2);
-	resultNode.writerOutputPort(0).subPort(0)		>> f1.writerInputPort(0);
+	inputDataNode.dataPort(0).subPort(0) 	>> f1.readerPort(0);
+	displacement1Node.dataPort(0) 			>> f1.readerPort(1);
+	regionNode.dataPort(0) 			>> f1.readerPort(2);
+	resultNode.dataPort(0).subPort(0)		>> f1.writerPort(0);
 
 	//typedef kiwi::core::Container TestType;
 	typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> TestType;
-	TestType* ptr =	resultNode.writerOutputPort(0).subPort(0).getContainer<TestType>() ;
+	TestType* ptr =	resultNode.dataPort(0).subPort(0).getContainer<TestType>() ;
 	assert( ptr );
 
-	assert( f1.readerInputPort(0).isConnected() );
-	assert( f1.readerInputPort(1).isConnected() );
-	assert( f1.writerInputPort(0).isConnected() );
+	assert( f1.readerPort(0).isConnected() );
+	assert( f1.readerPort(1).isConnected() );
+	assert( f1.writerPort(0).isConnected() );
 
 	f1.process();
 

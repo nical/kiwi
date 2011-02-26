@@ -26,7 +26,7 @@ public:
 		// Result (channel)
 		kiwi::portIndex_t w_in = addWriterPort(); 
 		kiwi::portIndex_t r_out = addDataPort();
-		associateWriterToReader( writerInputPort(w_in) , readerOutputPort(r_out) );
+		//associateWriterToReader( writerPort(w_in) , dataPort(r_out) );
 	}
 
 	void process(){
@@ -37,15 +37,15 @@ public:
 		typedef kiwi::generic::RectangleContainer<kiwi::int32_t, 2> RegionContainer;
 
 
-		ColorBuffer* chan = readerInputPort(0).getContainer<ColorBuffer>();
+		ColorBuffer* chan = readerPort(0).getContainer<ColorBuffer>();
 				
 		PointVectorContainer* vect
-			= readerInputPort(1).getContainer<PointVectorContainer>();
+			= readerPort(1).getContainer<PointVectorContainer>();
 
 		RegionContainer* regionInput
-			= readerInputPort(2).getContainer<RegionContainer>();
+			= readerPort(2).getContainer<RegionContainer>();
 
-		ColorBuffer* result	= writerInputPort(0).getContainer<ColorBuffer>();
+		ColorBuffer* result	= writerPort(0).getContainer<ColorBuffer>();
 				
 		if(!chan) Debug::print() << "input channel not found\n";
 		if(!vect) Debug::print() << "input offset vector not found\n";
@@ -59,7 +59,7 @@ public:
 			CoordinateVector size;
 			if(chan) {
 				result = new kiwi::generic::ArrayContainer<kiwi::uint8_t,2>(chan->spanSize());
-				setPortContainer(readerOutputPort(0), result );
+				setDataPortContainer(dataPort(0), result );
 			}else { return; }
 		}
 		

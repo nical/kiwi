@@ -61,9 +61,7 @@ public:
 	TextReader( core::ReaderPort& port
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 ); 
-	TextReader( core::ReaderPort& port
-		, kiwi::uint32_t firstLine = 0
-		, kiwi::uint32_t range = 0 );
+	
 
 	
 	kiwi::uint32_t nbLines() const { return _nbLines; }

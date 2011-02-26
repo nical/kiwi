@@ -28,15 +28,15 @@ endif(DEFINED BUILD_KIWI_IMAGE)
 
 if(DEFINED BUILD_KIWI_TEXT)	
 	SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
-		text/PlainTextContainerTest
+#		text/PlainTextContainerTest
 	)
 endif(DEFINED BUILD_KIWI_TEXT)
 
 
 SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 #	TestSuite
-	core/NodeTest
-	core/FactoryTest
+#	core/NodeTest
+#	core/FactoryTest
 	core/TagTest
 	utils/ConnectorTest
 	utils/UnorderedArrayTest

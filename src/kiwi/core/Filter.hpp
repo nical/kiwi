@@ -41,7 +41,9 @@
 #define KIWI_FILTER_HPP
 
 #include "kiwi/core/Node.hpp"
-#include "kiwi/core/Ports.hpp"
+#include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
 
 namespace kiwi{
 namespace core{
@@ -71,20 +73,21 @@ public:
 	 */ 
 	void layoutChanged()
 	{
-		uint32_t nbWriters = nbWriterInputs();
+		uint32_t nbWriters = nbWriterPorts();
 		//ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
 		for(uint32_t i = 0; i < nbWriters; ++i){
-			if( writerInputPort(i).isConnected() ){
-				if( !readerOutputPort(i).isEnabled() ){
-//					setPortEnabled(readerOutputPort(i),true);
-					portIndex_t outIndex = writerInputPort(i).connectedOutput()->index();
-					ReaderOutputPort& op
-						= writerInputPort(i).connectedOutput()->node()->readerOutputPort(outIndex);
-					bindPort( readerOutputPort(i), op );
+			if( writerPort(i).isConnected() ){
+				if( !dataPort(i).isEnabled() ){
+//					setPortEnabled(dataPort(i),true);
+					portIndex_t outIndex = writerPort(i).connectedOutput()->index();
+					DataPort& op
+						= writerPort(i).connectedOutput()->node()->dataPort(outIndex);
+					bindPort( dataPort(i), op );
 				}
 			}else{
-				readerOutputPort(i).disconnect();
-//				setPortEnabled(readerOutputPort(i),false);	
+				dataPort(i).disconnectReader();
+				dataPort(i).disconnectWriter();
+//				setPortEnabled(dataPort(i),false);	
 			}
 		}
 	}
@@ -97,11 +100,12 @@ public:
 	 * to a port, the associated reader should read the data that the writer 
 	 * accesses.
 	 */ 
-	void associateWriterToReader(WriterInputPort& writer, ReaderOutputPort& reader) const
+/*
+	void //associateWriterToReader(WriterInputPort& writer, ReaderOutputPort& reader) const
 	{
 		writer.associateReaderPort( &reader );
 	}
-	
+*/	
 
 	Filter():Node()
 	{

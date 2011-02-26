@@ -101,7 +101,7 @@ WriterPort::node() const
 
 Tags WriterPort::tags() const
 {
-	return node()->writerInputTags( index() );
+	return node()->writerTags( index() );
 }
 
 bool WriterPort::isCompatible(DataPort& output)	
@@ -140,7 +140,7 @@ WriterPort::connectedOutput() const
 kiwi::string 
 WriterPort::name() const
 {
-	return _node->writerInputName(_node->indexOf(*this));
+//	return _node->writerInputName(_node->indexOf(*this)); TODO
 }
 
 

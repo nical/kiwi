@@ -130,7 +130,7 @@ DataPort* ReaderPort::connectedOutput() const
 
 kiwi::string ReaderPort::name() const
 {
-	return _node->readerName(_node->indexOf(*this));
+	//return _node->readerName(_node->indexOf(*this)); //TODO
 }
 
 

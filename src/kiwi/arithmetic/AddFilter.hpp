@@ -16,9 +16,9 @@ class AddFilter : public kiwi::core::Filter
 public:
 	AddFilter(){
 		_result = new kiwi::generic::NumberContainer<KIWI_ADDFILTER_TYPE>();
-		addReaderInputPort(); // A
-		addReaderInputPort(); // B
-		addReaderOutputPort( _result );
+		addReaderPort(); // A
+		addReaderPort(); // B
+		addDataPort( _result );
 	}
 
 	void process(){
@@ -28,11 +28,11 @@ public:
 			typedef kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE> NumberContainer_T;
 			
 			NumberContainer_T* ca
-				= readerInputPort(0).connectedOutput()
+				= readerPort(0).connectedOutput()
 					->getContainer<NumberContainer_T>();
 
 			NumberContainer_T* cb
-				= readerInputPort(1).connectedOutput()
+				= readerPort(1).connectedOutput()
 					->getContainer<NumberContainer_T>();
 
 			if(!ca){
@@ -70,18 +70,18 @@ public:
 	}
 
 	void layoutChanged(){
-		if( readerInputPort(0).isConnected()
-		&& readerInputPort(1).isConnected() ){
+		if( readerPort(0).isConnected()
+		&& readerPort(1).isConnected() ){
 			if( _result == 0 ){
 				_result = new kiwi::generic::NumberContainer<KIWI_ADDFILTER_TYPE>( 0 );
-				setPortContainer( readerOutputPort(0), _result );
-//				setPortEnabled( readerOutputPort(0), false );
+				setDataPortContainer( dataPort(0), _result );
+//				setPortEnabled( dataPort(0), false );
 			}
 		}else{
 			if( _result != 0){
 				delete _result;
 				_result = 0;
-				setPortContainer( readerOutputPort(0), 0 );
+				setDataPortContainer( dataPort(0), 0 );
 			}
 		}
 	}

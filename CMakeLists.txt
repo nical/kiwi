@@ -14,9 +14,9 @@ set(BUILD_KIWI_TESTS "yes") #to build the tests (recommended !)
 set(BUILD_KIWI_IMAGE "yes") #to build kiwi::image
 set(BUILD_KIWI_TEXT "yes") #to build kiwi::text
 #set(BUILD_KIWI_CMDLINE "yes") #to build the command-line app
-set(BUILD_DDD_FLAG "yes") #to build using -g argument for debug purposes
+#set(BUILD_DDD_FLAG "yes") #to build using -g argument for debug purposes
 
-#so that each test is build with it's own executable
+#so that each test is built with it's own executable
 add_definitions(-DKIWI_TEST_MAIN)
 
 
@@ -81,6 +81,11 @@ if(DEFINED BUILD_KIWI_IMAGE)
 	if ( Cairo_FOUND )
 		message( "-- Cairo found. include=${Cairo_INCLUDE_DIR}" )
 		include_directories( ${Cairo_INCLUDE_DIR} )
+	else ( Cairo_FOUND )
+		# if cairo is not found, dependencies in kiwi::image wont be satisfied
+		# so just disable kiwi::image in the build process
+		set(BUILD_KIWI_IMAGE "no")
+		message("-- Cairo not found : kiwi::image excluded from build.")
 	endif ( Cairo_FOUND )
 endif(DEFINED BUILD_KIWI_IMAGE)
 

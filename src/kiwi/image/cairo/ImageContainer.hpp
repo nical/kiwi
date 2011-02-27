@@ -135,7 +135,7 @@ public:
 
 	
 	//factory
-	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
+	static void registerToFactory(kiwi::utils::NodeFactory& factory, const kiwi::string& filterId);
 
 
 protected:

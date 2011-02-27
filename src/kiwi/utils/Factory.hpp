@@ -39,21 +39,18 @@
 
 
 namespace kiwi{
-namespace core{
-
-class Node;
-class Filter;
-class Container;
+namespace core{ class Node; }
+namespace utils{
 
 
 template<typename T>
-class Descriptor
+class FactoryDescriptor
 {
 public:
 	typedef T*(*instantiationFunction)(void) ;
 	
-	Descriptor() : _tags("#invalid"), _creator(0){ }
-	Descriptor( instantiationFunction fPtr, const kiwi::string& tags = "" )
+	FactoryDescriptor() : _tags("#invalid"), _creator(0){ }
+	FactoryDescriptor( instantiationFunction fPtr, const kiwi::string& tags = "" )
 	: _tags(tags), _creator(fPtr){ }
 	
 	kiwi::string tags() const { return _tags; }
@@ -92,7 +89,7 @@ public:
 	 *
 	 * This step is necessary for each class that needs to be added to the factory. 
 	 */ 
-	void registerClass(const  HashKey& uniqueId, Descriptor<ObjType>);
+	void registerClass(const  HashKey& uniqueId, FactoryDescriptor<ObjType>);
 
 	/**
 	 * @brief Removes a key from the factory.
@@ -102,10 +99,10 @@ public:
 	/**
 	 * @brief Returns the list of the available classes.
 	 */ 
-	std::list< std::pair<HashKey, Descriptor<ObjType> > > availableClasses();
+	std::list< std::pair<HashKey, FactoryDescriptor<ObjType> > > availableClasses();
 
 private:
-	typedef std::map<HashKey, Descriptor<ObjType> > ObjectMap;
+	typedef std::map<HashKey, FactoryDescriptor<ObjType> > ObjectMap;
 	ObjectMap _objects;
 };
 
@@ -133,7 +130,7 @@ int Factory<ObjType,HashKey>::exists(const  HashKey& uniqueId)
 	
 template<class ObjType, class HashKey>
 void Factory<ObjType,HashKey>::registerClass( const HashKey& uniqueId
-	, Descriptor<ObjType> desc)
+	, FactoryDescriptor<ObjType> desc)
 {
 	_objects[uniqueId] = desc;
 }
@@ -167,6 +164,7 @@ std::list<kiwi::string> Factory<ObjType,HashKey>::availableClasses( const kiwi::
 
 
 typedef Factory<kiwi::core::Node,kiwi::string> NodeFactory;
+typedef FactoryDescriptor<kiwi::core::Node> NodeFactoryDescriptor;
 
 
 }//namespace

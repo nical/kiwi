@@ -36,7 +36,7 @@ endif(DEFINED BUILD_KIWI_TEXT)
 SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 #	TestSuite
 #	core/NodeTest
-#	core/FactoryTest
+	core/FactoryTest
 	core/TagTest
 	utils/ConnectorTest
 	utils/UnorderedArrayTest

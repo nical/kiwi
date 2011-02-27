@@ -35,7 +35,6 @@ SET(KIWI_SRC ${KIWI_SRC}
 		core/ReaderPort.cpp
 		core/WriterPort.cpp
 		core/DataPort.cpp
-		core/NodeFactory.cpp
 		pipeline/SimplePipeline.cpp
 		core/Tags.cpp
 		# kiwi::core source files

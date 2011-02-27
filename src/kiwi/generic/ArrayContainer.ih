@@ -132,7 +132,7 @@ ScopedBlockMacro(__scop, kiwi::string("ArrayContainer<")
 
 
 template<typename T, unsigned int D>
-void ArrayContainer<T,D>::registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
+void ArrayContainer<T,D>::registerToFactory(kiwi::utils::NodeFactory& factory, const kiwi::string& filterId)
 {
 	kiwi::string tags("#Container#array");
 	kiwi::string name("ArrayContainer<");
@@ -142,7 +142,7 @@ void ArrayContainer<T,D>::registerToFactory(kiwi::core::NodeFactory& factory, co
 	name += boost::lexical_cast<kiwi::string>(D) + "," + types::str<ValueType>() + ">";
 	
 	factory.registerClass( filterId
-		, kiwi::core::Descriptor<kiwi::core::Node>(newArrayContainer, tags )
+		, kiwi::utils::FactoryDescriptor<kiwi::core::Node>(newArrayContainer, tags )
 	);
 }
 

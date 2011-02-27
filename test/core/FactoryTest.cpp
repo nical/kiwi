@@ -3,7 +3,7 @@
 
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/utils/Factory.hpp"
 #include "kiwi/core/Filter.hpp"
 
 
@@ -40,30 +40,29 @@ void FactoryTest()
 {
 ScopedBlockMacro(__scop, "kiwi::NodeFactory::Test")
 	
-	kiwi::core::NodeFactory factory;
+	kiwi::utils::NodeFactory factory;
 	
-	factory.registerNode(
-		"A", kiwi::core::Descriptor<kiwi::core::Node>("testFilterA", &__createA, "#Filter") 
+	factory.registerClass(
+		"A", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createA, "#Filter") 
 	);
 	
-	factory.registerNode(
-		"B", kiwi::core::Descriptor<kiwi::core::Node>("testFilterB", &__createB, "#Filter") 
+	factory.registerClass(
+		"B", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createB, "#Filter") 
 	);
 	
-	factory.registerNode(
-		"C", kiwi::core::Descriptor<kiwi::core::Node>("testFilterB", &__createC, "#Filter") 
+	factory.registerClass(
+		"C", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createC, "#Filter") 
 	);
 	
-	kiwi::core::Node* tfa = factory.newNode("A");
+	kiwi::core::Node* tfa = factory.newObject("A");
 	assert(tfa != 0);
-	kiwi::core::Node* tfb = factory.newNode("B");
+	kiwi::core::Node* tfb = factory.newObject("B");
 	assert(tfb != 0);
-	kiwi::core::Node* tfc = factory.newNode("C");
+	kiwi::core::Node* tfc = factory.newObject("C");
 	assert(tfc != 0);
-	kiwi::core::Node* tfx = factory.newNode("unregistered filter");
+	kiwi::core::Node* tfx = factory.newObject("unregistered filter");
 	assert(tfx == 0);
 	
-	//assert( factory.exFilterists("A") == kiwi::core::NodeFactory::FILTER);
 	assert( factory.exists("A") );
 	assert( !factory.exists("unregistered filter") );
 	

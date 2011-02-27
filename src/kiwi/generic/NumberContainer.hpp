@@ -40,9 +40,9 @@ public:
 	/**
 	 * @brief Register the Container to the ContainerFactory
 	 */
-	virtual bool registerToFactory(kiwi::core::NodeFactory& factory){
+	virtual bool registerToFactory(kiwi::utils::NodeFactory& factory){
 		factory.registerClass( kiwi::string(types::str<ValueType>()) + "Number"
-		, kiwi::core::Descriptor<kiwi::core::Node>(
+		, kiwi::utils::FactoryDescriptor<kiwi::core::Node>(
 			&internals::__newNumberContainer<TValueType>
 			, "#Container") 
 		);

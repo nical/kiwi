@@ -42,7 +42,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Node.hpp"
 #include "kiwi/core/Filter.hpp"
-#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/utils/Factory.hpp"
 
 
 

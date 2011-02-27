@@ -46,7 +46,7 @@
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/utils/types.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
-#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/utils/Factory.hpp"
 
 #include <boost/lexical_cast.hpp>
 
@@ -199,7 +199,7 @@ public:
 		return new ArrayContainer<TValueType, TDimension>(CoordinateVector(128,128),1);
 	}
 
-	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
+	static void registerToFactory(kiwi::utils::NodeFactory& factory, const kiwi::string& filterId);
 
 
 protected:

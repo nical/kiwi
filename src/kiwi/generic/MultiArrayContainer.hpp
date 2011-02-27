@@ -46,7 +46,7 @@
 #include "kiwi/utils/types.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
 #include "kiwi/generic/ArrayContainerInterface.hpp"
-#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/utils/Factory.hpp"
 #include <boost/lexical_cast.hpp>
 
 namespace kiwi
@@ -198,7 +198,7 @@ public:
 		return new MultiArrayContainer<TValueType, TDimension>(Coordinates(128,128),1);
 	}
 
-	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId);
+	static void registerToFactory(kiwi::utils::NodeFactory& factory, const kiwi::string& filterId);
 
 protected:
 
@@ -210,7 +210,7 @@ private:
 	void init(unsigned char nameHint);
 
 	// here is the main difference between the multiArraycontainer and the MultiArrayContainer
-	// the different buffers are not stored at the same place in the memory (allows more
+	// the buffers are not stored at the same place in the memory (allows better
 	// compatibility with the VST framework for audio processing applications)
 	ValueType** _data; // (in the MultiArrayContainer it is a simple pointer here)
 	bool _deleteDataDestructor;

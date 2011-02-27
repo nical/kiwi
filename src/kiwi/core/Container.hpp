@@ -33,7 +33,7 @@
 #define KIWI_RESOURCE_HPP
 
 #include "kiwi/core/Node.hpp"
-#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/utils/Factory.hpp"
 
 namespace kiwi{
 namespace core{
@@ -81,7 +81,7 @@ public:
 	/**
 	 * @brief Register the Container to the ContainerFactory
 	 */
-	 virtual bool registerToFactory(const kiwi::core::NodeFactory& factory) {return false;}
+	 virtual bool registerToFactory(const kiwi::utils::NodeFactory& factory) {return false;}
 };
 
 

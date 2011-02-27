@@ -41,9 +41,9 @@ public:
 	 * @brief Register the Container to the ContainerFactory
 	 */
 	virtual bool registerToFactory(kiwi::core::NodeFactory& factory){
-		factory.registerNode( kiwi::string(types::str<ValueType>()) + "Number"
-		, kiwi::core::Descriptor<kiwi::core::Node>(kiwi::string(types::str<ValueType>())+"NumberContainer"
-			, &internals::__newNumberContainer<TValueType>
+		factory.registerClass( kiwi::string(types::str<ValueType>()) + "Number"
+		, kiwi::core::Descriptor<kiwi::core::Node>(
+			&internals::__newNumberContainer<TValueType>
 			, "#Container") 
 		);
 		return true;

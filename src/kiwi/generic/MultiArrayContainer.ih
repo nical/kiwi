@@ -149,10 +149,9 @@ void MultiArrayContainer<T,D>::registerToFactory(kiwi::core::NodeFactory& factor
 	
 	name += boost::lexical_cast<kiwi::string>(D) + "," + types::str<ValueType>() + ">";
 	
-	factory.registerNode( filterId
+	factory.registerClass( filterId
 			, kiwi::core::Descriptor<kiwi::core::Node>(
-				name
-				, newMultiArrayContainer
+				newMultiArrayContainer
 				, tags )
 		);
 		

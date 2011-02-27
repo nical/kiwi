@@ -50,7 +50,6 @@ DataPort::DataPort( Node* myNode, Container* data )
 		Debug::print() << "DataPort::constructor: warning: data = 0\n";
 	}
 	setContainer(data);
-	// nothing to do
 }
 
 
@@ -59,9 +58,6 @@ void DataPort::bind(DataPort& port)
 //	Debug::print() << "port binding" << endl();
 	_container = port._container;
 	port._linkedOutputPorts.add( this );
-
-	// note that if the binded Node is deleted, trying to acces
-	// this port might cause a segfault
 }
 
 void DataPort::unBind()

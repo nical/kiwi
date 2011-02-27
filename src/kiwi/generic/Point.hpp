@@ -179,6 +179,15 @@ public:
 	 */ 
 	Point<CoordType,TDimension>& operator = (const Point<CoordType, TDimension>& p);
 
+	template<typename T>
+	Point<CoordType,TDimension> operator * (T val){
+		Point<CoordType,TDimension> result;
+		for(kiwi::uint32_t i = 0; i < TDimension; ++i){
+			result(i) = (T)_coordinates[i]*val;
+		}
+		return result;
+	}
+
 	/**
 	 * @brief Returns a string representing this Point.
 	 */

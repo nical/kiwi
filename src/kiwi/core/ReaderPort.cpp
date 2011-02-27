@@ -128,11 +128,6 @@ DataPort* ReaderPort::connectedPort() const
 	return PortConnector::connectedInstance(0);
 }
 
-kiwi::string ReaderPort::name() const
-{
-	//return _node->readerName(_node->indexOf(*this)); //TODO
-}
-
 
 
 

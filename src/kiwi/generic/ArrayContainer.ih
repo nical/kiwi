@@ -141,12 +141,9 @@ void ArrayContainer<T,D>::registerToFactory(kiwi::core::NodeFactory& factory, co
 	
 	name += boost::lexical_cast<kiwi::string>(D) + "," + types::str<ValueType>() + ">";
 	
-	factory.registerNode( filterId
-			, kiwi::core::Descriptor<kiwi::core::Node>(
-				name
-				, newArrayContainer
-				, tags )
-		);
+	factory.registerClass( filterId
+		, kiwi::core::Descriptor<kiwi::core::Node>(newArrayContainer, tags )
+	);
 }
 
 

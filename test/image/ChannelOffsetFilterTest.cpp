@@ -3,6 +3,7 @@
 #include "kiwi/image/cairo/ImageContainer.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/generic/RectangleContainer.hpp"
+#include "kiwi/image/LinearGradientContainer.hpp"
 #include <assert.h>
 
 
@@ -13,11 +14,16 @@ using namespace kiwi::image;
 void ChannelOffsetTest()
 {
 	typedef cairo::RGBAImageContainer::CoordinateVector CoordinateVector; 
+	typedef LinearGradientContainer<kiwi::uint8_t,2,kiwi::uint32_t> GradientContainer;
+	
+	GradientContainer
+		gradient( CoordinateVector(0,0), 0,  CoordinateVector(10,600), 255 );
+	kiwi::core::Node gradientNode(&gradient);
 
 	cairo::RGBAImageContainer inputData("inputImageTransp.png");
 	kiwi::core::Node inputDataNode(&inputData);
 
-	kiwi::generic::PointVectorContainer<kiwi::uint32_t, 2> displacement1(CoordinateVector(10,10));
+	kiwi::generic::PointVectorContainer<kiwi::uint32_t, 2> displacement1(CoordinateVector(100,10));
 	kiwi::core::Node displacement1Node(&displacement1);
 
 	kiwi::generic::RectangleContainer<kiwi::int32_t,2> region(
@@ -33,10 +39,11 @@ void ChannelOffsetTest()
 	assert( inputDataNode.dataPort(0).isComposite() );
 	assert( inputDataNode.dataPort(0).nbSubPorts() == 4 );
 	
-	inputDataNode.dataPort(0).subPort(0) 	>> f1.readerPort(0);
-	displacement1Node.dataPort(0) 			>> f1.readerPort(1);
-	regionNode.dataPort(0) 			>> f1.readerPort(2);
-	resultNode.dataPort(0).subPort(0)		>> f1.writerPort(0);
+	inputDataNode.dataPort(0).subPort(0) >> f1.readerPort(0);
+	displacement1Node.dataPort(0) 		 >> f1.readerPort(1);
+	//regionNode.dataPort(0) 				 >> f1.readerPort(2);
+	gradientNode.dataPort(0) 			 >> f1.readerPort(3);
+	resultNode.dataPort(0).subPort(0)	 >> f1.writerPort(0);
 
 	//typedef kiwi::core::Container TestType;
 	typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> TestType;

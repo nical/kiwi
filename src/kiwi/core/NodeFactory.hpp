@@ -28,13 +28,14 @@
 
 #pragma once
 
-#ifndef KIWI_NODEFACTORY_HPP
-#define KIWI_NODEFACTORY_HPP
+#ifndef KIWI_CORE_FACTORY_HPP
+#define KIWI_CORE_FACTORY_HPP
 
 
 #include <map>
 #include <list>
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Tags.hpp"
 
 
 namespace kiwi{
@@ -51,18 +52,14 @@ class Descriptor
 public:
 	typedef T*(*instantiationFunction)(void) ;
 	
-	Descriptor(const kiwi::string& name
-		, instantiationFunction fPtr
-		, const kiwi::string& tags = "" )
-	:_name(name), _tags(tags), _creator(fPtr)
-	{ }
+	Descriptor() : _tags("#invalid"), _creator(0){ }
+	Descriptor( instantiationFunction fPtr, const kiwi::string& tags = "" )
+	: _tags(tags), _creator(fPtr){ }
 	
-	kiwi::string& name() const { return _name; }
 	kiwi::string tags() const { return _tags; }
 	instantiationFunction creator() {return _creator;}
 	
 private:
-	kiwi::string _name;
 	kiwi::string _tags;
 	instantiationFunction _creator;
 };
@@ -71,32 +68,105 @@ private:
 
 /**
  * @brief A factory of kiwi::core::Node instances. 
- */ 
-class NodeFactory
-{
+ */
+template<class ObjType, class HashKey = kiwi::string>
+class Factory
+{	private:
 public:
-	enum{FALSE=0, NODE, FILTER, CONTAINER};
-	
-	kiwi::core::Node* newNode(const  kiwi::string& uniqueId);
-	kiwi::core::Container* newContainer(const  kiwi::string& uniqueId);
-	
-	int exists(const  kiwi::string& uniqueId);
-	std::list<kiwi::string> searchFromTag(const  kiwi::string& uniqueId);
-	
-	void registerNode(const  kiwi::string& uniqueId, Descriptor<Node> nd);
-	void registerContainer(const  kiwi::string& uniqueId, Descriptor<Container> nd);
-	
-	bool unregister(const  kiwi::string& uniqueId);
-	
-	std::list<kiwi::string> availableContainers(const kiwi::string& tags = "#any");
-	std::list<kiwi::string> availableNodes(const kiwi::string& tags = "#any");
+
+	/**
+	 * @brief Instanciates an object and returns the pointer.
+	 *
+	 * Returns a nil pointer if the key does not exist in the factory.
+	 */ 
+	ObjType* newObject(const HashKey& uniqueId);
+
+	/**
+	 * @brief Returns true if the key exists in the factory.
+	 */ 
+	int exists(const  HashKey& uniqueId);
+	std::list<HashKey> searchFromTag(const  kiwi::Tags& uniqueId);
+
+	/**
+	 * @brief Adds a key to the factory.
+	 *
+	 * This step is necessary for each class that needs to be added to the factory. 
+	 */ 
+	void registerClass(const  HashKey& uniqueId, Descriptor<ObjType>);
+
+	/**
+	 * @brief Removes a key from the factory.
+	 */ 
+	bool unregisterClass(const  HashKey& uniqueId);
+
+	/**
+	 * @brief Returns the list of the available classes.
+	 */ 
+	std::list< std::pair<HashKey, Descriptor<ObjType> > > availableClasses();
 
 private:
-	typedef std::map<kiwi::string, Descriptor<Container>* > ContainerMap;
-	typedef std::map<kiwi::string, Descriptor<Node>* > NodeMap;
-	NodeMap _nodes;
-	ContainerMap _containers;
+	typedef std::map<HashKey, Descriptor<ObjType> > ObjectMap;
+	ObjectMap _objects;
 };
+
+
+
+
+// -------------------------------------------- Implementation
+
+
+
+template<class ObjType, class HashKey>
+ObjType* Factory<ObjType,HashKey>::newObject(const  HashKey& uniqueId)
+{
+	typename ObjectMap::iterator it = _objects.find(uniqueId);
+	if(it == _objects.end() ) return 0;
+	return (it->second.creator())();
+}
+
+template<class ObjType, class HashKey>
+int Factory<ObjType,HashKey>::exists(const  HashKey& uniqueId)
+{
+	if(_objects.find(uniqueId) != _objects.end() ) return 1;
+	return 0;
+}
+	
+template<class ObjType, class HashKey>
+void Factory<ObjType,HashKey>::registerClass( const HashKey& uniqueId
+	, Descriptor<ObjType> desc)
+{
+	_objects[uniqueId] = desc;
+}
+
+template<class ObjType, class HashKey>
+bool Factory<ObjType,HashKey>::unregisterClass(const  HashKey& uniqueId)
+{
+	_objects.erase(_objects.find(uniqueId) );
+	return true; // TODO;
+}
+/*
+template<class ObjType, class HashKey>
+std::list<kiwi::string> Factory<ObjType,HashKey>::availableClasses( const kiwi::string& tags )
+{
+	// prepare the tag list
+	std::list<kiwi::string> tagList;
+	while( tags.find("#",1) != kiwi::string::npos )
+	{
+		int sharp = tags.find("#",1);
+		tagList.push_back( tags.substr(0, sharp) );
+	}
+	// look for filters
+	std::list<kiwi::string> result;
+	NodeMap::iterator it = _nodes.begin();
+	NodeMap::iterator end = _nodes.end();
+	for( ; it != end; ++it)
+		result.push_front( it->first );
+	return result;
+}
+*/
+
+
+typedef Factory<kiwi::core::Node,kiwi::string> NodeFactory;
 
 
 }//namespace

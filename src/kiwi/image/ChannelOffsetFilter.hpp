@@ -22,6 +22,7 @@ public:
 		addReaderPort(); // Channel
 		addReaderPort(); // displacement vector
 		addReaderPort(); // region
+		addReaderPort(); // mask
 
 		// Result (channel)
 		kiwi::portIndex_t w_in = addWriterPort(); 
@@ -45,12 +46,15 @@ public:
 		RegionContainer* regionInput
 			= readerPort(2).getContainer<RegionContainer>();
 
+		ColorBuffer* mask = readerPort(3).getContainer<ColorBuffer>();	
+
 		ColorBuffer* result	= writerPort(0).getContainer<ColorBuffer>();
 				
 		if(!chan) Debug::print() << "input channel not found\n";
 		if(!vect) Debug::print() << "input offset vector not found\n";
 		if(!regionInput) Debug::print() << "input region not found\n";
 		if(!result) Debug::print() << "output channel not found\n";
+		if(!mask) Debug::print() << "input mask not found\n";
 
 		Debug::plop();
 
@@ -80,9 +84,13 @@ public:
 		CoordinateVector pos;
 		for(pos(0) = region.position(0); pos(0) < region.size(0); ++pos(0))
 			for(pos(1) = region.position(1); pos(1) < region.size(1); ++pos(1)){
-				kiwi::uint32_t val = chan->getValue(pos);
-				CoordinateVector newpos = (pos+*vect) % result->spanSize();
-				result->setValue(newpos, val);
+				float maskValue = 1;
+				if(mask) maskValue = (float)mask->getValue(pos)/255.0;
+				//if(maskValue < 0.5) Debug::bar();
+				CoordinateVector newpos = (pos+(*vect * maskValue)) % result->spanSize();
+				kiwi::uint32_t val = chan->getValue(newpos);
+				//Debug::print() << (newpos - pos)
+				result->setValue(pos, val);
 			}
 	}
 

@@ -40,58 +40,6 @@ namespace core{
 
 
 
-kiwi::core::Node* NodeFactory::newNode(const  kiwi::string& uniqueId)
-{
-	NodeMap::iterator it = _nodes.find(uniqueId);
-	if(it == _nodes.end() ) return 0;
-	Descriptor<Node>* desc = it->second;
-	return (desc->creator())();
-}
-
-kiwi::core::Container* NodeFactory::newContainer(const  kiwi::string& uniqueId)
-{
-	ContainerMap::iterator it = _containers.find(uniqueId);
-	if(it == _containers.end() ) return 0;
-	Descriptor<Container>* desc = it->second;
-	return (desc->creator())();
-}
-
-int NodeFactory::exists(const  kiwi::string& uniqueId)
-{
-	if(_containers.find(uniqueId) != _containers.end() ) return CONTAINER;
-	if( _nodes.find(uniqueId) != _nodes.end() ) return FILTER; 
-	return FALSE;
-}
-	
-void NodeFactory::registerNode(const kiwi::string& uniqueId, Descriptor<Node> nd)
-{
-	_nodes[uniqueId] = new Descriptor<Node>(nd);
-}
-
-bool NodeFactory::unregister(const  kiwi::string& uniqueId)
-{
-	_containers.erase(_containers.find(uniqueId) );
-	_nodes.erase(_nodes.find(uniqueId) );
-	return true; // TODO;
-}
-
-std::list<kiwi::string> NodeFactory::availableNodes( const kiwi::string& tags )
-{
-	// prepare the tag list
-	std::list<kiwi::string> tagList;
-	while( tags.find("#",1) != kiwi::string::npos )
-	{
-		int sharp = tags.find("#",1);
-		tagList.push_back( tags.substr(0, sharp) );
-	}
-	// look for filters
-	std::list<kiwi::string> result;
-	NodeMap::iterator it = _nodes.begin();
-	NodeMap::iterator end = _nodes.end();
-	for( ; it != end; ++it)
-		result.push_front( it->first );
-	return result;
-}
 
 
 }//namespace

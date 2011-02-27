@@ -53,8 +53,6 @@ class Filter : public Node
 {
 public:
 
-	int nodeType() { return Node::FILTER; }; // TODO: DEPRECATED
-
 	bool update(int) { process(); return true; } 
 
 	/**

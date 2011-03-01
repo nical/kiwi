@@ -29,7 +29,9 @@
 
 #include "TextWriter.hpp"
 #include "kiwi/utils/modulo.hpp"
-#include "kiwi/core/Ports.hpp"
+#include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
 
 
 namespace kiwi{
@@ -47,12 +49,12 @@ TextWriter::TextWriter( AbstractTextContainer& container
 	init(container, index, firstLine, range);
 }
 
-TextWriter::TextWriter( core::WriterInputPort& port
+TextWriter::TextWriter( core::WriterPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
 	//ScopedBlockMacro(__scop, "TextWriter::constructor")
-	AbstractTextContainer* tc = port.connectedOutput()->getContainer<AbstractTextContainer>();
+	AbstractTextContainer* tc = port.getContainer<AbstractTextContainer>();
 /* TODO !	
 	if( tc ) init( *tc, port.connectedOutput()->subPort()->index()
 		, firstLine, range );
@@ -66,7 +68,7 @@ TextWriter::TextWriter( core::WriterInputPort& port
 */ 
 }
 
-TextWriter::TextWriter( core::WriterOutputPort& port
+TextWriter::TextWriter( core::DataPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {

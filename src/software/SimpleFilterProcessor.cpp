@@ -36,7 +36,9 @@
 #include "ArgumentProcessor.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/text/TextToMorseFilter.hpp"
-#include "kiwi/core/Ports.hpp"
+#include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
 
 #include "kiwi/core.hpp" 
 #include "kiwi/text.hpp" 
@@ -60,22 +62,23 @@ SimpleFilterProcessor::SimpleFilterProcessor( const ArgumentProcessor& arguments
 int SimpleFilterProcessor::run()
 {
 //  ScopedBlockMacro(__scop, "SimpleFilterProcessor::run")	
-  kiwi::core::NodeFactory factory;
+  kiwi::utils::NodeFactory factory;
   kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCase");
   kiwi::text::TextToMorseFilter::registerToFactory(factory,"MorseCode");
 
 
   //Filter instanciation
-  kiwi::core::Node* F = factory.newNode(arguments.filterName() );
+  kiwi::core::Node* F = factory.newObject(arguments.filterName() );
   if (!F)
   {
+	typedef kiwi::utils::NodeFactory NodeFactory;  
 	cout << "ERROR : Could not find this filter." << std::endl
 		<< "The available filters are:" << std::endl;
-	std::list<kiwi::string> available =  factory.availableFilters("#any");
-	for(std::list<kiwi::string>::iterator it = available.begin()
+	NodeFactory::ClassList available =  factory.availableClasses();
+	for(NodeFactory::ClassList::iterator it = available.begin()
 			; it != available.end()
 			; ++it )
-		cout << "  * " << *it << std::endl;
+		cout << "  * " << it->first << std::endl;
 	return 1;
   }
   //cout << "Inputs number : " << arguments.getFilterInputs().size() << endl;
@@ -89,12 +92,12 @@ int SimpleFilterProcessor::run()
 
 
   // run the filter
-  if( F->isReady() ) F->process(); 
+  if( F->isReady() ) F->update(); 
 
   //Creation of a Reader needed to read text from a node
-  if(F->readerOutputPort(0).isEnabled() )
+  if(F->readerPort(0).isEnabled() )
   {
-	kiwi::text::TextReader reader( F->readerOutputPort(0) );
+	kiwi::text::TextReader reader( F->readerPort(0) );
 	for(int i = 1; i <= reader.nbLines(); ++i)
 	{ 
 	  std::cout << reader.line(i).str() << std::endl;
@@ -110,8 +113,8 @@ int SimpleFilterProcessor::run()
 
 
 void SimpleFilterProcessor::wrapInputs(
-	core::NodeFactory& factory
-	, core::Filter& filter
+	utils::NodeFactory& factory
+	, core::Node& filter
 	, std::list<string>& inputs )
 {
 //	ScopedBlockMacro(__scop, "SimpleFilterProcessor::wrapInputs");

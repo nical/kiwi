@@ -13,7 +13,7 @@ cmake_minimum_required (VERSION 2.4)
 set(BUILD_KIWI_TESTS "yes") #to build the tests (recommended !)
 set(BUILD_KIWI_IMAGE "yes") #to build kiwi::image
 set(BUILD_KIWI_TEXT "yes") #to build kiwi::text
-#set(BUILD_KIWI_CMDLINE "yes") #to build the command-line app
+set(BUILD_KIWI_CMDLINE "yes") #to build the command-line app
 #set(BUILD_DDD_FLAG "yes") #to build using -g argument for debug purposes
 
 #so that each test is built with it's own executable

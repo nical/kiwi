@@ -10,9 +10,11 @@
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/utils/types.hpp"
 #include "kiwi/text/PlainTextContainer.hpp"
-#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/utils/Factory.hpp"
 #include "kiwi/utils/TextOperations.hpp"
-#include "kiwi/core/Ports.hpp"
+#include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
 
 
 
@@ -32,7 +34,7 @@ public:
 		// CanonicalFilter's constructor automatically adds one reader output port
 		// and one writer input port.
 		
-		addReaderInputPort();
+		addReaderPort();
 	}
 	
 	~UpperCaseFilter() 
@@ -48,13 +50,13 @@ public:
 	{
 		//ScopedBlockMacro(_cpm, "UpperCaseFilter::process")
 	
-		if( !writerInputPort(0).isConnected() )
+		if( !writerPort(0).isConnected() )
 		{
 //			addWriteNode(new PlainTextContainer, 0);
 		}
 	
-		TextReader input( readerInputPort(0) );
-		TextWriter result( writerInputPort(0) );
+		TextReader input( readerPort(0) );
+		TextWriter result( writerPort(0) );
 		result.clear();
 			
 		if(input.nbLines() > 1) result.insertLine(PlainTextLine(""), input.nbLines() -1);	
@@ -70,7 +72,7 @@ public:
 
 	bool isReady() const
 	{
-		return (readerInputPort(0).isConnected() );
+		return (readerPort(0).isConnected() );
 	}
 	
 	
@@ -92,21 +94,21 @@ public:
 		return kiwi::string("#text");
 	}
 	// same idea with writer inputs
-	kiwi::Tags writerInputTags( portIndex_t index )
+	kiwi::Tags writerTags( portIndex_t index )
 	{
 		return kiwi::Tags("#text");
 	}
 	
 	static Node* newUpperCaseFilter() { return new UpperCaseFilter; }
 	
-	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
+	static bool registerToFactory(kiwi::utils::NodeFactory& factory, const kiwi::string& filterId)
 	{
-		factory.registerNode( filterId
-				, kiwi::core::Descriptor<kiwi::core::Node>(
-					"UpperCaseFilter"
-					, newUpperCaseFilter
+		factory.registerClass( filterId
+				, kiwi::utils::NodeFactoryDescriptor(
+					newUpperCaseFilter
 					, "#Filter#text" )
-			);
+			);	
+		return true;
 	}
 
 	

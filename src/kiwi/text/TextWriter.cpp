@@ -40,13 +40,12 @@ namespace text{
 
 
 
-TextWriter::TextWriter( AbstractTextContainer& container 
-	, portIndex_t index
+TextWriter::TextWriter( TextContainerInterface& container 
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
 	//ScopedBlockMacro(__scop, "TextWriter::constructor")
-	init(container, index, firstLine, range);
+	init(container, firstLine, range);
 }
 
 TextWriter::TextWriter( core::WriterPort& port
@@ -54,7 +53,7 @@ TextWriter::TextWriter( core::WriterPort& port
 	, kiwi::uint32_t range )
 {
 	//ScopedBlockMacro(__scop, "TextWriter::constructor")
-	AbstractTextContainer* tc = port.getContainer<AbstractTextContainer>();
+	TextContainerInterface* tc = port.getContainer<TextContainerInterface>();
 /* TODO !	
 	if( tc ) init( *tc, port.connectedOutput()->subPort()->index()
 		, firstLine, range );
@@ -73,7 +72,7 @@ TextWriter::TextWriter( core::DataPort& port
 	, kiwi::uint32_t range )
 {
 	//ScopedBlockMacro(__scop, "TextWriter::constructor")
-	AbstractTextContainer* tc = port.getContainer<AbstractTextContainer>() ;
+	TextContainerInterface* tc = port.getContainer<TextContainerInterface>() ;
 
 // TODO !	
 /*	if( tc ) init( *tc, port.subPort()->index(), firstLine, range );

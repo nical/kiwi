@@ -38,13 +38,13 @@ namespace kiwi{
 namespace text{
 
 
-TextReader::TextReader( AbstractTextContainer& container 
+TextReader::TextReader( TextContainerInterface& container 
 	, portIndex_t index
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
 //ScopedBlockMacro(__scop, "TextReader::constructor")
-	init(container, index, firstLine, range);
+	init(container, firstLine, range);
 }
 
 TextReader::TextReader( core::ReaderPort& port
@@ -52,7 +52,7 @@ TextReader::TextReader( core::ReaderPort& port
 	, kiwi::uint32_t range )
 {
 //ScopedBlockMacro(__scop, "TextReader::constructor")
-/*	AbstractTextContainer* tc = dynamic_cast<AbstractTextContainer*>(
+/*	TextContainerInterface* tc = dynamic_cast<TextContainerInterface*>(
 		port.connectedOutput()->data() );
 */
 /*	TODO
@@ -73,10 +73,10 @@ TextReader::TextReader( core::DataPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-//ScopedBlockMacro(__scop, "TextReader::constructor")
-//	AbstractTextContainer* tc = port.getContainer<TextContainerInterface> );
-/* TODO	
-	if( tc ) init( *tc, port.subPort()->index(), firstLine, range );
+ScopedBlockMacro(__scop, "TextReader::constructor")
+	TextContainerInterface* tc = port.getContainer<TextContainerInterface>();
+
+	if( tc ) init( *tc, firstLine, range );
 	else
 	{
 		Debug::error() 
@@ -84,7 +84,6 @@ TextReader::TextReader( core::DataPort& port
 			<<" Unable to determine the Container type."
 			<< endl();
 	}
-*/ 
 }
 
 

@@ -28,11 +28,9 @@ namespace cairo{
 
 
 /**
- * @brief 8bits per channel ARGB Image container powered by the cairo
- * graphic library.
+ * @brief 8bits per channel ARGB Image container using the cairo graphic library
+ * as backend.
  *
- * This Container is compatible with generic::ArrayReader and
- * generic::ArrayWriter.
  */
 class RGBAImageContainer : public generic::ArrayContainerInterface<RGBA32Fragment, 2>
 {

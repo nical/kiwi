@@ -15,7 +15,9 @@ namespace internals{
 	template<typename T> kiwi::core::Node* __newNumberContainer();
 }
 
-
+/**
+ * @brief Simple templated scalar number container.
+ */ 
 template<typename TValueType>
 class NumberContainer : public NumberContainerInterface<TValueType>
 {

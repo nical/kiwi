@@ -2,7 +2,17 @@
 namespace kiwi{
 namespace utils{
 
-// TODO add some concept check
+/**
+ * @brief Helper class that provides a simple, and safe way to achieve
+ * bidirectional relations between objects.
+ *
+ * To setup a connection system between two classes A and B, use inheritence
+ * as follow:
+ *
+ *  class A : public kiwi::utils::Connector<A,B>{ .. };
+ *
+ *  class B : public kiwi::utils::Connector<B,A>{ .. };
+ */ 
 template<class ThisType, class LinkType, unsigned int TNum, int LinkTag = 0>
 class Connector : public AbstractConnector<ThisType, LinkType, LinkTag>
 {

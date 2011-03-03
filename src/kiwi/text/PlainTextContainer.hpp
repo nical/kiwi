@@ -41,6 +41,9 @@ namespace text{
 class TextReader;
 class TextWriter;
 
+/**
+ * @brief A basic text container implementation.
+ */ 
 class PlainTextContainer : public TextContainerInterface
 {
 public:

@@ -7,6 +7,9 @@
 namespace kiwi{
 namespace utils{
 
+/**
+ * @brief Class used internally by the Connector class.
+ */ 
 template<class ThisType, class LinkType, int LinkTag>
 class AbstractConnector
 {

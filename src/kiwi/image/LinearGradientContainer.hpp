@@ -8,6 +8,9 @@
 namespace kiwi{
 namespace image{
 
+/**
+ * @brief Linear gradient container.
+ */ 
 template<typename TValueType, kiwi::uint32_t TDimension, typename AccessType>
 class LinearGradientContainer
 : public generic::PointAccessContainerInterface<TValueType,TDimension,AccessType>

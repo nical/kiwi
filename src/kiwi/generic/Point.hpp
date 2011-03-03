@@ -49,7 +49,7 @@ namespace kiwi{
 namespace generic{
 
 /**
- * @brief Generic point/vector class (in the mathematic meaning).
+ * @brief Generic point/vector class (in the mathematical meaning).
  * 
  */ 
 template <typename TCoordType, unsigned int TDimension>

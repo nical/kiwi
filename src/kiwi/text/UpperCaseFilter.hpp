@@ -23,7 +23,9 @@
 namespace kiwi{
 namespace text{
 
-
+/**
+ * @brief Copies the input text forcing each character to be upper case.
+ */ 
 class UpperCaseFilter : public core::Filter
 {
 public:

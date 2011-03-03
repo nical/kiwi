@@ -16,7 +16,9 @@
 namespace kiwi{
 namespace text{
 
-
+/**
+ * @brief Translates the input text into morse code.
+ */ 
 class TextToMorseFilter : public core::Filter
 {
 public:

@@ -42,7 +42,9 @@ namespace kiwi{
 namespace core{ class Node; }
 namespace utils{
 
-
+/**
+ * @brief Holds the informations needed by a factory about a class.
+ */ 
 template<typename T>
 class FactoryDescriptor
 {
@@ -64,7 +66,9 @@ private:
 
 
 /**
- * @brief A factory of kiwi::core::Node instances. 
+ * @brief A generic factory.
+ *
+ * @see NodeFactory.
  */
 template<class ObjType, class HashKey = kiwi::string>
 class Factory

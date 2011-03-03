@@ -41,6 +41,5 @@ SET(KIWI_SRC ${KIWI_SRC}
 		# tutorial/FilterSkeleton.cpp
 		)
 
-
 add_library ( ${LIBKIWI_NAME}  ${KIWI_SRC})
 TARGET_LINK_LIBRARIES(${LIBKIWI_NAME} ${optionalLibs} )

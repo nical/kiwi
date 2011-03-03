@@ -53,7 +53,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	generic/RectangleContainerTest
    )
 
-message("Kiwi Library : ${LIBKIWI_NAME}")
+message("-- Kiwi Library : ${LIBKIWI_NAME}")
 
 FOREACH(FILE ${KIWI_TESTS_SRC})
   add_executable(${FILE} ${FILE})

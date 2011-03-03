@@ -100,7 +100,7 @@ set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
 # -----------------------------------------------------------------------------
 SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -gdwarf-2)
 
-
+message( "CXX Flags: ${CMAKE_CXX_FLAGS}" )
 
 #------------------------------------------------------------------------------
 # Add subdirectories

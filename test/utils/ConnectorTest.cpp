@@ -80,7 +80,7 @@ int main(){
 	//c1.Connector2::connect(&e1);
 	d1.connect(&c1);
 	e1.connect(&c1);
-	Debug::print() << ((int)e1.connectedInstance(0)) - ((int)d1.connectedInstance(0))<<"\n";
+	
 	assert( c1.Connector1::nbConnections() == 1 );
 	assert( c1.Connector2::nbConnections() == 1 );
 	assert( d1.nbConnections() == 1 );

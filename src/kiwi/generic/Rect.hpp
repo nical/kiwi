@@ -7,6 +7,9 @@
 namespace kiwi{
 namespace generic{
 
+/**
+ * @brief generic rectangle class.
+ */ 
 template<typename TValueType, kiwi::uint32_t TDimension>
 class Rect
 {

@@ -10,7 +10,10 @@
 
 namespace kiwi{
 namespace generic{
-	
+
+/**
+ * @brief Generic rectangle container implementation.
+ */ 	
 template<typename TValueType, kiwi::uint32_t TDimension>	
 class RectangleContainer : public core::Container
 {

@@ -48,26 +48,45 @@
 namespace kiwi{
 namespace core{
 
-
+/** 
+ * @brief Base class for the filter nodes.
+ *
+ * At the moment the only way to create a filter is to derive this class and overload
+ * a few methods. In the future an additionnal system will work on the same fashion
+ * than the way containers work with nodes. Both methods will have their pros and
+ * cons, and both method will be supported on the long term.
+ *
+ * A minimal filter only need to override the process() method to perform its task
+ * and the constructor to setup the ports.  
+ */ 
 class Filter : public Node
 {
 public:
-
+	/**
+	 * @brief Just calls the process method.
+	 */ 
 	bool update(int) { process(); return true; } 
 
 	/**
-	 * Main entry point of the filter. This is the function you should override to perform
-	 * whatever the filter is supposed to do.
+	 * Main entry point of the filter. This is the function you should override
+	 * to perform whatever the filter is supposed to do.
 	 */
 	virtual void process() = 0;
 
 	/**
 	 * @brief Automatically publishes the Container's ports in this Filter's
 	 * Reader output ports.
-	 * 
-	 * The child classes, if they override this method, *must* call their
+	 *
+	 * This method is overriden from kiwi::core::Node and is called by the mother
+	 * class.
+	 *  
+	 * Child classes, if they need to override this method, *must* call their
 	 * parent's method as the only feature that brings this class is in 
 	 * here.
+	 *
+	 * @todo association between writer ports and data ports is not clearly defined
+	 * (well yes it is: dataPort(i) <-> writerPort(i), but it's not the best way
+	 * to go)
 	 */ 
 	void layoutChanged()
 	{
@@ -75,17 +94,12 @@ public:
 		//ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
 		for(uint32_t i = 0; i < nbWriters; ++i){
 			if( writerPort(i).isConnected() ){
-				if( !dataPort(i).isEnabled() ){
-//					setPortEnabled(dataPort(i),true);
-					portIndex_t outIndex = writerPort(i).connectedPort()->index();
-					DataPort& op
-						= writerPort(i).connectedPort()->node()->dataPort(outIndex);
-					bindPort( dataPort(i), op );
+				if( !dataPort(i).isEnabled() && writerPort(i).isConnected() ){
+					bindPort( dataPort(i), *writerPort(i).connectedPort() );
 				}
 			}else{
 				dataPort(i).disconnectReader();
 				dataPort(i).disconnectWriter();
-//				setPortEnabled(dataPort(i),false);	
 			}
 		}
 	}
@@ -97,8 +111,7 @@ public:
 	 * Basically what it does is make the writer port aware that if it connects
 	 * to a port, the associated reader should read the data that the writer 
 	 * accesses.
-	 */ 
-
+	 */
 	void associateWriterToDataPort(WriterPort& writer, DataPort& reader) const
 	{
 		writer.associateReaderPort( &reader );

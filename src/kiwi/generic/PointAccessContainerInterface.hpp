@@ -7,6 +7,9 @@
 namespace kiwi{
 namespace generic{
 
+/**
+ * @brief Generic interface class for containers that can be accessed using Points.
+ */ 
 template<typename TValueType, unsigned int TDimension, typename AccessType = kiwi::uint32_t>
 class PointAccessContainerInterface : public RandomAccessContainerInterface<TValueType>
 {

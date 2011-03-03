@@ -10,7 +10,9 @@
 namespace kiwi{
 namespace image{
 
-	
+/**
+ * @brief 8 bits per channel RGBA pixel.
+ */ 
 class RGBA32Fragment
 {
 public:

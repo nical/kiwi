@@ -12,7 +12,11 @@
 
 namespace kiwi{
 namespace generic{
-
+	
+/**
+ * @brief Generic Point/Vector container implementation.
+ *
+ */ 
 template<typename TValueType, kiwi::uint32_t TDimension>
 class PointVectorContainer
 	: public kiwi::core::Container

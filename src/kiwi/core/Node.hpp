@@ -74,7 +74,7 @@ class NodeInitializer;
 
 /**
  * @class Node
- * @brief The base class for every kiwi Container and Filter
+ * @brief The base class for every kiwi nodes, Filter in particular.
  *
  * This is the most important class in the library. kiwi::Node implements
  * the connection system that represents Kiwi's main feature.
@@ -407,7 +407,9 @@ bool operator >> (DataPort& output, ReaderPort& input );
 bool operator>>(DataPort& output, WriterPort& input );
 
 
-
+/**
+ * @brief This class is not yet ready for use.
+ */ 
 class NodeInitializer
 {
 public:

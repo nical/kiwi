@@ -6,6 +6,10 @@
 namespace kiwi{
 namespace generic{
 
+/**
+ * @brief Interface class for containers that can be random accessed using a
+ * single scalar number. 
+ */ 
 template<typename TValueType>
 class RandomAccessContainerInterface : public IterableContainerInterface<TValueType>
 {

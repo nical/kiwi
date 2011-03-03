@@ -13,7 +13,21 @@ namespace kiwi{
 namespace image{
 
 
-
+/**
+ * @brief Imaging filter that moves each component of an image channel in a direction.
+ *
+ * <b> Source </b>
+ * <ul>
+ *    <li> the input channel (PointAccessContainerInterface) </li>
+ *    <li> the displacement vector (PointVectorContainer) </li>
+ *    <li> [opt] the region in which to apply the filter (RectContainerInterface) </li>
+ *    <li> [opt] a mask for per pixel variation of the filter's strengh
+ *  (PointAccessContainerInterface) </li>
+ * <ul>
+ * <b> Destination </b>
+ * <ul> <li> the resulting color channel (PointAccessContainerInterface) </li> </ul>
+ * 
+ */ 
 class ChannelOffsetFilter : public kiwi::core::Filter
 {
 public:

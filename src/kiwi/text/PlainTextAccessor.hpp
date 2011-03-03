@@ -8,7 +8,9 @@
 namespace kiwi{
 namespace text{
 
-
+/**
+ * @brief Base class for PlainTextReader and PlainTextWriter.
+ */ 
 class PlainTextAccessor
 {
 public:

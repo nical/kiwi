@@ -12,7 +12,13 @@ namespace kiwi{
 namespace image{
 
 
-
+/**
+ * @brief Duplicates the input images.
+ *
+ * Note that it is possible to compose an image with any color channel in input,
+ * which may be usefull to create an image container from independent color channel
+ * containers.
+ */ 
 class CopyImageFilter : public kiwi::core::Filter
 {
 public:

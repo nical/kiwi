@@ -59,34 +59,49 @@ message( "-- CMAKE_PREFIX_PATH = " ${CMAKE_PREFIX_PATH} )
 
 # Find the boost library 
 FIND_PACKAGE(Boost REQUIRED)
-if ( Boost_FOUND )
-   message( "-- Boost found. include=${Boost_INCLUDE_DIR}" )
-   include_directories( ${Boost_INCLUDE_DIR} )
-
+# MACPORT
 if(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
-	SET( MACPORT_BOOST_INCLUDES "/opt/local/includes/boost")	
-	SET( MACPORT_BOOST_LIBS "/opt/local/lib/")	
+	SET( MACPORT_BOOST_INCLUDES "/opt/local/include/boost")
+	SET( MACPORT_BOOST_LIBS "/opt/local/lib/")
 
    	include_directories( ${MACPORT_BOOST_INCLUDES} )
    	link_directories( ${MACPORT_BOOST_LIBS} )
 	set( MACPORT_BOOST_FOUND TRUE) 	
-     	
+
 	message( "-- Apple plateform detected : Boost lib path added." )
-endif(DEFINED APPLE AND NOT DEFINED MACPORT_BOOST_FOUND)
+endif(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
+
+if ( Boost_FOUND )
+   message( "-- Boost found. include=${Boost_INCLUDE_DIR}" )
+   include_directories( ${Boost_INCLUDE_DIR} )
 endif ( Boost_FOUND )
 
 #Find the cairo library (only if kiwi::image has to be built) 
 if(DEFINED BUILD_KIWI_IMAGE)
 	find_package(Cairo REQUIRED)
-	if ( Cairo_FOUND )
-		message( "-- Cairo found. include=${Cairo_INCLUDE_DIR}" )
-		include_directories( ${Cairo_INCLUDE_DIR} )
-	else ( Cairo_FOUND )
-		# if cairo is not found, dependencies in kiwi::image wont be satisfied
-		# so just disable kiwi::image in the build process
-		set(BUILD_KIWI_IMAGE "no")
-		message("-- Cairo not found : kiwi::image excluded from build.")
-	endif ( Cairo_FOUND )
+
+	# MACPORT
+	if(DEFINED APPLE AND NOT DEFINED ${MACPORT_CAIRO_FOUND})
+		SET( MACPORT_CAIRO_INCLUDES "/opt/local/include/cairo")
+		SET( MACPORT_CAIRO_LIBS "/opt/local/lib/")
+
+		include_directories( ${MACPORT_CAIRO_INCLUDES} )
+		link_directories( ${MACPORT_CAIRO_LIBS} )
+		set( MACPORT_CAIRO_FOUND TRUE) 	
+
+		message( "-- Apple plateform detected : Cairo lib path added." )
+	else(DEFINED APPLE AND NOT DEFINED ${MACPORT_CAIRO_FOUND})
+		if ( Cairo_FOUND )
+			message( "-- Cairo found. include=${Cairo_INCLUDE_DIR}" )
+			include_directories( ${Cairo_INCLUDE_DIR} )
+			
+		else ( Cairo_FOUND )
+			# if cairo is not found, dependencies in kiwi::image wont be satisfied
+			# so just disable kiwi::image in the build process
+			set(BUILD_KIWI_IMAGE "no")
+			message("-- Cairo not found : kiwi::image excluded from build.")
+		endif ( Cairo_FOUND )
+	endif(DEFINED APPLE AND NOT DEFINED ${MACPORT_CAIRO_FOUND})
 endif(DEFINED BUILD_KIWI_IMAGE)
 
 

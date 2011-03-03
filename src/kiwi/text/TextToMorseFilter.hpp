@@ -7,7 +7,7 @@
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/text.hpp"
 #include "kiwi/utils/types.hpp"
-#include "kiwi/core/NodeFactory.hpp"
+#include "kiwi/utils/Factory.hpp"
 
 
 
@@ -27,11 +27,11 @@ public:
 		// CanonicalFilter's constructor automatically adds one reader output port
 		// and one writer input port.
 		
-		addReaderInputPort(); // input text
-		addReaderInputPort(); // opt: dot pattern 
-		addReaderInputPort(); // opt: long pattern
-		addReaderInputPort(); // opt: space pattern
-		addReaderInputPort(); // opt: unknown char pattern
+		addReaderPort(); // input text
+		addReaderPort(); // opt: dot pattern 
+		addReaderPort(); // opt: long pattern
+		addReaderPort(); // opt: space pattern
+		addReaderPort(); // opt: unknown char pattern
 	}
 	
 	~TextToMorseFilter() 
@@ -47,40 +47,40 @@ public:
 	{
 		//ScopedBlockMacro(_cpm, "TextToMorseFilter::process")
 	
-		if( !writerInputPort(0).isConnected() )
+		if( !writerPort(0).isConnected() )
 		{
 //			addWriteNode(new PlainTextContainer, 0);
 		}
 	
-		TextReader input( readerInputPort(0) );
-		TextWriter result( writerInputPort(0) );
+		TextReader input( readerPort(0) );
+		TextWriter result( writerPort(0) );
 		result.clear();
 		kiwi::string dotPattern(".");
 		kiwi::string longPattern("-");
 		kiwi::string spacePattern(" ");
 		kiwi::string unknownPattern(" ");
 		
-		if(readerInputPort(1).isConnected() )
+		if(readerPort(1).isConnected() )
 		{
-			TextReader r1( readerInputPort(1) );
+			TextReader r1( readerPort(1) );
 			dotPattern = r1.line(0).str();
 		}
 		
-		if(readerInputPort(2).isConnected() )
+		if(readerPort(2).isConnected() )
 		{
-			TextReader r2( readerInputPort(2) );
+			TextReader r2( readerPort(2) );
 			longPattern = r2.line(0).str();
 		}
 		
-		if(readerInputPort(3).isConnected() )
+		if(readerPort(3).isConnected() )
 		{
-			TextReader r3( readerInputPort(3) );
+			TextReader r3( readerPort(3) );
 			spacePattern = r3.line(0).str();
 		}
 		
-		if(readerInputPort(4).isConnected() )
+		if(readerPort(4).isConnected() )
 		{
-			TextReader r4( readerInputPort(4) );
+			TextReader r4( readerPort(4) );
 			unknownPattern = r4.line(0).str();
 		}
 			
@@ -153,7 +153,7 @@ public:
 	// needs to perform custom checks to tell if it's ready.
 	bool isReady() const
 	{
-		return (readerInputPort(0).isConnected() );
+		return (readerPort(0).isConnected() );
 	}
 	
 	
@@ -183,17 +183,14 @@ public:
 	
 	static Node* newTextToMorseFilter() { return new TextToMorseFilter; }
 	
-	static void registerToFactory(kiwi::core::NodeFactory& factory, const kiwi::string& filterId)
+	static void registerToFactory(kiwi::utils::NodeFactory& factory, const kiwi::string& filterId)
 	{
-		factory.registerNode( filterId
-				, kiwi::core::Descriptor<kiwi::core::Node>(
-					"TextToMorseFilter"
-					, newTextToMorseFilter
+		factory.registerClass( filterId
+				, kiwi::utils::NodeFactoryDescriptor(
+					newTextToMorseFilter
 					, "#Filter#text" )
 			);
 	}
-
-	
 };
 
 

@@ -28,7 +28,7 @@
 
 /**
  * @file TextWriter.hpp
- * @brief Writer for AbstractTextContainer based containers.
+ * @brief Writer for TextContainerInterface based containers.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva) 
  */
 
@@ -37,7 +37,7 @@
 #ifndef KIWI_TEXTWRITER_HPP
 #define KIWI_TEXTWRITER_HPP
 
-#include "kiwi/text/AbstractTextContainer.hpp"
+#include "kiwi/text/TextContainerInterface.hpp"
 #include "kiwi/text/PlainTextAccessor.hpp"
 
 #include "kiwi/text/PlainTextLine.hpp"
@@ -58,8 +58,7 @@ public:
 	/**
 	 * @brief Constructor.
 	 */ 
-	TextWriter(AbstractTextContainer& container
-		, portIndex_t
+	TextWriter(TextContainerInterface& container
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 );
 	/**
@@ -89,7 +88,7 @@ public:
 	 * @brief Returns a writer to a subset of this writer's data.
 	 */ 
 	TextWriter writerOnRange( kiwi::uint32_t firstLine, kiwi::uint32_t lastLine ){
-		return TextWriter(*_container, 0
+		return TextWriter(*_container
 				, _firstLine + firstLine
 				, lastLine - firstLine + 1 );
 	}

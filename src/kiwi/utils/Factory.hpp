@@ -70,6 +70,7 @@ template<class ObjType, class HashKey = kiwi::string>
 class Factory
 {	private:
 public:
+	typedef std::list< std::pair<HashKey, FactoryDescriptor<ObjType> > > ClassList;
 
 	/**
 	 * @brief Instanciates an object and returns the pointer.
@@ -99,7 +100,7 @@ public:
 	/**
 	 * @brief Returns the list of the available classes.
 	 */ 
-	std::list< std::pair<HashKey, FactoryDescriptor<ObjType> > > availableClasses();
+	ClassList availableClasses();
 
 private:
 	typedef std::map<HashKey, FactoryDescriptor<ObjType> > ObjectMap;
@@ -141,26 +142,19 @@ bool Factory<ObjType,HashKey>::unregisterClass(const  HashKey& uniqueId)
 	_objects.erase(_objects.find(uniqueId) );
 	return true; // TODO;
 }
-/*
+
 template<class ObjType, class HashKey>
-std::list<kiwi::string> Factory<ObjType,HashKey>::availableClasses( const kiwi::string& tags )
+typename Factory<ObjType,HashKey>::ClassList
+Factory<ObjType,HashKey>::availableClasses()
 {
-	// prepare the tag list
-	std::list<kiwi::string> tagList;
-	while( tags.find("#",1) != kiwi::string::npos )
-	{
-		int sharp = tags.find("#",1);
-		tagList.push_back( tags.substr(0, sharp) );
-	}
-	// look for filters
-	std::list<kiwi::string> result;
-	NodeMap::iterator it = _nodes.begin();
-	NodeMap::iterator end = _nodes.end();
+	ClassList result;
+	typename ObjectMap::iterator it = _objects.begin();
+	typename ObjectMap::iterator end = _objects.end();
 	for( ; it != end; ++it)
-		result.push_front( it->first );
+		result.push_front( *it );
 	return result;
 }
-*/
+
 
 
 typedef Factory<kiwi::core::Node,kiwi::string> NodeFactory;

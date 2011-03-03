@@ -32,7 +32,7 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Tags.hpp"
-#include "kiwi/text/AbstractTextContainer.hpp"
+#include "kiwi/text/TextContainerInterface.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
 
 namespace kiwi{
@@ -41,7 +41,7 @@ namespace text{
 class TextReader;
 class TextWriter;
 
-class PlainTextContainer : public AbstractTextContainer
+class PlainTextContainer : public TextContainerInterface
 {
 public:
 	typedef TextReader ReaderType;

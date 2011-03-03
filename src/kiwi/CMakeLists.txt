@@ -17,11 +17,11 @@ endif(DEFINED BUILD_KIWI_IMAGE)
 if(DEFINED BUILD_KIWI_TEXT)
 	message("build kiwi text")
 	SET(KIWI_SRC ${KIWI_SRC} 	#kiwi::text source files
-#		text/PlainTextContainer.cpp
-#		text/PlainTextLine.cpp
-#		text/PlainTextAccessor.cpp
-#		text/TextReader.cpp
-#		text/TextWriter.cpp
+		text/PlainTextContainer.cpp
+		text/PlainTextLine.cpp
+		text/PlainTextAccessor.cpp
+		text/TextReader.cpp
+		text/TextWriter.cpp
 		utils/TextOperations.cpp
 	)
 endif(DEFINED BUILD_KIWI_TEXT)

@@ -36,7 +36,9 @@
 #include "ArgumentProcessor.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/text/TextToMorseFilter.hpp"
-#include "kiwi/core/Ports.hpp"
+#include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
 
 #include "kiwi/core.hpp" 
 #include "kiwi/text.hpp" 
@@ -59,23 +61,24 @@ SimpleFilterProcessor::SimpleFilterProcessor( const ArgumentProcessor& arguments
 
 int SimpleFilterProcessor::run()
 {
-//  ScopedBlockMacro(__scop, "SimpleFilterProcessor::run")	
-  kiwi::core::NodeFactory factory;
+  ScopedBlockMacro(__scop, "SimpleFilterProcessor::run")	
+  kiwi::utils::NodeFactory factory;
   kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCase");
   kiwi::text::TextToMorseFilter::registerToFactory(factory,"MorseCode");
 
 
   //Filter instanciation
-  kiwi::core::Node* F = factory.newNode(arguments.filterName() );
+  kiwi::core::Node* F = factory.newObject(arguments.filterName() );
   if (!F)
   {
+	typedef kiwi::utils::NodeFactory NodeFactory;  
 	cout << "ERROR : Could not find this filter." << std::endl
 		<< "The available filters are:" << std::endl;
-	std::list<kiwi::string> available =  factory.availableFilters("#any");
-	for(std::list<kiwi::string>::iterator it = available.begin()
+	NodeFactory::ClassList available =  factory.availableClasses();
+	for(NodeFactory::ClassList::iterator it = available.begin()
 			; it != available.end()
 			; ++it )
-		cout << "  * " << *it << std::endl;
+		cout << "  * " << it->first << std::endl;
 	return 1;
   }
   //cout << "Inputs number : " << arguments.getFilterInputs().size() << endl;
@@ -89,16 +92,15 @@ int SimpleFilterProcessor::run()
 
 
   // run the filter
-  if( F->isReady() ) F->process(); 
+  if( F->isReady() ) F->update(); 
 
   //Creation of a Reader needed to read text from a node
-  if(F->readerOutputPort(0).isEnabled() )
+  if( F->dataPort(0).isEnabled() )
   {
-	kiwi::text::TextReader reader( F->readerOutputPort(0) );
+	kiwi::text::TextReader reader( F->dataPort(0) );
 	for(int i = 1; i <= reader.nbLines(); ++i)
 	{ 
-	  std::cout << reader.line(i).str() << std::endl;
-	  
+	  std::cout << reader.line(i).str() << std::endl; 
 	}
   }
   //END : Filter use request.
@@ -110,16 +112,16 @@ int SimpleFilterProcessor::run()
 
 
 void SimpleFilterProcessor::wrapInputs(
-	core::NodeFactory& factory
-	, core::Filter& filter
+	utils::NodeFactory& factory
+	, core::Node& filter
 	, std::list<string>& inputs )
 {
-//	ScopedBlockMacro(__scop, "SimpleFilterProcessor::wrapInputs");
-/*
+	ScopedBlockMacro(scop, "SimpleFilterProcessor::wrapInputs");
+
 	typedef std::list<string> ArgList;
 
 	int nbParams = inputs.size();
-	if(nbParams > filter.nbReaderInputs()) nbParams = filter.nbReaderInputs();
+	if(nbParams > filter.nbReaderPorts()) nbParams = filter.nbReaderPorts();
 
 	for( int i = 0; i < nbParams ; ++i )
 	{
@@ -146,13 +148,13 @@ void SimpleFilterProcessor::wrapInputs(
 				= new kiwi::text::PlainTextContainer;
 			inputText->init(*file);
 			file->close();
-//			inputText->readerOutputPort(0) >> filter.readerInputPort(i);
+			kiwi::core::Node* inputTextNode = new kiwi::core::Node( inputText );
+			inputTextNode->dataPort(0) >> filter.readerPort(i);
 			inputs.pop_front();
 		}else{
 			//Creation of a basic container, needed to apply the filter
 			kiwi::text::PlainTextContainer* basicInputContainer
 				= new kiwi::text::PlainTextContainer;
-
 
 			inputs.pop_front();
 			if((inputArgument == kiwi::string("cin")) 
@@ -167,14 +169,14 @@ void SimpleFilterProcessor::wrapInputs(
 					,0 );			 
 			}
 			//Connexion between the input container and the filter, then apply filter	
-//			basicInputContainer->readerOutputPort(0) >> filter.readerInputPort(i);
-			if(!filter.readerInputPort(0).isConnected() ) 
+			kiwi::core::Node* basicInputNode = new kiwi::core::Node(basicInputContainer);
+			basicInputNode->dataPort(0) >> filter.readerPort(i);
+			if(!filter.readerPort(0).isConnected() ) 
 			std::cerr << "connection error"<<std::endl;
 		}
 		if( file->is_open() ) file->close();
 		delete file;
 	}
-*/
 }
 
 

@@ -39,9 +39,9 @@
 
 namespace kiwi{
 namespace text{
+
 	
-		
-class AbstractTextContainer : public core::Container
+class TextContainerInterface : public core::Container
 {
 public:
 	typedef uint8_t lock_t;
@@ -92,7 +92,7 @@ public:
 	bool isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos) const;
 
 	   
-	 virtual ~AbstractTextContainer() {}
+	 virtual ~TextContainerInterface() {}
 };
 
 

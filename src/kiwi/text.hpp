@@ -41,7 +41,7 @@
 
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/text/AbstractTextContainer.hpp"
+#include "kiwi/text/TextContainerInterface.hpp"
 #include "kiwi/text/PlainTextContainer.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/text/TextReader.hpp"

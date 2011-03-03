@@ -28,7 +28,7 @@
 
 /**
  * @file TextReader.hpp
- * @brief Reader for AbstractTextContainer based containers.
+ * @brief Reader for TextContainerInterface based containers.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva) 
  */
 
@@ -37,7 +37,7 @@
 #ifndef KIWI_TEXTREADER_HPP
 #define KIWI_TEXTREADER_HPP
 
-#include "kiwi/text/AbstractTextContainer.hpp"
+#include "kiwi/text/TextContainerInterface.hpp"
 #include "kiwi/text/PlainTextAccessor.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/core/Commons.hpp"
@@ -55,10 +55,13 @@ public:
 
 	typedef kiwi::int8_t char_t;
 
-	TextReader( AbstractTextContainer& container, portIndex_t index
+	TextReader( TextContainerInterface& container, portIndex_t index
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 );
 	TextReader( core::ReaderPort& port
+		, kiwi::uint32_t firstLine = 0
+		, kiwi::uint32_t range = 0 ); 
+	TextReader( core::DataPort& port
 		, kiwi::uint32_t firstLine = 0
 		, kiwi::uint32_t range = 0 ); 
 	

@@ -5,8 +5,7 @@
 namespace kiwi{
 namespace text{
 
-void PlainTextAccessor::init( AbstractTextContainer& container
-	, portIndex_t portIndex
+void PlainTextAccessor::init( TextContainerInterface& container
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range  )
 {

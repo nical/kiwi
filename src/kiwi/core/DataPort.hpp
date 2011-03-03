@@ -48,10 +48,16 @@ class Node;
  * @brief Generic output port class for Reader and Writer interface.
  *
  * An instance of this class is hold by a Node for each of it's outputs.
- * Port classes are designed to do most of the external actions on Node/Filter which are
- * doning connections between Nodes and retrieving informations on their input/output data.
+ * Port classes are designed to do most of the external actions on Node/Filter
+ * which are doning connections between Nodes and retrieving informations on
+ * their input/output data.
  * 
- * Each port has a name which use is facultative has they are truely accessed using an integer index.
+ * Each port has a name which use is facultative has they are truely accessed
+ * using an integer index.
+ *
+ * @todo Right now ports use the utils::Connector helper class to handle connections
+ * and this system should be ported within the classes themselves to avoid some
+ * overhead. 
  */ 
 class DataPort
 : public kiwi::utils::Connector<DataPort, ReaderPort, 32, READER>
@@ -86,6 +92,12 @@ friend class WriterPort;
 	 */ 
 	bool isComposite() const ;
 
+	/**
+	 * @brief Returns a reference to the ith sub-port if any.
+	 *
+	 * If the port is not composite, returns self. Consider it has an undefined
+	 * behaviour that must be avoided.
+	 */ 
 	DataPort& subPort(kiwi::uint32_t i){
 		if(i >= _subPorts.size() ){
 			Debug::error() << "DataPort::subPort: subPort not found!\n";
@@ -94,8 +106,17 @@ friend class WriterPort;
 		return *_subPorts[i];
 	}
 
+	/**
+	 * @brief Returns the number of sub-ports (0 if not a composite port).
+	 */ 
 	kiwi::uint32_t nbSubPorts() const { return _subPorts.size(); }
 
+	/**
+	 * @brief Tries to return the associated container in a given class type.
+	 *
+	 * Returns 0 if for some reson the port doesn't have a container (disabled port)
+	 * or if the container could not be casted to the requested class type. 
+	 */ 
 	template<class T>
 	T* getContainer() {
 		ScopedBlockMacro(scop,"DataPort::getContainer")
@@ -142,18 +163,39 @@ friend class WriterPort;
 	bool connect(WriterPort& port);
 	bool connect(WriterPort* port);
 
+	/**
+	 * @brief returns true if this data port is connected to at least one reader port.
+	 */ 
 	bool isConnectedToReader() const{
 		return ReaderConnector::isConnected();
 	}
+
+	/**
+	 * @brief returns true if this data port is connected to at least one writer port.
+	 */ 
 	bool isConnectedToWriter() const{
 		return WriterConnector::isConnected();
 	}
+
+	/**
+	 * @brief returns true if this data port is connected to at least one port
+	 * (reader and/or writer ports).
+	 */ 
 	bool isConnected() const{
 		return isConnectedToReader() || isConnectedToWriter();
 	}
 
+	/**
+	 * @brief Disconnects from the reader port oassed in pa	parameter
+	 */ 
 	void disconnectReader( ReaderPort* port = 0);
+	/**
+	 * @brief Disconnects from the writer port oassed in pa	parameter
+	 */ 
 	void disconnectWriter( WriterPort* port = 0);
+	/**
+	 * @brief Disconnects this ports from all the ports it is connected to.
+	 */ 
 	void disconnectAll(){
 		disconnectReader(0);
 		disconnectWriter(0);

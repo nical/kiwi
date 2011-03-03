@@ -119,6 +119,11 @@ public:
 	 */ 
 	DataPort* connectedPort() const ;
 
+	/**
+	 * @brief Returns a pointer to the container provided by fthe connected
+	 * data port. if there is no connection or the container could not be casted
+	 * to the requested classe type, returns a nil pointer. 
+	 */ 
 	template<class T>
 	T* getContainer() const{
 		if( isConnected() )	return connectedPort()->getContainer<T>();
@@ -127,12 +132,7 @@ public:
 
 	
 protected:
-	void setType(const string& type);
-	/**
-	 * @brief Used internally by kiwi::core::Node to perform port binding.
-	 * 
-	 * @see kiwi::core::Node::bindPort
-	 */ 
+	
 	void bind( ReaderPort& port);
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.

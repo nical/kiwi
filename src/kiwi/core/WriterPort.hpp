@@ -75,10 +75,7 @@ public:
 	 */ 
 	bool connect(DataPort& outputPort);
 	bool connect(DataPort* outputPort);
-	/**
-	 * @brief Disconnect the port if connected.
-	 */ 
-//	void disconnect();
+
 	/**
 	 * @brief Returns the index of this port.
 	 */ 
@@ -122,6 +119,13 @@ public:
 	 */ 
 	DataPort* connectedPort() const ;
 
+	/**
+	 * @brief Returns a pointer to the container provided by fthe connected
+	 * data port.
+	 *
+	 * If there is no connection or the container could not be casted
+	 * to the requested classe type, returns a nil pointer. 
+	 */ 
 	template<class T>
 	T* getContainer() const{
 	ScopedBlockMacro(scop,"WriterPort::getContainer")
@@ -141,10 +145,8 @@ protected:
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
-	 * @see kiwi::core::setWriterPortEnabled
-	 * @see kiwi::core::setContainerPortEnabled
-	 * @see kiwi::core::setWriterPortEnabled
-	 * @see kiwi::core::setContainerPortEnabled
+	 * @see kiwi::core::setWriterPortEnabled, kiwi::core::setContainerPortEnabled,
+	 * kiwi::core::setContainerPortEnabled
 	 */ 
 	void setEnabled(bool status);
 

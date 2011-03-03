@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$_container_8hpp_source.html" title="kiwi/core/Container.hpp" alt="" coords="104,160,272,189"/>
-<area shape="rect" id="node24" href="$_abstract_array_container_8hpp_source.html" title="kiwi/generic/AbstractArrayContainer.hpp" alt="" coords="223,83,497,112"/>
-<area shape="rect" id="node5" href="$_node_8hpp.html" title="Header file for the base class of every kiwi resources and filters." alt="" coords="117,237,259,267"/>
-<area shape="rect" id="node7" href="$_commons_8hpp_source.html" title="kiwi/core/Commons.hpp" alt="" coords="253,315,427,344"/>
-<area shape="rect" id="node13" href="$_debug_output_stream_8hpp_source.html" title="kiwi/utils/DebugOutputStream.hpp" alt="" coords="307,392,547,421"/>
-<area shape="rect" id="node28" href="$_point_8hpp.html" title="a generic point/vector class." alt="" coords="421,237,579,267"/>
-<area shape="rect" id="node34" href="$types_8hpp.html" title="A collection of template functions to retrieve inforrmations about the basic cpp scalar types..." alt="" coords="637,315,779,344"/>
-</map>

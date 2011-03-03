@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$_abstract_array_container_8hpp_source.html" title="/home/nico/Dev/kiwi/src/kiwi/generic/AbstractArrayContainer.hpp" alt="" coords="548,83,977,112"/>
-<area shape="rect" id="node5" href="$_array_container_8hpp.html" title="Header file for an array based Container." alt="" coords="28,237,401,267"/>
-<area shape="rect" id="node12" href="$_multi_array_container_8hpp.html" title="Header file for an array based Container." alt="" coords="604,237,1009,267"/>
-<area shape="rect" id="node19" href="$_image_container_8hpp.html" title="Header file for the cairo image container." alt="" coords="952,160,1467,189"/>
-<area shape="rect" id="node9" href="$_array_reader_8hpp.html" title="Header file for the generic Reader of array based containers." alt="" coords="520,160,877,189"/>
-<area shape="rect" id="node14" href="$_array_writer_8hpp.html" title="Header file for the generic Writer of array based containers." alt="" coords="147,160,496,189"/>
-<area shape="rect" id="node7" href="$_audiobuffer_8hpp_source.html" title="/home/nico/Dev/kiwi/src/kiwi/audio/AudioBuffer/Audiobuffer.hpp" alt="" coords="5,315,424,344"/>
-</map>

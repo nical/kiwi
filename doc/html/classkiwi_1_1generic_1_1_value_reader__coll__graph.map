@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node2" href="$classkiwi_1_1core_1_1_reader.html" title="Base class of objects that read data from Node." alt="" coords="7,165,137,195"/>
-<area shape="rect" id="node4" href="$classkiwi_1_1generic_1_1_abstract_value_container.html" title="kiwi::generic::AbstractValueContainer\&lt; ValueType \&gt;" alt="" coords="161,165,511,195"/>
-<area shape="rect" id="node6" href="$classkiwi_1_1core_1_1_container.html" title="The base class for containers." alt="" coords="261,85,411,115"/>
-<area shape="rect" id="node8" href="$classkiwi_1_1core_1_1_node.html" title="The base class for every kiwi Container and Filter." alt="" coords="275,5,397,35"/>
-</map>

@@ -118,8 +118,8 @@ friend class WriterPort;
 	 * or if the container could not be casted to the requested class type. 
 	 */ 
 	template<class T>
-	T* getContainer() {
-		ScopedBlockMacro(scop,"DataPort::getContainer")
+	T* safeDownCastContainer() {
+		ScopedBlockMacro(scop,"DataPort::safeDownCastContainer")
 		if(!_container) Debug::error() << "no Container\n";
 		DEBUG_ONLY(
 			if(!dynamic_cast<T*>(_container)) Debug::error() << "cast failed\n" ;
@@ -202,6 +202,12 @@ friend class WriterPort;
 	}
 	
 protected:
+
+  virtual void connect_impl( ReaderPort* port );
+  virtual void disconnect_impl( ReaderPort* port );
+
+  virtual void connect_impl( WriterPort* port );
+  virtual void disconnect_impl( WriterPort* port );
 
 	/**
 	 * @brief Used internally by kiwi::core::Node to perform port binding.

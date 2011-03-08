@@ -44,23 +44,23 @@ public:
 
 		ColorBuffer* r
 			= readerPort(R).connectedPort()
-				->getContainer<ColorBuffer>();
+				->safeDownCastContainer<ColorBuffer>();
 		ColorBuffer* g
 			= readerPort(G).connectedPort()
-				->getContainer<ColorBuffer>();
+				->safeDownCastContainer<ColorBuffer>();
 		ColorBuffer* b
 			= readerPort(B).connectedPort()
-				->getContainer<ColorBuffer>();
+				->safeDownCastContainer<ColorBuffer>();
 		ColorBuffer* a
 			= readerPort(A).connectedPort()
-				->getContainer<ColorBuffer>();
+				->safeDownCastContainer<ColorBuffer>();
 
 		Debug::plop();
 		
 		assert( writerPort(0).connectedPort() );
 		kiwi::image::cairo::RGBAImageContainer* result
 			= writerPort(0).connectedPort()
-				->getContainer<kiwi::image::cairo::RGBAImageContainer>();
+				->safeDownCastContainer<kiwi::image::cairo::RGBAImageContainer>();
 
 		if(!a) Debug::print() << "alpha channel not found\n";
 		if(!r) Debug::print() << "red channel not found\n";

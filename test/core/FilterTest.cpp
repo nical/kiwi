@@ -27,13 +27,13 @@ public:
 		ScopedBlockMacro(scop, "DummyFilter::Process")
 		
 		NumberContainer* ca
-			= readerPort(0).getContainer<NumberContainer>();
+			= readerPort(0).safeDownCastContainer<NumberContainer>();
 
 		NumberContainer* cb
-			= readerPort(1).getContainer<NumberContainer>();
+			= readerPort(1).safeDownCastContainer<NumberContainer>();
 		
 		NumberContainer* result
-			= writerPort(0).getContainer<NumberContainer>();
+			= writerPort(0).safeDownCastContainer<NumberContainer>();
 
 		assert(ca);
 		assert(cb);
@@ -67,9 +67,9 @@ int main()
 	kiwi::core::Node nB( &B );
 	kiwi::core::Node nR( &R );
 
-	assert( nA.dataPort(0).getContainer<kiwi::core::Container>() );
-	assert( nB.dataPort(0).getContainer<kiwi::core::Container>() );
-	assert( nR.dataPort(0).getContainer<kiwi::core::Container>() );
+	assert( nA.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );
+	assert( nB.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );
+	assert( nR.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );
 /*
 	// check that association are made correctly
 	assert( nA.dataPort(0).associatedReaderOutputPort()
@@ -94,7 +94,7 @@ int main()
 	assert( nB.dataPort(0).isConnectedToReader() );
 	assert( nR.dataPort(0).isConnectedToWriter() );
 
-	assert( nR.dataPort(0).getContainer<NumberContainer>()->getValue() == 0 );
+	assert( nR.dataPort(0).safeDownCastContainer<NumberContainer>()->getValue() == 0 );
 
 	assert( filter.readerPort(0).connectedPort()->node() );
 
@@ -110,7 +110,7 @@ int main()
 	Debug::print() << R.getValue() << endl();
 	assert( R.getValue() == 11 );
 
-	NumberContainer* pr = filter.dataPort(0).getContainer<NumberContainer>();
+	NumberContainer* pr = filter.dataPort(0).safeDownCastContainer<NumberContainer>();
 	assert( pr );
 	assert( pr->getValue() == 11 );
 

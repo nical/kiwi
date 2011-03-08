@@ -29,11 +29,11 @@ public:
 			
 			NumberContainer_T* ca
 				= readerPort(0).connectedPort()
-					->getContainer<NumberContainer_T>();
+					->safeDownCastContainer<NumberContainer_T>();
 
 			NumberContainer_T* cb
 				= readerPort(1).connectedPort()
-					->getContainer<NumberContainer_T>();
+					->safeDownCastContainer<NumberContainer_T>();
 
 			if(!ca){
 				Debug::error()

@@ -41,8 +41,8 @@ void NumberContainerTest()
 		assert( n1->nbWriterPorts() == 0 );
 
 	Debug::print() << "check the within the containers\n";
-		assert( n1->dataPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 10 );
-		assert( n2->dataPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 5 );
+		assert( n1->dataPort(0).safeDownCastContainer<NumberContainerInterface<T> >()->getValue() == 10 );
+		assert( n2->dataPort(0).safeDownCastContainer<NumberContainerInterface<T> >()->getValue() == 5 );
 	
 	// create a filter
 	arithmetic::AddFilter addition;
@@ -73,7 +73,7 @@ void NumberContainerTest()
 
 	Debug::print() << "after filter processing\n";
 
-		assert( addition.dataPort(0).getContainer<NumberContainerInterface<T> >()->getValue() == 15 );
+		assert( addition.dataPort(0).safeDownCastContainer<NumberContainerInterface<T> >()->getValue() == 15 );
 
 	Debug::print() << "Test passed successfuly!\n";
 

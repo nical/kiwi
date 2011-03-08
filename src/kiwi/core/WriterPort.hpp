@@ -127,15 +127,20 @@ public:
 	 * to the requested classe type, returns a nil pointer. 
 	 */ 
 	template<class T>
-	T* getContainer() const{
-	ScopedBlockMacro(scop,"WriterPort::getContainer")
+	T* safeDownCastContainer() const{
+	ScopedBlockMacro(scop,"WriterPort::safeDownCastContainer")
 		if( isConnected() ){
-			return connectedPort()->getContainer<T>();	
+			return connectedPort()->safeDownCastContainer<T>();	
 		}	else return 0;
 	}
 	
 protected:
-	void setType(const string& type);
+
+  virtual void connect_impl( DataPort* port );
+
+  virtual void disconnect_impl( DataPort* port );
+
+  void setType(const string& type);
 	/**
 	 * @brief Used internally by kiwi::core::Node to perform port binding.
 	 * 

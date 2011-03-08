@@ -213,33 +213,6 @@ kiwi::string Node::strCommand( const kiwi::string& command )
 	return kiwi::string("kiwi::unknown_command");
 }
 
-// ---------------------------------------------------------- port names
-
-/*
-kiwi::string 
-Node::readerInputName(portIndex_t index) const
-{
-	return kiwi::string("");
-}
-
-kiwi::string 
-Node::readerOutputName(portIndex_t index) const
-{
-	return kiwi::string("");
-}
-
-kiwi::string 
-Node::writerInputName(portIndex_t index) const
-{
-	return kiwi::string("");
-}
-
-kiwi::string 
-Node::writerOutputName(portIndex_t index) const
-{
-	return kiwi::string("");
-}
-*/
 // ---------------------------------------------------------- Port types
 
 

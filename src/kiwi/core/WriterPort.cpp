@@ -59,10 +59,10 @@ bool WriterPort::connect(DataPort& outputPort)
 			bool status = PortConnector::connect( &outputPort );
 			if(status && _associatedDataPort)
 				_associatedDataPort->setContainer(
-					outputPort.getContainer<Container>() );
+					outputPort.safeDownCastContainer<Container>() );
 			return status;
 		}else{
-			Debug::error() << "WriterPort::connect: uncompatible port tags\n";	
+			Debug::error() << "WriterPort::connect: uncompatible port tags\n";
 			return false;
 		}
 	}else{
@@ -123,16 +123,8 @@ bool WriterPort::isCompatible(const kiwi::Tags& tag)
 	return ( tags().hasOneOf(tag + Tags("#any") ) );
 }
 
-/*
-bool 
-WriterPort::isConnected() const 
-{ 
-	return (_connectedNode != 0); 
-}
-*/
 
-bool 
-WriterPort::isEnabled() const 
+bool WriterPort::isEnabled() const 
 {
 	return _enabled;
 }
@@ -145,20 +137,19 @@ WriterPort::connectedPort() const
 }
 
 
-kiwi::string 
-WriterPort::name() const
-{
-//	return _node->writerInputName(_node->indexOf(*this)); TODO
-}
-
-
 
 
 
 // ----------------------------------------------------------- protected
 
 
+void WriterPort::connect_impl( DataPort* port ){
+  assert("TODO"=="not implemented yet");
+}
 
+void WriterPort::disconnect_impl( DataPort* port ){
+  assert("TODO"=="not implemented yet");
+}
 
 void 
 WriterPort::setEnabled(bool status) 

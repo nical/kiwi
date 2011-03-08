@@ -135,6 +135,13 @@ DataPort* ReaderPort::connectedPort() const
 // ----------------------------------------------------------- protected
 
 
+void ReaderPort::connect_impl( DataPort* port ){
+  assert("TODO"=="not implemented yet");
+}
+
+void ReaderPort::disconnect_impl( DataPort* port ){
+  assert("TODO"=="not implemented yet");
+}
 
 
 void 

@@ -74,7 +74,7 @@ TextReader::TextReader( core::DataPort& port
 	, kiwi::uint32_t range )
 {
 ScopedBlockMacro(__scop, "TextReader::constructor")
-	TextContainerInterface* tc = port.getContainer<TextContainerInterface>();
+	TextContainerInterface* tc = port.safeDownCastContainer<TextContainerInterface>();
 
 	if( tc ) init( *tc, firstLine, range );
 	else

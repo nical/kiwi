@@ -26,7 +26,7 @@ void CopyImageTest()
 
 	Debug::print() << inputDataNode.dataPort(0).subPort(0).isComposite() << endl();
 
-	assert( inputDataNode.dataPort(0).subPort(0).getContainer<kiwi::core::Container>() == inputData.subContainer(0) );
+	assert( inputDataNode.dataPort(0).subPort(0).safeDownCastContainer<kiwi::core::Container>() == inputData.subContainer(0) );
 
 	Debug::print() << inputDataNode.dataPort(0).subPort(0).nbSubPorts();
 	

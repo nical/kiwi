@@ -125,14 +125,17 @@ public:
 	 * to the requested classe type, returns a nil pointer. 
 	 */ 
 	template<class T>
-	T* getContainer() const{
-		if( isConnected() )	return connectedPort()->getContainer<T>();
+	T* safeDownCastContainer() const{
+		if( isConnected() )	return connectedPort()->safeDownCastContainer<T>();
 		else return 0;
 	}
 
 	
 protected:
-	
+
+  virtual void connect_impl( DataPort* port );
+  virtual void disconnect_impl( DataPort* port );
+  
 	void bind( ReaderPort& port);
 	/**
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.

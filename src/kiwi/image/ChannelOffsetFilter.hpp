@@ -52,17 +52,17 @@ public:
 		typedef kiwi::generic::RectangleContainer<kiwi::int32_t, 2> RegionContainer;
 
 
-		ColorBuffer* chan = readerPort(0).getContainer<ColorBuffer>();
+		ColorBuffer* chan = readerPort(0).safeDownCastContainer<ColorBuffer>();
 				
 		PointVectorContainer* vect
-			= readerPort(1).getContainer<PointVectorContainer>();
+			= readerPort(1).safeDownCastContainer<PointVectorContainer>();
 
 		RegionContainer* regionInput
-			= readerPort(2).getContainer<RegionContainer>();
+			= readerPort(2).safeDownCastContainer<RegionContainer>();
 
-		ColorBuffer* mask = readerPort(3).getContainer<ColorBuffer>();	
+		ColorBuffer* mask = readerPort(3).safeDownCastContainer<ColorBuffer>();	
 
-		ColorBuffer* result	= writerPort(0).getContainer<ColorBuffer>();
+		ColorBuffer* result	= writerPort(0).safeDownCastContainer<ColorBuffer>();
 				
 		if(!chan) Debug::print() << "input channel not found\n";
 		if(!vect) Debug::print() << "input offset vector not found\n";

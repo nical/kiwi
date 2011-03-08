@@ -47,7 +47,7 @@ void ChannelOffsetTest()
 
 	//typedef kiwi::core::Container TestType;
 	typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> TestType;
-	TestType* ptr =	resultNode.dataPort(0).subPort(0).getContainer<TestType>() ;
+	TestType* ptr =	resultNode.dataPort(0).subPort(0).safeDownCastContainer<TestType>() ;
 	assert( ptr );
 
 	assert( f1.readerPort(0).isConnected() );

@@ -82,29 +82,44 @@ Node::~Node()
 }
 
 
-portIndex_t Node::addReaderPort()
+
+portIndex_t Node::addReaderPort(){
+  addReaderPort( new ReaderPort(this) );
+}
+
+portIndex_t Node::addReaderPort( ReaderPort* port )
 {
-//ScopedBlockMacro(scop_b,"addDataPort("+name+")");
-//	portIndex_t index = getReaderInputCount();
-	_readerPorts.push_back( new ReaderPort(this) );
+  if(!port) return -1;
+	_readerPorts.push_back( port );
 	return _readerPorts.size()-1;
 }
 
 
-portIndex_t Node::addWriterPort()
+portIndex_t Node::addWriterPort(){
+  addWriterPort( new WriterPort(this) );
+}
+
+portIndex_t Node::addWriterPort( WriterPort* port )
 {
-	_writerPorts.push_back( new WriterPort(this) );
+  if(!port) return -1;
+	_writerPorts.push_back( port );
 	return _writerPorts.size()-1;
 }
 
-portIndex_t Node::addDataPort(Container* data, kiwi::uint8_t flags)
+
+portIndex_t Node::addDataPort(Container* data, kiwi::uint8_t flags){
+  addDataPort( new DataPort(this, data) ); // TODO data
+}
+
+portIndex_t Node::addDataPort( DataPort* port )
 {
 	ScopedBlockMacro(scop,"Node::addDataPort");
-	if(!data) Debug::error() << "warning: data param is nil\n";
+	if(!port) return -1;
 	// TODO: flags
-	_dataPorts.push_back( new DataPort(this, data) );
+	_dataPorts.push_back( port );
 	return _dataPorts.size()-1;
 }
+
 
 void Node::addContainer(Container* data, bool addPort, kiwi::uint8_t flags)
 {
@@ -112,7 +127,7 @@ void Node::addContainer(Container* data, bool addPort, kiwi::uint8_t flags)
 	if(!data) Debug::error() << "warning: the init parameter is nil\n";
 	_containers.add(data);
 	if(addPort){
-		 addDataPort(data,flags);
+		 addDataPort( new DataPort(this, data) ); // TODO flags
 	}else{
 		Debug::error() << "Node::addContainer: warning added a container without port\n";
 	}

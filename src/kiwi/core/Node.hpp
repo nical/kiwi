@@ -37,12 +37,9 @@
 #ifndef KIWI_NODE_HPP
 #define KIWI_NODE_HPP
 
-//#include "kiwi/core/InputPort.hpp"
-//#include "kiwi/core/OutputPort.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Tags.hpp"
-#include "kiwi/core/Reader.hpp"
-#include "kiwi/core/Writer.hpp"
+
 #include "kiwi/core/NodeListener.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
 
@@ -64,8 +61,6 @@ namespace kiwi{
 namespace core{
 
 
-class Reader;
-class Writer;
 class ReaderPort;
 class WriterPort;
 class DataPort;
@@ -181,6 +176,7 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */
+   
 	WriterPort& writerPort(portIndex_t index) const
 		{assert(index < nbWriterPorts() );return *_writerPorts[index];}
 	/**
@@ -257,6 +253,8 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
+	portIndex_t addReaderPort( ReaderPort* port );
+  
 	portIndex_t addReaderPort();
 
 	/**
@@ -272,8 +270,12 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
-	portIndex_t addDataPort(Container* data = 0, kiwi::uint8_t flags = 3);
-	/**
+	portIndex_t addDataPort( DataPort* port );
+
+  portIndex_t addDataPort(Container* data = 0, kiwi::uint8_t flags = 3);
+
+
+  /**
 	 * @brief Remove an output port from this Filter's Reader interface.
 	 *
 	 * Removes The last output port (the one oh highest index) from this Filter's Reader interface.
@@ -286,7 +288,12 @@ protected:
 	 * 
 	 * @return the index of the added port.
 	 */ 
+	portIndex_t addWriterPort( WriterPort* port );
+
+  
 	portIndex_t addWriterPort();
+
+  
 	/**
 	 * @brief Remove an input port from this Filter's Writer interface.
 	 *

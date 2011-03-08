@@ -23,7 +23,7 @@ class TextToMorseFilter : public core::Filter
 {
 public:
 	
-	TextToMorseFilter() : Filter(/*1*/)
+	TextToMorseFilter() : Filter()
 	{
 	//ScopedBlockMacro(scp_block, "TextToMorseFilter::constructor");
 		// CanonicalFilter's constructor automatically adds one reader output port

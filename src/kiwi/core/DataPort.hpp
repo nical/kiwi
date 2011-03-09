@@ -166,15 +166,17 @@ friend class WriterPort;
 	/**
 	 * @brief returns true if this data port is connected to at least one reader port.
 	 */ 
-	bool isConnectedToReader() const{
-		return ReaderConnector::isConnected();
+	bool isConnectedToReader( ReaderPort* port = 0) const{
+    if(!port) return _connectedReaders.size() > 0;
+		return (_connectedReaders.find(port) != -1);
 	}
 
 	/**
 	 * @brief returns true if this data port is connected to at least one writer port.
 	 */ 
-	bool isConnectedToWriter() const{
-		return WriterConnector::isConnected();
+	bool isConnectedToWriter( WriterPort* port = 0 ) const{
+    if(!port) return _connectedWriters.size() > 0;
+		return (_connectedWriters.find(port) != -1);
 	}
 
 	/**

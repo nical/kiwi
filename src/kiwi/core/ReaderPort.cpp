@@ -51,8 +51,10 @@ ReaderPort::ReaderPort( Node* myNode )
 bool ReaderPort::connect(DataPort* port)
 {
 	ScopedBlockMacro( __scop, "ReaderPort::connect*" )
+  
 	if( (port!=0) && isEnabled() && port->isEnabled() )
 		if( isCompatible( *port ) ){
+      disconnect();//only one connection at a time
       connect_impl( port );
       port->connect_impl( this );
 			return true;
@@ -108,11 +110,29 @@ bool ReaderPort::isEnabled() const
 
 DataPort* ReaderPort::connectedPort() const 
 { 
-	return PortConnector::connectedInstance(0);
+	return _connectedDataPort;
 }
 
+bool ReaderPort::isConnected( DataPort* port ) const {
+  if(port) return connectedPort() == port;
+  else return connectedPort() != 0;
+}
 
-
+bool ReaderPort::disconnect( DataPort* port ){
+if(port){
+    if( isConnected( port ) ){
+      disconnect_impl(0);
+      port->disconnect_impl(this);
+      return true;
+    }else return false;
+  }else{
+    if( isConnected() ){
+      disconnect_impl(0);
+      connectedPort()->disconnect_impl(this);
+      return true;
+    }else return false;
+  }
+}
 
 
 // ----------------------------------------------------------- protected

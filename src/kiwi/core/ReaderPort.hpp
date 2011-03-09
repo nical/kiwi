@@ -77,7 +77,10 @@ public:
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 
-//	void disconnect();
+	virtual bool disconnect( DataPort* port = 0 );
+
+  virtual bool isConnected( DataPort* port = 0 ) const;
+  
 	/**
 	 * @brief Returns the index of this port.
 	 */ 

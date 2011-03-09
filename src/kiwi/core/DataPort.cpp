@@ -149,6 +149,7 @@ bool DataPort::connect(ReaderPort* inputPort)
 	else return false;
 }
 
+/*
 bool DataPort::connect(WriterPort& inputPort)
 {
 	ScopedBlockMacro( scop, "DataPort::connect" )
@@ -158,23 +159,27 @@ bool DataPort::connect(WriterPort& inputPort)
 	}
 	else return false;
 }
+*/
 
 bool DataPort::connect(WriterPort* inputPort)
 {
 	ScopedBlockMacro( scop, "DataPort::connect" )
-	if( (inputPort != 0) && (isEnabled() && inputPort->isEnabled()) ){
-		if( isCompatible( *inputPort ) )
-			return WriterConnector::connect( inputPort );
-	}
+	if( inputPort != 0 ) inputPort->connect( this ); 
 	else return false;
 }
 
 void DataPort::disconnectReader( ReaderPort* port ){
-	ReaderConnector::disconnect( port );
+  if( isConnectedToReader( port ) ){
+    port->disconnect( this );
+  }
+	//ReaderConnector::disconnect( port );
 }
 
 void DataPort::disconnectWriter( WriterPort* port ){
-	WriterConnector::disconnect( port );
+  if( isConnectedToWriter( port ) ){
+    port->disconnect(this);
+  }
+	//WriterConnector::disconnect( port );
 }
 
 

@@ -77,6 +77,7 @@ bool WriterPort::connect(DataPort* port)
 	ScopedBlockMacro( __scop, "ReaderPort::connect*" )
 	if( (port!=0) && isEnabled() && port->isEnabled() )
 		if( isCompatible( *port ) ){
+      disconnect();
       connect_impl( port );
       port->connect_impl( this );
 			return true;
@@ -136,11 +137,25 @@ bool WriterPort::isEnabled() const
 DataPort* 
 WriterPort::connectedPort() const 
 { 
-	return PortConnector::connectedInstance(0);
+	return _connectedDataPort;
 }
 
 
-
+bool WriterPort::disconnect( DataPort* port ){
+  if(port){
+    if( isConnected(port) ){
+      disconnect_impl(0);
+      port->disconnect_impl(this);
+      return true;
+    }else return false;
+  }else{
+    if( isConnected() ){
+      disconnect_impl(0);
+      connectedPort()->disconnect_impl(this);
+      return true;
+    }else return false;
+  }
+}
 
 
 // ----------------------------------------------------------- protected

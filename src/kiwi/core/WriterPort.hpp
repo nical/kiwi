@@ -105,6 +105,10 @@ public:
 	 */ 
 	bool isCompatible(const kiwi::Tags& tag) ;
 
+  virtual bool isConnected( DataPort* port = 0 ) const;
+
+  virtual bool disconnect( DataPort* port = 0 );
+
 	/**
 	 * @brief returns true if this port is enabled.
 	 * 

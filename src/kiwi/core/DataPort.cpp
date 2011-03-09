@@ -128,18 +128,6 @@ bool DataPort::isCompatible(WriterPort& input)
 	return input.isCompatible(*this); 
 }
 
-void DataPort::connect_impl( ReaderPort* port ){
-  assert(!"not implemented yet");
-}
-void DataPort::disconnect_impl( ReaderPort* port ){
-  assert(!"not implemented yet");
-}
-void DataPort::connect_impl( WriterPort* port ){
-  assert(!"not implemented yet");
-}
-void DataPort::disconnect_impl( WriterPort* port ){
-  assert(!"not implemented yet");
-}
 
 bool DataPort::connect(ReaderPort& inputPort)
 {
@@ -194,6 +182,28 @@ bool DataPort::isEnabled() const
 { 
 	return _container != 0; 
 }
+
+
+
+
+void DataPort::connect_impl( ReaderPort* port ){
+  _connectedReaders.add( port );
+}
+
+void DataPort::disconnect_impl( ReaderPort* port ){
+  _connectedReaders.remove( port );
+}
+
+void DataPort::connect_impl( WriterPort* port ){
+  _connectedWriters.add( port );
+}
+
+void DataPort::disconnect_impl( WriterPort* port ){
+  _connectedWriters.remove( port );
+}
+
+
+
 
 }// namespace
 }// namespace

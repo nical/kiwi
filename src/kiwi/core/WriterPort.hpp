@@ -163,6 +163,7 @@ private:
 	Node* _node;
 	utils::UnorderedArray<WriterPort*> _linkedInputPorts;
 	DataPort* _associatedDataPort;
+	DataPort* _connectedDataPort;
 	bool _enabled;
 };
 

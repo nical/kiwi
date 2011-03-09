@@ -150,6 +150,7 @@ protected:
 private:
 	Node* _node;
 	utils::UnorderedArray<ReaderPort*> _linkedInputPorts;
+  DataPort* _connectedDataPort;
 	bool _enabled;
 };
 

@@ -301,7 +301,7 @@ operator >> (DataPort& output, ReaderPort& input )
 	ScopedBlockMacro(scop, "operator >> (reader)" )
 	if(!input.isConnected())
 	{
-		return input.connect(output);
+		return input.connect(&output);
 	}else{return false;}
 }
 
@@ -311,7 +311,7 @@ operator >> (DataPort& output, WriterPort& input )
 	ScopedBlockMacro(scop, "operator >> (writer)" )
 	if(!input.isConnected())
 	{
-		return input.connect(output);
+		return input.connect(&output);
 	}else{return false;}
 }
 

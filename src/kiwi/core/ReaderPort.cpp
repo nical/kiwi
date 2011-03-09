@@ -42,38 +42,21 @@ namespace core{
 // ----------------------------------------------------------- InputPort
 
 ReaderPort::ReaderPort( Node* myNode )
-:	_enabled(true)
-	, _node(myNode)
+:	_enabled(true), _node(myNode), _connectedDataPort(0)
 {
 	//nothing to do
 }
 
 
-bool ReaderPort::connect(DataPort& outputPort)
-{
-	ScopedBlockMacro( __scop, "ReaderPort::connect" )
-	if( isEnabled() && outputPort.isEnabled() ){
-		if( isCompatible( outputPort.tags() ) ){
-			return PortConnector::connect( &outputPort );
-		}else{
-			Debug::error()
-				<< "ReaderPort::connect error: uncompatible port tags!" <<endl()
-				<< "   input: " << tags().str() <<endl()
-				<< "   output: " << outputPort.tags().str() << endl();
-			return false;
-		}
-	}else{
-		Debug::error() << "ReaderPort::connect error: one of the port is disabled!" << endl();
-		return false;
-	}
-}
-
-bool ReaderPort::connect(DataPort* outputPort)
+bool ReaderPort::connect(DataPort* port)
 {
 	ScopedBlockMacro( __scop, "ReaderPort::connect*" )
-	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
-		if( isCompatible( *outputPort ) )
-			return PortConnector::connect( outputPort );
+	if( (port!=0) && isEnabled() && port->isEnabled() )
+		if( isCompatible( *port ) ){
+      connect_impl( port );
+      port->connect_impl( this );
+			return true;
+    }
 	else return false;
 }
 
@@ -136,11 +119,11 @@ DataPort* ReaderPort::connectedPort() const
 
 
 void ReaderPort::connect_impl( DataPort* port ){
-  assert("TODO"=="not implemented yet");
+  _connectedDataPort = port;
 }
 
 void ReaderPort::disconnect_impl( DataPort* port ){
-  assert("TODO"=="not implemented yet");
+  _connectedDataPort = 0;
 }
 
 

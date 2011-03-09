@@ -46,11 +46,12 @@ WriterPort::WriterPort( Node* myNode )
 :	_enabled(true)
 	, _node(myNode)
 	, _associatedDataPort(0)
+  , _connectedDataPort(0)
 {
 	
 }
 
-
+/*
 bool WriterPort::connect(DataPort& outputPort)
 {
 	ScopedBlockMacro( __scop, "WriterPort::connect" )
@@ -70,14 +71,16 @@ bool WriterPort::connect(DataPort& outputPort)
 		return false;
 	}
 }
-
-bool WriterPort::connect(DataPort* outputPort)
+*/
+bool WriterPort::connect(DataPort* port)
 {
-	assert(false);
-	ScopedBlockMacro( __scop, "WriterPort::connect" )
-	if( (outputPort!=0) && isEnabled() && outputPort->isEnabled() )
-		if( isCompatible( *outputPort ) )
-			return PortConnector::connect( outputPort );
+	ScopedBlockMacro( __scop, "ReaderPort::connect*" )
+	if( (port!=0) && isEnabled() && port->isEnabled() )
+		if( isCompatible( *port ) ){
+      connect_impl( port );
+      port->connect_impl( this );
+			return true;
+    }
 	else return false;
 }
 
@@ -144,11 +147,11 @@ WriterPort::connectedPort() const
 
 
 void WriterPort::connect_impl( DataPort* port ){
-  assert("TODO"=="not implemented yet");
+  _connectedDataPort = port;
 }
 
 void WriterPort::disconnect_impl( DataPort* port ){
-  assert("TODO"=="not implemented yet");
+  _connectedDataPort = 0;
 }
 
 void 

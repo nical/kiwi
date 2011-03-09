@@ -225,8 +225,13 @@ protected:
 	
 private:
 	Node* _node;
-	Container* _container; 
+	Container* _container;
+  //connections
+  utils::UnorderedArray<ReaderPort*> _connectedReaders;
+  utils::UnorderedArray<WriterPort*> _connectedWriters;
+  //port binding
 	utils::UnorderedArray<DataPort*> _linkedOutputPorts;
+  //composite data ports
 	utils::UnorderedArray<DataPort*> _subPorts;
 };
 

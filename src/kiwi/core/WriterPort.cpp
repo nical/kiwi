@@ -90,7 +90,7 @@ void
 WriterPort::bind(WriterPort& port)
 {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
-	port._linkedInputPorts.add(&port);
+	port._linkedInputPorts.add( &port );
 	
 }
 
@@ -138,13 +138,12 @@ bool WriterPort::isEnabled() const
 
 
 DataPort* 
-WriterPort::connectedPort() const 
-{ 
+WriterPort::connectedPort() const { 
 	return _connectedDataPort;
 }
 
 
-bool WriterPort::disconnect( DataPort* port ){
+bool WriterPort::disconnect( DataPort* port ) {
   if(port){
     if( isConnected(port) ){
       disconnect_impl(0);
@@ -167,17 +166,22 @@ bool WriterPort::disconnect( DataPort* port ){
 void WriterPort::connect_impl( DataPort* port ){
   _connectedDataPort = port;
   if(_associatedDataPort){
-    _associatedDataPort->setContainer( port->getAbstractContainer() );
+    //_associatedDataPort->setContainer( port->getAbstractContainer() );
+    _associatedDataPort->bind( *port );
   }
 }
 
 void WriterPort::disconnect_impl( DataPort* port ){
   _connectedDataPort = 0;
+  if(_associatedDataPort){
+    if((_associatedDataPort == port)||(port == 0)){
+      _associatedDataPort->unBind();
+    }
+  }
 }
 
 void 
-WriterPort::setEnabled(bool status) 
-{
+WriterPort::setEnabled(bool status) {
 	_enabled = status;
 }
 

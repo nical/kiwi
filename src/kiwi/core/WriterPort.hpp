@@ -139,7 +139,6 @@ protected:
 
   virtual void disconnect_impl( DataPort* port );
 
-  void setType(const string& type);
 	/**
 	 * @brief Used internally by kiwi::core::Node to perform port binding.
 	 * 

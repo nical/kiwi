@@ -121,7 +121,11 @@ friend class WriterPort;
 			)
 		return dynamic_cast<T*>(_container);
 	}
-	
+
+  Container* getAbstractContainer() const{
+    return _container;
+  }
+  
 	/**
 	 * @brief Returns this port's Type as a string.
 	 */ 

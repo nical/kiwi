@@ -166,6 +166,9 @@ bool WriterPort::disconnect( DataPort* port ){
 
 void WriterPort::connect_impl( DataPort* port ){
   _connectedDataPort = port;
+  if(_associatedDataPort){
+    _associatedDataPort->setContainer( port->getAbstractContainer() );
+  }
 }
 
 void WriterPort::disconnect_impl( DataPort* port ){

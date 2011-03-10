@@ -35,7 +35,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/generic/PointAccessContainerInterface.hpp"
 #include "kiwi/generic/Point.hpp"
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 
 namespace kiwi{
 /**

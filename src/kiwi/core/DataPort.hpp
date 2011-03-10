@@ -32,7 +32,7 @@
 //#include "kiwi/core/Node.hpp"
 
 #include <list>
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
 
 

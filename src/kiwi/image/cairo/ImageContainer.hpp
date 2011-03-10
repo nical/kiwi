@@ -16,7 +16,7 @@
 #include "kiwi/generic/ArrayContainer.hpp"
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/generic/PointVectorContainer.hpp"
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 #include "kiwi/image/RGBA32Fragment.hpp"
 
 

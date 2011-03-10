@@ -38,7 +38,7 @@
 #define KIWI_NODE_HPP
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 
 #include "kiwi/core/NodeListener.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"

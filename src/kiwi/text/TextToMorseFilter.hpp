@@ -4,7 +4,7 @@
 #define KIWI_TEXTTOMORSEFILTER_HPP
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 #include "kiwi/text.hpp"
 #include "kiwi/utils/types.hpp"
 #include "kiwi/utils/Factory.hpp"

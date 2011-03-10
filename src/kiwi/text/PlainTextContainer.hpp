@@ -31,7 +31,7 @@
 #define KIWI_TEXTCONTAINER_HPP
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 #include "kiwi/text/TextContainerInterface.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
 

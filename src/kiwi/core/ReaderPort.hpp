@@ -31,7 +31,7 @@
 #define KIWI_CORE_READERINPUTPORT_HPP
 
 //#include "kiwi/core/Node.hpp"
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
 #include "kiwi/core/DataPort.hpp"
 

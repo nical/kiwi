@@ -30,7 +30,7 @@
 #ifndef KIWI_CORE_WRITERINPUTPORT_HPP
 #define KIWI_CORE_WRITERINPUTPORT_HPP
 
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
 #include "kiwi/core/DataPort.hpp"
 

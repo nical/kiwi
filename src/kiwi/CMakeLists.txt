@@ -30,13 +30,13 @@ endif(DEFINED BUILD_KIWI_TEXT)
 SET(KIWI_SRC ${KIWI_SRC}
 		utils/DebugOutputStream.cpp
 		utils/SocketCreator.cpp
+    utils/Tags.cpp
 		utils/random.cpp
 		core/Node.cpp
 		core/ReaderPort.cpp
 		core/WriterPort.cpp
 		core/DataPort.cpp
 		pipeline/SimplePipeline.cpp
-		core/Tags.cpp
 		# kiwi::core source files
 		# tutorial/FilterSkeleton.cpp
 		)

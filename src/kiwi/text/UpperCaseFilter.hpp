@@ -4,7 +4,7 @@
 #define KIWI_UPPERCASEFILTER_HPP
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 #include "kiwi/text/TextReader.hpp"
 #include "kiwi/text/TextWriter.hpp"
 #include "kiwi/generic/Point.hpp"

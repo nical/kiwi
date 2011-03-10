@@ -40,7 +40,7 @@
 
 #include "kiwi/generic/IterativeFilter.hpp"
 #include "kiwi/generic/ArrayIterator.hpp"
-#include "kiwi/core/Tags.hpp"
+#include "kiwi/utils/Tags.hpp"
 
 namespace kiwi{
 namespace image{

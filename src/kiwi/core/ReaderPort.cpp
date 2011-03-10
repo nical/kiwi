@@ -28,9 +28,6 @@
 
 #include "kiwi/core/Node.hpp"
 
-#include "kiwi/core/Reader.hpp"
-#include "kiwi/core/Writer.hpp"
-
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/ReaderPort.hpp"
 

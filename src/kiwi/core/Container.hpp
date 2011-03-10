@@ -46,6 +46,30 @@ class Container
 {
 public:
 	static const uint32_t UNAVAILABLE = 0;
+  enum { READ = 1, WRITE = 2, READ_WRITE = READ | WRITE };
+  
+  /**
+   * @brief A method intended to prepare the container before access when needed.
+   *
+   * Some libraries -cairo for example- need to make some function calls before
+   * and after working on their data structures. These pre-process calls
+   * should be placed here.
+   * This is important because some kiwi containers use abstraction layers so as
+   * to work with non library-specific data, which means that the child containers
+   * should override this method if any pre-treatment is required. 
+   */
+   virtual void begin( int flags = READ_WRITE ) { }
+   /**
+   * @brief A method intended to prepare the container before access when needed.
+   *
+   * Some libraries -cairo for example- need to make some function calls before
+   * and after working on their data structures. These post-process calls
+   * should be placed here.
+   * This is important because some kiwi containers use abstraction layers so as
+   * to work with non library-specific data, which means that the child containers
+   * should override this method if any post-treatment is required. 
+   */
+   virtual void end( int flags = READ_WRITE ) { }
 
 	/**
 	 * @brief Returns an estimation of the memory consumed by the container.
@@ -54,6 +78,7 @@ public:
 
 	/**
 	 * @brief Returns the number of scalar elements in the container.
+   * @todo This method should be moved to a child class
 	 */ 
 	virtual kiwi::uint32_t size() const { return 0; }
 

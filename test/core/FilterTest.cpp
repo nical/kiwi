@@ -99,8 +99,6 @@ int main()
 	assert( filter.readerPort(0).connectedPort()->node() );
 
 	assert( nR.dataPort(0).node() );
-	assert( nR.dataPort(0).WriterConnector::connectedInstance() == &filter.writerPort(0) ); 
-	assert( &nR.dataPort(0) == filter.writerPort(0).PortConnector::connectedInstance() ); //fail
 	assert( filter.writerPort(0).connectedPort() );
 	assert( filter.writerPort(0).connectedPort()->node() ); // fail
 	assert( filter.writerPort(0).connectedPort()->node() == &nR );

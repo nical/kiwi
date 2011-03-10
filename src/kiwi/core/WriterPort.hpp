@@ -30,9 +30,7 @@
 #ifndef KIWI_CORE_WRITERINPUTPORT_HPP
 #define KIWI_CORE_WRITERINPUTPORT_HPP
 
-//#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Tags.hpp"
-#include "kiwi/utils/Connector.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
 #include "kiwi/core/DataPort.hpp"
 
@@ -56,26 +54,24 @@ class WriterPort;
  */
 
 class WriterPort
-: public kiwi::utils::Connector<WriterPort, DataPort, 1, WRITER>
 {
 friend class Node;
 friend class Filter;
 public:
-
-	typedef kiwi::utils::Connector<WriterPort, DataPort, 1, WRITER> PortConnector;
 
 	/**
 	 * @brief Constructor.
 	 * @todo The second argument will disapear in next version.
 	 */ 
 	WriterPort(Node* myNode);
+	virtual ~WriterPort(){}
 	
 	/**
 	 * @brief Connection method.
 	 */ 
-	bool connect(DataPort& outputPort);
 	bool connect(DataPort* outputPort);
-
+//bool connect(DataPort& outputPort);
+	
 	/**
 	 * @brief Returns the index of this port.
 	 */ 
@@ -93,13 +89,12 @@ public:
 	 * @brief Returns this port's Type as a string.
 	 */ 
 	Tags tags() const;
-	// TODO this is a temporary solution for port compatibility
-	// a more flexible version is to come with use of polymorphism 
-	// to get compatibility of child classes.
+	
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
 	bool isCompatible(DataPort& output) ;
+  
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 

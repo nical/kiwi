@@ -116,14 +116,17 @@ Tags WriterPort::tags() const
 	return node()->writerTags( index() );
 }
 
-bool WriterPort::isCompatible(DataPort& output)	
-{ 
+bool WriterPort::isCompatible(DataPort& output){ 
 	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
 }
 
+bool WriterPort::isConnected( DataPort* port) const{
+  if(!port) return _connectedDataPort;
+  return port == _connectedDataPort;
+}
 
-bool WriterPort::isCompatible(const kiwi::Tags& tag)	
-{ 
+
+bool WriterPort::isCompatible(const kiwi::Tags& tag){ 
 	return ( tags().hasOneOf(tag + Tags("#any") ) );
 }
 

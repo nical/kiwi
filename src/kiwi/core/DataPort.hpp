@@ -34,7 +34,7 @@
 #include <list>
 #include "kiwi/core/Tags.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
-#include "kiwi/utils/Connector.hpp"
+
 
 
 
@@ -60,16 +60,11 @@ class Node;
  * overhead. 
  */ 
 class DataPort
-: public kiwi::utils::Connector<DataPort, ReaderPort, 32, READER>
-, public kiwi::utils::Connector<DataPort, WriterPort, 32, WRITER>
 {
 friend class Node;
 public:
 friend class ReaderPort;
 friend class WriterPort;
-
-	typedef kiwi::utils::Connector<DataPort, ReaderPort, 32, READER> ReaderConnector;
-	typedef kiwi::utils::Connector<DataPort, WriterPort, 32, WRITER> WriterConnector;
 
 	// --------------------------------------------------------------------
 	/**

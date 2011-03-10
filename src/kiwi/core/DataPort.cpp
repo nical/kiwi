@@ -128,7 +128,7 @@ bool DataPort::isCompatible(WriterPort& input)
 	return input.isCompatible(*this); 
 }
 
-
+/*
 bool DataPort::connect(ReaderPort& inputPort)
 {
 	ScopedBlockMacro( scop, "DataPort::connect" )
@@ -138,14 +138,11 @@ bool DataPort::connect(ReaderPort& inputPort)
 	}
 	else return false;
 }
-
+*/
 bool DataPort::connect(ReaderPort* inputPort)
 {
 	ScopedBlockMacro( scop, "DataPort::connect" )
-	if( (inputPort != 0) && (isEnabled() && inputPort->isEnabled()) ){
-		if( isCompatible( *inputPort ) )
-			return ReaderConnector::connect( inputPort );
-	}
+	if( inputPort != 0 ) inputPort->connect( this ); 
 	else return false;
 }
 

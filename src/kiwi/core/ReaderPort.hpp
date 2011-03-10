@@ -32,7 +32,6 @@
 
 //#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Tags.hpp"
-#include "kiwi/utils/Connector.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
 #include "kiwi/core/DataPort.hpp"
 
@@ -56,12 +55,10 @@ class DataPort;
  */
 
 class ReaderPort
-: public kiwi::utils::Connector<ReaderPort, DataPort, 1, READER>
 {
 friend class Node;
 public:
 
-	typedef kiwi::utils::Connector<ReaderPort, DataPort, 1, READER> PortConnector;
 
 	/**
 	 * @brief Constructor.
@@ -72,8 +69,10 @@ public:
 	/**
 	 * @brief Connection method.
 	 */ 
-	bool connect(DataPort& outputPort);
 	bool connect(DataPort* outputPort);
+
+  //bool connect(DataPort& outputPort);
+
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 

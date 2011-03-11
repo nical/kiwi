@@ -36,7 +36,8 @@
 #define NOT_LINUX( instruction ) instruction
 #endif
 
-#define ParentMacro( pClass ) typedef pClass Parent;
+
+
 
 
 #endif //defined KIWI_MACROS_HPP

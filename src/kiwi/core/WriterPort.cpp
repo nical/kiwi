@@ -48,27 +48,6 @@ WriterPort::WriterPort( Node* myNode )
 	
 }
 
-/*
-bool WriterPort::connect(DataPort& outputPort)
-{
-	ScopedBlockMacro( __scop, "WriterPort::connect" )
-	if( isEnabled() && outputPort.isEnabled() ){
-		if( isCompatible( outputPort.tags() ) ){
-			bool status = PortConnector::connect( &outputPort );
-			if(status && _associatedDataPort)
-				_associatedDataPort->setContainer(
-					outputPort.safeDownCastContainer<Container>() );
-			return status;
-		}else{
-			Debug::error() << "WriterPort::connect: uncompatible port tags\n";
-			return false;
-		}
-	}else{
-		Debug::error() << "ReaderPort::connect error: one of the port is disabled!" << endl();
-		return false;
-	}
-}
-*/
 bool WriterPort::connect(DataPort* port)
 {
 	ScopedBlockMacro( __scop, "ReaderPort::connect*" )
@@ -163,7 +142,6 @@ bool WriterPort::disconnect( DataPort* port ) {
 void WriterPort::connect_impl( DataPort* port ){
   _connectedDataPort = port;
   if(_associatedDataPort){
-    //_associatedDataPort->setContainer( port->getAbstractContainer() );
     _associatedDataPort->bind( *port );
   }
 }

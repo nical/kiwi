@@ -22,6 +22,7 @@ if(DEFINED BUILD_KIWI_IMAGE)
 		image/ChannelOffsetFilterTest
 		image/LinearGradientContainerTest
 		image/ImageContainerTest
+    image/gil/gilTest
 #		image/ContrastTest
 	)
 endif(DEFINED BUILD_KIWI_IMAGE)

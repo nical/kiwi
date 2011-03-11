@@ -54,6 +54,7 @@ bool ReaderPort::connect(DataPort* port)
       disconnect();//only one connection at a time
       connect_impl( port );
       port->connect_impl( this );
+      updatePort();
 			return true;
     }
 	else return false;

@@ -31,7 +31,8 @@ mkdir test &&
 mkdir test/core
 mkdir test/generic
 mkdir test/text
-mkdir test/image
+mkdir test/image &&
+mkdir test/image/gil
 mkdir test/utils
 mkdir test/audio
 cp ../utils/inputImageTransp.png test/

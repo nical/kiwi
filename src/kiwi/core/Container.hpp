@@ -77,12 +77,6 @@ public:
 	virtual kiwi::uint32_t memoryEstimation() const { return UNAVAILABLE; }
 
 	/**
-	 * @brief Returns the number of scalar elements in the container.
-   * @todo This method should be moved to a child class
-	 */ 
-	virtual kiwi::uint32_t size() const { return 0; }
-
-	/**
 	 * @brief Returns this container's tags used for runtime compatibility check.
 	 */ 
 	virtual kiwi::Tags tags() const { return kiwi::Tags(); }

@@ -108,7 +108,7 @@ portIndex_t Node::addWriterPort( WriterPort* port )
 
 
 portIndex_t Node::addDataPort(Container* data, kiwi::uint8_t flags){
-  addDataPort( new DataPort(this, data) ); // TODO data
+  addDataPort( new DataPort(this, data) ); // TODO flags
 }
 
 portIndex_t Node::addDataPort( DataPort* port )

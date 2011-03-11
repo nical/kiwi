@@ -73,37 +73,6 @@ public:
 	 */
 	virtual void process() = 0;
 
-	/**
-	 * @brief Automatically publishes the Container's ports in this Filter's
-	 * Reader output ports.
-	 *
-	 * This method is overriden from kiwi::core::Node and is called by the mother
-	 * class.
-	 *  
-	 * Child classes, if they need to override this method, *must* call their
-	 * parent's method as the only feature that brings this class is in 
-	 * here.
-	 *
-	 * @todo association between writer ports and data ports is not clearly defined
-	 * (well yes it is: dataPort(i) <-> writerPort(i), but it's not the best way
-	 * to go)
-	 */ 
-	void layoutChanged()
-	{
-		uint32_t nbWriters = nbWriterPorts();
-		//ScopedBlockMacro(__scop, "CanonicalFilter::layoutChanged")
-		for(uint32_t i = 0; i < nbWriters; ++i){
-			if( writerPort(i).isConnected() ){
-				if( !dataPort(i).isEnabled() && writerPort(i).isConnected() ){
-					bindPort( dataPort(i), *writerPort(i).connectedPort() );
-				}
-			}else{
-				dataPort(i).disconnectReader();
-				dataPort(i).disconnectWriter();
-			}
-		}
-	}
-
 
 	/**
 	 * @brief Allows to associate a Reader Output with a Writer Input port.

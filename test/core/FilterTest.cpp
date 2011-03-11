@@ -2,6 +2,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Filter.hpp"
 #include "kiwi/generic/NumberContainer.hpp"
+#include "kiwi/core/TReaderPort.hpp"
 
 #include <assert.h>
 
@@ -14,23 +15,25 @@ class DummyFilter : public kiwi::core::Filter
 {
 public:
 	DummyFilter(){
-		addReaderPort();
-		addReaderPort();
+    _src1 =  new TReaderPort<NumberContainer>(this); 
+    _src2 =  new TReaderPort<NumberContainer>(this);
+    
+		addReaderPort( _src1 );
+		addReaderPort( _src2 );
 
 		portIndex_t w_in = addWriterPort();
 		portIndex_t r_out = addDataPort();
 		associateWriterToDataPort(writerPort(w_in), dataPort(r_out));
-		
 	}
 
 	void process(){
 		ScopedBlockMacro(scop, "DummyFilter::Process")
 		
 		NumberContainer* ca
-			= readerPort(0).safeDownCastContainer<NumberContainer>();
+			= _src1->getContainer();
 
 		NumberContainer* cb
-			= readerPort(1).safeDownCastContainer<NumberContainer>();
+			= _src2->getContainer();
 		
 		NumberContainer* result
 			= writerPort(0).safeDownCastContainer<NumberContainer>();
@@ -44,6 +47,10 @@ public:
 		result->setValue( A + B );
 		assert( result->getValue() == 11 );
 	}
+
+  protected:
+    TReaderPort<NumberContainer>* _src1;
+    TReaderPort<NumberContainer>* _src2;
 };
 
 

@@ -108,6 +108,7 @@ public:
 	 * @brief Returns true if the Node is reday to update
 	 * (process in the case of a Filter).
 	 *
+   * by default returns true;
 	 */
 	bool isReady() const { return true; } // TODO check that Containers are ready
 

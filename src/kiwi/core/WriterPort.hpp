@@ -38,9 +38,7 @@ namespace kiwi{
 namespace core{
 
 class Node;
-class Writer;
 class WriterPort;
-//class DataPort;
 
 
 /**
@@ -61,7 +59,6 @@ public:
 
 	/**
 	 * @brief Constructor.
-	 * @todo The second argument will disapear in next version.
 	 */ 
 	WriterPort(Node* myNode);
 	virtual ~WriterPort(){}
@@ -70,8 +67,7 @@ public:
 	 * @brief Connection method.
 	 */ 
 	bool connect(DataPort* outputPort);
-//bool connect(DataPort& outputPort);
-	
+
 	/**
 	 * @brief Returns the index of this port.
 	 */ 

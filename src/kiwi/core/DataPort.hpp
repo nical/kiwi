@@ -29,8 +29,6 @@
 #ifndef KIWI_CORE_READEROUTPUTPORT_HPP
 #define KIWI_CORE_READEROUTPUTPORT_HPP
 
-//#include "kiwi/core/Node.hpp"
-
 #include <list>
 #include "kiwi/utils/Tags.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
@@ -55,9 +53,6 @@ class Node;
  * Each port has a name which use is facultative has they are truely accessed
  * using an integer index.
  *
- * @todo Right now ports use the utils::Connector helper class to handle connections
- * and this system should be ported within the classes themselves to avoid some
- * overhead. 
  */ 
 class DataPort
 {
@@ -106,79 +101,18 @@ friend class WriterPort;
 	 */ 
 	kiwi::uint32_t nbSubPorts() const { return _subPorts.size(); }
 
-	/**
-	 * @brief Tries to return the associated container in a given class type.
-	 *
-	 * Returns 0 if for some reson the port doesn't have a container (disabled port)
-	 * or if the container could not be casted to the requested class type. 
-	 */ 
-	template<class T>
-	T* safeDownCastContainer() {
-		ScopedBlockMacro(scop,"DataPort::safeDownCastContainer")
-		if(!_container) Debug::error() << "no Container\n";
-		DEBUG_ONLY(
-			if(!dynamic_cast<T*>(_container)) Debug::error() << "cast failed\n" ;
-			)
-		return dynamic_cast<T*>(_container);
-	}
 
-  Container* getAbstractContainer() const{
-    return _container;
-  }
-  
-	/**
-	 * @brief Returns this port's Type as a string.
-	 */ 
-	string name() const;
-	/**
+  /**
 	 * @brief Returns this port's Type as a string.
 	 */ 
 	Tags tags() const;
-	
-	/**
-	 * @brief Port compatibility check based on the type string.
-	 */ 
-	bool isCompatible(ReaderPort& input);
-	bool isCompatible(WriterPort& input);
 
-	/**
-	 * @brief returns true if this port is enabled.
-	 * 
-	 * A port as to be enabloed to be connected. 
-	 * By default a port is enabled.
-	 */ 
-	bool isEnabled() const ;
-	/**
-	 * @brief Returns a list of the connected input ports.
-	 * 
-	 * Returns a std::list<kiwi::core::InputPort<T> of the port connected to this port
-	 */ 
-	//connectionList connections() const ;
- 
-	
-	bool connect(ReaderPort& port);
+  	
 	bool connect(ReaderPort* port);
 	
-	bool connect(WriterPort& port);
 	bool connect(WriterPort* port);
 
-	/**
-	 * @brief returns true if this data port is connected to at least one reader port.
-	 */ 
-	bool isConnectedToReader( ReaderPort* port = 0) const{
-    if(!port) return _connectedReaders.size() > 0;
-		return (_connectedReaders.find(port) != -1);
-	}
-
-	/**
-	 * @brief returns true if this data port is connected to at least one writer port.
-	 */ 
-	bool isConnectedToWriter( WriterPort* port = 0 ) const{
-    if(!port) return _connectedWriters.size() > 0;
-		return (_connectedWriters.find(port) != -1);
-	}
-
-	/**
+  /**
 	 * @brief returns true if this data port is connected to at least one port
 	 * (reader and/or writer ports).
 	 */ 
@@ -186,7 +120,8 @@ friend class WriterPort;
 		return isConnectedToReader() || isConnectedToWriter();
 	}
 
-	/**
+
+  /**
 	 * @brief Disconnects from the reader port oassed in pa	parameter
 	 */ 
 	void disconnectReader( ReaderPort* port = 0);
@@ -201,9 +136,73 @@ friend class WriterPort;
 		disconnectReader(0);
 		disconnectWriter(0);
 	}
+
+	/**
+	 * @brief Tries to return the associated container in a given class type.
+	 *
+	 * Returns 0 if for some reson the port doesn't have a container (disabled port)
+	 * or if the container could not be casted to the requested class type. 
+	 */ 
+	template<class T>
+	T* safeDownCastContainer() {
+		ScopedBlockMacro(scop,"DataPort::safeDownCastContainer")
+		if(!_container) Debug::error() << "no Container\n";
+		DEBUG_ONLY(
+			if(!dynamic_cast<T*>( getAbstractContainer() ) )
+        Debug::error() << "cast failed\n" ;
+			)
+		return dynamic_cast<T*>( getAbstractContainer() );
+	}
+
+  
+
+
+  // ---------------------------------------------- Virtual methods
+  
+
+  virtual Container* getAbstractContainer() const{
+    return _container;
+  }
+
+	/**
+	 * @brief Port compatibility check based on the type string.
+	 */ 
+	virtual bool isCompatible(ReaderPort& input);
+	virtual bool isCompatible(WriterPort& input);
+
+	/**
+	 * @brief returns true if this port is enabled.
+	 * 
+	 * A port as to be enabloed to be connected. 
+	 * By default a port is enabled.
+	 */ 
+	virtual bool isEnabled() const ;
+
+	/**
+	 * @brief returns true if this data port is connected to at least one reader port.
+	 */ 
+	virtual bool isConnectedToReader( ReaderPort* port = 0) const{
+    if(!port) return _connectedReaders.size() > 0;
+		return (_connectedReaders.find(port) != -1);
+	}
+
+	/**
+	 * @brief Returns true if this data port is connected to at least one writer port.
+	 */ 
+	virtual bool isConnectedToWriter( WriterPort* port = 0 ) const{
+    if(!port) return _connectedWriters.size() > 0;
+		return (_connectedWriters.find(port) != -1);
+	}
+
+	
+
 	
 protected:
-
+  /**
+	 * @brief Sets this port's container.
+	 */ 
+	virtual void setContainer( Container* data );
+	
   virtual void connect_impl( ReaderPort* port );
   virtual void disconnect_impl( ReaderPort* port );
 
@@ -217,12 +216,13 @@ protected:
 	 */ 
 	void bind( DataPort& port );
 
+  /**
+   * @brief Unbinds the port if binded.
+   *
+   * @see void DataPort::bind( DataPort& port )
+   */ 
 	void unBind();
 
-	/**
-	 * @brief Sets this port's container.
-	 */ 
-	void setContainer( Container* data );
 	
 private:
 	Node* _node;

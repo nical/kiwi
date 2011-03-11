@@ -59,28 +59,12 @@ class ReaderPort
 friend class Node;
 public:
 
-
 	/**
 	 * @brief Constructor.
-	 * 
 	 */ 
 	ReaderPort(Node* myNode);
-	
-	/**
-	 * @brief Connection method.
-	 */ 
-	bool connect(DataPort* outputPort);
 
-  //bool connect(DataPort& outputPort);
-
-	/**
-	 * @brief Disconnect the port if connected.
-	 */ 
-	virtual bool disconnect( DataPort* port = 0 );
-
-  virtual bool isConnected( DataPort* port = 0 ) const;
-  
-	/**
+  /**
 	 * @brief Returns the index of this port.
 	 */ 
 	portIndex_t index() const ;
@@ -88,32 +72,12 @@ public:
 	 * @brief Returns a pointer to the Node containing this port.
 	 */ 
 	Node* node() const ;
-		
-	/**
-	 * @brief Returns this port's Name as a string.
-	 */ 
-	string name() const;
+  
 	/**
 	 * @brief Returns this port's Type as a string.
 	 */ 
 	Tags tags() const;
 
-	/**
-	 * @brief Port compatibility check based on the type tag.
-	 */ 
-	bool isCompatible(DataPort& output) ;
-	/**
-	 * @brief Port compatibility check based on the type tag.
-	 */ 
-	bool isCompatible(const kiwi::Tags& tag) ;
-
-	/**
-	 * @brief returns true if this port is enabled.
-	 * 
-	 * A port as to be enabloed to be connected. 
-	 * By default a port is enabled.
-	 */ 
-	bool isEnabled() const ;
 	/**
 	 * @brief Returns a pointer to the OutputPort connected to this InputPort.
 	 * 
@@ -131,7 +95,37 @@ public:
 		if( isConnected() )	return connectedPort()->safeDownCastContainer<T>();
 		else return 0;
 	}
+  
+	/**
+	 * @brief Connection method.
+	 */ 
+	bool connect(DataPort* outputPort);
 
+	/**
+	 * @brief Disconnect the port if connected.
+	 */ 
+	virtual bool disconnect( DataPort* port = 0 );
+
+  virtual bool isConnected( DataPort* port = 0 ) const;
+
+	/**
+	 * @brief Port compatibility check based on the type tag.
+	 */ 
+	virtual bool isCompatible(DataPort& output) ;
+	/**
+	 * @brief Port compatibility check based on the type tag.
+	 */ 
+	virtual bool isCompatible(const kiwi::Tags& tag) ;
+
+	/**
+	 * @brief returns true if this port is enabled.
+	 * 
+	 * A port as to be enabloed to be connected. 
+	 * By default a port is enabled.
+	 */ 
+	virtual bool isEnabled() const ;
+
+  virtual void updatePort() { }
 	
 protected:
 

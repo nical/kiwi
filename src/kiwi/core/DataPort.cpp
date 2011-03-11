@@ -83,12 +83,6 @@ void DataPort::setContainer( Container* data )
 }
 
 
-kiwi::string DataPort::name() const
-{
-//	return _node->readerOutputName( _node->indexOf(*this) ); // TODO
-}
-
-
 portIndex_t DataPort::index() const 
 {
 	return _node->indexOf(*this);
@@ -139,27 +133,20 @@ bool DataPort::connect(ReaderPort& inputPort)
 bool DataPort::connect(ReaderPort* inputPort)
 {
 	ScopedBlockMacro( scop, "DataPort::connect" )
-	if( inputPort != 0 ) inputPort->connect( this ); 
-	else return false;
+  if( inputPort != 0 ){
+    inputPort->connect( this );
+  } else return false;
 }
 
-/*
-bool DataPort::connect(WriterPort& inputPort)
-{
-	ScopedBlockMacro( scop, "DataPort::connect" )
-	if( isEnabled() && inputPort.isEnabled() ){
-		if( isCompatible( inputPort ) )
-			return WriterConnector::connect( &inputPort );
-	}
-	else return false;
-}
-*/
 
 bool DataPort::connect(WriterPort* inputPort)
 {
-	ScopedBlockMacro( scop, "DataPort::connect" )
-	if( inputPort != 0 ) inputPort->connect( this ); 
-	else return false;
+  ScopedBlockMacro( scop, "DataPort::connect" )
+  if( inputPort != 0 ){
+    inputPort->connect( this );
+    //inputPort->updatePort()
+  }
+  else return false;
 }
 
 void DataPort::disconnectReader( ReaderPort* port ){

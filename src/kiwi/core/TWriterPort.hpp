@@ -1,23 +1,23 @@
 
 #pragma once
-#ifndef KIWI_CORE_TEMPLATEREADERPORT_HPP
-#define KIWI_CORE_TEMPLATEREADERPORT_HPP
+#ifndef KIWI_CORE_TEMPLATEWRITERPORT_HPP
+#define KIWI_CORE_TEMPLATEWRITERPORT_HPP
 
-#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
 
 namespace kiwi{
 namespace core{
 
 template<class TContainerType>
-class TReaderPort : public ReaderPort
+class TWriterPort : public WriterPort
 {
 public:
   typedef TContainerType ContainerType;
 
-  TReaderPort(kiwi::core::Node* myNode)
-  : ReaderPort(myNode), _tcontainer(0){}
+  TWriterPort(kiwi::core::Node* myNode)
+  : WriterPort(myNode), _tcontainer(0){}
 
-  Container* getAbstractContainer() const{
+  ContainerType* getAbstractContainer() const{
     return _tcontainer;
   }
   
@@ -26,7 +26,7 @@ public:
   }
 
   void updatePort(){
-    ScopedBlockMacro(scop,"TReaderPort::updatePort")
+    ScopedBlockMacro(scop,"TWriterPort::updatePort")
     Debug::plop(); 
     if( isConnected() )
       _tcontainer = connectedPort()->safeDownCastContainer<ContainerType>();
@@ -35,14 +35,6 @@ public:
   }
 
   
-
-	/**
-	 * @brief returns true if this port is enabled.
-	 * 
-	 * A port as to be enabloed to be connected. 
-	 * By default a port is enabled.
-	 */ 
-	//virtual bool isEnabled() const ;
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 

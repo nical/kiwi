@@ -68,18 +68,28 @@ void DataPort::unBind()
 void DataPort::setContainer( Container* data )
 {
 	ScopedBlockMacro(scop, "DataPort::setContainer");
-	if(!data) Debug::print() << "warning: param data = 0\n";
+  
+	DEBUG_ONLY( if(!data) Debug::print() << "warning: param data = 0\n"; )
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
 		_linkedOutputPorts[i]->setContainer( data );
-
 	_container = data;
-	
+  
+	// set the sub-ports if needed
 	if( (data) && (data->isComposite()) ){
-		Debug::print() << "the data is composite ("<<data->nbSubContainers()<<")\n"; 
+		DEBUG_ONLY(
+      Debug::print() << "the data is composite ("<<data->nbSubContainers()<<")\n";
+    )
 		for(kiwi::uint32_t i = 0; i < data->nbSubContainers(); ++i){
 			_subPorts.add(new DataPort(_node, data->subContainer(i)));
 		}
 	}
+  // notify the connected port in case they cache the container
+  for(kiwi::uint32_t i = 0; i < _connectedReaders.size();++i){
+    _connectedReaders[i]->updatePort();
+  }
+  for(kiwi::uint32_t i = 0; i < _connectedWriters.size();++i){
+    _connectedWriters[i]->updatePort();
+  }
 }
 
 
@@ -119,17 +129,6 @@ bool DataPort::isCompatible(WriterPort& input)
 	return input.isCompatible(*this); 
 }
 
-/*
-bool DataPort::connect(ReaderPort& inputPort)
-{
-	ScopedBlockMacro( scop, "DataPort::connect" )
-	if( isEnabled() && inputPort.isEnabled() ){
-		if( isCompatible( inputPort ) )
-			return ReaderConnector::connect( &inputPort);
-	}
-	else return false;
-}
-*/
 bool DataPort::connect(ReaderPort* inputPort)
 {
 	ScopedBlockMacro( scop, "DataPort::connect" )

@@ -85,22 +85,8 @@ public:
 	 * @brief Returns this port's Type as a string.
 	 */ 
 	Tags tags() const;
-	
-	/**
-	 * @brief Port compatibility check based on the type tag.
-	 */ 
-	bool isCompatible(DataPort& output) ;
-  
-	/**
-	 * @brief Port compatibility check based on the type tag.
-	 */ 
-	bool isCompatible(const kiwi::Tags& tag) ;
 
-  virtual bool isConnected( DataPort* port = 0 ) const;
-
-  virtual bool disconnect( DataPort* port = 0 );
-
-	/**
+  /**
 	 * @brief returns true if this port is enabled.
 	 * 
 	 * A port as to be enabloed to be connected. 
@@ -128,6 +114,18 @@ public:
 			return connectedPort()->safeDownCastContainer<T>();	
 		}	else return 0;
 	}
+
+  bool isConnected( DataPort* port = 0 ) const;
+
+  bool disconnect( DataPort* port = 0 );
+
+  
+	/**
+	 * @brief Port compatibility check based on the type tag.
+	 */ 
+	virtual bool isCompatible(DataPort& output) ;
+	
+  virtual void updatePort() { }
 	
 protected:
 

@@ -27,7 +27,6 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kiwi/core/Node.hpp"
-
 #include "kiwi/core/WriterPort.hpp"
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/Container.hpp"
@@ -72,15 +71,13 @@ WriterPort::bind(WriterPort& port)
 
 
 
-portIndex_t 
-WriterPort::index() const 
+portIndex_t WriterPort::index() const 
 {
 	return _node->indexOf(*this);
 }
 
 
-Node* 
-WriterPort::node() const 
+Node* WriterPort::node() const 
 {
 	return _node;
 }
@@ -102,19 +99,13 @@ bool WriterPort::isConnected( DataPort* port) const{
 }
 
 
-bool WriterPort::isCompatible(const kiwi::Tags& tag){ 
-	return ( tags().hasOneOf(tag + Tags("#any") ) );
-}
-
-
 bool WriterPort::isEnabled() const 
 {
 	return _enabled;
 }
 
 
-DataPort* 
-WriterPort::connectedPort() const { 
+DataPort* WriterPort::connectedPort() const { 
 	return _connectedDataPort;
 }
 
@@ -155,8 +146,7 @@ void WriterPort::disconnect_impl( DataPort* port ){
   }
 }
 
-void 
-WriterPort::setEnabled(bool status) {
+void WriterPort::setEnabled(bool status) {
 	_enabled = status;
 }
 

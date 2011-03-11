@@ -101,6 +101,10 @@ public:
 	 */ 
 	bool connect(DataPort* outputPort);
 
+  virtual const Container* getAbstractContainer() const{
+    return connectedPort()->getAbstractContainer();
+  }
+
 	/**
 	 * @brief Disconnect the port if connected.
 	 */ 

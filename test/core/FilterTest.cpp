@@ -3,6 +3,7 @@
 #include "kiwi/core/Filter.hpp"
 #include "kiwi/generic/NumberContainer.hpp"
 #include "kiwi/core/TReaderPort.hpp"
+#include "kiwi/core/TWriterPort.hpp"
 
 #include <assert.h>
 
@@ -17,13 +18,15 @@ public:
 	DummyFilter(){
     _src1 =  new TReaderPort<NumberContainer>(this); 
     _src2 =  new TReaderPort<NumberContainer>(this);
+    _dest1 =  new TWriterPort<NumberContainer>(this);
     
 		addReaderPort( _src1 );
 		addReaderPort( _src2 );
 
-		portIndex_t w_in = addWriterPort();
-		portIndex_t r_out = addDataPort();
-		associateWriterToDataPort(writerPort(w_in), dataPort(r_out));
+		addWriterPort( _dest1 );
+
+    portIndex_t r_out = addDataPort();
+		associateWriterToDataPort( *_dest1, dataPort(r_out));
 	}
 
 	void process(){
@@ -51,6 +54,7 @@ public:
   protected:
     TReaderPort<NumberContainer>* _src1;
     TReaderPort<NumberContainer>* _src2;
+    TWriterPort<NumberContainer>* _dest1;
 };
 
 

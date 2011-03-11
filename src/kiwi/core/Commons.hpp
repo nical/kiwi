@@ -69,9 +69,9 @@ typedef float float_t;
 typedef double double_t;
 
 typedef std::string string;
-typedef unsigned char portIndex_t;
+typedef char portIndex_t;
 
-enum{ READER, WRITER };
+//enum{ READER, WRITER };
 
 }
 

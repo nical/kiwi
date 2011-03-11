@@ -63,7 +63,7 @@ bool ReaderPort::connect(DataPort* port)
 
 void ReaderPort::bind(ReaderPort& port)
 {
-//DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
+DEBUG_ONLY( Debug::print() << "reader port binding" << endl(); )
 	port._linkedInputPorts.add(&port);
 }
 

@@ -29,11 +29,12 @@ public:
 		// CanonicalFilter's constructor automatically adds one reader output port
 		// and one writer input port.
 		
-		addReaderPort(); // input text
-		addReaderPort(); // opt: dot pattern 
-		addReaderPort(); // opt: long pattern
-		addReaderPort(); // opt: space pattern
-		addReaderPort(); // opt: unknown char pattern
+		addReaderPort( r0 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // input text
+		addReaderPort( r1 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // opt: dot pattern 
+		addReaderPort( r2 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // opt: long pattern
+		addReaderPort( r3 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // opt: space pattern
+		addReaderPort( r4 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // opt: unknown char pattern
+    addWriterPort( w0 = new kiwi::core::TWriterPort<PlainTextContainer>(this) ); 
 	}
 	
 	~TextToMorseFilter() 
@@ -47,57 +48,60 @@ public:
 	// make the filter do whatever it is supposed to do. 
 	void process()
 	{
-		//ScopedBlockMacro(_cpm, "TextToMorseFilter::process")
-	
-		if( !writerPort(0).isConnected() )
-		{
-//			addWriteNode(new PlainTextContainer, 0);
-		}
-	
-		TextReader input( readerPort(0) );
-		TextWriter result( writerPort(0) );
-		result.clear();
+		ScopedBlockMacro(scop, "TextToMorseFilter::process")
+
+
 		kiwi::string dotPattern(".");
 		kiwi::string longPattern("-");
 		kiwi::string spacePattern(" ");
 		kiwi::string unknownPattern(" ");
-		
+
+    PlainTextContainer* result = 0;
+    if(writerPort(0).isConnected() ){
+      result = w0->getContainer();
+    }
+    if(!result){
+      Debug::error() << "writer port not connected\n";
+      return;
+    }
+    
+    PlainTextContainer* input = 0;
+    if(readerPort(0).isConnected() ){
+      result = r0->getContainer();
+    }
+    if(!result){
+      Debug::error() << "reader port not connected\n";
+      return;
+    }
+    
 		if(readerPort(1).isConnected() )
-		{
-			TextReader r1( readerPort(1) );
-			dotPattern = r1.line(0).str();
-		}
+      dotPattern = r1->getContainer()->line(0).str();
 		
 		if(readerPort(2).isConnected() )
-		{
-			TextReader r2( readerPort(2) );
-			longPattern = r2.line(0).str();
-		}
+      longPattern = r2->getContainer()->line(0).str();
 		
 		if(readerPort(3).isConnected() )
-		{
-			TextReader r3( readerPort(3) );
-			spacePattern = r3.line(0).str();
-		}
+      spacePattern = r3->getContainer()->line(0).str();
 		
 		if(readerPort(4).isConnected() )
-		{
-			TextReader r4( readerPort(4) );
-			unknownPattern = r4.line(0).str();
-		}
-			
-		if(input.nbLines() > 1) result.insertLine(kiwi::text::PlainTextLine(""), input.nbLines() -1);	
+			unknownPattern = r4->getContainer()->line(0).str();
+
+    
+    
+		if(input->nbLines() > 1)
+      result->insertLine(kiwi::text::PlainTextLine(""), input->nbLines() -1);	
+
+		result->clear();
 		
-		
-		for(uint32_t i = 0; i < input.nbLines(); ++i ){
-			result.insertLine(PlainTextLine(""),-1);
-			for(uint32_t j = 0; j < input.line(i).size(); ++j ){
-				kiwi::string morse = charToMorse(input.line(i).getChar(j));
+		for(uint32_t i = 0; i < input->nbLines(); ++i ){
+			result->insertLine(PlainTextLine(""),-1);
+			for(uint32_t j = 0; j < input->line(i).size(); ++j ){
+				kiwi::string morse = charToMorse( input->line(i).getChar(j) );
 				for(uint32_t k = 0; k < morse.size(); ++k )
-					if(morse[k] == '.') result.line(i) += dotPattern;
-					else if(morse[k] == '-') result.line(i) += longPattern;
-					else if(morse[k] == '#') result.line(i) += unknownPattern;
-					else result.line(i) += spacePattern;
+					if(morse[k] == '.') result->line(i) += dotPattern;
+					else if(morse[k] == '-') result->line(i) += longPattern;
+					else if(morse[k] == '#') result->line(i) += unknownPattern;
+					else result->line(i) += spacePattern;
 			}
 		}
 		
@@ -193,6 +197,14 @@ public:
 					, "#Filter#text" )
 			);
 	}
+
+protected:
+  kiwi::core::TReaderPort<PlainTextContainer>* r0;
+  kiwi::core::TReaderPort<PlainTextContainer>* r1;
+  kiwi::core::TReaderPort<PlainTextContainer>* r2;
+  kiwi::core::TReaderPort<PlainTextContainer>* r3;
+  kiwi::core::TReaderPort<PlainTextContainer>* r4;
+  kiwi::core::TWriterPort<PlainTextContainer>* w0;
 };
 
 

@@ -104,37 +104,6 @@ public:
 };
 
 
-/**
- * @brief helper macro that produces typedef classType ReaderType;
- *
- * Some filters that have template a parameter on the (Container) input type need
- * to know at compilation time the Container's Reader type to instanciate it
- * correctly. This macro should be used in the public part of every Container class
- * declaration.
- */
-#define ReaderTypeMacro(classType) typedef classType ReaderType;
-
-/**
- * @brief helper macro that produces typedef classType WriterType;
- *
- * Some filters that have a template parameter on the (Container) input type need
- * to know at compilation time the Container's Writer type to instanciate it
- * correctly. This macro should be used in the public part of every Container class
- * declaration.
- */
-#define WriterTypeMacro(classType) typedef classType WriterType;
-
-/**
- * @brief helper macro that produces typedef classType ReaderType;
- *
- * Some filters that have template a parameter on the (Container) input type need
- * to know at compilation time the Container's Reader type to instanciate it
- * correctly. This macro should be used in the public part of every class
- * declaration of containers that are iterable.
- */
-#define IteratorTypeMacro(classType) typedef classType IteratorType;
-
-
 
 } //namespace
 } //namespace

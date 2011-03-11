@@ -40,16 +40,26 @@ PlainTextContainer::PlainTextContainer()
 	//insertLine(PlainTextLine(""),0);
 }
 
-Line* PlainTextContainer::line(kiwi::uint32_t linePos)
+Line& PlainTextContainer::line(kiwi::uint32_t linePos)
 {
 //	ScopedBlockMacro(__scop, "PlainTextContainer::line" )
 	// out of bounds...
-	if(linePos >= nbLines() ) return 0;
-	
+	if(linePos >= nbLines() ) return *_lines.begin(); // TODO modulo
 	//general case
 	std::list<kiwi::text::PlainTextLine>::iterator it = _lines.begin();
 	while( linePos-- > 0 ){ ++it; }
-	return &(*it);
+	return (*it);
+}
+
+const Line& PlainTextContainer::line(kiwi::uint32_t lineNumber) const
+{
+//	ScopedBlockMacro(__scop, "PlainTextContainer::line" )
+	// out of bounds...
+	if(lineNumber >= nbLines() ) return *_lines.begin();
+	//general case
+	std::list<kiwi::text::PlainTextLine>::const_iterator it = _lines.begin();
+	while( lineNumber-- > 0 ){ ++it; }
+	return (*it);
 }
 
 void PlainTextContainer::insertLine(const PlainTextLine& toInsert
@@ -131,7 +141,7 @@ void PlainTextContainer::removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t la
 	_lines.erase(itf,itl);
 }
 
-
+/*
 PlainTextContainer::lock_t PlainTextContainer::lock(kiwi::uint32_t firstLinePos
 		, kiwi::uint32_t lastLinePos )
 {
@@ -147,7 +157,7 @@ bool PlainTextContainer::isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t la
 {
 
 }
-
+*/
 
 }// namespace
 }// namespace

@@ -97,11 +97,13 @@ int SimpleFilterProcessor::run()
   //Creation of a Reader needed to read text from a node
   if( F->dataPort(0).isEnabled() )
   {
-	kiwi::text::TextReader reader( F->dataPort(0) );
+  /*
+  kiwi::text::TextReader reader( F->dataPort(0) );
 	for(int i = 1; i <= reader.nbLines(); ++i)
 	{ 
 	  std::cout << reader.line(i).str() << std::endl; 
 	}
+  */ 
   }
   //END : Filter use request.
 

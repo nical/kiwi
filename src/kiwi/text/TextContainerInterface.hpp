@@ -55,7 +55,8 @@ public:
 	 * 
 	 * @param lineNumber The number of the requested line. 
 	 */ 
-	virtual kiwi::text::Line* line(kiwi::uint32_t lineNumber) = 0;
+	virtual kiwi::text::Line& line(kiwi::uint32_t lineNumber) = 0;
+	virtual const kiwi::text::Line& line(kiwi::uint32_t lineNumber) const = 0;
 
 	/**
 	 * @brief Returns the number of lines in the container.
@@ -84,13 +85,13 @@ public:
 	  * @brief Clears the data.
 	  */
 	virtual void append(std::istream& stream) = 0;
-
+/*
 	virtual kiwi::uint32_t lock( kiwi::uint32_t firstLinePos
 		, kiwi::uint32_t lastLinePos ) = 0;
 	void unlock( lock_t );
 
 	bool isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos) const;
-
+*/
 	   
 	 virtual ~TextContainerInterface() {}
 };

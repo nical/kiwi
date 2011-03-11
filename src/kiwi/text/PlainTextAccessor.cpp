@@ -24,7 +24,7 @@ kiwi::uint32_t PlainTextAccessor::nbChars() const
 {
 	kiwi::uint32_t result = 0;
 	for(int i = 0; i < _nbLines; ++i){
-		result += _container->line(_firstLine + i)->size();
+		result += _container->line(_firstLine + i).size();
 	}
 	return result;
 }

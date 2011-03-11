@@ -5,16 +5,14 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/Tags.hpp"
-#include "kiwi/text/TextReader.hpp"
-#include "kiwi/text/TextWriter.hpp"
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/utils/types.hpp"
 #include "kiwi/text/PlainTextContainer.hpp"
 #include "kiwi/utils/Factory.hpp"
 #include "kiwi/utils/TextOperations.hpp"
 #include "kiwi/core/DataPort.hpp"
-#include "kiwi/core/ReaderPort.hpp"
-#include "kiwi/core/WriterPort.hpp"
+#include "kiwi/core/TReaderPort.hpp"
+#include "kiwi/core/TWriterPort.hpp"
 
 
 
@@ -30,13 +28,11 @@ class UpperCaseFilter : public core::Filter
 {
 public:
 	
-	UpperCaseFilter() : Filter(/*1*/)
+	UpperCaseFilter() : Filter()
 	{
-	//ScopedBlockMacro(scp_block, "UpperCaseFilter::constructor");
-		// CanonicalFilter's constructor automatically adds one reader output port
-		// and one writer input port.
-		
-		addReaderPort();
+		addReaderPort( _reader = new kiwi::core::TReaderPort<PlainTextContainer>(this) );
+		addWriterPort( _writer = new kiwi::core::TWriterPort<PlainTextContainer>(this) );
+		addDataPort();
 	}
 	
 	~UpperCaseFilter() 
@@ -50,23 +46,18 @@ public:
 	// make the filter do whatever it is supposed to do. 
 	void process()
 	{
-		//ScopedBlockMacro(_cpm, "UpperCaseFilter::process")
-	
-		if( !writerPort(0).isConnected() )
-		{
-//			addWriteNode(new PlainTextContainer, 0);
-		}
-	
-		TextReader input( readerPort(0) );
-		TextWriter result( writerPort(0) );
-		result.clear();
+
+    PlainTextContainer* result = _writer->getContainer();
+    const PlainTextContainer* input = _reader->getContainer();
+    
+		result->clear();
 			
-		if(input.nbLines() > 1) result.insertLine(PlainTextLine(""), input.nbLines() -1);	
+		if(input->nbLines() > 1) result->insertLine(PlainTextLine(""), input->nbLines() -1);	
 		
-		for(uint32_t i = 0; i < input.nbLines(); ++i ){
-			result.insertLine(PlainTextLine(""),-1);
-			for(uint32_t j = 0; j < input.line(i).size(); ++j ){
-				result.line(i) += utils::upperCase( input.line(i).getChar(j) );
+		for(uint32_t i = 0; i < input->nbLines(); ++i ){
+			result->insertLine(PlainTextLine(""),-1);
+			for(uint32_t j = 0; j < input->line(i).size(); ++j ){
+				result->line(i) += utils::upperCase( input->line(i).getChar(j) );
 			}
 		}
 	}
@@ -113,7 +104,9 @@ public:
 		return true;
 	}
 
-	
+protected:
+  kiwi::core::TReaderPort<PlainTextContainer>* _reader;
+  kiwi::core::TWriterPort<PlainTextContainer>* _writer;
 };
 
 

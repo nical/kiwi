@@ -19,9 +19,9 @@ if(DEFINED BUILD_KIWI_TEXT)
 	SET(KIWI_SRC ${KIWI_SRC} 	#kiwi::text source files
 		text/PlainTextContainer.cpp
 		text/PlainTextLine.cpp
-		text/PlainTextAccessor.cpp
-		text/TextReader.cpp
-		text/TextWriter.cpp
+		#text/PlainTextAccessor.cpp
+		#text/TextReader.cpp
+		#text/TextWriter.cpp
 		utils/TextOperations.cpp
 	)
 endif(DEFINED BUILD_KIWI_TEXT)

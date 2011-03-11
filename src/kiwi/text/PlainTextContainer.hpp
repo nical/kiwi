@@ -47,11 +47,6 @@ class TextWriter;
 class PlainTextContainer : public TextContainerInterface
 {
 public:
-	typedef TextReader ReaderType;
-	typedef TextWriter WriterType;
-
-	typedef kiwi::uint32_t lock_t;
-
 	/**
 	 * @brief Constructor.
 	 */
@@ -79,8 +74,8 @@ public:
 	 *
 	 * @param lineNumber The number of the requested line.
 	 */
-	Line* line(kiwi::uint32_t linePos);
-
+	Line& line(kiwi::uint32_t linePos);
+	const Line& line(kiwi::uint32_t lineNumber) const;
 
 	/**
 	 * @brief Returns the number of lines in the container.
@@ -105,14 +100,14 @@ public:
 
 // ---------------------------------------------------------------------
 // threading tools
-
+/*
 	lock_t lock(kiwi::uint32_t firstLinePos
 		, kiwi::uint32_t lastLinePos );
 
 	void unlock( lock_t );
 
 	bool isLocked(kiwi::uint32_t firstLinePos, kiwi::uint32_t lastLinePos) const;
-
+*/
 // ---------------------------------------------------------------------
 // tags
 

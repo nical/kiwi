@@ -81,34 +81,36 @@ int SimpleFilterProcessor::run()
 		cout << "  * " << it->first << std::endl;
 	return 1;
   }
-  //cout << "Inputs number : " << arguments.getFilterInputs().size() << endl;
-  //cout << "Outputs number : " << arguments.getFilterOutputs().size() << endl;
-
-
+ 
   std::list<kiwi::string> inputArgs = arguments.getFilterInputs();
   std::list<kiwi::string> outputArgs = arguments.getFilterOutputs();
 
 
   wrapInputs(factory, *F, inputArgs );
-  wrapOutputs(factory, *F, outputArgs );
+
+  typedef std::list<std::pair<kiwi::core::Node*,std::string> > OutNodeList;
+  
+  OutNodeList outputNodes = wrapOutputs(factory, *F, outputArgs );
 
 
   // run the filter
-  if( F->isReady() ) F->update(); 
+  assert( F->isReady() );
+  F->update();
 
-  //Creation of a Reader needed to read text from a node
-  if( F->dataPort(0).isEnabled() )
-  {
-  /*
-  kiwi::text::TextReader reader( F->dataPort(0) );
-	for(int i = 1; i <= reader.nbLines(); ++i)
-	{ 
-	  std::cout << reader.line(i).str() << std::endl; 
-	}
-  */ 
+  
+  for(OutNodeList::iterator it = outputNodes.begin(); it != outputNodes.end();++it){
+    if(it->second == std::string("cout") ){
+      kiwi::text::PlainTextContainer* container
+        = dynamic_cast<kiwi::text::PlainTextContainer*>(it->first);
+      assert(container);
+      for(int i = 0; i < container->nbLines(); ++i){
+        std::cout << container->line(i).str() << "\n";
+      }
+    }else{
+      Debug::error() << " saving result into files not implemented yet \n";
+    }
   }
-  //END : Filter use request.
-
+  
   return 0;
 
 }
@@ -131,17 +133,20 @@ void SimpleFilterProcessor::wrapInputs(
 
 	for( int i = 0; i < filter.nbReaderPorts(); ++i )
 	{
+    ScopedBlockMacro(forscop,
+      std::string("for(") + boost::lexical_cast<std::string>(i) + std::string(")") )
     kiwi::string inputArgument("cout");
 		if(i > inputs.size() ) inputArgument = inputs.front();
 
     bool tryFile = false;
 		std::ifstream* file;
-		if(i < 3){
-			 file = new std::ifstream(inputArgument.c_str() );
-			 tryFile = true;
-		}
+		
+    file = new std::ifstream(inputArgument.c_str() );
+    tryFile = true;
+
 		if( inputArgument == kiwi::string("-x") ) 
 		{
+      ScopedBlockMacro(forscopx, "-x")
 			inputs.pop_front();
 			// ignore argument and make no connections for the 
 			// corresponding input portDebug::print() << "-- params --\n";
@@ -149,6 +154,7 @@ void SimpleFilterProcessor::wrapInputs(
 		}
 		else if( tryFile && file->is_open() ) 
 		{
+      ScopedBlockMacro(forscopfile, "file")
 			kiwi::text::PlainTextContainer* inputText
 				= new kiwi::text::PlainTextContainer;
 			inputText->init(*file);
@@ -158,22 +164,28 @@ void SimpleFilterProcessor::wrapInputs(
 			inputs.pop_front();
       assert( filter.readerPort(i).isConnected() );
 		}else{
+      ScopedBlockMacro(forscopplop, "input arg or cin")
 			//Creation of a basic container, needed to apply the filter
 			kiwi::text::PlainTextContainer* basicInputContainer
 				= new kiwi::text::PlainTextContainer;
-
-			inputs.pop_front();
-			if((inputArgument == kiwi::string("cin")) 
+        
+      Debug::plop();
+      if(inputs.size() > 0) inputs.pop_front();
+      Debug::plop();
+      
+      if((inputArgument == kiwi::string("cin")) 
 			  || (inputArgument == kiwi::string("--")) )
 			{
+         Debug::foo();
 				basicInputContainer->init(std::cin);
 			}
 			else
 			{
-				basicInputContainer->insertLine(
-					kiwi::text::PlainTextLine( inputArgument )
-					,0 );			 
+        Debug::bar();
+        basicInputContainer->insertLine(
+					kiwi::text::PlainTextLine( inputArgument ), 0 );			 
 			}
+      Debug::plop();
 			//Connexion between the input container and the filter, then apply filter	
 			kiwi::core::Node* basicInputNode = new kiwi::core::Node(basicInputContainer);
 			basicInputNode->dataPort(0) >> filter.readerPort(i);
@@ -186,12 +198,15 @@ void SimpleFilterProcessor::wrapInputs(
 }
 
 
+
+
+
 std::list< std::pair<kiwi::core::Node*,std::string> > SimpleFilterProcessor::wrapOutputs(
 	utils::NodeFactory& factory
 	, core::Node& filter
 	, std::list<string>& outputs )
 {
-	ScopedBlockMacro(scop, "SimpleFilterProcessor::wrapInputs");
+	ScopedBlockMacro(scop, "SimpleFilterProcessor::wrapOutputs");
 	typedef std::list<string> ArgList;
   typedef std::list< std::pair<kiwi::core::Node*,std::string> > OutputNodeList;
   //DEBUG
@@ -200,33 +215,39 @@ std::list< std::pair<kiwi::core::Node*,std::string> > SimpleFilterProcessor::wra
   //DEBUG
 
   OutputNodeList outputList;
-	int nbParams = outputs.size();
-	if(nbParams > filter.nbWriterPorts()) nbParams = filter.nbWriterPorts();
-
+	int nbParams = filter.nbWriterPorts();
+	
   // for each argument
 	for( int i = 0; i < nbParams ; ++i )
 	{
-		kiwi::string inputArgument = outputs.front();
-		
+    ScopedBlockMacro(forscop, "for...");
+    
+		kiwi::string inputArgument = "cout";
+		if( i < outputs.size() )kiwi::string inputArgument = outputs.front();
+
+    Debug::foo();
+    
 		if( inputArgument == kiwi::string("-x") ) 
 		{
+      ScopedBlockMacro(forscopx, "-x")
 			outputs.pop_front();
 			// ignore argument and make no connections for the 
 			// corresponding input port
 			continue;
 
 		}else{
+      ScopedBlockMacro(forscopany, "any argument")
 			//Creation of a basic container, needed to apply the filter
 			kiwi::text::PlainTextContainer* basicInputContainer
 				= new kiwi::text::PlainTextContainer;
-
-			outputs.pop_front();
-     
+      Debug::bar();
+			if( outputs.size() > 0 )outputs.pop_front();
+      Debug::bar();
 			//Connexion between the input container and the filter, then apply filter	
 			kiwi::core::Node* basicInputNode = new kiwi::core::Node(basicInputContainer);
 			basicInputNode->dataPort(0) >> filter.writerPort(i);
 
-      assert(filter.writerPort(0).isConnected() );
+      assert( filter.writerPort(0).isConnected() );
 
       if((inputArgument == kiwi::string("cout"))
 			  || (inputArgument == kiwi::string("--")) ){
@@ -234,7 +255,6 @@ std::list< std::pair<kiwi::core::Node*,std::string> > SimpleFilterProcessor::wra
       }else{
         outputList.push_front( std::pair<kiwi::core::Node*,std::string>(basicInputNode,inputArgument) );
       }
-      
 		}
 	}
   return outputList;

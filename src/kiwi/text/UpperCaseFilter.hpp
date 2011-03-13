@@ -46,9 +46,13 @@ public:
 	// make the filter do whatever it is supposed to do. 
 	void process()
 	{
+    ScopedBlockMacro(scop,"UpperCaseFilter::process")
 
     PlainTextContainer* result = _writer->getContainer();
     const PlainTextContainer* input = _reader->getContainer();
+
+    assert(result);
+    assert(input);
     
 		result->clear();
 			
@@ -68,20 +72,6 @@ public:
 		return (readerPort(0).isConnected() );
 	}
 	
-	/*
-	kiwi::string readerInputName( portIndex_t index )
-	{
-		return kiwi::string("in");	
-	}
-	kiwi::string writerInputName( portIndex_t index )
-	{
-		return kiwi::string("write");	
-	}
-	kiwi::string readerOutputName( portIndex_t index )
-	{
-		return kiwi::string("out");	
-	}
-	*/
 	kiwi::utils::Tags readerInputTags( portIndex_t index )
 	{
 		return kiwi::utils::Tags("#text");

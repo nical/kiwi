@@ -162,21 +162,8 @@ public:
 		return (readerPort(0).isConnected() );
 	}
 	
-	
-	kiwi::string readerInputName( portIndex_t index )
-	{
-		return kiwi::string("in");	
-	}
-	kiwi::string writerInputName( portIndex_t index )
-	{
-		return kiwi::string("write");	
-	}
-	kiwi::string readerOutputName( portIndex_t index )
-	{
-		return kiwi::string("out");	
-	}
-	
-	kiwi::utils::Tags readerInputTags( portIndex_t index )
+		
+	kiwi::utils::Tags readerTags( portIndex_t index )
 	{
 		if(index == 0 ) return kiwi::utils::Tags("#text");
 		else return kiwi::utils::Tags("#text#opt");

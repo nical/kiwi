@@ -40,7 +40,7 @@ PlainTextContainer::PlainTextContainer()
 	//insertLine(PlainTextLine(""),0);
 }
 
-Line& PlainTextContainer::line(kiwi::uint32_t linePos)
+Line& PlainTextContainer::line(kiwi::int32_t linePos)
 {
 //	ScopedBlockMacro(__scop, "PlainTextContainer::line" )
 	// out of bounds...
@@ -51,7 +51,7 @@ Line& PlainTextContainer::line(kiwi::uint32_t linePos)
 	return (*it);
 }
 
-const Line& PlainTextContainer::line(kiwi::uint32_t lineNumber) const
+const Line& PlainTextContainer::line(kiwi::int32_t lineNumber) const
 {
 //	ScopedBlockMacro(__scop, "PlainTextContainer::line" )
 	// out of bounds...
@@ -63,10 +63,14 @@ const Line& PlainTextContainer::line(kiwi::uint32_t lineNumber) const
 }
 
 void PlainTextContainer::insertLine(const PlainTextLine& toInsert
-	, kiwi::uint32_t linePos )
+	, kiwi::int32_t linePos )
 {
 //	ScopedBlockMacro(__scop, "PlainTextContainer::insertLine" )
-	if(linePos > nbLines() ){
+  if(nbLines() == 0) linePos = 0;
+  if(linePos < 0){
+    linePos = nbLines() + linePos;
+  }
+  if(linePos > nbLines() ){
 		DEBUG_ONLY(
 			Debug::error() << "required position is out of the container.\n"
 				<< "( " << linePos << " > " << nbLines() << " )\n" 
@@ -74,6 +78,7 @@ void PlainTextContainer::insertLine(const PlainTextLine& toInsert
 		)
 		return;
 	}
+  
 	//general case
 	std::list<kiwi::text::PlainTextLine>::iterator it = _lines.begin();
 	while( linePos > 0 ){
@@ -83,7 +88,7 @@ void PlainTextContainer::insertLine(const PlainTextLine& toInsert
 	_lines.insert(it, toInsert);
 }
 
-void PlainTextContainer::insertLine(const Line& toInsert, kiwi::uint32_t linePos)
+void PlainTextContainer::insertLine(const Line& toInsert, kiwi::int32_t linePos)
 {
 	insertLine(PlainTextLine(toInsert.str()), linePos );
 }
@@ -117,7 +122,7 @@ void PlainTextContainer::init(std::istream& inputStream)
 	append(inputStream);
 }
 
-void PlainTextContainer::removeLine(kiwi::uint32_t linePos)
+void PlainTextContainer::removeLine(kiwi::int32_t linePos)
 {
 //	ScopedBlockMacro(__scop, "PlainTextContainer::removeLine" )
 	// out of bounds...

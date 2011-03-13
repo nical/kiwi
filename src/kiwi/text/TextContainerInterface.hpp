@@ -55,8 +55,8 @@ public:
 	 * 
 	 * @param lineNumber The number of the requested line. 
 	 */ 
-	virtual kiwi::text::Line& line(kiwi::uint32_t lineNumber) = 0;
-	virtual const kiwi::text::Line& line(kiwi::uint32_t lineNumber) const = 0;
+	virtual kiwi::text::Line& line(kiwi::int32_t lineNumber) = 0;
+	virtual const kiwi::text::Line& line(kiwi::int32_t lineNumber) const = 0;
 
 	/**
 	 * @brief Returns the number of lines in the container.
@@ -69,12 +69,12 @@ public:
 	 * @param toInsert The line to copy and insert in the container
 	 * @param position The line will be insterted before the given position.
 	 */ 
-	virtual void insertLine(const Line& toCopy, kiwi::uint32_t position ) = 0;
+	virtual void insertLine(const Line& toCopy, kiwi::int32_t position ) = 0;
 
 	/**
 	 * @brief Removes a line. 
 	 */
-	virtual void removeLine(kiwi::uint32_t position) = 0;
+	virtual void removeLine(kiwi::int32_t position) = 0;
 	virtual void removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine) = 0;
 	 /**
 	  * @brief Clears the data.

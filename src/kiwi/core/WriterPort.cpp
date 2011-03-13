@@ -55,6 +55,7 @@ bool WriterPort::connect(DataPort* port)
       disconnect();
       connect_impl( port );
       port->connect_impl( this );
+      updatePort();
 			return true;
     }
 	else return false;

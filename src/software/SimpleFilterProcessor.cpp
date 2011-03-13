@@ -99,9 +99,9 @@ int SimpleFilterProcessor::run()
 
   
   for(OutNodeList::iterator it = outputNodes.begin(); it != outputNodes.end();++it){
-    if(it->second == std::string("cout") ){
+    if(it->second == std::string("-cout") ){
       kiwi::text::PlainTextContainer* container
-        = dynamic_cast<kiwi::text::PlainTextContainer*>(it->first);
+        = it->first->dataPort(0).safeDownCastContainer<kiwi::text::PlainTextContainer>();
       assert(container);
       for(int i = 0; i < container->nbLines(); ++i){
         std::cout << container->line(i).str() << "\n";
@@ -136,7 +136,7 @@ void SimpleFilterProcessor::wrapInputs(
     ScopedBlockMacro(forscop,
       std::string("for(") + boost::lexical_cast<std::string>(i) + std::string(")") )
     kiwi::string inputArgument("cout");
-		if(i > inputs.size() ) inputArgument = inputs.front();
+		if(i < inputs.size() ) inputArgument = inputs.front();
 
     bool tryFile = false;
 		std::ifstream* file;

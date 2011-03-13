@@ -85,8 +85,8 @@ public:
 		else return 0;	
 	}
 
-	virtual kiwi::Tags tags() {
-		return kiwi::Tags(kiwi::string("#rectangle")
+	virtual kiwi::utils::Tags tags() {
+		return kiwi::utils::Tags(kiwi::string("#rectangle")
 			+ boost::lexical_cast<kiwi::string>(TDimension) ); }
 
 protected:

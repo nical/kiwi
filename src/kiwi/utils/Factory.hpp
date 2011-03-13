@@ -52,14 +52,14 @@ public:
 	typedef T*(*instantiationFunction)(void) ;
 	
 	FactoryDescriptor() : _tags("#invalid"), _creator(0){ }
-	FactoryDescriptor( instantiationFunction fPtr, const kiwi::string& tags = "" )
+	FactoryDescriptor( instantiationFunction fPtr, const kiwi::utils::Tags& tags = "" )
 	: _tags(tags), _creator(fPtr){ }
 	
-	kiwi::Tags tags() const { return _tags; }
+	kiwi::utils::Tags tags() const { return _tags; }
 	instantiationFunction creator() {return _creator;}
 	
 private:
-	kiwi::Tags _tags;
+	kiwi::utils::Tags _tags;
 	instantiationFunction _creator;
 };
 
@@ -87,7 +87,7 @@ public:
 	 * @brief Returns true if the key exists in the factory.
 	 */ 
 	int exists(const  HashKey& uniqueId);
-	std::list<HashKey> searchFromTag(const  kiwi::Tags& uniqueId);
+	std::list<HashKey> searchFromTag(const  kiwi::utils::Tags& uniqueId);
 
 	/**
 	 * @brief Adds a key to the factory.

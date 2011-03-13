@@ -79,7 +79,7 @@ ScopedBlockMacro(__scop, "kiwi::NodeFactory::Test")
   kiwi::utils::NodeFactory::ClassList::iterator stop = available.end();
   bool found = false;
   while(it != stop){
-    if(it->second.tags().hasOneOf( kiwi::Tags("#text") ) ) found = true;
+    if(it->second.tags().hasOneOf( kiwi::utils::Tags("#text") ) ) found = true;
     ++it;
   }
   assert(found);

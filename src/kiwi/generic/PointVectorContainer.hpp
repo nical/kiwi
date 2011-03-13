@@ -45,8 +45,8 @@ public:
 		initSubContainers();
 	}
 	
-	virtual Tags tags() const {
-		return Tags("#point#vector");
+	virtual utils::Tags tags() const {
+		return utils::Tags("#point#vector");
 	}
 
 	virtual kiwi::uint32_t size() const {

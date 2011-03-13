@@ -79,7 +79,7 @@ public:
 	/**
 	 * @brief Returns this container's tags used for runtime compatibility check.
 	 */ 
-	virtual kiwi::Tags tags() const { return kiwi::Tags(); }
+	virtual kiwi::utils::Tags tags() const { return kiwi::utils::Tags(); }
 
 	/**
 	 * @brief Returns true if the container is composed of sub-containers.

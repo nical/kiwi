@@ -84,13 +84,13 @@ Node* WriterPort::node() const
 
 
 
-Tags WriterPort::tags() const
+utils::Tags WriterPort::tags() const
 {
 	return node()->writerTags( index() );
 }
 
 bool WriterPort::isCompatible(DataPort& output){ 
-	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
+	return ( tags().hasOneOf(output.tags()+utils::Tags("#any") ) );
 }
 
 bool WriterPort::isConnected( DataPort* port) const{

@@ -68,7 +68,7 @@ public:
 		return (readerPort(0).isConnected() );
 	}
 	
-	
+	/*
 	kiwi::string readerInputName( portIndex_t index )
 	{
 		return kiwi::string("in");	
@@ -81,15 +81,15 @@ public:
 	{
 		return kiwi::string("out");	
 	}
-	
-	kiwi::Tags readerInputTags( portIndex_t index )
+	*/
+	kiwi::utils::Tags readerInputTags( portIndex_t index )
 	{
-		return kiwi::string("#text");
+		return kiwi::utils::Tags("#text");
 	}
 	// same idea with writer inputs
-	kiwi::Tags writerTags( portIndex_t index )
+	kiwi::utils::Tags writerTags( portIndex_t index )
 	{
-		return kiwi::Tags("#text");
+		return kiwi::utils::Tags("#text");
 	}
 	
 	static Node* newUpperCaseFilter() { return new UpperCaseFilter; }

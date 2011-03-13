@@ -112,9 +112,9 @@ public:
 // ---------------------------------------------------------------------
 // tags
 
-	kiwi::Tags tags() const
+	kiwi::utils::Tags tags() const
 	{
-			return kiwi::Tags("#text#rawText");
+			return kiwi::utils::Tags("#text#rawText");
 	}
 	
 

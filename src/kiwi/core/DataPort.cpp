@@ -108,13 +108,13 @@ Node* DataPort::node() const
 }
 
 
-Tags DataPort::tags() const
+utils::Tags DataPort::tags() const
 {
 	if(_container){
 		return _container->tags(); 
 	}else{
 		Debug::error() << "DataPort::tags: warning: no container available\n"; 
-		return Tags("#undefined");
+		return utils::Tags("#undefined");
 	}
 }
 

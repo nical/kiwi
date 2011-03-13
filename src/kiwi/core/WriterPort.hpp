@@ -84,7 +84,7 @@ public:
 	/**
 	 * @brief Returns this port's Type as a string.
 	 */ 
-	Tags tags() const;
+	utils::Tags tags() const;
 
   /**
 	 * @brief returns true if this port is enabled.

@@ -8,9 +8,7 @@
 #include <vector>
 
 namespace kiwi{
-// this is one of the few classes that is directly within the kiwi namespace
-// (along with kiwi::string and a few others...)
-// Well, this might change...
+namespace utils{
 
 class Tags
 {
@@ -49,6 +47,7 @@ protected:
 	std::vector<kiwi::string> _data;
 };
 
+}//namespace
 }//namespace
 
 #endif

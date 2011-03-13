@@ -62,9 +62,9 @@ public:
 
 	// -----------------------------------------------------------------
 
-	Tags tags() const
+	utils::Tags tags() const
 	{
-		return Tags( kiwi::string("#") + types::str<ValueType>());
+		return utils::Tags( kiwi::string("#") + types::str<ValueType>());
 	}
 	
 	kiwi::uint32_t size() const { return 1; }

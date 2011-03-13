@@ -76,7 +76,7 @@ public:
 	}
 	
 
-	kiwi::Tags tags() const
+	kiwi::utils::Tags tags() const
 	{
 		/* TODO : error with pixel types
 		return kiwi::Tags( kiwi::string("#array")

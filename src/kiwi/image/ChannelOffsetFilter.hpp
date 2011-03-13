@@ -108,8 +108,8 @@ public:
 			}
 	}
 
-	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{
-		return kiwi::Tags("#any");// TODO
+	kiwi::utils::Tags readerInputTags(kiwi::portIndex_t index) const{
+		return kiwi::utils::Tags("#any");// TODO
 	}
 
 protected:

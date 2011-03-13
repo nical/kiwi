@@ -4,6 +4,7 @@
 #include <assert.h>
 
 using namespace kiwi;
+using namespace kiwi::utils;
 
 int TagTest()
 {
@@ -13,14 +14,14 @@ int TagTest()
 	 * Scenario: Construct a tag with one token and check that the string returned
 	 * by str() corresponds to the argument passed to the constructor.
 	 */ 
-	kiwi::Tags tag1("#text");
+	kiwi::utils::Tags tag1("#text");
 	assert(tag1.str() == kiwi::string("#text"));
 	
 	/* Test: Constructor with one tag.
 	 * Scenario: Construct a tag with several tokens and check that the string 
 	 * returned by str() corresponds to the argument passed to the constructor.
 	 */ 
-	kiwi::Tags tag2("#text#image#foo#bar");
+	kiwi::utils::Tags tag2("#text#image#foo#bar");
 	assert(tag2.str() == kiwi::string("#text#image#foo#bar") );
 	assert(tag2.str(0) == kiwi::string("#text")  );
 	assert(tag2.str(1) == kiwi::string("#image") );
@@ -46,8 +47,8 @@ int TagTest()
 	/* Test: Copy constroctor
 	 * check the equality between the constructed Tags and its source.
 	 */ 
-	kiwi::Tags tagCopy1(tag1);
-	kiwi::Tags tagCopy2(tag2);
+	kiwi::utils::Tags tagCopy1(tag1);
+	kiwi::utils::Tags tagCopy2(tag2);
 	assert(tagCopy1 == tag1);
 	assert(tagCopy2 == tag2);
 	
@@ -55,8 +56,8 @@ int TagTest()
 	 * Scenario: Compute tag2 - tag3 using both operators, check that the result
 	 * is the one expected and that both results are equal. 
 	 */ 	
-	kiwi::Tags tag3("#text#foo");
-	kiwi::Tags tag4 = tag2 - tag3;
+	kiwi::utils::Tags tag3("#text#foo");
+	kiwi::utils::Tags tag4 = tag2 - tag3;
 	tag2 -= tag3;
 	assert(tag2.str() == kiwi::string("#image#bar") );
 	assert(tag2 == tag4);
@@ -86,11 +87,11 @@ int TagTest()
 	 * Scenario: 
 	 * 
 	 */
-	kiwi::Tags foobar("#foo#bar#plop#haha");
-	kiwi::Tags foo("#foo#plop#hey");
-	kiwi::Tags foo2("#foo#plop#hey");
+	kiwi::utils::Tags foobar("#foo#bar#plop#haha");
+	kiwi::utils::Tags foo("#foo#plop#hey");
+	kiwi::utils::Tags foo2("#foo#plop#hey");
 	foo2 &= foobar;
-	assert( (foo && foobar) == kiwi::Tags("#foo#plop") );
+	assert( (foo && foobar) == kiwi::utils::Tags("#foo#plop") );
 	assert( (foo && foobar) == (foobar && foo) );
 	assert( (foo && foobar) == foo2 ); 
 

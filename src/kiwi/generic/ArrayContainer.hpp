@@ -181,7 +181,7 @@ public:
 	 */
 	ArrayIterator<ValueType> getBasicIterator() const;
 
-	Tags tags() const { return Tags("array") ; }
+	utils::Tags tags() const { return utils::Tags("array") ; }
 
 	/**
 	 * Intended for debug purposes...

@@ -101,8 +101,8 @@ public:
 		//cairo_surface_mark_dirty(result->getSurface() ); // TODO
 	}
 
-	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{
-		return kiwi::Tags("#any");
+	kiwi::utils::Tags readerInputTags(kiwi::portIndex_t index) const{
+		return kiwi::utils::Tags("#any");
 	}
 
 };

@@ -64,9 +64,9 @@ public:
 
 	}
 
-	kiwi::Tags readerInputTags(kiwi::portIndex_t index) const{
+	kiwi::utils::Tags readerInputTags(kiwi::portIndex_t index) const{
 		Debug::print() << "AddFilter::Tags" << endl();
-		return kiwi::Tags("#float");// TODO
+		return kiwi::utils::Tags("#float");// TODO
 	}
 
 	void layoutChanged(){

@@ -176,15 +176,15 @@ public:
 		return kiwi::string("out");	
 	}
 	
-	kiwi::Tags readerInputTags( portIndex_t index )
+	kiwi::utils::Tags readerInputTags( portIndex_t index )
 	{
-		if(index == 0 ) return kiwi::Tags("#text");
-		else return kiwi::Tags("#text#opt");
+		if(index == 0 ) return kiwi::utils::Tags("#text");
+		else return kiwi::utils::Tags("#text#opt");
 	}
 	// same idea with writer inputs
-	kiwi::Tags writerInputTags( portIndex_t index )
+	kiwi::utils::Tags writerInputTags( portIndex_t index )
 	{
-		return kiwi::Tags("#text");
+		return kiwi::utils::Tags("#text");
 	}
 	
 	static Node* newTextToMorseFilter() { return new TextToMorseFilter; }

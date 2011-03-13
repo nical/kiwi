@@ -231,19 +231,19 @@ public:
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::Tags readerTags( portIndex_t index ) const;
+	virtual kiwi::utils::Tags readerTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a reader output port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::Tags writerTags( portIndex_t index ) const;
+	virtual kiwi::utils::Tags writerTags( portIndex_t index ) const;
 	/**
 	 * @brief Returns the type of a Writer input port.
 	 * 
 	 * This is one of the methods to override in order to define the port's types.
 	 */ 
-	virtual kiwi::Tags dataTags( portIndex_t index ) const;
+	virtual kiwi::utils::Tags dataTags( portIndex_t index ) const;
 	
 // --------------------------------------------------- protected methods	
 protected:

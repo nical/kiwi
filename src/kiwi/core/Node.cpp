@@ -216,23 +216,23 @@ kiwi::string Node::strCommand( const kiwi::string& command )
 // ---------------------------------------------------------- Port types
 
 
-kiwi::Tags 
+kiwi::utils::Tags 
 Node::readerTags(portIndex_t index) const
 {
-	return kiwi::Tags("#any");
+	return kiwi::utils::Tags("#any");
 }
 
-kiwi::Tags 
+kiwi::utils::Tags 
 Node::writerTags(portIndex_t index) const
 {
-	return kiwi::Tags("#any");
+	return kiwi::utils::Tags("#any");
 }
 
 
-kiwi::Tags 
+kiwi::utils::Tags 
 Node::dataTags(portIndex_t index) const
 {
-	return kiwi::Tags("#any");
+	return kiwi::utils::Tags("#any");
 }
 
 // -------------------------------------------------------- Port binding

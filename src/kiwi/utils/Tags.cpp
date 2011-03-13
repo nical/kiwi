@@ -3,6 +3,7 @@
 #include <assert.h>
 
 namespace kiwi{
+namespace utils{
 
 void Tags::init(char const* str)
 {
@@ -192,4 +193,5 @@ Tags& Tags::operator&=(const Tags& toComp)
 }
 
 
+}//namespace
 }//namespace

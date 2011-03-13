@@ -81,7 +81,7 @@ Node* ReaderPort::node() const
 }
 
 
-Tags ReaderPort::tags() const
+utils::Tags ReaderPort::tags() const
 {
 	ScopedBlockMacro(scop,"ReaderPort::tags")
 	return node()->readerTags( index() );
@@ -90,14 +90,14 @@ Tags ReaderPort::tags() const
 bool ReaderPort::isCompatible(DataPort& output)	
 {
 	ScopedBlockMacro(scop, "ReaderPort::isCompatible");
-	return ( tags().hasOneOf(output.tags()+Tags("#any") ) );
+	return ( tags().hasOneOf(output.tags()+utils::Tags("#any") ) );
 }
 
 
-bool ReaderPort::isCompatible(const kiwi::Tags& tag)	
+bool ReaderPort::isCompatible(const kiwi::utils::Tags& tag)	
 {
 	ScopedBlockMacro(scop, "ReaderPort::isCompatible");
-	return ( tags().hasOneOf(tag + Tags("#any") ) );
+	return ( tags().hasOneOf(tag + utils::Tags("#any") ) );
 }
 
 bool ReaderPort::isEnabled() const 

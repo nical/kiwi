@@ -76,7 +76,7 @@ public:
 	/**
 	 * @brief Returns this port's Type as a string.
 	 */ 
-	Tags tags() const;
+	utils::Tags tags() const;
 
 	/**
 	 * @brief Returns a pointer to the OutputPort connected to this InputPort.
@@ -119,7 +119,7 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	virtual bool isCompatible(const kiwi::Tags& tag) ;
+	virtual bool isCompatible(const kiwi::utils::Tags& tag) ;
 
 	/**
 	 * @brief returns true if this port is enabled.

@@ -105,7 +105,7 @@ friend class WriterPort;
   /**
 	 * @brief Returns this port's Type as a string.
 	 */ 
-	Tags tags() const;
+	utils::Tags tags() const;
 
   	
 	bool connect(ReaderPort* port);

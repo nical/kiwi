@@ -86,7 +86,7 @@ public:
 
 	// ----------------------------------- virtual method implementation
 	
-	Tags tags() const { return Tags("#RGBA"); }
+	utils::Tags tags() const { return utils::Tags("#RGBA"); }
 
 	virtual kiwi::uint32_t size() const {return _width*_height;}
 

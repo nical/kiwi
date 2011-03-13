@@ -14,9 +14,16 @@ namespace kiwi{
         int run(); 
 
       protected:
+        enum { COUT, FILE, DEFAULT };
+        
         void wrapInputs(utils::NodeFactory& factory
-			, core::Node& node
-			, std::list<string>& inputs );
+            , core::Node& node
+            , std::list<string>& inputs );
+            
+        std::list< std::pair<kiwi::core::Node*,std::string> >
+          wrapOutputs(utils::NodeFactory& factory
+            , core::Node& node
+            , std::list<string>& inputs );
 
         ArgumentProcessor arguments;
     };

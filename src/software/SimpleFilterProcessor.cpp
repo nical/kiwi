@@ -142,17 +142,16 @@ void SimpleFilterProcessor::wrapInputs(
 		std::ifstream* file;
 		
     file = new std::ifstream(inputArgument.c_str() );
-    tryFile = true;
 
 		if( inputArgument == kiwi::string("-x") ) 
 		{
       ScopedBlockMacro(forscopx, "-x")
-			inputs.pop_front();
+			if(inputs.size() > 0) inputs.pop_front();
 			// ignore argument and make no connections for the 
 			// corresponding input portDebug::print() << "-- params --\n";
 			continue;
 		}
-		else if( tryFile && file->is_open() ) 
+		else if( file->is_open() ) 
 		{
       ScopedBlockMacro(forscopfile, "file")
 			kiwi::text::PlainTextContainer* inputText

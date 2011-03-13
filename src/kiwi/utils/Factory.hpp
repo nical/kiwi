@@ -55,11 +55,11 @@ public:
 	FactoryDescriptor( instantiationFunction fPtr, const kiwi::string& tags = "" )
 	: _tags(tags), _creator(fPtr){ }
 	
-	kiwi::string tags() const { return _tags; }
+	kiwi::Tags tags() const { return _tags; }
 	instantiationFunction creator() {return _creator;}
 	
 private:
-	kiwi::string _tags;
+	kiwi::Tags _tags;
 	instantiationFunction _creator;
 };
 
@@ -105,6 +105,7 @@ public:
 	 * @brief Returns the list of the available classes.
 	 */ 
 	ClassList availableClasses();
+	ClassList availableClasses(const Tags& tags);
 
 private:
 	typedef std::map<HashKey, FactoryDescriptor<ObjType> > ObjectMap;
@@ -143,8 +144,11 @@ void Factory<ObjType,HashKey>::registerClass( const HashKey& uniqueId
 template<class ObjType, class HashKey>
 bool Factory<ObjType,HashKey>::unregisterClass(const  HashKey& uniqueId)
 {
-	_objects.erase(_objects.find(uniqueId) );
-	return true; // TODO;
+  typename ObjectMap::iterator it = _objects.find(uniqueId);
+  if( it != _objects.end() ){
+  	_objects.erase( it );
+    return true;
+  }else return false;
 }
 
 template<class ObjType, class HashKey>
@@ -156,6 +160,18 @@ Factory<ObjType,HashKey>::availableClasses()
 	typename ObjectMap::iterator end = _objects.end();
 	for( ; it != end; ++it)
 		result.push_front( *it );
+	return result;
+}
+
+template<class ObjType, class HashKey>
+typename Factory<ObjType,HashKey>::ClassList
+Factory<ObjType,HashKey>::availableClasses(const Tags& tags)
+{
+	ClassList result;
+	typename ObjectMap::iterator it = _objects.begin();
+	typename ObjectMap::iterator end = _objects.end();
+	for( ; it != end; ++it)
+    if( it->second.tags().hasAll(tags) ) result.push_front( *it );
 	return result;
 }
 

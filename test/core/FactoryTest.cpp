@@ -43,15 +43,15 @@ ScopedBlockMacro(__scop, "kiwi::NodeFactory::Test")
 	kiwi::utils::NodeFactory factory;
 	
 	factory.registerClass(
-		"A", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createA, "#Filter") 
+		"A", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createA, "#Filter#text") 
 	);
 	
 	factory.registerClass(
-		"B", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createB, "#Filter") 
+		"B", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createB, "#Filter#image") 
 	);
 	
 	factory.registerClass(
-		"C", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createC, "#Filter") 
+		"C", kiwi::utils::FactoryDescriptor<kiwi::core::Node>(&__createC, "#Filter#text") 
 	);
 	
 	kiwi::core::Node* tfa = factory.newObject("A");
@@ -69,7 +69,24 @@ ScopedBlockMacro(__scop, "kiwi::NodeFactory::Test")
 	tfa->update();
 	tfb->update();
 	tfc->update();
-	
+
+  assert( factory.unregisterClass("A") );
+  assert( !factory.exists("A") );
+
+  kiwi::utils::NodeFactory::ClassList available = factory.availableClasses();
+  assert( available.size() == 2 );
+  kiwi::utils::NodeFactory::ClassList::iterator it = available.begin();
+  kiwi::utils::NodeFactory::ClassList::iterator stop = available.end();
+  bool found = false;
+  while(it != stop){
+    if(it->second.tags().hasOneOf( kiwi::Tags("#text") ) ) found = true;
+    ++it;
+  }
+  assert(found);
+
+  kiwi::utils::NodeFactory::ClassList availableImage = factory.availableClasses("#image");
+  assert( availableImage.size() == 1 );
+  
 	delete tfa;
 	delete tfb;
 	delete tfc;

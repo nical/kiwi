@@ -85,7 +85,7 @@ void PlainTextContainer::insertLine(const PlainTextLine& toInsert
 
 void PlainTextContainer::insertLine(const Line& toInsert, kiwi::uint32_t linePos)
 {
-	insertLine(PlainTextLine(toInsert.str()), linePos  );
+	insertLine(PlainTextLine(toInsert.str()), linePos );
 }
 
 void PlainTextContainer::clear()
@@ -100,6 +100,14 @@ void PlainTextContainer::append(std::istream& inputStream)
 		kiwi::string line;
 		std::getline(inputStream, line);
 		insertLine( PlainTextLine(line), nbLines() );
+	}
+}
+
+void PlainTextContainer::append(const TextContainerInterface& toAppend)
+{
+	for(kiwi::uint32_t i = 0; i < toAppend.nbLines(); ++i)
+	{
+		insertLine( toAppend.line(i), nbLines() );
 	}
 }
 

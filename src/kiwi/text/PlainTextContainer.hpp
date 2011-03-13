@@ -55,6 +55,7 @@ public:
 	void init(std::istream& inputStream);
 
 	void append(std::istream& inputStream);
+	void append(const TextContainerInterface& toAppend);
 
 	void clear();
 
@@ -115,14 +116,7 @@ public:
 	{
 			return kiwi::Tags("#text#rawText");
 	}
-	kiwi::Tags outputReaderTags(portIndex_t)
-	{
-			return kiwi::Tags("#text#rawText");
-	}
-	kiwi::Tags outputWriterTags(portIndex_t)
-	{
-			return kiwi::Tags("#text#rawText");
-	}
+	
 
 // ---------------------------------------------------------------------
 // attributes

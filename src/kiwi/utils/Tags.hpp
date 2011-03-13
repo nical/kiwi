@@ -10,6 +10,7 @@
 namespace kiwi{
 // this is one of the few classes that is directly within the kiwi namespace
 // (along with kiwi::string and a few others...)
+// Well, this might change...
 
 class Tags
 {

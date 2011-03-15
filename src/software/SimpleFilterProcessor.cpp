@@ -39,6 +39,7 @@
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/ReaderPort.hpp"
 #include "kiwi/core/WriterPort.hpp"
+#include "kiwi/text/PlainTextLoader.hpp"
 
 #include "kiwi/core.hpp" 
 #include "kiwi/text.hpp" 

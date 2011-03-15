@@ -47,6 +47,10 @@ class Container
 public:
 	static const uint32_t UNAVAILABLE = 0;
   enum { READ = 1, WRITE = 2, READ_WRITE = READ | WRITE };
+
+  virtual bool loadFromFile(const kiwi::string& path) { return false; }
+  
+  virtual bool saveToFile(const kiwi::string& path) { return false; }
   
   /**
    * @brief A method intended to prepare the container before access when needed.
@@ -58,7 +62,8 @@ public:
    * to work with non library-specific data, which means that the child containers
    * should override this method if any pre-treatment is required. 
    */
-   virtual void begin( int flags = READ_WRITE ) { }
+  virtual void prepare( int flags = READ_WRITE ) { }
+
    /**
    * @brief A method intended to prepare the container before access when needed.
    *
@@ -69,7 +74,7 @@ public:
    * to work with non library-specific data, which means that the child containers
    * should override this method if any post-treatment is required. 
    */
-   virtual void end( int flags = READ_WRITE ) { }
+  virtual void flush( int flags = READ_WRITE ) { }
 
 	/**
 	 * @brief Returns an estimation of the memory consumed by the container.
@@ -101,6 +106,7 @@ public:
 	 * @brief Register the Container to the ContainerFactory
 	 */
 	 virtual bool registerToFactory(const kiwi::utils::NodeFactory& factory) {return false;}
+
 };
 
 

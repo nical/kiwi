@@ -157,17 +157,16 @@ public:
 
 	// This is optionnal. Override this method readyCondition() if this filter
 	// needs to perform custom checks to tell if it's ready.
-	bool isReady() const
-	{
+	bool isReady() const{
 		return (readerPort(0).isConnected() );
 	}
 	
 		
-	kiwi::utils::Tags readerTags( portIndex_t index )
-	{
+	kiwi::utils::Tags readerTags( portIndex_t index ){
 		if(index == 0 ) return kiwi::utils::Tags("#text");
 		else return kiwi::utils::Tags("#text#opt");
 	}
+  
 	// same idea with writer inputs
 	kiwi::utils::Tags writerInputTags( portIndex_t index )
 	{

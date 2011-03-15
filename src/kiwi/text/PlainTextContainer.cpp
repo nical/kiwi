@@ -28,16 +28,37 @@
 
 
 #include "PlainTextContainer.hpp"
-
+#include <fstream>
 
 namespace kiwi{
 namespace text{	
 
 PlainTextContainer::PlainTextContainer()
 {
-//	addReaderOutputPort();
-//	addWriterOutputPort();
-	//insertLine(PlainTextLine(""),0);
+}
+
+
+bool PlainTextContainer::loadFromFile(const kiwi::string& path){
+  std::ifstream file( path.c_str() );
+  if( file.is_open() ) {
+    init( file );
+    file.close();
+    return true;
+  }else{
+    return false;
+  }
+}
+
+bool PlainTextContainer::saveToFile(const kiwi::string& path){
+  std::ofstream file( path.c_str() );
+  if( file.is_open() ) {
+    for(kiwi::uint32_t i = 0; i < nbLines(); ++i){
+      file << line(i).str() << "\n"; // TODO
+    }
+    return true;
+  }else{
+    return false;
+  }
 }
 
 Line& PlainTextContainer::line(kiwi::int32_t linePos)
@@ -50,6 +71,7 @@ Line& PlainTextContainer::line(kiwi::int32_t linePos)
 	while( linePos-- > 0 ){ ++it; }
 	return (*it);
 }
+
 
 const Line& PlainTextContainer::line(kiwi::int32_t lineNumber) const
 {

@@ -57,12 +57,14 @@ public:
 	void append(std::istream& inputStream);
 	void append(const TextContainerInterface& toAppend);
 
+  bool loadFromFile(const kiwi::string& path);
+  bool saveToFile(const kiwi::string& path);
+
 	void clear();
 
 	bool isComposite() const {return false;}
 	kiwi::uint32_t nbSubContainers() const { return  0; }
 	kiwi::uint32_t memoryEstimation() const {return 0;}//TODO
-	kiwi::uint32_t size() const {return 0;}//TODO
 
 
 

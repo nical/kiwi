@@ -8,6 +8,7 @@
 #include "kiwi/core/TWriterPort.hpp"
 #include "kiwi/text/TextContainerInterface.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
+#include "kiwi/utils/Factory.hpp"
 
 #include <fstream>
 
@@ -49,10 +50,19 @@ public:
   }
 
   ~PlainTextLoader(){
+  }
+
     //delete _inputPath;
     //delete _outputText;
-  }
-  
+  static Node* newPlainTextLoader() { return new PlainTextLoader; }
+	
+	static bool registerToFactory(kiwi::utils::NodeFactory& factory, const kiwi::string& filterId)
+	{
+		factory.registerClass( filterId
+    , kiwi::utils::NodeFactoryDescriptor(	newPlainTextLoader, "#Filter#Loader#text" )
+    );	
+		return true;
+	}
 
 protected:
 kiwi::core::TReaderPort<TextContainerInterface>* _inputPath;

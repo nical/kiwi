@@ -106,6 +106,8 @@ public:
 	 */ 
 	ClassList availableClasses();
 	ClassList availableClasses(const Tags& tags);
+  
+	ObjType* newObjectFromTags(const Tags& tags);
 
 private:
 	typedef std::map<HashKey, FactoryDescriptor<ObjType> > ObjectMap;
@@ -175,6 +177,16 @@ Factory<ObjType,HashKey>::availableClasses(const Tags& tags)
 	return result;
 }
 
+template<class ObjType, class HashKey>
+ObjType* Factory<ObjType,HashKey>::newObjectFromTags(const Tags& tags){
+  typename ObjectMap::iterator it = _objects.begin();
+	typename ObjectMap::iterator end = _objects.end();
+  for( ; it != end; ++it)
+    if( it->second.tags().hasAll(tags) )
+      return (it->second.creator())();
+  //if no class found
+  return 0;
+}
 
 
 typedef Factory<kiwi::core::Node,kiwi::string> NodeFactory;

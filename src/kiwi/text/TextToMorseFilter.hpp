@@ -162,14 +162,13 @@ public:
 	}
 	
 		
-	kiwi::utils::Tags readerTags( portIndex_t index ){
+	kiwi::utils::Tags readerTags( portIndex_t index ) const {
 		if(index == 0 ) return kiwi::utils::Tags("#text");
 		else return kiwi::utils::Tags("#text#opt");
 	}
   
 	// same idea with writer inputs
-	kiwi::utils::Tags writerInputTags( portIndex_t index )
-	{
+	kiwi::utils::Tags writerTags( portIndex_t index ) const {
 		return kiwi::utils::Tags("#text");
 	}
 	

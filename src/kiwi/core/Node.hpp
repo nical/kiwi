@@ -166,7 +166,7 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */ 
-	ReaderPort& readerPort(portIndex_t index) const
+	ReaderPort& readerPort(portIndex_t index = 0) const
 		{assert(index < nbReaderPorts() ); return *_readerPorts[index];}
 	
 	
@@ -178,7 +178,7 @@ public:
 	 * @param index The index of the port.
 	 */
    
-	WriterPort& writerPort(portIndex_t index) const
+	WriterPort& writerPort(portIndex_t index = 0) const
 		{assert(index < nbWriterPorts() );return *_writerPorts[index];}
 	/**
 	 * @brief Access to a port.
@@ -187,7 +187,7 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */
-	DataPort& dataPort(portIndex_t index) const
+	DataPort& dataPort(portIndex_t index = 0) const
 		{assert(index < nbDataPorts() );return *_dataPorts[index];}
 
 	/**

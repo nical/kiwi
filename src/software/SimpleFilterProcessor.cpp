@@ -40,6 +40,7 @@
 #include "kiwi/core/ReaderPort.hpp"
 #include "kiwi/core/WriterPort.hpp"
 #include "kiwi/text/PlainTextLoader.hpp"
+#include "kiwi/utils/Tags.hpp"
 
 #include "kiwi/core.hpp" 
 #include "kiwi/text.hpp" 
@@ -66,6 +67,7 @@ int SimpleFilterProcessor::run()
   kiwi::utils::NodeFactory factory;
   kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCase");
   kiwi::text::TextToMorseFilter::registerToFactory(factory,"MorseCode");
+  kiwi::text::PlainTextLoader::registerToFactory(factory,"TextLoader");
 
 
   //Filter instanciation
@@ -127,26 +129,24 @@ void SimpleFilterProcessor::wrapInputs(
 
 	typedef std::list<string> ArgList;
 
-  //DEBUG
-    Debug::print() << "-- The selected filter has " << (int)filter.nbReaderPorts() << " reader ports\n";
-    Debug::print() << "-- Versus " << (int)inputs.size() << " input arguments\n";
-  //DEBUG
+ 
 
 	for( int i = 0; i < filter.nbReaderPorts(); ++i )
 	{
+    /*
     ScopedBlockMacro(forscop,
       std::string("for(") + boost::lexical_cast<std::string>(i) + std::string(")") )
-    kiwi::string inputArgument("cout");
+    */ 
+    kiwi::string inputArgument("-x"); //default
 		if(i < inputs.size() ) inputArgument = inputs.front();
 
-    bool tryFile = false;
-		std::ifstream* file;
+    std::ifstream* file;
 		
-    file = new std::ifstream(inputArgument.c_str() );
+    file = new std::ifstream( inputArgument.c_str() );
 
 		if( inputArgument == kiwi::string("-x") ) 
 		{
-      ScopedBlockMacro(forscopx, "-x")
+      //ScopedBlockMacro(forscopx, "-x")
 			if(inputs.size() > 0) inputs.pop_front();
 			// ignore argument and make no connections for the 
 			// corresponding input portDebug::print() << "-- params --\n";
@@ -154,7 +154,22 @@ void SimpleFilterProcessor::wrapInputs(
 		}
 		else if( file->is_open() ) 
 		{
-      ScopedBlockMacro(forscopfile, "file")
+      kiwi::utils::Tags tags = filter.readerTags(i) + kiwi::utils::Tags("#Loader");
+      Debug::error() << tags.str() << "\n";
+      kiwi::core::Node* loader = factory.newObjectFromTags(tags);
+      if(!loader) Debug::error() << "could not find a corresponding loader in the factory, using TextContainer as fallback" << endl();
+      
+      if( loader ){
+        kiwi::text::PlainTextContainer* path = new kiwi::text::PlainTextContainer;
+        kiwi::core::Node* pathNode = new kiwi::core::Node( path );
+        pathNode->dataPort() >> loader->readerPort();
+        assert( loader->readerPort().isConnected() );
+        loader->dataPort() >> filter.readerPort();
+        assert( filter.readerPort().isConnected() );
+        // TODO
+      }
+      
+      //ScopedBlockMacro(forscopfile, "file")
 			kiwi::text::PlainTextContainer* inputText
 				= new kiwi::text::PlainTextContainer;
 			inputText->init(*file);
@@ -164,7 +179,7 @@ void SimpleFilterProcessor::wrapInputs(
 			inputs.pop_front();
       assert( filter.readerPort(i).isConnected() );
 		}else{
-      ScopedBlockMacro(forscopplop, "input arg or cin")
+      //ScopedBlockMacro(forscopplop, "input arg or cin")
 			//Creation of a basic container, needed to apply the filter
 			kiwi::text::PlainTextContainer* basicInputContainer
 				= new kiwi::text::PlainTextContainer;

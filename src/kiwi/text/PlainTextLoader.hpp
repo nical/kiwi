@@ -7,6 +7,7 @@
 #include "kiwi/core/TReaderPort.hpp"
 #include "kiwi/core/TWriterPort.hpp"
 #include "kiwi/text/TextContainerInterface.hpp"
+#include "kiwi/text/PlainTextContainer.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/utils/Factory.hpp"
 
@@ -26,10 +27,21 @@ public:
       _outputText = new kiwi::core::TWriterPort<TextContainerInterface>(this));
     addDataPort();
     associateWriterToDataPort( *_outputText, dataPort(0) );
+
+    _auxNode = 0;
+  }
+
+  ~PlainTextLoader(){
+    if(_auxNode) delete _auxNode;
   }
 
   void process(){
     ScopedBlockMacro(scop,"PlainTextLoader::process")
+    if( !_outputText->isConnected() ){
+      _auxNode = new kiwi::core::Node( new PlainTextContainer );
+      _auxNode->dataPort() >> writerPort();
+      assert( _outputText->isConnected() );
+    }
     TextContainerInterface* input = _inputPath->getContainer();
     TextContainerInterface* output = _outputText->getContainer();
     assert(input);
@@ -49,11 +61,15 @@ public:
     }
   }
 
-  ~PlainTextLoader(){
-  }
+  kiwi::utils::Tags readerTags( portIndex_t index ) const {
+		return kiwi::utils::Tags("#text"); // TODO #path ?
+	}
 
-    //delete _inputPath;
-    //delete _outputText;
+  kiwi::utils::Tags writerTags( portIndex_t index ) const	{
+		return kiwi::utils::Tags("#text");
+	}
+
+  
   static Node* newPlainTextLoader() { return new PlainTextLoader; }
 	
 	static bool registerToFactory(kiwi::utils::NodeFactory& factory, const kiwi::string& filterId)
@@ -65,6 +81,7 @@ public:
 	}
 
 protected:
+kiwi::core::Node* _auxNode;
 kiwi::core::TReaderPort<TextContainerInterface>* _inputPath;
 kiwi::core::TWriterPort<TextContainerInterface>* _outputText;
 };

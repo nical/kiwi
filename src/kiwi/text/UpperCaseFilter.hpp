@@ -67,18 +67,15 @@ public:
 	}
 	
 
-	bool isReady() const
-	{
+	bool isReady() const {
 		return (readerPort(0).isConnected() );
 	}
 	
-	kiwi::utils::Tags readerInputTags( portIndex_t index )
-	{
+	kiwi::utils::Tags readerTags( portIndex_t index ) const {
 		return kiwi::utils::Tags("#text");
 	}
 	// same idea with writer inputs
-	kiwi::utils::Tags writerTags( portIndex_t index )
-	{
+	kiwi::utils::Tags writerTags( portIndex_t index ) const	{
 		return kiwi::utils::Tags("#text");
 	}
 	

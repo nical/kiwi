@@ -7,6 +7,7 @@
 #include "kiwi/core/TReaderPort.hpp"
 #include "kiwi/core/TWriterPort.hpp"
 #include "kiwi/text/TextContainerInterface.hpp"
+#include "kiwi/text/PlainTextLine.hpp"
 
 #include <fstream>
 
@@ -18,8 +19,10 @@ class PlainTextLoader : public kiwi::core::Filter
 {
 public:
   PlainTextLoader(){
-    _inputPath = new kiwi::core::TReaderPort<TextContainerInterface>(this);
-    _outputText = new kiwi::core::TWriterPort<TextContainerInterface>(this);
+    addReaderPort(
+      _inputPath = new kiwi::core::TReaderPort<TextContainerInterface>(this));
+    addWriterPort(
+      _outputText = new kiwi::core::TWriterPort<TextContainerInterface>(this));
     addDataPort();
     associateWriterToDataPort( *_outputText, dataPort(0) );
   }
@@ -38,7 +41,7 @@ public:
         std::getline(file, line);
         output->insertLine( PlainTextLine(line), output->nbLines() );
       }
-      //release the stream
+      //release the system resource
       file.close();
     }else{
       Debug::error() << "file not found\n";

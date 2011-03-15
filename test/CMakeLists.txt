@@ -30,6 +30,7 @@ endif(DEFINED BUILD_KIWI_IMAGE)
 if(DEFINED BUILD_KIWI_TEXT)	
 	SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 		text/PlainTextContainerTest
+		text/PlainTextLoaderTest
 	)
 endif(DEFINED BUILD_KIWI_TEXT)
 

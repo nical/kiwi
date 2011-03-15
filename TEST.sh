@@ -70,7 +70,8 @@ fi
 
 if [ "$text" = "yes" ]
 then
-#./text/PlainTextContainerTest ||
+#./text/PlainTextContainerTest &&
+./text/PlainTextLoaderTest ||
 exit
 fi
 

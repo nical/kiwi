@@ -45,12 +45,12 @@ public:
 
 
 protected:
-
+/*
   void connect_impl( ReaderPort* port );
   void disconnect_impl( ReaderPort* port );
   void connect_impl( WriterPort* port );
   void disconnect_impl( WriterPort* port );
-
+*/
   ContainerType* _tcontainer;
 };
 

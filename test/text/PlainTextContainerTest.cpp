@@ -8,7 +8,7 @@ using namespace kiwi;
 
 void PlainTextContainerTest()
 {
-	ScopedBlockMacro(__scp, "kiwi::test::PlainTextContainer")
+	ScopedBlockMacro( "kiwi::test::PlainTextContainer")
 
 	kiwi::text::PlainTextContainer tc;
 	

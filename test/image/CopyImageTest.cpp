@@ -65,6 +65,6 @@ void CopyImageTest()
 
 int main()
 {
-	ScopedBlockMacro(scop, "CopyImageFilter::Test")
+	ScopedBlockMacro("CopyImageFilter::Test")
 	CopyImageTest();
 }

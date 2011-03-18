@@ -107,6 +107,7 @@ friend class WriterPort;
 	 */ 
 	utils::Tags tags() const;
 
+  virtual bool isEmpty() const { return _container == 0 ; }
   	
 	bool connect(ReaderPort* port);
 	
@@ -145,7 +146,7 @@ friend class WriterPort;
 	 */ 
 	template<class T>
 	T* safeDownCastContainer() {
-		ScopedBlockMacro(scop,"DataPort::safeDownCastContainer")
+		ScopedBlockMacro("DataPort::safeDownCastContainer")
 		if(!_container) Debug::error() << "no Container\n";
 		DEBUG_ONLY(
 			if(!dynamic_cast<T*>( getAbstractContainer() ) )

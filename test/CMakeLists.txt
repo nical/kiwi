@@ -44,6 +44,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 	utils/UnorderedArrayTest
 	utils/typesTest
 	utils/randomTest
+  utils/ClassInfoTest
 	core/FilterTest
 #	core/MetaFilterTest
 	generic/PointTest

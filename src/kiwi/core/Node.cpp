@@ -56,7 +56,7 @@ Node::Node( const NodeInitializer& init)
 
 Node::Node( Container* init)
 {
-	ScopedBlockMacro(scop,"Node::constructor(Container*)")
+	ScopedBlockMacro("Node::constructor(Container*)")
 	if(!init) Debug::print() << "warning: the init parameter is nil\n";
 	addContainer( init, true, 3 ); // 3 is READ | WRITE access
 	_listener = 0;
@@ -113,7 +113,7 @@ portIndex_t Node::addDataPort(Container* data, kiwi::uint8_t flags){
 
 portIndex_t Node::addDataPort( DataPort* port )
 {
-	ScopedBlockMacro(scop,"Node::addDataPort");
+	ScopedBlockMacro("Node::addDataPort");
 	if(!port) return -1;
 	// TODO: flags
 	_dataPorts.push_back( port );
@@ -123,7 +123,7 @@ portIndex_t Node::addDataPort( DataPort* port )
 
 void Node::addContainer(Container* data, bool addPort, kiwi::uint8_t flags)
 {
-	ScopedBlockMacro(__scop, "Node::addContainer" )
+	ScopedBlockMacro("Node::addContainer" )
 	if(!data) Debug::error() << "warning: the init parameter is nil\n";
 	_containers.add(data);
 	if(addPort){
@@ -157,7 +157,7 @@ Node::removeDataPort()
 portIndex_t 
 Node::indexOf(const ReaderPort& port) const
 {
-//ScopedBlockMacro(__scop, "Node::indexOf");
+//ScopedBlockMacro( "Node::indexOf");
 	for(unsigned i = 0; i < _readerPorts.size(); ++i)
 		if(_readerPorts[i] == &port)
 			return i;
@@ -175,7 +175,7 @@ Node::indexOf(const ReaderPort& port) const
 portIndex_t 
 Node::indexOf(const WriterPort& port) const
 {
-//ScopedBlockMacro(__scop, "Node::indexOf");
+//ScopedBlockMacro( "Node::indexOf");
 	for(unsigned i = 0; i < _writerPorts.size(); ++i)
 		if(_writerPorts[i] == &port)
 			return i;
@@ -193,7 +193,7 @@ Node::indexOf(const WriterPort& port) const
 portIndex_t 
 Node::indexOf(const DataPort& port) const
 {
-//ScopedBlockMacro(__scop, "Node::indexOf");
+//ScopedBlockMacro( "Node::indexOf");
 	for(unsigned i = 0; i < _dataPorts.size(); ++i)
 		if( _dataPorts[i] == &port )
 			return i;
@@ -298,7 +298,7 @@ bool NodeInitializer::addWriter(kiwi::uint32_t index) const
 bool 
 operator >> (DataPort& output, ReaderPort& input )
 {
-	ScopedBlockMacro(scop, "operator >> (reader)" )
+	ScopedBlockMacro("operator >> (reader)" )
 	if(!input.isConnected())
 	{
 		return input.connect(&output);
@@ -308,7 +308,7 @@ operator >> (DataPort& output, ReaderPort& input )
 bool 
 operator >> (DataPort& output, WriterPort& input )
 {
-	ScopedBlockMacro(scop, "operator >> (writer)" )
+	ScopedBlockMacro( "operator >> (writer)" )
 	if(!input.isConnected())
 	{
 		return input.connect(&output);

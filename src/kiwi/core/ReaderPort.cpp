@@ -47,17 +47,25 @@ ReaderPort::ReaderPort( Node* myNode )
 
 bool ReaderPort::connect(DataPort* port)
 {
-	ScopedBlockMacro( __scop, "ReaderPort::connect*" )
+	ScopedBlockMacro("ReaderPort::connect*" )
   
-	if( (port!=0) && isEnabled() && port->isEnabled() )
+	if( (port!=0) && isEnabled() && port->isEnabled() ){
 		if( isCompatible( *port ) ){
       disconnect();//only one connection at a time
       connect_impl( port );
       port->connect_impl( this );
       updatePort();
+      assert( isConnected() );
+      assert( port->isConnected() );
 			return true;
-    }
-	else return false;
+    }else{
+      Debug::error() << "uncompatible ports!\n";
+      return false;
+     }
+  }else{
+    Debug::error() << "Disabled port!\n";
+    return false;
+  }
 }
 
 
@@ -83,20 +91,20 @@ Node* ReaderPort::node() const
 
 utils::Tags ReaderPort::tags() const
 {
-	ScopedBlockMacro(scop,"ReaderPort::tags")
+	ScopedBlockMacro("ReaderPort::tags")
 	return node()->readerTags( index() );
 }
 
 bool ReaderPort::isCompatible(DataPort& output)	
 {
-	ScopedBlockMacro(scop, "ReaderPort::isCompatible");
-	return ( tags().hasOneOf(output.tags()+utils::Tags("#any") ) );
+	ScopedBlockMacro( "ReaderPort::isCompatible");
+  return ( tags().hasOneOf(output.tags()+utils::Tags("#any") ) );
 }
 
 
 bool ReaderPort::isCompatible(const kiwi::utils::Tags& tag)	
 {
-	ScopedBlockMacro(scop, "ReaderPort::isCompatible");
+	ScopedBlockMacro( "ReaderPort::isCompatible");
 	return ( tags().hasOneOf(tag + utils::Tags("#any") ) );
 }
 

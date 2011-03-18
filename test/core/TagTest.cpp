@@ -8,7 +8,7 @@ using namespace kiwi::utils;
 
 int TagTest()
 {
-	ScopedBlockMacro(__scop__, "kiwi::Test::Tags");
+	ScopedBlockMacro("kiwi::Test::Tags");
 
 	/* Test: Constructor with one tag.
 	 * Scenario: Construct a tag with one token and check that the string returned

@@ -39,7 +39,7 @@ public:
 // ---------------------------------------------------------------------
 	AddArraysFilter() : Filter(/*1*/)
 	{
-	ScopedBlockMacro(scp_block, "AddArraysFilter::constructor");
+	ScopedBlockMacro("AddArraysFilter::constructor");
 		kiwi::string sType( kiwi::string("array")
 			+ boost::lexical_cast<kiwi::string>(TDimension)
 			+"d_"+ types::str<TValueType>() );
@@ -60,7 +60,7 @@ public:
 // ---------------------------------------------------------------------
 	void process()
 	{
-	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+	ScopedBlockMacro("AddArraysFilter::process()");
 
 DEBUG_ONLY(		if(!isReady() )
 		{

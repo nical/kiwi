@@ -10,7 +10,7 @@ using namespace kiwi::image::cairo;
 
 int CairoImageContainerTest()
 {
-ScopedBlockMacro(__scp, "kiwi::cairo::ImageContainer Test" );
+ScopedBlockMacro("kiwi::cairo::ImageContainer Test" );
 	//typedef kiwi::generic::Point<kiwi::uint32_t,2> Point2u;
 	typedef RGBAImageContainer::CoordinateVector CoordinateVector;
 	typedef generic::ArrayContainer<kiwi::uint8_t,2> ChannelBuffer;

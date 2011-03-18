@@ -63,7 +63,7 @@ bool PlainTextContainer::saveToFile(const kiwi::string& path){
 
 Line& PlainTextContainer::line(kiwi::int32_t linePos)
 {
-//	ScopedBlockMacro(__scop, "PlainTextContainer::line" )
+//	ScopedBlockMacro( "PlainTextContainer::line" )
 	// out of bounds...
 	if(linePos >= nbLines() ) return *_lines.begin(); // TODO modulo
 	//general case
@@ -75,7 +75,7 @@ Line& PlainTextContainer::line(kiwi::int32_t linePos)
 
 const Line& PlainTextContainer::line(kiwi::int32_t lineNumber) const
 {
-//	ScopedBlockMacro(__scop, "PlainTextContainer::line" )
+//	ScopedBlockMacro( "PlainTextContainer::line" )
 	// out of bounds...
 	if(lineNumber >= nbLines() ) return *_lines.begin();
 	//general case
@@ -87,7 +87,7 @@ const Line& PlainTextContainer::line(kiwi::int32_t lineNumber) const
 void PlainTextContainer::insertLine(const PlainTextLine& toInsert
 	, kiwi::int32_t linePos )
 {
-//	ScopedBlockMacro(__scop, "PlainTextContainer::insertLine" )
+//	ScopedBlockMacro( "PlainTextContainer::insertLine" )
   if(nbLines() == 0) linePos = 0;
   if(linePos < 0){
     linePos = nbLines() + linePos;
@@ -146,7 +146,7 @@ void PlainTextContainer::init(std::istream& inputStream)
 
 void PlainTextContainer::removeLine(kiwi::int32_t linePos)
 {
-//	ScopedBlockMacro(__scop, "PlainTextContainer::removeLine" )
+//	ScopedBlockMacro( "PlainTextContainer::removeLine" )
 	// out of bounds...
 	if(linePos >= nbLines() ) return;
 	
@@ -161,7 +161,7 @@ void PlainTextContainer::removeLine(kiwi::int32_t linePos)
 
 void PlainTextContainer::removeLines(kiwi::uint32_t firstLine, kiwi::uint32_t lastLine)
 {
-//	ScopedBlockMacro(__scop, "PlainTextContainer::removeLines" )
+//	ScopedBlockMacro( "PlainTextContainer::removeLines" )
 //	Debug::print()<<firstLine << " -> " << lastLine << endl();
 	// out of bounds...
 	if(firstLine >= nbLines() ) return;

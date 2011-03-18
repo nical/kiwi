@@ -15,7 +15,7 @@ void PointTest()
 {
 	typedef kiwi::generic::Point<T,D> pointnd;
 
-	ScopedBlockMacro(__scop, "kiwi::TestPoint");
+	ScopedBlockMacro("kiwi::TestPoint");
 		Debug::print() << "init -----------------" << endl();
 	pointnd p1(1,5);
 	pointnd p2(42,4);

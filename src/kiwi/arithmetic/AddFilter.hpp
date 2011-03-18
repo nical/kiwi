@@ -22,7 +22,7 @@ public:
 	}
 
 	void process(){
-		ScopedBlockMacro( __scrop,"AddFilter::process()" );
+		ScopedBlockMacro("AddFilter::process()" );
 		if( _result ){
 			
 			typedef kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE> NumberContainer_T;

@@ -12,7 +12,7 @@ class testFilterA : public kiwi::core::Filter
 public:
 	void process()
 	{
-	ScopedBlockMacro(__scop,"testFilterA::process")
+	ScopedBlockMacro("testFilterA::process")
 	}
 };
 class testFilterB : public kiwi::core::Filter
@@ -20,7 +20,7 @@ class testFilterB : public kiwi::core::Filter
 public:
 	void process()
 	{
-	ScopedBlockMacro(__scop,"testFilterB::process")
+	ScopedBlockMacro("testFilterB::process")
 	}
 };
 class testFilterC : public kiwi::core::Filter
@@ -28,7 +28,7 @@ class testFilterC : public kiwi::core::Filter
 public:
 	void process()
 	{
-	ScopedBlockMacro(__scop,"testFilterC::process")
+	ScopedBlockMacro("testFilterC::process")
 	}
 };
 
@@ -38,7 +38,7 @@ kiwi::core::Node* __createC(){ return new testFilterC; }
 
 void FactoryTest()
 {
-ScopedBlockMacro(__scop, "kiwi::NodeFactory::Test")
+ScopedBlockMacro( "kiwi::NodeFactory::Test")
 	
 	kiwi::utils::NodeFactory factory;
 	

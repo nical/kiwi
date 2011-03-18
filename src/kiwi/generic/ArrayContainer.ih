@@ -69,7 +69,7 @@ ArrayContainer<T,D>::ArrayContainer(ValueType* dataPtr
 	, const StrideVector& stride )
 :_stride(stride)
 {
-	ScopedBlockMacro(scop,"ArrayContainer::constructor")
+	ScopedBlockMacro("ArrayContainer::constructor")
 	_deleteDataDestructor = false;
 	_spanSize = size;
 	_stride = stride;
@@ -115,7 +115,7 @@ ArrayIterator<T> ArrayContainer<T,D>::getBasicIterator() const
 template<typename T, unsigned int D>
 void ArrayContainer<T,D>::printState()
 {
-ScopedBlockMacro(__scop, kiwi::string("ArrayContainer<")
+ScopedBlockMacro(kiwi::string("ArrayContainer<")
 	+  types::str<T>() 
 	+ "," + boost::lexical_cast<string>( D )
 	+ ">::printState" )
@@ -151,7 +151,7 @@ template<typename T, unsigned int D>
 bool
 ArrayContainer<T,D>::resize(const CoordinateVector& newSize, bool keepData)
 {
-	ScopedBlockMacro(__scop, "ArrayContainer::resize")
+	ScopedBlockMacro("ArrayContainer::resize")
 	kiwi::uint32_t nTotalSize = 1;
 	assert( "resize" == "not supported yet"); 
 	for(unsigned i = 0; i < D; ++i)	nTotalSize*= newSize(i);

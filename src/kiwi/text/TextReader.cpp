@@ -43,7 +43,7 @@ TextReader::TextReader( TextContainerInterface& container
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-//ScopedBlockMacro(__scop, "TextReader::constructor")
+//ScopedBlockMacro( "TextReader::constructor")
 	init(container, firstLine, range);
 }
 
@@ -51,7 +51,7 @@ TextReader::TextReader( core::ReaderPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-//ScopedBlockMacro(__scop, "TextReader::constructor")
+//ScopedBlockMacro( "TextReader::constructor")
 /*	TextContainerInterface* tc = dynamic_cast<TextContainerInterface*>(
 		port.connectedOutput()->data() );
 */
@@ -73,7 +73,7 @@ TextReader::TextReader( core::DataPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-ScopedBlockMacro(__scop, "TextReader::constructor")
+ScopedBlockMacro( "TextReader::constructor")
 	TextContainerInterface* tc = port.safeDownCastContainer<TextContainerInterface>();
 
 	if( tc ) init( *tc, firstLine, range );

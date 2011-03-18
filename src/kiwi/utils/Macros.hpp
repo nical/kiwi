@@ -9,9 +9,9 @@
 
 
 #ifdef DEBUG
-#define ScopedBlockMacro(vname, message) kiwi::ScopedBlock vname(message);
+#define ScopedBlockMacro(message) kiwi::ScopedBlock kiwi_scop##__LINE__(message);
 #else
-#define ScopedBlockMacro(vname, message) 
+#define ScopedBlockMacro(message) 
 #endif
 
 

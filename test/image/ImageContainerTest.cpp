@@ -7,7 +7,7 @@ using namespace kiwi::image;
 
 int ImageContainerTest()
 {
-ScopedBlockMacro(__scp, "kiwi::ImageContainer::Test" );
+ScopedBlockMacro( "kiwi::ImageContainer::Test" );
 
 	typedef RGBAImageContainer<>::CoordinateVector CoordinateVector;
 	typedef RGBAImageContainer<>::ColorChannel ColorChannel;

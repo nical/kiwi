@@ -61,7 +61,7 @@ void ArrayContainerTest()
 int main()
 {
 	Debug::init(true,true);
-	ScopedBlockMacro(_scop, "ArrayContainer::Test")
+	ScopedBlockMacro( "ArrayContainer::Test")
 	
 	ArrayContainerTest< ArrayContainer<kiwi::int8_t, 1> >();
 	ArrayContainerTest< ArrayContainer<kiwi::int32_t, 2> >();

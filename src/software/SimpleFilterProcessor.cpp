@@ -63,7 +63,7 @@ SimpleFilterProcessor::SimpleFilterProcessor( const ArgumentProcessor& arguments
 
 int SimpleFilterProcessor::run()
 {
-  ScopedBlockMacro(__scop, "SimpleFilterProcessor::run")	
+  ScopedBlockMacro( "SimpleFilterProcessor::run")	
   kiwi::utils::NodeFactory factory;
   kiwi::text::UpperCaseFilter::registerToFactory(factory,"UpperCase");
   kiwi::text::TextToMorseFilter::registerToFactory(factory,"MorseCode");
@@ -125,7 +125,7 @@ void SimpleFilterProcessor::wrapInputs(
 	, core::Node& filter
 	, std::list<string>& inputs )
 {
-	ScopedBlockMacro(scop, "SimpleFilterProcessor::wrapInputs");
+	ScopedBlockMacro( "SimpleFilterProcessor::wrapInputs");
 
 	typedef std::list<string> ArgList;
 
@@ -164,8 +164,10 @@ void SimpleFilterProcessor::wrapInputs(
         kiwi::core::Node* pathNode = new kiwi::core::Node( path );
         pathNode->dataPort() >> loader->readerPort();
         assert( loader->readerPort().isConnected() );
-        loader->dataPort() >> filter.readerPort();
-        assert( filter.readerPort().isConnected() );
+        assert( loader->dataPort() >> filter.readerPort() );//passes
+        
+        assert( loader->dataPort().isConnected()  ); // fails 
+        assert( filter.readerPort().isConnected() ); // fails
         // TODO
       }
       
@@ -221,7 +223,7 @@ std::list< std::pair<kiwi::core::Node*,std::string> > SimpleFilterProcessor::wra
 	, core::Node& filter
 	, std::list<string>& outputs )
 {
-	ScopedBlockMacro(scop, "SimpleFilterProcessor::wrapOutputs");
+	ScopedBlockMacro( "SimpleFilterProcessor::wrapOutputs");
 	typedef std::list<string> ArgList;
   typedef std::list< std::pair<kiwi::core::Node*,std::string> > OutputNodeList;
   //DEBUG
@@ -235,7 +237,7 @@ std::list< std::pair<kiwi::core::Node*,std::string> > SimpleFilterProcessor::wra
   // for each argument
 	for( int i = 0; i < nbParams ; ++i )
 	{
-    ScopedBlockMacro(forscop, "for...");
+    ScopedBlockMacro("for...");
     
 		kiwi::string inputArgument = "cout";
 		if( i < outputs.size() )kiwi::string inputArgument = outputs.front();
@@ -244,14 +246,14 @@ std::list< std::pair<kiwi::core::Node*,std::string> > SimpleFilterProcessor::wra
     
 		if( inputArgument == kiwi::string("-x") ) 
 		{
-      ScopedBlockMacro(forscopx, "-x")
+      ScopedBlockMacro("-x")
 			outputs.pop_front();
 			// ignore argument and make no connections for the 
 			// corresponding input port
 			continue;
 
 		}else{
-      ScopedBlockMacro(forscopany, "any argument")
+      ScopedBlockMacro("any argument")
 			//Creation of a basic container, needed to apply the filter
 			kiwi::text::PlainTextContainer* basicInputContainer
 				= new kiwi::text::PlainTextContainer;

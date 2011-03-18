@@ -28,7 +28,7 @@ public: // -------------------------------------------------------------
 
 
 	LinkType* connectedInstance(kiwi::uint32_t index = 0) const {
-		ScopedBlockMacro(__scp, "Connector<mono>::connectedInstance")
+		ScopedBlockMacro( "Connector<mono>::connectedInstance")
 		//if(index == 0) return static_cast<LinkType*>(_link);
 		if(index == 0) return dynamic_cast<LinkType*>(_link);
 		Debug::error() << "invalid index" << endl();
@@ -63,7 +63,7 @@ public: // -------------------------------------------------------------
 
 
 	void _connect_impl( AbstractConnectorType* toConnect ){
-		ScopedBlockMacro(scop,"Connector<mono>::_connect_impl")
+		ScopedBlockMacro("Connector<mono>::_connect_impl")
 		_link = toConnect ;
 	}	
 

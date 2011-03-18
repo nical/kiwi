@@ -31,7 +31,7 @@ kiwi::uint32_t PlainTextAccessor::nbChars() const
 
 kiwi::uint32_t PlainTextAccessor::position(kiwi::int32_t lineNb) const
 {
-	//ScopedBlockMacro(__scop, "PlainTextAccessor::position")
+	//ScopedBlockMacro( "PlainTextAccessor::position")
 	//Debug::print() << "lineNb = " << lineNb << " nbLines = "
 	//	<< _nbLines <<  endl(); 
 	if( lineNb >= (int)_nbLines ){
@@ -45,7 +45,7 @@ kiwi::uint32_t PlainTextAccessor::position(kiwi::int32_t lineNb) const
 
 kiwi::uint32_t PlainTextAccessor::positionInsert(kiwi::int32_t lineNb) const
 {
-	//ScopedBlockMacro(__scop, "PlainTextAccessor::positionInsert")
+	//ScopedBlockMacro( "PlainTextAccessor::positionInsert")
 	//Debug::print() << "lineNb = " << lineNb << " nbLines = "
 	//	<< _nbLines <<  endl(); 
 	if( lineNb > (int)_nbLines ){

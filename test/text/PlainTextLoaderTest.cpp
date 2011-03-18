@@ -20,24 +20,29 @@ void plainTextLoaderTest(){
   assert( loader->nbDataPorts() == 1 );
 
   PlainTextContainer path;
-  PlainTextContainer result;
+  //PlainTextContainer result;
 
   path.insertLine(PlainTextLine("inputText.txt"), 0 );
 
   
   kiwi::core::Node pathNode( &path );
-  kiwi::core::Node resultNode( &result );
+  //kiwi::core::Node resultNode( &result );
   
   pathNode.dataPort(0) >> loader->readerPort(0);
-  resultNode.dataPort(0) >> loader->writerPort(0);
+  //resultNode.dataPort(0) >> loader->writerPort(0);
 
   assert( loader->readerPort(0).isConnected() );
-  assert( loader->writerPort(0).isConnected() );
+  //assert( loader->writerPort(0).isConnected() );
 
   loader->update(); //equivalent to process() for filters
 
-  for(kiwi::uint32_t i = 0; i < result.nbLines(); ++i ){
-    Debug::print() << result.line(i).str() << "\n";
+  PlainTextContainer* result
+    = loader->dataPort().safeDownCastContainer<PlainTextContainer>();
+
+  assert(result);
+
+  for(kiwi::uint32_t i = 0; i < result->nbLines(); ++i ){
+    Debug::print() << result->line(i).str() << "\n";
   }
   
 }
@@ -45,7 +50,7 @@ void plainTextLoaderTest(){
 
 
 int main(){
-  ScopedBlockMacro(scop,"PlainTextLoader::Test")
+  ScopedBlockMacro("PlainTextLoader::Test")
   plainTextLoaderTest();
   return 0;
 }

@@ -46,7 +46,7 @@ public:
 	// make the filter do whatever it is supposed to do. 
 	void process()
 	{
-    ScopedBlockMacro(scop,"UpperCaseFilter::process")
+    ScopedBlockMacro("UpperCaseFilter::process")
 
     PlainTextContainer* result = _writer->getContainer();
     const PlainTextContainer* input = _reader->getContainer();

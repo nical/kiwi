@@ -7,7 +7,7 @@ using namespace kiwi;
 
 void PointVectorContainerTest()
 {
-	ScopedBlockMacro(scop,"PointVectorContainer::Test")
+	ScopedBlockMacro("PointVectorContainer::Test")
 
 	typedef int ValueType;
 	typedef PointVectorContainer<ValueType,3> PointContainer;

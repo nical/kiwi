@@ -97,7 +97,7 @@ public:
 	 * @brief Returns the ArrayContainers that are part of this structured container.
 	 */ 
 	virtual core::Container* subContainer(kiwi::uint32_t index){
-		ScopedBlockMacro(scop, "StructuredArrayContainer::subContainer")
+		ScopedBlockMacro("StructuredArrayContainer::subContainer")
 		if(index < nbSubContainers() ){
 			return _subContainers[index];
 		}else{
@@ -128,7 +128,7 @@ protected:
 			, CoordinateVector perArraySize
 			, const kiwi::string& description )
 	{
-	ScopedBlockMacro(___, "StructuredArrayContainer::init")
+	ScopedBlockMacro( "StructuredArrayContainer::init")
 	_layout = 0;
 	Debug::print() << "perArraySize: " << perArraySize.toStr() << endl();
 	kiwi::uint32_t nbArrays = 1;
@@ -226,7 +226,7 @@ protected:
 
 	StrideVector size2stride(const CoordinateVector& size, kiwi::uint32_t nbInteleavedArrays = 1)
 	{
-		ScopedBlockMacro(____, "StructuredArrayContainer::size2stride")
+		ScopedBlockMacro( "StructuredArrayContainer::size2stride")
 		Debug::print() << "size: " << size.toStr() << endl();
 		Debug::print() << "nbInterleaved: " << nbInteleavedArrays << endl();
 		StrideVector result(nbInteleavedArrays);

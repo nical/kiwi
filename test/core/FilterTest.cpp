@@ -30,7 +30,7 @@ public:
 	}
 
 	void process(){
-		ScopedBlockMacro(scop, "DummyFilter::Process")
+		ScopedBlockMacro( "DummyFilter::Process")
 		
 		NumberContainer* ca
 			= _src1->getContainer();
@@ -61,12 +61,12 @@ public:
 
 int main()
 {
-	ScopedBlockMacro(scop, "Filter::Test")
+	ScopedBlockMacro( "Filter::Test")
 	DummyFilter filter;
 
 	Debug::foo();
 	
-	assert( !filter.dataPort(0).isEnabled() );
+	//assert( !filter.dataPort(0).isEnabled() );
 	assert( filter.readerPort(0).isEnabled() );
 	assert( filter.readerPort(1).isEnabled() );
 

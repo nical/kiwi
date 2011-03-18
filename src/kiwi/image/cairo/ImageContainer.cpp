@@ -14,7 +14,7 @@ kiwi::core::Node* newCairoImageNode(){
 
 RGBAImageContainer::RGBAImageContainer(const generic::Point<uint32_t, 2>& size) 
 {
-	ScopedBlockMacro(scop,"cairo::RGBAImageContainer::constructor")
+	ScopedBlockMacro("cairo::RGBAImageContainer::constructor")
 	//allocate the cairo surface	
 	_surface = cairo_image_surface_create(
 		CAIRO_FORMAT_ARGB32
@@ -35,7 +35,7 @@ RGBAImageContainer::RGBAImageContainer(
 	RGBA32Fragment* data
 	, const generic::Point<uint32_t, 2>& size ) 
 {
-	ScopedBlockMacro(scop,"cairo::RGBAImageContainer::constructor") 
+	ScopedBlockMacro("cairo::RGBAImageContainer::constructor") 
 	uint32_t stride = cairo_format_stride_for_width(
 		CAIRO_FORMAT_ARGB32
 		, size(0) );

@@ -36,7 +36,6 @@ namespace kiwi{
 namespace core{
 
 
-// ----------------------------------------------------------- InputPort
 
 WriterPort::WriterPort( Node* myNode )
 :	_enabled(true)
@@ -47,24 +46,24 @@ WriterPort::WriterPort( Node* myNode )
 	
 }
 
-bool WriterPort::connect(DataPort* port)
-{
-	ScopedBlockMacro( __scop, "ReaderPort::connect*" )
-	if( (port!=0) && isEnabled() && port->isEnabled() )
+bool WriterPort::connect(DataPort* port) {
+	ScopedBlockMacro( "ReaderPort::connect*" )
+	if( (port!=0) && isEnabled() && port->isEnabled() ){
 		if( isCompatible( *port ) ){
       disconnect();
       connect_impl( port );
       port->connect_impl( this );
       updatePort();
+      assert( isConnected() );
+      assert( port->isConnected() );
 			return true;
-    }
-	else return false;
+    }else return false;
+  }else return false;
 }
 
 
 void 
-WriterPort::bind(WriterPort& port)
-{
+WriterPort::bind(WriterPort& port) {
 //DEBUG_ONLY( Debug::print() << "input port rebinding" << endl(); )
 	port._linkedInputPorts.add( &port );
 	
@@ -72,36 +71,32 @@ WriterPort::bind(WriterPort& port)
 
 
 
-portIndex_t WriterPort::index() const 
-{
+portIndex_t WriterPort::index() const {
 	return _node->indexOf(*this);
 }
 
 
-Node* WriterPort::node() const 
-{
+Node* WriterPort::node() const {
 	return _node;
 }
 
 
 
-utils::Tags WriterPort::tags() const
-{
+utils::Tags WriterPort::tags() const {
 	return node()->writerTags( index() );
 }
 
-bool WriterPort::isCompatible(DataPort& output){ 
+bool WriterPort::isCompatible(DataPort& output) { 
 	return ( tags().hasOneOf(output.tags()+utils::Tags("#any") ) );
 }
 
-bool WriterPort::isConnected( DataPort* port) const{
+bool WriterPort::isConnected( DataPort* port) const {
   if(!port) return _connectedDataPort;
   return port == _connectedDataPort;
 }
 
 
-bool WriterPort::isEnabled() const 
-{
+bool WriterPort::isEnabled() const {
 	return _enabled;
 }
 
@@ -131,7 +126,7 @@ bool WriterPort::disconnect( DataPort* port ) {
 // ----------------------------------------------------------- protected
 
 
-void WriterPort::connect_impl( DataPort* port ){
+void WriterPort::connect_impl( DataPort* port ) {
   _connectedDataPort = port;
   if(_associatedDataPort){
     _associatedDataPort->bind( *port );

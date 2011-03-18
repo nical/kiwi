@@ -6,7 +6,7 @@ using namespace boost::gil;
 
 int main()
 {
-ScopedBlockMacro(scop,"gil::Test")
+ScopedBlockMacro("gil::Test")
   
   
 

@@ -79,7 +79,7 @@ public: // -------------------------------------------------------------
 	}
 
 	void _connect_impl( AbstractConnectorType* toConnect ){
-		ScopedBlockMacro(scop,"Connector<multi>::_connect_impl")
+		ScopedBlockMacro("Connector<multi>::_connect_impl")
 		_linkList.push_back( toConnect );
 	}
 

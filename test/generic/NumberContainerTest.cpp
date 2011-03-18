@@ -28,7 +28,7 @@ using namespace kiwi::generic;
 template<typename T>
 void NumberContainerTest()
 {
-	ScopedBlockMacro(__scop, "NumberContainer::Test<>")
+	ScopedBlockMacro("NumberContainer::Test<>")
 
 	// allocate two container nodes with one container each
 	Node* n1 = new Node( new NumberContainer<T>(10) );
@@ -85,7 +85,7 @@ void NumberContainerTest()
 int main()
 {
 	Debug::init();
-	ScopedBlockMacro(__scop, "NumberContainer::Test")
+	ScopedBlockMacro("NumberContainer::Test")
 	//NumberContainerTest<char>();
 	NumberContainerTest<float>(); // Right now only works with floats
 

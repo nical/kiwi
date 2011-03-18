@@ -7,7 +7,7 @@ using namespace kiwi::utils;
 int main()
 {
 kiwi::Debug::init(true,true);
-ScopedBlockMacro(__scop, "UnorderedArray::Test" )	
+ScopedBlockMacro( "UnorderedArray::Test" )	
 	UnorderedArray<int> a;
 
 	assert( a.size() == 0 );

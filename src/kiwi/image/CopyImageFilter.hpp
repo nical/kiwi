@@ -37,7 +37,7 @@ public:
 	}
 
 	void process(){
-		ScopedBlockMacro(scop,"CopyImageFilter::process")
+		ScopedBlockMacro("CopyImageFilter::process")
 		typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> ColorBuffer;
 		//typedef kiwi::generic::ArrayContainer<kiwi::uint8_t,2> ColorBuffer;
 		typedef kiwi::generic::Point<kiwi::uint32_t, 2> CoordinateVector;

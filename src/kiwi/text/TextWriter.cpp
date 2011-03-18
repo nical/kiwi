@@ -44,7 +44,7 @@ TextWriter::TextWriter( TextContainerInterface& container
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-	//ScopedBlockMacro(__scop, "TextWriter::constructor")
+	//ScopedBlockMacro( "TextWriter::constructor")
 	init(container, firstLine, range);
 }
 
@@ -52,7 +52,7 @@ TextWriter::TextWriter( core::WriterPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-	//ScopedBlockMacro(__scop, "TextWriter::constructor")
+	//ScopedBlockMacro( "TextWriter::constructor")
 	TextContainerInterface* tc = port.safeDownCastContainer<TextContainerInterface>();
 /* TODO !	
 	if( tc ) init( *tc, port.connectedOutput()->subPort()->index()
@@ -71,7 +71,7 @@ TextWriter::TextWriter( core::DataPort& port
 	, kiwi::uint32_t firstLine
 	, kiwi::uint32_t range )
 {
-	//ScopedBlockMacro(__scop, "TextWriter::constructor")
+	//ScopedBlockMacro( "TextWriter::constructor")
 	TextContainerInterface* tc = port.safeDownCastContainer<TextContainerInterface>() ;
 
 // TODO !	

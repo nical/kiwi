@@ -29,6 +29,6 @@ void RectangleContainerTest()
 
 int main()
 {
-	ScopedBlockMacro(scop,"RectangleContainer::Test");
+	ScopedBlockMacro("RectangleContainer::Test");
 	RectangleContainerTest();
 }

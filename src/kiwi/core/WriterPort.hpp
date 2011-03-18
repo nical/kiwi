@@ -109,7 +109,7 @@ public:
 	 */ 
 	template<class T>
 	T* safeDownCastContainer() const{
-	ScopedBlockMacro(scop,"WriterPort::safeDownCastContainer")
+	ScopedBlockMacro("WriterPort::safeDownCastContainer")
 		if( isConnected() ){
 			return connectedPort()->safeDownCastContainer<T>();	
 		}	else return 0;

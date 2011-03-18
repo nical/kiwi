@@ -200,7 +200,7 @@ void test3()
 
 int main()
 {
-ScopedBlockMacro(__, "StructuredArrayContainer::Test")
+ScopedBlockMacro("StructuredArrayContainer::Test")
 
 	test<kiwi::uint8_t,2>();
 	test<kiwi::float_t,1>();

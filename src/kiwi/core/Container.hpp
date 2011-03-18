@@ -48,10 +48,6 @@ public:
 	static const uint32_t UNAVAILABLE = 0;
   enum { READ = 1, WRITE = 2, READ_WRITE = READ | WRITE };
 
-  virtual bool loadFromFile(const kiwi::string& path) { return false; }
-  
-  virtual bool saveToFile(const kiwi::string& path) { return false; }
-  
   /**
    * @brief A method intended to prepare the container before access when needed.
    *
@@ -77,11 +73,6 @@ public:
   virtual void flush( int flags = READ_WRITE ) { }
 
 	/**
-	 * @brief Returns an estimation of the memory consumed by the container.
-	 */ 
-	virtual kiwi::uint32_t memoryEstimation() const { return UNAVAILABLE; }
-
-	/**
 	 * @brief Returns this container's tags used for runtime compatibility check.
 	 */ 
 	virtual kiwi::utils::Tags tags() const { return kiwi::utils::Tags(); }
@@ -105,9 +96,10 @@ public:
 	/**
 	 * @brief Register the Container to the ContainerFactory
 	 */
-	 virtual bool registerToFactory(const kiwi::utils::NodeFactory& factory) {return false;}
+	virtual bool registerToFactory(const kiwi::utils::NodeFactory& factory) {return false;}
 
 };
+
 
 
 

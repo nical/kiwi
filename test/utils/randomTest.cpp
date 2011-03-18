@@ -10,7 +10,7 @@ using namespace kiwi::utils;
 int main()
 {
 	Debug::init(true, true);
-	ScopedBlockMacro(__scop_, "random::Test");
+	ScopedBlockMacro( "random::Test");
 	float totf = 0;
 	int toti = 0;
 	for(int i = 0; i < 100; ++i)

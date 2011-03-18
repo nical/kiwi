@@ -45,7 +45,7 @@ public:
 	}
 
 	void process(){
-		ScopedBlockMacro(scop,"ChannelOffsetFilter::process")
+		ScopedBlockMacro("ChannelOffsetFilter::process")
 		typedef kiwi::generic::PointAccessContainerInterface<kiwi::uint8_t,2> ColorBuffer;
 		typedef kiwi::generic::PointVectorContainer<kiwi::uint32_t, 2> PointVectorContainer;
 		typedef kiwi::generic::Point<kiwi::uint32_t, 2> CoordinateVector;

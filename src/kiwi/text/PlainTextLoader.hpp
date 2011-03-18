@@ -36,7 +36,7 @@ public:
   }
 
   void process(){
-    ScopedBlockMacro(scop,"PlainTextLoader::process")
+    ScopedBlockMacro("PlainTextLoader::process")
     if( !_outputText->isConnected() ){
       _auxNode = new kiwi::core::Node( new PlainTextContainer );
       _auxNode->dataPort() >> writerPort();

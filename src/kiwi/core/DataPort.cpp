@@ -42,7 +42,7 @@ namespace core{
 DataPort::DataPort( Node* myNode, Container* data )
 	:_node(myNode)
 {
-	ScopedBlockMacro(scop,"DataPort::constructor")
+	ScopedBlockMacro("DataPort::constructor")
 	if(!data){
 		Debug::print() << "DataPort::constructor: warning: data = 0\n";
 	}
@@ -67,7 +67,7 @@ void DataPort::unBind()
 
 void DataPort::setContainer( Container* data )
 {
-	ScopedBlockMacro(scop, "DataPort::setContainer");
+	ScopedBlockMacro( "DataPort::setContainer");
   
 	DEBUG_ONLY( if(!data) Debug::print() << "warning: param data = 0\n"; )
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
@@ -131,7 +131,7 @@ bool DataPort::isCompatible(WriterPort& input)
 
 bool DataPort::connect(ReaderPort* inputPort)
 {
-	ScopedBlockMacro( scop, "DataPort::connect" )
+	ScopedBlockMacro( "DataPort::connect" )
   if( inputPort != 0 ){
     inputPort->connect( this );
   } else return false;
@@ -140,10 +140,9 @@ bool DataPort::connect(ReaderPort* inputPort)
 
 bool DataPort::connect(WriterPort* inputPort)
 {
-  ScopedBlockMacro( scop, "DataPort::connect" )
+  ScopedBlockMacro( "DataPort::connect" )
   if( inputPort != 0 ){
     inputPort->connect( this );
-    //inputPort->updatePort()
   }
   else return false;
 }
@@ -152,20 +151,19 @@ void DataPort::disconnectReader( ReaderPort* port ){
   if( isConnectedToReader( port ) ){
     port->disconnect( this );
   }
-	//ReaderConnector::disconnect( port );
 }
 
 void DataPort::disconnectWriter( WriterPort* port ){
   if( isConnectedToWriter( port ) ){
     port->disconnect(this);
   }
-	//WriterConnector::disconnect( port );
 }
 
 
-bool DataPort::isEnabled() const 
+bool DataPort::isEnabled() const //TODO
 { 
-	return _container != 0; 
+	//return _container != 0; 
+	return true; 
 }
 
 

@@ -8,7 +8,7 @@ using namespace kiwi::image;
 
 int main()
 {
-	ScopedBlockMacro(____, "MixedImageTests")
+	ScopedBlockMacro("MixedImageTests")
 	/*
 	typedef cairo::RGBAImageContainer::CoordinateVector CoordinateVector;
 	typedef cairo::RGBAImageContainer::ValueType ValueType;

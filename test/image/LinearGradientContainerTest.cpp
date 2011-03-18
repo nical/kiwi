@@ -45,7 +45,7 @@ void LinearGradientContainerTest(){
 
 int main()
 {
-	ScopedBlockMacro(scop,"LinearGradientContainer::Test")
+	ScopedBlockMacro("LinearGradientContainer::Test")
 	LinearGradientContainerTest();
 	return 0;
 }

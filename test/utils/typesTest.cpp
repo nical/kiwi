@@ -22,7 +22,7 @@ kiwi::string typesTest(){
 int main()
 {
 	Debug::init(true, true);	
-	ScopedBlockMacro(__scop, "types::Test")
+	ScopedBlockMacro( "types::Test")
 
 	assert(typesTest<char>() == kiwi::string("int8"));
 	assert(typesTest<unsigned char>()  == kiwi::string("uint8"));

@@ -123,7 +123,7 @@ MultiArrayContainer<T,D>::increments(portIndex_t index) const
 template<typename T, unsigned int D>
 T* const MultiArrayContainer<T,D>::getDataPointer(portIndex_t index) const
 {
-DEBUG_ONLY( ScopedBlockMacro(__scop, "ArrayConstIterator::getDataPointer") )
+DEBUG_ONLY( ScopedBlockMacro("ArrayConstIterator::getDataPointer") )
 
 	return _data[index];
 

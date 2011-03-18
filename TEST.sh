@@ -50,6 +50,7 @@ fi
 
 if [ "$utils" = "yes" ]
 then
+./utils/ClassInfoTest &&
 ./utils/ConnectorTest &&
 ./utils/UnorderedArrayTest &&
 ./utils/typesTest &&

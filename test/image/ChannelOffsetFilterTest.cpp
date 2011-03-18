@@ -62,6 +62,6 @@ void ChannelOffsetTest()
 
 int main()
 {
-	ScopedBlockMacro(scop, "ChannelOffsetFilter::Test")
+	ScopedBlockMacro("ChannelOffsetFilter::Test")
 	ChannelOffsetTest();
 }

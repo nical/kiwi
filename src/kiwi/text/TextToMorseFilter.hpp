@@ -48,7 +48,7 @@ public:
 	// make the filter do whatever it is supposed to do. 
 	void process()
 	{
-		ScopedBlockMacro(scop, "TextToMorseFilter::process")
+		ScopedBlockMacro( "TextToMorseFilter::process")
 
 
 		kiwi::string dotPattern(".");

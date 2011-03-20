@@ -2,6 +2,7 @@
 #ifndef KIWI_CORE_STATICNODE_HPP
 #define KIWI_CORE_STATICNODE_HPP
 
+#include <vector>
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/for_each.hpp>
 #include "kiwi/core/TReaderPort.hpp"
@@ -19,13 +20,19 @@ template<typename TLayout> class StaticNode;
 template<typename NodeType>
 struct PortNodeSetter{
   PortNodeSetter(NodeType* node) : _node(node){}
-  template<typename T> void operator()(const TReaderPort<T>& port) const {
-    const_cast< TReaderPort<T>& >(port).setNode(_node); }
-  template<typename T> void operator()(const TWriterPort<T>& port) const {
-    const_cast< TWriterPort<T>& >(port).setNode(_node); }
-  template<typename T> void operator()(const TDataPort<T>& port) const {
-    const_cast< TDataPort<T>& >(port).setNode(_node); }
+  template<typename T> void operator()(const T& port) const {
+    const_cast<T&>(port).setNode(_node); }
+  
   NodeType* _node;
+};
+
+template<typename PortType>
+struct PortDynamicAccessWrapper{
+  PortDynamicAccessWrapper(std::vector<PortType*>& array) : _array(&array){}
+  template<typename T> void operator()(const T& port) const {
+    _array->push_back( &const_cast<T&>(port) ); }
+  
+  std::vector<PortType*>* _array;
 };
 
 
@@ -37,18 +44,30 @@ struct StaticNodeLayout{
   typedef StaticNodeLayout<ReaderList,WriterList,DataList> Self;
   
   StaticNodeLayout(kiwi::core::StaticNode<Self>* node){
+  // set each port's associated Node to node  
     boost::fusion::for_each(
-      _readerPorts, PortNodeSetter<Node>(node) );
+      boost::fusion::as_vector(_readerPorts), PortNodeSetter<Node>(node) );
     boost::fusion::for_each(
       boost::fusion::as_vector(_writerPorts), PortNodeSetter<Node>(node) );
     boost::fusion::for_each(
       boost::fusion::as_vector(_dataPorts)  , PortNodeSetter<Node>(node) );
+  // then fill the vectors containing higher level access to ports
+    boost::fusion::for_each( boost::fusion::as_vector(_readerPorts)
+      , PortDynamicAccessWrapper<ReaderPort>(_dynReaderPorts) );
+    boost::fusion::for_each( boost::fusion::as_vector(_writerPorts)
+      , PortDynamicAccessWrapper<WriterPort>(_dynWriterPorts) );
+    boost::fusion::for_each( boost::fusion::as_vector(_dataPorts)
+      , PortDynamicAccessWrapper<DataPort>(_dynDataPorts) );
+      
   }
 
   ReaderList _readerPorts;
   WriterList _writerPorts;
   DataList   _dataPorts;
 
+  std::vector<ReaderPort*> _dynReaderPorts;
+  std::vector<WriterPort*> _dynWriterPorts;
+  std::vector<DataPort*> _dynDataPorts;
 };
 
 

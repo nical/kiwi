@@ -38,13 +38,14 @@ endif(DEFINED BUILD_KIWI_TEXT)
 SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 #	TestSuite
 #	core/NodeTest
+  core/StaticNodeTest
 	core/FactoryTest
 	core/TagTest
 	utils/ConnectorTest
 	utils/UnorderedArrayTest
 	utils/typesTest
 	utils/randomTest
-  utils/ClassInfoTest
+# utils/ClassInfoTest
 	core/FilterTest
 #	core/MetaFilterTest
 	generic/PointTest

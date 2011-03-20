@@ -150,9 +150,9 @@ protected:
 	void associateReaderPort(DataPort* reader){
 		_associatedDataPort = reader;
 	}
-	
+protected:
+  Node* _node;
 private:
-	Node* _node;
 	utils::UnorderedArray<WriterPort*> _linkedInputPorts;
 	DataPort* _associatedDataPort;
 	DataPort* _connectedDataPort;

@@ -40,7 +40,9 @@ namespace kiwi{
 namespace core{
 
 class ReaderPort;
+class WriterPort;
 class Node;
+class Container;
 
 /**
  * @brief Generic output port class for Reader and Writer interface.
@@ -224,9 +226,9 @@ protected:
    */ 
 	void unBind();
 
-	
+protected:
+	Node* _node;	
 private:
-	Node* _node;
 	Container* _container;
   //connections
   utils::UnorderedArray<ReaderPort*> _connectedReaders;

@@ -14,43 +14,23 @@ class TDataPort : public DataPort
 public:
   typedef TContainerType ContainerType;
 
+  TDataPort() : DataPort(0,0) {}
 
-  virtual Container* getAbstractContainer() const{
+  void setNode( kiwi::core::Node* const node){ _node = node; }
+
+  TDataPort(Node* myNode, ContainerType* data = 0)
+  : DataPort(myNode, data ){_tcontainer = data;}
+
+  virtual Container* getAbstractContainer() const {
     return _tcontainer;
   }
-  
-	/**
-	 * @brief returns true if this port is enabled.
-	 * 
-	 * A port as to be enabloed to be connected. 
-	 * By default a port is enabled.
-	 */ 
-	virtual bool isEnabled() const ;
 
-	/**
-	 * @brief returns true if this data port is connected to at least one reader port.
-	 */ 
-	virtual bool isConnectedToReader( ReaderPort* port = 0) const{
-    if(!port) return _connectedReaders.size() > 0;
-		return (_connectedReaders.find(port) != -1);
-	}
-
-	/**
-	 * @brief Returns true if this data port is connected to at least one writer port.
-	 */ 
-	virtual bool isConnectedToWriter( WriterPort* port = 0 ) const{
-    if(!port) return _connectedWriters.size() > 0;
-		return (_connectedWriters.find(port) != -1);
-	}
-
+  ContainerType* getContainer() const {
+    return _tcontainer;
+  }
 
 protected:
-/*
-  void connect_impl( ReaderPort* port );
-  void disconnect_impl( ReaderPort* port );
-  void connect_impl( WriterPort* port );
-  void disconnect_impl( WriterPort* port );
-*/
+
   ContainerType* _tcontainer;
 };
 

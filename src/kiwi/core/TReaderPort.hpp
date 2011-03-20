@@ -14,8 +14,10 @@ class TReaderPort : public ReaderPort
 public:
   typedef TContainerType ContainerType;
 
-  TReaderPort(kiwi::core::Node* myNode)
+  TReaderPort(kiwi::core::Node* myNode = 0)
   : ReaderPort(myNode), _tcontainer(0){}
+
+  void setNode( kiwi::core::Node* const node){ _node = node; }
 
   Container* getAbstractContainer() const{
     return _tcontainer;

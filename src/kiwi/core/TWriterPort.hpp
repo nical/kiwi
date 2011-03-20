@@ -14,8 +14,10 @@ class TWriterPort : public WriterPort
 public:
   typedef TContainerType ContainerType;
 
-  TWriterPort(kiwi::core::Node* myNode)
+  TWriterPort(kiwi::core::Node* myNode = 0)
   : WriterPort(myNode), _tcontainer(0){}
+
+  void setNode( kiwi::core::Node * const node){ _node = node; }
 
   ContainerType* getAbstractContainer() const{
     return _tcontainer;

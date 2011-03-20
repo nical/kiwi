@@ -44,13 +44,14 @@ if [ "$core" = "yes" ]
 then
 ./core/FactoryTest  &&
 #./core/NodeTest &&
+./core/StaticNodeTest &&
 ./core/FilterTest ||
 exit
 fi
 
 if [ "$utils" = "yes" ]
 then
-./utils/ClassInfoTest &&
+#./utils/ClassInfoTest &&
 ./utils/ConnectorTest &&
 ./utils/UnorderedArrayTest &&
 ./utils/typesTest &&

@@ -146,9 +146,10 @@ protected:
 	 * @see kiwi::core::setContainerPortEnabled
 	 */ 
 	void setEnabled(bool status);
-	
+
+protected:
+  Node* _node;
 private:
-	Node* _node;
 	utils::UnorderedArray<ReaderPort*> _linkedInputPorts;
   DataPort* _connectedDataPort;
 	bool _enabled;

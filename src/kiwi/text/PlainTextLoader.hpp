@@ -4,8 +4,8 @@
 
 #include "kiwi/core/Filter.hpp"
 #include "kiwi/core/DataPort.hpp"
-#include "kiwi/core/TReaderPort.hpp"
-#include "kiwi/core/TWriterPort.hpp"
+#include "kiwi/core/StaticReaderPort.hpp"
+#include "kiwi/core/StaticWriterPort.hpp"
 #include "kiwi/text/TextContainerInterface.hpp"
 #include "kiwi/text/PlainTextContainer.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
@@ -22,9 +22,9 @@ class PlainTextLoader : public kiwi::core::Filter
 public:
   PlainTextLoader(){
     addReaderPort(
-      _inputPath = new kiwi::core::TReaderPort<TextContainerInterface>(this));
+      _inputPath = new kiwi::core::StaticReaderPort<TextContainerInterface>(this));
     addWriterPort(
-      _outputText = new kiwi::core::TWriterPort<TextContainerInterface>(this));
+      _outputText = new kiwi::core::StaticWriterPort<TextContainerInterface>(this));
     addDataPort();
     associateWriterToDataPort( *_outputText, dataPort(0) );
 
@@ -82,8 +82,8 @@ public:
 
 protected:
 kiwi::core::Node* _auxNode;
-kiwi::core::TReaderPort<TextContainerInterface>* _inputPath;
-kiwi::core::TWriterPort<TextContainerInterface>* _outputText;
+kiwi::core::StaticReaderPort<TextContainerInterface>* _inputPath;
+kiwi::core::StaticWriterPort<TextContainerInterface>* _outputText;
 };
 
 

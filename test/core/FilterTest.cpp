@@ -2,8 +2,8 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Filter.hpp"
 #include "kiwi/generic/NumberContainer.hpp"
-#include "kiwi/core/TReaderPort.hpp"
-#include "kiwi/core/TWriterPort.hpp"
+#include "kiwi/core/StaticReaderPort.hpp"
+#include "kiwi/core/StaticWriterPort.hpp"
 
 #include <assert.h>
 
@@ -16,9 +16,9 @@ class DummyFilter : public kiwi::core::Filter
 {
 public:
 	DummyFilter(){
-    _src1 =  new TReaderPort<NumberContainer>(this); 
-    _src2 =  new TReaderPort<NumberContainer>(this);
-    _dest1 =  new TWriterPort<NumberContainer>(this);
+    _src1 =  new StaticReaderPort<NumberContainer>(this); 
+    _src2 =  new StaticReaderPort<NumberContainer>(this);
+    _dest1 =  new StaticWriterPort<NumberContainer>(this);
     
 		addReaderPort( _src1 );
 		addReaderPort( _src2 );
@@ -52,9 +52,9 @@ public:
 	}
 
   protected:
-    TReaderPort<NumberContainer>* _src1;
-    TReaderPort<NumberContainer>* _src2;
-    TWriterPort<NumberContainer>* _dest1;
+    StaticReaderPort<NumberContainer>* _src1;
+    StaticReaderPort<NumberContainer>* _src2;
+    StaticWriterPort<NumberContainer>* _dest1;
 };
 
 

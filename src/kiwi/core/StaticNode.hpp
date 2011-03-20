@@ -8,33 +8,28 @@
 #include <boost/fusion/include/for_each.hpp>
 #include <boost/fusion/include/mpl.hpp>
 
-#include "kiwi/core/TReaderPort.hpp"
-#include "kiwi/core/TWriterPort.hpp"
-#include "kiwi/core/TDataPort.hpp"
+#include "kiwi/core/StaticReaderPort.hpp"
+#include "kiwi/core/StaticWriterPort.hpp"
+#include "kiwi/core/StaticDataPort.hpp"
 #include "kiwi/core/Node.hpp"
 
 namespace kiwi{
 namespace core{
 
-class Node;
 
 template<typename TLayout> class StaticNode;
 
-template<typename NodeType>
-struct PortNodeSetter{
+template<typename NodeType> struct PortNodeSetter{
   PortNodeSetter(NodeType* node) : _node(node){}
   template<typename T> void operator()(const T& port) const {
     const_cast<T&>(port).setNode(_node); }
-  
   NodeType* _node;
 };
 
-template<typename PortType>
-struct PortDynamicAccessWrapper{
+template<typename PortType> struct PortDynamicAccessWrapper{
   PortDynamicAccessWrapper(std::vector<PortType*>& array) : _array(&array){}
   template<typename T> void operator()(const T& port) const {
     _array->push_back( &const_cast<T&>(port) ); }
-  
   std::vector<PortType*>* _array;
 };
 
@@ -82,13 +77,39 @@ public:
 
   StaticNode() : _layout(this){}
 
-  template<int i> struct staticReaderPort{
+  // to get the low level port types
+  template<int i> struct staticReaderPortInfo{
     typedef typename boost::mpl::at<typename Layout::ReaderList,boost::mpl::arg<i> >::type type;
   };
-  
-  template<int i> typename staticReaderPort<i>::type& getStaticReaderPort() {
+  template<int i> struct staticWriterPortInfo{
+    typedef typename boost::mpl::at<typename Layout::WriterList,boost::mpl::arg<i> >::type type;
+  };
+  template<int i> struct staticDataPortInfo{
+    typedef typename boost::mpl::at<typename Layout::DataList,boost::mpl::arg<i> >::type type;
+  };
+
+  // to get the low level port instances
+  template<int i> typename staticReaderPortInfo<i>::type& staticReaderPort() {
     return boost::fusion::at_c<i>(_layout._readerPorts);
   }
+  template<int i> typename staticWriterPortInfo<i>::type& staticWriterPort() {
+    return boost::fusion::at_c<i>(_layout._writerPorts);
+  }
+  template<int i> typename staticDataPortInfo<i>::type& staticDataPort() {
+    return boost::fusion::at_c<i>(_layout._dataPorts);
+  }
+
+  // to get the high level port instances
+  ReaderPort& readerPort(portIndex_t i = 0){
+    return _layout._dynReaderPorts[i];
+  }
+  WriterPort& writerPort(portIndex_t i = 0){
+    return _layout._dynWriterPorts[i];
+  }
+  DataPort& dataPort(portIndex_t i = 0){
+    return _layout._dynDataPorts[i];
+  }
+
 
 protected:
   Layout _layout;

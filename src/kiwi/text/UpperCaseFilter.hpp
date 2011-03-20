@@ -11,8 +11,8 @@
 #include "kiwi/utils/Factory.hpp"
 #include "kiwi/utils/TextOperations.hpp"
 #include "kiwi/core/DataPort.hpp"
-#include "kiwi/core/TReaderPort.hpp"
-#include "kiwi/core/TWriterPort.hpp"
+#include "kiwi/core/StaticReaderPort.hpp"
+#include "kiwi/core/StaticWriterPort.hpp"
 
 
 
@@ -30,8 +30,8 @@ public:
 	
 	UpperCaseFilter() : Filter()
 	{
-		addReaderPort( _reader = new kiwi::core::TReaderPort<PlainTextContainer>(this) );
-		addWriterPort( _writer = new kiwi::core::TWriterPort<PlainTextContainer>(this) );
+		addReaderPort( _reader = new kiwi::core::StaticReaderPort<PlainTextContainer>(this) );
+		addWriterPort( _writer = new kiwi::core::StaticWriterPort<PlainTextContainer>(this) );
 		addDataPort();
 	}
 	
@@ -92,8 +92,8 @@ public:
 	}
 
 protected:
-  kiwi::core::TReaderPort<PlainTextContainer>* _reader;
-  kiwi::core::TWriterPort<PlainTextContainer>* _writer;
+  kiwi::core::StaticReaderPort<PlainTextContainer>* _reader;
+  kiwi::core::StaticWriterPort<PlainTextContainer>* _writer;
 };
 
 

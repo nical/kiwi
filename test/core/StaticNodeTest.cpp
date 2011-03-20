@@ -16,14 +16,14 @@ class C : public kiwi::core::Container {};
 
 typedef kiwi::core::StaticNodeLayout<
     reader_list<
-      kiwi::core::TReaderPort<A>
-    , kiwi::core::TReaderPort<B>
-    , kiwi::core::TReaderPort<C> >
+      kiwi::core::StaticReaderPort<A>
+    , kiwi::core::StaticReaderPort<B>
+    , kiwi::core::StaticReaderPort<C> >
   , writer_list<
-      kiwi::core::TWriterPort<B>
-    , kiwi::core::TWriterPort<C> >
+      kiwi::core::StaticWriterPort<B>
+    , kiwi::core::StaticWriterPort<C> >
   , data_list<
-      kiwi::core::TDataPort<A> >
+      kiwi::core::StaticDataPort<A> >
 > myLayout;
 
 
@@ -36,6 +36,6 @@ int main(){
   typedef kiwi::core::StaticNode<myLayout> myNode;
   myNode node;
 
-  myNode::staticReaderPort<1>::type& aPort = node.getStaticReaderPort<1>();
+  myNode::staticReaderPortInfo<1>::type& aPort = node.staticReaderPort<1>();
 
 }

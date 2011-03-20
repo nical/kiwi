@@ -29,12 +29,12 @@ public:
 		// CanonicalFilter's constructor automatically adds one reader output port
 		// and one writer input port.
 		
-		addReaderPort( r0 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // input text
-		addReaderPort( r1 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // opt: dot pattern 
-		addReaderPort( r2 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // opt: long pattern
-		addReaderPort( r3 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // opt: space pattern
-		addReaderPort( r4 = new kiwi::core::TReaderPort<PlainTextContainer>(this) ); // opt: unknown char pattern
-    addWriterPort( w0 = new kiwi::core::TWriterPort<PlainTextContainer>(this) ); 
+		addReaderPort( r0 = new kiwi::core::StaticReaderPort<PlainTextContainer>(this) ); // input text
+		addReaderPort( r1 = new kiwi::core::StaticReaderPort<PlainTextContainer>(this) ); // opt: dot pattern 
+		addReaderPort( r2 = new kiwi::core::StaticReaderPort<PlainTextContainer>(this) ); // opt: long pattern
+		addReaderPort( r3 = new kiwi::core::StaticReaderPort<PlainTextContainer>(this) ); // opt: space pattern
+		addReaderPort( r4 = new kiwi::core::StaticReaderPort<PlainTextContainer>(this) ); // opt: unknown char pattern
+    addWriterPort( w0 = new kiwi::core::StaticWriterPort<PlainTextContainer>(this) ); 
 	}
 	
 	~TextToMorseFilter() 
@@ -184,12 +184,12 @@ public:
 	}
 
 protected:
-  kiwi::core::TReaderPort<PlainTextContainer>* r0;
-  kiwi::core::TReaderPort<PlainTextContainer>* r1;
-  kiwi::core::TReaderPort<PlainTextContainer>* r2;
-  kiwi::core::TReaderPort<PlainTextContainer>* r3;
-  kiwi::core::TReaderPort<PlainTextContainer>* r4;
-  kiwi::core::TWriterPort<PlainTextContainer>* w0;
+  kiwi::core::StaticReaderPort<PlainTextContainer>* r0;
+  kiwi::core::StaticReaderPort<PlainTextContainer>* r1;
+  kiwi::core::StaticReaderPort<PlainTextContainer>* r2;
+  kiwi::core::StaticReaderPort<PlainTextContainer>* r3;
+  kiwi::core::StaticReaderPort<PlainTextContainer>* r4;
+  kiwi::core::StaticWriterPort<PlainTextContainer>* w0;
 };
 
 

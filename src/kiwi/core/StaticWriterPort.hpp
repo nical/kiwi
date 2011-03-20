@@ -1,25 +1,25 @@
 
 #pragma once
-#ifndef KIWI_CORE_TEMPLATEREADERPORT_HPP
-#define KIWI_CORE_TEMPLATEREADERPORT_HPP
+#ifndef KIWI_CORE_TEMPLATEWRITERPORT_HPP
+#define KIWI_CORE_TEMPLATEWRITERPORT_HPP
 
-#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
 
 namespace kiwi{
 namespace core{
 
 template<class TContainerType>
-class TReaderPort : public ReaderPort
+class StaticWriterPort : public WriterPort
 {
 public:
   typedef TContainerType ContainerType;
 
-  TReaderPort(kiwi::core::Node* myNode = 0)
-  : ReaderPort(myNode), _tcontainer(0){}
+  StaticWriterPort(kiwi::core::Node* myNode = 0)
+  : WriterPort(myNode), _tcontainer(0){}
 
-  void setNode( kiwi::core::Node* const node){ _node = node; }
+  void setNode( kiwi::core::Node * const node){ _node = node; }
 
-  Container* getAbstractContainer() const{
+  ContainerType* getAbstractContainer() const{
     return _tcontainer;
   }
   
@@ -28,7 +28,7 @@ public:
   }
 
   void updatePort(){
-    ScopedBlockMacro("TReaderPort::updatePort")
+    ScopedBlockMacro("StaticWriterPort::updatePort")
     Debug::plop(); 
     if( isConnected() )
       _tcontainer = connectedPort()->safeDownCastContainer<ContainerType>();
@@ -37,7 +37,6 @@ public:
   }
 
   
-
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 

@@ -33,8 +33,9 @@ int main(){
 
   myLayout layout(0);
 
-  kiwi::core::StaticNode<myLayout> node;
+  typedef kiwi::core::StaticNode<myLayout> myNode;
+  myNode node;
 
-  
+  myNode::staticReaderPort<1>::type& aPort = node.getStaticReaderPort<1>();
 
 }

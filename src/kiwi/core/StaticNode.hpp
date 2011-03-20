@@ -84,8 +84,11 @@ public:
 
   template<int i> struct staticReaderPort{
     typedef typename boost::mpl::at<typename Layout::ReaderList,boost::mpl::arg<i> >::type type;
-    type& get() { return boost::fusion::at_c<i>(_layout._readerPorts); }
   };
+  
+  template<int i> typename staticReaderPort<i>::type& getStaticReaderPort() {
+    return boost::fusion::at_c<i>(_layout._readerPorts);
+  }
 
 protected:
   Layout _layout;

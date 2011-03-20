@@ -33,4 +33,8 @@ int main(){
 
   myLayout layout(0);
 
+  kiwi::core::StaticNode<myLayout> node;
+
+  
+
 }

@@ -3,8 +3,11 @@
 #define KIWI_CORE_STATICNODE_HPP
 
 #include <vector>
+#include <boost/fusion/include/sequence.hpp>
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/for_each.hpp>
+#include <boost/fusion/include/mpl.hpp>
+
 #include "kiwi/core/TReaderPort.hpp"
 #include "kiwi/core/TWriterPort.hpp"
 #include "kiwi/core/TDataPort.hpp"
@@ -76,6 +79,13 @@ class StaticNode : public kiwi::core::Node
 {
 public:
   typedef TLayout Layout;
+
+  StaticNode() : _layout(this){}
+
+  template<int i> struct staticReaderPort{
+    typedef typename boost::mpl::at<typename Layout::ReaderList,boost::mpl::arg<i> >::type type;
+    type& get() { return boost::fusion::at_c<i>(_layout._readerPorts); }
+  };
 
 protected:
   Layout _layout;

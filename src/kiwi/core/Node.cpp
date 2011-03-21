@@ -44,176 +44,21 @@ Node::Node()
 	_listener = 0;
 }
 
-Node::Node( const NodeInitializer& init)
-{
-	for( kiwi::uint32_t i = 0; i < init.nbContainers(); ++i){
-		addContainer(init.container(i)
-				, init.addReader(i)
-				, init.addWriter(i) );
-	}
-	_listener = 0;
-}
 
-Node::Node( Container* init)
-{
-	ScopedBlockMacro("Node::constructor(Container*)")
-	if(!init) Debug::print() << "warning: the init parameter is nil\n";
-	addContainer( init, true, 3 ); // 3 is READ | WRITE access
-	_listener = 0;
-}
 
 Node::~Node()
 {
-	while(nbReaderPorts())
-	{
-		delete _readerPorts[_readerPorts.size()-1];
-		removeReaderPort();
-	}
-	while(nbWriterPorts())
-	{
-		delete _writerPorts[_writerPorts.size()-1];
-		removeWriterPort();
-	}
-	while(nbDataPorts())
-	{
-		delete _dataPorts[_dataPorts.size()-1];
-		removeDataPort();
-	}
-}
-
-
-
-portIndex_t Node::addReaderPort(){
-  addReaderPort( new ReaderPort(this) );
-}
-
-portIndex_t Node::addReaderPort( ReaderPort* port )
-{
-  if(!port) return -1;
-	_readerPorts.push_back( port );
-	return _readerPorts.size()-1;
-}
-
-
-portIndex_t Node::addWriterPort(){
-  addWriterPort( new WriterPort(this) );
-}
-
-portIndex_t Node::addWriterPort( WriterPort* port )
-{
-  if(!port) return -1;
-	_writerPorts.push_back( port );
-	return _writerPorts.size()-1;
-}
-
-
-portIndex_t Node::addDataPort(Container* data, kiwi::uint8_t flags){
-  addDataPort( new DataPort(this, data) ); // TODO flags
-}
-
-portIndex_t Node::addDataPort( DataPort* port )
-{
-	ScopedBlockMacro("Node::addDataPort");
-	if(!port) return -1;
-	// TODO: flags
-	_dataPorts.push_back( port );
-	return _dataPorts.size()-1;
-}
-
-
-void Node::addContainer(Container* data, bool addPort, kiwi::uint8_t flags)
-{
-	ScopedBlockMacro("Node::addContainer" )
-	if(!data) Debug::error() << "warning: the init parameter is nil\n";
-	_containers.add(data);
-	if(addPort){
-		 addDataPort( new DataPort(this, data) ); // TODO flags
-	}else{
-		Debug::error() << "Node::addContainer: warning added a container without port\n";
-	}
-}
-
-
-
-void 
-Node::removeReaderPort()
-{
-	_readerPorts.pop_back();
-}
-
-
-void 
-Node::removeWriterPort()
-{
-	_writerPorts.pop_back();
-}
-
-void 
-Node::removeDataPort()
-{
-	_dataPorts.pop_back();
-}
-
-portIndex_t 
-Node::indexOf(const ReaderPort& port) const
-{
-//ScopedBlockMacro( "Node::indexOf");
-	for(unsigned i = 0; i < _readerPorts.size(); ++i)
-		if(_readerPorts[i] == &port)
-			return i;
-			
-	DEBUG_ONLY(
-		Debug::error() 
-			<< "Node::indexOf( ReaderPort& ) Error : unknown port !" 
-			<< endl();
-	)//DEBUG_ONLY
-		
-	//default value
-	return 0;	
-}
-
-portIndex_t 
-Node::indexOf(const WriterPort& port) const
-{
-//ScopedBlockMacro( "Node::indexOf");
-	for(unsigned i = 0; i < _writerPorts.size(); ++i)
-		if(_writerPorts[i] == &port)
-			return i;
-	DEBUG_ONLY(	
-		Debug::error() 
-			<< "Node::indexOf( WriterPort& ) Error : unknown port !" 
-			<< endl(); 
-	)//DEBUG_ONLY
 	
-	//default value
-	return 0;
 }
 
 
-portIndex_t 
-Node::indexOf(const DataPort& port) const
-{
-//ScopedBlockMacro( "Node::indexOf");
-	for(unsigned i = 0; i < _dataPorts.size(); ++i)
-		if( _dataPorts[i] == &port )
-			return i;
-			
-	DEBUG_ONLY(
-		Debug::error() 
-			<< "Node::indexOf( DataPort& ) Error : unknown port !" 
-			<< endl();
-	)//DEBUG_ONLY
-		
-	//default value
-	return 0;	
-}
 
 kiwi::string Node::strCommand( const kiwi::string& command )
 {
 	return kiwi::string("kiwi::unknown_command");
 }
 
-// ---------------------------------------------------------- Port types
+// ---------------------------------------------------------- Port tags
 
 
 kiwi::utils::Tags 
@@ -234,6 +79,57 @@ Node::dataTags(portIndex_t index) const
 {
 	return kiwi::utils::Tags("#any");
 }
+
+
+
+portIndex_t Node::indexOf(const ReaderPort& port) const {
+//ScopedBlockMacro( "DynamicNode::indexOf");
+	for(unsigned i = 0; i < nbReaderPorts(); ++i)
+		if( &readerPort(i) == &port)
+			return i;
+			
+	DEBUG_ONLY(
+		Debug::error() 
+			<< "DynamicNode::indexOf( ReaderPort& ) Error : unknown port !" 
+			<< endl();
+	)//DEBUG_ONLY
+		
+	//default value
+	return 0;	
+}
+
+portIndex_t Node::indexOf(const WriterPort& port) const {
+//ScopedBlockMacro( "DynamicNode::indexOf");
+	for(unsigned i = 0; i < nbWriterPorts(); ++i)
+		if( &writerPort(i) == &port )
+			return i;
+	DEBUG_ONLY(	
+		Debug::error() 
+			<< "DynamicNode::indexOf( WriterPort& ) Error : unknown port !" 
+			<< endl(); 
+	)//DEBUG_ONLY
+	
+	//default value
+	return 0;
+}
+
+
+portIndex_t Node::indexOf(const DataPort& port) const {
+//ScopedBlockMacro( "DynamicNode::indexOf");
+	for(unsigned i = 0; i < nbDataPorts(); ++i)
+		if( &dataPort(i) == &port )
+			return i;
+			
+	DEBUG_ONLY(
+		Debug::error() 
+			<< "DynamicNode::indexOf( DataPort& ) Error : unknown port !" 
+			<< endl();
+	)//DEBUG_ONLY
+		
+	//default value
+	return 0;	
+}
+
 
 // -------------------------------------------------------- Port binding
 
@@ -260,37 +156,6 @@ void Node::setDataPortContainer(DataPort& port, Container* container)
 }
 
 
-// ---------------------------------------------------- Node initializer
-
-
-void NodeInitializer::addContainer(Container* theContainer, bool hasReader, bool hasWriter)
-{
-	ContainerInit n;
-	n.container = theContainer;
-	n.addReader = hasReader;
-	n.addWriter = hasWriter;
-	_data.add( n );
-}
-
-kiwi::uint32_t NodeInitializer::nbContainers() const
-{
-	return _data.size();
-}
-
-Container* NodeInitializer::container(kiwi::uint32_t index) const
-{
-	return _data[index].container;
-}
-
-bool NodeInitializer::addReader(kiwi::uint32_t index) const
-{
-	return _data[index].addReader;
-}
-
-bool NodeInitializer::addWriter(kiwi::uint32_t index) const
-{
-	return _data[index].addWriter;
-}
 
 // ----------------------------------------------------------- Operators
 

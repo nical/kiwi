@@ -4,6 +4,7 @@
 #include "kiwi/core/Commons.hpp"
 
 #include "kiwi/core/Filter.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 
 #include "kiwi/generic/NumberContainer.hpp"
 #include "kiwi/arithmetic/AddFilter.hpp"
@@ -31,8 +32,8 @@ void NumberContainerTest()
 	ScopedBlockMacro("NumberContainer::Test<>")
 
 	// allocate two container nodes with one container each
-	Node* n1 = new Node( new NumberContainer<T>(10) );
-	Node* n2 = new Node( new NumberContainer<T>(5) );
+	Node* n1 = new DynamicNode( new NumberContainer<T>(10) );
+	Node* n2 = new DynamicNode( new NumberContainer<T>(5) );
 
 	Debug::print() << "assert: number of ports in the container\n";
 		// check that the number of ports is correct

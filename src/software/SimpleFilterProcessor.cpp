@@ -36,6 +36,7 @@
 #include "ArgumentProcessor.hpp"
 #include "kiwi/text/PlainTextLine.hpp"
 #include "kiwi/text/TextToMorseFilter.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/ReaderPort.hpp"
 #include "kiwi/core/WriterPort.hpp"
@@ -161,7 +162,7 @@ void SimpleFilterProcessor::wrapInputs(
       
       if( loader ){
         kiwi::text::PlainTextContainer* path = new kiwi::text::PlainTextContainer;
-        kiwi::core::Node* pathNode = new kiwi::core::Node( path );
+        kiwi::core::Node* pathNode = new kiwi::core::DynamicNode( path );
         pathNode->dataPort() >> loader->readerPort();
         assert( loader->readerPort().isConnected() );
         assert( loader->dataPort() >> filter.readerPort() );//passes
@@ -176,7 +177,7 @@ void SimpleFilterProcessor::wrapInputs(
 				= new kiwi::text::PlainTextContainer;
 			inputText->init(*file);
 			file->close();
-			kiwi::core::Node* inputTextNode = new kiwi::core::Node( inputText );
+			kiwi::core::Node* inputTextNode = new kiwi::core::DynamicNode( inputText );
 			inputTextNode->dataPort(0) >> filter.readerPort(i);
 			inputs.pop_front();
       assert( filter.readerPort(i).isConnected() );
@@ -204,7 +205,7 @@ void SimpleFilterProcessor::wrapInputs(
 			}
       Debug::plop();
 			//Connexion between the input container and the filter, then apply filter	
-			kiwi::core::Node* basicInputNode = new kiwi::core::Node(basicInputContainer);
+			kiwi::core::Node* basicInputNode = new kiwi::core::DynamicNode(basicInputContainer);
 			basicInputNode->dataPort(0) >> filter.readerPort(i);
 			if(!filter.readerPort(0).isConnected() ) 
 			std::cerr << "connection error"<<std::endl;
@@ -261,7 +262,7 @@ std::list< std::pair<kiwi::core::Node*,std::string> > SimpleFilterProcessor::wra
 			if( outputs.size() > 0 )outputs.pop_front();
       Debug::bar();
 			//Connexion between the input container and the filter, then apply filter	
-			kiwi::core::Node* basicInputNode = new kiwi::core::Node(basicInputContainer);
+			kiwi::core::Node* basicInputNode = new kiwi::core::DynamicNode(basicInputContainer);
 			basicInputNode->dataPort(0) >> filter.writerPort(i);
 
       assert( filter.writerPort(0).isConnected() );

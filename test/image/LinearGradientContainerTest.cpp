@@ -16,13 +16,13 @@ void LinearGradientContainerTest(){
 
 	//kiwi::core::Container* test = dynamic_cast<kiwi::core::Container>(gradient)
 
-	kiwi::core::Node gradient1Node( &gradient1 );
+	kiwi::core::DynamicNode gradient1Node( &gradient1 );
 
 	cairo::RGBAImageContainer inputData("inputImageTransp.png");
-	kiwi::core::Node inputDataNode(&inputData);
+	kiwi::core::DynamicNode inputDataNode(&inputData);
 		
 	cairo::RGBAImageContainer result("inputImageTransp.png" );	
-	kiwi::core::Node resultNode(&result);
+	kiwi::core::DynamicNode resultNode(&result);
 
 	CopyImageFilter filter;
 

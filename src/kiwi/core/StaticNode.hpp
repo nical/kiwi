@@ -76,6 +76,12 @@ public:
   typedef TLayout Layout;
 
   StaticNode() : _layout(this){}
+  static const portIndex_t NbReaderPorts
+    = boost::mpl::size<typename Layout::ReaderList>::value;
+  static const portIndex_t NbWriterPorts
+    = boost::mpl::size<typename Layout::WriterList>::value;
+  static const portIndex_t NbDataPorts
+    = boost::mpl::size<typename Layout::DataList>::value;
 
   // to get the low level port types
   template<int i> struct staticReaderPortInfo{
@@ -100,14 +106,26 @@ public:
   }
 
   // to get the high level port instances
-  ReaderPort& readerPort(portIndex_t i = 0){
-    return _layout._dynReaderPorts[i];
+  ReaderPort& readerPort(portIndex_t i = 0) const {
+    return *_layout._dynReaderPorts[i];
   }
-  WriterPort& writerPort(portIndex_t i = 0){
-    return _layout._dynWriterPorts[i];
+  WriterPort& writerPort(portIndex_t i = 0) const {
+    return *_layout._dynWriterPorts[i];
   }
-  DataPort& dataPort(portIndex_t i = 0){
-    return _layout._dynDataPorts[i];
+  DataPort& dataPort(portIndex_t i = 0) const {
+    return *_layout._dynDataPorts[i];
+  }
+  
+  kiwi::portIndex_t nbReaderPorts() const{
+    return NbReaderPorts;
+  }
+
+  kiwi::portIndex_t nbWriterPorts() const{
+    return NbWriterPorts;
+  }
+
+  kiwi::portIndex_t nbDataPorts() const{
+    return NbDataPorts;
   }
 
 

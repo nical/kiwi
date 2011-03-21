@@ -14,6 +14,7 @@ class A : public kiwi::core::Container {};
 class B : public kiwi::core::Container {};
 class C : public kiwi::core::Container {};
 
+
 typedef kiwi::core::StaticNodeLayout<
     reader_list<
       kiwi::core::StaticReaderPort<A>
@@ -37,5 +38,5 @@ int main(){
   myNode node;
 
   myNode::staticReaderPortInfo<1>::type& aPort = node.staticReaderPort<1>();
-
+  
 }

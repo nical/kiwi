@@ -59,7 +59,7 @@ private:
 namespace internals{
 	template<typename T>
 	kiwi::core::Node* __newNumberContainer(){
-		return new kiwi::core::Node( new NumberContainer<T>(0) );
+		return new kiwi::core::DynamicNode( new NumberContainer<T>(0) );
 	}
 }
 

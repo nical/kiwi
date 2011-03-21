@@ -27,16 +27,16 @@
 //      OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
- * @file Node.hpp
- * @brief Header file for the base class of every kiwi resources and filters.
+ * @file DynamicNode.hpp
+ * @brief Header file for the base class of runtime oriented Filters.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
  */
 
 #pragma once
-#ifndef KIWI_NODE_HPP
-#define KIWI_NODE_HPP
+#ifndef KIWI_DYNAMICNODE_HPP
+#define KIWI_DYNAMICNODE_HPP
 
-#include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Node.hpp"
 #include "kiwi/utils/Tags.hpp"
 
 #include "kiwi/core/NodeListener.hpp"
@@ -74,7 +74,7 @@ class NodeInitializer;
  * the connection system that represents Kiwi's main feature.
  *
  */ 
-class Node
+class DynamicNode : public kiwi::core::Node
 {
 public:
 //--------------------------------------------------------------------- typedefs
@@ -83,18 +83,24 @@ public:
 	/**
 	 * @brief Constructor.
 	 */ 
-	Node();
+	DynamicNode();
 	
-	Node( Container* init );
+	/**
+	 * @brief Constructor.
+	 *
+	 * Initializes the Node with one container, adding one reader output
+	 * port and one writer output port. (convenient shortcut)
+	 */ 
+	DynamicNode( Container* init );
 
 	/**
 	 * @brief Destructor.
 	 */ 
-	virtual ~Node();
+	virtual ~DynamicNode();
 
 // ------------------------------------------------------------- virtual methods
 
-	virtual bool update(int phase = 0){}
+	//virtual bool update(int phase = 0){}
 
 	/**
 	 * @brief Returns true if the Node is reday to update
@@ -116,7 +122,7 @@ public:
 	 * Note: If overloaded this method should call the parent
 	 * class's method in case it does override it, to keep its behaviour.
 	 */  
-	virtual void layoutChanged() { }
+	//virtual void layoutChanged() { }
 
 	/**
 	 * @brief Optionnal higher level interface. 
@@ -128,29 +134,12 @@ public:
 	 * The purpose of this is to enable a runtime resolved interface for
 	 * client-server usage. 
 	 */ 
-	virtual kiwi::string strCommand( const kiwi::string& command);
+	//virtual kiwi::string strCommand( const kiwi::string& command);
 	
 	
 // ------------------------------------------------------ pulic methods
 
-	/**
-	 * @brief Set this Node's Listener.
-	 *
-	 * A NodeListener is a class that can listen to a Node in order to
-	 * detect when the Node's layout changes (a port is created etc...).
-	 *
-	 * This feature is intended for user interfaces or controlers, so that
-	 * they can be aware of when a Node changes. 
-	 * kiwi::core::NodeListener is an abstract class that can be inherited
-	 * by any user-defined class.
-	 */ 
-	void setListener( NodeListener* listener ) { _listener = listener; }
-
-	/**
-	 * @brief Returns true if this Node has a Listener.
-	 */ 
-	bool hasListener() const { return _listener != 0; }
-
+	
 	/**
 	 * @brief Access to a port.
 	 *
@@ -158,7 +147,8 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */ 
-	virtual ReaderPort& readerPort(portIndex_t index = 0) const = 0;
+	ReaderPort& readerPort(portIndex_t index = 0) const
+		{assert(index < nbReaderPorts() ); return *_readerPorts[index];}
 	
 	
 	/**
@@ -169,7 +159,8 @@ public:
 	 * @param index The index of the port.
 	 */
    
-	virtual WriterPort& writerPort(portIndex_t index = 0) const = 0;
+	WriterPort& writerPort(portIndex_t index = 0) const
+		{assert(index < nbWriterPorts() );return *_writerPorts[index];}
 	/**
 	 * @brief Access to a port.
 	 *
@@ -177,20 +168,21 @@ public:
 	 *
 	 * @param index The index of the port.
 	 */
-	virtual DataPort& dataPort(portIndex_t index = 0) const = 0;
+	DataPort& dataPort(portIndex_t index = 0) const
+		{assert(index < nbDataPorts() );return *_dataPorts[index];}
 
 	/**
 	 * @brief Returns the amount of data ports of this Node.
 	 */ 
-	virtual kiwi::portIndex_t nbDataPorts() const = 0;
+	inline kiwi::portIndex_t nbDataPorts() const {return _dataPorts.size();}
 	/**
 	 * @brief Returns the amount of Reader inputs of this Node.
 	 */
-	virtual kiwi::portIndex_t nbReaderPorts() const = 0;
+	inline kiwi::portIndex_t nbReaderPorts() const {return _readerPorts.size();}
 	/**
 	 * @brief Returns the amount of Writer inputs of this Node.
 	 */
-	virtual kiwi::portIndex_t nbWriterPorts() const = 0;
+	inline kiwi::portIndex_t nbWriterPorts() const {return _writerPorts.size();}
 	
 	
 
@@ -236,111 +228,77 @@ public:
 	
 // --------------------------------------------------- protected methods	
 protected:
+	/**
+	 * @brief Adds an input port to the Reader interface.
+	 *
+	 * This is meant to be used in the initialisation phase of a Node/Filter.
+	 * 
+	 * @return the index of the added port.
+	 */ 
+	portIndex_t addReaderPort( ReaderPort* port );
+  
+	portIndex_t addReaderPort();
 
+	/**
+	 * @brief Remove an input port from this Filter's Reader interface.
+	 *
+	 * Removes The last input port (the one oh highest index) from this Filter's Reader interface.
+	 */
+	void removeReaderPort();
+	/**
+	 * @brief Adds an output port to the Reader interface.
+	 *
+	 * This is meant to be used in the initialisation phase of a Node/Filter.
+	 * 
+	 * @return the index of the added port.
+	 */ 
+	portIndex_t addDataPort( DataPort* port );
+
+  portIndex_t addDataPort(Container* data = 0, kiwi::uint8_t flags = 3);
+
+
+  /**
+	 * @brief Remove an output port from this Filter's Reader interface.
+	 *
+	 * Removes The last output port (the one oh highest index) from this Filter's Reader interface.
+	 */
+	void removeDataPort();
+	/**
+	 * @brief Adds an input port to the Writer interface.
+	 *
+	 * This is meant to be used in the initialisation phase of a Node/Filter.
+	 * 
+	 * @return the index of the added port.
+	 */ 
+	portIndex_t addWriterPort( WriterPort* port );
+
+  
+	portIndex_t addWriterPort();
+
+  
+	/**
+	 * @brief Remove an input port from this Filter's Writer interface.
+	 *
+	 * Removes The last input port (the one oh highest index) from this Filter's Reader interface.
+	 */
+	void removeWriterPort();
+	
+	
 
 	void addContainer(Container* data, bool addPort = true, kiwi::uint8_t flags = 3);
-
-// ------------------------------------------------------
-	
-
-	void setDataPortContainer(DataPort& port, Container* container);
-	
-	
-	/**
-	 * @brief Redirect a port to the port another Node's port.
-	 * 
-	 * bindPort allows a Node to have ports that are in fact pointing 
-	 * to another Node instead of itself.
-	 * Each port contains knows both the Node that contains it and also
-	 * the Node that actuly contains the data.
-	 * This distinction permits to have for instance a Node that 
-	 * contains other Nodes and redirects its ports to the one of the
-	 * contained Node (for exemple Pipelines). 
-	 * Another use of this method is for any Filter that writes in a 
-	 * Node to provide the output readers of the Node in its own
-	 * outputs.
-	 * 
-	 * @param myPort This class's port that has to be redirected to another Node's port.
-	 * @param toBind The other Node's port.
-	 */
-	void bindPort(DataPort& myPort, DataPort& toBind);
-	
-	/**
-	 * @brief Redirect a port to the port another Node's port.
-	 * 
-	 * bindPort allows a Node to have ports that are in fact pointing 
-	 * to another Node instead of itself.
-	 * Each port contains knows both the Node that contains it and also
-	 * the Node that actuly contains the data.
-	 * This distinction permits to have for instance a Node that 
-	 * contains other Nodes and redirects its ports to the one of the
-	 * contained Node (for exemple Pipelines). 
-	 * Another use of this method is for any Filter that writes in a 
-	 * Node to provide the output readers of the Node in its own
-	 * outputs.
-	 * 
-	 * @param myPort This class's port that has to be redirected to another Node's port.
-	 * @param toBind The other Node's port.
-	 */ 
-	void bindPort(ReaderPort& myPort, ReaderPort& toBind);
-
-	/**
-	 * @brief Redirect a port to the port another Node's port.
-	 * 
-	 * bindPort allows a Node to have ports that are in fact pointing 
-	 * to another Node instead of itself.
-	 * Each port contains knows both the Node that contains it and also
-	 * the Node that actuly contains the data.
-	 * This distinction permits to have for instance a Node that 
-	 * contains other Nodes and redirects its ports to the one of the
-	 * contained Node (for exemple Pipelines). 
-	 * Another use of this method is for any Filter that writes in a 
-	 * Node to provide the output readers of the Node in its own
-	 * outputs.
-	 * 
-	 * @param myPort This class's port that has to be redirected to another Node's port.
-	 * @param toBind The other Node's port.
-	 */ 
-	void bindPort(WriterPort& myPort, WriterPort& toBind);
-
-
-	
 
 // ----------------------------------------------------- private members
 private:
 
+	utils::UnorderedArray<Container*> _containers;	
+	// The input/output ports
+	std::vector<ReaderPort*> _readerPorts;
+	std::vector<WriterPort*> _writerPorts;
+	std::vector<DataPort*> _dataPorts;
+	
 	NodeListener* _listener;
 
-}; // class Node;
-
-
-
-
-
-// ----------------------------------------------------------- Operators
-/**
- *	@brief Operator for connections between Node.
- * 
- * The operator to connect Nodes port in an elegant way.
- * Corresonds to InputPort::connect(OutputPort<SlotType>& outputPort);
- *
- * exemple:
- * 	// connects myNode1's first OutputPort to myNode2's second InputPort
- * 	myNode1.dataPort(0) >> myNode2.readerPort(1);
- */ 
-bool operator >> (DataPort& output, ReaderPort& input );
-
-/**
- *	@brief Operator for connections between Node.
- * 
- * The operator to connect Nodes port in an elegant way.
- * Corresonds to InputPort::connect(OutputPort<SlotType>& outputPort);
- *
- * exemple:
- * 	// connects myNode1's first OutputPort to myNode2's second InputPort
- * 	myNode1.dataPort(0) >> myNode2.readerPort(1);
- */ 
-bool operator>>(DataPort& output, WriterPort& input );
+}; // class DynamicNode;
 
 
 }//namespace core

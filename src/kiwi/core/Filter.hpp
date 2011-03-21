@@ -40,7 +40,7 @@
 #ifndef KIWI_FILTER_HPP
 #define KIWI_FILTER_HPP
 
-#include "kiwi/core/Node.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/ReaderPort.hpp"
 #include "kiwi/core/WriterPort.hpp"
@@ -59,7 +59,7 @@ namespace core{
  * A minimal filter only need to override the process() method to perform its task
  * and the constructor to setup the ports.  
  */ 
-class Filter : public Node
+class Filter : public DynamicNode
 {
 public:
 	/**
@@ -87,7 +87,7 @@ public:
 	}
 	
 
-	Filter():Node()
+	Filter():DynamicNode()
 	{
 	}
 

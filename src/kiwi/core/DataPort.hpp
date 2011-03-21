@@ -32,7 +32,7 @@
 #include <list>
 #include "kiwi/utils/Tags.hpp"
 #include "kiwi/utils/UnorderedArray.hpp"
-
+#include "kiwi/core/Container.hpp"
 
 
 
@@ -42,7 +42,7 @@ namespace core{
 class ReaderPort;
 class WriterPort;
 class Node;
-class Container;
+
 
 /**
  * @brief Generic output port class for Reader and Writer interface.

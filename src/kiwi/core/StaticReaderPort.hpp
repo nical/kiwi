@@ -19,7 +19,7 @@ public:
 
   void setNode( kiwi::core::Node* const node){ _node = node; }
 
-  Container* getAbstractContainer() const{
+  const Container* getAbstractContainer() const{
     return _tcontainer;
   }
   

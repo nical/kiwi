@@ -3,6 +3,7 @@
 #define KIWI_TEXT_PLAINTEXTLOADER_HPP
 
 #include "kiwi/core/Filter.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/StaticReaderPort.hpp"
 #include "kiwi/core/StaticWriterPort.hpp"
@@ -38,7 +39,7 @@ public:
   void process(){
     ScopedBlockMacro("PlainTextLoader::process")
     if( !_outputText->isConnected() ){
-      _auxNode = new kiwi::core::Node( new PlainTextContainer );
+      _auxNode = new kiwi::core::DynamicNode( new PlainTextContainer );
       _auxNode->dataPort() >> writerPort();
       assert( _outputText->isConnected() );
     }

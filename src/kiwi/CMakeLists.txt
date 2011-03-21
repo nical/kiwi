@@ -33,6 +33,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     utils/Tags.cpp
 		utils/random.cpp
 		core/Node.cpp
+		core/DynamicNode.cpp
 		core/ReaderPort.cpp
 		core/WriterPort.cpp
 		core/DataPort.cpp

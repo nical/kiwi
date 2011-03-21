@@ -74,9 +74,9 @@ int main()
 	NumberContainer B(6);
 	NumberContainer R(0);
 
-	kiwi::core::Node nA( &A );
-	kiwi::core::Node nB( &B );
-	kiwi::core::Node nR( &R );
+	kiwi::core::DynamicNode nA( &A );
+	kiwi::core::DynamicNode nB( &B );
+	kiwi::core::DynamicNode nR( &R );
 
 	assert( nA.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );
 	assert( nB.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );

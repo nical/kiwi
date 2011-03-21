@@ -15,7 +15,7 @@ void CopyImageTest()
 	typedef cairo::RGBAImageContainer::CoordinateVector CoordinateVector; 
 
 	cairo::RGBAImageContainer inputData("inputImageTransp.png");
-	kiwi::core::Node inputDataNode(&inputData);
+	kiwi::core::DynamicNode inputDataNode(&inputData);
 
 	assert(inputDataNode.dataPort(0).isComposite());
 	assert(inputDataNode.dataPort(0).nbSubPorts() == 4);
@@ -51,7 +51,7 @@ void CopyImageTest()
 	cairo::RGBAImageContainer result(
 		CoordinateVector( inputData.width(), inputData.height() ) );
 		
-	kiwi::core::Node resultNode(&result);
+	kiwi::core::DynamicNode resultNode(&result);
 
 	resultNode.dataPort(0) >> filter.writerPort(0);
 

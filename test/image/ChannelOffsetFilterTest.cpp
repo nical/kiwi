@@ -18,20 +18,20 @@ void ChannelOffsetTest()
 	
 	GradientContainer
 		gradient( CoordinateVector(0,0), 0,  CoordinateVector(10,600), 255 );
-	kiwi::core::Node gradientNode(&gradient);
+	kiwi::core::DynamicNode gradientNode(&gradient);
 
 	cairo::RGBAImageContainer inputData("inputImageTransp.png");
-	kiwi::core::Node inputDataNode(&inputData);
+	kiwi::core::DynamicNode inputDataNode(&inputData);
 
 	kiwi::generic::PointVectorContainer<kiwi::uint32_t, 2> displacement1(CoordinateVector(100,10));
-	kiwi::core::Node displacement1Node(&displacement1);
+	kiwi::core::DynamicNode displacement1Node(&displacement1);
 
 	kiwi::generic::RectangleContainer<kiwi::int32_t,2> region(
 		CoordinateVector(0,100),CoordinateVector(600,400) );
-	kiwi::core::Node regionNode(&region);
+	kiwi::core::DynamicNode regionNode(&region);
 		
 	cairo::RGBAImageContainer result("inputImageTransp.png" );	
-	kiwi::core::Node resultNode(&result);
+	kiwi::core::DynamicNode resultNode(&result);
 
 	kiwi::image::ChannelOffsetFilter f1;
 

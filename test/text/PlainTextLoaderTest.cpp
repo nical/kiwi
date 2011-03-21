@@ -25,7 +25,7 @@ void plainTextLoaderTest(){
   path.insertLine(PlainTextLine("inputText.txt"), 0 );
 
   
-  kiwi::core::Node pathNode( &path );
+  kiwi::core::DynamicNode pathNode( &path );
   //kiwi::core::Node resultNode( &result );
   
   pathNode.dataPort(0) >> loader->readerPort(0);

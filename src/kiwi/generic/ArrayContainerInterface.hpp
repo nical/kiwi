@@ -54,7 +54,7 @@ template <typename TValueType, unsigned int TDimension>
 class ArrayContainerInterface : public PointAccessContainerInterface<TValueType, TDimension>
 {
 public:
-	ValueTypeMacro( TValueType );
+	typedef TValueType ValueType;
 	typedef ArrayReader<TValueType,TDimension> ReaderType;
 	typedef ArrayWriter<TValueType,TDimension> WriterType;
 	typedef Point<unsigned int, TDimension> CoordinateVector;

@@ -5,9 +5,7 @@
 
 
 #include "kiwi/generic/MultiArrayContainer.hpp"
-#include "kiwi/generic/ArrayReader.hpp"
-#include "kiwi/generic/ArrayWriter.hpp"
-#include "kiwi/generic/ArrayIterator.hpp"
+#include "kiwi/core/Filter.hpp"
 
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/core.hpp"

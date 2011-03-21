@@ -141,9 +141,9 @@ protected:
 	 * @brief Used internally by kiwi::core::Node to enable/disable ports.
 	 * 
 	 * @see kiwi::core::setReaderPortEnabled
-	 * @see kiwi::core::setContainerPortEnabled
+	 * @see kiwi::core::setAbstractContainerPortEnabled
 	 * @see kiwi::core::setWriterPortEnabled
-	 * @see kiwi::core::setContainerPortEnabled
+	 * @see kiwi::core::setAbstractContainerPortEnabled
 	 */ 
 	void setEnabled(bool status);
 

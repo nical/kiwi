@@ -152,10 +152,12 @@ void Node::bindPort(WriterPort& myPort, WriterPort& toBind)
 
 void Node::setDataPortContainer(DataPort& port, Container* container)
 {
-	port.setContainer( container );
+	port.setAbstractContainer( container );
 }
 
-
+void Node::associateWriterToDataPort(WriterPort& writer, DataPort& reader) const {
+  writer.associateReaderPort( &reader );
+}
 
 // ----------------------------------------------------------- Operators
 

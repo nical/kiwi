@@ -13,7 +13,6 @@ class StaticDataPort : public DataPort
 {
 public:
   typedef TContainerType ContainerType;
-  //static const int Flag; 
   enum { READ = 1, WRITE = 2, READ_WRITE = READ || WRITE, Flag = TFlag };
 
   StaticDataPort() : DataPort(0) {}
@@ -21,30 +20,34 @@ public:
   void setNode( kiwi::core::Node* const node){ _node = node; }
 
   StaticDataPort(Node* myNode, ContainerType* data = 0)
-  : DataPort( myNode ){_tcontainer = data;}
+  : DataPort( myNode ){_container = data;}
 
   virtual Container* getAbstractContainer() const {
-    return _tcontainer;
+    return _container;
   }
 
   ContainerType* getContainer() const {
-    return _tcontainer;
+    return _container;
   }
 
   int flag() const { return TFlag; }
 
   virtual bool isEmpty() const{
-    return _tcontainer;
+    return _container;
   }
 
-  virtual bool setContainer( Container* data ){
-    _tcontainer = dynamic_cast<ContainerType*>(data);
-    return _tcontainer != 0;
+  virtual bool setAbstractContainer( Container* data ){
+    _container = dynamic_cast<ContainerType*>(data);
+    return _container != 0;
+  }
+  
+  virtual bool setContainer( ContainerType* data ){
+    _container = data;
   }
 
 protected:
 
-  ContainerType* _tcontainer;
+  ContainerType* _container;
 };
 
 

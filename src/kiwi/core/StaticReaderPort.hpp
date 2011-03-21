@@ -15,25 +15,25 @@ public:
   typedef TContainerType ContainerType;
 
   StaticReaderPort(kiwi::core::Node* myNode = 0)
-  : ReaderPort(myNode), _tcontainer(0){}
+  : ReaderPort(myNode), _container(0){}
 
   void setNode( kiwi::core::Node* const node){ _node = node; }
 
   const Container* getAbstractContainer() const{
-    return _tcontainer;
+    return _container;
   }
   
   ContainerType* getContainer() const{
-    return _tcontainer;
+    return _container;
   }
 
   void updatePort(){
     ScopedBlockMacro("StaticReaderPort::updatePort")
     Debug::plop(); 
     if( isConnected() )
-      _tcontainer = connectedPort()->safeDownCastContainer<ContainerType>();
+      _container = connectedPort()->safeDownCastContainer<ContainerType>();
     DEBUG_ONLY( else Debug::error() << "this port is not connected\n"; )
-    DEBUG_ONLY( if(!_tcontainer) Debug::error() << "update failed\n"; )
+    DEBUG_ONLY( if(!_container) Debug::error() << "update failed\n"; )
   }
 
   
@@ -58,7 +58,7 @@ protected:
   //void connect_impl( DataPort* port );
   //void disconnect_impl( DataPort* port );
 
-  ContainerType* _tcontainer;
+  ContainerType* _container;
 };
 
 

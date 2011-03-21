@@ -46,7 +46,7 @@ DataPort::DataPort( Node* myNode, Container* data )
 	if(!data){
 		Debug::print() << "DataPort::constructor: warning: data = 0\n";
 	}
-	setContainer(data);
+	setAbstractContainer(data);
 }
 */
 DataPort::DataPort( Node* myNode )
@@ -72,13 +72,13 @@ void DataPort::unBind()
 }
 
 /* TODO!! transpose the subport handling from here to StaticDataPort
-void DataPort::setContainer( Container* data )
+void DataPort::setAbstractContainer( Container* data )
 {
-	ScopedBlockMacro( "DataPort::setContainer");
+	ScopedBlockMacro( "DataPort::setAbstractContainer");
   
 	DEBUG_ONLY( if(!data) Debug::print() << "warning: param data = 0\n"; )
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
-		_linkedOutputPorts[i]->setContainer( data );
+		_linkedOutputPorts[i]->setAbstractContainer( data );
 	_container = data;
   
 	// set the sub-ports if needed

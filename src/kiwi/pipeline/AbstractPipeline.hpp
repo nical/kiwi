@@ -46,10 +46,10 @@ namespace core
  * @brief Interface of te meta-Filter classes.
  * 
  */ 	
-class AbstractPipeline : public Filter
+class AbstractPipeline : public DynamicNode
 {
 public:
-	AbstractPipeline() : Filter() {}
+	AbstractPipeline() : DynamicNode() {}
 
 	/**
 	 * @brief Returns true if the Node has been added to this Pipeline.

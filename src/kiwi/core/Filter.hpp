@@ -45,8 +45,12 @@
 #include "kiwi/core/ReaderPort.hpp"
 #include "kiwi/core/WriterPort.hpp"
 
+#ifdef KIWI_DEPRECATED_FILTER
+
 namespace kiwi{
 namespace core{
+
+
 
 /** 
  * @brief Base class for the filter nodes.
@@ -126,5 +130,6 @@ private:
 }//namespace core
 }//namespace kiwi
 
+#endif
 
 #endif

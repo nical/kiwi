@@ -51,52 +51,7 @@ namespace core{
 class SimplePipeline : public AbstractPipeline
 {
 public:
-	SimplePipeline();
 
-	void process();
-
-	bool contains(Node* node);
-	
-	bool add(Node* toAdd);
-	
-	bool remove(Node* toRemove);
-
-	/**
-	 * @brief Prepares the pipeline before execution.
-	 * 
-	 * isReady will return false and nbErrors() will be different from 0
-	 * if an error occurs while updating.
-	 * In this case these errors, they can be retrieved one by one, 
-	 * calling popError().
-	 */ 
-	void update();
-		
-	/**
-	 * @brief Returns the number of remaining errors since last update.
-	 * 
-	 * This value is decremented each time an error is poped using popError()
-	 */ 	
-	kiwi::uint32_t nbErrors();
-	
-	/**
-	 * @brief Pops an error from the update error's fifo.
-	 */ 
-	kiwi::string popError();
-	
-	
-	
-protected:
-	
-	unsigned int index(unsigned int x, unsigned int y);
-	int findFilter(Filter* filter);
-	typedef std::pair< unsigned int, unsigned int> constraints;
-	
-private:
-	std::list<Filter*> _filters;
-	std::list<Container*> _containers;
-	
-	uint32_t _nbErrors;
-	
 };	
 
 }//namespace core

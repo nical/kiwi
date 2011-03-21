@@ -94,7 +94,23 @@ public:
 
 // ------------------------------------------------------------- virtual methods
 
-	virtual bool update(int phase = 0){}
+	/**
+	 * Main entry point of the filter. This is the function you should override
+	 * to perform whatever the filter is supposed to do.
+	 */
+	virtual void process() {};
+
+
+	/**
+	 * @brief Allows to associate a Reader Output with a Writer Input port.
+	 *
+	 * Basically what it does is make the writer port aware that if it connects
+	 * to a port, the associated reader should read the data that the writer 
+	 * accesses.
+	 */
+	void associateWriterToDataPort(WriterPort& writer, DataPort& reader) const;
+
+	virtual bool update(int phase = 0){ if(phase==0)process(); }
 
 	/**
 	 * @brief Returns true if the Node is reday to update

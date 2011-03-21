@@ -203,7 +203,7 @@ protected:
   /**
 	 * @brief Sets this port's container.
 	 */ 
-	virtual bool setContainer( Container* data ) = 0;
+	virtual bool setAbstractContainer( Container* data ) = 0;
 	
   virtual void connect_impl( ReaderPort* port );
   virtual void disconnect_impl( ReaderPort* port );

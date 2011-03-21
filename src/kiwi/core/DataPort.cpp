@@ -38,7 +38,7 @@ namespace kiwi{
 namespace core{
 
 
-
+/*
 DataPort::DataPort( Node* myNode, Container* data )
 	:_node(myNode)
 {
@@ -48,12 +48,18 @@ DataPort::DataPort( Node* myNode, Container* data )
 	}
 	setContainer(data);
 }
+*/
+DataPort::DataPort( Node* myNode )
+	:_node(myNode)
+{
+	ScopedBlockMacro("DataPort::constructor")
+}
 
 
 void DataPort::bind(DataPort& port)
 {
 //	Debug::print() << "port binding" << endl();
-	_container = port._container;
+	//_container = port._container; TODO !!!
 	port._linkedOutputPorts.add( this );
 }
 
@@ -62,9 +68,10 @@ void DataPort::unBind()
 	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
 		_linkedOutputPorts[i]->unBind();
 		
-	_container = 0;
+	//_container = 0; TODO !!!
 }
 
+/* TODO!! transpose the subport handling from here to StaticDataPort
 void DataPort::setContainer( Container* data )
 {
 	ScopedBlockMacro( "DataPort::setContainer");
@@ -91,7 +98,7 @@ void DataPort::setContainer( Container* data )
     _connectedWriters[i]->updatePort();
   }
 }
-
+*/
 
 portIndex_t DataPort::index() const 
 {
@@ -110,8 +117,8 @@ Node* DataPort::node() const
 
 utils::Tags DataPort::tags() const
 {
-	if(_container){
-		return _container->tags(); 
+	if( !isEmpty() ){
+		return getAbstractContainer()->tags(); 
 	}else{
 		Debug::error() << "DataPort::tags: warning: no container available\n"; 
 		return utils::Tags("#undefined");

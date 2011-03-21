@@ -67,7 +67,8 @@ friend class WriterPort;
 	/**
 	 * @brief Constructor.
 	 */ 
-	DataPort(Node* myNode, Container* data = 0);
+	DataPort(Node* myNode);
+	//DataPort(Node* myNode, Container* data = 0);
 	/**
 	 * @brief Returns the index of this port.
 	 */ 
@@ -109,7 +110,7 @@ friend class WriterPort;
 	 */ 
 	utils::Tags tags() const;
 
-  virtual bool isEmpty() const { return _container == 0 ; }
+  virtual bool isEmpty() const = 0;
   	
 	bool connect(ReaderPort* port);
 	
@@ -149,8 +150,8 @@ friend class WriterPort;
 	template<class T>
 	T* safeDownCastContainer() {
 		ScopedBlockMacro("DataPort::safeDownCastContainer")
-		if(!_container) Debug::error() << "no Container\n";
 		DEBUG_ONLY(
+      if( isEmpty() ) Debug::error() << "no Container\n";
 			if(!dynamic_cast<T*>( getAbstractContainer() ) )
         Debug::error() << "cast failed\n" ;
 			)
@@ -163,9 +164,7 @@ friend class WriterPort;
   // ---------------------------------------------- Virtual methods
   
 
-  virtual Container* getAbstractContainer() const{
-    return _container;
-  }
+  virtual Container* getAbstractContainer() const = 0;
 
 	/**
 	 * @brief Port compatibility check based on the type string.
@@ -204,7 +203,7 @@ protected:
   /**
 	 * @brief Sets this port's container.
 	 */ 
-	virtual void setContainer( Container* data );
+	virtual bool setContainer( Container* data ) = 0;
 	
   virtual void connect_impl( ReaderPort* port );
   virtual void disconnect_impl( ReaderPort* port );
@@ -229,7 +228,7 @@ protected:
 protected:
 	Node* _node;	
 private:
-	Container* _container;
+	//Container* _container;
   //connections
   utils::UnorderedArray<ReaderPort*> _connectedReaders;
   utils::UnorderedArray<WriterPort*> _connectedWriters;

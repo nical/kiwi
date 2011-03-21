@@ -111,7 +111,7 @@ void DynamicNode::addContainer(Container* data, bool addPort, kiwi::uint8_t flag
 	if(!data) Debug::error() << "warning: the init parameter is nil\n";
 	_containers.add(data);
 	if(addPort){
-		 addDataPort( new DataPort(this, data) ); // TODO flags
+		 addDataPort( new StaticDataPort<>(this, data) ); // TODO flags
 	}else{
 		Debug::error() << "DynamicNode::addContainer: warning added a container without port\n";
 	}

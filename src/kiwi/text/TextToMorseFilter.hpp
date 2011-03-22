@@ -4,6 +4,7 @@
 #define KIWI_TEXTTOMORSEFILTER_HPP
 
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 #include "kiwi/utils/Tags.hpp"
 #include "kiwi/text.hpp"
 #include "kiwi/utils/types.hpp"
@@ -19,11 +20,11 @@ namespace text{
 /**
  * @brief Translates the input text into morse code.
  */ 
-class TextToMorseFilter : public core::Filter
+class TextToMorseFilter : public core::DynamicNode
 {
 public:
 	
-	TextToMorseFilter() : Filter()
+	TextToMorseFilter() : DynamicNode()
 	{
 	//ScopedBlockMacro(scp_block, "TextToMorseFilter::constructor");
 		// CanonicalFilter's constructor automatically adds one reader output port

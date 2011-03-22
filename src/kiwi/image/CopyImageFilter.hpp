@@ -3,10 +3,13 @@
 #ifndef KIWI_IMAGE_COPYIMAGEFILTER_HPP
 #define KIWI_IMAGE_COPYIMAGEFILTER_HPP
 
-#include "kiwi/core/Filter.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 #include "kiwi/image/cairo/ImageContainer.hpp"
 #include "kiwi/generic/PointAccessContainerInterface.hpp"
 #include "kiwi/generic/ArrayContainer.hpp"
+#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
+#include "kiwi/core/DataPort.hpp"
 
 namespace kiwi{
 namespace image{
@@ -19,7 +22,7 @@ namespace image{
  * which may be usefull to create an image container from independent color channel
  * containers.
  */ 
-class CopyImageFilter : public kiwi::core::Filter
+class CopyImageFilter : public kiwi::core::DynamicNode
 {
 public:
 	enum{ R = 0, G = 1, B = 2, A = 3 };

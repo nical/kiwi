@@ -57,6 +57,7 @@ class DataPort;
 class ReaderPort
 {
 friend class Node;
+friend class DataPort;
 public:
 
 	/**
@@ -115,11 +116,11 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	virtual bool isCompatible(DataPort& output) ;
+	virtual bool isCompatible( const DataPort& output) const = 0;
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	virtual bool isCompatible(const kiwi::utils::Tags& tag) ;
+	//virtual bool isCompatible(const kiwi::utils::Tags& tag) ;
 
 	/**
 	 * @brief returns true if this port is enabled.
@@ -135,6 +136,7 @@ protected:
 
   virtual void connect_impl( DataPort* port );
   virtual void disconnect_impl( DataPort* port );
+  void connectWithoutChecking( DataPort* port );
   
 	void bind( ReaderPort& port);
 	/**

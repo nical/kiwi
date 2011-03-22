@@ -2,7 +2,7 @@
 #ifndef KIWI_TEXT_PLAINTEXTLOADER_HPP
 #define KIWI_TEXT_PLAINTEXTLOADER_HPP
 
-#include "kiwi/core/Filter.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 #include "kiwi/core/DynamicNode.hpp"
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/StaticReaderPort.hpp"
@@ -18,7 +18,7 @@ namespace kiwi{
 namespace text{
 
 
-class PlainTextLoader : public kiwi::core::Filter
+class PlainTextLoader : public kiwi::core::DynamicNode
 {
 public:
   PlainTextLoader(){

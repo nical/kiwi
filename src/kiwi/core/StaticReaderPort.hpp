@@ -8,7 +8,15 @@
 namespace kiwi{
 namespace core{
 
-template<class TContainerType>
+template<typename ContainerType>
+struct SameTypePolicy{
+  static bool isCompatible( const DataPort& port ){
+    return true; // TODO
+  }
+};
+
+
+template<class TContainerType, class ConnectionPolicy = SameTypePolicy<Container> >
 class StaticReaderPort : public ReaderPort
 {
 public:
@@ -17,7 +25,11 @@ public:
   StaticReaderPort(kiwi::core::Node* myNode = 0)
   : ReaderPort(myNode), _container(0){}
 
-  void setNode( kiwi::core::Node* const node){ _node = node; }
+  void setNode( kiwi::core::Node* const node ){ _node = node; }
+
+  bool isCompatible( const DataPort& port ) const {
+    return ConnectionPolicy::isCompatible( port );
+  }
 
   const Container* getAbstractContainer() const{
     return _container;
@@ -60,6 +72,9 @@ protected:
 
   ContainerType* _container;
 };
+
+
+
 
 
 }//namespace

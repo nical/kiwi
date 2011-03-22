@@ -94,10 +94,10 @@ utils::Tags ReaderPort::tags() const
 	ScopedBlockMacro("ReaderPort::tags")
 	return node()->readerTags( index() );
 }
-
+/*
 bool ReaderPort::isCompatible(DataPort& output)	
 {
-	ScopedBlockMacro( "ReaderPort::isCompatible");
+	ScopedBlockMacro( "ReaderPort::isCompatible" );
   return ( tags().hasOneOf(output.tags()+utils::Tags("#any") ) );
 }
 
@@ -107,6 +107,7 @@ bool ReaderPort::isCompatible(const kiwi::utils::Tags& tag)
 	ScopedBlockMacro( "ReaderPort::isCompatible");
 	return ( tags().hasOneOf(tag + utils::Tags("#any") ) );
 }
+*/
 
 bool ReaderPort::isEnabled() const 
 {
@@ -152,6 +153,11 @@ void ReaderPort::disconnect_impl( DataPort* port ){
   _connectedDataPort = 0;
 }
 
+
+void ReaderPort::connectWithoutChecking( DataPort* port ){
+    connect_impl( port );
+    port->connect_impl( this );
+}
 
 void 
 ReaderPort::setEnabled(bool status) 

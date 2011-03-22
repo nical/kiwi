@@ -211,6 +211,9 @@ protected:
   virtual void connect_impl( WriterPort* port );
   virtual void disconnect_impl( WriterPort* port );
 
+  void connectWithoutChecking( ReaderPort* port );
+  void connectWithoutChecking( WriterPort* port );
+
 	/**
 	 * @brief Used internally by kiwi::core::Node to perform port binding.
 	 * 

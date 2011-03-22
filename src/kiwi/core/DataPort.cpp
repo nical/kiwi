@@ -192,6 +192,13 @@ void DataPort::disconnect_impl( WriterPort* port ){
   _connectedWriters.remove( port );
 }
 
+void DataPort::connectWithoutChecking( ReaderPort* port ){
+    port->connectWithoutChecking( this );
+}
+
+void DataPort::connectWithoutChecking( WriterPort* port ){
+    port->connectWithoutChecking( this );
+}
 
 
 

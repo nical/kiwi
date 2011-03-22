@@ -5,7 +5,7 @@
 
 
 #include "kiwi/generic/MultiArrayContainer.hpp"
-#include "kiwi/core/Filter.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 
 #include "kiwi/generic/Point.hpp"
 #include "kiwi/core.hpp"
@@ -25,7 +25,7 @@ using namespace kiwi::generic;
 
 // compute the sum of two Value<> resources and place it in an other Value<>
 template<typename TValueType, unsigned int TDimension>
-class AddArraysFilter : public kiwi::core::Filter
+class AddArraysFilter : public kiwi::core::DynamicNode
 {
 public:
 	enum{ A = 0, B = 1};
@@ -35,7 +35,7 @@ public:
 	typedef generic::ArrayReader<TValueType, TDimension> myReader;
 	typedef generic::ArrayWriter<TValueType, TDimension> myWriter;
 // ---------------------------------------------------------------------
-	AddArraysFilter() : Filter(/*1*/)
+	AddArraysFilter() : DynamicNode()
 	{
 	ScopedBlockMacro("AddArraysFilter::constructor");
 		kiwi::string sType( kiwi::string("array")

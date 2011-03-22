@@ -64,7 +64,7 @@ namespace image{
  * limited.
  */ 
 
-class GaussianBlur : public core::Filter
+class GaussianBlur : public core::DynamicNode
 {
 public:
 	/**

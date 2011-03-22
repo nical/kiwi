@@ -4,9 +4,12 @@
 #define KIWI_CORE_TEMPLATEDATAPORT_HPP
 
 #include "kiwi/core/DataPort.hpp"
+#include "kiwi/core/StaticReaderPort.hpp"
+#include "kiwi/core/StaticWriterPort.hpp"
 
 namespace kiwi{
 namespace core{
+
 
 template<class TContainerType = kiwi::core::Container, int TFlag = 3>
 class StaticDataPort : public DataPort
@@ -43,6 +46,24 @@ public:
   
   virtual bool setContainer( ContainerType* data ){
     _container = data;
+  }
+
+  template<typename T1>
+  bool operator >> ( StaticReaderPort<T1>& readerPort ){
+	ScopedBlockMacro("StaticDataPort::SafeConnect" )
+    if(isEnabled() && readerPort.isEnabled() ){
+      connectWithoutChecking( &readerPort );
+      return true;
+    }else return false;
+  }
+  
+  template<typename T1>
+  bool operator >> ( StaticWriterPort<T1>& writerPort ){
+	ScopedBlockMacro("StaticDataPort::SafeConnect" )
+    if(isEnabled() && writerPort.isEnabled() ){
+      connectWithoutChecking( &writerPort );
+      return true;
+    }else return false;
   }
 
 protected:

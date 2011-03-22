@@ -7,11 +7,16 @@
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/for_each.hpp>
 #include <boost/fusion/include/mpl.hpp>
+#include <boost/mpl/int.hpp>
 
 #include "kiwi/core/StaticReaderPort.hpp"
 #include "kiwi/core/StaticWriterPort.hpp"
 #include "kiwi/core/StaticDataPort.hpp"
 #include "kiwi/core/Node.hpp"
+
+#define ReaderListMacro boost::fusion::vector
+#define WriterListMacro boost::fusion::vector
+#define DataListMacro boost::fusion::vector
 
 namespace kiwi{
 namespace core{
@@ -56,7 +61,6 @@ struct StaticNodeLayout{
       , PortDynamicAccessWrapper<WriterPort>(_dynWriterPorts) );
     boost::fusion::for_each( boost::fusion::as_vector(_dataPorts)
       , PortDynamicAccessWrapper<DataPort>(_dynDataPorts) );
-      
   }
 
   ReaderList _readerPorts;
@@ -85,13 +89,13 @@ public:
 
   // to get the low level port types
   template<int i> struct staticReaderPortInfo{
-    typedef typename boost::mpl::at<typename Layout::ReaderList,boost::mpl::arg<i> >::type type;
+    typedef typename boost::mpl::at<typename Layout::ReaderList,boost::mpl::int_<i> >::type type;
   };
   template<int i> struct staticWriterPortInfo{
-    typedef typename boost::mpl::at<typename Layout::WriterList,boost::mpl::arg<i> >::type type;
+    typedef typename boost::mpl::at<typename Layout::WriterList,boost::mpl::int_<i> >::type type;
   };
   template<int i> struct staticDataPortInfo{
-    typedef typename boost::mpl::at<typename Layout::DataList,boost::mpl::arg<i> >::type type;
+    typedef typename boost::mpl::at<typename Layout::DataList,boost::mpl::int_<i> >::type type;
   };
 
   // to get the low level port instances

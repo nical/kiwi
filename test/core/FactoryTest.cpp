@@ -7,7 +7,7 @@
 #include "kiwi/core/Filter.hpp"
 
 
-class testFilterA : public kiwi::core::Filter
+class testFilterA : public kiwi::core::DynamicNode
 {
 public:
 	void process()
@@ -15,7 +15,7 @@ public:
 	ScopedBlockMacro("testFilterA::process")
 	}
 };
-class testFilterB : public kiwi::core::Filter
+class testFilterB : public kiwi::core::DynamicNode
 {
 public:
 	void process()
@@ -23,7 +23,7 @@ public:
 	ScopedBlockMacro("testFilterB::process")
 	}
 };
-class testFilterC : public kiwi::core::Filter
+class testFilterC : public kiwi::core::DynamicNode
 {
 public:
 	void process()

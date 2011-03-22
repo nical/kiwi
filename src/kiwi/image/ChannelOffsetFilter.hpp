@@ -3,11 +3,14 @@
 #ifndef KIWI_IMAGE_CHANNELOFFSETFILTER_HPP
 #define KIWI_IMAGE_CHANNELOFFSETFILTER_HPP
 
-#include "kiwi/core/Filter.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 #include "kiwi/generic/PointAccessContainerInterface.hpp"
 #include "kiwi/generic/PointVectorContainer.hpp"
 #include "kiwi/generic/RectangleContainer.hpp"
 #include "kiwi/generic/ArrayContainer.hpp"
+#include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/WriterPort.hpp"
+#include "kiwi/core/DataPort.hpp"
 
 namespace kiwi{
 namespace image{
@@ -28,7 +31,7 @@ namespace image{
  * <ul> <li> the resulting color channel (PointAccessContainerInterface) </li> </ul>
  * 
  */ 
-class ChannelOffsetFilter : public kiwi::core::Filter
+class ChannelOffsetFilter : public kiwi::core::DynamicNode
 {
 public:
 

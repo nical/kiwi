@@ -27,7 +27,7 @@ if(DEFINED BUILD_KIWI_TEXT)
 endif(DEFINED BUILD_KIWI_TEXT)
 
 
-SET(KIWI_SRC ${KIWI_SRC}
+SET(KIWI_SRC ${KIWI_SRC} # kiwi::core source files
 		utils/DebugOutputStream.cpp
 		utils/SocketCreator.cpp
     utils/Tags.cpp
@@ -37,9 +37,7 @@ SET(KIWI_SRC ${KIWI_SRC}
 		core/ReaderPort.cpp
 		core/WriterPort.cpp
 		core/DataPort.cpp
-		pipeline/SimplePipeline.cpp
-		# kiwi::core source files
-		# tutorial/FilterSkeleton.cpp
+		
 		)
 
 add_library ( ${LIBKIWI_NAME}  ${KIWI_SRC})

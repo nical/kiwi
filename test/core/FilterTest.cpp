@@ -12,7 +12,7 @@ using namespace kiwi::core;
 
 typedef kiwi::generic::NumberContainer<int> NumberContainer;
 
-class DummyFilter : public kiwi::core::Filter
+class DummyFilter : public kiwi::core::DynamicNode
 {
 public:
 	DummyFilter(){

@@ -142,6 +142,12 @@ void WriterPort::disconnect_impl( DataPort* port ){
   }
 }
 
+
+void WriterPort::connectWithoutChecking( DataPort* port ){
+    connect_impl( port );
+    port->connect_impl( this );
+}
+
 void WriterPort::setEnabled(bool status) {
 	_enabled = status;
 }

@@ -28,7 +28,7 @@
 
 /**
  * @file Node.hpp
- * @brief Header file for the base class of every kiwi resources and filters.
+ * @brief Header file for the base class of every kiwi nodes.
  * @author Nicolas Silva (email: nical.silva@gmail.com  twitter: @nicalsilva)
  */
 

@@ -38,7 +38,6 @@ namespace kiwi{
 namespace core{
 
 class Node;
-class WriterPort;
 
 
 /**
@@ -54,7 +53,7 @@ class WriterPort;
 class WriterPort
 {
 friend class Node;
-friend class Filter;
+friend class DataPort;
 public:
 
 	/**
@@ -123,7 +122,7 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	virtual bool isCompatible(DataPort& output) ;
+	virtual bool isCompatible( DataPort& output ) ;
 	
   virtual void updatePort() { }
 	
@@ -132,6 +131,10 @@ protected:
   virtual void connect_impl( DataPort* port );
 
   virtual void disconnect_impl( DataPort* port );
+
+  
+  void connectWithoutChecking( DataPort* port );
+ 
 
 	/**
 	 * @brief Used internally by kiwi::core::Node to perform port binding.

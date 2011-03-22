@@ -13,6 +13,7 @@
 #include "kiwi/core/DataPort.hpp"
 #include "kiwi/core/StaticReaderPort.hpp"
 #include "kiwi/core/StaticWriterPort.hpp"
+#include "kiwi/core/DynamicNode.hpp"
 
 
 
@@ -24,11 +25,11 @@ namespace text{
 /**
  * @brief Copies the input text forcing each character to be upper case.
  */ 
-class UpperCaseFilter : public core::Filter
+class UpperCaseFilter : public core::DynamicNode
 {
 public:
 	
-	UpperCaseFilter() : Filter()
+	UpperCaseFilter() : DynamicNode()
 	{
 		addReaderPort( _reader = new kiwi::core::StaticReaderPort<PlainTextContainer>(this) );
 		addWriterPort( _writer = new kiwi::core::StaticWriterPort<PlainTextContainer>(this) );

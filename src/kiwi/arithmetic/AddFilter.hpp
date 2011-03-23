@@ -53,19 +53,16 @@ public:
 				Debug::error()
 					<< "AddFilter::process(): error \n"
 					<<"could not get the frist input container"  << endl();
-				return;
 			}
 			if(!cb){
 				Debug::error()
 					<< "AddFilter::process(): error \n"
 					<<"could not get the second input container" << endl();
-				return;
 			}
 
 
-			int A = ca->getValue();
-
-			int B = cb->getValue();
+			int A = ca ? ca->getValue() : 0;
+			int B = cb ? cb->getValue() : 0;
 
 			_result->setValue( A + B );
 

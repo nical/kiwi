@@ -126,13 +126,12 @@ utils::Tags DataPort::tags() const
 }
 
 
-bool DataPort::isCompatible(ReaderPort& input)	
-{
+bool DataPort::isCompatible(ReaderPort& input){
+  ScopedBlockMacro("DataPort::isCompatible")
 	return input.isCompatible(*this); 
 }
 
-bool DataPort::isCompatible(WriterPort& input)	
-{
+bool DataPort::isCompatible(WriterPort& input){
 	return input.isCompatible(*this); 
 }
 

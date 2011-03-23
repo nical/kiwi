@@ -166,20 +166,15 @@ bool
 operator >> (DataPort& output, ReaderPort& input )
 {
 	ScopedBlockMacro("operator >> (reader)" )
-	if(!input.isConnected())
-	{
-		return input.connect(&output);
-	}else{return false;}
+  //Debug::foo();
+  return input.connect(&output);
 }
 
 bool 
 operator >> (DataPort& output, WriterPort& input )
 {
 	ScopedBlockMacro( "operator >> (writer)" )
-	if(!input.isConnected())
-	{
-		return input.connect(&output);
-	}else{return false;}
+  return input.connect(&output);
 }
 
 

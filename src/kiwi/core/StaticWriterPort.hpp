@@ -4,11 +4,14 @@
 #define KIWI_CORE_TEMPLATEWRITERPORT_HPP
 
 #include "kiwi/core/WriterPort.hpp"
+#include "kiwi/core/AlwaysCompatibleConnectionPolicy.hpp"
+
 
 namespace kiwi{
 namespace core{
 
-template<class TContainerType>
+template<class TContainerType
+  , class ConnectionPolicy = AlwaysCompatibleConnectionPolicy>
 class StaticWriterPort : public WriterPort
 {
 public:

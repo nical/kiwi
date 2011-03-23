@@ -36,16 +36,18 @@ public:
   int flag() const { return TFlag; }
 
   virtual bool isEmpty() const{
-    return _container;
+    return getAbstractContainer();
   }
 
-  virtual bool setAbstractContainer( Container* data ){
+  virtual bool setAbstractContainer( Container* data )
+  {
     _container = dynamic_cast<ContainerType*>(data);
     return _container != 0;
   }
   
   virtual bool setContainer( ContainerType* data ){
     _container = data;
+    return _container != 0;
   }
 
   template<typename T1>

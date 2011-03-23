@@ -18,7 +18,7 @@ public:
 	DummyFilter(){
     _src1 =  new StaticReaderPort<NumberContainer>(this); 
     _src2 =  new StaticReaderPort<NumberContainer>(this);
-    _dest1 =  new StaticWriterPort<NumberContainer>(this);
+    _dest1 = new StaticWriterPort<NumberContainer>(this);
     
 		addReaderPort( _src1 );
 		addReaderPort( _src2 );

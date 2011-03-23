@@ -31,36 +31,75 @@ template<typename NodeType> struct PortNodeSetter{
   NodeType* _node;
 };
 
-template<typename PortType> struct PortDynamicAccessWrapper{
-  PortDynamicAccessWrapper(std::vector<PortType*>& array) : _array(&array){}
-  template<typename T> void operator()(const T& port) const {
-    _array->push_back( &const_cast<T&>(port) ); }
-  std::vector<PortType*>* _array;
+
+
+
+
+// ------------------------------------------------------------- Port Wrappers -
+// -----------------------------------------------------------------------------
+template<int i, class LayoutType> struct _ReaderWrapperLoop{
+  static void exec(LayoutType& layout){
+    Debug::print() << (int) i-1;
+    _ReaderWrapperLoop<i-1,LayoutType>::exec(layout);
+    layout._dynReaderPorts.push_back(&boost::fusion::at_c<i-1>(layout._readerPorts));
+  }
 };
+template<class LayoutType> struct _ReaderWrapperLoop<0,LayoutType>{
+  static void exec(LayoutType& layout){ }
+};
+template<int i, class LayoutType> struct _WriterWrapperLoop{
+  static void exec(LayoutType& layout){
+    _WriterWrapperLoop<i-1,LayoutType>::exec(layout);
+    layout._dynWriterPorts.push_back(&boost::fusion::at_c<i-1>(layout._writerPorts));
+  }
+};
+template<class LayoutType> struct _WriterWrapperLoop<0,LayoutType>{
+  static void exec(LayoutType& layout){ }
+};
+template<int i, class LayoutType> struct _DataWrapperLoop{
+  static void exec(LayoutType& layout){
+    _DataWrapperLoop<i-1,LayoutType>::exec(layout);
+    layout._dynDataPorts.push_back(&boost::fusion::at_c<i-1>(layout._dataPorts));
+  }
+};
+template<class LayoutType> struct _DataWrapperLoop<0,LayoutType>{
+  static void exec(LayoutType& layout){ }
+};
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 
 template<typename TReaderList, typename TWriterList, typename TDataList>
 struct StaticNodeLayout{
+  // typedefs
   typedef TReaderList ReaderList;
   typedef TWriterList WriterList;
   typedef TDataList DataList;
   typedef StaticNodeLayout<ReaderList,WriterList,DataList> Self;
-  
+  // number of ports
+  static const portIndex_t NbReaderPorts
+    = boost::mpl::size<ReaderList>::value;
+  static const portIndex_t NbWriterPorts
+    = boost::mpl::size<WriterList>::value;
+  static const portIndex_t NbDataPorts
+    = boost::mpl::size<DataList>::value;
+
+  /**
+   * @brief Constructor.
+   */ 
   StaticNodeLayout(kiwi::core::StaticNode<Self>* node){
-  // set each port's associated Node to node  
+    ScopedBlockMacro("StaticNodeLayout::constructor")
+    // set each port's associated Node to node  
     boost::fusion::for_each(
       boost::fusion::as_vector(_readerPorts), PortNodeSetter<Node>(node) );
     boost::fusion::for_each(
       boost::fusion::as_vector(_writerPorts), PortNodeSetter<Node>(node) );
     boost::fusion::for_each(
       boost::fusion::as_vector(_dataPorts)  , PortNodeSetter<Node>(node) );
-  // then fill the vectors containing higher level access to ports
-    boost::fusion::for_each( boost::fusion::as_vector(_readerPorts)
-      , PortDynamicAccessWrapper<ReaderPort>(_dynReaderPorts) );
-    boost::fusion::for_each( boost::fusion::as_vector(_writerPorts)
-      , PortDynamicAccessWrapper<WriterPort>(_dynWriterPorts) );
-    boost::fusion::for_each( boost::fusion::as_vector(_dataPorts)
-      , PortDynamicAccessWrapper<DataPort>(_dynDataPorts) );
+    // then fill the vectors containing higher level access to ports
+    _ReaderWrapperLoop<NbReaderPorts,Self>::exec(*this);
+    _WriterWrapperLoop<NbWriterPorts,Self>::exec(*this);
+    _DataWrapperLoop<NbDataPorts,Self>::exec(*this);
   }
 
   ReaderList _readerPorts;
@@ -70,6 +109,7 @@ struct StaticNodeLayout{
   std::vector<ReaderPort*> _dynReaderPorts;
   std::vector<WriterPort*> _dynWriterPorts;
   std::vector<DataPort*> _dynDataPorts;
+
 };
 
 
@@ -135,6 +175,7 @@ public:
 
 protected:
   Layout _layout;
+
 };
 
 

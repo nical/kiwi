@@ -4,19 +4,14 @@
 #define KIWI_CORE_TEMPLATEREADERPORT_HPP
 
 #include "kiwi/core/ReaderPort.hpp"
+#include "kiwi/core/AlwaysCompatibleConnectionPolicy.hpp"
 
 namespace kiwi{
 namespace core{
 
-template<typename ContainerType>
-struct SameTypePolicy{
-  static bool isCompatible( const DataPort& port ){
-    return true; // TODO
-  }
-};
 
-
-template<class TContainerType, class ConnectionPolicy = SameTypePolicy<Container> >
+template<class TContainerType
+  , class ConnectionPolicy = AlwaysCompatibleConnectionPolicy>
 class StaticReaderPort : public ReaderPort
 {
 public:
@@ -28,14 +23,15 @@ public:
   void setNode( kiwi::core::Node* const node ){ _node = node; }
 
   bool isCompatible( const DataPort& port ) const {
-    return ConnectionPolicy::isCompatible( port );
+    ScopedBlockMacro("StaticReaderPort::isCompatible")
+    return _policy.isCompatible( *this, port );
   }
 
-  const Container* getAbstractContainer() const{
+  const Container* getAbstractContainer() const {
     return _container;
   }
   
-  ContainerType* getContainer() const{
+  ContainerType* getContainer() const {
     return _container;
   }
 
@@ -71,6 +67,7 @@ protected:
   //void disconnect_impl( DataPort* port );
 
   ContainerType* _container;
+  ConnectionPolicy _policy;
 };
 
 

@@ -116,7 +116,7 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	virtual bool isCompatible( const DataPort& output) const = 0;
+	virtual bool isCompatible( const DataPort& output ) const = 0;
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 

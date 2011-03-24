@@ -96,7 +96,11 @@ public:
 	/**
 	 * @brief Register the Container to the ContainerFactory
 	 */
-	virtual bool registerToFactory(const kiwi::utils::NodeFactory& factory) {return false;}
+	virtual bool registerToFactory(const kiwi::utils::NodeFactory& factory) {
+    return false;
+  }
+
+  virtual kiwi::core::Node* MakeNode() { return 0; }
 
 };
 

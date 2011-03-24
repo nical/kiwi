@@ -6,6 +6,7 @@
 
 #include "kiwi/generic/NumberContainerInterface.hpp"
 #include "kiwi/utils/types.hpp"
+#include "kiwi/core/ContainerNode.hpp"
 
 namespace kiwi{
 namespace generic{
@@ -23,6 +24,7 @@ class NumberContainer : public NumberContainerInterface<TValueType>
 {
 public:
 	typedef TValueType ValueType;
+  typedef NumberContainer<ValueType> Self;
 
 	NumberContainer( ValueType val ) : _data(val) {}
 	NumberContainer() : _data(0) {}
@@ -50,6 +52,10 @@ public:
 		);
 		return true;
 	}
+
+  kiwi::core::Node* MakeNode() {
+    return new core::ContainerNode<Self>( this );
+  }
 	
 
 private:

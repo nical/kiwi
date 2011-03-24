@@ -30,11 +30,12 @@ public:
     if( isConnected() ){
       return _container;
     }else{
-/*      if( isAssociatedToDataPort() ){
+      //if( isAssociatedToDataPort() ){
+      //  autoAllocateNode();
+      //}
 
-      }
-*/
-     }
+    return 0;
+    }
   }
 
   void updatePort(){
@@ -62,12 +63,17 @@ public:
     }
   }
 
+  void autoAllocateNode(){
+    if( !isConnected() ){
+      _auxNode = (new TContainerType)-> MakeNode();
+      assert( connect( _auxNode->dataPort() ) );
+    }
+  }
+
 protected:
 
-  //void connect_impl( DataPort* port );
-  //void disconnect_impl( DataPort* port );
-
   ContainerType* _container;
+  Node* _auxNode;
 };
 
 

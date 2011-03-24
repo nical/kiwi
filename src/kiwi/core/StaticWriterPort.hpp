@@ -27,7 +27,14 @@ public:
   }
   
   ContainerType* getContainer() const{
-    return _container;
+    if( isConnected() ){
+      return _container;
+    }else{
+/*      if( isAssociatedToDataPort() ){
+
+      }
+*/
+     }
   }
 
   void updatePort(){

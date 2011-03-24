@@ -31,42 +31,42 @@ class AddFilter : public kiwi::core::StaticNode<addFilterLayout>
 {
 public:
 	AddFilter(){
-		_result = new kiwi::generic::NumberContainer<KIWI_ADDFILTER_TYPE>();
+
 	}
 
-	void process(){
+  void process(){
 		ScopedBlockMacro("AddFilter::process()" );
-		if( _result ){
-			
-			typedef kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE> NumberContainer_T;
+  
+    
+    typedef kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE> NumberContainer_T;
 
-    	
-			NumberContainer_T* ca = staticReaderPort<0>().getContainer();
-			//	= readerPort(0).connectedPort()
-      //    ->safeDownCastContainer<NumberContainer_T>();
+    
+    NumberContainer_T* ca = staticReaderPort<0>().getContainer();			
+    NumberContainer_T* cb = staticReaderPort<0>().getContainer();
+    NumberContainer_T* result = staticWriterPort<0>().getContainer();
 
-			NumberContainer_T* cb = staticReaderPort<0>().getContainer();
-			//	= readerPort(1).connectedPort()
-			//		->safeDownCastContainer<NumberContainer_T>();
+    
+    if(!ca){
+      Debug::error()
+        << "AddFilter::process(): error \n"
+        <<"could not get the frist input container"  << endl();
+    }
+    if(!cb){
+      Debug::error()
+        << "AddFilter::process(): error \n"
+        <<"could not get the second input container" << endl();
+    }
+    if(!result){
+      Debug::error()
+        << "AddFilter::process(): error \n"
+        <<"could not get the writer port's container" << endl();
+      return;
+    }
 
-			if(!ca){
-				Debug::error()
-					<< "AddFilter::process(): error \n"
-					<<"could not get the frist input container"  << endl();
-			}
-			if(!cb){
-				Debug::error()
-					<< "AddFilter::process(): error \n"
-					<<"could not get the second input container" << endl();
-			}
+    int A = ca ? ca->getValue() : 0;
+    int B = cb ? cb->getValue() : 0;
 
-
-			int A = ca ? ca->getValue() : 0;
-			int B = cb ? cb->getValue() : 0;
-
-			_result->setValue( A + B );
-
-		}
+    result->setValue( A + B );
 	}
 
 	template<typename TypeR>
@@ -80,26 +80,8 @@ public:
 		return kiwi::utils::Tags("#float");// TODO
 	}
 
-	void layoutChanged(){
-		if( readerPort(0).isConnected()
-		&& readerPort(1).isConnected() ){
-			if( _result == 0 ){
-				_result = new kiwi::generic::NumberContainer<KIWI_ADDFILTER_TYPE>( 0 );
-				setDataPortContainer( dataPort(0), _result );
-//				setPortEnabled( dataPort(0), false );
-			}
-		}else{
-			if( _result != 0){
-				delete _result;
-				_result = 0;
-				setDataPortContainer( dataPort(0), 0 );
-			}
-		}
-	}
-
-
 protected:
-	kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>* _result;
+	//kiwi::generic::NumberContainerInterface<KIWI_ADDFILTER_TYPE>* _result;
 	template<typename T1,typename T2> void process2();
 };
 

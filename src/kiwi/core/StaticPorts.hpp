@@ -11,6 +11,7 @@ namespace core{
   template<class TContainerType, class ConnectionPolicy> class StaticReaderPort;
 }//namespace
 }//namespace
+
 #include "kiwi/core/StaticReaderPort_decl.hpp"
 #include "kiwi/core/StaticWriterPort_decl.hpp"
 #include "kiwi/core/StaticDataPort_decl.hpp"

@@ -14,7 +14,9 @@ public:
 
   DynamicContainerNode( Container* container, DataPort* port, bool deleteContainer = false );
 
-  DataPort& dataPort(portIndex_t) const;
+  DataPort& dataPort(portIndex_t = 0) const;
+  ReaderPort& readerPort(portIndex_t index = 0) const;
+	WriterPort& writerPort(portIndex_t index = 0) const;
 
   portIndex_t nbReaderPorts() const { return 0; }
   portIndex_t nbWriterPorts() const { return 0; }

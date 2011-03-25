@@ -20,5 +20,13 @@ DataPort& DynamicContainerNode::dataPort(portIndex_t) const{
   return *_port;
 }
 
+ReaderPort& DynamicContainerNode::readerPort(portIndex_t) const{
+  assert("error" == "DynamicContainerNode do not have reader ports.");
+}
+
+WriterPort& DynamicContainerNode::writerPort(portIndex_t) const{
+  assert("error" == "DynamicContainerNode do not have writer ports.");
+}
+
 }//namespace
 }//namespace

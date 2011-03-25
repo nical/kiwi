@@ -28,9 +28,7 @@
 
 
 #include "DynamicNode.hpp"
-#include "kiwi/core/StaticReaderPort.hpp"
-#include "kiwi/core/StaticDataPort.hpp"
-#include "kiwi/core/StaticWriterPort.hpp"
+#include "kiwi/core/StaticPorts.hpp"
 
 namespace kiwi{
 namespace core{

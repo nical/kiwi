@@ -8,7 +8,7 @@
 #include "kiwi/core/WriterPort.hpp"
 #include "kiwi/core/AlwaysCompatibleConnectionPolicy.hpp"
 #include "kiwi/core/DynamicContainerNode.hpp"
-#include "kiwi/core/StaticDataPort.hpp"
+
 
 namespace kiwi{
 namespace core{
@@ -66,14 +66,7 @@ public:
     }
   }
 
-  void autoAllocateNode(){
-    if( !isConnected() ){
-      _container = new ContainerType;
-      _auxNode = new DynamicContainerNode( _container, new StaticDataPort<ContainerType>(_container),  true);
-      assert( connect( &_auxNode->dataPort() ) );
-
-    }
-  }
+  void autoAllocateNode();
   
 
 protected:

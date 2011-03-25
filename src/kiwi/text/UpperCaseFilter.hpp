@@ -11,8 +11,7 @@
 #include "kiwi/utils/Factory.hpp"
 #include "kiwi/utils/TextOperations.hpp"
 #include "kiwi/core/DataPort.hpp"
-#include "kiwi/core/StaticReaderPort.hpp"
-#include "kiwi/core/StaticWriterPort.hpp"
+#include "kiwi/core/StaticPorts.hpp"
 #include "kiwi/core/DynamicNode.hpp"
 
 

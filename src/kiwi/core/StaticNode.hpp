@@ -9,9 +9,10 @@
 #include <boost/fusion/include/mpl.hpp>
 #include <boost/mpl/int.hpp>
 
-#include "kiwi/core/StaticReaderPort.hpp"
-#include "kiwi/core/StaticWriterPort.hpp"
-#include "kiwi/core/StaticDataPort.hpp"
+//#include "kiwi/core/StaticReaderPort.hpp"
+//#include "kiwi/core/StaticWriterPort.hpp"
+//#include "kiwi/core/StaticDataPort.hpp"
+#include "kiwi/core/StaticPorts.hpp"
 #include "kiwi/core/Node.hpp"
 
 #define ReaderListMacro boost::fusion::vector

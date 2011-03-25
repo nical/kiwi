@@ -5,7 +5,7 @@
 
 #include "kiwi/core/Node.hpp"
 #include "kiwi/core/StaticNode.hpp"
-//#include "kiwi/core/StaticDataPort.hpp"
+
 
 namespace kiwi{
 namespace core{

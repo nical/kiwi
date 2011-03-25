@@ -4,8 +4,6 @@
 #define KIWI_CORE_TEMPLATEDATAPORT_HPP
 
 #include "kiwi/core/DataPort.hpp"
-#include "kiwi/core/StaticReaderPort.hpp"
-#include "kiwi/core/StaticWriterPort.hpp"
 
 namespace kiwi{
 namespace core{
@@ -19,11 +17,14 @@ public:
   enum { READ = 1, WRITE = 2, READ_WRITE = READ || WRITE, Flag = TFlag };
 
   StaticDataPort() : DataPort(0) {}
+  StaticDataPort(ContainerType* container)
+  : DataPort(0), _container(container) {}
   
-  void setNode( kiwi::core::Node* const node){ _node = node; }
-
+  
   StaticDataPort(Node* myNode, ContainerType* data = 0)
   : DataPort( myNode ){_container = data;}
+
+  void setNode( kiwi::core::Node* const node){ _node = node; }
 
   virtual Container* getAbstractContainer() const {
     return _container;
@@ -50,23 +51,13 @@ public:
     return _container != 0;
   }
 
-  template<typename T1>
-  bool operator >> ( StaticReaderPort<T1>& readerPort ){
-	ScopedBlockMacro("StaticDataPort::SafeConnect" )
-    if(isEnabled() && readerPort.isEnabled() ){
-      connectWithoutChecking( &readerPort );
-      return true;
-    }else return false;
-  }
-  
-  template<typename T1>
-  bool operator >> ( StaticWriterPort<T1>& writerPort ){
-	ScopedBlockMacro("StaticDataPort::SafeConnect" )
-    if(isEnabled() && writerPort.isEnabled() ){
-      connectWithoutChecking( &writerPort );
-      return true;
-    }else return false;
-  }
+  // implemented in StaticDataPort_def.hpp
+  template<typename T1, typename policy>
+  bool operator >> ( StaticReaderPort<T1, policy>& readerPort );
+
+  // implemented in StaticDataPort_def.hpp
+  template<typename T1, typename policy>
+  bool operator >> ( StaticWriterPort<T1,policy>& writerPort );
 
 protected:
 

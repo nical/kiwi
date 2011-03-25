@@ -2,8 +2,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Filter.hpp"
 #include "kiwi/generic/NumberContainer.hpp"
-#include "kiwi/core/StaticReaderPort.hpp"
-#include "kiwi/core/StaticWriterPort.hpp"
+#include "kiwi/core/StaticPorts.hpp"
 
 #include <assert.h>
 
@@ -52,9 +51,9 @@ public:
 	}
 
   protected:
-    StaticReaderPort<NumberContainer>* _src1;
-    StaticReaderPort<NumberContainer>* _src2;
-    StaticWriterPort<NumberContainer>* _dest1;
+    StaticReaderPort<NumberContainer, AlwaysCompatibleConnectionPolicy>* _src1;
+    StaticReaderPort<NumberContainer, AlwaysCompatibleConnectionPolicy>* _src2;
+    StaticWriterPort<NumberContainer, AlwaysCompatibleConnectionPolicy>* _dest1;
 };
 
 

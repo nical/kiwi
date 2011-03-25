@@ -1,3 +1,5 @@
+//here for cyclic dependency issues
+//#include "kiwi/core/ContainerNode.hpp"
 
 #pragma once
 #ifndef KIWI_CORE_TEMPLATEWRITERPORT_HPP
@@ -5,7 +7,8 @@
 
 #include "kiwi/core/WriterPort.hpp"
 #include "kiwi/core/AlwaysCompatibleConnectionPolicy.hpp"
-
+#include "kiwi/core/DynamicContainerNode.hpp"
+#include "kiwi/core/StaticDataPort.hpp"
 
 namespace kiwi{
 namespace core{
@@ -26,12 +29,12 @@ public:
     return _container;
   }
   
-  ContainerType* getContainer() const{
+  ContainerType* getContainer(){
     if( isConnected() ){
       return _container;
     }else{
       //if( isAssociatedToDataPort() ){
-      //  autoAllocateNode();
+        autoAllocateNode();
       //}
 
     return 0;
@@ -65,10 +68,13 @@ public:
 
   void autoAllocateNode(){
     if( !isConnected() ){
-      _auxNode = (new TContainerType)-> MakeNode();
-      assert( connect( _auxNode->dataPort() ) );
+      _container = new ContainerType;
+      _auxNode = new DynamicContainerNode( _container, new StaticDataPort<ContainerType>(_container),  true);
+      assert( connect( &_auxNode->dataPort() ) );
+
     }
   }
+  
 
 protected:
 

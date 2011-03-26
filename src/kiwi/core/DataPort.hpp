@@ -197,7 +197,7 @@ friend class WriterPort;
 	}
 
 	
-
+  virtual void setNode( kiwi::core::Node* const node) { _node = node; }
 	
 protected:
   /**

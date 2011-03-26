@@ -1,6 +1,6 @@
 
 #include "kiwi/core/DynamicContainerNode.hpp"
-
+#include "kiwi/core/DataPort.hpp"
 
 namespace kiwi{
 namespace core{
@@ -11,8 +11,10 @@ DynamicContainerNode::DynamicContainerNode(
   , bool deleteContainer )
 {
   _port = port;
+  _port->setNode(this);
   _container = container;
-  assert(port);
+  assert(_port);
+  assert( _port->getAbstractContainer() );
   _deleteContainer = deleteContainer;
 }
 
@@ -21,11 +23,11 @@ DataPort& DynamicContainerNode::dataPort(portIndex_t) const{
 }
 
 ReaderPort& DynamicContainerNode::readerPort(portIndex_t) const{
-  assert("error" == "DynamicContainerNode do not have reader ports.");
+  assert("DynamicContainerNode::readerPort: error" == "DynamicContainerNode do not have reader ports.");
 }
 
 WriterPort& DynamicContainerNode::writerPort(portIndex_t) const{
-  assert("error" == "DynamicContainerNode do not have writer ports.");
+  assert("DynamicContainerNode::writerPort: error" == "DynamicContainerNode do not have writer ports.");
 }
 
 }//namespace

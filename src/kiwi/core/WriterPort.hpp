@@ -122,7 +122,7 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	virtual bool isCompatible( DataPort& output ) ;
+	virtual bool isCompatible( DataPort& output ) const = 0;
 	
   virtual void updatePort() { }
 	

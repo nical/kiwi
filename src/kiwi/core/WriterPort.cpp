@@ -47,8 +47,8 @@ WriterPort::WriterPort( Node* myNode )
 }
 
 bool WriterPort::connect(DataPort* port) {
-	ScopedBlockMacro( "ReaderPort::connect*" )
-	if( (port!=0) && isEnabled() && port->isEnabled() ){
+	ScopedBlockMacro( "WriterPort::connect" )
+	if( (port!=0) /* && isEnabled() && port->isEnabled()*/ ){
 		if( isCompatible( *port ) ){
       disconnect();
       connect_impl( port );
@@ -57,8 +57,14 @@ bool WriterPort::connect(DataPort* port) {
       assert( isConnected() );
       assert( port->isConnected() );
 			return true;
-    }else return false;
-  }else return false;
+    }else{
+      Debug::error() << "uncompatible ports!\n";
+      return false;
+     }
+  }else{
+    Debug::error() << "Disabled port!\n";
+    return false;
+  }
 }
 
 
@@ -85,11 +91,11 @@ Node* WriterPort::node() const {
 utils::Tags WriterPort::tags() const {
 	return node()->writerTags( index() );
 }
-
+/*
 bool WriterPort::isCompatible(DataPort& output) { 
 	return ( tags().hasOneOf(output.tags()+utils::Tags("#any") ) );
 }
-
+*/
 bool WriterPort::isConnected( DataPort* port) const {
   if(!port) return _connectedDataPort;
   return port == _connectedDataPort;

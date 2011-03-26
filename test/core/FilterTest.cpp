@@ -3,6 +3,7 @@
 #include "kiwi/core/Filter.hpp"
 #include "kiwi/generic/NumberContainer.hpp"
 #include "kiwi/core/StaticPorts.hpp"
+#include "kiwi/core/DynamicContainerNode.hpp"
 
 #include <assert.h>
 
@@ -24,7 +25,7 @@ public:
 
 		addWriterPort( _dest1 );
 
-    portIndex_t r_out = addDataPort();
+    portIndex_t r_out = addDataPort( new StaticDataPort<NumberContainer>(this) );
 		associateWriterToDataPort( *_dest1, dataPort(r_out));
 	}
 
@@ -73,9 +74,9 @@ int main()
 	NumberContainer B(6);
 	NumberContainer R(0);
 
-	kiwi::core::DynamicNode nA( &A );
-	kiwi::core::DynamicNode nB( &B );
-	kiwi::core::DynamicNode nR( &R );
+	kiwi::core::DynamicContainerNode nA( &A, new kiwi::core::StaticDataPort<NumberContainer>(&A) );
+	kiwi::core::DynamicContainerNode nB( &B, new kiwi::core::StaticDataPort<NumberContainer>(&B) );
+	kiwi::core::DynamicContainerNode nR( &R, new kiwi::core::StaticDataPort<NumberContainer>(&R) );
 
 	assert( nA.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );
 	assert( nB.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );

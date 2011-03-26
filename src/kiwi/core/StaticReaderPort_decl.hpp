@@ -24,7 +24,7 @@ public:
 
   bool isCompatible( const DataPort& port ) const {
     ScopedBlockMacro("StaticReaderPort::isCompatible")
-    return _policy.isCompatible( *this, port );
+    return ConnectionPolicy::isCompatible( *this, port );
   }
 
   const Container* getAbstractContainer() const {

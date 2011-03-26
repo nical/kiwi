@@ -11,7 +11,10 @@ namespace core{
  *
  */ 
 struct AlwaysCompatibleConnectionPolicy{
-  bool isCompatible( const ReaderPort& self, const DataPort& port ) const {
+  static bool isCompatible( const ReaderPort& self, const DataPort& port ) {
+    return true;
+  }
+  static bool isCompatible( const WriterPort& self, const DataPort& port ) {
     return true;
   }
 };

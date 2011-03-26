@@ -47,13 +47,9 @@ ReaderPort::ReaderPort( Node* myNode )
 
 bool ReaderPort::connect(DataPort* port)
 {
-	ScopedBlockMacro("ReaderPort::connect*" )
-  Debug::bar();
+	ScopedBlockMacro("ReaderPort::connect" )
 	if( (port != 0) /* && isEnabled() && port->isEnabled()*/ ){
-    Debug::plop();
-    assert( port );
 		if( isCompatible( *port ) ){
-      Debug::bar();
       disconnect();//only one connection at a time
       connect_impl( port );
       port->connect_impl( this );

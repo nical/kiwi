@@ -33,12 +33,10 @@ public:
     if( isConnected() ){
       return _container;
     }else{
-      //if( isAssociatedToDataPort() ){
-        autoAllocateNode();
-      //}
-
-    return 0;
+      autoAllocateNode();
+      return _container;
     }
+    
   }
 
   void updatePort(){
@@ -54,16 +52,8 @@ public:
 	/**
 	 * @brief Port compatibility check based on the type tag.
 	 */ 
-	virtual bool isCompatible(DataPort& port){
-    if( !port.isEmpty() ){
-      return port.safeDownCastContainer<ContainerType>();
-    }else{
-      // TODO: right now the dynamic_cast method works only when the data port
-      // already has an allocated container, which is a problem.
-      // So we fall back to the old tag compatibility method
-      // this hack is temporary. 
-      return ( port.tags().hasOneOf( tags() ) );
-    }
+	virtual bool isCompatible(DataPort& port) const {
+    return ConnectionPolicy::isCompatible( *this, port );
   }
 
   void autoAllocateNode();

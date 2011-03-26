@@ -50,7 +50,7 @@ DataPort::DataPort( Node* myNode, Container* data )
 }
 */
 DataPort::DataPort( Node* myNode )
-	:_node(myNode)
+	:_node(myNode), _masterLinkedDataPort(0)
 {
 	ScopedBlockMacro("DataPort::constructor")
 }
@@ -58,47 +58,27 @@ DataPort::DataPort( Node* myNode )
 
 void DataPort::bind(DataPort& port)
 {
+  ScopedBlockMacro("DataPort::bind")
 //	Debug::print() << "port binding" << endl();
 	//_container = port._container; TODO !!!
-	port._linkedOutputPorts.add( this );
+	port._slaveLinkedDataPorts.add( this );
+  if(_masterLinkedDataPort)
+    _masterLinkedDataPort->_slaveLinkedDataPorts.remove(this);
 }
 
 void DataPort::unBind()
 {
-	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
-		_linkedOutputPorts[i]->unBind();
-		
+  ScopedBlockMacro("DataPort::unbind")
+	for(kiwi::uint32_t i = 0; i < _slaveLinkedDataPorts.size(); ++i )
+		_slaveLinkedDataPorts[i]->unBind();
+
+  if(_masterLinkedDataPort)
+    _masterLinkedDataPort->_slaveLinkedDataPorts.remove(this);
+
+  _masterLinkedDataPort = 0;
 	//_container = 0; TODO !!!
 }
 
-/* TODO!! transpose the subport handling from here to StaticDataPort
-void DataPort::setAbstractContainer( Container* data )
-{
-	ScopedBlockMacro( "DataPort::setAbstractContainer");
-  
-	DEBUG_ONLY( if(!data) Debug::print() << "warning: param data = 0\n"; )
-	for(kiwi::uint32_t i = 0; i < _linkedOutputPorts.size(); ++i )
-		_linkedOutputPorts[i]->setAbstractContainer( data );
-	_container = data;
-  
-	// set the sub-ports if needed
-	if( (data) && (data->isComposite()) ){
-		DEBUG_ONLY(
-      Debug::print() << "the data is composite ("<<data->nbSubContainers()<<")\n";
-    )
-		for(kiwi::uint32_t i = 0; i < data->nbSubContainers(); ++i){
-			_subPorts.add(new DataPort(_node, data->subContainer(i)));
-		}
-	}
-  // notify the connected port in case they cache the container
-  for(kiwi::uint32_t i = 0; i < _connectedReaders.size();++i){
-    _connectedReaders[i]->updatePort();
-  }
-  for(kiwi::uint32_t i = 0; i < _connectedWriters.size();++i){
-    _connectedWriters[i]->updatePort();
-  }
-}
-*/
 
 portIndex_t DataPort::index() const 
 {
@@ -199,6 +179,13 @@ void DataPort::connectWithoutChecking( WriterPort* port ){
     port->connectWithoutChecking( this );
 }
 
+
+
+namespace internals{
+  void callBindPort(DataPort& p1, DataPort& p2){
+    p1.bind(p2);
+  }
+}//namespace internals
 
 
 }// namespace

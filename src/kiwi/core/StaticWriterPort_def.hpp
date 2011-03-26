@@ -13,6 +13,9 @@ void StaticWriterPort<ContainerType,ConnectionPolicy>::autoAllocateNode(){
     _container = new ContainerType;
     _auxNode = new DynamicContainerNode( _container, new StaticDataPort<ContainerType>(_container),  true);
     assert( connect( &_auxNode->dataPort() ) );
+    if( associatedDataPort() ){
+      internals::callBindPort( *associatedDataPort(), _auxNode->dataPort() );
+    }
   }
 }
 

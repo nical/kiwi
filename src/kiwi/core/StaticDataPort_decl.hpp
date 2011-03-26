@@ -37,17 +37,27 @@ public:
   int flag() const { return TFlag; }
 
   virtual bool isEmpty() const{
-    return getAbstractContainer();
+    return (getAbstractContainer() == 0);
   }
 
   virtual bool setAbstractContainer( Container* data )
   {
+    // set the container
     _container = dynamic_cast<ContainerType*>(data);
+    // transmit the modification to the ports that are bound to this port. 
+    for(kiwi::int32_t i = 0; i < _slaveLinkedDataPorts.size(); ++i)
+      callSetAbstractContainer(*_slaveLinkedDataPorts[i], data );
+    // return true if it worked for this port
     return _container != 0;
   }
   
   virtual bool setContainer( ContainerType* data ){
+    // set the container
     _container = data;
+    // transmit the modification to the ports that are bound to this port. 
+    for(kiwi::int32_t i = 0; i < _slaveLinkedDataPorts.size(); ++i)
+      callSetAbstractContainer(*_slaveLinkedDataPorts[i], data );
+    // returns true unless the input argument was a nil pointer
     return _container != 0;
   }
 

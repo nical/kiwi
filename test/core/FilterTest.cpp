@@ -64,7 +64,6 @@ int main()
 	ScopedBlockMacro( "Filter::Test")
 	DummyFilter filter;
 
-	Debug::foo();
 	
 	//assert( !filter.dataPort(0).isEnabled() );
 	assert( filter.readerPort(0).isEnabled() );
@@ -78,9 +77,13 @@ int main()
 	kiwi::core::DynamicContainerNode nB( &B, new kiwi::core::StaticDataPort<NumberContainer>(&B) );
 	kiwi::core::DynamicContainerNode nR( &R, new kiwi::core::StaticDataPort<NumberContainer>(&R) );
 
+  Debug::foo();
 	assert( nA.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );
 	assert( nB.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );
 	assert( nR.dataPort(0).safeDownCastContainer<kiwi::core::Container>() );
+  Debug::bar();
+  assert( nA.dataPort().safeDownCastContainer<NumberContainer>()->getValue() == 5 );
+  assert( nB.dataPort().safeDownCastContainer<NumberContainer>()->getValue() == 6 );
 /*
 	// check that association are made correctly
 	assert( nA.dataPort(0).associatedReaderOutputPort()

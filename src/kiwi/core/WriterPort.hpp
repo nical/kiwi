@@ -54,6 +54,7 @@ class WriterPort
 {
 friend class Node;
 friend class DataPort;
+friend void callBindPort(DataPort& p1, DataPort& p2);
 public:
 
 	/**
@@ -125,6 +126,10 @@ public:
 	virtual bool isCompatible( DataPort& output ) const = 0;
 	
   virtual void updatePort() { }
+
+  DataPort* associatedDataPort() const{
+    return _associatedDataPort;
+  }
 	
 protected:
 
@@ -150,7 +155,7 @@ protected:
 	 */ 
 	void setEnabled(bool status);
 
-	void associateReaderPort(DataPort* reader){
+	void associateDataPort(DataPort* reader){
 		_associatedDataPort = reader;
 	}
 protected:

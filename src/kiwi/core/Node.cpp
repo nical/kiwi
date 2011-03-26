@@ -155,8 +155,8 @@ void Node::setDataPortContainer(DataPort& port, Container* container)
 	port.setAbstractContainer( container );
 }
 
-void Node::associateWriterToDataPort(WriterPort& writer, DataPort& reader) const {
-  writer.associateReaderPort( &reader );
+void Node::associateWriterToDataPort(WriterPort& writer, DataPort& dataport) const {
+  writer.associateDataPort( &dataport );
 }
 
 // ----------------------------------------------------------- Operators

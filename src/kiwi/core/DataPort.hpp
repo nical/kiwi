@@ -43,6 +43,8 @@ class ReaderPort;
 class WriterPort;
 class Node;
 
+namespace internals {void callBindPort(DataPort& p1, DataPort& p2);}
+
 
 /**
  * @brief Generic output port class for Reader and Writer interface.
@@ -62,6 +64,7 @@ friend class Node;
 public:
 friend class ReaderPort;
 friend class WriterPort;
+friend void internals::callBindPort(DataPort& p1, DataPort& p2);
 
 	// --------------------------------------------------------------------
 	/**
@@ -204,6 +207,9 @@ protected:
 	 * @brief Sets this port's container.
 	 */ 
 	virtual bool setAbstractContainer( Container* data ) = 0;
+	bool callSetAbstractContainer( DataPort& port, Container* data ){
+    return port.setAbstractContainer(data);
+  }
 	
   virtual void connect_impl( ReaderPort* port );
   virtual void disconnect_impl( ReaderPort* port );
@@ -230,16 +236,19 @@ protected:
 
 protected:
 	Node* _node;	
-private:
+protected:
 	//Container* _container;
   //connections
   utils::UnorderedArray<ReaderPort*> _connectedReaders;
   utils::UnorderedArray<WriterPort*> _connectedWriters;
   //port binding
-	utils::UnorderedArray<DataPort*> _linkedOutputPorts;
+  DataPort* _masterLinkedDataPort;
+	utils::UnorderedArray<DataPort*> _slaveLinkedDataPorts;
   //composite data ports
 	utils::UnorderedArray<DataPort*> _subPorts;
 };
+
+
 
 
 }// namespace

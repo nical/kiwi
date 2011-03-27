@@ -228,11 +228,11 @@ protected:
 	void bind( DataPort& port );
 
   /**
-   * @brief Unbinds the port if binded.
+   * @brief unbinds the port if binded.
    *
    * @see void DataPort::bind( DataPort& port )
    */ 
-	void unBind();
+	void unbind();
 
 protected:
 	Node* _node;	

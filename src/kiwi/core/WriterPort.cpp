@@ -143,7 +143,7 @@ void WriterPort::disconnect_impl( DataPort* port ){
   _connectedDataPort = 0;
   if(_associatedDataPort){
     if((_associatedDataPort == port)||(port == 0)){
-      _associatedDataPort->unBind();
+      _associatedDataPort->unbind();
     }
   }
 }

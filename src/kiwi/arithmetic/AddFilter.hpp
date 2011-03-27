@@ -31,7 +31,7 @@ class AddFilter : public kiwi::core::StaticNode<addFilterLayout>
 {
 public:
 	AddFilter(){
-
+    associateWriterToDataPort( staticWriterPort<0>(), staticDataPort<0>() );
 	}
 
   void process(){
@@ -42,7 +42,7 @@ public:
 
     
     NumberContainer_T* ca = staticReaderPort<0>().getContainer();			
-    NumberContainer_T* cb = staticReaderPort<0>().getContainer();
+    NumberContainer_T* cb = staticReaderPort<1>().getContainer();
     NumberContainer_T* result = staticWriterPort<0>().getContainer();
 
     

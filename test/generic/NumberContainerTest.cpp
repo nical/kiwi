@@ -73,7 +73,7 @@ void NumberContainerTest()
 	addition.process();
 
 	Debug::print() << "after filter processing\n";
-
+    Debug::print() << addition.dataPort(0).safeDownCastContainer<NumberContainerInterface<T> >()->getValue() << endl();
 		assert( addition.dataPort(0).safeDownCastContainer<NumberContainerInterface<T> >()->getValue() == 15 );
 
 	Debug::print() << "Test passed successfuly!\n";

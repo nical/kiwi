@@ -71,7 +71,7 @@ void DataPort::unbind()
 {
   ScopedBlockMacro("DataPort::unbind")
 	for(kiwi::uint32_t i = 0; i < _slaveLinkedDataPorts.size(); ++i )
-		_slaveLinkedDataPorts[i]->unBind();
+		_slaveLinkedDataPorts[i]->unbind();
 
   if(_masterLinkedDataPort)
     _masterLinkedDataPort->_slaveLinkedDataPorts.remove(this);

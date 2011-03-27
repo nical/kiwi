@@ -87,6 +87,7 @@ public:
 	 */
 	void associateWriterToDataPort(WriterPort& writer, DataPort& reader) const
 	{
+    ScopedBlockMacro("Filter::AssociateWriterToDataPort")
 		writer.associateReaderPort( &reader );
 	}
 	

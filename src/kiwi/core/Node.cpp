@@ -156,9 +156,9 @@ void Node::setDataPortContainer(DataPort& port, Container* container)
 }
 
 void Node::associateWriterToDataPort(WriterPort& writer, DataPort& dataport) const {
+  ScopedBlockMacro("Node::AssociateWriterToDataPort")
   writer.associateDataPort( &dataport );
 }
-
 // ----------------------------------------------------------- Operators
 
 

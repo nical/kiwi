@@ -16,6 +16,7 @@ class DummyFilter : public kiwi::core::DynamicNode
 {
 public:
 	DummyFilter(){
+    ScopedBlockMacro("DummyFilter::constructor")
     _src1 =  new StaticReaderPort<NumberContainer>(this); 
     _src2 =  new StaticReaderPort<NumberContainer>(this);
     _dest1 = new StaticWriterPort<NumberContainer>(this);
@@ -26,7 +27,9 @@ public:
 		addWriterPort( _dest1 );
 
     portIndex_t r_out = addDataPort( new StaticDataPort<NumberContainer>(this) );
+    Debug::bar();
 		associateWriterToDataPort( *_dest1, dataPort(r_out));
+    Debug::bar();
 	}
 
 	void process(){

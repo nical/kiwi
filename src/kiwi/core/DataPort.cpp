@@ -59,14 +59,15 @@ DataPort::DataPort( Node* myNode )
 void DataPort::bind(DataPort& port)
 {
   ScopedBlockMacro("DataPort::bind")
+  unbind();
 //	Debug::print() << "port binding" << endl();
-	//_container = port._container; TODO !!!
-	port._slaveLinkedDataPorts.add( this );
-  if(_masterLinkedDataPort)
-    _masterLinkedDataPort->_slaveLinkedDataPorts.remove(this);
+	
+  _masterLinkedDataPort = &port;
+  port._slaveLinkedDataPorts.add( this );
+  setAbstractContainer( port.getAbstractContainer() );
 }
 
-void DataPort::unBind()
+void DataPort::unbind()
 {
   ScopedBlockMacro("DataPort::unbind")
 	for(kiwi::uint32_t i = 0; i < _slaveLinkedDataPorts.size(); ++i )

@@ -128,6 +128,8 @@ public:
   virtual void updatePort() { }
 
   DataPort* associatedDataPort() const{
+    Debug::endl();
+    ScopedBlockMacro("WriterPort::associateDataPort")
     return _associatedDataPort;
   }
 	
@@ -156,6 +158,7 @@ protected:
 	void setEnabled(bool status);
 
 	void associateDataPort(DataPort* reader){
+    ScopedBlockMacro("WriterPort::associateDataPort")
 		_associatedDataPort = reader;
 	}
 protected:

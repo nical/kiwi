@@ -26,7 +26,7 @@ public:
   void setNode( kiwi::core::Node * const node){ _node = node; }
 
   ContainerType* getAbstractContainer() const{
-    return _container;
+     return getContainer();
   }
   
   ContainerType* getContainer(){
@@ -36,7 +36,6 @@ public:
       autoAllocateNode();
       return _container;
     }
-    
   }
 
   void updatePort(){

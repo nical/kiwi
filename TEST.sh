@@ -1,34 +1,47 @@
 #!/bin/sh
 
-generic="yes"; core="yes"; image="yes"; text="yes"; utils="yes"
+generic="yes"; core="yes"; image="yes"; text="yes"; utils="yes"; mpl="yes"
 
 if [ "$1" = "generic" ]
 then
-	core="no"; image="no"; text="no"; utils="no"
+	core="no"; image="no"; text="no"; utils="no"; mpl="no"
 fi
 
 if [ "$1" = "core" ]
 then
-	generic="no"; image="no"; text="no"; utils="no"
+	generic="no"; image="no"; text="no"; utils="no"; mpl="no"
 fi
 if [ "$1" = "image" ]
 then
-	core="no"; generic="no"; text="no"; utils="no"
+	core="no"; generic="no"; text="no"; utils="no"; mpl="no"
 fi
 
 if [ "$1" = "text" ]
 then
-	core="no"; generic="no"; image="no"; utils="no"
+	core="no"; generic="no"; image="no"; utils="no"; mpl="no"
 fi
 
 if [ "$1" = "utils" ]
 then
-	core="no"; generic="no"; image="no"; text="no"
+	core="no"; generic="no"; image="no"; text="no"; mpl="no"
+fi
+
+if [ "$1" = "mpl" ]
+then
+	core="no"; generic="no"; image="no"; text="no"; utils="no"
 fi
 
 
 
 cd ./build/test
+
+if [ "$mpl" = "yes" ]
+then
+./mpl/TypeListTest &&
+./mpl/TupleTest ||
+exit
+fi
+
 if [ "$generic" = "yes" ]
 then
 ./generic/ArrayContainerTest && 

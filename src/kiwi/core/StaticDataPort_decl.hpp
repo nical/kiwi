@@ -70,7 +70,6 @@ public:
   bool operator >> ( StaticWriterPort<T1,policy>& writerPort );
 
 protected:
-
   ContainerType* _container;
 };
 
@@ -80,3 +79,22 @@ protected:
 
 
 #endif
+
+/*
+* from sequence of container types
+* -> make a sequence of StaticDataPorts of these container types
+* (mpl::vector<image,text>
+*   --> fusion::vector<StaticDataPort<image>,StaticDataPort<image> > )
+* 
+
+struct MySubPorts{
+  typedef StaticDataPort<image> t0; t0 n0;
+  typedef StaticDataPort<text> t1; t1 n1;
+}; 
+struct MySubPorts2{
+  SubPortMacro( StaticDataPort<image>, 0 );
+  SubPortMacro( StaticDataPort<text>, 1 );
+};
+
+#define SubPortMacro(name,num) typedef name t##num; t##num n##num;
+*/

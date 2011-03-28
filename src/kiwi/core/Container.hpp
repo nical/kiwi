@@ -35,6 +35,7 @@
 #include "kiwi/core/Node.hpp"
 #include "kiwi/utils/Factory.hpp"
 
+
 namespace kiwi{
 namespace core{
 
@@ -104,6 +105,9 @@ public:
 
 };
 
+
+#define COMPOSITE_CONTAINER typedef IsComposite kiwi::true_t;
+#define NON_COMPOSITE_CONTAINER typedef IsComposite kiwi::false_t;
 
 
 

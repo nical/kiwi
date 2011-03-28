@@ -29,6 +29,7 @@ fi
 cd build
 mkdir test &&
 mkdir test/core
+mkdir test/mpl
 mkdir test/generic
 mkdir test/text
 mkdir test/image &&

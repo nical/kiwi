@@ -38,6 +38,8 @@ endif(DEFINED BUILD_KIWI_TEXT)
 SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 #	TestSuite
 #	core/NodeTest
+  mpl/TypeListTest
+  mpl/TupleTest
   core/StaticNodeTest
 	core/FactoryTest
 	core/TagTest

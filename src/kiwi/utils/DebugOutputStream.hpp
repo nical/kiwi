@@ -36,6 +36,7 @@
 
 #define DEBUG
 
+#define DumpValueMacro( expr ) Debug::print() << #expr << ": " << expr << "\n";
 
 namespace kiwi{
 	

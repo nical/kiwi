@@ -74,7 +74,7 @@ typedef char portIndex_t;
 struct true_t{static const int value = 1;};
 struct false_t{static const int value = 0;};
 
-struct NullType{ };
+struct NullType{ typedef NullType type; };
 //enum{ READER, WRITER };
 
 

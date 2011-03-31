@@ -1,9 +1,12 @@
 
 #include "kiwi/mpl/Tuple.hpp"
+#include "kiwi/mpl/DynamicTupleWrapper.hpp"
 #include <assert.h>
 
 
 using namespace kiwi;
+
+typedef kiwi::mpl::Tuple<TypeList_0> Tuple_0;
 
 typedef TypeList_6(kiwi::int32_t,kiwi::int32_t,kiwi::int32_t,kiwi::int32_t,kiwi::int32_t,kiwi::int32_t) TList6i;
 typedef kiwi::mpl::Tuple<TList6i> Tuple6i;
@@ -17,6 +20,14 @@ typedef kiwi::mpl::Tuple<TList3ci> Tuple3ci;
 typedef TypeList_6(kiwi::int8_t,kiwi::int32_t,float,double,kiwi::uint8_t,float) TList_cifdsf;
 typedef kiwi::mpl::Tuple<TList_cifdsf> Tuple_cifdsf;
 
+
+class MotherCLass{};
+struct A : public MotherCLass{ kiwi::int32_t val; };
+struct B : public MotherCLass{ float val; };
+struct C : public MotherCLass{ kiwi::uint32_t val; };
+struct D : public MotherCLass{ kiwi::uint32_t val; };
+typedef TypeList_4(A,B,C,D) TList_abc;
+typedef kiwi::mpl::Tuple<TList_abc> Tuple_abc;
 
 template<class Tuple_t>
 void TupleIntegralTypeTest(){
@@ -65,7 +76,13 @@ ScopedBlockMacro("Tuple::Test")
   TupleIntegralTypeTest<Tuple6c>();
   TupleIntegralTypeTest<Tuple3ci>();
   TupleIntegralTypeTest<Tuple_cifdsf>();
-  
+
+  Tuple_0 emptyTuple;
+
+  Tuple_abc tupleabc;
+  MotherCLass* hli[4];
+  kiwi::mpl::DynamicTupleWrapper::exec(emptyTuple, hli);
+  kiwi::mpl::DynamicTupleWrapper::exec(tupleabc, hli);
   
 return 0;
 }

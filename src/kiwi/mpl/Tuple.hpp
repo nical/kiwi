@@ -18,21 +18,20 @@ struct Tuple{
   typedef typename typelist_::type type;
   static const int size = typelist_::size;
   typedef typelist_ typelist;
-  typedef Tuple<typename typelist_::tail> nextTuple;
+  typedef Tuple<typename typelist_::tail> NestedTuple;
   
   type _obj;
-  nextTuple _next;
+  NestedTuple _next;
 };
-template<class lastType> struct Tuple< TypeList<lastType,NullType> >{
-  typedef lastType type;
-  static const int size = 1;
-  typedef TypeList<lastType,NullType> typelist;
-  typedef NullType nextTuple; //not sure about this...
-  
-  lastType _obj;
+template<> struct Tuple<EmptyTypeList>{
+  typedef NullType type;
+  static const int size = 0;
+  typedef EmptyTypeList typelist;
+  typedef NullType NestedTuple; //not sure this is required
+
 };
 
-
+typedef Tuple<EmptyTypeList> EmptyTuple; 
 
 
 
@@ -40,7 +39,7 @@ namespace tuple{
 
 /*
 template<int i, class tuple_> struct randomAccess{
-  typedef typename randomAccess<i-1,tuple_>::tuple::nextTuple tuple;
+  typedef typename randomAccess<i-1,tuple_>::tuple::NestedTuple tuple;
   //typedef typename typelist::type type;
   static tuple& get(tuple_& t) { return t._next; }
 };
@@ -57,39 +56,39 @@ template<class tuple_> struct randomAccess<0,tuple_>{
   static tuple& get(tuple_& t) { return t; }
 };
 template<class tuple_> struct randomAccess<1,tuple_>{
-  typedef typename tuple_::nextTuple tuple;
+  typedef typename tuple_::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next; }
 };
 template<class tuple_> struct randomAccess<2,tuple_>{
-  typedef typename tuple_::nextTuple::nextTuple tuple;
+  typedef typename tuple_::NestedTuple::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next._next; }
 };
 template<class tuple_> struct randomAccess<3,tuple_>{
-  typedef typename tuple_::nextTuple::nextTuple::nextTuple tuple;
+  typedef typename tuple_::NestedTuple::NestedTuple::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next._next._next; }
 };
 template<class tuple_> struct randomAccess<4,tuple_>{
-  typedef typename tuple_::nextTuple::nextTuple::nextTuple::nextTuple tuple;
+  typedef typename tuple_::NestedTuple::NestedTuple::NestedTuple::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next._next._next._next; }
 };
 template<class tuple_> struct randomAccess<5,tuple_>{
-  typedef typename tuple_::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple tuple;
+  typedef typename tuple_::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next._next._next._next._next; }
 };
 template<class tuple_> struct randomAccess<6,tuple_>{
-  typedef typename tuple_::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple tuple;
+  typedef typename tuple_::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next._next._next._next._next._next; }
 };
 template<class tuple_> struct randomAccess<7,tuple_>{
-  typedef typename tuple_::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple tuple;
+  typedef typename tuple_::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next._next._next._next._next._next._next; }
 };
 template<class tuple_> struct randomAccess<8,tuple_>{
-  typedef typename tuple_::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple tuple;
+  typedef typename tuple_::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next._next._next._next._next._next._next._next; }
 };
 template<class tuple_> struct randomAccess<9,tuple_>{
-  typedef typename tuple_::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple::nextTuple tuple;
+  typedef typename tuple_::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple::NestedTuple tuple;
   static tuple& get(tuple_& t) { return t._next._next._next._next._next._next._next._next._next; }
 };
 

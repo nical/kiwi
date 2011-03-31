@@ -7,7 +7,8 @@
 
 #define KIWI_TYPELIST_MAX_SIZE 10
 
-#define TypeList_1(T1) kiwi::mpl::TypeList<T1,kiwi::NullType>
+#define TypeList_0 kiwi::mpl::EmptyTypeList
+#define TypeList_1(T1) kiwi::mpl::TypeList<T1,TypeList_0 >
 #define TypeList_2(T1,T2) kiwi::mpl::TypeList<T1,TypeList_1(T2) > 
 #define TypeList_3(T1,T2,T3) kiwi::mpl::TypeList<T1,TypeList_2(T2,T3) > 
 #define TypeList_4(T1,T2,T3,T4) kiwi::mpl::TypeList<T1,TypeList_3(T2,T3,T4) > 
@@ -28,12 +29,18 @@ struct TypeList{
   typedef T2 tail;
   static const int size = T2::size+1;
 };
-
+/*
 template<class T1>
 struct TypeList<T1, kiwi::NullType>{
   typedef T1 type;
   typedef NullType tail;
   static const int size = 1;
+};
+*/
+struct EmptyTypeList{
+  typedef NullType type;
+  typedef NullType tail;
+  static const int size = 0;
 };
 
 

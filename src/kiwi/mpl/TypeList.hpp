@@ -44,29 +44,20 @@ struct EmptyTypeList{
 };
 
 
+
+
+
+
 namespace typelist{
 
-template<class typelist_, int i> struct at{ };
+//random access
+template<class typelist_, int i> struct at{
+  typedef typename at<typename typelist_::tail,i-1>::type type;
+};
 template<class typelist_> struct at<typelist_,0>{
-  typedef typename typelist_::type type;};
-template<class typelist_> struct at<typelist_,1>{
-  typedef typename typelist_::tail::type type;};
-template<class typelist_> struct at<typelist_,2>{
-  typedef typename typelist_::tail::tail::type type;};
-template<class typelist_> struct at<typelist_,3>{
-  typedef typename typelist_::tail::tail::tail::type type;};
-template<class typelist_> struct at<typelist_,4>{
-  typedef typename typelist_::tail::tail::tail::tail::type type;};
-template<class typelist_> struct at<typelist_,5>{
-  typedef typename typelist_::tail::tail::tail::tail::tail::type type;};
-template<class typelist_> struct at<typelist_,6>{
-  typedef typename typelist_::tail::tail::tail::tail::tail::tail::type type;};
-template<class typelist_> struct at<typelist_,7>{
-  typedef typename typelist_::tail::tail::tail::tail::tail::tail::tail::type type;};
-template<class typelist_> struct at<typelist_,8>{
-  typedef typename typelist_::tail::tail::tail::tail::tail::tail::tail::type::type type;};
-template<class typelist_> struct at<typelist_,9>{
-  typedef typename typelist_::tail::tail::tail::tail::tail::tail::tail::type::type::type type;};
+  typedef typename typelist_::type type;
+};
+
 
 }//namespace typelist
 

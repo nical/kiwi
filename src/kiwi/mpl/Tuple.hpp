@@ -95,7 +95,6 @@ template<class tuple_> struct randomAccess<9,tuple_>{
 
 template<int i> struct at{
   template<class tuple_>
-  //static typename typelist::at<typename tuple_::typelist,i>::type&
   static typename randomAccess<i,tuple_>::tuple::type&
     get(tuple_& t){ return randomAccess<i,tuple_>::get(t)._obj; }
 };

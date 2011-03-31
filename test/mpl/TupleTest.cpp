@@ -21,11 +21,11 @@ typedef TypeList_6(kiwi::int8_t,kiwi::int32_t,float,double,kiwi::uint8_t,float) 
 typedef kiwi::mpl::Tuple<TList_cifdsf> Tuple_cifdsf;
 
 
-class MotherCLass{};
-struct A : public MotherCLass{ kiwi::int32_t val; };
-struct B : public MotherCLass{ float val; };
-struct C : public MotherCLass{ kiwi::uint32_t val; };
-struct D : public MotherCLass{ kiwi::uint32_t val; };
+struct M{ kiwi::int32_t val; M(kiwi::int32_t v):val(v){} };
+struct A : public M{ A():M(42){} };
+struct B : public M{ B():M(12){} };
+struct C : public M{ C():M(1234){} };
+struct D : public M{ D():M(1337){} };
 typedef TypeList_4(A,B,C,D) TList_abc;
 typedef kiwi::mpl::Tuple<TList_abc> Tuple_abc;
 
@@ -80,9 +80,13 @@ ScopedBlockMacro("Tuple::Test")
   Tuple_0 emptyTuple;
 
   Tuple_abc tupleabc;
-  MotherCLass* hli[4];
+  
+  M* hli[4];
   kiwi::mpl::DynamicTupleWrapper::exec(emptyTuple, hli);
   kiwi::mpl::DynamicTupleWrapper::exec(tupleabc, hli);
+  assert( hli[0]->val == 42 );
+  assert( hli[1]->val == 12 );
+  assert( hli[2]->val == 1234 );
   
 return 0;
 }

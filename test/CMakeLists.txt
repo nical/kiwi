@@ -40,6 +40,7 @@ SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 #	core/NodeTest
   mpl/TypeListTest
   mpl/TupleTest
+  mpl/TupleFunctorTest
   core/StaticNodeTest
 	core/FactoryTest
 	core/TagTest

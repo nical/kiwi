@@ -38,7 +38,8 @@ cd ./build/test
 if [ "$mpl" = "yes" ]
 then
 ./mpl/TypeListTest &&
-./mpl/TupleTest ||
+./mpl/TupleTest &&
+./mpl/TupleFunctorTest ||
 exit
 fi
 

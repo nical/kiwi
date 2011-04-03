@@ -1,6 +1,7 @@
 
 #include "kiwi/mpl/Tuple.hpp"
 #include "kiwi/mpl/DynamicTupleWrapper.hpp"
+#include "kiwi/mpl/TupleApplyFunctor.hpp"
 #include <assert.h>
 
 
@@ -87,6 +88,8 @@ ScopedBlockMacro("Tuple::Test")
   assert( hli[0]->val == 42 );
   assert( hli[1]->val == 12 );
   assert( hli[2]->val == 1234 );
+
+  
   
 return 0;
 }

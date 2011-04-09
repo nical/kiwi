@@ -38,6 +38,7 @@
 #ifndef KIWI_COMMONS_HPP
 #define KIWI_COMMONS_HPP
 
+
 #include "kiwi/utils/Macros.hpp"
 #include "kiwi/config.hpp"
 

@@ -15,9 +15,9 @@ typedef boost::uint16_t uint16;
 typedef boost::uint32_t uint32;
 typedef boost::uint64_t uint64;
 
-typedef char int8_t;
+typedef char int8;
 typedef char char_t;
-typedef char byte_t;
+typedef char byte;
 typedef boost::int16_t int16;
 typedef boost::int32_t int32;
 typedef boost::int64_t int64;

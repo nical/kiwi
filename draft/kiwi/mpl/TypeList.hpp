@@ -50,6 +50,21 @@ struct EmptyTypeList{
 
 namespace typelist{
 
+template<typename T> struct IsATypeList{
+  static const int value = 0;
+  typedef false_t type;
+};
+
+template<typename T1, typename T2> struct IsATypeList< TypeList<T1,T2> >{
+  static const int value = 1;
+  typedef true_t type;
+};
+
+template<> struct IsATypeList<EmptyTypeList>{
+  static const int value = 1;
+  typedef true_t type;
+};
+
 //random access
 template<class typelist_, int i> struct at{
   typedef typename at<typename typelist_::tail,i-1>::type type;

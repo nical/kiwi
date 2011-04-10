@@ -15,7 +15,7 @@
 
 
 #ifdef USE_SCOPEDBLOCK_MACRO
-#define ScopedBlockMacro(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(kiwi::out,message);
+#define ScopedBlockMacro(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::out);
 #else
 #define ScopedBlockMacro(message) 
 #endif
@@ -70,7 +70,7 @@ DebugStream& operator << (DebugStream& stream, EndOfLine& eol);
 
 class ScopedBlock{
 public:
-  ScopedBlock(kiwi::string& message,DebugStream& stream){
+  ScopedBlock(const kiwi::string& message,DebugStream& stream){
     _stream = &stream;
     _msg = &message;
     stream.beginBlock(message);
@@ -81,7 +81,7 @@ public:
   
 private:
   DebugStream* _stream;
-  kiwi::string* _msg;
+  kiwi::string const* _msg;
 };
 
 

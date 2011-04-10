@@ -12,7 +12,10 @@ template<typename TSubContainers>
 class CompositeContainer{
 public:
   typedef TSubContainers SubContainersTypeList;
-
+  template<int i>
+  struct subContainerInfo{
+    typedef typename kiwi::mpl::typelist::at<SubContainersTypeList,i>::type type;
+  };
   template<int i>
   typename kiwi::mpl::typelist::at<SubContainersTypeList,i>::type&
   subContainer(){

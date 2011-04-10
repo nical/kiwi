@@ -8,7 +8,11 @@
 class IntContainer : public kiwi::core::Container
 {
 public:
-  int* value;
+  int& value() { return *_value; }
+  const int& value() const { return *_value; }
+  void init( int* ptr ){ _value = ptr; }
+protected:
+  int* _value;
 };
 
 class Vector3iContainer
@@ -19,9 +23,9 @@ public:
       _data[0] = x;
       _data[1] = y;
       _data[2] = z;
-      subContainer<0>().value = &_data[0];
-      subContainer<1>().value = &_data[1];
-      subContainer<2>().value = &_data[2];
+      subContainer<0>().init( &_data[0] );
+      subContainer<1>().init( &_data[1] );
+      subContainer<2>().init( &_data[2] );
     }
     int& operator[](int i){
       return _data[i];

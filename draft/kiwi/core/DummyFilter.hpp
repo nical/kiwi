@@ -5,14 +5,12 @@
 #include "Filter.hpp"
 #include "DynamicNodeLayout.hpp"
 
-class DummyContainerA { };
-class DummyContainerB { };
+#include "DummyContainer.hpp"
 
 class DummyFilter : public kiwi::core::Filter{
 public:
   void process(){
-    // PROCESS
-    // use _readA, etc.
+    _write->value() = _readA->value() + _readB->value();
   }
   
 protected:
@@ -22,9 +20,9 @@ protected:
     layout.createWriter( _write );
   }
 private:
-  DummyContainerA* _readA;
-  DummyContainerB* _readB;
-  DummyContainerA* _Write;
+  IntContainer* _readA;
+  IntContainer* _readB;
+  IntContainer* _Write;
 };
 
 

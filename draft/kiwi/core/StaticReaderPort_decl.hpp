@@ -1,4 +1,10 @@
 
+#ifndef KIWI_CORE_STATICREADERPORT_DECL_HPP
+#define KIWI_CORE_STATICREADERPORT_DECL_HPP
+
+#include "kiwi/mpl/TypeList.hpp"
+#include "kiwi/mpl/Tuple.hpp"
+#include "kiwi/mpl/MakePointer.hpp"
 
 namespace kiwi{
 namespace core{
@@ -11,7 +17,7 @@ public:
   
   
 protected:
-  typedef kiwi::mpl::typelist::Transform<ContainerTypeList,kiwi::mpl::MakePointer> ContainerPtrTypeList;
+  typedef kiwi::mpl::typelist::Transform<ContainerTypeList,kiwi::mpl::MakePointer_2> ContainerPtrTypeList;
   
   kiwi::mpl::tuple::<ContainerPtrTypeList> _toUpdate;
 };
@@ -20,3 +26,6 @@ protected:
 
 }//namespace
 }//namespace
+s
+
+#endif

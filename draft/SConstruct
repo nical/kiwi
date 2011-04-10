@@ -1,3 +1,0 @@
-
-libKiwiEnv = Environment(CPPPATH = ['.'])
-libKiwiEnv.Program(['test.cpp','kiwi/utils/DebugStream.cpp'])

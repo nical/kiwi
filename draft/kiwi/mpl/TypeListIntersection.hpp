@@ -28,7 +28,6 @@ template<typename T2> struct _intersection2<EmptyTypeList,T2>{enum{ value = 0 };
 template<typename T1, typename T2>
 struct intersection{
   enum{ value = _intersection1<T1,T2>::value };
-
 };
 
 

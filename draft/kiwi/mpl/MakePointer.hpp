@@ -9,6 +9,10 @@ template<typename T> struct MakePointer{
   typedef T* type;
 };
 
+template<typename T> struct MakePointer_2{
+  typedef T** type;
+};
+
 }//namespace
 }//namespace
 

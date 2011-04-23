@@ -1,5 +1,10 @@
 #define KIWI_USE_ASSERT
 
+#include "kiwi/core/AbstractDataPort.hpp"
+#include "kiwi/core/StaticDataPort_decl.hpp"
+#include "kiwi/core/AbstractAccessPort.hpp"
+#include "kiwi/core/StaticAccessPort_decl.hpp"
+
 #include "kiwi/utils/assert.hpp"
 #include "kiwi/core/Container.hpp"
 #include "core/DumbContainer.hpp"
@@ -8,6 +13,7 @@
 #include "kiwi/mpl/SameType.hpp"
 #include "kiwi/mpl/TypeListPrint.hpp"
 #include "kiwi/mpl/TypeToStr.hpp"
+#include "kiwi/mpl/AsTypeList.hpp"
 #include <typeinfo>
 
 template<typename T> struct MakePointer{ typedef T* type; };

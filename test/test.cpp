@@ -56,13 +56,13 @@ int main(){
 
   typedef kiwi::mpl::typelist::Transform<TypeList_3(int,float,char), MakePointer>::type TransformedTypeList;
 
-  out << " TypeToStr: " << kiwi::mpl::type<int>::str() << endl;
-  out << " TypeToStr: " << kiwi::mpl::type<char>::str() << endl;
-  out << " TypeToStr: " << kiwi::mpl::type<float*>::str() << endl;
+  out << "TypeToStr: " << kiwi::mpl::type<int>::str() << endl;
+  out << "TypeToStr: " << kiwi::mpl::type<char>::str() << endl;
+  out << "TypeToStr: " << kiwi::mpl::type<float*>::str() << endl;
 
   out << "foo" <<endl;
   kiwi::mpl::typelist::print<TypeList_3(int*,float*,char*)>::in(out);
-  out << "\nbar" <<endl;
+  out << endl << "bar" <<endl;
   bool transformTest = kiwi::mpl::SameType<
     TypeList_3(int*,float*,char*)
     , TransformedTypeList
@@ -74,13 +74,12 @@ int main(){
   
 
   kiwi::core::StaticDataPort<int,kiwi::core::READ_WRITE> dp;
-  assert( dp.flag() == kiwi::core::READ_WRITE );
-
+ 
   kiwi::core::StaticAccessPort<int,kiwi::core::AlwaysCompatiblePolicy,kiwi::core::READ_WRITE> ap;
 
-  ap.connect( dp );
-  
-  //kiwi::mpl::typelist::print< kiwi::mpl::typelist::Transform<TypeList_1(int),kiwi::mpl::MakePointer_2> >::in(out);
+  assert( ap.connect( dp ) );
+  out << "ap.flag: " << ap.flag() << endl; 
+  out << "dp.flag: " << dp.flag() << endl; 
   
   out << "end of the test" << endl;
 }

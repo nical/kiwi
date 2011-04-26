@@ -1,0 +1,14 @@
+
+libKiwiEnv = Environment(CPPPATH = ['..'])
+libKiwiEnv.Append(CCFLAGS = ['-g','-O3'])
+libKiwiEnv.Append(CPPDEFINES=['DEBUG'])
+#env.Append(LIBS = ['GL']) 
+
+libKiwiSrc = Split("""core/Node.cpp core/DynamicNode.cpp utils/DebugStream.cpp""")
+
+static = libKiwiEnv.Library(target='libKiwi', source=libKiwiSrc)
+shared = libKiwiEnv.SharedLibrary(target='libKiwi', source=libKiwiSrc)
+
+libKiwiEnv.Install(dir = "/usr/lib", source = shared)
+libKiwiEnv.Install(dir = "/usr/lib", source = static)
+libKiwiEnv.Alias('install', ['/usr/lib/'])

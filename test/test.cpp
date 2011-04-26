@@ -14,7 +14,12 @@
 #include "kiwi/mpl/TypeListPrint.hpp"
 #include "kiwi/mpl/TypeToStr.hpp"
 #include "kiwi/mpl/AsTypeList.hpp"
+
+#include "kiwi/mpl/IsRelated.hpp"
+
 #include <typeinfo>
+
+
 
 template<typename T> struct MakePointer{ typedef T* type; };
   
@@ -82,6 +87,16 @@ int main(){
   out << "dp.flag: " << dp.flag() << endl; 
   
   out << "end of the test" << endl;
+  
+  int isrelatedtest  = kiwi::mpl::IsRelated<kiwi::core::AbstractAccessPort,int>::value;
+  int isrelatedtest2 = kiwi::mpl::IsRelated<
+    kiwi::core::AbstractAccessPort,
+    kiwi::core::StaticAccessPort<int,kiwi::core::AlwaysCompatiblePolicy,kiwi::core::READ_WRITE>
+  >::value;
+   
+  assert(!isrelatedtest);
+  assert(isrelatedtest2);
+  
 }
 
 

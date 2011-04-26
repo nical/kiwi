@@ -73,7 +73,14 @@ int main(){
   out.endBlock("mpl tests");
   
 
+  kiwi::core::StaticDataPort<int,kiwi::core::READ_WRITE> dp;
+  assert( dp.flag() == kiwi::core::READ_WRITE );
 
+  kiwi::core::StaticAccessPort<int,kiwi::core::AlwaysCompatiblePolicy,kiwi::core::READ_WRITE> ap;
+
+  ap.connect( dp );
+  
+  //kiwi::mpl::typelist::print< kiwi::mpl::typelist::Transform<TypeList_1(int),kiwi::mpl::MakePointer_2> >::in(out);
   
   out << "end of the test" << endl;
 }

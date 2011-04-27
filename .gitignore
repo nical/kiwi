@@ -1,3 +1,5 @@
+*.o
+*.os
 *.cmake
 *.pro.user
 *Makefile*

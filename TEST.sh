@@ -74,8 +74,8 @@ fi
 
 if [ "$text" = "yes" ]
 then
-echo 'no test for target: image' ||
+echo 'no test for target: text' ||
 exit
 fi
 
-echo '\n\n end of the test suite--\n\n'
+echo '\n\n end of the test suite--\n'

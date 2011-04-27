@@ -1,9 +1,5 @@
 #define KIWI_USE_ASSERT
 
-#include "kiwi/core/AbstractDataPort.hpp"
-#include "kiwi/core/StaticDataPort_decl.hpp"
-#include "kiwi/core/AbstractAccessPort.hpp"
-#include "kiwi/core/StaticAccessPort_decl.hpp"
 
 #include "kiwi/utils/assert.hpp"
 #include "kiwi/core/Container.hpp"
@@ -14,25 +10,16 @@
 #include "kiwi/mpl/TypeListPrint.hpp"
 #include "kiwi/mpl/TypeToStr.hpp"
 #include "kiwi/mpl/AsTypeList.hpp"
-#include "kiwi/mpl/MakeContainer.hpp"
-
-#include "kiwi/mpl/IsRelated.hpp"
-
-#include <typeinfo>
 
 
 
 template<typename T> struct MakePointer{ typedef T* type; };
   
 
-class CA : public kiwi::core::Container{ };
-
-
 
 using kiwi::out;
 using kiwi::endl;
 
-void tempTest();
 
 int main(){
   ScopedBlockMacro("kiwi v2::test")
@@ -62,15 +49,6 @@ int main(){
   out.endBlock("mpl tests");
   
 
-  kiwi::core::StaticDataPort<int,kiwi::core::READ_WRITE> dp;
- 
-  kiwi::core::StaticAccessPort<int,kiwi::core::AlwaysCompatiblePolicy,kiwi::core::READ_WRITE> ap;
-
-  assert( ap.connect( dp ) );
-  out << "ap.flag: " << ap.flag() << endl; 
-  out << "dp.flag: " << dp.flag() << endl; 
-  
-
 
 
 
@@ -78,8 +56,3 @@ int main(){
 
 }
 
-
-
-void tempTest(){
-
-}

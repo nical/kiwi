@@ -4,7 +4,13 @@ libKiwiEnv.Append(CCFLAGS = ['-g','-O3'])
 libKiwiEnv.Append(CPPDEFINES=['DEBUG'])
 #env.Append(LIBS = ['GL']) 
 
-libKiwiSrc = Split("""core/Node.cpp core/DynamicNode.cpp utils/DebugStream.cpp""")
+libKiwiSrc = Split("""
+  core/AbstractDataPort.cpp
+  core/AbstractAccessPort.cpp
+  core/Node.cpp
+  core/DynamicNode.cpp
+  utils/DebugStream.cpp
+  """)
 
 static = libKiwiEnv.Library(target='libKiwi', source=libKiwiSrc)
 shared = libKiwiEnv.SharedLibrary(target='libKiwi', source=libKiwiSrc)

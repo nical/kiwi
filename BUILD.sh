@@ -1,26 +1,16 @@
 #!/bin/sh
 
 
-if [ -d "build" ];
+cd ./src/kiwi/
+
+
+if [ "$1" = "install" ]
 then
-	echo "--build directory already crated" 
-	if [ -f "build/Makefile" ];
-	then
-		echo "--Makefile already generated" 
-		cd build;
-		make -j4 &&
-		cd ..
-	else
-	  ./REBUILD.sh
-	fi
+echo 'Will now build and install the Kiwi library\n'
+sudo scons -j4 install
 else
-	./REBUILD.sh
+echo 'Will now build the Kiwi library\n'
+scons -j4
 fi
 
-
-
-
-
-
-
-
+cd ../../

@@ -10,12 +10,12 @@ namespace mpl{
 
 template<typename T1, typename T2>
 struct SameType{
-  static const int value = 0;
+  enum{ value = 0 };
   typedef kiwi::false_t type;
 };
 template<typename T>
 struct SameType<T,T>{
-  static const int value = 1;
+  enum{ value = 1 };
   typedef kiwi::true_t type;
 };
 

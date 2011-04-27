@@ -8,8 +8,22 @@
 namespace kiwi{
 namespace core{
 
+
+/**
+ * Abstract mother class for containers.
+ *
+ * Having this class allows to use kiwi::mpl::IsRelated with containers that is
+ * needed by the implementation of kiwi::mpl::MakeContainer. 
+ */ 
+class AbstractContainer{ public: virtual ~AbstractContainer(){} };
+
+/**
+ * The class that implements the composite container's mecanism.
+ *
+ * Custom containers should inherit this class;
+ */ 
 template<typename TSubContainers>
-class CompositeContainer{
+class CompositeContainer : public AbstractContainer{
 public:
   typedef TSubContainers SubContainersTypeList;
   template<int i>
@@ -35,19 +49,6 @@ struct ContainerWrapper : public Container{
   ValueType data;
 };
 
-// ---------------------------------------------------------------- Is container
-template<typename T>
-struct IsContainer{
-  typedef false_t type;
-  static const int value = 0;
-};
-template<typename T>
-struct IsContainer< CompositeContainer<T> >{
-  typedef true_t type;
-  static const int value = 1;
-};
-
-// -------------------------------------------------------------- make Container
 
 }//namespace
 }//namespace

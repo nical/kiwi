@@ -16,7 +16,7 @@ namespace mpl{
 template<class typelist_>
 struct Tuple{
   typedef typename typelist_::type type;
-  static const int size = typelist_::size;
+  enum{ size = typelist_::size };
   typedef typelist_ typelist;
   typedef Tuple<typename typelist_::tail> NestedTuple;
   
@@ -25,7 +25,7 @@ struct Tuple{
 };
 template<> struct Tuple<EmptyTypeList>{
   typedef NullType type;
-  static const int size = 0;
+  enum{ size = 0 };
   typedef EmptyTypeList typelist;
   typedef NullType NestedTuple; //not sure this is required
 

@@ -14,6 +14,7 @@
 #include "kiwi/mpl/TypeListPrint.hpp"
 #include "kiwi/mpl/TypeToStr.hpp"
 #include "kiwi/mpl/AsTypeList.hpp"
+#include "kiwi/mpl/MakeContainer.hpp"
 
 #include "kiwi/mpl/IsRelated.hpp"
 
@@ -23,6 +24,8 @@
 
 template<typename T> struct MakePointer{ typedef T* type; };
   
+
+class CA : public kiwi::core::Container{ };
 
 
 
@@ -86,17 +89,39 @@ int main(){
   out << "ap.flag: " << ap.flag() << endl; 
   out << "dp.flag: " << dp.flag() << endl; 
   
-  out << "end of the test" << endl;
+
   
   int isrelatedtest  = kiwi::mpl::IsRelated<kiwi::core::AbstractAccessPort,int>::value;
   int isrelatedtest2 = kiwi::mpl::IsRelated<
     kiwi::core::AbstractAccessPort,
     kiwi::core::StaticAccessPort<int,kiwi::core::AlwaysCompatiblePolicy,kiwi::core::READ_WRITE>
   >::value;
+  int isrelatedtest3 = kiwi::mpl::IsRelated< kiwi::core::AbstractContainer, CA >::value;
    
   assert(!isrelatedtest);
   assert(isrelatedtest2);
+  assert(isrelatedtest3);
+
   
+  out << "isRelated constants: " << (int) kiwi::mpl::IsRelated<kiwi::core::AbstractAccessPort, int>::value << " " << (int) kiwi::mpl::IsRelated<int,float>::value << endl;
+
+  typedef kiwi::mpl::MakeContainer<int>::type makecontainer_int;
+  typedef kiwi::mpl::MakeContainer< kiwi::core::ContainerWrapper<int> >::type makecontainer_cw_int;
+  typedef kiwi::core::ContainerWrapper<int> containerwrapper_int;
+  bool makecontainer_test1
+    = kiwi::mpl::SameType<containerwrapper_int,makecontainer_int>::value;
+  bool makecontainer_test2
+    = kiwi::mpl::SameType<containerwrapper_int,makecontainer_cw_int>::value;
+
+  assert( kiwi::mpl::MakeContainer<int>::introduceChange );
+  assert( !kiwi::mpl::MakeContainer< kiwi::core::ContainerWrapper<int> >::introduceChange );
+    
+  assert( makecontainer_test1 );
+  assert( makecontainer_test2 );
+
+
+  out << "end of the test" << endl;
+
 }
 
 

@@ -23,7 +23,7 @@ struct IsRelated{
   static DerivedT derived();
   static char test(const BaseT&); // sizeof(test()) == sizeof(char)
   static char (&test(...))[2];    // sizeof(test()) == sizeof(char[2])
-  enum { value = (sizeof(test(derived())) == sizeof(char)) }; 
+  enum{ value = (sizeof(test(derived())) == sizeof(char)) }; 
 };
 
 

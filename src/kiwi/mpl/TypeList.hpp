@@ -27,20 +27,13 @@ template<class T1, class T2>
 struct TypeList{
   typedef T1 type;
   typedef T2 tail;
-  static const int size = T2::size+1;
+  enum{ size = T2::size+1 };
 };
-/*
-template<class T1>
-struct TypeList<T1, kiwi::NullType>{
-  typedef T1 type;
-  typedef NullType tail;
-  static const int size = 1;
-};
-*/
+
 struct EmptyTypeList{
   typedef NullType type;
   typedef NullType tail;
-  static const int size = 0;
+  enum{ size = 0 };
 };
 
 
@@ -51,17 +44,17 @@ struct EmptyTypeList{
 namespace typelist{
 
 template<typename T> struct IsATypeList{
-  static const int value = 0;
+  enum{ value = 0 };
   typedef false_t type;
 };
 
 template<typename T1, typename T2> struct IsATypeList< TypeList<T1,T2> >{
-  static const int value = 1;
+  enum{ value = 1 };
   typedef true_t type;
 };
 
 template<> struct IsATypeList<EmptyTypeList>{
-  static const int value = 1;
+  enum{ value = 1 };
   typedef true_t type;
 };
 

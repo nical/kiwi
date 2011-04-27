@@ -72,16 +72,18 @@ class ScopedBlock{
 public:
   ScopedBlock(const kiwi::string& message,DebugStream& stream){
     _stream = &stream;
-    _msg = &message;
+    _msg = message;
     stream.beginBlock(message);
+    *_stream << "message: " << _msg << "\n";
   }
   ~ScopedBlock(){
-    _stream->endBlock(*_msg);
+    *_stream << "message: " << _msg << "\n";
+    _stream->endBlock(_msg);
   }
   
 private:
   DebugStream* _stream;
-  kiwi::string const* _msg;
+  kiwi::string _msg;
 };
 
 

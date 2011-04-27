@@ -2,6 +2,8 @@
 
 generic="yes"; core="yes"; image="yes"; text="yes"; utils="yes"; mpl="yes"
 
+echo '\nTest suite - target: '$1'\n\n'
+
 if [ "$1" = "generic" ]
 then
 	core="no"; image="no"; text="no"; utils="no"; mpl="no"
@@ -33,61 +35,46 @@ fi
 
 
 
-cd ./build/test
+cd ./test
+
+scons -j4 || exit
+echo '\n\n'
 
 if [ "$mpl" = "yes" ]
 then
 ./mpl/TypeListTest &&
 ./mpl/TupleTest &&
-./mpl/TupleFunctorTest ||
+./mpl/MakeContainerTest ||
 exit
 fi
 
 if [ "$generic" = "yes" ]
 then
-./generic/ArrayContainerTest && 
-./generic/StructuredArrayContainerTest && 
-./generic/PointTest &&
-./generic/NumberContainerTest &&
-./generic/PointVectorContainerTest &&
-./generic/RectangleContainerTest ||
+echo 'no test for target: generic\n' ||
 exit
 fi
 
 if [ "$core" = "yes" ]
 then
-./core/FactoryTest  &&
-#./core/NodeTest &&
-./core/StaticNodeTest &&
-./core/FilterTest ||
+./core/PortTest ||
 exit
 fi
 
 if [ "$utils" = "yes" ]
 then
-#./utils/ClassInfoTest &&
-./utils/ConnectorTest &&
-./utils/UnorderedArrayTest &&
-./utils/typesTest &&
-./utils/randomTest ||
+./utils/DebugStreamTest ||
 exit
 fi
 
 if [ "$image" = "yes" ]
 then
-./image/CairoImageContainerTest &&
-./image/MixedImageTest &&
-./image/CopyImageTest &&
-./image/LinearGradientContainerTest &&
-./image/ChannelOffsetFilterTest &&
-./image/ImageContainerTest ||
+echo 'no test for target: image' ||
 exit
 fi
 
 if [ "$text" = "yes" ]
 then
-#./text/PlainTextContainerTest &&
-./text/PlainTextLoaderTest ||
+echo 'no test for target: image' ||
 exit
 fi
 

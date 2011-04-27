@@ -39,6 +39,10 @@ public:
 		return true;
 		//TODO: to benchmark: using resize on _data
 	}
+  void clear(){
+    _nbElements = 0;
+    _data.resize(0);
+  }
 	
 	T& at( kiwi::uint32 index ) {return _data[index];}
 	T at( kiwi::uint32 index ) const {return _data[index];}

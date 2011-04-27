@@ -15,6 +15,9 @@ typedef enum{ READ = 1, WRITE = 2, READ_WRITE = READ | WRITE } AccessFlag;
 
 class AbstractAccessPort{
 public:
+  // constructor
+  AbstractAccessPort()  : _connectedPort(0){  }
+
   // methods
   bool connect( AbstractDataPort& port );
   void disconnect();

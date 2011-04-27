@@ -1,0 +1,14 @@
+
+KiwiTestEnv = Environment(CPPPATH = ['.', '../src/'])
+#KiwiTestEnv.Append(CPPPATH = ['../src/'])
+KiwiTestEnv.Append(LIBS = ['Kiwi']) 
+KiwiTestEnv.Program(target='test', source=['test.cpp'])
+KiwiTestEnv.Program('mpl/TypeListTest.cpp')
+KiwiTestEnv.Program('mpl/TupleTest.cpp')
+KiwiTestEnv.Program('mpl/MakeContainerTest.cpp')
+KiwiTestEnv.Program('mpl/IsRelatedTest.cpp')
+
+KiwiTestEnv.Program('utils/DebugStreamTest.cpp')
+
+KiwiTestEnv.Program('core/PortTest.cpp')
+

@@ -12,6 +12,7 @@ namespace core{
 
 
 class AbstractDataPort{
+friend class AbstractAccessPort;
 public:
   void commit();
   void disconnect( AbstractAccessPort* = 0 );
@@ -22,7 +23,9 @@ public:
   bool connect( AbstractAccessPort& port ) { return port.connect(*this); }
   bool isCompatible( AbstractAccessPort& port ){ return port.isCompatible(*this); }
   kiwi::int32 nbConnections() const { return _connectedPorts.size(); }
-  bool isConnected(AbstractAccessPort& port) const { return _connectedPorts.find(&port); }
+  bool isConnected(AbstractAccessPort& port) const {
+    return _connectedPorts.find(&port);
+  }
   bool isConnected() const { return nbConnections(); }
  
   // virtual methods
@@ -30,6 +33,7 @@ public:
   
   
 protected:
+  void _disconnect( AbstractAccessPort* );
   utils::UnorderedArray<AbstractAccessPort*> _connectedPorts;
 };
 

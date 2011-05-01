@@ -10,6 +10,7 @@ libKiwiSrc = Split("""
   core/Node.cpp
   core/DynamicNode.cpp
   utils/DebugStream.cpp
+  utils/Testing.cpp
   """)
 
 static = libKiwiEnv.Library(target='libKiwi', source=libKiwiSrc)

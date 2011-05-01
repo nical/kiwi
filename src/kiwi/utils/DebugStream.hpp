@@ -35,9 +35,15 @@ public:
   }
   DebugStream& endl();
   DebugStream& error();
-  DebugStream& foo() { (*_stream) << "foo"; endl(); }
-  DebugStream& bar() { (*_stream) << "bar"; endl(); }
-  DebugStream& plop(){ (*_stream) << "plop"; endl(); }
+  DebugStream& foo() {
+    (*this) << emphasePrefix() <<"foo" << resetFormat(); endl();
+    return *this; }
+  DebugStream& bar() {
+    (*this) << emphasePrefix() <<"bar" << resetFormat(); endl();
+    return *this; }
+  DebugStream& plop(){
+    (*this) << emphasePrefix() <<"plop" << resetFormat(); endl();
+    return *this; }
   void beginBlock(const kiwi::string& message);
   void endBlock(const kiwi::string& message);
   

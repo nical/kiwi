@@ -1,8 +1,10 @@
+#define KIWI_TESTING
 
 #include "kiwi/core/PortSystem.hpp"
 #include "kiwi/core/Container.hpp"
 #include "kiwi/utils/DebugStream.hpp"
 #include <assert.h>
+#include "kiwi/utils/Testing.hpp"
 
 using kiwi::out;
 using kiwi::endl;
@@ -18,24 +20,32 @@ int main(){
     ,kiwi::core::READ_WRITE
   > ap;
 
-  // ports are note connected yet
-  assert( ! ap.isConnected() );
-  assert( ! dp.isConnected() );
+  
+  kiwi_test( "The AccessPort should not be connected at this stage.","c.ps.01a",
+    ! ap.isConnected()  );
+  kiwi_test( "The DataPort should not be connected at this stage.","c.ps.01b",
+    ! dp.isConnected()  );
 
-  //connecting should be fine
-  assert( ap.connect( dp ) );
+  
+  kiwi_test( "Connecting ([data R+W]>>[access R+W]) should work fine.","c.ps.02",
+    ap.connect( dp ) );
+
   out << "ap.flag: " << ap.flag() << endl; 
   out << "dp.flag: " << dp.flag() << endl; 
 
-  // port should (at least) say that they're connected
-  assert( ap.isConnected() );
-  assert( dp.isConnected() );
+
+  kiwi_test( "The AccessPort should be connected.","c.ps.03",
+    ap.isConnected() );
+  kiwi_test( "The DataPort should be connected.","c.ps.03",
+    dp.isConnected() );
 
   // check the link
-  assert( ap.connectedPort() == &dp );
+  kiwi_test( "Checking the AccessPort's connectedPort() pointer.","c.ps.04",
+    ap.connectedPort() == &dp );
 
   // disconnecting from the access port
   ap.disconnect();
+  
   assert( ! ap.isConnected() );
   assert( ! dp.isConnected() );
 
@@ -49,5 +59,5 @@ int main(){
   assert( ! dp.isConnected() );
 
 
-
+  return kiwi::utils::TestManager::getInstance()->testResult();
 }

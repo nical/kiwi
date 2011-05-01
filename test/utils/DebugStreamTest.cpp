@@ -26,6 +26,16 @@ int main(){
   
   out.endBlock("< a block");
 
+  out << out.red() << "red "
+    << out.blue() << "blue "
+    << out.green() << "green "
+    << out.lightRed() << "lightRed "
+    << out.lightBlue() << "lightBlue "
+    << out.lightGreen() << "lightGreen "
+    << out.darkGray() << "darkGray "
+    << out.reset() << "normal "
+    << out.underlined() << "underlined "
+    << endl;
   return 0;
 
 }

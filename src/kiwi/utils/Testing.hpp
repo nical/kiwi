@@ -5,14 +5,17 @@
 
 #include <assert.h>
 
-#ifdef KIWI_TESTING
-#define kiwi_test( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);
-#define kiwi_test_assert( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);\
+static char* kiwi_testname;
+
+#define KIWI_TEST( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);
+#define KIWI_TEST_assert( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);\
 assert(expr);
-#else
-#define kiwi_test( label, id, expr )
-#define kiwi_test_assert( label, id, expr )  
-#endif
+
+#define KIWI_BEGIN_TESTING( testname ) kiwi::out << out.bold()<<out.blue() << "[Begin test] " << out.reset() << testname << kiwi::endl;\
+kiwi_testname = testname;\
+out.indentation++;
+
+#define KIWI_END_TESTING kiwi::utils::TestManager::getInstance()->testResult();
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/DebugStream.hpp"
@@ -42,12 +45,15 @@ public:
     , const char* id){
       ++_nbTests;
       if(expr){
-        (*_out) << "Test::"<<id<<": passed successfully. ["<< label <<"]" ;
+        (*_out) << _out->blue() << "Test::" << _out->reset() <<id<<": "
+          << _out->green() <<"passed successfully."
+          << _out->reset() <<" ["<< label <<"]" ;
         _out->endl();
         ++_success;
         return true;
       }else{
-        (*_out) << "Test::"<<id<<": failed. | "<< label ;
+        (*_out) << _out->blue() << "Test::" << _out->reset() <<id<<": "
+          << _out->red() <<"failed. | "<< label ;
         _out->endl();
         (*_out) << file << "  " << line;
         _out->endl();
@@ -57,12 +63,15 @@ public:
 
   bool testResult(){
     (*_out) << "\n" << "The Test terminated ";
-    if( _success < _nbTests ) (*_out) << "with errors.\n";
-    else (*_out) << "without errors.\n";
+    if( _success < _nbTests ) (*_out) << _out->red() << "with errors.\n" << _out->reset();
+    else (*_out) << _out->green() << "without errors.\n" << _out->reset();
     (*_out) << _nbTests << " tests | "
       << _success << " success | "
       << _nbTests-_success << " errors.\n";
 
+    (*_out) << _out->bold() << _out->blue() << "[End test] " << _out->reset()
+      << kiwi_testname << kiwi::endl << kiwi::endl;  
+    out.indentation--;
     return _success < _nbTests;
   }
   

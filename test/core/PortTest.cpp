@@ -10,7 +10,7 @@ using kiwi::out;
 using kiwi::endl;
 
 int main(){
-  SCOPEDBLOCK_MACRO("core::Port::Test")
+  KIWI_BEGIN_TESTING("core::Port::Test")
 
   kiwi::core::StaticDataPort<int,kiwi::core::READ_WRITE> dp;
  
@@ -21,43 +21,45 @@ int main(){
   > ap;
 
   
-  kiwi_test( "The AccessPort should not be connected at this stage.","c.ps.01a",
+  KIWI_TEST( "The AccessPort should not be connected at this stage.","c.ps.01a",
     ! ap.isConnected()  );
-  kiwi_test( "The DataPort should not be connected at this stage.","c.ps.01b",
+  KIWI_TEST( "The DataPort should not be connected at this stage.","c.ps.01b",
     ! dp.isConnected()  );
 
   
-  kiwi_test( "Connecting ([data R+W]>>[access R+W]) should work fine.","c.ps.02",
+  KIWI_TEST( "Connecting ([data R+W]>>[access R+W]) should work fine.","c.ps.02",
     ap.connect( dp ) );
 
-  out << "ap.flag: " << ap.flag() << endl; 
-  out << "dp.flag: " << dp.flag() << endl; 
 
-
-  kiwi_test( "The AccessPort should be connected.","c.ps.03",
+  KIWI_TEST( "The AccessPort should be connected.","c.ps.03",
     ap.isConnected() );
-  kiwi_test( "The DataPort should be connected.","c.ps.03",
+  KIWI_TEST( "The DataPort should be connected.","c.ps.03",
     dp.isConnected() );
 
   // check the link
-  kiwi_test( "Checking the AccessPort's connectedPort() pointer.","c.ps.04",
+  KIWI_TEST( "Checking the AccessPort's connectedPort() pointer.","c.ps.04",
     ap.connectedPort() == &dp );
 
   // disconnecting from the access port
   ap.disconnect();
   
-  assert( ! ap.isConnected() );
-  assert( ! dp.isConnected() );
+  KIWI_TEST( "The AccessPort should be disconnected.","c.ps.05a",
+    ! ap.isConnected() );
+  KIWI_TEST( "The DataPort should be disconnected.","c.ps.05a",
+    ! dp.isConnected() );
 
-  //connecting should be fine again
-  assert( ap.connect( dp ) );
-  out.foo();
+  KIWI_TEST( "Reconnecting should work.","c.ps.06",
+    ap.connect( dp ) );
+    
+  
   // disconnecting from the data port
   dp.disconnect();
-  out.bar();
-  assert( ! ap.isConnected() );
-  assert( ! dp.isConnected() );
+  
+  KIWI_TEST( "The AccessPort should not be connected.","c.ps.07a",
+   ! ap.isConnected() );
+  KIWI_TEST( "The AccessPort should not be connected.","c.ps.07b",
+   ! dp.isConnected() );
 
 
-  return kiwi::utils::TestManager::getInstance()->testResult();
+  return KIWI_END_TESTING
 }

@@ -54,15 +54,16 @@ echo 'no test for target: generic\n' ||
 exit
 fi
 
-if [ "$core" = "yes" ]
-then
-./core/PortTest ||
-exit
-fi
-
 if [ "$utils" = "yes" ]
 then
 ./utils/DebugStreamTest ||
+exit
+fi
+
+
+if [ "$core" = "yes" ]
+then
+./core/PortTest ||
 exit
 fi
 

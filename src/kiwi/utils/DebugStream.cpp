@@ -83,6 +83,110 @@ const char*  DebugStream::resetFormat()
 }
 
 
+const char*  DebugStream::reset()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[0m";
+#else
+  return "";
+#endif
+}
+
+const char*  DebugStream::blue()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[34m";
+#else
+  return "";
+#endif
+}
+
+const char*  DebugStream::red()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[31m";
+#else
+  return "";
+#endif
+}
+
+const char*  DebugStream::green()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[32m";
+#else
+  return "";
+#endif
+}
+const char*  DebugStream::lightGreen()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[1;32m";
+#else
+  return "";
+#endif
+}
+const char*  DebugStream::lightBlue()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[1;34m";
+#else
+  return "";
+#endif
+}
+const char*  DebugStream::purple()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[1;35m";
+#else
+  return "";
+#endif
+}
+const char*  DebugStream::lightRed()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[1;31m";
+#else
+  return "";
+#endif
+}
+const char*  DebugStream::darkGray()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[1;30m";
+#else
+  return "";
+#endif
+}
+
+const char*  DebugStream::underlined()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[4m";
+#else
+  return "";
+#endif
+}
+
+const char*  DebugStream::italic()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[3m";
+#else
+  return "";
+#endif
+}
+
+const char*  DebugStream::bold()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[1m";
+#else
+  return "";
+#endif
+}
+
+
 
 }//namespace
 utils::DebugStream out(std::cout);

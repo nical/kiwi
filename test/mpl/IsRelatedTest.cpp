@@ -13,7 +13,7 @@ class A11 : public A1 {};
 class B{};
 
 int main(){
-  ScopedBlockMacro("mpl::IsRelated::Test")
+  SCOPEDBLOCK_MACRO("mpl::IsRelated::Test")
 
   
   // A & int are not related

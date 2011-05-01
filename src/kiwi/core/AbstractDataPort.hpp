@@ -34,7 +34,8 @@ public:
   
 protected:
   void _disconnect( AbstractAccessPort* );
-  utils::UnorderedArray<AbstractAccessPort*> _connectedPorts;
+  typedef utils::UnorderedArray<AbstractAccessPort*> ConnectedPortsSeq;
+  ConnectedPortsSeq _connectedPorts;
 };
 
 

@@ -26,7 +26,7 @@ public:
 	}
 	
 	bool remove(const T& toRemove){
-		kiwi::int32 pos = find( toRemove );
+		kiwi::int32 pos = findIndex( toRemove );
 		if(pos != NOT_FOUND){
 			return removeIndex( static_cast<kiwi::uint32>(pos) );
 		}else return false;
@@ -56,7 +56,20 @@ public:
 		return false;
 	}
 
-	kiwi::int32 find(const T& toFind) const {
+	T* find(const T& toFind) {
+		for(kiwi::uint32 i = 0; i < size(); ++i){
+			if(_data[i] == toFind) return &(_data[i]);
+		}
+		return 0;
+	}
+	const T* find(const T& toFind) const {
+		for(kiwi::uint32 i = 0; i < size(); ++i){
+			if(_data[i] == toFind) return &(_data[i]);
+		}
+		return 0;
+	}
+  
+	kiwi::int32 findIndex(const T& toFind) const {
 		for(kiwi::uint32 i = 0; i < size(); ++i){
 			if(_data[i] == toFind) return i;
 		}

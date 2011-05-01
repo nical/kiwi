@@ -5,7 +5,7 @@ using kiwi::out;
 using kiwi::endl;
 
 int main(){
-  ScopedBlockMacro("TupleList::Test")
+  SCOPEDBLOCK_MACRO("TupleList::Test")
   
 
 }

@@ -8,7 +8,7 @@ using kiwi::out;
 using kiwi::endl;
 
 int main(){
-  ScopedBlockMacro("mpl::MakeContainer::Test")
+  SCOPEDBLOCK_MACRO("mpl::MakeContainer::Test")
 
   typedef kiwi::mpl::MakeContainer<int>::type makecontainer_int;
   typedef kiwi::mpl::MakeContainer< kiwi::core::ContainerWrapper<int> >::type makecontainer_cw_int;

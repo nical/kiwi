@@ -9,7 +9,7 @@
 int main()
 {
 
-ScopedBlockMacro(s2, "kiwi::testAudioSampleBuffer");
+SCOPEDBLOCK_MACRO(s2, "kiwi::testAudioSampleBuffer");
 
 kiwi::debug.beginBlock("int main() ");
 

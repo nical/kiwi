@@ -8,7 +8,7 @@ using kiwi::out;
 using kiwi::endl;
 
 int main(){
-  ScopedBlockMacro("core::Port::Test")
+  SCOPEDBLOCK_MACRO("core::Port::Test")
 
   kiwi::core::StaticDataPort<int,kiwi::core::READ_WRITE> dp;
  
@@ -22,6 +22,7 @@ int main(){
   assert( ! ap.isConnected() );
   assert( ! dp.isConnected() );
 
+  //connecting should be fine
   assert( ap.connect( dp ) );
   out << "ap.flag: " << ap.flag() << endl; 
   out << "dp.flag: " << dp.flag() << endl; 
@@ -29,6 +30,23 @@ int main(){
   // port should (at least) say that they're connected
   assert( ap.isConnected() );
   assert( dp.isConnected() );
+
+  // check the link
+  assert( ap.connectedPort() == &dp );
+
+  // disconnecting from the access port
+  ap.disconnect();
+  assert( ! ap.isConnected() );
+  assert( ! dp.isConnected() );
+
+  //connecting should be fine again
+  assert( ap.connect( dp ) );
+  out.foo();
+  // disconnecting from the data port
+  dp.disconnect();
+  out.bar();
+  assert( ! ap.isConnected() );
+  assert( ! dp.isConnected() );
 
 
 

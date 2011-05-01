@@ -6,7 +6,7 @@ using kiwi::out;
 using kiwi::endl;
 
 int main(){
-  ScopedBlockMacro("core::Container::Test")
+  SCOPEDBLOCK_MACRO("core::Container::Test")
   
 
   IntContainer ic;

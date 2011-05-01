@@ -4,7 +4,7 @@ using kiwi::out;
 using kiwi::endl;
 
 int main(){
-  ScopedBlockMacro("DebugStream::Test")
+  SCOPEDBLOCK_MACRO("DebugStream::Test")
 
   out.beginBlock("> a block");
   

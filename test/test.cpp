@@ -14,15 +14,20 @@
 
 
 template<typename T> struct MakePointer{ typedef T* type; };
-  
 
+  
+#ifdef __PRETTY_FUNCTION__
+#define PFTEST "__PRETTY_FUNCTION__ is defined"
+#else
+#define PFTEST "__PRETTY_FUNCTION__ is NOT defined"
+#endif
 
 using kiwi::out;
 using kiwi::endl;
 
 
 int main(){
-  ScopedBlockMacro("kiwi v2::test")
+  SCOPEDBLOCK_MACRO("kiwi v2::test")
   out.beginBlock("kiwi v2::test");
   
  
@@ -49,7 +54,7 @@ int main(){
   out.endBlock("mpl tests");
   
 
-
+  out << endl << PFTEST << endl;
 
 
   out << "end of the test" << endl;

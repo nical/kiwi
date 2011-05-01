@@ -15,9 +15,11 @@
 
 
 #ifdef USE_SCOPEDBLOCK_MACRO
-#define ScopedBlockMacro(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::out);
+#define SCOPEDBLOCK_MACRO(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::out);
+#define FUNCTIONBLOCK_MACRO kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNC__, kiwi::out);
 #else
-#define ScopedBlockMacro(message) 
+#define SCOPEDBLOCK_MACRO(message) 
+#define FUNCTIONBLOCK_MACRO   
 #endif
 
 
@@ -33,6 +35,9 @@ public:
   }
   DebugStream& endl();
   DebugStream& error();
+  DebugStream& foo() { (*_stream) << "foo"; endl(); }
+  DebugStream& bar() { (*_stream) << "bar"; endl(); }
+  DebugStream& plop(){ (*_stream) << "plop"; endl(); }
   void beginBlock(const kiwi::string& message);
   void endBlock(const kiwi::string& message);
   
@@ -74,10 +79,8 @@ public:
     _stream = &stream;
     _msg = message;
     stream.beginBlock(message);
-    *_stream << "message: " << _msg << "\n";
   }
   ~ScopedBlock(){
-    *_stream << "message: " << _msg << "\n";
     _stream->endBlock(_msg);
   }
   

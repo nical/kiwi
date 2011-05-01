@@ -5,7 +5,7 @@ using kiwi::out;
 using kiwi::endl;
 
 int main(){
-  ScopedBlockMacro("TypeList::Test")
+  SCOPEDBLOCK_MACRO("TypeList::Test")
   
 
 }

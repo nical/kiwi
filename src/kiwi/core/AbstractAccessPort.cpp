@@ -10,7 +10,7 @@ namespace core{
 
 
 bool AbstractAccessPort::connect(AbstractDataPort& port ){
-  ScopedBlockMacro("AbstractAccessPort::connect");
+  SCOPEDBLOCK_MACRO("AbstractAccessPort::connect");
   if( isCompatible(port) ){
     if( isConnected() ) disconnect();
     // for now we don't handle a maximum amount of connections for data ports
@@ -22,6 +22,7 @@ bool AbstractAccessPort::connect(AbstractDataPort& port ){
 }
 
 void AbstractAccessPort::disconnect(){
+  SCOPEDBLOCK_MACRO("AbstractAccessPort::connect");
   if(_connectedPort){
     _connectedPort->_disconnect(this);
     _connectedPort = 0;

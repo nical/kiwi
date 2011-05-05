@@ -26,6 +26,7 @@ template<typename TSubContainers>
 class CompositeContainer : public AbstractContainer{
 public:
   typedef TSubContainers SubContainersTypeList;
+  enum { NbSubContainers = SubContainersTypeList::size };
   template<int i>
   struct subContainerInfo{
     typedef typename kiwi::mpl::typelist::at<SubContainersTypeList,i>::type type;
@@ -46,6 +47,9 @@ typedef CompositeContainer<kiwi::mpl::EmptyTypeList> Container;
 template<typename TValueType>
 struct ContainerWrapper : public Container{
   typedef TValueType ValueType;
+  enum { NbSubContainers = 0 };
+  typedef mpl::EmptyTypeList SubContainersTypeList;
+  
   ValueType data;
 };
 

@@ -4,6 +4,10 @@
 
 #include "AbstractDataPort.hpp"
 #include "Container.hpp"
+#include "kiwi/mpl/FillTypeList.hpp"
+#include "kiwi/mpl/Number.hpp"
+#include "kiwi/mpl/MakeContainer.hpp"
+#include "kiwi/mpl/TypeListTransform2.hpp"
 
 namespace kiwi{
 namespace core{
@@ -20,22 +24,39 @@ template<typename T> struct ApplyConstModifier<T, READ>{
   typedef const T type;
 };
 
+template<typename container, typename flag> struct _MakeStaticDataPort;
 
-
+/**
+ * DataPort templated implementation.
+ *
+ * Template parameters:
+ *  - the container type (automatically wrapped into a container if necessary)
+ *  - the AccessFlag (READ, WRITE, READ_WRITE ...)
+ *  - [opt] a list of access flags for the subContainers. The list is generated
+ *      automatically using this port's AccessFlag by default.
+ */
 template<
   typename TContainerType
   , AccessFlag TAccessFlag
-  , typename SubAccessFlagsList = TypeList_0 >
+  , typename SubAccessFlagsList
+    = typename mpl::FillTypeList<mpl::Number<TAccessFlag>,
+        mpl::MakeContainer<TContainerType>::type::NbSubContainers
+      >::type
+>
 class StaticDataPort : public AbstractDataPort
 {
 public:
   static const AccessFlag Flag = TAccessFlag;
-  typedef TContainerType ContainerType;
-  
+  typedef typename mpl::MakeContainer<TContainerType>::type ContainerType;
+  typedef typename mpl::typelist::Transform2<
+    typename ContainerType::SubContainersTypeList
+    ,SubAccessFlagsList, _MakeStaticDataPort>::type SubPortsTypList;
   
   AccessFlag flag() const { return Flag; }
 
-  typename ApplyConstModifier<ContainerType,Flag>::type * container() { return _container; }
+  typename ApplyConstModifier<ContainerType,Flag>::type * container() {
+    return _container;
+  }
   Container* abstractContainer() { return _container; }
   
 protected:  
@@ -43,6 +64,12 @@ protected:
 };
 
 
+
+
+
+template<typename container, typename flag> struct _MakeStaticDataPort{
+  typedef StaticDataPort<container,flag::value> type;
+};
 
 
 

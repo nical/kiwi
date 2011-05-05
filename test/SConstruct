@@ -6,9 +6,11 @@ KiwiTestEnv.Program(target='test', source=['test.cpp'])
 KiwiTestEnv.Program('mpl/TypeListTest.cpp')
 KiwiTestEnv.Program('mpl/TypeListTransform2Test.cpp')
 KiwiTestEnv.Program('mpl/NumberTest.cpp')
+KiwiTestEnv.Program('mpl/ApplyBitwiseOperatorTest.cpp')
 KiwiTestEnv.Program('mpl/TupleTest.cpp')
 KiwiTestEnv.Program('mpl/MakeContainerTest.cpp')
 KiwiTestEnv.Program('mpl/IsRelatedTest.cpp')
+KiwiTestEnv.Program('mpl/FillTypeListTest.cpp')
 
 KiwiTestEnv.Program('utils/DebugStreamTest.cpp')
 

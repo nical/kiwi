@@ -22,12 +22,16 @@ template<typename T> struct ApplyConstModifier<T, READ>{
 
 
 
-template<typename TContainerType, AccessFlag TAccessFlag>
+template<
+  typename TContainerType
+  , AccessFlag TAccessFlag
+  , typename SubAccessFlagsList = TypeList_0 >
 class StaticDataPort : public AbstractDataPort
 {
 public:
   static const AccessFlag Flag = TAccessFlag;
   typedef TContainerType ContainerType;
+  
   
   AccessFlag flag() const { return Flag; }
 

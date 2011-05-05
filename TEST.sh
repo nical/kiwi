@@ -47,6 +47,8 @@ then
 ./mpl/TupleTest &&
 ./mpl/TypeListTransform2Test &&
 ./mpl/NumberTest &&
+./mpl/ApplyBitwiseOperatorTest &&
+./mpl/FillTypeListTest &&
 ./mpl/MakeContainerTest ||
 exit
 fi

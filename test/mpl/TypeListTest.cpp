@@ -1,11 +1,11 @@
 
-#include "kiwi/utils/DebugStream.hpp"
+#include "kiwi/utils/Testing.hpp"
 
 using kiwi::out;
 using kiwi::endl;
 
 int main(){
-  SCOPEDBLOCK_MACRO("TypeList::Test")
+  KIWI_BEGIN_TESTING("mpl::TypeList")
   
-
+  return KIWI_END_TESTING
 }

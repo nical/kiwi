@@ -13,6 +13,7 @@ int main(){
   KIWI_BEGIN_TESTING("core::Port::Test")
 
   kiwi::core::StaticDataPort<int,kiwi::core::READ_WRITE> dp;
+  kiwi::core::StaticDataPort<int,kiwi::core::READ> dp_read;
  
   kiwi::core::StaticAccessPort<
     int
@@ -56,9 +57,14 @@ int main(){
   dp.disconnect();
   
   KIWI_TEST( "The AccessPort should not be connected.","c.ps.07a",
-   ! ap.isConnected() );
+    ! ap.isConnected() );
   KIWI_TEST( "The AccessPort should not be connected.","c.ps.07b",
-   ! dp.isConnected() );
+    ! dp.isConnected() );
+
+
+  KIWI_TEST( "Connecting ([data R]>>[access R+W]) should not work work.","c.ps.08",
+    ! ap.connect( dp_read ) );
+
 
 
   return KIWI_END_TESTING

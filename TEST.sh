@@ -43,7 +43,10 @@ echo '\n\n'
 if [ "$mpl" = "yes" ]
 then
 ./mpl/TypeListTest &&
+./mpl/IsRelatedTest &&
 ./mpl/TupleTest &&
+./mpl/TypeListTransform2Test &&
+./mpl/NumberTest &&
 ./mpl/MakeContainerTest ||
 exit
 fi

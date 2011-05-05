@@ -11,6 +11,7 @@ namespace core{
 // forward declaration
 
 
+
 /// transforms T into const T if Flag is READ
 template<typename T, AccessFlag Flag> struct ApplyConstModifier{
   typedef T type;
@@ -27,7 +28,7 @@ class StaticDataPort : public AbstractDataPort
 public:
   static const AccessFlag Flag = TAccessFlag;
   typedef TContainerType ContainerType;
-
+  
   AccessFlag flag() const { return Flag; }
 
   typename ApplyConstModifier<ContainerType,Flag>::type * container() { return _container; }
@@ -36,6 +37,9 @@ public:
 protected:  
   ContainerType* _container;
 };
+
+
+
 
 
 }//namespace

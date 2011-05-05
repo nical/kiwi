@@ -39,10 +39,10 @@ public:
   }
 
   bool test( bool expr
-    , const char* label
-    , const char* file
+    , const char* const label
+    , const char* const file
     , int line
-    , const char* id){
+    , const char* const id){
       ++_nbTests;
       if(expr){
         (*_out) << _out->blue() << "Test::" << _out->reset() <<id<<": "

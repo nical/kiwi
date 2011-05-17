@@ -35,19 +35,18 @@ template<typename container, typename flag> struct _MakeStaticDataPort;
  *  - [opt] a list of access flags for the subContainers. The list is generated
  *      automatically using this port's AccessFlag by default.
  */
-template<
-  typename TContainerType
-  , AccessFlag TAccessFlag
-  , typename SubAccessFlagsList
-    = typename mpl::FillTypeList<mpl::Number<TAccessFlag>,
-        mpl::MakeContainer<TContainerType>::type::NbSubContainers
-      >::type
->
+template<typename TContainerType, AccessFlag TAccessFlag>
 class StaticDataPort : public AbstractDataPort
 {
 public:
   static const AccessFlag Flag = TAccessFlag;
   typedef typename mpl::MakeContainer<TContainerType>::type ContainerType;
+
+  typedef typename mpl::FillTypeList<
+        mpl::Number<TAccessFlag>,
+        mpl::MakeContainer<TContainerType>::type::NbSubContainers
+      >::type SubAccessFlagsList;
+  
   typedef typename mpl::typelist::Transform2<
     typename ContainerType::SubContainersTypeList
     ,SubAccessFlagsList, _MakeStaticDataPort>::type SubPortsTypList;

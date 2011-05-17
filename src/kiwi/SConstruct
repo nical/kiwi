@@ -9,6 +9,7 @@ libKiwiSrc = Split("""
   core/AbstractAccessPort.cpp
   core/Node.cpp
   core/DynamicNode.cpp
+  core/ContainerManager.cpp
   utils/DebugStream.cpp
   utils/Testing.cpp
   """)

@@ -15,4 +15,6 @@ KiwiTestEnv.Program('mpl/FillTypeListTest.cpp')
 KiwiTestEnv.Program('utils/DebugStreamTest.cpp')
 
 KiwiTestEnv.Program('core/PortTest.cpp')
+KiwiTestEnv.Program('core/ContainerTest.cpp')
+KiwiTestEnv.Program('core/ContainerManagerTest.cpp')
 

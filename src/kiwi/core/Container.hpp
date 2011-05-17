@@ -5,17 +5,33 @@
 #include "kiwi/mpl/TypeList.hpp"
 #include "kiwi/mpl/Tuple.hpp"
 
+
+//------------------------------------------------------------------------------
+#define KIWI_CONTAINER_UID_MACRO \
+friend class kiwi::core::ContainerManager; \
+protected: \
+static kiwi::int32& _class_uid_() { static kiwi::int32 uid = 0; return uid;} \
+static void setUid(kiwi::int32 id) {_class_uid_() = id;} \
+public: \
+static kiwi::int32 getUid() { return _class_uid_(); } \
+kiwi::int32 getClassUid() const { return _class_uid_(); }
+//------------------------------------------------------------------------------
+
+
 namespace kiwi{
 namespace core{
 
+class ContainerManager;
 
 /**
  * Abstract mother class for containers.
  *
- * Having this class allows to use kiwi::mpl::IsRelated with containers that is
- * needed by the implementation of kiwi::mpl::MakeContainer. 
  */ 
-class AbstractContainer{ public: virtual ~AbstractContainer(){} };
+class AbstractContainer{
+public:
+  virtual ~AbstractContainer(){}
+  virtual int32 getClassUid() { return 0; }
+};
 
 /**
  * The class that implements the composite container's mecanism.
@@ -59,3 +75,32 @@ struct ContainerWrapper : public Container{
 
 
 #endif
+
+/*
+class RGBA32Image:public Container{
+  SUBCONTAINER(ColorChannel,_r,READ_WRITE)
+  SUBCONTAINER(ColorChannel,_g,READ_WRITE)
+  SUBCONTAINER(ColorChannel,_b,READ_WRITE)
+  SUBCONTAINER(IntContainer,_width,READ)
+  SUBCONTAINER(IntContainer,_height,READ)
+public:
+  void init(kiwi::int32 w,kiwi::int32 h){
+    _data.resize(w*h);
+    _width.init(w);
+    _height.init(h);
+    _r.init(this,0);
+    _g.init(this,1);
+    _b.init(this,2);
+  }
+protected:
+  std::vector<kiwi::uint8> _data;
+};
+SUBCONTAINER_OUTLINE_MACRO(RGBA32Image,ColorChannel,_r,READ_WRITE)
+SUBCONTAINER_NUMBER(3)
+*/
+/*
+SUBCONTAINER(ctype,name,flag)
+protected: ctype name;
+public:   
+
+*/

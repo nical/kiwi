@@ -40,6 +40,13 @@ cd ./test
 scons -j4 || exit
 echo '\n\n'
 
+
+if [ "$utils" = "yes" ]
+then
+./utils/DebugStreamTest ||
+exit
+fi
+
 if [ "$mpl" = "yes" ]
 then
 ./mpl/TypeListTest &&
@@ -59,16 +66,11 @@ echo 'no test for target: generic\n' ||
 exit
 fi
 
-if [ "$utils" = "yes" ]
-then
-./utils/DebugStreamTest ||
-exit
-fi
-
-
 if [ "$core" = "yes" ]
 then
-./core/PortTest ||
+./core/PortTest &&
+./core/ContainerTest &&
+./core/ContainerManagerTest ||
 exit
 fi
 

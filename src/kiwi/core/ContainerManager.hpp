@@ -3,9 +3,11 @@
 #define KIWI_CORE_CONTAINERMANAGER_HPP
 
 #include <vector>
+#include "kiwi/utils/DebugStream.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Container.hpp"
 
+#define KIWI_CONTAINER_NAME_MAX_LENGHT 64
 
 namespace kiwi{
 namespace core{
@@ -22,7 +24,7 @@ template<typename T> void defaultDeleteContainer(T*& instance){
 };
 
 struct ContainerInfo{
-  char uniqueName[64];
+  char uniqueName[KIWI_CONTAINER_NAME_MAX_LENGHT];
 //  NewContainerFunction newContainer;
 //  DeleteContainerFunction deleteContainer;
   kiwi::int32 parentUid;
@@ -45,6 +47,7 @@ class AbstractContainer;
 
 class ContainerManager{
 public:
+  ContainerManager();
 
   static ContainerManager* create(ContainerManager* useAnotherManager = 0);
   static void destroy();
@@ -55,14 +58,21 @@ public:
   typedef void (*DeleteContainerFunction)( AbstractContainer* );
 
   template<typename ContainerType> kiwi::int32 registerContainer(){
-    _containerInfo.push_back(ContainerInfo(
-      ContainerType::className(), registerContainer<ContainerType::SuperClass>() )
-    );
+    SCOPEDBLOCK_MACRO("ContainerManager::registerContainer")
+    int32 parentUid = registerContainer<typename ContainerType::SuperClass>();
+    int32 uid = classUid( ContainerType::className() );
+    if(uid == -1){
+      _containerInfo.push_back( ContainerInfo( ContainerType::className()
+        , parentUid ) );
+      ContainerType::setUid( _containerInfo.size() );
+      uid = _containerInfo.size()-1;
+    }
+    return uid;
   }
  
     
   ContainerInfo* containerInfo(int32 id);
-  int32 containerId(char* uniqueName);
+  int32 classUid(const char* uniqueName);
   
 private:  
   std::vector<ContainerInfo> _containerInfo;
@@ -72,8 +82,9 @@ private:
 
 
 template<> kiwi::int32 ContainerManager::registerContainer<AbstractContainer>(){
-    _containerInfo[0] = ContainerInfo("AbstractContainer", 0 );
-  }
+  SCOPEDBLOCK_MACRO("ContainerManager::registerContainer(AbstactContainer)")
+  return 0;
+}
 
 
 

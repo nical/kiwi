@@ -1,10 +1,12 @@
 
 
+#include "kiwi/utils/DebugStream.hpp"
 #include "kiwi/core/ContainerManager.hpp"
 #include "kiwi/core/Container.hpp"
 
 #include <vector>
 #include <assert.h>
+#include <string.h>
 
 #define CM_CHECK_INIT assert(_init);
 
@@ -12,6 +14,9 @@ namespace kiwi{
 namespace core{
 
 
+ContainerManager::ContainerManager(){
+   _containerInfo.push_back( ContainerInfo("AbstractContainer", 0 ) );
+}
 
 ContainerManager* ContainerManager::_instance = 0;
 static bool _useAnotherManager = false;
@@ -21,6 +26,7 @@ ContainerManager* ContainerManager::create(ContainerManager* useAnotherManager){
     _instance = useAnotherManager;
   else
     _instance = new ContainerManager();
+  return _instance;
 }
 
 bool ContainerManager::isCreated(){
@@ -36,7 +42,23 @@ ContainerManager* ContainerManager::getInstance(){
 }
 
 
+ContainerInfo* ContainerManager::containerInfo(int32 id){
+  return &_containerInfo[id];
+}
 
+int32 ContainerManager::classUid(const char* uniqueName){
+  SCOPEDBLOCK_MACRO("ContainerManager::classUid")
+  ContainerInfo* iter = &_containerInfo[0];
+  for(kiwi::int32 i = 0; i < _containerInfo.size(); ++i){
+    bool different = false;
+    char* itName = iter->uniqueName;
+    out << "comparing " << iter->uniqueName << " and " << uniqueName << endl;
+    if (strncmp(iter->uniqueName,uniqueName,KIWI_CONTAINER_NAME_MAX_LENGHT))
+      return i;
+    ++iter;
+  }
+  return -1;
+}
 
 
 

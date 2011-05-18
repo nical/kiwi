@@ -16,7 +16,7 @@ public: \
 static kiwi::int32 getUid() { return _class_uid_(); } \
 kiwi::int32 getClassUid() const { return _class_uid_(); }
 //------------------------------------------------------------------------------
-
+#define KIWI_CONTAINER_NAME_MACRO( name ) public: static const char* className() {return #name ;} 
 
 namespace kiwi{
 namespace core{

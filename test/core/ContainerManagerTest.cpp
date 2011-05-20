@@ -54,6 +54,9 @@ int main(){
   int32 dc2 = cm->registerContainer<DummyContainer2>();
   int32 dc3 = cm->registerContainer<DummyContainer3>();
 
+  out << endl << endl;
+
+
   KIWI_TEST( "checking ContainerManager::getUid on container 1","c.cm.05a",
      cm->classUid("DummyContainer1") == dc1  );
   KIWI_TEST( "checking ContainerManager::getUid on container 2","c.cm.05b",
@@ -63,10 +66,13 @@ int main(){
   KIWI_TEST( "checking ContainerManager::getUid with an invalid name","c.cm.05d",
      cm->classUid("invalid") == -1  );
 
+  out << endl << endl;
+
   out << "uid 0: " << cm->containerInfo(0)->uniqueName << endl
       << "uid 1: " << cm->containerInfo(1)->uniqueName << endl
       << "uid 2: " << cm->containerInfo(2)->uniqueName << endl
-      << "uid 3: " << cm->containerInfo(3)->uniqueName << endl;
+      << "uid 3: " << cm->containerInfo(3)->uniqueName << endl
+      << "nb registered containers: " << cm->nbRegisteredContainers();
 
   return KIWI_END_TESTING
 }

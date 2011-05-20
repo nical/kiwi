@@ -15,32 +15,17 @@ namespace core{
 typedef AbstractContainer* (*NewContainerFunction)(void);
 typedef void (*DeleteContainerFunction)( AbstractContainer* );
 
-template<typename T> AbstractContainer defaultNewContainer(){
-  return new T;
-};
-template<typename T> void defaultDeleteContainer(T*& instance){
-  delete instance;
-  instance = 0;
-};
+
 
 struct ContainerInfo{
   char uniqueName[KIWI_CONTAINER_NAME_MAX_LENGHT];
 //  NewContainerFunction newContainer;
 //  DeleteContainerFunction deleteContainer;
-  kiwi::int32 parentUid;
+  kiwi::int32 superClassUid;
   //constructors
   ContainerInfo(){}
-  ContainerInfo(
-    const char* const name
-//    , NewContainerFunction nc
-//  , DeleteContainerFunction dc
-    , kiwi::int32 parent)
- : parentUid(parent){
-    for(kiwi::uint32 i = 0; i < 64; ++i){
-      if((i > 1) && (name[i-2] == '\\') && (name[i-1] == '0')) break;
-      uniqueName[i] = name[i];
-    }
-  }
+  ContainerInfo(const char* const name, kiwi::int32 superUid);
+  
 };
 
 class AbstractContainer;
@@ -59,18 +44,19 @@ public:
 
   template<typename ContainerType> kiwi::int32 registerContainer(){
     SCOPEDBLOCK_MACRO("ContainerManager::registerContainer")
-    int32 parentUid = registerContainer<typename ContainerType::SuperClass>();
+    int32 superClassUid = registerContainer<typename ContainerType::SuperClass>();
     int32 uid = classUid( ContainerType::className() );
     if(uid == -1){
+      out << "ClassUid not found" << endl;
       _containerInfo.push_back( ContainerInfo( ContainerType::className()
-        , parentUid ) );
-      ContainerType::setUid( _containerInfo.size() );
-      uid = _containerInfo.size()-1;
-    }
+        , superClassUid ) );
+      uid = _containerInfo.size()-1; 
+      ContainerType::setUid( uid ); // TODO !
+    }else{ out << ContainerType::className() << " already registered"<<endl; }
     return uid;
   }
  
-    
+  kiwi::int32 nbRegisteredContainers() const {return _containerInfo.size();}  
   ContainerInfo* containerInfo(int32 id);
   int32 classUid(const char* uniqueName);
   

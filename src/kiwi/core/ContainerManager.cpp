@@ -14,6 +14,15 @@ namespace kiwi{
 namespace core{
 
 
+ContainerInfo::ContainerInfo( const char* const name, kiwi::int32 parent)
+: superClassUid(parent){
+  SCOPEDBLOCK_MACRO("ContainerInfo::constructor")
+  strncpy(uniqueName, name, KIWI_CONTAINER_NAME_MAX_LENGHT);
+  out << uniqueName << endl;
+}
+
+
+
 ContainerManager::ContainerManager(){
    _containerInfo.push_back( ContainerInfo("AbstractContainer", 0 ) );
 }
@@ -53,7 +62,7 @@ int32 ContainerManager::classUid(const char* uniqueName){
     bool different = false;
     char* itName = iter->uniqueName;
     out << "comparing " << iter->uniqueName << " and " << uniqueName << endl;
-    if (strncmp(iter->uniqueName,uniqueName,KIWI_CONTAINER_NAME_MAX_LENGHT))
+    if(!strncmp(iter->uniqueName,uniqueName,KIWI_CONTAINER_NAME_MAX_LENGHT))
       return i;
     ++iter;
   }

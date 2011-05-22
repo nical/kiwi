@@ -6,14 +6,25 @@ namespace kiwi{
 namespace utils{
 
 
-DebugStream& DebugStream::error(){
-  (*this) << errorPrefix();  
-  return *this;
+DebugStream::ProxyStream& DebugStream::error(){
+  if( has(kiwi::Error) )
+    (*this) << errorPrefix();
+  return (*this)[kiwi::Error];
+}
+
+DebugStream::ProxyStream& DebugStream::warning(){
+  // why the hell isn't that syntax supported?!
+  //return ((*this)[kiwi::Warning]) << errorPrefix();
+  if( has(kiwi::Warning) )
+    (*this) << errorPrefix();
+  return (*this)[kiwi::Warning];
 }
 
 DebugStream& DebugStream::endl(){
-  (*_stream) << resetFormat() << std::endl;
-  _endl = true;
+  if(_targets){
+    (*_stream) << resetFormat() << std::endl;
+    _endl = true;
+  }
   return *this;
 }
 
@@ -23,19 +34,23 @@ DebugStream& operator << (DebugStream& stream, EndOfLine& eol){
 }
 
 
-void DebugStream::beginBlock(const kiwi::string& message){  
-  *this << emphasePrefix() << KIWI_BEGINBLOCK_1 << resetFormat()
-    << message
-    << emphasePrefix() << KIWI_BEGINBLOCK_2  << resetFormat();
-  endl();
+void DebugStream::beginBlock(const kiwi::string& message){
+  if(has(kiwi::Default)){
+    *this << emphasePrefix() << KIWI_BEGINBLOCK_1 << resetFormat()
+      << message
+      << emphasePrefix() << KIWI_BEGINBLOCK_2  << resetFormat();
+    endl();
+  }
   ++indentation;
 }
 void DebugStream::endBlock(const kiwi::string& message){
   --indentation;
+  if(has(kiwi::Default)){
   *this << emphasePrefix() << KIWI_ENDBLOCK_1 << resetFormat()
     << message
     << emphasePrefix() << KIWI_ENDBLOCK_2 << resetFormat();
   endl();
+  }
 }
 
 const char*  DebugStream::infoPrefix()
@@ -197,12 +212,12 @@ void DebugStream::parseArgs(int argc, char** argv){
       else if(!strcmp(argv[i], "All")){ _targets |= kiwi::All; }
       else if(!strcmp(argv[i], "Warning")){ _targets |= kiwi::Warning; }
       else if(!strcmp(argv[i], "Error")){ _targets |= kiwi::Error; }
-      else if(!strcmp(argv[i], "Lv0")){ _targets |= kiwi::Level_0; }
-      else if(!strcmp(argv[i], "Lv1")){ _targets |= kiwi::Level_1; }
-      else if(!strcmp(argv[i], "Lv2")){ _targets |= kiwi::Level_2; }
-      else if(!strcmp(argv[i], "Lv3")){ _targets |= kiwi::Level_3; }
-      else if(!strcmp(argv[i], "Lv4")){ _targets |= kiwi::Level_4; }
-      else if(!strcmp(argv[i], "Lv5")){ _targets |= kiwi::Level_5; }
+      else if(!strcmp(argv[i], "Lv0")){ _targets |= kiwi::Lv0; }
+      else if(!strcmp(argv[i], "Lv1")){ _targets |= kiwi::Lv1; }
+      else if(!strcmp(argv[i], "Lv2")){ _targets |= kiwi::Lv2; }
+      else if(!strcmp(argv[i], "Lv3")){ _targets |= kiwi::Lv3; }
+      else if(!strcmp(argv[i], "Lv4")){ _targets |= kiwi::Lv4; }
+      else if(!strcmp(argv[i], "Lv5")){ _targets |= kiwi::Lv5; }
       else if(!strcmp(argv[i], "None")){ _targets = 0; }
     }else if(!strcmp(argv[i], "-v")){ printOption = true; }
   }

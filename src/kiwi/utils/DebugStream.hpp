@@ -26,9 +26,9 @@
 namespace kiwi{
   
 // print targets 
-enum{ None = 0, All = -1, Debug = 2, Test=4, Warning=16, Error=32
-    , Level_0=64, Level_1=128, Level_2=256
-    , Level_3=512, Level_4=1024, Level_5=2048  };
+enum{ None = 0, All = -1, Default = 1, Debug = 2, Test=4, Warning = 16, Error = 32
+    , Lv0 = 64, Lv1 = 128, Lv2 = 256
+    , Lv3 = 512, Lv4 = 1024, Lv5 = 2048  };
 
 namespace utils{
 
@@ -72,7 +72,8 @@ public:
    * End of line.
    */ 
   DebugStream& endl();
-  DebugStream& error();
+  ProxyStream& error();
+  ProxyStream& warning();
 
   /**
    * Debug shortcut too print foo.

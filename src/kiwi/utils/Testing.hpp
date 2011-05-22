@@ -5,13 +5,13 @@
 
 #include <assert.h>
 
-static char* kiwi_testname;
+static char const* kiwi_testname;
 
 #define KIWI_TEST( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);
 #define KIWI_TEST_assert( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);\
 assert(expr);
 
-#define KIWI_BEGIN_TESTING( testname ) kiwi::out << out.bold()<<out.blue() << "[Begin test] " << out.reset() << testname << kiwi::endl;\
+#define KIWI_BEGIN_TESTING( testname ) kiwi::out << out.bold() << out.blue() << "[Begin test] " << out.reset() << testname << kiwi::endl;\
 kiwi_testname = testname;\
 out.indentation++;
 

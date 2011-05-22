@@ -19,8 +19,9 @@ struct static_pair{
 };
 
 
-int main(){
+int main(int argc, char** argv){
   KIWI_BEGIN_TESTING("mpl::TypeListTransform2")
+  out.parseArgs(argc,argv);
 
   typedef kiwi::mpl::typelist::Transform2<TypeList_3(int,float,char),TypeList_3(double,short,bool), static_pair>::type transformed;
 

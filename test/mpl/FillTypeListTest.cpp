@@ -8,8 +8,9 @@ using kiwi::endl;
 
 using namespace kiwi::mpl;
 
-int main(){
+int main(int argc, char** argv){
   KIWI_BEGIN_TESTING("mpl::FillTypeList")
+  out.parseArgs(argc,argv);
 
   typedef TypeList_3(int,char,float ) icf;
   typedef TypeList_4(int,int,int,int) iiii;

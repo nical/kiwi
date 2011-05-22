@@ -59,7 +59,8 @@ public:
   kiwi::int32 nbRegisteredContainers() const {return _containerInfo.size();}  
   ContainerInfo* containerInfo(int32 id);
   int32 classUid(const char* uniqueName);
-  
+
+  bool isChildOf(kiwi::int32 baseClass, kiwi::int32 superClass) const;
 private:  
   std::vector<ContainerInfo> _containerInfo;
   static ContainerManager* _instance;

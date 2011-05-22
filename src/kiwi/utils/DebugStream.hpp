@@ -15,8 +15,8 @@
 
 
 #ifdef USE_SCOPEDBLOCK_MACRO
-#define SCOPEDBLOCK_MACRO(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::out);
-#define FUNCTIONBLOCK_MACRO kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNC__, kiwi::out);
+#define SCOPEDBLOCK_MACRO(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::out, kiwi::Debug);
+#define FUNCTIONBLOCK_MACRO kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNCTION__, kiwi::out, kiwi::Debug);
 #else
 #define SCOPEDBLOCK_MACRO(message) 
 #define FUNCTIONBLOCK_MACRO   
@@ -24,29 +24,89 @@
 
 
 namespace kiwi{
+  
+// print targets 
+enum{ None = 0, All = -1, Debug = 2, Test=4, Warning=16, Error=32
+    , Level_0=64, Level_1=128, Level_2=256
+    , Level_3=512, Level_4=1024, Level_5=2048  };
+
 namespace utils{
+
+class DebugStream;
+
+
+// -----------------------------------------------------------------------------
 
 class DebugStream{
 public:
-  DebugStream(std::ostream& stdStream){
+  class ProxyStream;
+  
+  /**
+   * Constructor;
+   */ 
+  DebugStream(std::ostream& stdStream, kiwi::int32 targets = kiwi::All){
     _stream = &stdStream;
     _endl = true;
     indentation = 0;
+    _targets = targets;
   }
+
+  void parseArgs(int argc, char** argv);
+  
+  /**
+   * Returns true if the stream has at least one of the targets
+   */ 
+  bool has(kiwi::int32 targets)const{
+    return(targets & _targets);
+  }
+  /**
+   * Set the print targets;
+   */ 
+  void setTargets(kiwi::int32 targets){ _targets = targets; }
+  /**
+   * Returns the print targets.
+   */ 
+  kiwi::int32 targets()const{ return _targets; }
+
+  /**
+   * End of line.
+   */ 
   DebugStream& endl();
   DebugStream& error();
-  DebugStream& foo() {
-    (*this) << emphasePrefix() <<"foo" << resetFormat(); endl();
+
+  /**
+   * Debug shortcut too print foo.
+   */ 
+  DebugStream& foo(kiwi::int32 targets = Debug) {
+    if(has(targets))
+      (*this) << emphasePrefix() <<"foo" << resetFormat(); endl();
     return *this; }
-  DebugStream& bar() {
-    (*this) << emphasePrefix() <<"bar" << resetFormat(); endl();
+  /**
+   * Debug shortcut too print bat.
+   */ 
+  DebugStream& bar(kiwi::int32 targets = Debug) {
+    if(has(targets))
+        (*this) << emphasePrefix() <<"bar" << resetFormat(); endl();
     return *this; }
-  DebugStream& plop(){
-    (*this) << emphasePrefix() <<"plop" << resetFormat(); endl();
+  /**
+   * Debug shortcut too print plop.
+   */ 
+  DebugStream& plop(kiwi::int32 targets = Debug) {
+    if(has(targets))
+        (*this) << emphasePrefix() <<"plop" << resetFormat(); endl();
     return *this; }
+  /**
+   * Begins an indentation block.
+   */ 
   void beginBlock(const kiwi::string& message);
+  /**
+   * Ends an indentation block.
+   */
   void endBlock(const kiwi::string& message);
-  
+
+  /**
+   * Stream operator.
+   */
   template<typename T> DebugStream& operator << (const T& data){
     if(_endl){
       for(int i = 0; i < indentation; ++i)
@@ -56,6 +116,9 @@ public:
     (*_stream) << data;
     return *this;
   }
+  /**
+   * Public indentation property; 
+   */ 
   int indentation;
 
   static const char*  infoPrefix();
@@ -77,9 +140,37 @@ public:
   const char*  underlined();
   const char*  reset();
 
+  /**
+   * Proxy class that filters certain targets.
+   */
+  class ProxyStream{
+  public:
+    ProxyStream(){} //unsafe, do not use
+    void setup(kiwi::int32 target, DebugStream* stream){
+      _targets = target;
+      _stream = stream;
+    }
+    template<typename T> ProxyStream& operator << (T& data){
+      if( _stream->has(_targets) ) (*_stream) << data;
+      return *this;
+    }
+  private:
+    kiwi::int32 _targets;
+    DebugStream* _stream;
+  };
+  /**
+   * Returns a proxy using the targets passed in parameter.
+   */ 
+  ProxyStream& operator[](kiwi::int32 targets){
+    _proxy.setup(targets,this);
+    return _proxy;
+  }
+
 private:
   bool _endl;
   std::ostream* _stream;
+  kiwi::int32 _targets;
+  ProxyStream _proxy;
 };
 
 struct EndOfLine{
@@ -91,12 +182,15 @@ public:
 
 DebugStream& operator << (DebugStream& stream, EndOfLine& eol);
 
-
+// -----------------------------------------------------------------------------
 class ScopedBlock{
 public:
-  ScopedBlock(const kiwi::string& message,DebugStream& stream){
+  ScopedBlock(const kiwi::string& message,DebugStream& stream
+    , kiwi::int32 targets = kiwi::All )
+  {
     _stream = &stream;
     _msg = message;
+    _targets = targets;
     stream.beginBlock(message);
   }
   ~ScopedBlock(){
@@ -106,7 +200,12 @@ public:
 private:
   DebugStream* _stream;
   kiwi::string _msg;
+  kiwi::int32 _targets;
 };
+
+
+
+DebugStream& operator << (DebugStream& stream, EndOfLine& eol);
 
 
 
@@ -114,6 +213,8 @@ private:
 extern utils::DebugStream out;
 extern utils::EndOfLine endl;
 }//namespace
+
+
 
 #endif
 
@@ -186,7 +287,7 @@ extern utils::EndOfLine endl;
 \\033[1;47m set background color to white
 
 For other features:
-\\033[0m reset; clears all colors and styles (to white on black)
+\\033[0m reset; clears  colors and styles (to white on black)
 
 \\033[1m bold on
 

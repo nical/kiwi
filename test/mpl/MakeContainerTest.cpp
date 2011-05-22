@@ -7,9 +7,10 @@
 using kiwi::out;
 using kiwi::endl;
 
-int main(){
+int main(int argc, char** argv){
   KIWI_BEGIN_TESTING("mpl::MakeContainer")
-
+  out.parseArgs(argc,argv);
+  
   // preparing some of the tests
   typedef kiwi::mpl::MakeContainer<int>::type makecontainer_int;
   typedef kiwi::mpl::MakeContainer< kiwi::core::ContainerWrapper<int> >::type makecontainer_cw_int;

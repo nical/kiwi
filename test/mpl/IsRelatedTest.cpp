@@ -13,8 +13,9 @@ class A1 : public A {};
 class A11 : public A1 {};
 class B{};
 
-int main(){
+int main(int argc, char** argv){
   KIWI_BEGIN_TESTING("mpl::IsRelated")
+  out.parseArgs(argc,argv);
   
   // A & int are not related
   int isrelatedtest_n1  = kiwi::mpl::IsRelated<A,int>::value; //false

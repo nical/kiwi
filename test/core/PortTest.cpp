@@ -9,9 +9,10 @@
 using kiwi::out;
 using kiwi::endl;
 
-int main(){
+int main(int argc, char** argv){
   KIWI_BEGIN_TESTING("core::Port::Test")
-
+  out.parseArgs(argc,argv);
+  
   kiwi::core::StaticDataPort<int,kiwi::core::READ_WRITE> dp;
   kiwi::core::StaticDataPort<int,kiwi::core::READ> dp_read;
  

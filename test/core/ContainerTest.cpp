@@ -26,8 +26,9 @@ int foo::subContainer(int index) {
     }
   }
 
-int main(){
+int main(int argc, char** argv){
   KIWI_BEGIN_TESTING("core::Container")
+  out.parseArgs(argc,argv);
   
   /*
   IntContainer ic;

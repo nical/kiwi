@@ -1,6 +1,6 @@
 
 #include "DebugStream.hpp"
-
+#include <string.h>
 
 namespace kiwi{
 namespace utils{
@@ -186,6 +186,28 @@ const char*  DebugStream::bold()
 #endif
 }
 
+void DebugStream::parseArgs(int argc, char** argv){
+  FUNCTIONBLOCK_MACRO
+  bool printOption = false;
+  _targets = 0;
+  for(kiwi::int32 i = 1; i < argc; ++i){
+    if(printOption){
+      if( argv[i][0] == '-' ) { return; }
+      if(!strcmp(argv[i], "Debug")){ _targets |= kiwi::Debug; }
+      else if(!strcmp(argv[i], "All")){ _targets |= kiwi::All; }
+      else if(!strcmp(argv[i], "Warning")){ _targets |= kiwi::Warning; }
+      else if(!strcmp(argv[i], "Error")){ _targets |= kiwi::Error; }
+      else if(!strcmp(argv[i], "Lv0")){ _targets |= kiwi::Level_0; }
+      else if(!strcmp(argv[i], "Lv1")){ _targets |= kiwi::Level_1; }
+      else if(!strcmp(argv[i], "Lv2")){ _targets |= kiwi::Level_2; }
+      else if(!strcmp(argv[i], "Lv3")){ _targets |= kiwi::Level_3; }
+      else if(!strcmp(argv[i], "Lv4")){ _targets |= kiwi::Level_4; }
+      else if(!strcmp(argv[i], "Lv5")){ _targets |= kiwi::Level_5; }
+      else if(!strcmp(argv[i], "None")){ _targets = 0; }
+    }else if(!strcmp(argv[i], "-v")){ printOption = true; }
+  }
+  if(!printOption) _targets = kiwi::All;
+}
 
 
 }//namespace

@@ -69,6 +69,14 @@ int32 ContainerManager::classUid(const char* uniqueName){
   return -1;
 }
 
+bool ContainerManager::isChildOf(kiwi::int32 baseClass, kiwi::int32 superClass) const {
+  SCOPEDBLOCK_MACRO("ContainerManager::isChildOf")
+  out << "baseClass: " << baseClass << " superClass: " << superClass << endl;
+  if(baseClass == superClass) return true;
+  else if( baseClass == 0 ) return false; // reached AbstractContainer
+
+  return isChildOf( _containerInfo[baseClass].superClassUid, superClass );
+}
 
 
 }//namespace

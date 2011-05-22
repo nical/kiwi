@@ -3,9 +3,10 @@
 using kiwi::out;
 using kiwi::endl;
 
-int main(){
+int main(int argc, char** argv){
   SCOPEDBLOCK_MACRO("DebugStream::Test")
-
+  out.parseArgs(argc,argv);
+  
   out.beginBlock("> a block");
   
     out.beginBlock("output indentation tests");
@@ -36,6 +37,18 @@ int main(){
     << out.reset() << "normal "
     << out.underlined() << "underlined "
     << endl;
+
+
+  out.parseArgs(argc, argv);
+  
+  int target = 1;
+  for( kiwi::int32 i = 0; i < 8; ++ i){
+    out[kiwi::All] << "--- "; 
+    out[target] << "target test "<< target;
+    out << endl;
+    target *= 2;
+  }
+
   return 0;
 
 }

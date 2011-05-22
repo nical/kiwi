@@ -6,9 +6,10 @@
 using kiwi::out;
 using kiwi::endl;
 
-int main(){
+int main(int argc, char** argv){
   KIWI_BEGIN_TESTING("mpl::Number")
-
+  out.parseArgs(argc,argv);
+  
   typedef kiwi::mpl::Number<1> _1;
   typedef kiwi::mpl::Number<2> _2;
   typedef kiwi::mpl::Number<3> _3;

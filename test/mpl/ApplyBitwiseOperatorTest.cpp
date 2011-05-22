@@ -8,8 +8,9 @@ using kiwi::endl;
 
 using namespace kiwi::mpl;
 
-int main(){
+int main(int argc, char** argv){
   KIWI_BEGIN_TESTING("mpl::ApplyBitwiseOperator")
+  out.parseArgs(argc,argv);
 
   int andTest1 = ApplyAndOperator< Number<7>, Number<4> >::value; // 111 & 001
   int andTest2 = ApplyAndOperator< Number<42>, Number<42> >::value; // 010101

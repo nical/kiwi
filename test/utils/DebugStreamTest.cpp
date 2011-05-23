@@ -49,6 +49,11 @@ int main(int argc, char** argv){
     target *= 2;
   }
 
+  out.test() << "test tagrget only" << endl;
+  out.info() << "info tagrget only" << endl;
+  out.debug() << "debug tagrget only" << endl;
+  out.warning() << "warning tagrget only" << endl;
+
   return 0;
 
 }

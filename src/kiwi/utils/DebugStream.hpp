@@ -15,20 +15,56 @@
 
 
 #ifdef USE_SCOPEDBLOCK_MACRO
-#define SCOPEDBLOCK_MACRO(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::out, kiwi::Debug);
-#define FUNCTIONBLOCK_MACRO kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNCTION__, kiwi::out, kiwi::Debug);
+#define SCOPEDBLOCK_MACRO(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::out, kiwi::DEBUG_3);
+#define FUNCTIONBLOCK_MACRO kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNCTION__, kiwi::out, kiwi::DEBUG_3);
 #else
 #define SCOPEDBLOCK_MACRO(message) 
 #define FUNCTIONBLOCK_MACRO   
 #endif
 
+#define KIWI_BIT( n ) 1 << n
 
 namespace kiwi{
   
 // print targets 
-enum{ None = 0, All = -1, Default = 1, Debug = 2, Test=4, Warning = 16, Error = 32
-    , Lv0 = 64, Lv1 = 128, Lv2 = 256
-    , Lv3 = 512, Lv4 = 1024, Lv5 = 2048  };
+enum{ None      = 0
+    , All       = -1
+    , Default   = KIWI_BIT(  0 )
+    , TEST_0    = KIWI_BIT(  1 )
+    , TEST_1    = KIWI_BIT(  2 )
+    , TEST_2    = KIWI_BIT(  3 )
+    , TEST_3    = KIWI_BIT(  4 )
+    , TEST_4    = KIWI_BIT(  5 )
+    , TEST_5    = KIWI_BIT(  6 )
+    , DEBUG_0   = KIWI_BIT(  7 )
+    , DEBUG_1   = KIWI_BIT(  8 )
+    , DEBUG_2   = KIWI_BIT(  9 )
+    , DEBUG_3   = KIWI_BIT( 10 )
+    , DEBUG_4   = KIWI_BIT( 11 )
+    , DEBUG_5   = KIWI_BIT( 12 )
+    , WARNING_0 = KIWI_BIT( 13 )
+    , WARNING_1 = KIWI_BIT( 14 )
+    , WARNING_2 = KIWI_BIT( 15 )
+    , WARNING_3 = KIWI_BIT( 16 )
+    , WARNING_4 = KIWI_BIT( 17 )
+    , WARNING_5 = KIWI_BIT( 18 )
+    , INFO_0    = KIWI_BIT( 19 )
+    , INFO_1    = KIWI_BIT( 20 )
+    , INFO_2    = KIWI_BIT( 21 )
+    , INFO_3    = KIWI_BIT( 22 )
+    , INFO_4    = KIWI_BIT( 23 )
+    , INFO_5    = KIWI_BIT( 24 )
+    , ERROR     = KIWI_BIT( 25 )
+    , TEST_ALL  = TEST_0|TEST_1|TEST_2|TEST_3|TEST_4|TEST_5 
+    , INFO_ALL  = INFO_0|INFO_1|INFO_2|INFO_3|INFO_4|INFO_5 
+    , DEBUG_ALL = DEBUG_0|DEBUG_1|DEBUG_2|DEBUG_3|DEBUG_4|DEBUG_5 
+    , WARNING_ALL = WARNING_0|WARNING_1|WARNING_2|WARNING_3|WARNING_4|WARNING_5 
+};
+
+kiwi::int32 WARNING_LEVEL( kiwi::int32 n );
+kiwi::int32 DEBUG_LEVEL( kiwi::int32 n );
+kiwi::int32 TEST_LEVEL( kiwi::int32 n );  
+kiwi::int32 INFO_LEVEL( kiwi::int32 n );   
 
 namespace utils{
 
@@ -73,26 +109,29 @@ public:
    */ 
   DebugStream& endl();
   ProxyStream& error();
-  ProxyStream& warning();
+  ProxyStream& warning(kiwi::int32 level= 3 );
+  ProxyStream& debug( kiwi::int32 level = 3 );
+  ProxyStream&  info( kiwi::int32 level = 3 );
+  ProxyStream&  test( kiwi::int32 level = 3 );
 
   /**
    * Debug shortcut too print foo.
    */ 
-  DebugStream& foo(kiwi::int32 targets = Debug) {
+  DebugStream& foo(kiwi::int32 targets = kiwi::DEBUG_5) {
     if(has(targets))
       (*this) << emphasePrefix() <<"foo" << resetFormat(); endl();
     return *this; }
   /**
    * Debug shortcut too print bat.
    */ 
-  DebugStream& bar(kiwi::int32 targets = Debug) {
+  DebugStream& bar(kiwi::int32 targets = kiwi::DEBUG_5) {
     if(has(targets))
         (*this) << emphasePrefix() <<"bar" << resetFormat(); endl();
     return *this; }
   /**
    * Debug shortcut too print plop.
    */ 
-  DebugStream& plop(kiwi::int32 targets = Debug) {
+  DebugStream& plop(kiwi::int32 targets = kiwi::DEBUG_5) {
     if(has(targets))
         (*this) << emphasePrefix() <<"plop" << resetFormat(); endl();
     return *this; }
@@ -109,12 +148,14 @@ public:
    * Stream operator.
    */
   template<typename T> DebugStream& operator << (const T& data){
-    if(_endl){
-      for(int i = 0; i < indentation; ++i)
-        (*_stream) << KIWI_INDENTATION_PATTERN;
+    if(_targets){
+      if(_endl){
+        for(int i = 0; i < indentation; ++i)
+          (*_stream) << KIWI_INDENTATION_PATTERN;
+      }
+      _endl = false;
+      (*_stream) << data;
     }
-    _endl = false;
-    (*_stream) << data;
     return *this;
   }
   /**
@@ -192,10 +233,12 @@ public:
     _stream = &stream;
     _msg = message;
     _targets = targets;
-    stream.beginBlock(message);
+    if(_stream->has(kiwi::DEBUG_LEVEL(3)))
+      _stream->beginBlock(_msg);
   }
   ~ScopedBlock(){
-    _stream->endBlock(_msg);
+    if(_stream->has(kiwi::DEBUG_LEVEL(3)))
+      _stream->endBlock(_msg);
   }
   
 private:

@@ -66,7 +66,5 @@ int main(int argc, char** argv){
   KIWI_TEST( "Connecting ([data R]>>[access R+W]) should not work work.","c.ps.08",
     ! ap.connect( dp_read ) );
 
-
-
   return KIWI_END_TESTING
 }

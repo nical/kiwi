@@ -13,14 +13,29 @@
 namespace kiwi{
 namespace core{
 
-
+/*
 ContainerInfo::ContainerInfo( const char* const name, kiwi::int32 parent)
-: superClassUid(parent){
+: baseClassUid(parent){
   SCOPEDBLOCK_MACRO("ContainerInfo::constructor")
   strncpy(uniqueName, name, KIWI_CONTAINER_NAME_MAX_LENGHT);
   out << uniqueName << endl;
 }
+*/
 
+ContainerInfo::ContainerInfo(
+  const char* const name
+  , kiwi::int32 baseUid
+  , const std::vector<kiwi::int32>& subContainers
+  , NewContainerFunction newC
+  , DeleteContainerFunction deleteC)
+    : baseClassUid(baseUid)
+    , subContainerClassUid(subContainers)
+    , newContainer(newC)
+    , deleteContainer(deleteC){
+      SCOPEDBLOCK_MACRO("ContainerInfo::constructor")
+      strncpy(uniqueName, name, KIWI_CONTAINER_NAME_MAX_LENGHT);
+      out << uniqueName << endl;
+  }
 
 
 ContainerManager::ContainerManager(){
@@ -75,8 +90,15 @@ bool ContainerManager::isChildOf(kiwi::int32 baseClass, kiwi::int32 superClass) 
   if(baseClass == superClass) return true;
   else if( baseClass == 0 ) return false; // reached AbstractContainer
 
-  return isChildOf( _containerInfo[baseClass].superClassUid, superClass );
+  return isChildOf( _containerInfo[baseClass].baseClassUid, superClass );
 }
+
+
+template<> kiwi::int32 ContainerManager::registerContainer<AbstractContainer>(){
+  SCOPEDBLOCK_MACRO("ContainerManager::registerContainer(AbstactContainer)")
+  return 0;
+}
+
 
 
 }//namespace

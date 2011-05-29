@@ -69,6 +69,7 @@ fi
 if [ "$core" = "yes" ]
 then
 ./core/PortTest &&
+./core/DynamicPortTest &&
 ./core/ContainerTest &&
 ./core/ContainerManagerTest ||
 exit

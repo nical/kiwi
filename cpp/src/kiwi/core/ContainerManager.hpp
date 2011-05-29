@@ -8,6 +8,7 @@
 #include "kiwi/core/Container.hpp"
 
 #define KIWI_CONTAINER_NAME_MAX_LENGHT 64
+#define KIWI_MAX_SUBCONTAINERS 32
 
 namespace kiwi{
 namespace core{
@@ -19,12 +20,22 @@ typedef void (*DeleteContainerFunction)( AbstractContainer* );
 
 struct ContainerInfo{
   char uniqueName[KIWI_CONTAINER_NAME_MAX_LENGHT];
-//  NewContainerFunction newContainer;
-//  DeleteContainerFunction deleteContainer;
-  kiwi::int32 superClassUid;
+  kiwi::int32 baseClassUid;
+  std::vector<kiwi::int32> subContainerClassUid;
+  NewContainerFunction newContainer;
+  DeleteContainerFunction deleteContainer;
+
   //constructors
   ContainerInfo(){}
-  ContainerInfo(const char* const name, kiwi::int32 superUid);
+  ContainerInfo(
+    const char* const name
+    , kiwi::int32 baseUid
+    , const std::vector<kiwi::int32>& subContainers
+    , NewContainerFunction newC = 0
+    , DeleteContainerFunction deleteC = 0 );
+  ContainerInfo(
+    const char* const name
+    , kiwi::int32 baseUid ){}//TODO!!
   
 };
 
@@ -44,14 +55,17 @@ public:
 
   template<typename ContainerType> kiwi::int32 registerContainer(){
     SCOPEDBLOCK_MACRO("ContainerManager::registerContainer")
-    int32 superClassUid = registerContainer<typename ContainerType::SuperClass>();
+    int32 baseClassUid = registerContainer<typename ContainerType::SuperClass>();
     int32 uid = classUid( ContainerType::className() );
     if(uid == -1){
       out << "ClassUid not found" << endl;
       _containerInfo.push_back( ContainerInfo( ContainerType::className()
-        , superClassUid ) );
+        , baseClassUid ) );
       uid = _containerInfo.size()-1; 
-      ContainerType::setUid( uid ); // TODO !
+      ContainerType::setUid( uid );
+      //for(kiwi::int32 i = O; i < ContainerType::nbSubContainers()e; ++i){
+      //  _containerInfo.subContainerClassUid.push_back()
+      //}
     }else{ out << ContainerType::className() << " already registered"<<endl; }
     return uid;
   }
@@ -68,10 +82,7 @@ private:
 
 
 
-template<> kiwi::int32 ContainerManager::registerContainer<AbstractContainer>(){
-  SCOPEDBLOCK_MACRO("ContainerManager::registerContainer(AbstactContainer)")
-  return 0;
-}
+template<> kiwi::int32 ContainerManager::registerContainer<AbstractContainer>();
 
 
 

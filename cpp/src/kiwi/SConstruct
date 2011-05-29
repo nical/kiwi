@@ -6,6 +6,7 @@ libKiwiEnv.Append(CPPDEFINES=['DEBUG'])
 
 libKiwiSrc = Split("""
   core/AbstractDataPort.cpp
+  core/DynamicDataPort.cpp
   core/AbstractAccessPort.cpp
   core/Node.cpp
   core/DynamicNode.cpp

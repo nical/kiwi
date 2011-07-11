@@ -1,5 +1,7 @@
 #!/usr/bin/rdmd
 
+module test;
+
 import kiwi.core.data;
 import kiwi.core.interfaces;
 import kiwi.core.dynamic;
@@ -9,7 +11,7 @@ import kiwi.mpl.Tuple;
 
 import kiwi.utils.io;
 
-
+pragma(lib,"phobos2");
 
 class CustomContainerA : AbstractContainer{
 public:
@@ -61,23 +63,40 @@ void main(string[] args){
  *  kiwi.utils.testing
  *    Test
  *    TestManager
+ *
  *  kiwi.utils.io
- *    OutputStream
+ *    Log
+ *
  *  kiwi.core.data
  *    Container
  *    ContainerManager
- *  kiwi.core.interface
+ *
+ *  kiwi.core.interfaces
  *    Node
+ *    NodeListener
  *    DataPort
+ *    DataPortListener
  *    AccessPort
+ *    AccessPortListener
  *    NodeGroup
- *  kiwi.core.dynamic
+ * 
+ *  kiwi.core.dynamic.node
  *    Node
+ *
+ *  kiwi.core.dynamic.ports
  *    DataPort
  *    AccessPort
+
+ *  kiwi.core.static.ports
+ *    DataPort
+ *    AccessPort
+ *
+ *  kiwi.core.dynamic.pipeline
  *    Pipeline
+ *
  *  kiwi.text.data
  *    TextContainer
+ *
  *  kiwi.text.filter.uppercase
  *  kiwi.text.filter.morsecode
  * 

@@ -1,0 +1,52 @@
+
+AddOption('--core', dest='core', default=False, action='store_true',help='build the core')
+AddOption('--dbg', dest='debug', default=False, action='store_true',help='Compile in debug mode.')
+AddOption('--test', dest='unittest', default=False, action='store_true',help='compile with unittests.')
+AddOption('--pretty', dest='pretty', default=False, action='store_true',help='prettify compiler output.')
+AddOption('--extern', dest='extern', default=False, action='store_true',help='build extern libs(like log.')
+
+# binary files in a separate folder ------------------------------------
+VariantDir('build', 'src', duplicate=0)
+
+stdLibs = ['phobos2', 'pthread', 'rt']
+
+
+# kiwi.core ------------------------------------------------------------
+libKiwiCoreSrc = Glob('kiwi/core/*.d')
+libKiwiCore = Environment()
+libKiwiCore.Library('lib/kiwiCore', libKiwiCoreSrc)
+libKiwiCore.SharedLibrary('lib/kiwiCore', libKiwiCoreSrc)
+if GetOption('debug') :
+    libKiwiCore.AppendUnique( DFLAGS='-version=debug' )
+if GetOption('test') :
+    libKiwiCore.Append( DFLAGS='-unittest' )
+    libKiwiCore.Program('test/core', SRC = libKiwiCoreSrc + 'test/core.d', LIBS = stdLibs)
+
+# kiwi.dynamic ---------------------------------------------------------    
+libKiwiDynSrc = Glob('kiwi/dynamic/*.d')
+libKiwiDyn = Environment()
+libKiwiDyn.Library('lib/kiwiDyn', libKiwiDynSrc)
+libKiwiDyn.SharedLibrary('lib/kiwiDyn', libKiwiDynSrc)
+if GetOption('debug') :
+    libKiwiDyn.AppendUnique( DFLAGS='-version=debug' )
+if GetOption('test') :
+    libKiwiDyn.Append( DFLAGS='-unittest' )
+    libKiwiCore.Program('test/dyn', SRC = libKiwiDynSrc + 'test/dyn.d', LIBS = stdLibs)
+
+
+# program --------------------------------------------------------------
+programEnv = Environment()
+programLibs = stdLibs + ['kiwiCore', 'kiwiDyn']
+programEnv.Append( DFLAGS='-unittest' )
+if GetOption('debug') :
+    programEnv.AppendUnique( DFLAGS='-version=debug' )
+programEnv.Append( BUILDPATH='build/' )
+programEnv.Append( DPATH='./build' )
+programEnv.Append( LIBPATH='./lib' )
+
+programEnv.Program( 'testSuite', Split('build/main.d build/base/bar/Bar.d'), LIBS=programLibs)
+
+
+#if GetOption('pretty'):
+#    programEnv["DCOM"] = programEnv["DCOM"] + " 2>&1 | tr a-z A-Z"
+

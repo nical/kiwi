@@ -2,39 +2,27 @@ module kiwi.core.interfaces;
 
 import kiwi.core.data;
 
-
 alias string PortType;
 
-
-// nb Ports
-// isComposite
-// model (ContainerInfo...)
-// port Type
-// compatible port types
-// max connected ports
-// onUpdate()
 interface Port{
-
 
   // --------------------------------------------------------------- implemented
   final bool connect(kiwi.core.interfaces.Port toConnect){
-    //if( this.connectableTypes.contains(toConnect.type) || toConnect.connectableTypes.contains(this.type) )
     if( isCompatible(toConnect) && toConnect.isCompatible(this)){
       this.doConnect(toConnect);
       toConnect.doConnect(this);
     }
     
-    // notify listeners
+    // TODO: notify listeners
     return false;
   }
   
   final bool disconnect(kiwi.core.interfaces.Port toDisconnect){
+    // TODO
     return false;
   }
 
   // ------------------------------------------------------------------- virtual
-  @property PortType type();
-
 
   bool disconnectAll();
 
@@ -42,24 +30,38 @@ interface Port{
   
   @property Port[] connections();
 
+  /++
+   + Should return a null reference if no data provided
+   +/ 
+  @property Data data();
 
+  @property PortType type();
+  
   // ----------------------------------------------------------------- protected
   protected void doConnect(kiwi.core.interfaces.Port toConnect);
   protected void doDisconnect(kiwi.core.interfaces.Port toDisconnect);
+  
 }
 
 
-
+interface Data{
+  bool isComposite();
+  bool isSerializable();
+  bool serialize( int stream );
+  bool deSerialize( int stream );
+  @property const Data[] subContainers();
+  
+}
 
 
 //##############################################################################
 interface Node{
-
+  @property NodeListener listener();
+  @property void listener(NodeListener listnr);
 }
 
 
 //##############################################################################
 interface NodeListener{
   
-
 }

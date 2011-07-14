@@ -14,6 +14,12 @@ interface CompatibilityPolicy{
 //##############################################################################
 class Node : kiwi.core.interfaces.Node {
 
+  override @property NodeListener listener(){
+    return _listener;
+  }
+  override @property void listener(NodeListener listnr){
+      _listener = listnr;
+  }
 
 private:
   NodeListener _listener;
@@ -40,11 +46,15 @@ class Port : kiwi.core.interfaces.Port{
 
   }
 
+  override @property Data data(){
+    return _data;
+  }
   override @property PortType type(){ return "TODO"; }
   override @property kiwi.core.interfaces.Port[] connections(){ return _connections; }
 
   protected CompatibilityPolicy _compatibility;
   protected kiwi.core.interfaces.Port[] _connections;
+  protected kiwi.core.interfaces.Data _data;
 }
 
 unittest{

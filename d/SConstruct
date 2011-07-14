@@ -1,4 +1,5 @@
 
+# command line arguments
 AddOption('--core', dest='core', default=False, action='store_true',help='build the core')
 AddOption('--dbg', dest='debug', default=False, action='store_true',help='Compile in debug mode.')
 AddOption('--test', dest='unittest', default=False, action='store_true',help='compile with unittests.')
@@ -8,30 +9,35 @@ AddOption('--extern', dest='extern', default=False, action='store_true',help='bu
 # binary files in a separate folder ------------------------------------
 VariantDir('build', 'src', duplicate=0)
 
+# phobos libs
 stdLibs = ['phobos2', 'pthread', 'rt']
 
 
 # kiwi.core ------------------------------------------------------------
-libKiwiCoreSrc = Glob('kiwi/core/*.d')
+libKiwiCoreSrc = Glob('src/kiwi/core/*.d')
+print libKiwiCoreSrc
 libKiwiCore = Environment()
+libKiwiCore.Append( DPATH = 'src/' )
 libKiwiCore.Library('lib/kiwiCore', libKiwiCoreSrc)
 libKiwiCore.SharedLibrary('lib/kiwiCore', libKiwiCoreSrc)
 if GetOption('debug') :
     libKiwiCore.AppendUnique( DFLAGS='-version=debug' )
-if GetOption('test') :
+if GetOption('unittest') :
     libKiwiCore.Append( DFLAGS='-unittest' )
     libKiwiCore.Program('test/core', SRC = libKiwiCoreSrc + 'test/core.d', LIBS = stdLibs)
 
+
 # kiwi.dynamic ---------------------------------------------------------    
-libKiwiDynSrc = Glob('kiwi/dynamic/*.d')
-libKiwiDyn = Environment()
-libKiwiDyn.Library('lib/kiwiDyn', libKiwiDynSrc)
-libKiwiDyn.SharedLibrary('lib/kiwiDyn', libKiwiDynSrc)
-if GetOption('debug') :
-    libKiwiDyn.AppendUnique( DFLAGS='-version=debug' )
-if GetOption('test') :
-    libKiwiDyn.Append( DFLAGS='-unittest' )
-    libKiwiCore.Program('test/dyn', SRC = libKiwiDynSrc + 'test/dyn.d', LIBS = stdLibs)
+def buildKiwiDyn(): 
+    libKiwiDynSrc = Glob('kiwi/dynamic/*.d')
+    libKiwiDyn = Environment()
+    libKiwiDyn.Library('lib/kiwiDyn', libKiwiDynSrc)
+    libKiwiDyn.SharedLibrary('lib/kiwiDyn', libKiwiDynSrc)
+    if GetOption('debug') :
+        libKiwiDyn.AppendUnique( DFLAGS='-version=debug' )
+    if GetOption('unittest') :
+        libKiwiDyn.Append( DFLAGS='-unittest' )
+        libKiwiCore.Program('test/dyn', SRC = libKiwiDynSrc + 'test/dyn.d', LIBS = stdLibs)
 
 
 # program --------------------------------------------------------------
@@ -44,7 +50,7 @@ programEnv.Append( BUILDPATH='build/' )
 programEnv.Append( DPATH='./build' )
 programEnv.Append( LIBPATH='./lib' )
 
-programEnv.Program( 'testSuite', Split('build/main.d build/base/bar/Bar.d'), LIBS=programLibs)
+#programEnv.Program( 'testSuite', Split('build/main.d build/base/bar/Bar.d'), LIBS=programLibs)
 
 
 #if GetOption('pretty'):

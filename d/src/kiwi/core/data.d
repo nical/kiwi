@@ -1,27 +1,42 @@
 module kiwi.core.data;
 import std.typecons;
 
-//import kiwi.mpl.Tuple;
 
-//------------------------------------------------------------------------------
-class AbstractContainer{
+/++
+ + Real time type information for kiwi data classes.
+ +/ 
+class DataTypeInfo{
 public:
-  static immutable string className = "AbstractContainer";
-  static int classId = 0;   
-  alias Object BaseClass;
-  alias Tuple!() SubContainerClasses;
+  this(string name, const(DataTypeInfo)[] defaultSubData, bool serializable){
+    _name = name;
+    _subData = defaultSubData;
+  }
+
+  @property const string name(){
+    return _name;
+  }
+  
+  @property const(const(DataTypeInfo)[]) subData(){
+    return _subData;
+  }
+  
+  bool isSerializable(){
+    return _serializable;
+  }
+  
+private:
+  string                _name;
+  const(DataTypeInfo)[] _subData;
+  bool                  _serializable;
 }
+
 
 //------------------------------------------------------------------------------
 
 
-struct ContainerInfo{
-  string name;
-  int baseClassId;
-  int[] subContainerClassesId;
-}
 
 
+/*
 class ContainerManager{
 public:
   int registerContainer(ContainerType)(){
@@ -51,3 +66,5 @@ private:
   ContainerInfo[] _containerInfo;
 protected:
 }
+
+*/

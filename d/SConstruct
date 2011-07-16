@@ -1,7 +1,7 @@
 
 # command line arguments
 AddOption('--core', dest='core', default=False, action='store_true',help='build the core')
-AddOption('--dbg', dest='debug', default=False, action='store_true',help='Compile in debug mode.')
+AddOption('--release', dest='release', default=False, action='store_true',help='Compile in release mode.')
 AddOption('--test', dest='unittest', default=False, action='store_true',help='compile with unittests.')
 AddOption('--pretty', dest='pretty', default=False, action='store_true',help='prettify compiler output.')
 AddOption('--extern', dest='extern', default=False, action='store_true',help='build extern libs(like log.')
@@ -14,10 +14,10 @@ stdLibs = ['phobos2', 'pthread', 'rt']
 
 
 # kiwi.core ------------------------------------------------------------
-libKiwiCoreSrc = Glob('src/kiwi/core/*.d')
+libKiwiCoreSrc = Glob('src/kiwi/core/*.d') + ['src/extern/log/log.d']
 print libKiwiCoreSrc
 libKiwiCore = Environment()
-libKiwiCore.Append( DPATH = 'src/' )
+libKiwiCore.Append( DPATH = ['src/', 'src/extern/log/'] )
 libKiwiCore.Library('lib/kiwiCore', libKiwiCoreSrc)
 libKiwiCore.SharedLibrary('lib/kiwiCore', libKiwiCoreSrc)
 if GetOption('debug') :
@@ -41,18 +41,17 @@ def buildKiwiDyn():
 
 
 # program --------------------------------------------------------------
-programEnv = Environment()
-programLibs = stdLibs + ['kiwiCore', 'kiwiDyn']
-programEnv.Append( DFLAGS='-unittest' )
-if GetOption('debug') :
-    programEnv.AppendUnique( DFLAGS='-version=debug' )
-programEnv.Append( BUILDPATH='build/' )
-programEnv.Append( DPATH='./build' )
-programEnv.Append( LIBPATH='./lib' )
-
-#programEnv.Program( 'testSuite', Split('build/main.d build/base/bar/Bar.d'), LIBS=programLibs)
+testEnv = Environment()
+programLibs = ['kiwiCore'] + stdLibs
+testEnv.Append( DFLAGS='-unittest' )
+if not GetOption('release') :
+    testEnv.AppendUnique( DFLAGS='-version=debug' )
+testEnv.Append( BUILDPATH='build/' )
+testEnv.Append( DPATH=['./build', 'src/extern/log/'] )
+testEnv.Append( LIBPATH='./lib' )
+testEnv.Program( 'build/testSuite', Split('test/core.d src/extern/log/log.d'), LIBS=programLibs)
 
 
 #if GetOption('pretty'):
-#    programEnv["DCOM"] = programEnv["DCOM"] + " 2>&1 | tr a-z A-Z"
+#    testEnv["DCOM"] = testEnv["DCOM"] + " 2>&1 | tr a-z A-Z"
 

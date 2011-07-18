@@ -12,12 +12,16 @@ VariantDir('build', 'src', duplicate=0)
 # phobos libs
 stdLibs = ['phobos2', 'pthread', 'rt']
 
+plop = Environment()
+#print plop["DLINK"]
+
 
 # kiwi.core ------------------------------------------------------------
 libKiwiCoreSrc = Glob('src/kiwi/core/*.d') + ['src/extern/log/log.d']
 print libKiwiCoreSrc
 libKiwiCore = Environment()
 libKiwiCore.Append( DPATH = ['src/', 'src/extern/log/'] )
+#libKiwiCore.Append( LINK = "dmd" )
 libKiwiCore.Library('lib/kiwiCore', libKiwiCoreSrc)
 libKiwiCore.SharedLibrary('lib/kiwiCore', libKiwiCoreSrc)
 if GetOption('debug') :

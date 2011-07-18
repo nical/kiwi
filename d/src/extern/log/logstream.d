@@ -1,4 +1,4 @@
-module log;
+module logstream;
 
 import std.stdio;
 import std.string;
@@ -51,7 +51,7 @@ enum{ INFO_0      = 1
 class LogStream{
 public:
   this(string[] args){ }
-
+  
   /++
    + Constructor
    +
@@ -142,15 +142,15 @@ public:
   }
   
   void foo(){
-    writeln(LIGHTBLUE,"foo",RESET);
+    writeln(PURPLE,"foo",RESET);
   }
 
   void bar(){
-    writeln(LIGHTBLUE,"bar",RESET);
+    writeln(PURPLE,"bar",RESET);
   }
 
   void plop(){
-    writeln(LIGHTBLUE,"plop",RESET);
+    writeln(PURPLE,"plop",RESET);
   }
   
   int indentation = 0;
@@ -194,14 +194,7 @@ struct ScopedIndent{
   LogStream logStream;
 }
 
-enum{ scopedIndent = "log.indentation++;scope(exit)log.indentation--;" };
-string scopedBlock(string name)(){
-  return "debug{"
-       ~ "log.writeln( LIGHTBLUE, \"{Begin block} \",RESET,\""~name~"\" );"
-       ~ "log.indentation++;"
-       ~ "scope(exit){ log.indentation--;"
-       ~ "log.writeln( LIGHTBLUE, \"{End block} \",RESET,\""~name~"\" );}}";
-}
+
 
 //              #######   #####    ####   #####    ####
 //                 #      #       #         #     #   
@@ -210,21 +203,11 @@ string scopedBlock(string name)(){
 //                 #      #####   ####      #     #### 
 
 unittest{
-  LogStream log = new LogStream();
-  mixin(scopedBlock!"test:LogStream");
-  log.write("line\n");
-  log.writeWarning(1,"this is a warning\n");
-  log.write("line\nline\nline\nline\n");
-  log.writeln("line");
-  log.write("\n\n\n\n");
-  {
-  mixin(scopedIndent);
-  log.writeln("indent_1");
-  {
-  mixin(scopedIndent);
-  log.writeln("indent_2");
+  LogStream logs = new LogStream();
+  logs.write("line\n");
+  logs.writeWarning(1,"this is a warning\n");
+  logs.write("line\nline\nline\nline\n");
+  logs.writeln("line");
+  logs.write("\n\n\n\n");
+  stdout.writeln();
   }
-  log.writeln("indent_1");
-  }
-  log.writeln("indent_0");
-}

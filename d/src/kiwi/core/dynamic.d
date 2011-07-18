@@ -1,5 +1,6 @@
 module kiwi.core.dynamic;
 
+import kiwi.core.commons;
 import kiwi.core.interfaces;
 import kiwi.core.data;
 
@@ -30,7 +31,11 @@ private:
 class Port : kiwi.core.interfaces.Port{
 
   public override bool isCompatible(kiwi.core.interfaces.Port port){
-    return _compatibility.isCompatible(this,port);
+    mixin(logFunction!"dynamic.Port.isCompatible");
+    if(_compatibility is null)
+      return true;
+    else
+      return _compatibility.isCompatible(this,port);
   }
 
   public override bool disconnectAll(){

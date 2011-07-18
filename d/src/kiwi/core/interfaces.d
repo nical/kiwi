@@ -1,5 +1,6 @@
 module kiwi.core.interfaces;
 
+import kiwi.core.commons;
 import kiwi.core.data;
 
 alias string PortType;
@@ -7,17 +8,20 @@ alias string PortType;
 interface Port{
 
   // --------------------------------------------------------------- implemented
-  final bool connect(kiwi.core.interfaces.Port toConnect){
-    if( isCompatible(toConnect) && toConnect.isCompatible(this)){
+  final bool connect(kiwi.core.interfaces.Port toConnect)
+    in{ assert(!(toConnect is null),"Forbidden null parameter."); }
+    body{    
+    mixin(logFunction!"Port.connect");
+    if( isCompatible(toConnect) && toConnect.isCompatible(this) ){
       this.doConnect(toConnect);
       toConnect.doConnect(this);
     }
-    
     // TODO: notify listeners
     return false;
   }
   
   final bool disconnect(kiwi.core.interfaces.Port toDisconnect){
+    mixin(logFunction!"Port.disconnect");
     // TODO
     return false;
   }

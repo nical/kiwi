@@ -9,8 +9,7 @@ include_directories (${PROJECT_SOURCE_DIR}/test/)
 link_directories (${PROJECT_BINARY_DIR})
 
 include_directories (${PROJECT_SOURCE_DIR}/test)
-include_directories (${PROJECT_SOURCE_DIR}/src)
-include_directories (${PROJECT_SOURCE_DIR}/src/extern/log)
+include_directories (${PROJECT_SOURCE_DIR}/include)
 
 
 if(DEFINED BUILD_KIWI_TEST)

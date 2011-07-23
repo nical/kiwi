@@ -3,6 +3,9 @@ module logstream;
 import std.stdio;
 import std.string;
 
+/**
+ * Constants priding the character sequences to add colors in a terminal.
+ */ 
 enum{ RESET       = "\033[0m"
     , BOLD        = "\033[1m"
     , ITALIC      = "\033[3m"
@@ -17,6 +20,9 @@ enum{ RESET       = "\033[0m"
     , PURPLE      = "\033[1;35m"
 };
 
+/**
+ * The debug targets
+ */ 
 enum{ INFO_0      = 1
     , INFO_1      = 1 << 1
     , INFO_2      = 1 << 2
@@ -47,7 +53,9 @@ enum{ INFO_0      = 1
 
 
 
-
+/**
+ * Log class to ease debugging
+ */ 
 class LogStream{
 public:
   this(string[] args){ }

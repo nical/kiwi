@@ -1,5 +1,6 @@
 module kiwi.core.commons;
-public import logstream; 
+
+public import dtools.logstream; 
 
 
 LogStream log;

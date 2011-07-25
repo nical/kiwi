@@ -1,2 +1,2 @@
 
-dmd -lib -oflib/libkiwidcore.a -H -debug -g -Isrc -Iinclude/ src/kiwi/core/*.d 
+dmd -lib -oflib/libkiwidcore.a -debug -g -Isrc -Iinclude/ src/kiwi/core/*.d 

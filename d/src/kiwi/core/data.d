@@ -1,4 +1,6 @@
 module kiwi.core.data;
+
+import kiwi.core.commons;
 import std.typecons;
 
 
@@ -8,8 +10,13 @@ import std.typecons;
 class DataTypeInfo{
 public:
   this(string name, const(DataTypeInfo)[] defaultSubData, bool serializable){
+    mixin(logFunction!"DataTypeInfo.constructor");
     _name = name;
     _subData = defaultSubData;
+  }
+  
+  struct DefaultPortLayout{
+      
   }
 
   @property const string name(){
@@ -24,47 +31,26 @@ public:
     return _serializable;
   }
   
-private:
-  string                _name;
-  const(DataTypeInfo)[] _subData;
-  bool                  _serializable;
-}
-
-
-//------------------------------------------------------------------------------
-
-
-
-
-/*
-class ContainerManager{
-public:
-  int registerContainer(ContainerType)(){
-    static if( is(ContainerType == AbstractContainer) ){
-      return 0; // special case;
+  bool isComposite(){
+    if( _subData is null ){
+      return false;
     }else{
-      if( ContainerType.classId != 0 ){
-        int baseId;
-        static if( is(ContainerType.BaseClass == AbstractContainer) ){
-          baseId = 0;
-        }else{
-          baseId = this.registerContainer!(ContainerType.BaseClass)();
-        }
-        int[] subContainers;
-        foreach( subC ; ContainerType.SubContainerClasses ){
-          subContainers ~= registerContainer!(subC)();
-        }
-        _containerInfo ~= ContainerInfo(
-          ContainerType.className, baseId, subContainers );
-        ContainerType.classId = _containerInfo.size -1;
-      }
-      return ContainerType.classId;
+      return _subData.length != 0;
     }
   }
-
+  
+  struct CustomVariable{
+    int type;
+    float value;    
+  }
+  
+  @property const(CustomVariable)[string] variables(){
+    return _variables;
+  }
+  
 private:
-  ContainerInfo[] _containerInfo;
-protected:
+  string                 _name;
+  const(DataTypeInfo)[]  _subData;
+  bool                   _serializable;
+  CustomVariable[string] _variables;
 }
-
-*/

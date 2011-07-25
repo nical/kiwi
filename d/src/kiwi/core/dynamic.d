@@ -7,30 +7,38 @@ import kiwi.core.data;
 
 
 interface CompatibilityPolicy{
-  bool isCompatible(kiwi.core.interfaces.Port thisPort, kiwi.core.interfaces.Port port);
+  bool isCompatible(PortInterface thisPort, PortInterface port);
 }
 
 
 
-//##############################################################################
-class Node : kiwi.core.interfaces.Node {
+//######################################################################
+class Node : NodeInterface {
 
-  override @property NodeListener listener(){
+  override @property NodeListenerInterface listener(){
     return _listener;
   }
-  override @property void listener(NodeListener listnr){
+  override @property void listener(NodeListenerInterface listnr){
       _listener = listnr;
   }
 
 private:
-  NodeListener _listener;
+  NodeListenerInterface _listener;
 }
 
 
-//##############################################################################
-class Port : kiwi.core.interfaces.Port{
+//######################################################################
+class Port : PortInterface{
+  this(){
+    mixin(logFunction!"dynamic.Port.constructor");
+  }
+  this(DataTypeInfo dataTypeInfo = null, CompatibilityPolicy compatibility = null){
+    mixin(logFunction!"dynamic.Port.constructor");
+    _dataTypeInfo = dataTypeInfo;
+    _compatibility = compatibility;
+  }
 
-  public override bool isCompatible(kiwi.core.interfaces.Port port){
+  public override bool isCompatible(PortInterface port){    
     mixin(logFunction!"dynamic.Port.isCompatible");
     if(_compatibility is null)
       return true;
@@ -38,29 +46,51 @@ class Port : kiwi.core.interfaces.Port{
       return _compatibility.isCompatible(this,port);
   }
 
+  public override bool isComposite(){
+    mixin(logFunction!"DynamicPort.isComposite");
+    if( _dataTypeInfo is null )
+      return false;
+    else
+      return _dataTypeInfo.isComposite();    
+  }
+
   public override bool disconnectAll(){
+    mixin(logFunction!"DynamicPort.disconnectAll");
+    while( connections.length > 0 ){
+        disconnect(
+    }
     return false;
     // TODO
   }
 
-  protected override void doConnect(kiwi.core.interfaces.Port toConnect){
-    
+  protected override void doConnect(PortInterface toConnect){
+    mixin(logFunction!"DynamicPort.doConnect");
+    // verify that toConnect is not already connected.
+    foreach( connectn ; connections ){
+      if( connectn is toConnect ) return;
+    }
+    _connections ~= toConnect;
   }
 
-  protected override void doDisconnect(kiwi.core.interfaces.Port toConnect){
-
+  protected override void doDisconnect(PortInterface toConnect){
+    mixin(logFunction!"DynamicPort.doDisconnect");
   }
 
-  override @property Data data(){
+  override @property DataInterface data(){
     return _data;
   }
-  override @property PortType type(){ return "TODO"; }
-  override @property kiwi.core.interfaces.Port[] connections(){ return _connections; }
+  override @property DataTypeInfo type(){ return _dataTypeInfo; }
+  override @property PortInterface[] connections(){ return _connections; }
 
   protected CompatibilityPolicy _compatibility;
-  protected kiwi.core.interfaces.Port[] _connections;
-  protected kiwi.core.interfaces.Data _data;
+  protected PortInterface[]     _connections;
+  protected DataInterface       _data;
+  protected DataTypeInfo        _dataTypeInfo;
 }
+
+
+// ---------------------------------------------------------------------
+
 
 unittest{
   auto p1 = new kiwi.core.dynamic.Port();

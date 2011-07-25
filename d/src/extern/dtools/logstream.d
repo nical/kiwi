@@ -1,4 +1,4 @@
-module logstream;
+module dtools.logstream;
 
 import std.stdio;
 import std.string;
@@ -21,7 +21,7 @@ enum{ RESET       = "\033[0m"
 };
 
 /**
- * The debug targets
+ * The log targets
  */ 
 enum{ INFO_0      = 1
     , INFO_1      = 1 << 1
@@ -169,7 +169,7 @@ private:
   
   void indent(int target = INFO_){
     if(usePrefix){
-      _output.write(_targetPrefix[target]);
+      _output.write(GREY, _targetPrefix[target], RESET);
     }
     for(int i = 0; i < indentation; ++i){
       _output.write("    ");
@@ -180,7 +180,7 @@ private:
     = ["[NFO]  ","[DBG]  ","[WRN]  "
       ,"[USR]  ","[ERR]  ","[   ]  "];
 
-  // private properties
+  // private propertiesw
   bool _endl              = true;
   bool _displayBlockText  = true;
   bool _useColors         = true;

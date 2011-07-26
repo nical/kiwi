@@ -9,10 +9,10 @@ import std.stdio;
 class CompatibilityTest : CompatibilityPolicy{
     override bool isCompatible(PortInterface thisPort, PortInterface otherPort){
         mixin( logFunction!"CompatibilityTest" );
-        if( thisPort.type() is null || otherPort.type() is null ){
+        if( thisPort.dataType() is null || otherPort.dataType() is null ){
             return true;
         }else{
-            return thisPort.type() is otherPort.type();  
+            return thisPort.dataType() is otherPort.dataType();  
         }
     } 
 }
@@ -41,8 +41,8 @@ int main(){
   Port p1 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo(), new CompatibilityTest );
   Port p2 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo() );
   assert( !(p1 is null) && !(p2 is null) );
-  assert( p1.type() is ContainerTest.typeInfo() );
-  assert( p2.type() is ContainerTest.typeInfo() );
+  assert( p1.dataType() is ContainerTest.typeInfo() );
+  assert( p2.dataType() is ContainerTest.typeInfo() );
   assert( !p1.isComposite() );
   assert( p1.connect(p2) );
   

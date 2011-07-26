@@ -4,7 +4,12 @@ import kiwi.core.commons;
 import kiwi.core.interfaces;
 import kiwi.core.data;
 
-
+struct NodeControler{
+  
+  // ...
+  
+  private Node _node;
+}
 
 interface CompatibilityPolicy{
   bool isCompatible(PortInterface thisPort, PortInterface port);
@@ -29,8 +34,9 @@ private:
 
 //######################################################################
 class Port : PortInterface{
-  this(){
+  this(Node myNode){
     mixin(logFunction!"dynamic.Port.constructor");
+    _node = myNode;
   }
   this(DataTypeInfo dataTypeInfo = null, CompatibilityPolicy compatibility = null){
     mixin(logFunction!"dynamic.Port.constructor");
@@ -57,7 +63,7 @@ class Port : PortInterface{
   public override bool disconnectAll(){
     mixin(logFunction!"DynamicPort.disconnectAll");
     while( connections.length > 0 ){
-        disconnect(
+        
     }
     return false;
     // TODO
@@ -71,6 +77,10 @@ class Port : PortInterface{
     }
     _connections ~= toConnect;
   }
+  
+  override bool isConnected(PortInterface port){
+    return false; // TODO
+  }
 
   protected override void doDisconnect(PortInterface toConnect){
     mixin(logFunction!"DynamicPort.doDisconnect");
@@ -79,13 +89,18 @@ class Port : PortInterface{
   override @property DataInterface data(){
     return _data;
   }
-  override @property DataTypeInfo type(){ return _dataTypeInfo; }
+  override @property DataTypeInfo dataType(){ return _dataTypeInfo; }
   override @property PortInterface[] connections(){ return _connections; }
+
+  override @property Node node(){
+    return _node;
+  }
 
   protected CompatibilityPolicy _compatibility;
   protected PortInterface[]     _connections;
   protected DataInterface       _data;
   protected DataTypeInfo        _dataTypeInfo;
+  protected NodeInterface       _node;
 }
 
 

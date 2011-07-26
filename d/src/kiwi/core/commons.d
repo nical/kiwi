@@ -1,5 +1,9 @@
 module kiwi.core.commons;
-
+/*
+ * TODO: Dirty stuff here. needs cleanup
+ * 
+ * 
+ */ 
 public import dtools.logstream; 
 
 

@@ -5,7 +5,7 @@ import kiwi.core.data;
 
 interface PortInterface{
 
-  // --------------------------------------------------------------- implemented
+  // ------------------------------------------------------- implemented
   final bool connect(PortInterface toConnect)
     in
     { 
@@ -20,14 +20,14 @@ interface PortInterface{
           return true;
         }
         log.writeWarning(4,"uncompatible ports");
-        // TODO: notify listeners
+        if(!(node is null )) node.notifyPortConnected(this, toConnect);
         return false;
     }
   
   final bool disconnect(PortInterface toDisconnect)
     in
     {
-      assert(!(toConnect is null),"Forbidden null parameter.");
+      assert(!(toDisconnect is null),"Forbidden null parameter.");
     }
     body
     {
@@ -36,23 +36,26 @@ interface PortInterface{
       if( !isConnected(toDisconnect) ) 
         return false;
       
-      foreach( port ; _connections ){
+      foreach( port ; connections ){
         if( port is toDisconnect ){
             port.doDisconnect( this );
+            this.doDisconnect( port );
+            if(!(node is null )) node.notifyPortDisconnected(this, toDisconnect);
+            return true;
         }
       }
-      
-      // TODO
       return false;
     }
 
-  // ------------------------------------------------------------------- virtual
+  // ----------------------------------------------------------- virtual
 
   bool disconnectAll();
 
   bool isCompatible(PortInterface port);
   
   bool isComposite();
+  
+  bool isConnected(PortInterface  port);
   
   @property PortInterface[] connections();
 
@@ -61,9 +64,11 @@ interface PortInterface{
    +/ 
   @property DataInterface data();
 
-  @property DataTypeInfo type();
+  @property DataTypeInfo dataType();
   
-  // ----------------------------------------------------------------- protected
+  @property NodeInterface node();
+  
+  // --------------------------------------------------------- protected
   protected void doConnect(PortInterface toConnect);
   protected void doDisconnect(PortInterface toDisconnect);
   
@@ -86,14 +91,28 @@ interface DataInterface{
 }
 
 
-//##############################################################################
+//######################################################################
 interface NodeInterface{
   @property NodeListenerInterface listener();
   @property void listener(NodeListenerInterface listnr);
+  
+  protected:
+  final void notifyPortConnected(PortInterface myPort, PortInterface otherPort){
+    if(listener !is null) listener.portConnected(myPort, otherPort);
+  }
+  final void notifyPortDisconnected(PortInterface myPort, PortInterface otherPort){
+    if(listener !is null) listener.portDisconnected(myPort, otherPort);
+  }
+  final void notifyPortAdded(PortInterface addedPort){
+    if(listener !is null) listener.portAdded(addedPort);
+  }
+  final void notifyPortRemoved(PortInterface removedPort){
+    if(listener !is null) listener.portRemoved(removedPort);
+  }
 }
 
 
-//##############################################################################
+//######################################################################
 interface NodeListenerInterface{
   void portConnected(PortInterface myPort, PortInterface otherPort);
   void portDisconnected(PortInterface myPort, PortInterface otherPort);

@@ -4,18 +4,6 @@ import kiwi.core.commons;
 import kiwi.core.interfaces;
 import kiwi.core.data;
 
-struct NodeControler{
-  
-  // ...
-  
-  private Node _node;
-}
-
-interface CompatibilityPolicy{
-  bool isCompatible(PortInterface thisPort, PortInterface port);
-}
-
-
 
 //######################################################################
 class Node : NodeInterface {
@@ -38,7 +26,7 @@ class Port : PortInterface{
     mixin(logFunction!"dynamic.Port.constructor");
     _node = myNode;
   }
-  this(DataTypeInfo dataTypeInfo = null, CompatibilityPolicy compatibility = null){
+  this(DataTypeInfo dataTypeInfo = null, PortCompatibilityPolicy compatibility = null){
     mixin(logFunction!"dynamic.Port.constructor");
     _dataTypeInfo = dataTypeInfo;
     _compatibility = compatibility;
@@ -49,7 +37,7 @@ class Port : PortInterface{
     if(_compatibility is null)
       return true;
     else
-      return _compatibility.isCompatible(this,port);
+      return _compatibility(this,port);
   }
 
   public override bool isComposite(){
@@ -63,10 +51,9 @@ class Port : PortInterface{
   public override bool disconnectAll(){
     mixin(logFunction!"DynamicPort.disconnectAll");
     while( connections.length > 0 ){
-        
+        connections[$].disconnect(this);
     }
-    return false;
-    // TODO
+    return true;
   }
 
   protected override void doConnect(PortInterface toConnect){
@@ -78,8 +65,11 @@ class Port : PortInterface{
     _connections ~= toConnect;
   }
   
-  override bool isConnected(PortInterface port){
-    return false; // TODO
+  override bool isConnectedTo(PortInterface port){
+    foreach( connectn ; connections ){
+      if( connectn is port ) return true;
+    }
+    return false;
   }
 
   protected override void doDisconnect(PortInterface toConnect){
@@ -96,7 +86,7 @@ class Port : PortInterface{
     return _node;
   }
 
-  protected CompatibilityPolicy _compatibility;
+  protected PortCompatibilityPolicy _compatibility;
   protected PortInterface[]     _connections;
   protected DataInterface       _data;
   protected DataTypeInfo        _dataTypeInfo;
@@ -105,6 +95,17 @@ class Port : PortInterface{
 
 
 // ---------------------------------------------------------------------
+
+
+ 
+
+
+
+// ---------------------------------------------------------------------
+
+
+
+
 
 
 unittest{

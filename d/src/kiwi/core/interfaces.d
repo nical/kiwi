@@ -3,6 +3,8 @@ module kiwi.core.interfaces;
 import kiwi.core.commons;
 import kiwi.core.data;
 
+alias bool delegate(PortInterface,PortInterface) PortCompatibilityPolicy;
+
 interface PortInterface{
 
   // ------------------------------------------------------- implemented
@@ -33,7 +35,7 @@ interface PortInterface{
     {
       mixin(logFunction!"Port.disconnect");
       
-      if( !isConnected(toDisconnect) ) 
+      if( !isConnectedTo(toDisconnect) ) 
         return false;
       
       foreach( port ; connections ){
@@ -55,7 +57,7 @@ interface PortInterface{
   
   bool isComposite();
   
-  bool isConnected(PortInterface  port);
+  bool isConnectedTo(PortInterface  port);
   
   @property PortInterface[] connections();
 

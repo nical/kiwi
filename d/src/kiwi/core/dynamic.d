@@ -41,7 +41,7 @@ class Port : PortInterface{
   }
 
   public override bool isComposite(){
-    mixin(logFunction!"DynamicPort.isComposite");
+    mixin(logFunction!"dynamic.Port.isComposite");
     if( _dataTypeInfo is null )
       return false;
     else
@@ -49,7 +49,7 @@ class Port : PortInterface{
   }
 
   public override bool disconnectAll(){
-    mixin(logFunction!"DynamicPort.disconnectAll");
+    mixin(logFunction!"dynamic.Port.disconnectAll");
     while( connections.length > 0 ){
         connections[$].disconnect(this);
     }
@@ -57,7 +57,7 @@ class Port : PortInterface{
   }
 
   protected override void doConnect(PortInterface toConnect){
-    mixin(logFunction!"DynamicPort.doConnect");
+    mixin(logFunction!"dynamic.Port.doConnect");
     // verify that toConnect is not already connected.
     foreach( connectn ; connections ){
       if( connectn is toConnect ) return;
@@ -73,7 +73,14 @@ class Port : PortInterface{
   }
 
   protected override void doDisconnect(PortInterface toConnect){
-    mixin(logFunction!"DynamicPort.doDisconnect");
+    mixin(logFunction!"dynamic.Port.doDisconnect");
+    for( int i = 0; i < connections.length; ++i ){
+      if( connections[i] is toConnect ){
+        log.writeln(i, " ", connections.length);
+        _connections[i] = _connections[$-1];
+        _connections.length -= 1;
+      }
+    }
   }
 
   override @property DataInterface data(){

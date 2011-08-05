@@ -15,14 +15,14 @@ interface PortInterface{
     }
     body
     {    
-        mixin(logFunction!"Port.connect");
+        mixin(logFunction!"PortInterface.connect");
         if( isCompatible(toConnect) && toConnect.isCompatible(this) ){
           this.doConnect(toConnect);
           toConnect.doConnect(this);
+          if(!(node is null )) node.notifyPortConnected(this, toConnect);
           return true;
         }
         log.writeWarning(4,"uncompatible ports");
-        if(!(node is null )) node.notifyPortConnected(this, toConnect);
         return false;
     }
   
@@ -33,7 +33,7 @@ interface PortInterface{
     }
     body
     {
-      mixin(logFunction!"Port.disconnect");
+      mixin(logFunction!"PortInterface.disconnect");
       
       if( !isConnectedTo(toDisconnect) ) 
         return false;

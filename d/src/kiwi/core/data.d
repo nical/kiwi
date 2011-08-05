@@ -15,10 +15,6 @@ public:
     _subData = defaultSubData;
   }
   
-  struct DefaultPortLayout{
-      
-  }
-
   @property const string name(){
     return _name;
   }

@@ -1,5 +1,7 @@
 module test.core;
 
+import dtools.testing;
+
 import kiwi.core.commons;
 import kiwi.core.dynamic;
 import kiwi.core.interfaces;
@@ -65,15 +67,31 @@ class ContainerTest : DataInterface{
 
 int main(){
     
-  mixin(logTest!"kiwi.core");
+  //mixin(logTest!"kiwi.core");
+  beginTesting("kiwi.core");
+
 
   Port p1 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo(), compatibilityCheck(SAME_DATATYPEINFO) );
   Port p2 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo() );
   assert( !(p1 is null) && !(p2 is null) );
-  assert( p1.dataType() is ContainerTest.typeInfo() );
+  test( p1.dataType() is ContainerTest.typeInfo() );
   assert( p2.dataType() is ContainerTest.typeInfo() );
   assert( !p1.isComposite() );
   assert( p1.connect(p2) );
+  assert( p1.isConnectedTo(p2) );
+  assert( p2.isConnectedTo(p1) );
   
-  return true;
+  Port p3 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo(), compatibilityCheck(NEVER_COMPATIBLE) );
+  Port p4 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo(), compatibilityCheck(ALWAYS_COMPATIBLE) );
+  assert( !p3.connect(p4) );
+  assert( !p3.isConnectedTo(p4) ); 
+  
+  assert( p2.connect(p4) );
+  assert( p2.isConnectedTo(p4) ); 
+  
+  assert( p1.disconnect(p2) );
+  assert( !p1.isConnectedTo(p2) );
+  assert( !p2.isConnectedTo(p1) );
+  
+  return endTesting();
 }

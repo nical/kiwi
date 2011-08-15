@@ -1,6 +1,8 @@
 module kiwi.core.data;
 
+import kiwi.core.interfaces;
 import kiwi.core.commons;
+
 import std.typecons;
 
 
@@ -35,18 +37,28 @@ public:
     }
   }
   
-  struct CustomVariable{
-    int type;
-    float value;    
-  }
-  
-  @property const(CustomVariable)[string] variables(){
-    return _variables;
-  }
-  
 private:
   string                 _name;
   const(DataTypeInfo)[]  _subData;
   bool                   _serializable;
-  CustomVariable[string] _variables;
+}
+
+
+class ContainerWrapper(dataType) : DataInterface {
+    alias dataType DataType;
+    alias _data this;
+
+    static this(){
+        _typeInfo = new DataTypeInfo("ContainerWrapper", [], false);
+    }
+
+    override{
+        bool isSerializable(){ return false; }
+        bool serialize( DataStream stream ){ return false; }
+        bool deSerialize( const DataStream stream ){ return false; }
+        @property const(DataInterface[]) subData(){ return []; }
+        DataTypeInfo typeInfo(){ return _typeInfo; }
+    }
+    private DataType _data;
+    private static DataTypeInfo _typeInfo;
 }

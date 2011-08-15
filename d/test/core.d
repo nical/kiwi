@@ -1,6 +1,6 @@
 module test.core;
 
-import dtools.testing;
+//import dtools.testing;
 
 import kiwi.core.commons;
 import kiwi.core.dynamic;
@@ -21,10 +21,10 @@ PortCompatibilityPolicy compatibilityCheck(int hint){
     case SAME_DATATYPEINFO : {
       return delegate(PortInterface thisPort, PortInterface otherPort){
         mixin( logFunction!"basicCompatibilityTest" );
-        if( thisPort.dataType() is null || otherPort.dataType() is null ){
+        if( thisPort.dataTypeInfo() is null || otherPort.dataTypeInfo() is null ){
             return true;
         }else{
-            return thisPort.dataType() is otherPort.dataType();  
+            return thisPort.dataTypeInfo() is otherPort.dataTypeInfo();  
         }
       };
     }
@@ -40,10 +40,10 @@ T delegate(A) Fn2Dg(T, A...)(T function(A) f)
 
 bool basicCompatibilityTest(PortInterface thisPort, PortInterface otherPort){
   mixin( logFunction!"basicCompatibilityTest" );
-  if( thisPort.dataType() is null || otherPort.dataType() is null ){
+  if( thisPort.dataTypeInfo() is null || otherPort.dataTypeInfo() is null ){
       return true;
   }else{
-      return thisPort.dataType() is otherPort.dataType();  
+      return thisPort.dataTypeInfo() is otherPort.dataTypeInfo();  
   }
 } 
 
@@ -56,10 +56,12 @@ class ContainerTest : DataInterface{
   override bool isSerializable(){
     return false;
   }
-  override bool serialize( int stream ){ return false; }
-  override bool deSerialize( int stream ){ return false; }
+  override bool serialize( DataStream stream ){ return false; }
+  override bool deSerialize( const DataStream stream ){ return false; }
+  override DataTypeInfo typeInfo(){ return _typeInfo; }
+  static DataTypeInfo TypeInfo(){ return _typeInfo; }
   override @property DataInterface[] subData(){ return null; }
-  static DataTypeInfo typeInfo(){ return _typeInfo; }
+  
   private static DataTypeInfo _typeInfo; 
 }
 
@@ -67,22 +69,26 @@ class ContainerTest : DataInterface{
 
 int main(){
     
-  //mixin(logTest!"kiwi.core");
-  beginTesting("kiwi.core");
+  mixin(logTest!"kiwi.core");
+  //beginTesting("kiwi.core");
 
 
-  Port p1 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo(), compatibilityCheck(SAME_DATATYPEINFO) );
-  Port p2 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo() );
+  auto p1 = new kiwi.core.dynamic.Port( null, ContainerTest.TypeInfo()
+    , compatibilityCheck(SAME_DATATYPEINFO) );
+  auto p2 = new kiwi.core.dynamic.Port( null, ContainerTest.TypeInfo() );
+
   assert( !(p1 is null) && !(p2 is null) );
-  test( p1.dataType() is ContainerTest.typeInfo() );
-  assert( p2.dataType() is ContainerTest.typeInfo() );
+  assert( p1.dataTypeInfo() is ContainerTest.TypeInfo() );
+  assert( p2.dataTypeInfo() is ContainerTest.TypeInfo() );
   assert( !p1.isComposite() );
   assert( p1.connect(p2) );
   assert( p1.isConnectedTo(p2) );
   assert( p2.isConnectedTo(p1) );
   
-  Port p3 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo(), compatibilityCheck(NEVER_COMPATIBLE) );
-  Port p4 = new kiwi.core.dynamic.Port( ContainerTest.typeInfo(), compatibilityCheck(ALWAYS_COMPATIBLE) );
+  auto p3 = new kiwi.core.dynamic.Port( null, ContainerTest.TypeInfo()
+    , compatibilityCheck(NEVER_COMPATIBLE) );
+  auto p4 = new kiwi.core.dynamic.Port( null, ContainerTest.TypeInfo()
+    , compatibilityCheck(ALWAYS_COMPATIBLE) );
   assert( !p3.connect(p4) );
   assert( !p3.isConnectedTo(p4) ); 
   
@@ -93,5 +99,6 @@ int main(){
   assert( !p1.isConnectedTo(p2) );
   assert( !p2.isConnectedTo(p1) );
   
-  return endTesting();
+  //return endTesting();
+  return 0;
 }

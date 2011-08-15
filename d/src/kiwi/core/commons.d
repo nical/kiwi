@@ -6,6 +6,7 @@ module kiwi.core.commons;
  */ 
 public import dtools.logstream; 
 
+alias byte[] DataStream;
 
 LogStream log;
 

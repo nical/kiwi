@@ -211,6 +211,7 @@ struct ScopedIndent{
 //                 #      #####   ####      #     #### 
 
 unittest{
+  /*  
   LogStream logs = new LogStream();
   logs.write("line\n");
   logs.writeWarning(1,"this is a warning\n");
@@ -218,4 +219,6 @@ unittest{
   logs.writeln("line");
   logs.write("\n\n\n\n");
   stdout.writeln();
+  */
   }
+

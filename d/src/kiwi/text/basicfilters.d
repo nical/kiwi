@@ -9,24 +9,26 @@ import kiwi.core.base;
 import std.string;
 
 
-class UpperCaseFilter : kiwi.core.dynamic.NodeInterface{
+class UpperCaseFilter : DynamicNode{
 
     this(){
         mixin( logFunction!"UpperCaseFilter.constructor" );
-        _input = new Port(this, cast(DataInterface)null);
-        _output = new Port(this, new PlainTextContainer);
+        inputs ~= new PermissiveInputPort(this);
+        outputs ~= new PermissiveOutputPort(this);
     }
 
     override void update(){
         mixin( logFunction!"UpperCaseFilter.update" );
                 
-        if( !_input.isConnected() ){
+        if( !inputs[0].isConnected() ){
             log.writeError("UpperCaseFilter.update: input port not connected!\n");
             return;
         }
         
-        PlainTextContainer inputData = cast(PlainTextContainer) _input.connectedPort().data();
-        PlainTextContainer outputData = _output.dataAs!PlainTextContainer();
+        PlainTextContainer inputData
+            = cast(PlainTextContainer) inputs[0].connectedPort().data();
+        PlainTextContainer outputData
+            = outputs[0].dataAs!PlainTextContainer();
         
         if(inputData is null || outputData is null ){
             log.writeError("UpperCaseFilter.update: nil data\n");
@@ -37,21 +39,6 @@ class UpperCaseFilter : kiwi.core.dynamic.NodeInterface{
         log.write("input: ", inputData.textData, "\n");
         log.write("output: ", outputData.textData, "\n");
     }
-
-    @property{
-        override NodeListenerInterface listener(){return _listener;}
-        override void listener(NodeListenerInterface val){_listener = val;}
-    }
-    
-    override PortInterface input(int index = 0){ return _input; }
-    override PortInterface output(int index = 0){ return _output; }
-    Port input()  { return _input;  } //temp
-    Port output() { return _output; } //temp
-     
-private:    
-    Port _input; 
-    Port _output;
-    NodeListenerInterface _listener;
 }
 
 unittest{

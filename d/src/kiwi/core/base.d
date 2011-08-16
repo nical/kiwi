@@ -9,153 +9,342 @@ import std.conv;
 
 
 
-class StaticPort(dataType) : PortInterface{
-    alias dataType DataType;
-
-    this(DataType data = null){
-        _data = data;
-    }
-    
-    override{
-        @property PortInterface[] connections(){ return _connections; }         
-        @property DataTypeInfo dataTypeInfo(){ return _dataTypeInfo; }
-        @property DataInterface data() { return _data; }
-        @property NodeInterface node() { return _node; }
-        bool isCompatible(PortInterface port){ return true; }                   //TODO
-        bool isComposite() { return false; }                                    //TODO
-        
-
-        public bool disconnectAll(){
-            mixin(logFunction!"dynamic.Port.disconnectAll");
-            while( connections.length > 0 ){
-                connections[$].disconnect(this);
-            }
-            return true;
-        }
-
-        bool isConnectedTo(PortInterface port){
-            foreach( connectn ; connections ){
-                if( connectn is port ) return true;
-            }
-            return false;
-        }
-
-        protected void doConnect(PortInterface toConnect){
-            mixin(logFunction!"StaticPort.Port.doConnect");
-            // check that toConnect is not already connected.
-            foreach( connectn ; connections ){
-                if( connectn is toConnect ) return;
-            }
-            _connections ~= toConnect;
-        }
-
-        protected void doDisconnect(PortInterface toConnect){
-            mixin(logFunction!"StaticPort.doDisconnect");
-            for( int i = 0; i < connections.length; ++i ){
-                if( connections[i] is toConnect ){
-                    log.writeln(i, " ", connections.length);
-                    _connections[i] = _connections[$-1];
-                    _connections.length -= 1;
-                }
-            }
-        }
-    }//override
-
-private:
-    static DataTypeInfo   _dataTypeInfo;
-    PortInterface[]       _connections;
-    DataType              _data;
-    NodeInterface         _node;
-    NodeListenerInterface _listener;
-}
+alias int PortFlags;
 
 
-/*
+interface Node{
 
-template NodeSystem(string name, layout...){
-
-alias layout Layout;
-alias name Name;
-
-string _declareConstants(){
-  int i = 0;
-  string result = "enum{";
-  foreach(symbol; layout){
-    result ~= symbol.toupper() ~ " = " ~ to!string(i++) ~ ", ";    
-  }
-  result ~= "INVALID};";
-  return result;
-}
-
-mixin( _declareConstants() );
-
-string _declareFunctions(){
-  string result;
-  foreach(symbol; layout){
-    result ~= "PortInterface " ~ symbol ~ "(int index = 0)"
-        ~ "{ return _ports[" ~ symbol.toupper() ~ "][index];}";
-  }
-  return result;
-}
-
-class DynamicNode : NodeInterface{
-    mixin( _declareFunctions() );
-    mixin _listenerMixin ;
-
-    override{
-        void update(){}
-        PortInterface opIndex(int portType, int index = 0){
-            return _ports[index][portType];        
-        }
-    }
-    
-private:
-    PortInterface[][] _ports;    
-}
-/+
-class StaticNode(portDeclarations...) : NodeInterface{
-    
-}
-
-class ContainerNode(ContainerClass) : NodeInterface{
-
-}
-+/
-    
-}// template NodeSystem
-
-
-mixin template _listenerMixin(){
     @property{
-        public NodeListenerInterface listener(){ return _listener; }
-        public void listener(NodeListenerInterface val){ _listener = val; }
+        NodeListener listener();
+        void listener(NodeListener listnr);
+        InputPort[] inputs();
+        OutputPort[] outputs();
+    }//properties
+
+    /++
+     + Function to override in order to have the node do whatever processing it
+     + is supposed to do. 
+     +/ 
+    void update();
+
+    /++
+     + Input port accessor.
+     +/ 
+    InputPort input(int index = 0);
+    
+    
+    /++
+     + Output port accessor.
+     +/ 
+    OutputPort output(int index = 0);
+
+
+    /++
+     + Access input ports by name.
+     +
+     + TODO: for composite ports access them like foo.bar with bar the sub port name.
+     +/ 
+    final InputPort input( string portName )
+    {
+        foreach(port ; inputs){
+            if(port.name == portName)
+                return port;
+        }
+        return null;
     }
-    private NodeListenerInterface _listener;
+    
+    /++
+     + Access output ports by name.
+     +/     
+    final OutputPort output( string portName )
+    {
+        foreach(port ; outputs){
+            if(port.name == portName)
+                return port;
+        }
+        return null;
+    }
+protected:
+    final void notifyInputPortConnected(InputPort myPort, OutputPort otherPort)
+    {
+        if(listener !is null) listener.inputPortConnected(myPort, otherPort);
+    }
+    final void notifyInputPortDisconnected(InputPort myPort, OutputPort otherPort)
+    {
+        if(listener !is null) listener.inputPortDisconnected(myPort, otherPort);
+    }
+    final void notifyInputPortAdded(InputPort addedPort)
+    {
+        if(listener !is null) listener.inputPortAdded(addedPort);
+    }
+    final void notifyInputPortRemoved(InputPort removedPort)
+    {
+        if(listener !is null) listener.inputPortRemoved(removedPort);
+    }
+    final void notifyOutputPortConnected(OutputPort myPort, InputPort otherPort)
+    {
+        if(listener !is null) listener.outputPortConnected(myPort, otherPort);
+    }
+    final void notifyOutputPortDisconnected(OutputPort myPort, InputPort otherPort)
+    {
+        if(listener !is null) listener.outputPortDisconnected(myPort, otherPort);
+    }
+    final void notifyOutputPortAdded(OutputPort addedPort)
+    {
+        if(listener !is null) listener.outputPortAdded(addedPort);
+    }
+    final void notifyOutputPortRemoved(OutputPort removedPort)
+    {
+        if(listener !is null) listener.outputPortRemoved(removedPort);
+    }
+
+}// Node
+
+
+
+
+
+
+
+
+class InputPort
+{
+public:
+    this(Node n, PortFlags f = 0)
+    {
+        _node = n;
+        _flags = f;
+    }
+
+    abstract{
+        @property{
+             /++
+             + Returns the name of this port.
+             +/ 
+            string name();
+            /++
+             +
+             +/ 
+            int maxConnections();            
+        }
+        bool isCompatible( OutputPort );
+    }
+    
+    @property{
+        Node node() { return _node; }
+        OutputPort[] connections() { return _connections; }
+        PortFlags flags() { return _flags; }        
+    }
+    
+    
+
+    /++
+     + Connects this port to an OutputPort if possible.
+     +/ 
+    bool connect( OutputPort port )
+    {
+        if (port is null)
+            return false;
+            
+        if ( this.maxConnections >= 0 && this.connections.length >= this.maxConnections )
+            return false;
+
+        if ( port.maxConnections >= 0 && port.connections.length >= port.maxConnections )
+            return false;
         
-}
+        if ( !this.isCompatible(port) || !port.isCompatible(this) )
+            return false;
+
+        this._connections ~= port;
+        port._connections ~= this;
+
+        return true;       
+    }
+
+    /++
+     + Disconnect this port from an OutputPort if they are conected.
+     +/ 
+    bool disconnect( OutputPort port )
+    {
+        if ( port is null )
+            return false;
+            
+        uint i1 = this.indexOf(port);
+        uint i2 = port.indexOf(this);
+
+        // Check that i1 and i2 are of the same sign.
+        // (if this has port in its connections, port should have this too, etc.)
+        assert ( i1*i2 > 0 );
+
+        if ( i1 < 0 )
+            return false;
+
+        // proceed with the disconnection
+        this.connections[i1] = this.connections[$];
+        this.connections.length -= 1;
+        port.connections[i2] = port.connections[$];
+        port.connections.length -= 1;
+
+        return true;
+    }
+
+    void disconnectAll()
+    {
+        for(int i = 0; i < connections.length; ++i)
+            this.disconnect(connections[i]);
+    }
+
+    /++
+     + Returns true if this port is connected to the one passed in parameter.
+     +/ 
+    bool isConnectedTo( OutputPort port )
+    {
+        return ( indexOf(port) >= 0 );
+    }
+
+    /++
+     + Returns true if the port is connected.
+     +/ 
+    bool isConnected()
+    {
+        return ( connections.length > 0 );
+    }
+protected:
+    @property void connections(OutputPort[] value)
+    {
+        _connections = value;
+    }
+    
+    /++
+     + Returns the index of an output port in connections, or -1 if not found.
+     +/ 
+    int indexOf(OutputPort port)
+    {
+        for(int i = 0; i < connections.length; ++i){
+            if( connections[i] is port )
+                return i;
+        }
+        return -1;
+    }
+
+private:
+    PortFlags    _flags;
+    OutputPort[] _connections;
+    Node         _node;
+} // class InputPort
+
+class OutputPort{
+public:
+    this(Node n, PortFlags f = 0)
+    {
+        _node = n;
+        _flags = f;
+    }
+    
+    abstract{
+        /++
+         + Returns true if this port has sub-ports.
+         +/ 
+        bool isComposite();
+        /++
+         + Returns true if this port is compatible with the InputPort in parameter.
+         +/ 
+        bool isCompatible( InputPort );
+        
+        @property{
+            /++
+             + Returns the maximum number of connections.
+             +/ 
+            int maxConnections();
+            /++
+             + Returns the name of this port.
+             +/ 
+            string name();
+            /++
+             + Returns this port's sub-ports if composite.
+             +/ 
+            OutputPort[] subPorts();
+        }//properties
+    } //abstract
+      
+    @property{
+        Node node(){ return _node; }
+        InputPort[] connections(){ return _connections; }
+        PortFlags flags(){ return _flags; }
+        
+        
+    }
+
+    /++
+     + Connects this port to an InputPort.
+     +/ 
+    bool connect(InputPort port)
+    {
+        if(port is null)
+            return false;
+
+        return port.connect(this);
+    }
+
+    /++
+     + disconnect this port from an InputPort.
+     +/ 
+    bool disconnect(InputPort port)
+    {
+        if(port is null)
+            return false;
+            
+        return port.disconnect(this);
+    }
+
+    void disconnectAll()
+    {
+        for(int i = 0; i < connections.length; ++i)
+            this.disconnect(connections[i]);
+    }
+    
+protected:
+
+    @property void connections(InputPort[] value)
+    {
+        _connections = value;
+    }
+    /++
+     + Returns the index of an output port in connections, or -1 if not found.
+     +/ 
+    int indexOf(InputPort port)
+    {
+        for(int i = 0; i < connections.length; ++i){
+            if( connections[i] is port )
+                return i;
+        }
+        return -1;
+    }
+    
+    @property{
+        void flags(PortFlags value){ _flags = value; }
+        void node(Node value){ _node =  value; }
+    }
+private:
+    PortFlags    _flags;
+    InputPort[]  _connections;
+    Node         _node;
+} // class OutputPort
 
 
-template DeclarePort(T, int portType, string portName){
-    alias T Class;
-    alias int Type;
-    alias portName Name;
-}
-
-*/
-
-
-// -----------------------------------------------------------------------------
 
 
 
-
-unittest{
-    mixin( logTest!"NodeSystem.unittest" );
-
-    //alias NodeSystem!("UnittestSystem","input","output") UnittestSystem;
-
-    //auto n1 = new UnittestSystem.DynamicNode();
-
-    auto p1 = new StaticPort!(ContainerWrapper!float);
+interface NodeListener{
+    void inputPortConnected(InputPort myPort, OutputPort otherPort);
+    void inputPortDisconnected(InputPort myPort, OutputPort otherPort);
+    void inputPortAdded(InputPort addedPort);
+    void inputPortRemoved(InputPort removedPort);
+    void outputPortConnected(OutputPort myPort, InputPort otherPort);
+    void outputPortDisconnected(OutputPort myPort, InputPort otherPort);
+    void outputPortAdded(OutputPort addedPort);
+    void outputPortRemoved(OutputPort removedPort);
+    void nodeChanged();
+    void detachNode();
 }
 

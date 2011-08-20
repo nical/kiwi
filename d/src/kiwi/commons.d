@@ -1,4 +1,4 @@
-module kiwi.core.commons;
+module kiwi.commons;
 /*
  * TODO: Dirty stuff here. needs cleanup
  * 

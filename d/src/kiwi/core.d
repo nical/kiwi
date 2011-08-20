@@ -1,9 +1,8 @@
-module kiwi.core.base;
-
-import kiwi.core.commons;
-import kiwi.core.interfaces;
-import kiwi.core.data;
-
+module kiwi.core;
+// kiwi imports
+import kiwi.commons;
+import kiwi.data;
+// external imports
 import std.string;
 import std.conv;
 
@@ -125,7 +124,8 @@ public:
             /++
              +
              +/ 
-            int maxConnections();            
+            int maxConnections();    
+                             
         }
         bool isCompatible( OutputPort );
     }
@@ -142,7 +142,13 @@ public:
      + Connects this port to an OutputPort if possible.
      +/ 
     bool connect( OutputPort port )
+    out
     {
+        assert (isConnectionReciproqual(port), "port connection reciprocity test failed. ");
+    }
+    body
+    {
+        mixin( logFunction!"InputPort.connect" );
         if (port is null)
             return false;
             
@@ -165,25 +171,28 @@ public:
      + Disconnect this port from an OutputPort if they are conected.
      +/ 
     bool disconnect( OutputPort port )
+    out
     {
+        assert( !port.isConnectedTo(this), "disconnection failed." ); 
+        assert( !this.isConnectedTo(port), "disconnection failed." ); 
+    }
+    body
+    {
+        mixin( logFunction!"InputPort.disconnect" );
         if ( port is null )
             return false;
-            
-        uint i1 = this.indexOf(port);
-        uint i2 = port.indexOf(this);
 
-        // Check that i1 and i2 are of the same sign.
-        // (if this has port in its connections, port should have this too, etc.)
-        assert ( i1*i2 > 0 );
+        int i1 = this.indexOf(port);
+        int i2 = port.indexOf(this);
 
         if ( i1 < 0 )
             return false;
 
         // proceed with the disconnection
-        this.connections[i1] = this.connections[$];
-        this.connections.length -= 1;
-        port.connections[i2] = port.connections[$];
-        port.connections.length -= 1;
+        this._connections[i1] = this.connections[$-1];
+        this._connections.length -= 1;
+        port._connections[i2] = port.connections[$-1];
+        port._connections.length -= 1;
 
         return true;
     }
@@ -210,6 +219,22 @@ public:
         return ( connections.length > 0 );
     }
 protected:
+
+    /++
+     + Checks that the state of the connection between this and the port is reciproqual.
+     +
+     + In other words, if this.connections contains port then port.connections must contain this, etc. 
+     + Should return true in any case. intended for debug.
+     +/
+    bool isConnectionReciproqual(OutputPort port)
+    {
+        uint i1 = this.indexOf(port);
+        uint i2 = port.indexOf(this);
+        if (i1 < 0 && i2 < 0) return true;
+        if (i1 >= 0 && i2 >= 0) return true;
+        return false;
+    }
+
     @property void connections(OutputPort[] value)
     {
         _connections = value;
@@ -232,6 +257,10 @@ private:
     OutputPort[] _connections;
     Node         _node;
 } // class InputPort
+
+
+
+
 
 class OutputPort{
 public:
@@ -264,9 +293,15 @@ public:
              + Returns this port's sub-ports if composite.
              +/ 
             OutputPort[] subPorts();
+            /++
+             + 
+             +/
+             const(DataTypeInfo) dataType() pure;
+             Data data(); 
         }//properties
     } //abstract
       
+    
     @property{
         Node node(){ return _node; }
         InputPort[] connections(){ return _connections; }
@@ -280,6 +315,7 @@ public:
      +/ 
     bool connect(InputPort port)
     {
+        mixin( logFunction!"OutputPort.connect" );
         if(port is null)
             return false;
 
@@ -303,6 +339,10 @@ public:
             this.disconnect(connections[i]);
     }
     
+    bool isConnectedTo(InputPort port)
+    {
+        return indexOf(port) != -1;
+    }
 protected:
 
     @property void connections(InputPort[] value)

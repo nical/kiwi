@@ -1,35 +1,55 @@
-module kiwi.core.data;
-
-import kiwi.core.interfaces;
-import kiwi.core.commons;
-
+module kiwi.data;
+//
+import kiwi.commons;
+//
 import std.typecons;
 
+
+
+
+interface Data
+{
+    @property 
+    {
+        DataTypeInfo type();
+        Data[] subData();
+        //
+        final bool isComposite(){ return subData.length != 0; } 
+    }
+    bool serialize( DataStream stream );
+    bool deSerialize( const DataStream stream );
+}
 
 /++
  + Real time type information for kiwi data classes.
  +/ 
-class DataTypeInfo{
+class DataTypeInfo
+{
 public:
-  this(string name, const(DataTypeInfo)[] defaultSubData, bool serializable){
+  this(string name, const(DataTypeInfo)[] defaultSubData, bool serializable)
+  {
     mixin(logFunction!"DataTypeInfo.constructor");
     _name = name;
     _subData = defaultSubData;
   }
-  
-  @property const string name(){
+
+  @property const string name()
+  {
     return _name;
   }
-  
-  @property const(const(DataTypeInfo)[]) subData(){
+
+  @property const(DataTypeInfo[]) subData()
+  {
     return _subData;
   }
-  
-  bool isSerializable(){
+
+  bool isSerializable()
+  {
     return _serializable;
   }
-  
-  bool isComposite(){
+
+  bool isComposite()
+  {
     if( _subData is null ){
       return false;
     }else{
@@ -44,7 +64,7 @@ private:
 }
 
 
-class ContainerWrapper(dataType) : DataInterface {
+class ContainerWrapper(dataType) : Data {
     alias dataType DataType;
     alias _data this;
 
@@ -53,12 +73,13 @@ class ContainerWrapper(dataType) : DataInterface {
     }
 
     override{
-        bool isSerializable(){ return false; }
+        //bool isSerializable(){ return false; }
         bool serialize( DataStream stream ){ return false; }
         bool deSerialize( const DataStream stream ){ return false; }
-        @property const(DataInterface[]) subData(){ return []; }
-        DataTypeInfo typeInfo(){ return _typeInfo; }
+        @property Data[] subData(){ return []; }
+        @property DataTypeInfo type(){ return _typeInfo; }        
     }
+    @property static DataTypeInfo Type(){ return _typeInfo; }
     private DataType _data;
     private static DataTypeInfo _typeInfo;
 }

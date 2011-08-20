@@ -13,8 +13,8 @@ class UpperCaseFilter : DynamicNode{
 
     this(){
         mixin( logFunction!"UpperCaseFilter.constructor" );
-        inputs ~= new PermissiveInputPort(this);
-        outputs ~= new PermissiveOutputPort(this);
+//        addInputPort( new PermissiveInputPort(this) );
+//        addOutputPort( new PermissiveOutputPort(this) );
     }
 
     override void update(){
@@ -26,7 +26,7 @@ class UpperCaseFilter : DynamicNode{
         }
         
         PlainTextContainer inputData
-            = cast(PlainTextContainer) inputs[0].connectedPort().data();
+            = cast(PlainTextContainer) inputs[0].connections[0].data();
         PlainTextContainer outputData
             = outputs[0].dataAs!PlainTextContainer();
         

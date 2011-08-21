@@ -7,9 +7,18 @@ import kiwi.dynamic.port;
 
 //######################################################################
 
+alias void function(Data[] inputData, Data[] outputData) NodeUpdateFunction;
 
 class DynamicNode : Node {
-    
+
+    this( InputPort[] inputs, OutputPort[] outputs, NodeUpdateFunction updateFunction = null )
+    {
+        mixin( logFunction!"DynamicNode.constructor" );
+        _inputPorts = inputs;
+        _outputPorts = outputs;
+        _updateFunc = updateFunction;
+    }
+
     override{
         @property {
             NodeListener listener(){ return _listener; }
@@ -21,23 +30,61 @@ class DynamicNode : Node {
         InputPort input(int index = 0){ return _inputPorts[index]; }
         OutputPort output(int index = 0){ return _outputPorts[index]; }
         
-        void update(){};
+        void update()
+        {
+            mixin( logFunction!"DynamicNode.update" );
+            if(_updateFunc !is null)
+            {
+                Data[] inputData = [];
+                Data[] outputData = [];
+
+                foreach( inputPort ; _inputPorts )
+                    inputData ~= inputPort.connections[0].data;
+                foreach( outputPort ; _outputPorts )
+                    outputData ~= outputPort.data;
+                
+                _updateFunc(inputData, outputData);
+            }   
+        }
     }//override
 private:
     InputPort[] _inputPorts;
     OutputPort[] _outputPorts;
     NodeListener _listener;
+    NodeUpdateFunction _updateFunc;
 }
 
 
 
-unittest{
-    mixin(logTest!"kiwi.dynamic.unittest");
+/*
+             #####   #####    ####   #####    ####
+               #     #       #         #     #
+               #     ###      ###      #      ###
+               #     #           #     #         #
+               #     #####   ####      #     ####
+*/
+
+
+version(unittest)
+{
+    bool processCalled = false;
+    void processTest()
+    {
+        mixin( logFunction!"unittest.processTest" );
+        
+        processCalled = true;
+    }
+}
+
+unittest
+{
+    mixin(logTest!"kiwi.dynamic.node");
     
-    auto pin = new DynamicInputPort(null);
-    auto pout = new DynamicOutputPort(null, ContainerWrapper!int.Type );
 
-    assert( pin.connect(pout) );
+    Node n1 = new DynamicNode( [], [], &processTest );
+
+    n1.update();
+
+    assert( processCalled );
 
 }
-

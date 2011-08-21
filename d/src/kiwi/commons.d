@@ -8,16 +8,23 @@ public import dtools.logstream;
 
 alias byte[] DataStream;
 
+// instance of the log object
 LogStream log;
 
-static this(){
+
+static this()
+{
   log = new LogStream();
 }
 
+
+
 enum{ scopedIndent = "log.indentation++;scope(exit)log.indentation--;" };
 
+
 // TODO: should be done with template mixin instead of text mixin
-string logBlock(string name)(){
+string logBlock(string name)()
+{
   return "debug{"
        ~ "log.writeln( LIGHTBLUE, \"{Begin block} \",RESET,\""~name~"\" );"
        ~ "log.indentation++;"
@@ -26,7 +33,8 @@ string logBlock(string name)(){
 }
 
 // TODO: should be done with template mixin instead of text mixin
-string logFunction(string name)(){
+string logFunction(string name)()
+{
   return "debug{"
        ~ "log.writeln( LIGHTBLUE, \"{Begin function} \",RESET,\""~name~"\" );"
        ~ "log.indentation++;"
@@ -35,7 +43,8 @@ string logFunction(string name)(){
 }
 
 // TODO: should be done with template mixin instead of text mixin
-string logTest(string name)(){
+string logTest(string name)()
+{
   return "debug{"
        ~ "log.writeln( LIGHTGREEN, \"{Begin test} \",RESET,BOLD,\""~name~"\",RESET );"
        ~ "log.indentation++;"

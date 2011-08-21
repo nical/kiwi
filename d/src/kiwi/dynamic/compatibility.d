@@ -1,12 +1,13 @@
 /++
  + Runtime compatibility policies for kiwi.dynamic.InputPort objects.
+ + @author Nicolas Silva
  +/
 module kiwi.dynamic.compatibility;
 
 import kiwi.commons;
-import kiwi.data 			: DataTypeInfo;
-import kiwi.core 			: OutputPort;
-import kiwi.dynamic.port 	: PortCompatibility;
+import kiwi.data;
+import kiwi.core;
+import kiwi.dynamic.port;
 
 
 /++
@@ -18,6 +19,7 @@ class DataTypeCompatibility : PortCompatibility
 	{
 		_compatibleTypes = compatibleTypes;
 	}
+	
 	this(DataTypeInfo compatibleType)
 	{
 		_compatibleTypes ~= compatibleType;
@@ -29,7 +31,7 @@ class DataTypeCompatibility : PortCompatibility
 		assert ( port !is null);
 	}
 	body
-	{		
+	{	
 		foreach ( typeInfo ; _compatibleTypes )
 		{
 			if (port.dataType is typeInfo)
@@ -55,6 +57,22 @@ class AlwaysCompatible : PortCompatibility
 	}
 	body
 	{
-		return true;	
+		return true;
+	}
+}
+
+/**
+ * Runtime compatibility policy for kiwi.dynamic.InputPort objects, never compatible.
+ */
+class NeverCompatible : PortCompatibility
+{
+	override bool isCompatible(OutputPort port) pure
+	in
+	{
+		assert ( port !is null);
+	}
+	body
+	{
+		return false;
 	}
 }

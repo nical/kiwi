@@ -262,6 +262,9 @@ private:
 
 
 
+
+
+
 class OutputPort{
 public:
     this(Node n, PortFlags f = 0)
@@ -296,9 +299,16 @@ public:
             /++
              + 
              +/
-             const(DataTypeInfo) dataType() pure;
-             Data data(); 
-        }//properties
+            DataTypeInfo dataType() pure;
+            /++
+             +
+             +/
+            Data data();
+            
+            void data( kiwi.core.Data value );        
+            //in{ if( dataType !is null && value !is null ) assert( data.type is dataType ); } 
+            
+        } //properties
     } //abstract
       
     
@@ -342,6 +352,18 @@ public:
     bool isConnectedTo(InputPort port)
     {
         return indexOf(port) != -1;
+    }
+
+    bool isConnected()
+    {
+        return connections.length > 0;
+    }
+
+    void allocateData()
+    {
+        if( data is null ){
+            data = dataType.newInstance();   
+        }
     }
 protected:
 

@@ -1,62 +1,53 @@
 module kiwi.text.basicfilters;
 
 import kiwi.text.data;
-import kiwi.core.commons;
-import kiwi.core.interfaces;
-import kiwi.core.dynamic;
-import kiwi.core.base;
+import kiwi.commons;
+import kiwi.core;
+import kiwi.data;
+import kiwi.dynamic.node;
+import kiwi.dynamic.port;
+import kiwi.dynamic.compatibility;
 
 import std.string;
 
 
-class UpperCaseFilter : DynamicNode{
+void applyUpperCase(Data[] input, Data[] output )
+{
+    if(input is null     || output is null)     return;
+    if(input.length == 0 || output.length == 0) return;
+    
+    auto inputData  = cast(PlainTextContainer) input[0];
+    auto outputData = cast(PlainTextContainer) output[0];
 
-    this(){
-        mixin( logFunction!"UpperCaseFilter.constructor" );
-//        addInputPort( new PermissiveInputPort(this) );
-//        addOutputPort( new PermissiveOutputPort(this) );
-    }
+    if(inputData is null || outputData is null)  return;
+    
+    outputData.text = toupper(inputData.text);
+}
 
-    override void update(){
-        mixin( logFunction!"UpperCaseFilter.update" );
-                
-        if( !inputs[0].isConnected() ){
-            log.writeError("UpperCaseFilter.update: input port not connected!\n");
-            return;
-        }
-        
-        PlainTextContainer inputData
-            = cast(PlainTextContainer) inputs[0].connections[0].data();
-        PlainTextContainer outputData
-            = outputs[0].dataAs!PlainTextContainer();
-        
-        if(inputData is null || outputData is null ){
-            log.writeError("UpperCaseFilter.update: nil data\n");
-            return;
-        }
-        
-        outputData.textData = toupper(inputData.textData);
-        log.write("input: ", inputData.textData, "\n");
-        log.write("output: ", outputData.textData, "\n");
-    }
+Node NewUpperCaseFilter()
+{
+    mixin( logFunction!"NewUpperCaseFilter" );
+    InputPortInitializer[] inputs   = [];
+    OutputPortInitializer[] outputs = [];
+    inputs  ~= InputPortInitializer("Input text", new DataTypeCompatibility(PlainTextContainer.Type));
+    outputs ~= OutputPortInitializer("Output text", PlainTextContainer.Type);
+    return new DynamicNode( inputs, outputs, &applyUpperCase );
 }
 
 unittest{
 
-    mixin(logTest!"kiwi.text.basicfilters");
+    mixin(logTest!" kiwi.text.basicfilters");
     //beginTesting("kiwi.core");
 
-    auto inputNode = new ContainerNode( new PlainTextContainer("hello world!") );
-
-    auto filter    = new UpperCaseFilter(); 
-
+    auto filter     = NewUpperCaseFilter(); 
+    auto inputNode  = NewContainerNode( new PlainTextContainer("hello world!") );
+    
     assert( inputNode.output() !is null );
     assert( inputNode.output().data !is null );
 
     assert( filter.input()  !is null );
     assert( filter.output() !is null );
-    assert( filter.output().data !is null );
-
+    
     assert( inputNode.output().connect( filter.input() ) );
     assert( inputNode.output().isConnected() );
     assert( filter.input().isConnected() );
@@ -67,5 +58,5 @@ unittest{
     auto outputText = cast(PlainTextContainer) filter.output().data;
     assert(outputText !is null);
     
-    log.writeln( "Output: ", outputText.textData );
+    log.writeln( "Output: ", outputText.text );
 }

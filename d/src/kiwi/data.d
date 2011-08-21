@@ -3,9 +3,9 @@ module kiwi.data;
 import kiwi.commons;
 //
 import std.typecons;
+import std.traits;
 
-
-
+alias Data function() pure NewDataFunction;
 
 interface Data
 {
@@ -22,51 +22,67 @@ interface Data
 
 /++
  + Real time type information for kiwi data classes.
- +/ 
+ +/
 class DataTypeInfo
 {
 public:
-  this(string name, const(DataTypeInfo)[] defaultSubData, bool serializable)
-  {
-    mixin(logFunction!"DataTypeInfo.constructor");
-    _name = name;
-    _subData = defaultSubData;
-  }
-
-  @property const string name()
-  {
-    return _name;
-  }
-
-  @property const(DataTypeInfo[]) subData()
-  {
-    return _subData;
-  }
-
-  bool isSerializable()
-  {
-    return _serializable;
-  }
-
-  bool isComposite()
-  {
-    if( _subData is null ){
-      return false;
-    }else{
-      return _subData.length != 0;
+    this(string name, DataTypeInfo[] subData, bool serializable, NewDataFunction instanciator)
+    {
+        mixin(logFunction!"DataTypeInfo.constructor");
+        _name = name;
+        _subData = subData;
+        _serializable = serializable;
+        _newData = instanciator;
     }
-  }
-  
+
+    @property{ 
+        const string name() pure
+        {
+            return _name;
+        }
+
+        const(DataTypeInfo[]) subData() pure
+        {
+            return _subData;
+        }
+
+        bool isSerializable() pure
+        {
+            return _serializable;
+        }
+
+        bool isComposite() pure
+        {
+            if( _subData is null ){
+                return false;
+            }else{
+                return _subData.length != 0;
+            }
+        }
+    } // properties
+
+    /++
+     + Instanciate an object of this type.
+     +/
+    Data newInstance() pure
+    in{ assert( _newData !is null ); }
+    body
+    {
+        return _newData();
+    }
 private:
-  string                 _name;
-  const(DataTypeInfo)[]  _subData;
-  bool                   _serializable;
+    string                 _name;
+    const(DataTypeInfo)[]  _subData;
+    bool                   _serializable;
+    NewDataFunction        _newData;
 }
+
 
 
 class ContainerWrapper(dataType) : Data {
     alias dataType DataType;
     alias _data this;
+    
 
     static this(){
         _typeInfo = new DataTypeInfo("ContainerWrapper", [], false);
@@ -82,4 +98,171 @@ class ContainerWrapper(dataType) : Data {
     @property static DataTypeInfo Type(){ return _typeInfo; }
     private DataType _data;
     private static DataTypeInfo _typeInfo;
+}
+
+
+
+
+
+
+
+class DataTypeManager
+{
+
+    static DataTypeInfo registerDataType( _Type )()
+    {
+        mixin( logFunction!"DataTypeManager.registerDataType" );
+
+        static if ( __traits(compiles, name = _Type.Name) )
+            string name = _Type.Name;
+        else 
+            string name = _Type.stringof;
+        
+        log.writeDebug(0, name,"\n" );
+
+        DataTypeInfo result;
+        if ( contains(name) )
+        {
+            log.writeDebug(0,"already registered.");
+            return _dataTypes[name];
+        }
+        else
+        {
+            static if( __traits(compiles, _Type.SubDataTypes) )
+            {
+                int i = 0;
+                DataTypeInfo[_Type.SubDataTypes.length] subTypes;
+                foreach( subType ; _Type.SubDataTypes ){
+                    subTypes[i] = registerDataType!subType();
+                    ++i;
+                }
+            }
+            else
+            {
+                DataTypeInfo[] subTypes = [];
+            }
+            
+            static if( __traits(compiles, _Type.NewInstance) )
+            {
+                NewDataFunction instanciator = &_Type.NewInstance;
+            }
+            else
+            {
+                NewDataFunction instanciator = function Data()pure{ return new _Type; };
+            }
+            result = new DataTypeInfo(name, subTypes, false, instanciator);
+            _dataTypes[name] = result;
+            return result;
+        }   
+    }
+
+    static bool contains( string key )
+    {
+        foreach( existing ; _dataTypes.byKey )
+          if ( existing == key )
+            return true;
+        return false;
+    }
+
+    static auto keys() { return _dataTypes.keys; }
+
+    static DataTypeInfo opIndex( string key )
+    {
+        if( contains(key) ) 
+            return _dataTypes[key];
+        else
+            return null;
+    }
+    
+private: 
+    this(){ mixin( logFunction!"DataTypeManager.constructor");}
+    static DataTypeInfo[string] _dataTypes;
+}
+
+
+
+
+
+mixin template DeclareSubDataTypes(T...)
+{
+    alias T SubDataTypes;
+}
+
+mixin template DeclareName(alias name)
+{
+    alias name Name;
+}
+
+mixin template DeclareInstanciator(alias func)
+{
+    alias func NewInstance;
+}
+
+template DefineInstanciator(T) // wont work because mixin evaluated too late
+{
+    enum{ functionText = "kiwi.Data New"~T.stringof~"(){ return new "~T.stringof~";}" }
+    string DefineInstanciator = functionText;
+}
+
+/*
+             #####   #####    ####   #####    ####
+               #     #       #         #     #
+               #     ###      ###      #      ###
+               #     #           #     #         #
+               #     #####   ####      #     ####
+*/
+
+
+
+version(unittest)
+{
+    
+    Data NewDataTest() pure { return new DataTest; }
+
+    class DataTestSub : Data
+    {
+        override{
+            bool serialize( DataStream stream ){ return false; }
+            bool deSerialize( const DataStream stream ){ return false; }
+            @property Data[] subData(){ return []; }
+            @property DataTypeInfo type(){ return null; }        
+        }
+
+    }
+
+    class DataTest : Data
+    {
+        mixin DeclareName!("DataTest");
+        mixin DeclareSubDataTypes!(DataTestSub,DataTestSub);
+        mixin DeclareInstanciator!(NewDataTest);
+
+        static this()
+        {
+            mixin( logFunction!"unittest.DataTest.static_constructor" );
+            _typeInfo = DataTypeManager.registerDataType!DataTest;
+        }
+
+        override{
+            bool serialize( DataStream stream ){ return false; }
+            bool deSerialize( const DataStream stream ){ return false; }
+            @property Data[] subData(){ return []; }
+            @property DataTypeInfo type(){ return _typeInfo; }        
+        }
+        @property static DataTypeInfo Type(){ return _typeInfo; }
+        private static DataTypeInfo _typeInfo;
+    }
+
+}
+
+unittest
+{
+    mixin( logTest!"kiwi.data" ); 
+    
+    foreach( registeredKey ; DataTypeManager.keys )
+    {
+        log.writeln(registeredKey);
+    }
+    assert ( DataTypeManager["DataTest"] !is null );
+    assert ( DataTypeManager["DataTestSub"] !is null );
+    assert ( DataTypeManager["unregistered"] is null );
 }

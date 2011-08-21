@@ -65,14 +65,15 @@ class DynamicOutputPort : OutputPort
             int maxConnections() { return -1; }
             string name() { return _name; }
             OutputPort[] subPorts() { return []; }
-            const(DataTypeInfo ) dataType() pure { return _dataType; }
+            DataTypeInfo dataType() pure { return _dataType; }
+            Data data(){ return _data; }
         }
 
         bool isComposite() { return false; }
-        bool isCompatible( InputPort port ){ return (port !is null); }
-        Data data(){ return _data; }             
+        bool isCompatible( InputPort port ){ return (port !is null); }         
+                   
     }
-
+    @property void data( kiwi.core.Data value ){ _data = value; }
 private:
     string _name;
     Data _data;  
@@ -100,10 +101,15 @@ version(unittest)
 {
     import kiwi.dynamic.compatibility;
 
+    Data NewContainerTest()
+    {
+        return new ContainerTest();
+    }
+
     class ContainerTest : kiwi.core.Data{
         static this()
         {
-            _typeInfo = new DataTypeInfo("ContainerTest", null, false);
+            _typeInfo = new DataTypeInfo("ContainerTest", null, false, &NewContainerTest);
         }
 
         override bool serialize( DataStream stream ){ return false; }

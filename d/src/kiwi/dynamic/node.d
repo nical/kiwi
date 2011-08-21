@@ -5,17 +5,23 @@ import kiwi.core;
 import kiwi.data;
 import kiwi.dynamic.port;
 
+import std.typecons;
+
 //######################################################################
 
 alias void function(Data[] inputData, Data[] outputData) NodeUpdateFunction;
+alias Tuple!(string, PortCompatibility) InputPortInitializer;
+alias Tuple!(string, DataTypeInfo)      OutputPortInitializer;
+
 
 class DynamicNode : Node {
 
-    this( InputPort[] inputs, OutputPort[] outputs, NodeUpdateFunction updateFunction = null )
+    this( InputPortInitializer[] inputs, OutputPortInitializer[] outputs
+        , NodeUpdateFunction updateFunction = null )
     {
         mixin( logFunction!"DynamicNode.constructor" );
-        _inputPorts = inputs;
-        _outputPorts = outputs;
+        foreach( ipi ; inputs )  addInputPort( ipi[1], ipi[0] );
+        foreach( opi ; outputs ) addOutputPort( opi[1], opi[0] );
         _updateFunc = updateFunction;
     }
 
@@ -33,6 +39,7 @@ class DynamicNode : Node {
         void update()
         {
             mixin( logFunction!"DynamicNode.update" );
+            allocateData();
             if(_updateFunc !is null)
             {
                 Data[] inputData = [];
@@ -47,6 +54,35 @@ class DynamicNode : Node {
             }   
         }
     }//override
+
+    void allocateData()
+    {
+        foreach( port ; outputs )
+            port.allocateData();        
+    }
+
+    void addInputPort( PortCompatibility compatibility, string name)
+    {        
+        _inputPorts ~= new DynamicInputPort( this, compatibility, name );
+    }
+    void addOutputPort( DataTypeInfo typeInfo, string name)
+    {        
+        _outputPorts ~= new DynamicOutputPort( this, typeInfo, name );
+    }
+
+    bool setOutputPortData( int index, Data data )
+    in
+    {
+        assert( index > 0 );
+        assert( index < outputs.length );
+    }
+    body
+    {
+        if(output(index).dataType !is data.type && output(index).dataType !is null) return false;
+        output(index).data = data;
+        return true;
+    }
+
 private:
     InputPort[] _inputPorts;
     OutputPort[] _outputPorts;
@@ -55,6 +91,19 @@ private:
 }
 
 
+Node NewContainerNode( kiwi.core.Data data )
+{
+    mixin( logFunction!"NewContainerNode" );
+
+    OutputPortInitializer[] dataPort = [];
+    dataPort ~= OutputPortInitializer("Data", data.type );
+    log.foo();
+    auto n = new DynamicNode( [], dataPort, null );
+    log.bar();
+    n.output().data = data;
+    log.plop();
+    return n;
+}
 
 /*
              #####   #####    ####   #####    ####

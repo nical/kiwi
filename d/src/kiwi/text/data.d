@@ -10,7 +10,8 @@ Data NewPlainTextContainer(){ return new PlainTextContainer; }
 class PlainTextContainer : kiwi.core.Data
 {
     static this(){
-        _typeInfo = new DataTypeInfo("PlainText",null,true, &NewPlainTextContainer);        
+        _typeInfo = DataTypeManager.registerDataType!PlainTextContainer();
+        //_typeInfo = new DataTypeInfo("PlainText",null,true, &NewPlainTextContainer);        
     }
 
     this(){

@@ -59,6 +59,7 @@ class DynamicOutputPort : OutputPort
     this(Node n, DataTypeInfo dataTypeInfo, string myName = "output"){
         super(n);    
         _name = myName;
+        _dataType = dataTypeInfo;
     }
     override{
         @property{

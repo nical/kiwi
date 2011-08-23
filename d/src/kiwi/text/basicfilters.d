@@ -48,6 +48,9 @@ unittest{
     assert( filter.input()  !is null );
     assert( filter.output() !is null );
     
+    assert( inputNode.output().dataType !is null );
+    log.writeln(inputNode.output().dataType.name);
+    //log.writeln(filter.input().data.Type.name;);
     assert( inputNode.output().connect( filter.input() ) );
     assert( inputNode.output().isConnected() );
     assert( filter.input().isConnected() );

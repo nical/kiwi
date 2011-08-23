@@ -97,11 +97,8 @@ Node NewContainerNode( kiwi.core.Data data )
 
     OutputPortInitializer[] dataPort = [];
     dataPort ~= OutputPortInitializer("Data", data.type );
-    log.foo();
     auto n = new DynamicNode( [], dataPort, null );
-    log.bar();
     n.output().data = data;
-    log.plop();
     return n;
 }
 

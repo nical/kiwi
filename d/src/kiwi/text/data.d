@@ -23,8 +23,8 @@ class PlainTextContainer : kiwi.core.Data
     }
 
     override{
-        bool serialize(DataStream stream){ return false; }
-        bool deSerialize(const DataStream stream){ return false; }
+        //bool serialize(DataStream stream){ return false; }
+        //bool deSerialize(const DataStream stream){ return false; }
         @property kiwi.core.Data[] subData(){ return []; }
         
         DataTypeInfo type(){ return _typeInfo; }

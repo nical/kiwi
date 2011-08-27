@@ -56,10 +56,26 @@ private:
 
 class DynamicOutputPort : OutputPort
 {
-    this(Node n, DataTypeInfo dataTypeInfo, string myName = "output"){
-        super(n);    
-        _name = myName;
-        _dataType = dataTypeInfo;
+    this(Node n, DynamicOutputPort parent, DataTypeInfo dataTypeInfo, string myName = "output")
+    {
+        mixin( logFunction!"DynamicOutputPort.constructor" );
+        super(n);
+        _name       = myName;
+        _parentPort = parent;
+        _dataType   = dataTypeInfo;
+        _subPorts   = [];
+        
+        if ( (dataTypeInfo !is null) && (dataTypeInfo.subData !is null) )
+        {
+            log.writeln(dataTypeInfo.name);
+            log.writeln(dataTypeInfo.subData.length);
+            
+            foreach( subTypeInfo ; dataTypeInfo.subData )
+            {
+                log.writeDebug(0, subTypeInfo.name );
+                _subPorts ~= new DynamicOutputPort( n, this, subTypeInfo, "" );
+            }
+        }
     }
     override{
         @property{
@@ -76,9 +92,11 @@ class DynamicOutputPort : OutputPort
     }
     @property void data( kiwi.core.Data value ){ _data = value; }
 private:
-    string _name;
-    Data _data;  
-    DataTypeInfo _dataType;  
+    string              _name;
+    Data                _data;  
+    DataTypeInfo        _dataType;  
+    DynamicOutputPort[] _subPorts;
+    DynamicOutputPort   _parentPort;
 }
 
 
@@ -107,14 +125,39 @@ version(unittest)
         return new ContainerTest();
     }
 
-    class ContainerTest : kiwi.core.Data{
+    class SubContainerTest : kiwi.core.Data
+    {
         static this()
         {
-            _typeInfo = new DataTypeInfo("ContainerTest", null, false, &NewContainerTest);
+            mixin( logFunction!"SubContainerTest.static_constructor" );
+            _typeInfo = DataTypeManager.registerDataType!SubContainerTest;
+            assert( _typeInfo !is null );
+            assert( DataTypeManager["SubContainerTest"] !is null);
+            assert( DataTypeManager["SubContainerTest"] is _typeInfo );
+        }
+        override DataTypeInfo type(){ return _typeInfo; }
+        static DataTypeInfo Type(){ return _typeInfo; }
+        override @property Data[] subData(){ return []; }
+        private static DataTypeInfo _typeInfo;
+    } 
+
+    class ContainerTest : kiwi.core.Data
+    {
+        mixin DeclareSubDataTypes!(SubContainerTest,SubContainerTest);
+
+        static this()
+        {
+            mixin( logFunction!"ContainerTest.static_constructor" );
+            _typeInfo = DataTypeManager.registerDataType!ContainerTest;
+            assert( _typeInfo !is null );
+            assert( DataTypeManager["ContainerTest"] !is null);
+            assert( DataTypeManager["ContainerTest"] is _typeInfo );
+            assert( _typeInfo.name == "ContainerTest");
+            assert( _typeInfo.subData.length == 2);
         }
 
-        override bool serialize( DataStream stream ){ return false; }
-        override bool deSerialize( const DataStream stream ){ return false; }
+        //override bool serialize( DataStream stream ){ return false; }
+        //override bool deSerialize( const DataStream stream ){ return false; }
         override DataTypeInfo type(){ return _typeInfo; }
         static DataTypeInfo Type(){ return _typeInfo; }
         override @property Data[] subData(){ return []; }
@@ -127,11 +170,14 @@ unittest
 {
     mixin(logTest!"kiwi.dynamic.port");
     //beginTesting("kiwi.core");
+    log.writeln( "ContainerTest.Type.name: ", ContainerTest.Type.name );
+    assert( ContainerTest.Type.subData.length == 2 );
+    assert( ContainerTest.Type.subData[0].name == "SubContainerTest" );
 
-    auto op_1 = new kiwi.dynamic.port.DynamicOutputPort( null, ContainerTest.Type() );
+    auto op_1 = new kiwi.dynamic.port.DynamicOutputPort( null, null, ContainerTest.Type );
     auto ip_1 = new kiwi.dynamic.port.DynamicInputPort(  null, new AlwaysCompatible );
 
-    auto op_2 = new kiwi.dynamic.port.DynamicOutputPort( null, ContainerTest.Type() );
+    auto op_2 = new kiwi.dynamic.port.DynamicOutputPort( null, null, ContainerTest.Type );
     auto ip_2 = new kiwi.dynamic.port.DynamicInputPort(  null, new AlwaysCompatible );
 
     // simply trying every connection/disconnection cases.

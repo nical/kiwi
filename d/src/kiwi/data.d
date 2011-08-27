@@ -16,8 +16,8 @@ interface Data
         //
         final bool isComposite(){ return subData.length != 0; } 
     }
-    bool serialize( DataStream stream );
-    bool deSerialize( const DataStream stream );
+    //bool serialize( DataStream stream );
+    //bool deSerialize( const DataStream stream );
 }
 
 /++
@@ -41,7 +41,7 @@ public:
             return _name;
         }
 
-        const(DataTypeInfo[]) subData() pure
+        DataTypeInfo[] subData() pure
         {
             return _subData;
         }
@@ -72,7 +72,7 @@ public:
     }
 private:
     string                 _name;
-    const(DataTypeInfo)[]  _subData;
+    DataTypeInfo[]  _subData;
     bool                   _serializable;
     NewDataFunction        _newData;
 }
@@ -90,8 +90,8 @@ class ContainerWrapper(dataType) : Data {
 
     override{
         //bool isSerializable(){ return false; }
-        bool serialize( DataStream stream ){ return false; }
-        bool deSerialize( const DataStream stream ){ return false; }
+        //bool serialize( DataStream stream ){ return false; }
+        //bool deSerialize( const DataStream stream ){ return false; }
         @property Data[] subData(){ return []; }
         @property DataTypeInfo type(){ return _typeInfo; }        
     }
@@ -110,6 +110,12 @@ class DataTypeManager
 {
 
     static DataTypeInfo registerDataType( _Type )()
+    out(result)
+    { 
+        assert( result !is null );
+        assert( _dataTypes[result.name] is result ); 
+    }
+    body
     {
         mixin( logFunction!"DataTypeManager.registerDataType" );
 
@@ -118,7 +124,7 @@ class DataTypeManager
         else 
             string name = _Type.stringof;
         
-        log.writeDebug(0, name,"\n" );
+        log.writeln( name );
 
         DataTypeInfo result;
         if ( contains(name) )
@@ -128,19 +134,15 @@ class DataTypeManager
         }
         else
         {
+            DataTypeInfo[] subTypes = [];
             static if( __traits(compiles, _Type.SubDataTypes) )
             {
-                int i = 0;
-                DataTypeInfo[_Type.SubDataTypes.length] subTypes;
+                log.writeDebug(0,"has sub data type");
+                log.writeDebug(0, subTypes.length );
                 foreach( subType ; _Type.SubDataTypes ){
-                    subTypes[i] = registerDataType!subType();
-                    ++i;
-                }
-            }
-            else
-            {
-                DataTypeInfo[] subTypes = [];
-            }
+                    DataTypeInfo temp = registerDataType!subType;
+                    subTypes ~= temp;                                    }
+            }            
             
             static if( __traits(compiles, _Type.NewInstance) )
             {
@@ -150,7 +152,11 @@ class DataTypeManager
             {
                 NewDataFunction instanciator = function Data()pure{ return new _Type; };
             }
+            log.plop;
+            log.writeDebug(0,"subTypes: ", subTypes.length);
+            if(subTypes.length > 0) log.writeDebug(0,"subTypes[0]: ", subTypes[0].name);
             result = new DataTypeInfo(name, subTypes, false, instanciator);
+            if(subTypes.length > 0) log.writeDebug(0,"result.subData[0]: ", result.subData[0].name);
             _dataTypes[name] = result;
             return result;
         }   
@@ -222,8 +228,8 @@ version(unittest)
     class DataTestSub : Data
     {
         override{
-            bool serialize( DataStream stream ){ return false; }
-            bool deSerialize( const DataStream stream ){ return false; }
+            //bool serialize( DataStream stream ){ return false; }
+            //bool deSerialize( const DataStream stream ){ return false; }
             @property Data[] subData(){ return []; }
             @property DataTypeInfo type(){ return null; }        
         }
@@ -243,8 +249,8 @@ version(unittest)
         }
 
         override{
-            bool serialize( DataStream stream ){ return false; }
-            bool deSerialize( const DataStream stream ){ return false; }
+            //bool serialize( DataStream stream ){ return false; }
+            //bool deSerialize( const DataStream stream ){ return false; }
             @property Data[] subData(){ return []; }
             @property DataTypeInfo type(){ return _typeInfo; }        
         }

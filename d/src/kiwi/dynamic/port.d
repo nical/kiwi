@@ -130,7 +130,7 @@ version(unittest)
         static this()
         {
             mixin( logFunction!"SubContainerTest.static_constructor" );
-            _typeInfo = DataTypeManager.registerDataType!SubContainerTest;
+            _typeInfo = DataTypeManager.Register!SubContainerTest;
             assert( _typeInfo !is null );
             assert( DataTypeManager["SubContainerTest"] !is null);
             assert( DataTypeManager["SubContainerTest"] is _typeInfo );
@@ -148,7 +148,7 @@ version(unittest)
         static this()
         {
             mixin( logFunction!"ContainerTest.static_constructor" );
-            _typeInfo = DataTypeManager.registerDataType!ContainerTest;
+            _typeInfo = DataTypeManager.Register!ContainerTest;
             assert( _typeInfo !is null );
             assert( DataTypeManager["ContainerTest"] !is null);
             assert( DataTypeManager["ContainerTest"] is _typeInfo );

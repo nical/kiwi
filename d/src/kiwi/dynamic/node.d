@@ -30,7 +30,9 @@ class DynamicNode : Node {
             NodeListener listener(){ return _listener; }
             void listener(NodeListener listnr){ _listener = listnr; }
             InputPort[] inputs() { return _inputPorts; }
-            OutputPort[] outputs() { return _outputPorts; }            
+            OutputPort[] outputs() { return _outputPorts; }     
+            NodeGroup group() { return _group; }
+            void group(NodeGroup value) { _group = value; }
         }//properties
 
         InputPort input(int index = 0){ return _inputPorts[index]; }
@@ -84,10 +86,11 @@ class DynamicNode : Node {
     }
 
 private:
-    InputPort[] _inputPorts;
-    OutputPort[] _outputPorts;
-    NodeListener _listener;
-    NodeUpdateFunction _updateFunc;
+    InputPort[]         _inputPorts;
+    OutputPort[]        _outputPorts;
+    NodeListener        _listener;
+    NodeUpdateFunction  _updateFunc;
+    NodeGroup           _group;
 }
 
 

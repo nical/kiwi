@@ -109,7 +109,7 @@ class ContainerWrapper(dataType) : Data {
 class DataTypeManager
 {
 
-    static DataTypeInfo registerDataType( _Type )()
+    static DataTypeInfo Register( _Type )()
     out(result)
     { 
         assert( result !is null );
@@ -117,17 +117,15 @@ class DataTypeManager
     }
     body
     {
-        mixin( logFunction!"DataTypeManager.registerDataType" );
+        mixin( logFunction!"DataTypeManager.Register" );
 
         static if ( __traits(compiles, name = _Type.Name) )
             string name = _Type.Name;
         else 
             string name = _Type.stringof;
         
-        log.writeln( name );
-
         DataTypeInfo result;
-        if ( contains(name) )
+        if ( Contains(name) )
         {
             log.writeDebug(0,"already registered.");
             return _dataTypes[name];
@@ -140,7 +138,7 @@ class DataTypeManager
                 log.writeDebug(0,"has sub data type");
                 log.writeDebug(0, subTypes.length );
                 foreach( subType ; _Type.SubDataTypes ){
-                    DataTypeInfo temp = registerDataType!subType;
+                    DataTypeInfo temp = Register!subType;
                     subTypes ~= temp;                                    }
             }            
             
@@ -152,17 +150,27 @@ class DataTypeManager
             {
                 NewDataFunction instanciator = function Data()pure{ return new _Type; };
             }
-            log.plop;
-            log.writeDebug(0,"subTypes: ", subTypes.length);
-            if(subTypes.length > 0) log.writeDebug(0,"subTypes[0]: ", subTypes[0].name);
             result = new DataTypeInfo(name, subTypes, false, instanciator);
-            if(subTypes.length > 0) log.writeDebug(0,"result.subData[0]: ", result.subData[0].name);
             _dataTypes[name] = result;
             return result;
         }   
     }
 
-    static bool contains( string key )
+    static Data Create( string key )
+    {
+        auto info = Get( key );
+        if ( info !is null )
+        {
+           return info.newInstance(); 
+        }
+        else 
+        {
+            // TODO: return an exception instead
+            return null;
+        }
+    }
+
+    static bool Contains( string key )
     {
         foreach( existing ; _dataTypes.byKey )
           if ( existing == key )
@@ -170,18 +178,27 @@ class DataTypeManager
         return false;
     }
 
-    static auto keys() { return _dataTypes.keys; }
+    static auto Keys()
+    {
+        return _dataTypes.keys;
+    }
+
+
+    static DataTypeInfo Get(string key)
+    {
+        return opIndex( key );
+    }
 
     static DataTypeInfo opIndex( string key )
     {
-        if( contains(key) ) 
+        if( Contains(key) ) 
             return _dataTypes[key];
         else
             return null;
     }
     
 private: 
-    this(){ mixin( logFunction!"DataTypeManager.constructor");}
+    this(){ mixin( logFunction!"DataTypeManager.constructor"); }
     static DataTypeInfo[string] _dataTypes;
 }
 
@@ -202,12 +219,6 @@ mixin template DeclareName(alias name)
 mixin template DeclareInstanciator(alias func)
 {
     alias func NewInstance;
-}
-
-template DefineInstanciator(T) // wont work because mixin evaluated too late
-{
-    enum{ functionText = "kiwi.Data New"~T.stringof~"(){ return new "~T.stringof~";}" }
-    string DefineInstanciator = functionText;
 }
 
 /*
@@ -245,7 +256,7 @@ version(unittest)
         static this()
         {
             mixin( logFunction!"unittest.DataTest.static_constructor" );
-            _typeInfo = DataTypeManager.registerDataType!DataTest;
+            _typeInfo = DataTypeManager.Register!DataTest;
         }
 
         override{
@@ -264,7 +275,7 @@ unittest
 {
     mixin( logTest!"kiwi.data" ); 
     
-    foreach( registeredKey ; DataTypeManager.keys )
+    foreach( registeredKey ; DataTypeManager.Keys )
     {
         log.writeln(registeredKey);
     }

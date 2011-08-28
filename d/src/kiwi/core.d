@@ -18,6 +18,8 @@ interface Node{
         void listener(NodeListener listnr);
         InputPort[] inputs();
         OutputPort[] outputs();
+        NodeGroup group();
+        void group(NodeGroup);
     }//properties
 
     /++
@@ -102,6 +104,18 @@ protected:
 
 
 
+
+interface NodeGroup
+{
+    
+    bool addNode( Node n );
+    bool removeNode( Node n );
+    void optimize( int flags );
+    void update();
+    bool serialize( DataStream stream );
+    bool deSerialize( DataStream stream );
+    
+}
 
 
 

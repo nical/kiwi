@@ -7,7 +7,11 @@ import kiwi.dynamic.node;
 
 class NodeGroup : kiwi.core.NodeGroup
 {
-	override{
+	enum{ NOT_READY = 0, READY = 1, OPTIMIZED = 3, }
+
+	override
+	{
+
 		bool addNode( Node n )
 		{
 			_nodes ~= n;
@@ -23,12 +27,28 @@ class NodeGroup : kiwi.core.NodeGroup
 				}
 			return false;
 		}
+
 		void optimize( int flags ){};
-		void update(){};
-		bool serialize( DataStream stream ){ return false; }
-		bool deSerialize( DataStream stream ){ return false; }
-	}
+		
+		void update()
+		{
+			throw new NotImplementedYetException("kiwi.dynamic.nodegroup.NodeGroup.update"
+				, __FILE__, __LINE__);
+		}
+		bool serialize( DataStream stream )
+		{
+			throw new NotImplementedYetException("kiwi.dynamic.nodegroup.NodeGroup.serialize"
+				, __FILE__, __LINE__);
+		}
+		bool deSerialize( DataStream stream )
+		{
+			throw new NotImplementedYetException("kiwi.dynamic.nodegroup.NodeGroup.deSerialize"
+				, __FILE__, __LINE__);
+		}
+
+	}// override
 
 
+	int _state;
 	Node[] _nodes;
 }

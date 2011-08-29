@@ -51,3 +51,11 @@ string logTest(string name)()
        ~ "scope(exit){ log.indentation--;"
        ~ "log.writeln( LIGHTGREEN, \"{End test} \",RESET,BOLD,\""~name~"\",RESET );}}";
 }
+
+class NotImplementedYetException : Exception
+{
+  this(string msg, string file = null, uint line = 0)
+  {
+    super(msg ~ " is not implemented yet.", file, line);
+  }
+}

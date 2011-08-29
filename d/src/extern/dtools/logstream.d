@@ -4,7 +4,7 @@ import std.stdio;
 import std.string;
 
 /**
- * Constants priding the character sequences to add colors in a terminal.
+ * Constants providing the character sequences to add colors in a terminal.
  */ 
 enum{ RESET       = "\033[0m"
     , BOLD        = "\033[1m"
@@ -56,118 +56,129 @@ enum{ INFO_0      = 1
 /**
  * Log class to ease debugging
  */ 
-class LogStream{
+class LogStream
+{
 public:
-  this(string[] args){ }
-  
-  /++
-   + Constructor
-   +
-   + Uses stdout as default output device.
-   +/ 
-  this(){
-    _output = &stdout;
-  }
-  this(File* logDevice){
-    _output = logDevice;
-  }
 
-  void write(T...)(T text){
-    foreach(subText; text){
-    static if( is(typeof(subText)==string) ){
-      auto parts = subText.split("\n");
-      //stdout.write("-|",parts.count,"|-");
-      bool first = true;
-      foreach(part;parts){
-        //if((_endl || !first)&&(!part.length==0)) {
-        if((_endl || !first)) {
-          if(!first)_output.writeln();
-          indent();
-        }
-        if(part.length==0 && part is parts[$-1]){
-          _output.writeln();
-        }    
-        stdout.write(part);
-        _endl = (part.length == 0);
-        first = false;
-      }
-    }else{
-      if(_endl) indent();
-        _output.write( subText );
-      }
-    }    
-//stdout.write( text );
-  }
-  
-  void writeln(T...)(T text){
-    if(_endl) indent();
-    _output.writeln( text );
-    _endl = true;
-  }
-
-  void endl(int nLines = 1){
-    for(;nLines > 0; --nLines){
-      if(_endl && usePrefix)
-        _output.write(_targetPrefix[EMPTY_]);
-      _output.writeln();
+    /++
+     + Constructor
+     +
+     + Uses stdout as default output device.
+     +/ 
+    this(){
+        _output = &stdout;
     }
-    _endl = true;
-  }
+    this(File* logDevice){
+        _output = logDevice;
+    }
 
-  void writeDebug(T...)(int level, T Text){
-    if(!(_targets & (DEBUG_0 << level))) return;
-    if(_endl) indent(DEBUG_);
-    _output.writeln( Text );
-    _endl = true;
-  }
+    void write(T...)(T text)
+    {
+        if(_output == null) return;
+        foreach( subText ; text )
+            writeSingle(subText);
+    }
 
-  void writeInfo(T...)(int level, T Text){
-    if(!(_targets & (INFO_0 << level))) return;
-    if(_endl) indent(INFO_);
-    _output.writeln( Text );
-    _endl = true;
-  }
+    protected void writeSingle(T)(T text)
+    {
+        static if( is(typeof(text)==string) )
+        {
+            auto parts = text.split("\n");
 
-  void writeWarning(T...)(int level, T Text){
-    if(!(_targets & (WARNING_0 << level))) return;
-    if(_endl) indent(WARNING_);
-    _output.writeln( RED, Text, RESET );
-    _endl = true;
-  }
+            for( int i = 0; i < parts.length; ++i )
+            {
+                if (_endl && parts[i] != "") indent();
+                if (parts[i] != "") _output.write( parts[i] );
+                if ( i != parts.length-1 )
+                {
+                    //stdout.write(GREEN, "x",i,"/",parts.length, RESET);
+                    _output.writeln();
+                    _endl = true;
+                }
+                else
+                {
+                    _endl = false;
+                    if (parts[i] == "" && i > 0)
+                        _endl = true;
+                }
+            }
+        }
+        else
+        {
+            if(_endl) indent();
+            _output.write( text );
+        }    
+    }
 
-  void writeUser(T...)(int level, T Text){
-    if(!(_targets & (USER_0 << level))) return;
-    if(_endl) indent(USER_);
-    _output.writeln( Text );
-    _endl = true;
-  }
+    void writeln(T...)(T text){
+        write(text, "\n");
+    }
 
-  void writeError(T...)( T Text ){
-    if(!(_targets & ERROR_)) return;
-    if(_endl) indent(ERROR_);
-    _output.writeln(LIGHTRED, Text, RESET );
-    _endl = true;
-  }
-  
-  void foo(){
-    writeln(PURPLE,"foo",RESET);
-  }
+    void endl(int nLines = 1){
+        if( _output is null ) return;
+        for(;nLines > 0; --nLines){
+            if(_endl && usePrefix)
+                _output.write(GREY, _targetPrefix[EMPTY_], RESET);    
+            _output.writeln();
+        }
+        _endl = true;
+    }
 
-  void bar(){
-    writeln(PURPLE,"bar",RESET);
-  }
+    void writeDebug(T...)(int level, T Text){
+        if(!(_targets & (DEBUG_0 << level))) return;
+        if(_endl) indent(DEBUG_);
+        _output.writeln( Text );
+        _endl = true;
+    }
 
-  void plop(){
-    writeln(PURPLE,"plop",RESET);
-  }
-  
-  int indentation = 0;
-  bool usePrefix = true;
-  
+    void writeInfo(T...)(int level, T Text){
+        if(!(_targets & (INFO_0 << level))) return;
+        if(_endl) indent(INFO_);
+        _output.writeln( Text );
+        _endl = true;
+    }
+
+    void writeWarning(T...)(int level, T Text){
+        if(!(_targets & (WARNING_0 << level))) return;
+        if(_endl) indent(WARNING_);
+        _output.writeln( RED, Text, RESET );
+        _endl = true;
+    }
+
+    void writeUser(T...)(int level, T Text){
+        if(!(_targets & (USER_0 << level))) return;
+        if(_endl) indent(USER_);
+        _output.writeln( Text );
+        _endl = true;
+    }
+
+    void writeError(T...)( T Text ){
+        if(!(_targets & ERROR_)) return;
+        if(_endl) indent(ERROR_);
+        _output.writeln(LIGHTRED, Text, RESET );
+        _endl = true;
+    }
+    
+    void foo(){
+        writeln(PURPLE,"foo",RESET);
+    }
+
+    void bar(){
+        writeln(PURPLE,"bar",RESET);
+    }
+
+    void plop(){
+        writeln(PURPLE,"plop",RESET);
+    }
+    
+    int indentation = 0;
+    bool usePrefix = true;
+    
 private:
   enum{ INFO_, DEBUG_, WARNING_, USER_, ERROR_, EMPTY_ };
   
   void indent(int target = INFO_){
+    if( _output is null ) return;
     if(usePrefix){
       _output.write(GREY, _targetPrefix[target], RESET);
     }
@@ -185,6 +196,7 @@ private:
   bool _displayBlockText  = true;
   bool _useColors         = true;
   int  _targets           = LOG_ALL;
+  int  _currentTarget     = 0;
   File* _output;
 }
 
@@ -210,15 +222,42 @@ struct ScopedIndent{
 //                 #      #           #     #         #
 //                 #      #####   ####      #     #### 
 
-unittest{
-  /*  
-  LogStream logs = new LogStream();
-  logs.write("line\n");
-  logs.writeWarning(1,"this is a warning\n");
-  logs.write("line\nline\nline\nline\n");
-  logs.writeln("line");
-  logs.write("\n\n\n\n");
-  stdout.writeln();
-  */
-  }
+
+unittest
+{
+    stdout.writeln(GREY, "[NFO]  ", GREEN, "{Begin test} logstream", RESET);
+    
+    LogStream logs = new LogStream();
+    
+    logs.indentation++;
+
+    logs.write("line\n");
+    logs.writeWarning(1,"this is a warning\n");
+    logs.write("line\nline\nline\nline\n");
+    logs.writeln("line");
+    
+    logs.write("a\n", "b", "\n", "c \n");
+    logs.write("f",  "e",  "d\n");
+    logs.endl();
+    logs.write("1\n2","\n", "a-","-b\n");
+    logs.write("then 2 blank lines\n");
+    logs.write("\n\n");
+    logs.write("then 2 blank lines again\n");
+    logs.write(" \n"," \n");
+    logs.write("on ", "the ");
+    logs.write("same line\n");
+    logs.write("");
+    logs.write("");
+    logs.write("numbers:", 42, " ", 3.14);
+    logs.write( 1337, "\n");
+    stdout.writeln(GREY, "[NFO]  ", GREEN, "{End test} logstream", RESET);
+    
+    // create a log stream that prints nowhere
+    LogStream nullLogs = new LogStream(null);
+    nullLogs.write("THIS SHOULD NOT BE PRINTED!");
+    nullLogs.plop();
+    nullLogs.foo();
+    nullLogs.bar();
+    nullLogs.endl();
+}
 

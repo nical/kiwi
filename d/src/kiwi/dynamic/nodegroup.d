@@ -4,10 +4,12 @@ import kiwi.core;
 import kiwi.commons;
 import kiwi.dynamic.node;
 
+import kiwi.graph.traversal;
+
 
 class NodeGroup : kiwi.core.NodeGroup
 {
-	enum{ NOT_READY = 0, READY = 1, OPTIMIZED = 3, }
+	enum{ NOT_READY = 0, READY = 1, SORTED = 2, OPTIMIZED = 4 }
 
 	override
 	{
@@ -32,6 +34,13 @@ class NodeGroup : kiwi.core.NodeGroup
 		
 		void update()
 		{
+			prepare();
+
+			foreach ( node ; _sortedNodes )
+			{
+				node.update();
+			}
+
 			throw new NotImplementedYetException("kiwi.dynamic.nodegroup.NodeGroup.update"
 				, __FILE__, __LINE__);
 		}
@@ -48,7 +57,17 @@ class NodeGroup : kiwi.core.NodeGroup
 
 	}// override
 
+	void prepare()
+	{
+		_sortedNodes = acyclicOrderedNodes( _nodes );
+	}
+
+	bool isReady()
+	{
+		return (_state & READY);
+	}
 
 	int _state;
 	Node[] _nodes;
+	Node[] _sortedNodes;
 }

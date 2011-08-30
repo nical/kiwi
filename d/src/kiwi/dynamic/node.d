@@ -33,6 +33,7 @@ class DynamicNode : Node {
             OutputPort[] outputs() { return _outputPorts; }     
             NodeGroup group() { return _group; }
             void group(NodeGroup value) { _group = value; }
+            string name(){ return "DynamicNode"; }
         }//properties
 
         InputPort input(int index = 0){ return _inputPorts[index]; }

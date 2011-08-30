@@ -101,9 +101,9 @@ public:
                     if (parts[i] == "" && i > 0)
                         _endl = true;
                 }
-            }
+            } // for
         }
-        else
+        else // static if...
         {
             if(_endl) indent();
             _output.write( text );
@@ -175,29 +175,29 @@ public:
     bool usePrefix = true;
     
 private:
-  enum{ INFO_, DEBUG_, WARNING_, USER_, ERROR_, EMPTY_ };
-  
-  void indent(int target = INFO_){
-    if( _output is null ) return;
-    if(usePrefix){
-      _output.write(GREY, _targetPrefix[target], RESET);
+    enum{ INFO_, DEBUG_, WARNING_, USER_, ERROR_, EMPTY_ };
+    
+    void indent(int target = INFO_){
+        if( _output is null ) return;
+        if(usePrefix){
+            _output.write(GREY, _targetPrefix[target], RESET);
+        }
+        for(int i = 0; i < indentation; ++i){
+            _output.write("    ");
+        }
     }
-    for(int i = 0; i < indentation; ++i){
-      _output.write("    ");
-    }
-  }
-  
-  static immutable string[] _targetPrefix
-    = ["[NFO]  ","[DBG]  ","[WRN]  "
-      ,"[USR]  ","[ERR]  ","[   ]  "];
+    
+    static immutable string[] _targetPrefix
+      = ["[NFO]  ","[DBG]  ","[WRN]  "
+        ,"[USR]  ","[ERR]  ","[   ]  "];
 
-  // private propertiesw
-  bool _endl              = true;
-  bool _displayBlockText  = true;
-  bool _useColors         = true;
-  int  _targets           = LOG_ALL;
-  int  _currentTarget     = 0;
-  File* _output;
+    // private propertiesw
+    bool _endl              = true;
+    bool _displayBlockText  = true;
+    bool _useColors         = true;
+    int  _targets           = LOG_ALL;
+    int  _currentTarget     = 0;
+    File* _output;
 }
 
 
@@ -222,7 +222,7 @@ struct ScopedIndent{
 //                 #      #           #     #         #
 //                 #      #####   ####      #     #### 
 
-
+/*
 unittest
 {
     stdout.writeln(GREY, "[NFO]  ", GREEN, "{Begin test} logstream", RESET);
@@ -260,4 +260,4 @@ unittest
     nullLogs.bar();
     nullLogs.endl();
 }
-
+*/

@@ -20,6 +20,7 @@ interface Node{
         OutputPort[] outputs();
         NodeGroup group();
         void group(NodeGroup);
+        string name();
     }//properties
 
     /++
@@ -64,6 +65,29 @@ interface Node{
                 return port;
         }
         return null;
+    }
+
+    // TODO: temporary, will be replaced by a more generic "serialize"
+    final string serialize()
+    {
+        string result = "{\"name\":"~name~", \"inputs\":[";
+        bool first = true;
+        foreach( inputPort ; this.inputs ){
+            if(!first) result ~= ", ";
+            first = false;
+            //result ~= inputPort.;
+        }
+
+        result ~= "], \"outputs\":[";
+
+        first = true;
+        foreach( outputPort ; this.outputs ){
+            if(!first) result ~= ", ";
+            first = false;
+            //result ~= inputPort.;
+        }
+        result ~= "] }";        
+        return result;
     }
 protected:
     final void notifyInputPortConnected(InputPort myPort, OutputPort otherPort)
@@ -411,7 +435,8 @@ private:
 
 
 
-interface NodeListener{
+interface NodeListener
+{
     void inputPortConnected(InputPort myPort, OutputPort otherPort);
     void inputPortDisconnected(InputPort myPort, OutputPort otherPort);
     void inputPortAdded(InputPort addedPort);

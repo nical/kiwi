@@ -115,14 +115,14 @@ unittest{
 
     // take "<1> <2>!" as input, replace "<1>" by "Hello" and "<2>" by "Word", 
     // then turn it to upper case. 
-    //
-    // "<1> <2>!" >> |         |
-    //      "<1>" >> | replace |
-    //    "Hello" >> |         | >> |         |
-    //                     "<2>" >> | replace | 
-    //                 "<World>" >> |         | >> | upperCase | >> output
-    //
-
+    //                _________
+    // "<1> <2>!" ---o         |
+    //      "<1>" ---o replace |     _________
+    //    "Hello" ---o_________o----o         |     ___________
+    //                     "<2>" ---o replace |    |           |
+    //                 "<World>" ---o_________o----o upperCase |
+    //                                             |___________o---> output    
+    //                                              
 
     auto upperCaseFilter = NewUpperCaseFilter(); 
     auto replaceFilter1  = NewTextReplaceFilter(); 
@@ -144,11 +144,11 @@ unittest{
     assert( replaceFilter1.output().dataType !is null );
 
     // connect the nodes
-    assert( inputPhrase.output().connect( replaceFilter1.input(0) ) );
-    assert( inputTextP1.output().connect( replaceFilter1.input(1) ) );
+    assert(    inputPhrase.output().connect( replaceFilter1.input(0) ) );
+    assert(    inputTextP1.output().connect( replaceFilter1.input(1) ) );
     assert( inputTextHello.output().connect( replaceFilter1.input(2) ) );
     assert( replaceFilter1.output().connect( replaceFilter2.input(0) ) );
-    assert( inputTextP2.output().connect( replaceFilter2.input(1) ) );
+    assert(    inputTextP2.output().connect( replaceFilter2.input(1) ) );
     assert( inputTextWorld.output().connect( replaceFilter2.input(2) ) );
     assert( replaceFilter2.output().connect( upperCaseFilter.input() ) );
 
@@ -165,15 +165,15 @@ unittest{
     replaceFilter2.update();
     upperCaseFilter.update();
 
-    // Check the result
-    auto partialOutputText1 = cast(PlainTextContainer) replaceFilter1.output().data;
-    auto partialOutputText2 = cast(PlainTextContainer) replaceFilter2.output().data;
-    auto outputText = cast(PlainTextContainer) upperCaseFilter.output().data;
+    // print the intermediate results
+    log.writeln( "input: ",     (cast(PlainTextContainer) inputPhrase.output().data).text );
+    log.writeln( "Output(0): ", (cast(PlainTextContainer) replaceFilter1.output().data).text );
+    log.writeln( "Output(1): ", (cast(PlainTextContainer) replaceFilter2.output().data).text );
     
-    log.writeln( "input: ", (cast(PlainTextContainer)inputPhrase.output().data).text );
-    log.writeln( "Output(0): ", partialOutputText1.text );
-    log.writeln( "Output(1): ", partialOutputText2.text );
+    auto outputText = cast(PlainTextContainer) upperCaseFilter.output().data;    
     log.writeln( "Output(final): ", outputText.text );
+
+    // Check the result
     assert(outputText.text == "HELLO WORLD!");
     
 }

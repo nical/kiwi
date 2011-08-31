@@ -10,6 +10,11 @@ import std.conv;
 
 alias int PortFlags;
 
+enum{ 
+    OPTIONAL = 1
+    , READ = 2
+    , WRITE = 4
+    , READ_WRITE = READ | WRITE };
 
 interface Node{
 
@@ -171,7 +176,8 @@ public:
     @property{
         Node node() { return _node; }
         OutputPort[] connections() { return _connections; }
-        PortFlags flags() { return _flags; }        
+        PortFlags flags() { return _flags; }
+        bool isOptional(){ return _flags & OPTIONAL; }
     }
     
     
@@ -353,9 +359,8 @@ public:
     @property{
         Node node(){ return _node; }
         InputPort[] connections(){ return _connections; }
-        PortFlags flags(){ return _flags; }
-        
-        
+        PortFlags flags(){ return _flags; }        
+        bool isOptional(){ return _flags & OPTIONAL; }        
     }
 
     /++

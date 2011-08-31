@@ -42,14 +42,20 @@ class DynamicNode : Node {
         void update()
         {
             mixin( logFunction!"DynamicNode.update" );
-            allocateData();
+            allocateData();            
             if(_updateFunc !is null)
             {
                 Data[] inputData = [];
                 Data[] outputData = [];
 
                 foreach( inputPort ; _inputPorts )
+                {
+                    // returns if non optional inputs are not connected
+                    // TODO should throw an exception !
+                    if(!inputPort.isOptional && !inputPort.isConnected)
+                        return;
                     inputData ~= inputPort.connections[0].data;
+                }
                 foreach( outputPort ; _outputPorts )
                     outputData ~= outputPort.data;
                 

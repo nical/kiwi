@@ -4,7 +4,7 @@
 	This is mostly for testing other modules.
 
 +/
-module kiwi.utilts.mock;
+module kiwi.utils.mock;
 
 import kiwi.core;
 import kiwi.data;

@@ -72,7 +72,7 @@ interface Node{
         return null;
     }
 
-    // TODO: temporary, will be replaced by a more generic "serialize"
+    // TODO
     final string serialize()
     {
         string result = "{\"name\":"~name~", \"inputs\":[";
@@ -373,6 +373,12 @@ public:
             return false;
 
         return port.connect(this);
+    }
+
+
+    final bool opBinary(string op)(InputPort port) if (op == ">>")
+    {
+        return connect( port );
     }
 
     /++

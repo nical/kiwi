@@ -1,13 +1,11 @@
 module kiwi.text.data;
 
-import kiwi.core;
-import kiwi.commons;
-import kiwi.data;
+import kiwi.core.all;
 
 
 Data NewPlainTextContainer(){ return new PlainTextContainer; }
 
-class PlainTextContainer : kiwi.core.Data
+class PlainTextContainer : kiwi.core.base.Data
 {
     static this(){
         _typeInfo = DataTypeManager.Register!PlainTextContainer();
@@ -25,7 +23,7 @@ class PlainTextContainer : kiwi.core.Data
     override{
         //bool serialize(DataStream stream){ return false; }
         //bool deSerialize(const DataStream stream){ return false; }
-        @property kiwi.core.Data[] subData(){ return []; }
+        @property kiwi.core.base.Data[] subData(){ return []; }
         
         DataTypeInfo type(){ return _typeInfo; }
     }

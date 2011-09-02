@@ -4,9 +4,7 @@
  +/
 module kiwi.dynamic.compatibility;
 
-import kiwi.commons;
-import kiwi.data;
-import kiwi.core;
+import kiwi.core.all;
 import kiwi.dynamic.port;
 
 

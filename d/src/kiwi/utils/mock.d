@@ -6,9 +6,7 @@
 +/
 module kiwi.utils.mock;
 
-import kiwi.core;
-import kiwi.data;
-import kiwi.commons;
+import kiwi.core.all;
 import kiwi.dynamic.node;
 import kiwi.dynamic.port;
 import kiwi.dynamic.compatibility;

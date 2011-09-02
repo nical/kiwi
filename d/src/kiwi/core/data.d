@@ -1,6 +1,6 @@
-module kiwi.data;
+module kiwi.core.data;
 //
-import kiwi.commons;
+import kiwi.core.commons;
 //
 import std.typecons;
 import std.traits;

@@ -1,7 +1,7 @@
-module kiwi.core;
+module kiwi.core.base;
 // kiwi imports
-import kiwi.commons;
-import kiwi.data;
+import kiwi.core.commons;
+import kiwi.core.data;
 // external imports
 import std.string;
 import std.conv;
@@ -349,7 +349,7 @@ public:
              +/
             Data data();
             
-            void data( kiwi.core.Data value );        
+            void data( kiwi.core.base.Data value );        
             //in{ if( dataType !is null && value !is null ) assert( data.type is dataType ); } 
             
         } //properties

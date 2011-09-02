@@ -1,12 +1,11 @@
 module kiwi.text.basicfilters;
 
-import kiwi.text.data;
-import kiwi.commons;
-import kiwi.core;
-import kiwi.data;
+
+import kiwi.core.all;
 import kiwi.dynamic.node;
 import kiwi.dynamic.port;
 import kiwi.dynamic.compatibility;
+import kiwi.text.data;
 
 import std.string;
 import std.array;

@@ -1,8 +1,6 @@
 module kiwi.dynamic.port;
 
-import kiwi.core;
-import kiwi.data;
-import kiwi.commons;
+import kiwi.core.all;
 
 
 
@@ -90,7 +88,7 @@ class DynamicOutputPort : OutputPort
         bool isCompatible( InputPort port ){ return (port !is null); }         
                    
     }
-    @property void data( kiwi.core.Data value ){ _data = value; }
+    @property void data( kiwi.core.base.Data value ){ _data = value; }
 private:
     string              _name;
     Data                _data;  
@@ -126,7 +124,7 @@ version(unittest)
         return new ContainerTest();
     }
 
-    class SubContainerTest : kiwi.core.Data
+    class SubContainerTest : kiwi.core.base.Data
     {
         static this()
         {
@@ -142,7 +140,7 @@ version(unittest)
         private static DataTypeInfo _typeInfo;
     } 
 
-    class ContainerTest : kiwi.core.Data
+    class ContainerTest : kiwi.core.base.Data
     {
         mixin DeclareSubDataTypes!(SubContainerTest,SubContainerTest);
 

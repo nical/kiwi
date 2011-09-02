@@ -1,13 +1,13 @@
 module kiwi.dynamic.nodegroup;
 
-import kiwi.core;
-import kiwi.commons;
+import kiwi.core.base;
+import kiwi.core.commons;
 import kiwi.dynamic.node;
 
-import kiwi.graph.traversal;
+import kiwi.graph.acyclic;
 
 
-class NodeGroup : kiwi.core.NodeGroup
+class NodeGroup : kiwi.core.base.NodeGroup
 {
 	enum{ NOT_READY = 0, READY = 1, SORTED = 2, OPTIMIZED = 4 }
 
@@ -59,7 +59,7 @@ class NodeGroup : kiwi.core.NodeGroup
 
 	void prepare()
 	{
-		_sortedNodes = acyclicOrderedNodes( _nodes );
+		_sortedNodes = OrderedNodes( _nodes );
 	}
 
 	bool isReady()

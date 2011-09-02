@@ -1,18 +1,18 @@
-module kiwi.graph.traversal;
+module kiwi.graph.acyclic;
 
-import kiwi.core;
-import kiwi.commons;
+import kiwi.core.base;
+import kiwi.core.commons;
 
 import std.range;
 
 
-bool isAcyclic( Node[] )
+bool IsAcyclic( Node[] )
 {
 	throw new NotImplementedYetException("kiwi.graph.traversal.isAcyclic", __FILE__, __LINE__);
 }
 
 
-Node[] directDependencies(Node n)
+Node[] DirectDependencies(Node n)
 in
 {
 	assert( n !is null );
@@ -27,7 +27,7 @@ body
 	return result;
 }
 
-Node[] indirectDependencies(Node n)
+Node[] IndirectDependencies(Node n)
 in
 {
 	assert( n !is null );
@@ -35,9 +35,9 @@ in
 body
 {
 	Node[] result = [];
-	foreach ( dep ; directDependencies(n) )
+	foreach ( dep ; DirectDependencies(n) )
 	{
-		result ~= indirectDependencies(n);
+		result ~= IndirectDependencies(n);
 		result ~= n;
 	}
 				
@@ -45,11 +45,11 @@ body
 }
 
 
-Node[] acyclicOrderedNodes( Node[] nodes )
+Node[] OrderedNodes( Node[] nodes )
 {
 	Node[] result = [];
 	foreach ( node ; nodes )
-		_recAcyclicOrdered( nodes, result, node );
+		_recOrdered( nodes, result, node );
 		
 	return result;
 }
@@ -92,14 +92,14 @@ private Node[] _intersection(Node[] r1, Node[]r2)
 	return result;
 }
 
-void _recAcyclicOrdered(ref Node[] nodes, ref Node[] result, Node n)
+void _recOrdered(ref Node[] nodes, ref Node[] result, Node n)
 {
-	mixin( logFunction!"_recAcyclicOrdered" );
+	mixin( logFunction!"_recOrdered" );
 	if ( !_contains(result, n) && (nodes.length == 0 || _contains(nodes, n)) )
 	{
 		foreach ( n_in ; n.inputs )
 			if ( n_in.isConnected )
-				_recAcyclicOrdered( nodes, result, n_in.connections[0].node );
+				_recOrdered( nodes, result, n_in.connections[0].node );
 		for(int i=0; i<nodes.length; ++i)
 			if( nodes[i] is n ) log.writeln(i);
 		result ~= n;
@@ -123,7 +123,7 @@ version(unittest)
 
 unittest
 {
-	mixin( logTest!"kiwi.graph.traversal" );
+	mixin( logTest!"kiwi.graph.acyclic" );
 
 	Node[] nodes = [];
 
@@ -147,7 +147,7 @@ unittest
 	nodes[0].output() >> nodes[3].input();
 
 	// compute the direct dependencies of nodes[0]
-	auto n0_dependencies = directDependencies( nodes[0] );
+	auto n0_dependencies = DirectDependencies( nodes[0] );
 
 	// check that nodes[0]'s dependencies are nodes[2] and nodes[1]
 	assert( n0_dependencies.length == 2 );
@@ -158,7 +158,7 @@ unittest
 	assert( _isBefore( nodes, nodes[1], nodes[3]) );
 	assert( !_isBefore( nodes, nodes[3], nodes[1]) );
 
-	Node[] sortedNodes = acyclicOrderedNodes( nodes );
+	Node[] sortedNodes = OrderedNodes( nodes );
 	log.writeln("nodes.length", nodes.length);
 	log.writeln("sortedNodes.length", sortedNodes.length);
 	assert( sortedNodes.length == nodes.length );

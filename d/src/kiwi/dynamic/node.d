@@ -1,8 +1,6 @@
 module kiwi.dynamic.node;
 
-import kiwi.commons;
-import kiwi.core;
-import kiwi.data;
+import kiwi.core.all;
 import kiwi.dynamic.port;
 
 import std.typecons;
@@ -101,7 +99,7 @@ private:
 }
 
 
-Node NewContainerNode( kiwi.core.Data data )
+Node NewContainerNode( kiwi.core.base.Data data )
 {
     mixin( logFunction!"NewContainerNode" );
 

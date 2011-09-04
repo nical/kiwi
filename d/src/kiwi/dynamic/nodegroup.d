@@ -4,6 +4,8 @@ import kiwi.core.base;
 import kiwi.core.commons;
 import kiwi.core.data;
 import kiwi.dynamic.node;
+import kiwi.dynamic.port;
+import kiwi.dynamic.compatibility;
 
 import kiwi.graph.acyclic;
 
@@ -17,12 +19,9 @@ class InternalInputPort : InputPort
 
 class InternalOutputPort : OutputPort
 {
-	this(InputPort linkedInput)
-	in{	assert( linkedInput !is null ); }
-	body
+	this()
 	{
 		super(null);
-		_linkedInput = linkedInput;
 	}
 
 	override
@@ -30,24 +29,28 @@ class InternalOutputPort : OutputPort
         @property
         {
             int maxConnections() { return -1; }
-            string name() { return _linkedInput.name; }
+            string name() 
+            {
+            	throw NotImplemented("InternalOutputPort.name"); 
+            }
             OutputPort[] subPorts() 
             {
-            	throw NotImplemented("NodeGroup.subPorts");
+            	throw NotImplemented("InternalOutputPort.subPorts");
             }
             DataTypeInfo dataType() pure 
             { 
-	            throw NotImplemented("NodeGroup.dataType"); 
+	            throw NotImplemented("InternalOutputPort.dataType"); 
 	        }
             Data data()
             {
-            	throw NotImplemented("NodeGroup.data");
+            	throw NotImplemented("InternalOutputPort.data");
             }
         }
 
         bool isComposite()
         {
-        	throw NotImplemented("NodeGroup.isComposite"); 
+        	return dataType.isComposite;
+        	throw NotImplemented("InternalOutputPort.isComposite"); 
         }
         bool isCompatible( InputPort port ){ return (port !is null); }         
                    
@@ -56,14 +59,12 @@ class InternalOutputPort : OutputPort
     {
     	throw NotImplemented("NodeGroup.data:set"); 
     }
-private:
-	InputPort _linkedInput;
 }
 
-class NodeGroup : kiwi.core.base.NodeGroup
-{
-	enum{ NOT_READY = 0, READY = 1, SORTED = 2, OPTIMIZED = 4 }
 
+
+class NodeGroup : kiwi.core.base.NodeGroup
+{		
 	override
 	{
 
@@ -87,7 +88,7 @@ class NodeGroup : kiwi.core.base.NodeGroup
 		
 		void update()
 		{
-			prepare();
+			if ( !isReady ) prepare();
 
 			foreach ( node ; _sortedNodes )
 			{
@@ -107,6 +108,8 @@ class NodeGroup : kiwi.core.base.NodeGroup
 
 	}// override
 
+
+
 	void prepare()
 	{
 		_sortedNodes = OrderedNodes( _nodes );
@@ -114,10 +117,69 @@ class NodeGroup : kiwi.core.base.NodeGroup
 
 	bool isReady()
 	{
-		return (_state & READY);
+		throw NotImplemented("NodeGroup.isReady");
 	}
 
+	/++
+	 + add an input to this group and create an output port to which will connect the nested nodes' input.
+	 +/
+	void addInput( string name = "in" )
+	{
+		// TODO: better DataType support !
+		_inputBridge ~= new DynamicOutputPort(null, null, null, name);
+	}
+
+	void removeInput()
+	{
+		_inputBridge.length -= 1;
+	}
+
+	void addOutput( string name = "out")
+	{
+		_outputBridge ~= new DynamicInputPort( null, new AlwaysCompatible, name );
+	}
+
+	void removeOutput()
+	{
+		_outputBridge.length -= 1;
+	}
+
+protected:
+	Data dataSlot(int index)
+	{
+		throw NotImplemented("NodeGroup.dataSLot");
+	}
+
+private:
+
 	int _state;
+	OutputPort[] _inputBridge;
+	InputPort[] _outputBridge;
 	Node[] _nodes;
 	Node[] _sortedNodes;
+}
+
+
+
+
+//              #######   #####    ####   #####    ####
+//                 #      #       #         #     #   
+//                 #      ###      ###      #      ### 
+//                 #      #           #     #         #
+//                 #      #####   ####      #     #### 
+
+
+
+version(unittest){ import kiwi.utils.mock; }
+
+unittest
+{
+	mixin( logTest!"kiwi.dynamic.nodegroup" );
+	auto ng = new NodeGroup;
+
+	auto n1 = NewMockNode(2,2);
+	auto n2 = NewMockNode(2,2);
+
+	ng.addNode(n1);
+	ng.addNode(n2);
 }

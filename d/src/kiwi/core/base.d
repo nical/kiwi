@@ -16,6 +16,12 @@ enum{
     , WRITE = 4
     , READ_WRITE = READ | WRITE };
 
+class DataRef
+{
+    Data data;
+    alias data this;
+}
+
 interface Node{
 
     @property{
@@ -174,6 +180,12 @@ public:
     }
     
     @property{
+        Data data() 
+        { 
+            if ( !isConnected ) 
+                return null;
+            return connections[0].data;
+        }
         Node node() { return _node; }
         OutputPort[] connections() { return _connections; }
         PortFlags flags() { return _flags; }

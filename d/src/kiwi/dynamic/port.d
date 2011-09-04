@@ -82,8 +82,7 @@ class DynamicOutputPort : OutputPort
             string name() { return _name; }
             OutputPort[] subPorts() 
             {
-                NotImplemented("DynamicOutputPort.subPorts");
-                return [];
+                return _subPorts;
             }
             DataTypeInfo dataType() pure { return _dataType; }
             Data data(){ return _data; }

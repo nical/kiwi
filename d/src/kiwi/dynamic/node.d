@@ -77,16 +77,18 @@ class DynamicNode : Node {
         _outputPorts ~= new DynamicOutputPort( this, null, typeInfo, name );
     }
 
-    bool setOutputPortData( int index, Data data )
+    bool setOutputPortData( int index, DataRef dataref )
     in
     {
+        assert( dataref !is null );
         assert( index > 0 );
         assert( index < outputs.length );
     }
     body
-    {
-        if(output(index).dataType !is data.type && output(index).dataType !is null) return false;
-        output(index).data = data;
+    {        
+        if( dataref.data !is null )
+            if(output(index).dataType !is dataref.type && output(index).dataType !is null) return false;
+        output(index).dataRef = dataref;
         return true;
     }
 

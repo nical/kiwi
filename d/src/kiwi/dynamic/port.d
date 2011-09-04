@@ -84,8 +84,7 @@ class DynamicOutputPort : OutputPort
             {
                 return _subPorts;
             }
-            DataTypeInfo dataType() pure { return _dataType; }
-            Data data(){ return _data; }
+            DataTypeInfo dataType() pure { return _dataType; }            
         }
 
         bool isComposite() 
@@ -97,10 +96,11 @@ class DynamicOutputPort : OutputPort
         bool isCompatible( InputPort port ){ return (port !is null); }         
                    
     }
-    @property void data( kiwi.core.base.Data value ){ _data = value; }
+    @property void dataRef( DataRef value ){ _dataRef = value; }
+    @property DataRef dataRef(){ return _dataRef; }
 private:
     string              _name;
-    Data                _data;  
+    DataRef             _dataRef;  
     DataTypeInfo        _dataType;  
     DynamicOutputPort[] _subPorts;
     DynamicOutputPort   _parentPort;

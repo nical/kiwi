@@ -18,6 +18,10 @@ enum{
 
 class DataRef
 {
+    this(Data initVal)
+    {
+        data = initVal;
+    }
     Data data;
     alias data this;
 }
@@ -358,10 +362,10 @@ public:
             DataTypeInfo dataType() pure;
             /++
              +
-             +/
-            Data data();
+             +/            
             
-            void data( Data value );        
+            void dataRef( DataRef value );        
+            DataRef dataRef();        
             //in{ if( dataType !is null && value !is null ) assert( data.type is dataType ); } 
             
         } //properties
@@ -370,6 +374,17 @@ public:
     
     @property{
         Node node(){ return _node; }
+        
+        Data data()
+        { 
+            if(dataRef is null ) return null;
+            return dataRef.data;
+        }
+        void data( Data val )
+        {
+            dataRef = new DataRef( val );
+        }
+
         InputPort[] connections(){ return _connections; }
         PortFlags flags(){ return _flags; }        
         bool isOptional(){ return _flags & OPTIONAL; }        
@@ -423,7 +438,7 @@ public:
     void allocateData()
     {
         if( data is null ){
-            data = dataType.newInstance();   
+            dataRef = new DataRef( dataType.newInstance() );   
         }
     }
 protected:

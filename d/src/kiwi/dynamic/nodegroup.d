@@ -17,51 +17,37 @@ class InternalInputPort : InputPort
 	}
 }
 
-class InternalOutputPort : OutputPort
+
+class MetaNode : DynamicNode
 {
-	this()
-	{
-		super(null);
+	this( NodeGroup group )
+	{	
+		super([],[],null);	
+		_nodeGroup = group;
 	}
 
 	override
 	{
-        @property
-        {
-            int maxConnections() { return -1; }
-            string name() 
-            {
-            	throw NotImplemented("InternalOutputPort.name"); 
-            }
-            OutputPort[] subPorts() 
-            {
-            	throw NotImplemented("InternalOutputPort.subPorts");
-            }
-            DataTypeInfo dataType() pure 
-            { 
-	            throw NotImplemented("InternalOutputPort.dataType"); 
-	        }
-            Data data()
-            {
-            	throw NotImplemented("InternalOutputPort.data");
-            }
-        }
+		void update()
+		{
+			_nodeGroup.update();
+		}
 
-        bool isComposite()
-        {
-        	return dataType.isComposite;
-        	throw NotImplemented("InternalOutputPort.isComposite"); 
-        }
-        bool isCompatible( InputPort port ){ return (port !is null); }         
-                   
-    }
-    @property void data( kiwi.core.base.Data value )
-    {
-    	throw NotImplemented("NodeGroup.data:set"); 
-    }
+		void addInputPort( PortCompatibility compatibility, int flags, string name)
+		{
+			_nodeGroup.addInput( name );
+			super.addInputPort( compatibility, flags, name);
+		}
+	}
+
+	NodeGroup nodeGroup() pure
+	{
+		return _nodeGroup;
+	}
+
+private:	
+	NodeGroup _nodeGroup;
 }
-
-
 
 class NodeGroup : kiwi.core.base.NodeGroup
 {		
@@ -134,9 +120,9 @@ class NodeGroup : kiwi.core.base.NodeGroup
 		_inputBridge.length -= 1;
 	}
 
-	void addOutput( string name = "out")
+	void addOutput( int flags = 0, string name = "out")
 	{
-		_outputBridge ~= new DynamicInputPort( null, new AlwaysCompatible, name );
+		_outputBridge ~= new DynamicInputPort( null, new AlwaysCompatible, flags, name );
 	}
 
 	void removeOutput()
@@ -144,11 +130,6 @@ class NodeGroup : kiwi.core.base.NodeGroup
 		_outputBridge.length -= 1;
 	}
 
-protected:
-	Data dataSlot(int index)
-	{
-		throw NotImplemented("NodeGroup.dataSLot");
-	}
 
 private:
 
@@ -175,11 +156,19 @@ version(unittest){ import kiwi.utils.mock; }
 unittest
 {
 	mixin( logTest!"kiwi.dynamic.nodegroup" );
-	auto ng = new NodeGroup;
 
-	auto n1 = NewMockNode(2,2);
-	auto n2 = NewMockNode(2,2);
+	auto metaNode = new MetaNode( new NodeGroup );
 
-	ng.addNode(n1);
-	ng.addNode(n2);
+	auto n1 = NewMockNode(1,1);
+	auto n2 = NewMockNode(1,1);
+	auto before = NewMockNode(0,1);
+
+	metaNode.nodeGroup.addNode(n1);
+	metaNode.nodeGroup.addNode(n2);
+
+	metaNode.addInputPort(new AlwaysCompatible, 0, "input" );
+
+	n1.output() >> n2.input();
+	before.output() >> metaNode.input();
+
 }

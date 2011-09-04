@@ -32,6 +32,11 @@ class MockData : Data
 	}
 	static DataTypeInfo Type(){ return _dataType; }
 	private static DataTypeInfo _dataType;
+	static int updateCount;
+	static void ResetUpdateCount()
+	{
+		updateCount = 0;
+	}
 }
 
 /++
@@ -39,7 +44,9 @@ class MockData : Data
  +/
 private void MockFunction(Data[],Data[])
 {
-	mixin( logFunction!"MockNode.update" );    
+	mixin( logFunction!"MockNode.update" );  
+	MockData.updateCount++;  
+	log.writeln(MockData.updateCount);
 }
 
 /++
@@ -51,7 +58,7 @@ Node NewMockNode(int nbInputs, int nbOutputs)
     InputPortInitializer[] inputs   = [];
     OutputPortInitializer[] outputs = [];
     for(int i = 0; i < nbInputs; ++i)  
-    	inputs  ~= InputPortInitializer("Input", new AlwaysCompatible );
+    	inputs  ~= InputPortInitializer("Input", new AlwaysCompatible, OPTIONAL );
     
     for(int i = 0; i < nbOutputs; ++i)  
 	    outputs ~= OutputPortInitializer("Output", MockData.Type );
@@ -74,10 +81,13 @@ unittest
 {
 	mixin( logTest!"kiwi.mock" );
 
-	auto n1 = NewMockNode(2,2);
-	auto n2 = NewMockNode(3,2);
+	MockData.ResetUpdateCount();
+	assert( MockData.updateCount == 0 );
 
-	assert( n2.inputs.length == 3 );
+	auto n1 = NewMockNode(2,2);
+	auto n2 = NewMockNode(2,2);
+
+	assert( n2.inputs.length == 2 );
 	assert( n2.outputs.length == 2 );
 
 	n1.input(0).connect( n2.output(1) );
@@ -88,6 +98,9 @@ unittest
 	assert( n2.output(0).isConnected );
 	assert( n2.output(1).isConnected );
 
+
 	n1.update();
 	n2.update();
+	log.writeln( MockData.updateCount );
+	assert( MockData.updateCount == 2 );
 }

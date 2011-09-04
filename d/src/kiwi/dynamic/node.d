@@ -8,9 +8,20 @@ import std.typecons;
 //######################################################################
 
 alias void function(Data[] inputData, Data[] outputData) NodeUpdateFunction;
-alias Tuple!(string, PortCompatibility) InputPortInitializer;
 alias Tuple!(string, DataTypeInfo)      OutputPortInitializer;
 
+struct InputPortInitializer
+{
+    this(string pname, PortCompatibility comp, int pflags = 0) 
+    { 
+        name = pname;
+        compatibility = comp; 
+        flags = pflags;
+    }
+    string name;
+    PortCompatibility compatibility;
+    int flags;
+}
 
 class DynamicNode : Node {
 
@@ -18,7 +29,7 @@ class DynamicNode : Node {
         , NodeUpdateFunction updateFunction = null )
     {
         mixin( logFunction!"DynamicNode.constructor" );
-        foreach( ipi ; inputs )  addInputPort( ipi[1], ipi[0] );
+        foreach( ipi ; inputs )  addInputPort( ipi.compatibility, ipi.flags, ipi.name);
         foreach( opi ; outputs ) addOutputPort( opi[1], opi[0] );
         _updateFunc = updateFunction;
     }
@@ -52,7 +63,10 @@ class DynamicNode : Node {
                     // TODO should throw an exception !
                     if(!inputPort.isOptional && !inputPort.isConnected)
                         return;
-                    inputData ~= inputPort.connections[0].data;
+                    if(inputPort.isConnected)
+                        inputData ~= inputPort.connections[0].data;
+                    else
+                        inputData ~= null;        
                 }
                 foreach( outputPort ; _outputPorts )
                     outputData ~= outputPort.data;
@@ -68,9 +82,9 @@ class DynamicNode : Node {
             port.allocateData();        
     }
 
-    void addInputPort( PortCompatibility compatibility, string name)
+    void addInputPort( PortCompatibility compatibility, int portFlags, string name)
     {        
-        _inputPorts ~= new DynamicInputPort( this, compatibility, name );
+        _inputPorts ~= new DynamicInputPort( this, compatibility, portFlags, name );
     }
     void addOutputPort( DataTypeInfo typeInfo, string name)
     {        
@@ -111,6 +125,7 @@ Node NewContainerNode( kiwi.core.base.Data data )
     n.output().data = data;
     return n;
 }
+
 
 /*
              #####   #####    ####   #####    ####

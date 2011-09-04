@@ -69,7 +69,7 @@ Node NewUpperCaseFilter()
     mixin( logFunction!"NewUpperCaseFilter" );
     InputPortInitializer[] inputs   = [];
     OutputPortInitializer[] outputs = [];
-    inputs  ~= InputPortInitializer("Input text", new DataTypeCompatibility(PlainTextContainer.Type));
+    inputs  ~= InputPortInitializer("Input text", new DataTypeCompatibility(PlainTextContainer.Type),0);
     outputs ~= OutputPortInitializer("Output text", PlainTextContainer.Type);
     return new DynamicNode( inputs, outputs, &applyUpperCase );
 }
@@ -79,7 +79,7 @@ Node NewLowerCaseFilter()
     mixin( logFunction!"NewLowerCaseFilter" );
     InputPortInitializer[] inputs   = [];
     OutputPortInitializer[] outputs = [];
-    inputs  ~= InputPortInitializer("Input text", new DataTypeCompatibility(PlainTextContainer.Type));
+    inputs  ~= InputPortInitializer("Input text", new DataTypeCompatibility(PlainTextContainer.Type),0);
     outputs ~= OutputPortInitializer("Output text", PlainTextContainer.Type);
     return new DynamicNode( inputs, outputs, &applyLowerCase );
 }

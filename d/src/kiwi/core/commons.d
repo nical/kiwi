@@ -60,7 +60,20 @@ class NotImplementedYetException : Exception
   }
 }
 
+class UnalocatedDataObjectException : Exception
+{
+  this(string msg, string file = null, uint line = 0)
+  {
+    super(msg ~ " data is not allocated.", file, line);
+  }
+}
+
 auto NotImplemented(string file = __FILE__, int line = __LINE__)(string name) pure
 {
     return new NotImplementedYetException(name,file,line);
+}
+
+auto UnalocatedData(string file = __FILE__, int line = __LINE__)(string msg = "") pure
+{
+    return new UnalocatedDataObjectException(msg,file,line);
 }

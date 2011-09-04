@@ -18,14 +18,14 @@ interface PortCompatibility
 
 class DynamicInputPort : InputPort
 {
-    this(Node n, PortCompatibility compatibility, string myName = "input")
+    this(Node n, PortCompatibility compatibility, int pflags = 0, string myName = "input")
     in
     {
         assert (compatibility !is null);
     }
     body
     {
-        super(n);    
+        super(n, pflags);    
         _name = myName;
         _compatibility = compatibility;
     }
@@ -63,6 +63,7 @@ class DynamicOutputPort : OutputPort
         _parentPort = parent;
         _dataType   = dataTypeInfo;
         _subPorts   = [];
+        _dataRef = new DataRef(null);
         
         if ( (dataTypeInfo !is null) && (dataTypeInfo.subData !is null) )
         {
@@ -182,11 +183,11 @@ unittest
     assert( ContainerTest.Type.subData.length == 2 );
     assert( ContainerTest.Type.subData[0].name == "SubContainerTest" );
 
-    auto op_1 = new kiwi.dynamic.port.DynamicOutputPort( null, null, ContainerTest.Type );
-    auto ip_1 = new kiwi.dynamic.port.DynamicInputPort(  null, new AlwaysCompatible );
+    auto op_1 = new DynamicOutputPort( null, null, ContainerTest.Type );
+    auto ip_1 = new DynamicInputPort(  null, new AlwaysCompatible );
 
-    auto op_2 = new kiwi.dynamic.port.DynamicOutputPort( null, null, ContainerTest.Type );
-    auto ip_2 = new kiwi.dynamic.port.DynamicInputPort(  null, new AlwaysCompatible );
+    auto op_2 = new DynamicOutputPort( null, null, ContainerTest.Type );
+    auto ip_2 = new DynamicInputPort(  null, new AlwaysCompatible );
 
     // simply trying every connection/disconnection cases.
 

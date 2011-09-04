@@ -5,5 +5,7 @@
 *Makefile*
 *CMakeFiles*
 build/*
+*/bin/*
 codeblocks/*
 *-build-desktop*
+*.dblite

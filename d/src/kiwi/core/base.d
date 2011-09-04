@@ -349,7 +349,7 @@ public:
              +/
             Data data();
             
-            void data( kiwi.core.base.Data value );        
+            void data( Data value );        
             //in{ if( dataType !is null && value !is null ) assert( data.type is dataType ); } 
             
         } //properties

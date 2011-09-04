@@ -2,10 +2,63 @@ module kiwi.dynamic.nodegroup;
 
 import kiwi.core.base;
 import kiwi.core.commons;
+import kiwi.core.data;
 import kiwi.dynamic.node;
 
 import kiwi.graph.acyclic;
 
+class InternalInputPort : InputPort
+{
+	this()
+	{
+		super(null);
+	}
+}
+
+class InternalOutputPort : OutputPort
+{
+	this(InputPort linkedInput)
+	in{	assert( linkedInput !is null ); }
+	body
+	{
+		super(null);
+		_linkedInput = linkedInput;
+	}
+
+	override
+	{
+        @property
+        {
+            int maxConnections() { return -1; }
+            string name() { return _linkedInput.name; }
+            OutputPort[] subPorts() 
+            {
+            	throw NotImplemented("NodeGroup.subPorts");
+            }
+            DataTypeInfo dataType() pure 
+            { 
+	            throw NotImplemented("NodeGroup.dataType"); 
+	        }
+            Data data()
+            {
+            	throw NotImplemented("NodeGroup.data");
+            }
+        }
+
+        bool isComposite()
+        {
+        	throw NotImplemented("NodeGroup.isComposite"); 
+        }
+        bool isCompatible( InputPort port ){ return (port !is null); }         
+                   
+    }
+    @property void data( kiwi.core.base.Data value )
+    {
+    	throw NotImplemented("NodeGroup.data:set"); 
+    }
+private:
+	InputPort _linkedInput;
+}
 
 class NodeGroup : kiwi.core.base.NodeGroup
 {
@@ -41,18 +94,15 @@ class NodeGroup : kiwi.core.base.NodeGroup
 				node.update();
 			}
 
-			throw new NotImplementedYetException("kiwi.dynamic.nodegroup.NodeGroup.update"
-				, __FILE__, __LINE__);
+			throw NotImplemented("kiwi.dynamic.nodegroup.NodeGroup.update");			
 		}
 		bool serialize( DataStream stream )
 		{
-			throw new NotImplementedYetException("kiwi.dynamic.nodegroup.NodeGroup.serialize"
-				, __FILE__, __LINE__);
+			throw NotImplemented("kiwi.dynamic.nodegroup.NodeGroup.serialize");
 		}
 		bool deSerialize( DataStream stream )
 		{
-			throw new NotImplementedYetException("kiwi.dynamic.nodegroup.NodeGroup.deSerialize"
-				, __FILE__, __LINE__);
+			throw NotImplemented("kiwi.dynamic.nodegroup.NodeGroup.deSerialize");
 		}
 
 	}// override

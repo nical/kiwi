@@ -1,5 +1,6 @@
 module kiwi.dynamic.port;
 
+import kiwi.core.commons;
 import kiwi.core.all;
 
 
@@ -79,12 +80,21 @@ class DynamicOutputPort : OutputPort
         @property{
             int maxConnections() { return -1; }
             string name() { return _name; }
-            OutputPort[] subPorts() { return []; }
+            OutputPort[] subPorts() 
+            {
+                NotImplemented("DynamicOutputPort.subPorts");
+                return [];
+            }
             DataTypeInfo dataType() pure { return _dataType; }
             Data data(){ return _data; }
         }
 
-        bool isComposite() { return false; }
+        bool isComposite() 
+        { 
+            if(_dataType is null)
+                return false;
+            return _dataType.isComposite; 
+        }
         bool isCompatible( InputPort port ){ return (port !is null); }         
                    
     }
@@ -184,7 +194,7 @@ unittest
     assert( !(op_1 is null) && !(ip_1 is null) );
     assert( !op_1.isConnectedTo(ip_1) );
     assert( !ip_1.isConnectedTo(op_1) );
-    assert( !op_1.isComposite() );
+    assert( op_1.isComposite() );
     assert( op_1.connect(ip_1) );
     assert( op_1.isConnectedTo(ip_1) );
     assert( ip_1.isConnectedTo(op_1) );

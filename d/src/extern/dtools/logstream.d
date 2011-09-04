@@ -54,7 +54,7 @@ enum{ INFO_0      = 1
 
 
 /**
- * Log class to ease debugging
+ * Log class to help debugging
  */ 
 class LogStream
 {

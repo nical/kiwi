@@ -14,7 +14,7 @@ LogStream log;
 
 static this()
 {
-  log = new LogStream();
+    log = new LogStream();
 }
 
 
@@ -58,4 +58,9 @@ class NotImplementedYetException : Exception
   {
     super(msg ~ " is not implemented yet.", file, line);
   }
+}
+
+auto NotImplemented(string file = __FILE__, int line = __LINE__)(string name) pure
+{
+    return new NotImplementedYetException(name,file,line);
 }

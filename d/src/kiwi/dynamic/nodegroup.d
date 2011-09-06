@@ -9,14 +9,6 @@ import kiwi.dynamic.compatibility;
 
 import kiwi.graph.acyclic;
 
-class InternalInputPort : InputPort
-{
-	this()
-	{
-		super(null);
-	}
-}
-
 
 class MetaNode : DynamicNode
 {

@@ -101,7 +101,7 @@ class DynamicNode : Node {
     body
     {        
         if( dataref.data !is null )
-            if(output(index).dataType !is dataref.type && output(index).dataType !is null) return false;
+            if(output(index).dataType !is dataref.data.type && output(index).dataType !is null) return false;
         output(index).dataRef = dataref;
         return true;
     }

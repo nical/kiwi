@@ -16,14 +16,23 @@ enum{
     , WRITE = 4
     , READ_WRITE = READ | WRITE };
 
+alias Data delegate() DataRef_;
+
+DataRef_ DataGet( Data toGet )
+{
+    return delegate(){ return toGet; };
+}
+
 class DataRef
 {
     this(Data initVal)
     {
         data = initVal;
     }
-    Data data;
-    alias data this;
+    Data data(){ return _data; }
+    void data(Data val){ _data = val; }
+    
+    protected Data _data;
 }
 
 interface Node{
@@ -191,7 +200,8 @@ public:
             return connections[0].data;
         }
         Node node() { return _node; }
-        OutputPort[] connections() { return _connections; }
+        OutputPort[] connections() { return _connections; }// TODO: deprecated;
+        OutputPort connection() { return _connections[0]; }
         PortFlags flags() { return _flags; }
         bool isOptional(){ return _flags & OPTIONAL; }
     }

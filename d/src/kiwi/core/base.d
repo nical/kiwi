@@ -204,13 +204,7 @@ interface NodeGroup
 interface InputPort
 {
 public:
-    this(Node n, PortFlags f = 0)
-    {
-        node = n;
-        flags = f;
-    }
-
-
+    
     @property{
          /++
          + Returns the name of this port.

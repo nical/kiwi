@@ -25,7 +25,8 @@ class DynamicInputPort : InputPort
     }
     body
     {
-        super(n, pflags);    
+        _node = n;
+        _flags = pflags;    
         _name = myName;
         _compatibility = compatibility;
     }

@@ -64,7 +64,7 @@ class DynamicNode : Node {
                     if(!inputPort.isOptional && !inputPort.isConnected)
                         return;
                     if(inputPort.isConnected)
-                        inputData ~= inputPort.connections[0].data;
+                        inputData ~= inputPort.connection.data;
                     else
                         inputData ~= null;        
                 }

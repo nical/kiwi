@@ -123,6 +123,15 @@ unittest
     assert( obj.attribute.type == "int" );
     assert( obj.method(null).type == Wrapper!int(42).type );
 
+    int[string] foo;
+    foo["a"] = 1;
+    foo["b"] = 42;
+    foo["c"] = 12;
+    assert( "a" in foo );
+    assert( "b" in foo );
+    assert( "c" in foo );
+    assert( "d" !in foo );
+    
     // T_T
     //
     //assert( obj.attribute == 0 );

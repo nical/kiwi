@@ -21,9 +21,9 @@ body
 {
 	Node[] result = [];
 	foreach ( port ; n.inputs )
-		foreach ( c ; port.connections )
-			if ( c.node !is null && ! _contains(result, c.node) )
-				result ~= c.node;
+        if( port.isConnected )
+			if ( port.connection.node !is null && ! _contains(result, port.connection.node) )
+				result ~= port.connection.node;
 	return result;
 }
 
@@ -99,7 +99,7 @@ void _recOrdered(ref Node[] nodes, ref Node[] result, Node n)
 	{
 		foreach ( n_in ; n.inputs )
 			if ( n_in.isConnected )
-				_recOrdered( nodes, result, n_in.connections[0].node );
+				_recOrdered( nodes, result, n_in.connection.node );
 		for(int i=0; i<nodes.length; ++i)
 			if( nodes[i] is n ) log.writeln(i);
 		result ~= n;

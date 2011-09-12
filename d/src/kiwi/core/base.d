@@ -195,13 +195,12 @@ public:
     @property{
         Data data() 
         { 
-            if ( !isConnected ) 
-                return null;
-            return connections[0].data;
+            if ( !isConnected ) return null;
+            return connection.data;
         }
         Node node() { return _node; }
-        OutputPort[] connections() { return _connections; }// TODO: deprecated;
-        OutputPort connection() { return _connections[0]; }
+        //OutputPort[] connections() { return _connections; }// TODO: deprecated;
+        OutputPort connection() { return _connection; }
         PortFlags flags() { return _flags; }
         bool isOptional(){ return _flags & OPTIONAL; }
     }
@@ -221,17 +220,17 @@ public:
         mixin( logFunction!"InputPort.connect" );
         if (port is null)
             return false;
-            
-        if ( this.maxConnections >= 0 && this.connections.length >= this.maxConnections )
-            return false;
 
+        
         if ( port.maxConnections >= 0 && port.connections.length >= port.maxConnections )
             return false;
         
         if ( !this.isCompatible(port) || !port.isCompatible(this) )
             return false;
 
-        this._connections ~= port;
+        if( this.isConnected ) disconnect();
+
+        this._connection = port;
         port._connections ~= this;
 
         return true;       
@@ -240,37 +239,30 @@ public:
     /++
      + Disconnect this port from an OutputPort if they are conected.
      +/ 
-    bool disconnect( OutputPort port )
+    bool disconnect( OutputPort port  = null)
     out
     {
-        assert( !port.isConnectedTo(this), "disconnection failed." ); 
+        if(port !is null) assert( !port.isConnectedTo(this), "disconnection failed." ); 
         assert( !this.isConnectedTo(port), "disconnection failed." ); 
     }
     body
     {
         mixin( logFunction!"InputPort.disconnect" );
-        if ( port is null )
-            return false;
 
-        int i1 = this.indexOf(port);
+        if ( port !is null && _connection !is port ) return false;
+        else
+        {
+            if ( _connection is null ) return false;
+            port = this._connection;
+        }
+        
         int i2 = port.indexOf(this);
-
-        if ( i1 < 0 )
-            return false;
-
+            
         // proceed with the disconnection
-        this._connections[i1] = this.connections[$-1];
-        this._connections.length -= 1;
+        this._connection = null;
         port._connections[i2] = port.connections[$-1];
         port._connections.length -= 1;
-
         return true;
-    }
-
-    void disconnectAll()
-    {
-        for(int i = 0; i < connections.length; ++i)
-            this.disconnect(connections[i]);
     }
 
     /++
@@ -278,7 +270,7 @@ public:
      +/ 
     bool isConnectedTo( OutputPort port )
     {
-        return ( indexOf(port) >= 0 );
+        return _connection is port ;
     }
 
     /++
@@ -286,7 +278,7 @@ public:
      +/ 
     bool isConnected()
     {
-        return ( connections.length > 0 );
+        return ( connection !is null );
     }
 protected:
 
@@ -298,33 +290,21 @@ protected:
      +/
     bool isConnectionReciproqual(OutputPort port)
     {
-        uint i1 = this.indexOf(port);
+        bool c1 = _connection is port;
         uint i2 = port.indexOf(this);
-        if (i1 < 0 && i2 < 0) return true;
-        if (i1 >= 0 && i2 >= 0) return true;
+        if (!c1 && i2 < 0) return true;
+        if (c1 && i2 >= 0) return true;
         return false;
     }
 
-    @property void connections(OutputPort[] value)
+    @property void connection(OutputPort value)
     {
-        _connections = value;
+        _connection = value;
     }
     
-    /++
-     + Returns the index of an output port in connections, or -1 if not found.
-     +/ 
-    int indexOf(OutputPort port)
-    {
-        for(int i = 0; i < connections.length; ++i){
-            if( connections[i] is port )
-                return i;
-        }
-        return -1;
-    }
-
 private:
     PortFlags    _flags;
-    OutputPort[] _connections;
+    OutputPort   _connection;
     Node         _node;
 } // class InputPort
 

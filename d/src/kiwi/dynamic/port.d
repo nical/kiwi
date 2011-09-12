@@ -43,6 +43,11 @@ class DynamicInputPort : InputPort
         }
     }
 
+protected:
+    void setFlags(int pflags)
+    {
+        
+    }
 private:
     string _name;    
     PortCompatibility _compatibility;
@@ -61,21 +66,11 @@ class DynamicOutputPort : OutputPort
         super(n);
         _name       = myName;
         _parentPort = parent;
-        _dataType   = dataTypeInfo;
+        _dataType   = null;
         _subPorts   = [];
         _dataRef = new DataRef(null);
         
-        if ( (dataTypeInfo !is null) && (dataTypeInfo.subData !is null) )
-        {
-            log.writeln(dataTypeInfo.name);
-            log.writeln(dataTypeInfo.subData.length);
-            
-            foreach( subTypeInfo ; dataTypeInfo.subData )
-            {
-                log.writeDebug(0, subTypeInfo.name );
-                _subPorts ~= new DynamicOutputPort( n, this, subTypeInfo, "" );
-            }
-        }
+        setDataTypeInfo( dataTypeInfo );
     }
     override{
         @property{
@@ -99,6 +94,26 @@ class DynamicOutputPort : OutputPort
     }
     @property void dataRef( DataRef value ){ _dataRef = value; }
     @property DataRef dataRef(){ return _dataRef; }
+
+protected:
+
+    void setDataTypeInfo(DataTypeInfo dataTypeInfo)
+    {
+        if ( dataTypeInfo is _dataType ) return;
+        _subPorts = [];
+        _dataType = dataTypeInfo;
+        if ( (dataTypeInfo !is null) && (dataTypeInfo.subData !is null) )
+        {
+            log.writeln(dataTypeInfo.name);
+            log.writeln(dataTypeInfo.subData.length);
+            
+            foreach( subTypeInfo ; dataTypeInfo.subData )
+            {
+                log.writeDebug(0, subTypeInfo.name );
+                _subPorts ~= new DynamicOutputPort( node, this, subTypeInfo, "" );
+            }
+        }
+    }
 private:
     string              _name;
     DataRef             _dataRef;  
@@ -221,17 +236,17 @@ unittest
     assert( op_2.connect(ip_1) );
 
     assert( op_2.isConnectedTo(ip_1) );
-    assert( op_1.isConnectedTo(ip_1) );
+    assert( !op_1.isConnectedTo(ip_1) );
 
     assert( op_2.disconnect(ip_1) );
 
     assert( !op_2.isConnectedTo(ip_1) );
-    assert( op_1.isConnectedTo(ip_1) );
+    assert( !op_1.isConnectedTo(ip_1) );
 
     assert( ip_1.connect(op_2) );
 
     assert( op_2.isConnectedTo(ip_1) );
-    assert( op_1.isConnectedTo(ip_1) );
+    assert( !op_1.isConnectedTo(ip_1) );
 }
 
 

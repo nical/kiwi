@@ -132,19 +132,7 @@ private:
 	Node[] _sortedNodes;
 }
 
-/*
-class InternalOutputPort : DynamicOutputPort
-{
-    
-    this(NodeGroup ng)
-    {
-        super(null);
-        this._nodeGroup = ng;
-    }
 
-    NodeGroup _nodeGroup;
-}
-*/
 
 //              #######   #####    ####   #####    ####
 //                 #      #       #         #     #   

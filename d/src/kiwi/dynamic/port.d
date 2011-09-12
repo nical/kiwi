@@ -31,9 +31,18 @@ class DynamicInputPort : InputPort
     }
 
     override{
-        @property{
-            int maxConnections(){ return -1; }
+        @property{           
             string name(){ return _name; }
+
+            public PortFlags flags(){ return _flags; }
+            protected void flags(PortFlags value){ _flags = value; }
+            
+            public Node node(){ return _node; } 
+            protected void node(Node n){ _node = n; }
+
+            public OutputPort connection() { return _connection; }
+            protected void connection(OutputPort value) { _connection = value; }
+    
         }
         
         bool isCompatible( OutputPort port )                
@@ -42,15 +51,13 @@ class DynamicInputPort : InputPort
             return _compatibility.isCompatible( port ); 
         }
     }
-
-protected:
-    void setFlags(int pflags)
-    {
-        
-    }
+    
 private:
+    PortFlags _flags;
+    Node _node;
     string _name;    
     PortCompatibility _compatibility;
+    OutputPort   _connection;
 }
 
 
@@ -60,7 +67,11 @@ private:
 
 class DynamicOutputPort : OutputPort
 {
-    this(Node n, DynamicOutputPort parent, DataTypeInfo dataTypeInfo, string myName = "output")
+    this(Node n
+        , DynamicOutputPort parent
+        , DataTypeInfo dataTypeInfo
+        , string myName = "output"
+        , DataRef dataref = null )
     {
         mixin( logFunction!"DynamicOutputPort.constructor" );
         super(n);
@@ -68,38 +79,65 @@ class DynamicOutputPort : OutputPort
         _parentPort = parent;
         _dataType   = null;
         _subPorts   = [];
-        _dataRef = new DataRef(null);
+
+        if( dataref is null ) _dataRef = new BasicDataRef(null);
+        else _dataRef = dataref;
         
-        setDataTypeInfo( dataTypeInfo );
+        _setDataType( dataTypeInfo );
     }
     override{
         @property{
+            /**
+             * Returns the maximum amount of connections, or -1 if unlimited.
+             */ 
             int maxConnections() { return -1; }
+
+            /**
+             * Returns this port's name
+             */ 
             string name() { return _name; }
+            /**
+             * Returns an array containing references to this port's sub ports.
+             */ 
             OutputPort[] subPorts() 
             {
                 return _subPorts;
             }
+            /**
+             * returns a reference to this port's data type info.
+             */ 
             DataTypeInfo dataType() pure { return _dataType; }            
         }
 
+        /**
+         * Returns true if this port is composite.
+         */ 
         bool isComposite() 
         { 
             if(_dataType is null)
                 return false;
             return _dataType.isComposite; 
         }
-        bool isCompatible( InputPort port ){ return (port !is null); }         
+
+        /**
+         * Returns true if port is compatible with this.
+         */ 
+        bool isCompatible( InputPort port ){ return (port !is null); }       // TODO: perform flag check   
                    
     }
+    
     @property void dataRef( DataRef value ){ _dataRef = value; }
     @property DataRef dataRef(){ return _dataRef; }
 
 protected:
-
-    void setDataTypeInfo(DataTypeInfo dataTypeInfo)
+    
+    void _setDataType(DataTypeInfo dataTypeInfo)
     {
         if ( dataTypeInfo is _dataType ) return;
+
+        foreach( p ; _subPorts)
+            p.disconnectAll();
+
         _subPorts = [];
         _dataType = dataTypeInfo;
         if ( (dataTypeInfo !is null) && (dataTypeInfo.subData !is null) )
@@ -114,6 +152,10 @@ protected:
             }
         }
     }
+    
+    void _setName(string newName){ _name = newName; }
+
+    
 private:
     string              _name;
     DataRef             _dataRef;  

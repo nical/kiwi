@@ -23,16 +23,49 @@ DataRef_ DataGet( Data toGet )
     return delegate(){ return toGet; };
 }
 
-class DataRef
+interface DataRef
+{
+    @property
+    {
+        Data data();
+        void data(Data val);    
+    }
+}
+
+class BasicDataRef : DataRef
 {
     this(Data initVal)
     {
         data = initVal;
     }
-    Data data(){ return _data; }
-    void data(Data val){ _data = val; }
-    
+    override{
+        @property{
+            Data data(){ return _data; }
+            void data(Data val){ _data = val; }
+        }
+    }
     protected Data _data;
+}
+
+class InputDataRef : DataRef
+{
+    this(InputPort port)
+    {
+        _input = port;
+    }
+
+    override{
+        @property{
+            Data data(){
+                if(_input !is null && _input.isConnected)
+                    return _input.connection.data;
+                return null;
+            }
+            void data(Data val){}
+        }
+    }
+
+    private InputPort _input;
 }
 
 interface Node{
@@ -168,117 +201,122 @@ interface NodeGroup
 
 
 
-class InputPort
+interface InputPort
 {
 public:
     this(Node n, PortFlags f = 0)
     {
-        _node = n;
-        _flags = f;
+        node = n;
+        flags = f;
     }
 
-    abstract{
-        @property{
-             /++
-             + Returns the name of this port.
-             +/ 
-            string name();
-            /++
-             +
-             +/ 
-            int maxConnections();    
-                             
-        }
-        bool isCompatible( OutputPort );
-    }
-    
+
     @property{
-        Data data() 
-        { 
-            if ( !isConnected ) return null;
-            return connection.data;
+         /++
+         + Returns the name of this port.
+         +/ 
+        string name();
+        
+        public PortFlags flags();
+        protected void flags(PortFlags value);
+
+        public Node node();
+        protected void node(Node value);
+
+        public OutputPort connection();
+        protected void connection(OutputPort value);
+                                      
+    }
+    bool isCompatible( OutputPort );
+
+    
+    final
+    {
+        @property{
+            Data data() 
+            { 
+                if ( !isConnected ) return null;
+                return connection.data;
+            }
+
+            bool isOptional(){ return flags & OPTIONAL; }
         }
-        Node node() { return _node; }
-        //OutputPort[] connections() { return _connections; }// TODO: deprecated;
-        OutputPort connection() { return _connection; }
-        PortFlags flags() { return _flags; }
-        bool isOptional(){ return _flags & OPTIONAL; }
-    }
-    
-    
-
-    /++
-     + Connects this port to an OutputPort if possible.
-     +/ 
-    bool connect( OutputPort port )
-    out
-    {
-        assert (isConnectionReciproqual(port), "port connection reciprocity test failed. ");
-    }
-    body
-    {
-        mixin( logFunction!"InputPort.connect" );
-        if (port is null)
-            return false;
-
         
-        if ( port.maxConnections >= 0 && port.connections.length >= port.maxConnections )
-            return false;
         
-        if ( !this.isCompatible(port) || !port.isCompatible(this) )
-            return false;
 
-        if( this.isConnected ) disconnect();
-
-        this._connection = port;
-        port._connections ~= this;
-
-        return true;       
-    }
-
-    /++
-     + Disconnect this port from an OutputPort if they are conected.
-     +/ 
-    bool disconnect( OutputPort port  = null)
-    out
-    {
-        if(port !is null) assert( !port.isConnectedTo(this), "disconnection failed." ); 
-        assert( !this.isConnectedTo(port), "disconnection failed." ); 
-    }
-    body
-    {
-        mixin( logFunction!"InputPort.disconnect" );
-
-        if ( port !is null && _connection !is port ) return false;
-        else
+        /++
+         + Connects this port to an OutputPort if possible.
+         +/ 
+        bool connect( OutputPort port )
+        out
         {
-            if ( _connection is null ) return false;
-            port = this._connection;
+            assert (isConnectionReciproqual(port), "port connection reciprocity test failed. ");
         }
-        
-        int i2 = port.indexOf(this);
+        body
+        {
+            mixin( logFunction!"InputPort.connect" );
+            if (port is null)
+                return false;
+
             
-        // proceed with the disconnection
-        this._connection = null;
-        port._connections[i2] = port.connections[$-1];
-        port._connections.length -= 1;
-        return true;
-    }
+            if ( port.maxConnections >= 0 && port.connections.length >= port.maxConnections )
+                return false;
+            
+            if ( !this.isCompatible(port) || !port.isCompatible(this) )
+                return false;
 
-    /++
-     + Returns true if this port is connected to the one passed in parameter.
-     +/ 
-    bool isConnectedTo( OutputPort port )
-    {
-        return _connection is port ;
-    }
+            if( this.isConnected ) disconnect();
 
-    /++
-     + Returns true if the port is connected.
-     +/ 
-    bool isConnected()
-    {
-        return ( connection !is null );
+            this.connection = port;
+            port._connections ~= this;
+
+            return true;       
+        }
+
+        /++
+         + Disconnect this port from an OutputPort if they are conected.
+         +/ 
+        bool disconnect( OutputPort port  = null)
+        out
+        {
+            if(port !is null) assert( !port.isConnectedTo(this), "disconnection failed." ); 
+            assert( !this.isConnectedTo(port), "disconnection failed." ); 
+        }
+        body
+        {
+            mixin( logFunction!"InputPort.disconnect" );
+
+            if ( port !is null && connection !is port ) return false;
+            else
+            {
+                if ( connection is null ) return false;
+                port = this.connection;
+            }
+            
+            int i2 = port.indexOf(this);
+                
+            // proceed with the disconnection
+            this.connection = null;
+            port._connections[i2] = port.connections[$-1];
+            port._connections.length -= 1;
+            return true;
+        }
+
+        /++
+         + Returns true if this port is connected to the one passed in parameter.
+         +/ 
+        bool isConnectedTo( OutputPort port )
+        {
+            return connection is port ;
+        }
+
+        /++
+         + Returns true if the port is connected.
+         +/ 
+        bool isConnected()
+        {
+            return ( connection !is null );
+        }
     }
 protected:
 
@@ -288,25 +326,17 @@ protected:
      + In other words, if this.connections contains port then port.connections must contain this, etc. 
      + Should return true in any case. intended for debug.
      +/
-    bool isConnectionReciproqual(OutputPort port)
+    final bool isConnectionReciproqual(OutputPort port)
     {
-        bool c1 = _connection is port;
+        bool c1 = connection is port;
         uint i2 = port.indexOf(this);
         if (!c1 && i2 < 0) return true;
         if (c1 && i2 >= 0) return true;
         return false;
     }
 
-    @property void connection(OutputPort value)
-    {
-        _connection = value;
-    }
     
-private:
-    PortFlags    _flags;
-    OutputPort   _connection;
-    Node         _node;
-} // class InputPort
+} // InputPort
 
 
 
@@ -350,9 +380,7 @@ public:
              + 
              +/
             DataTypeInfo dataType() pure;
-            /++
-             +
-             +/            
+          
             
             void dataRef( DataRef value );        
             DataRef dataRef();        
@@ -370,9 +398,13 @@ public:
             if(dataRef is null ) return null;
             return dataRef.data;
         }
+        
         void data( Data val )
         {
-            dataRef = new DataRef( val );
+            if(dataRef is null)
+                dataRef = new BasicDataRef( val );
+            else
+                dataRef.data = val;
         }
 
         InputPort[] connections(){ return _connections; }
@@ -405,7 +437,7 @@ public:
     {
         if(port is null)
             return false;
-            
+        
         return port.disconnect(this);
     }
 
@@ -413,6 +445,9 @@ public:
     {
         for(int i = 0; i < connections.length; ++i)
             this.disconnect(connections[i]);
+
+        foreach( p ; subPorts )
+            p.disconnectAll();
     }
     
     bool isConnectedTo(InputPort port)
@@ -428,7 +463,7 @@ public:
     void allocateData()
     {
         if( data is null ){
-            dataRef = new DataRef( dataType.newInstance() );   
+            data = dataType.newInstance();                 // TODO ! unsafe if dataType is null
         }
     }
 protected:
@@ -448,11 +483,11 @@ protected:
         }
         return -1;
     }
+
     
-    @property{
-        void flags(PortFlags value){ _flags = value; }
-        void node(Node value){ _node =  value; }
-    }
+    void _setFlags(PortFlags value){ _flags = value; }
+    void _setNode(Node value){ _node =  value; }
+        
 private:
     PortFlags    _flags;
     InputPort[]  _connections;

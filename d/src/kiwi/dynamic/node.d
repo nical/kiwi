@@ -23,6 +23,8 @@ struct InputPortInitializer
     int flags;
 }
 
+
+
 class DynamicNode : Node {
 
     this( InputPortInitializer[] inputs, OutputPortInitializer[] outputs
@@ -127,13 +129,16 @@ Node NewContainerNode( kiwi.core.base.Data data )
 }
 
 
-/*
-             #####   #####    ####   #####    ####
-               #     #       #         #     #
-               #     ###      ###      #      ###
-               #     #           #     #         #
-               #     #####   ####      #     ####
-*/
+
+
+//            #####   #####    ####   #####    ####
+//              #     #       #         #     #
+//              #     ###      ###      #      ###
+//              #     #           #     #         #
+//              #     #####   ####      #     ####
+
+
+
 
 
 version(unittest)

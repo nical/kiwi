@@ -10,18 +10,14 @@ import std.conv;
 
 alias int PortFlags;
 
+
 enum{ 
     OPTIONAL = 1
     , READ = 2
     , WRITE = 4
-    , READ_WRITE = READ | WRITE };
+    , READ_WRITE = READ | WRITE
+    };
 
-alias Data delegate() DataRef_;
-
-DataRef_ DataGet( Data toGet )
-{
-    return delegate(){ return toGet; };
-}
 
 interface DataRef
 {
@@ -201,6 +197,8 @@ interface NodeGroup
 
 
 
+
+
 interface InputPort
 {
 public:
@@ -227,16 +225,20 @@ public:
     final
     {
         @property{
+            /**
+             * Returns the data held by the output port this port is connected to.
+             */ 
             Data data() 
             { 
                 if ( !isConnected ) return null;
                 return connection.data;
             }
 
+            /**
+             * Returns true if this port has the flag OPTIONAL.
+             */ 
             bool isOptional(){ return flags & OPTIONAL; }
         }
-        
-        
 
         /++
          + Connects this port to an OutputPort if possible.
@@ -262,7 +264,7 @@ public:
             if( this.isConnected ) disconnect();
 
             this.connection = port;
-            port._connections ~= this;
+            port.refConnections() ~= this;
 
             return true;       
         }
@@ -291,8 +293,8 @@ public:
                 
             // proceed with the disconnection
             this.connection = null;
-            port._connections[i2] = port.connections[$-1];
-            port._connections.length -= 1;
+            port.refConnections[i2] = port.connections[$-1];
+            port.refConnections.length -= 1;
             return true;
         }
 
@@ -339,154 +341,144 @@ protected:
 
 
 
-class OutputPort{
+
+
+
+
+interface OutputPort{
 public:
-    this(Node n, PortFlags f = 0)
-    {
-        _node = n;
-        _flags = f;
-    }
     
-    abstract{
-        /++
-         + Returns true if this port has sub-ports.
-         +/ 
-        bool isComposite();
-        /++
-         + Returns true if this port is compatible with the InputPort in parameter.
-         +/ 
-        bool isCompatible( InputPort );
-        
-        @property{
-            /++
-             + Returns the maximum number of connections.
-             +/ 
-            int maxConnections();
-            /++
-             + Returns the name of this port.
-             +/ 
-            string name();
-            /++
-             + Returns this port's sub-ports if composite.
-             +/ 
-            OutputPort[] subPorts();
-            /++
-             + 
-             +/
-            DataTypeInfo dataType() pure;
-          
-            
-            void dataRef( DataRef value );        
-            DataRef dataRef();        
-            //in{ if( dataType !is null && value !is null ) assert( data.type is dataType ); } 
-            
-        } //properties
-    } //abstract
-      
+    /++
+     + Returns true if this port has sub-ports.
+     +/ 
+    bool isComposite();
+    /++
+     + Returns true if this port is compatible with the InputPort in parameter.
+     +/ 
+    bool isCompatible( InputPort );
     
     @property{
-        Node node(){ return _node; }
-        
-        Data data()
-        { 
-            if(dataRef is null ) return null;
-            return dataRef.data;
+        /++
+         + Returns the maximum number of connections.
+         +/ 
+        int maxConnections();
+        /++
+         + Returns the name of this port.
+         +/ 
+        string name();
+        /++
+         + Returns this port's sub-ports if composite.
+         +/ 
+        OutputPort[] subPorts();
+        /++
+         + 
+         +/
+        DataTypeInfo dataType() pure;
+      
+        void dataRef( DataRef value );        
+        DataRef dataRef();     
+
+        public PortFlags flags();
+        protected void flags(PortFlags value);
+
+        public Node node();
+        protected void node(Node value);
+
+        protected ref InputPort[] refConnections();
+    } //properties
+      
+    final
+    {
+        @property{
+            
+            Data data()
+            { 
+                if(dataRef is null ) return null;
+                return dataRef.data;
+            }
+            
+            void data( Data val )
+            {
+                if(dataRef is null)
+                    dataRef = new BasicDataRef( val );
+                else
+                    dataRef.data = val;
+            }
+
+            InputPort[] connections(){ return refConnections(); }
+            bool isOptional(){ return flags & OPTIONAL; }        
         }
-        
-        void data( Data val )
+
+        /++
+         + Connects this port to an InputPort.
+         +/ 
+        bool connect(InputPort port)
         {
-            if(dataRef is null)
-                dataRef = new BasicDataRef( val );
-            else
-                dataRef.data = val;
+            mixin( logFunction!"OutputPort.connect" );
+            if(port is null)
+                return false;
+
+            return port.connect(this);
         }
 
-        InputPort[] connections(){ return _connections; }
-        PortFlags flags(){ return _flags; }        
-        bool isOptional(){ return _flags & OPTIONAL; }        
-    }
 
-    /++
-     + Connects this port to an InputPort.
-     +/ 
-    bool connect(InputPort port)
-    {
-        mixin( logFunction!"OutputPort.connect" );
-        if(port is null)
-            return false;
+        final bool opBinary(string op)(InputPort port) if (op == ">>")
+        {
+            return connect( port );
+        }
 
-        return port.connect(this);
-    }
+        /++
+         + disconnect this port from an InputPort.
+         +/ 
+        bool disconnect(InputPort port)
+        {
+            if(port is null)
+                return false;
+            
+            return port.disconnect(this);
+        }
 
+        void disconnectAll()
+        {
+            for(int i = 0; i < connections.length; ++i)
+                this.disconnect(connections[i]);
 
-    final bool opBinary(string op)(InputPort port) if (op == ">>")
-    {
-        return connect( port );
-    }
-
-    /++
-     + disconnect this port from an InputPort.
-     +/ 
-    bool disconnect(InputPort port)
-    {
-        if(port is null)
-            return false;
+            foreach( p ; subPorts )
+                p.disconnectAll();
+        }
         
-        return port.disconnect(this);
-    }
-
-    void disconnectAll()
-    {
-        for(int i = 0; i < connections.length; ++i)
-            this.disconnect(connections[i]);
-
-        foreach( p ; subPorts )
-            p.disconnectAll();
-    }
-    
-    bool isConnectedTo(InputPort port)
-    {
-        return indexOf(port) != -1;
-    }
-
-    bool isConnected()
-    {
-        return connections.length > 0;
-    }
-
-    void allocateData()
-    {
-        if( data is null ){
-            data = dataType.newInstance();                 // TODO ! unsafe if dataType is null
+        bool isConnectedTo(InputPort port)
+        {
+            return indexOf(port) != -1;
         }
-    }
-protected:
 
-    @property void connections(InputPort[] value)
-    {
-        _connections = value;
-    }
-    /++
-     + Returns the index of an output port in connections, or -1 if not found.
-     +/ 
-    int indexOf(InputPort port)
-    {
-        for(int i = 0; i < connections.length; ++i){
-            if( connections[i] is port )
-                return i;
+        bool isConnected()
+        {
+            return connections.length > 0;
         }
-        return -1;
-    }
 
+        void allocateData()
+        {
+            if( data is null ){
+                data = dataType.newInstance();  // TODO ! unsafe if dataType is null
+            }
+        }
     
-    void _setFlags(PortFlags value){ _flags = value; }
-    void _setNode(Node value){ _node =  value; }
         
-private:
-    PortFlags    _flags;
-    InputPort[]  _connections;
-    Node         _node;
-} // class OutputPort
+        /++
+         + Returns the index of an output port in connections, or -1 if not found.
+         +/ 
+        protected int indexOf(InputPort port)
+        {
+            for(int i = 0; i < connections.length; ++i){
+                if( connections[i] is port )
+                    return i;
+            }
+            return -1;
+        }
+        
+    }//final
+} // OutputPort
 
 
 

@@ -90,7 +90,7 @@ class DynamicNode : Node {
     }
     void addOutputPort( DataTypeInfo typeInfo, string name)
     {        
-        _outputPorts ~= new DynamicOutputPort( this, null, typeInfo, name );
+        _outputPorts ~= new DynamicOutputPort( this, null, typeInfo, 0, name ); // TODO flags
     }
 
     bool setOutputPortData( int index, DataRef dataref )

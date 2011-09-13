@@ -25,9 +25,9 @@ class DynamicInputPort : InputPort
     }
     body
     {
-        _node = n;
+        _node  = n;
         _flags = pflags;    
-        _name = myName;
+        _name  = myName;
         _compatibility = compatibility;
     }
 
@@ -71,11 +71,13 @@ class DynamicOutputPort : OutputPort
     this(Node n
         , DynamicOutputPort parent
         , DataTypeInfo dataTypeInfo
+        , PortFlags pflags
         , string myName = "output"
         , DataRef dataref = null )
     {
-        mixin( logFunction!"DynamicOutputPort.constructor" );
-        super(n);
+        mixin( logFunction!"DynamicOutputPort.constructor" );        
+        _node       = n;
+        _flags      = pflags;
         _name       = myName;
         _parentPort = parent;
         _dataType   = null;
@@ -107,9 +109,20 @@ class DynamicOutputPort : OutputPort
             /**
              * returns a reference to this port's data type info.
              */ 
-            DataTypeInfo dataType() pure { return _dataType; }            
+            DataTypeInfo dataType() pure { return _dataType; }
+
+            public PortFlags flags(){ return _flags; }
+            protected void flags(PortFlags value){ _flags = value; }
+            
+            public Node node(){ return _node; } 
+            protected void node(Node n){ _node = n; }
         }
 
+        protected ref InputPort[] refConnections()
+        {
+            return _connections;
+        }
+    
         /**
          * Returns true if this port is composite.
          */ 
@@ -149,7 +162,7 @@ protected:
             foreach( subTypeInfo ; dataTypeInfo.subData )
             {
                 log.writeDebug(0, subTypeInfo.name );
-                _subPorts ~= new DynamicOutputPort( node, this, subTypeInfo, "" );
+                _subPorts ~= new DynamicOutputPort( node, this, subTypeInfo, 0, "" );
             }
         }
     }
@@ -158,11 +171,14 @@ protected:
 
     
 private:
+    Node                _node;
+    PortFlags           _flags;
     string              _name;
     DataRef             _dataRef;  
     DataTypeInfo        _dataType;  
     DynamicOutputPort[] _subPorts;
     DynamicOutputPort   _parentPort;
+    InputPort[]         _connections;
 }
 
 
@@ -243,10 +259,10 @@ unittest
     assert( ContainerTest.Type.subData.length == 2 );
     assert( ContainerTest.Type.subData[0].name == "SubContainerTest" );
 
-    auto op_1 = new DynamicOutputPort( null, null, ContainerTest.Type );
+    auto op_1 = new DynamicOutputPort( null, null, ContainerTest.Type, 0 );
     auto ip_1 = new DynamicInputPort(  null, new AlwaysCompatible );
 
-    auto op_2 = new DynamicOutputPort( null, null, ContainerTest.Type );
+    auto op_2 = new DynamicOutputPort( null, null, ContainerTest.Type, 0 );
     auto ip_2 = new DynamicInputPort(  null, new AlwaysCompatible );
 
     // simply trying every connection/disconnection cases.

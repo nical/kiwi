@@ -104,7 +104,7 @@ class NodeGroup : kiwi.core.base.NodeGroup
 	void addInput( string name = "in" )
 	{
 		// TODO: better DataType support !
-		_inputBridge ~= new DynamicOutputPort(null, null, null, name);
+		_inputBridge ~= new DynamicOutputPort(null, null, null,0, name);
 	}
 
 	void removeInput()

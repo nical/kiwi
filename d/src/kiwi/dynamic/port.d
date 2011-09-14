@@ -176,7 +176,7 @@ private:
     string              _name;
     DataRef             _dataRef;  
     DataTypeInfo        _dataType;  
-    DynamicOutputPort[] _subPorts;
+    OutputPort[]        _subPorts;
     DynamicOutputPort   _parentPort;
     InputPort[]         _connections;
 }

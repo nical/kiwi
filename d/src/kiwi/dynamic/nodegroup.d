@@ -159,8 +159,8 @@ unittest
 
 	metaNode.addInputPort(new AlwaysCompatible, 0, "input" );
 
-	n1.output() >> n2.input();
-	before.output() >> metaNode.input();
+	n1.output().connect(  n2.input()  );
+	before.output().connect(  metaNode.input()  );
 
 
     //auto internal = new InternalOutputPort;

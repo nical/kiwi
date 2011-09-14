@@ -421,12 +421,12 @@ public:
             return port.connect(this);
         }
 
-
+/*
         final bool opBinary(string op)(InputPort port) if (op == ">>")
         {
             return connect( port );
         }
-
+*/
         /++
          + disconnect this port from an InputPort.
          +/ 

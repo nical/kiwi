@@ -142,9 +142,9 @@ unittest
 	assert( !_contains( nodes, NewMockNode(0,0) ) );
 
 	// connect the nodes
-	nodes[2].output() >> nodes[0].input(0);
-	nodes[1].output() >> nodes[0].input(1);
-	nodes[0].output() >> nodes[3].input();
+	nodes[2].output().connect( nodes[0].input(0) );
+	nodes[1].output().connect( nodes[0].input(1) );
+	nodes[0].output().connect( nodes[3].input() );
 
 	// compute the direct dependencies of nodes[0]
 	auto n0_dependencies = DirectDependencies( nodes[0] );

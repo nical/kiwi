@@ -14,7 +14,8 @@ interface Data
         DataTypeInfo type();
         Data[] subData();
         //
-        final bool isComposite(){ return subData.length != 0; } 
+        final bool isComposite(){ return subData.length != 0; }
+
     }
     //bool serialize( DataStream stream );
     //bool deSerialize( const DataStream stream );
@@ -26,7 +27,7 @@ interface Data
 class DataTypeInfo
 {
 public:
-    this(string name, DataTypeInfo[] subData, bool serializable, NewDataFunction instanciator)
+    this(string name, DataTypeInfo[] subData, string[] subDataNames, bool serializable, NewDataFunction instanciator)
     {
         mixin(logFunction!"DataTypeInfo.constructor");
         _name = name;
@@ -140,7 +141,23 @@ class DataTypeManager
                 foreach( subType ; _Type.SubDataTypes ){
                     DataTypeInfo temp = Register!subType;
                     subTypes ~= temp;                                    }
-            }            
+            }
+
+            string[] subNames;
+
+            // if the a name is provided for sub data types, use it
+            static if( __traits(compiles, _type.SubDataNames) )
+            {
+                subNames = _type.SubDataNames;
+            }
+            else // if no name provided, use the sub type names by default
+            {
+                subNames.length = subTypes.length;
+                for(int i = 0; i < subNames.length; ++i )
+                {
+                    subNames[i] = subTypes[i].name;
+                }
+            }
             
             static if( __traits(compiles, _Type.NewInstance) )
             {
@@ -150,7 +167,7 @@ class DataTypeManager
             {
                 NewDataFunction instanciator = function Data()pure{ return new _Type; };
             }
-            result = new DataTypeInfo(name, subTypes, false, instanciator);
+            result = new DataTypeInfo(name, subTypes, subNames, false, instanciator);
             _dataTypes[name] = result;
             return result;
         }   
@@ -221,13 +238,12 @@ mixin template DeclareInstanciator(alias func)
     alias func NewInstance;
 }
 
-/*
-             #####   #####    ####   #####    ####
-               #     #       #         #     #
-               #     ###      ###      #      ###
-               #     #           #     #         #
-               #     #####   ####      #     ####
-*/
+//            #####   #####    ####   #####    ####
+//              #     #       #         #     #
+//              #     ###      ###      #      ###
+//              #     #           #     #         #
+//              #     #####   ####      #     ####
+
 
 
 

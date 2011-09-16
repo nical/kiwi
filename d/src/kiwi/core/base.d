@@ -6,6 +6,7 @@ import kiwi.core.data;
 import std.string;
 import std.conv;
 
+public import kiwi.core.port; 
 
 
 alias int PortFlags;
@@ -18,6 +19,7 @@ enum{
     , READ_WRITE = READ | WRITE
     };
 
+/*
 
 interface DataRef
 {
@@ -63,7 +65,7 @@ class InputDataRef : DataRef
 
     private InputPort _input;
 }
-
+*/
 interface Node{
 
     @property{
@@ -196,7 +198,7 @@ interface NodeGroup
 
 
 
-
+/+
 
 
 interface InputPort
@@ -481,7 +483,7 @@ public:
 } // OutputPort
 
 
-
++/
 
 
 interface NodeListener

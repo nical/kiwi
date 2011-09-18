@@ -1,8 +1,9 @@
 module kiwi.core.port;
 
 import kiwi.core.data;
-import kiwi.core.base;
+import kiwi.core.node;
 import kiwi.core.commons;
+import kiwi.core.datastrategy;
 
 alias int DataAccessFlag;
 
@@ -11,20 +12,12 @@ enum{ READ = 1, WRITE=2, READ_WRITE = READ | WRITE
 
 class OutputPort
 {
-    this(string name, Node n, DataStrategy dataStrategy = null)
+    this(string name, Node n, DataStrategy dataStrategy )
     {
         _node = n;
         _parent = null;
         _name = name;
         _setDataStrategy(dataStrategy); 
-    }
-
-    this(string name, Node n, OutputPort parent, DataStrategy dataStrategy)
-    {
-        _node = n;
-        _parent = parent;
-        _name = name;
-        _setDataStrategy(dataStrategy);
     }
     
     @property
@@ -34,12 +27,12 @@ class OutputPort
             return _node;
         }
 
-        bool hasDataStrategy()
+        bool hasDataStrategy() const
         {
             return _dataStrategy !is null;
         }
         
-        bool isComposite() // TODO
+        bool isComposite() const // TODO
         {
             return false;
         }
@@ -61,25 +54,15 @@ class OutputPort
             else return null;
         }
 
-        DataAccessFlag accessFlags()
+        DataAccessFlag accessFlags() const
         {
             if ( hasDataStrategy ) return _dataStrategy.accessFlags;
             else return 0;
         }
 
-        string name()
+        string name() const
         {
             return _name;
-        }
-
-        OutputPortModifier modify()
-        {
-            return _modifier;
-        }
-
-        bool isAlterable()
-        {
-            return _modifier !is null;
         }
 
         InputPort[] connections()
@@ -101,7 +84,7 @@ class OutputPort
         return port.isCompatible(this);
     }
 
-    bool isConnectedTo( InputPort port )
+    bool isConnectedTo( InputPort port ) const
     {
         foreach( p ; _connections)
         {
@@ -156,8 +139,7 @@ private:
     Node    _node;
     string  _name;
     InputPort[] _connections;
-    OutputPortModifier _modifier;
-    OutputPort _parent;
+    OutputPort _parent; // deprecated
     
     // components
 package DataStrategy _dataStrategy;
@@ -170,11 +152,14 @@ package DataStrategy _dataStrategy;
 
 class InputPort
 {
-    this(string portName, Node n, CompatibilityStrategy comp)
+    this(string portName, Node n, CompatibilityStrategy comp
+        , DataAccessFlag flags = READ, bool optional = false)
     {
         _name = portName;
         _node = n;
         _compatibilityStrategy = comp;
+        _accessFlags = flags;
+        _optional = optional;
     }
     
     @property
@@ -191,7 +176,7 @@ class InputPort
             return null; 
         }
             
-        DataAccessFlag accessFlags()
+        DataAccessFlag accessFlags() const
         {
             return _accessFlags;
         }
@@ -201,16 +186,25 @@ class InputPort
             return _connection;
         }
 
-        bool isConnected()
+        bool isConnected() const
         {
             return _connection !is null;
         }
+
+        bool isOptional() const
+        {
+            return true;
+        }
         
-        bool hasCompatibilityStrategy()
+        bool hasCompatibilityStrategy() const
         {
             return _compatibilityStrategy !is null;
         }
 
+        bool isOptional()
+        {
+            return _optional;
+        }
     }
 
     bool isCompatible( OutputPort port )
@@ -226,7 +220,7 @@ class InputPort
         return true;
     }
 
-    bool isConnectedTo( OutputPort port )
+    bool isConnectedTo( OutputPort port ) const
     {
         return _connection is port;
     }
@@ -282,8 +276,8 @@ private:
     Node _node;
     DataAccessFlag _accessFlags;
     string _name;
+    bool _optional;
     OutputPort _connection;
-    InputPortModifier _modifier;
     // components
     CompatibilityStrategy  _compatibilityStrategy;
     //PortInfoStrategy       _portInfoStrategy;
@@ -291,8 +285,24 @@ private:
 
 
 
+// ---------------------------
 
-// -----------------------------------------------------------------------------
+
+interface DataStrategy
+{
+    enum{ USER = 0, ENGINE = 1 };
+    @property
+    {
+        Data data();
+        DataTypeInfo dataType();
+        DataAccessFlag accessFlags() const;
+        int componentFlags() const;
+        final string StrategyType() const { return "DataStrategy"; }
+    }
+        
+}
+
+
 
 interface CompatibilityStrategy
 {
@@ -367,58 +377,6 @@ class NeverCompatible : CompatibilityStrategy
 }
 
 
-// ---------------------------
-
-
-interface DataStrategy
-{
-    enum{ USER = 0, ENGINE = 1 };
-    @property
-    {
-        Data data();
-        DataTypeInfo dataType();
-        DataAccessFlag accessFlags();
-        int componentFlags();
-        final string StrategyType() { return "DataStrategy"; }
-    }
-        
-}
-
-
-
-class InputPortModifier
-{
-    this(InputPort port)
-    {
-        _port = port;
-    }
-    
-    bool rename(string newName)
-    {
-        if(_port._modifier !is this) return false;
-        _port._name = newName;
-        return true;
-    }
-    
-    private InputPort _port;
-}
-
-class OutputPortModifier
-{
-    this(OutputPort port)
-    {
-        _port = port;
-    }
-    
-    bool rename(string newName)
-    {
-        if(_port._modifier !is this) return false;
-        _port._name = newName;
-        return true;
-    }
-    private OutputPort _port;
-}
-
 
 
 //            #####   #####    ####   #####    ####
@@ -431,7 +389,6 @@ class OutputPortModifier
 
 version(unittest)
 {
-    import kiwi.dynamic.compatibility;
     import kiwi.core.datastrategy;
 
     Data NewContainerTest()
@@ -439,7 +396,7 @@ version(unittest)
         return new ContainerTest();
     }
 
-    class SubContainerTest : kiwi.core.base.Data
+    class SubContainerTest : Data
     {
         static this()
         {
@@ -457,7 +414,7 @@ version(unittest)
        
     } 
 
-    class ContainerTest : kiwi.core.base.Data
+    class ContainerTest : Data
     {
         mixin DeclareSubDataTypes!(SubContainerTest,SubContainerTest);
 

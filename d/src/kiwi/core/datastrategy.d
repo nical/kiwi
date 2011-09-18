@@ -5,30 +5,28 @@ import kiwi.core.data;
 import kiwi.core.commons;
 
 
-
-
-
-
 class UserAllocatedDataStrategy : DataStrategy
 {
     this( Data data_, DataAccessFlag flags_ )
     {
         _data = data_;
         _dataType = data_.type;
+        _accessFlags = flags_;
     }
 
     this( DataTypeInfo dataTypeInfo, DataAccessFlag flags_ )
     {
         _data = null;
         _dataType = dataTypeInfo;
+        _accessFlags = flags_;
     }
     
     override
     {
         @property
         {
-            int componentFlags(){ return DataStrategy.USER; }
-            DataAccessFlag accessFlags(){ return _accessFlags; }
+            int componentFlags() const { return DataStrategy.USER; }
+            DataAccessFlag accessFlags() const { return _accessFlags; }
             Data data(){ return _data; }
             DataTypeInfo dataType(){ return _dataType; }
             
@@ -43,40 +41,9 @@ private:
 
 
 
-class SubDataStrategy : DataStrategy
-{
-    this( Data data_, DataAccessFlag flags_ )
-    {
-        _data = data_;
-        _dataType = data_.type;
-    }
-
-    this( DataTypeInfo dataTypeInfo, DataAccessFlag flags_ )
-    {
-        _data = null;
-        _dataType = dataTypeInfo;
-    }
-    
-    override
-    {
-        @property
-        {
-            int componentFlags(){ return DataStrategy.USER; }
-            DataAccessFlag accessFlags(){ return _accessFlags; }
-            Data data(){ return _data; }
-            DataTypeInfo dataType(){ return _dataType; }
-            
-        }
-    }
-private:
-    Data _data;
-    DataTypeInfo _dataType;
-    DataAccessFlag _accessFlags;
-}
-
 class FromInputDataStrategy : DataStrategy
 {
-    this(InPort port, DataTypeInfo dataTypeInfo)
+    this(InputPort port, DataTypeInfo dataTypeInfo)
     {
         _inputPort = port;
         _dataType = dataTypeInfo;
@@ -98,11 +65,11 @@ class FromInputDataStrategy : DataStrategy
             {
                 return _dataType;
             }
-            DataAccessFlag accessFlags()
+            DataAccessFlag accessFlags() const
             {
                 return _inputPort.accessFlags();
             }
-            int componentFlags()
+            int componentFlags() const
             {
                 return DataStrategy.USER;
             }
@@ -110,7 +77,7 @@ class FromInputDataStrategy : DataStrategy
     }
     
 private:
-    InPort _inputPort;
+    InputPort _inputPort;
     DataTypeInfo _dataType;
 }
 

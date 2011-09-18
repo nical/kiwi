@@ -1,14 +1,56 @@
 module kiwi.core.nodetree;
 
 import kiwi.core.commons;
-import kiwi.core.base;
+import kiwi.core.node;
 
-interface NodeTree
+class NodeTree
 {
+    enum{ SEQUENTIAL, CONCURRENT };
+
     @property
     {
-        NodeTree[] children();
-        NodeTree parent();
+        int execution()
+        {
+            return _type;
+        }
+        bool isRoot()
+        {
+            return _parent is null;
+        }
+        bool isLeaf()
+        {
+            return _children.length == 0;
+        }
+        NodeTree[] children()
+        {
+            return _children;
+        }
         
+        NodeTree parent()
+        {
+            return _parent;
+        }
+        Node[] nodes()
+        {
+            if( isLeaf )
+                return _nodes;
+
+            Node[] result;
+            foreach( child ; _children )
+                result ~= child.nodes;
+            return result;
+        }
     }
+
+    void update()
+    {
+        foreach( n ; nodes )
+            n.update();
+    }
+
+package:
+    NodeTree    _parent;
+    NodeTree[]  _children;
+    Node[]      _nodes;
+    int         _type;
 } 

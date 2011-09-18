@@ -9,7 +9,9 @@ import kiwi.core.nodetree;
 
 class Node
 {
-    this( string nodeName, InputDescriptor[] inputDesc, OutputDescriptor[] outputDesc  )
+    this( string nodeName
+        , InputDescriptor[] inputDesc, OutputDescriptor[] outputDesc
+        , NodeUpdater updater = null)
     {
         _name = nodeName;
 
@@ -19,6 +21,8 @@ class Node
 
         foreach( desc ; outputDesc )
             _outputs ~= new OutputPort( desc.name, this, desc.data );    
+
+        _updater = updater;
     }
     
 
@@ -34,20 +38,41 @@ class Node
         return _outputs[index];
     }
 
-    InputPort[] inputs()
+    @property
     {
-        return _inputs;
-    }
 
-    OutputPort[] outputs()
-    {
-        return _outputs;
-    }
+        InputPort[] inputs()
+        {
+            return _inputs;
+        }
 
-    NodeTree nodeTree()
-    {
-        return _nodeTree;
-    }
+        OutputPort[] outputs()
+        {
+            return _outputs;
+        }
+
+        uint inputCount() const
+        {
+            return _inputs.length;
+        }
+
+        uint outputCount() const
+        {
+            return _outputs.length;
+        }
+        
+        NodeTree nodeTree()
+        {
+            return _nodeTree;
+        }
+
+        void update()
+        {
+            mixin( logFunction!"Node.update" );
+            if(_updater !is null) _updater.update(this);
+        }
+    }//properties
+    
 private:
     InputPort[]     _inputs;
     OutputPort[]    _outputs;
@@ -78,7 +103,7 @@ struct InputDescriptor
 }
 
 
-class FunctionUpdate
+class FunctionUpdate : NodeUpdater
 {
     alias void function(Data[],Data[]) UpdateFunction;
 
@@ -86,10 +111,46 @@ class FunctionUpdate
     {
         _update = func;
     }
-    void update(Node)
+    
+    override void update(Node n)
     {
-        
+        mixin( logFunction!"FunctionUpdate.update" );
+        Data[] inputs;
+        Data[] outputs;
+        foreach( input ; n.inputs )
+        {
+            if ( !input.isOptional && !input.isConnected )
+                return;
+            inputs ~= input.data;
+        }
+        foreach( output ; n.outputs )
+            outputs ~= output.data;
+
+        _update(inputs, outputs);
     }
     
     UpdateFunction _update;
+}
+
+version(unittest)
+{
+    int execCount = 0;
+
+    void updateTestFunc(Data[],Data[])
+    {
+        mixin( logFunction!"updateTestFunc" );
+        ++execCount;
+    }
+}
+
+unittest
+{
+    mixin( logTest!"kiwi.core.core" );
+
+    auto n = new Node("dummy",[],[], new FunctionUpdate(&updateTestFunc) );
+
+    n.update;
+    n.update;
+
+    assert( execCount == 2 );
 }

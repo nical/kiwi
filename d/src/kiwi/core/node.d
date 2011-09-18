@@ -147,10 +147,10 @@ unittest
 {
     mixin( logTest!"kiwi.core.core" );
 
-    auto n = new Node("dummy",[],[], new FunctionUpdate(&updateTestFunc) );
+    auto n = new Node( "dummy",[],[], new FunctionUpdate(&updateTestFunc) );
 
+    assert( execCount == 0 );
     n.update;
     n.update;
-
     assert( execCount == 2 );
 }

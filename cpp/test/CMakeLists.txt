@@ -1,5 +1,5 @@
 message( "--------------------------------------------------------------" )
-message( "                         Kiwi::Tests                          " )
+message( " Kiwi::Tests " )
 message( "--------------------------------------------------------------" )
 
 
@@ -12,59 +12,23 @@ include_directories (/usr/include/cairo/)
 link_directories (${PROJECT_BINARY_DIR})
 
 
-
-
-if(DEFINED BUILD_KIWI_IMAGE)	
-	SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
-		image/CairoImageContainerTest
-		image/MixedImageTest
-		image/CopyImageTest
-		image/ChannelOffsetFilterTest
-		image/LinearGradientContainerTest
-		image/ImageContainerTest
-    image/gil/gilTest
-#		image/ContrastTest
-	)
-endif(DEFINED BUILD_KIWI_IMAGE)
-
-if(DEFINED BUILD_KIWI_TEXT)	
-	SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
-		text/PlainTextContainerTest
-		text/PlainTextLoaderTest
-	)
+if(DEFINED BUILD_KIWI_TEXT)
+SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
+# text/PlainTextContainerTest
+)
 endif(DEFINED BUILD_KIWI_TEXT)
 
 
 SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
-#	TestSuite
-#	core/NodeTest
-  mpl/TypeListTest
-  mpl/TupleTest
-  mpl/TupleFunctorTest
-  core/StaticNodeTest
-	core/FactoryTest
-	core/TagTest
-	utils/ConnectorTest
-	utils/UnorderedArrayTest
-	utils/typesTest
-	utils/randomTest
-# utils/ClassInfoTest
-	core/FilterTest
-#	core/MetaFilterTest
-	generic/PointTest
-	generic/ArrayContainerTest
-	generic/StructuredArrayContainerTest
-	generic/MultiArrayContainerTest
-	generic/NumberContainerTest
-	generic/PointVectorContainerTest
-	generic/RectangleContainerTest
-   )
+core/Node_Test
+)
 
 message("-- Kiwi Library : ${LIBKIWI_NAME}")
 
 FOREACH(FILE ${KIWI_TESTS_SRC})
   add_executable(${FILE} ${FILE})
   target_link_libraries (${FILE} ${LIBKIWI_NAME} )
-#  add_test(${FILE} ${FILE})
+# add_test(${FILE} ${FILE})
 ENDFOREACH(FILE)
+
 

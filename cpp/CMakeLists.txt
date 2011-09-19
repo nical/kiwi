@@ -7,21 +7,18 @@
 # Project definition
 # -----------------------------------------------------------------------------
 project (Kiwi)
-cmake_minimum_required (VERSION 2.4) 
+cmake_minimum_required (VERSION 2.4)
 
 #comment/uncomment some of the folowing lines to enable/disable part of the projects
 set(BUILD_KIWI_TESTS "yes") #to build the tests (recommended !)
-set(BUILD_KIWI_IMAGE "yes") #to build kiwi::image
-#set(BUILD_KIWI_TEXT "yes") #to build kiwi::text
-#set(BUILD_KIWI_CMDLINE "yes") #to build the command-line app
-#set(BUILD_DDD_FLAG "yes") #to build using -g argument for debug purposes
+#set(BUILD_DDD_FLAG "yes") #to build using -g argument for debug
 
 #so that each test is built with it's own executable
 add_definitions(-DKIWI_TEST_MAIN)
 
 
 message( "--------------------------------------------------------------" )
-message( "                         Kiwi	  	                            " )
+message( " Kiwi " )
 message( "--------------------------------------------------------------" )
 
 message(STATUS "Source DIR is ${PROJECT_SOURCE_DIR}")
@@ -44,7 +41,7 @@ endif (APPLE)
 # Check packages
 # -----------------------------------------------------------------------------
 
-# tell CMake to search first in directories listed in CMAKE_MODULE_PATH when 
+# tell CMake to search first in directories listed in CMAKE_MODULE_PATH when
 # you use FIND_PACKAGE() or INCLUDE()
 set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 list( APPEND CMAKE_MODULE_PATH . )
@@ -57,18 +54,18 @@ list( APPEND CMAKE_MODULE_PATH . )
 set ( CMAKE_PREFIX_PATH "/usr:/usr/local:/opt/local:${CMAKE_PREFIX_PATH}" )
 message( "-- CMAKE_PREFIX_PATH = " ${CMAKE_PREFIX_PATH} )
 
-# Find the boost library 
+# Find the boost library
 FIND_PACKAGE(Boost REQUIRED)
 # MACPORT
 if(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
-	SET( MACPORT_BOOST_INCLUDES "/opt/local/include/boost")
-	SET( MACPORT_BOOST_LIBS "/opt/local/lib/")
+SET( MACPORT_BOOST_INCLUDES "/opt/local/include/boost")
+SET( MACPORT_BOOST_LIBS "/opt/local/lib/")
 
-   	include_directories( ${MACPORT_BOOST_INCLUDES} )
-   	link_directories( ${MACPORT_BOOST_LIBS} )
-	set( MACPORT_BOOST_FOUND TRUE) 	
+    include_directories( ${MACPORT_BOOST_INCLUDES} )
+    link_directories( ${MACPORT_BOOST_LIBS} )
+set( MACPORT_BOOST_FOUND TRUE)
 
-	message( "-- Apple plateform detected : Boost lib path added." )
+message( "-- Apple plateform detected : Boost lib path added." )
 endif(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
 
 if ( Boost_FOUND )
@@ -76,42 +73,15 @@ if ( Boost_FOUND )
    include_directories( ${Boost_INCLUDE_DIR} )
 endif ( Boost_FOUND )
 
-#Find the cairo library (only if kiwi::image has to be built) 
-if(DEFINED BUILD_KIWI_IMAGE)
-	find_package(Cairo REQUIRED)
-
-	# MACPORT
-	if(DEFINED APPLE AND NOT DEFINED ${MACPORT_CAIRO_FOUND})
-		SET( MACPORT_CAIRO_INCLUDES "/opt/local/include/cairo")
-		SET( MACPORT_CAIRO_LIBS "/opt/local/lib/")
-
-		include_directories( ${MACPORT_CAIRO_INCLUDES} )
-		link_directories( ${MACPORT_CAIRO_LIBS} )
-		set( MACPORT_CAIRO_FOUND TRUE) 	
-
-		message( "-- Apple plateform detected : Cairo lib path added." )
-	else(DEFINED APPLE AND NOT DEFINED ${MACPORT_CAIRO_FOUND})
-		if ( Cairo_FOUND )
-			message( "-- Cairo found. include=${Cairo_INCLUDE_DIR}" )
-			include_directories( ${Cairo_INCLUDE_DIR} )
-			
-		else ( Cairo_FOUND )
-			# if cairo is not found, dependencies in kiwi::image wont be satisfied
-			# so just disable kiwi::image in the build process
-			set(BUILD_KIWI_IMAGE "no")
-			message("-- Cairo not found : kiwi::image excluded from build.")
-		endif ( Cairo_FOUND )
-	endif(DEFINED APPLE AND NOT DEFINED ${MACPORT_CAIRO_FOUND})
-endif(DEFINED BUILD_KIWI_IMAGE)
 
 
 # -----------------------------------------------------------------------------
 # Defines some variables
 # -----------------------------------------------------------------------------
-set ( LIBKIWI_NAME "Kiwi${SUFFIXLIB}" )
+set ( LIBKIWI_NAME "Kiwicpp${SUFFIXLIB}" )
 
 # -----------------------------------------------------------------------------
-# Compile flags 
+# Compile flags
 # -----------------------------------------------------------------------------
 SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -gdwarf-2)
 
@@ -126,12 +96,7 @@ message( "CXX Flags: ${CMAKE_CXX_FLAGS}" )
 # the library itself
 add_subdirectory(src/kiwi)
 
-# command-line app
-if(DEFINED BUILD_KIWI_CMDLINE)
-	add_subdirectory (src/software)
-endif(DEFINED BUILD_KIWI_CMDLINE)
-
 # tests
 if(DEFINED BUILD_KIWI_TESTS)
-	add_subdirectory (test)
+add_subdirectory (test)
 endif(DEFINED BUILD_KIWI_TESTS)

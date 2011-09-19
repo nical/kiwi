@@ -13,20 +13,23 @@
 #define KIWI_ENDBLOCK_1 "\033[1;30m[end block] "
 #define KIWI_ENDBLOCK_2 " "
 
-
 #ifdef USE_SCOPEDBLOCK_MACRO
-#define SCOPEDBLOCK_MACRO(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::out, kiwi::DEBUG_3);
-#define FUNCTIONBLOCK_MACRO kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNCTION__, kiwi::out, kiwi::DEBUG_3);
+#define SCOPEDBLOCK(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::log, KIWI_DEBUG_3);
+#define FUNCTIONBLOCK kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNCTION__, kiwi::log, KIWI_DEBUG_3);
 #else
-#define SCOPEDBLOCK_MACRO(message) 
-#define FUNCTIONBLOCK_MACRO   
+#define SCOPEDBLOCK(message) \
+
+#define FUNCTIONBLOCK \
+
 #endif
 
 #define KIWI_BIT( n ) 1 << n
 
 namespace kiwi{
-  
-// print targets 
+
+
+// print targets
+/*
 enum{ None      = 0
     , All       = -1
     , Default   = KIWI_BIT(  0 )
@@ -60,6 +63,41 @@ enum{ None      = 0
     , DEBUG_ALL = DEBUG_0|DEBUG_1|DEBUG_2|DEBUG_3|DEBUG_4|DEBUG_5 
     , WARNING_ALL = WARNING_0|WARNING_1|WARNING_2|WARNING_3|WARNING_4|WARNING_5 
 };
+*/
+
+#define KIWI_NONE       0
+#define KIWI_ALL        -1
+#define KIWI_DEFAULT    KIWI_BIT(  0 )
+#define KIWI_TEST_0     KIWI_BIT(  1 )
+#define KIWI_TEST_1     KIWI_BIT(  2 )
+#define KIWI_TEST_2     KIWI_BIT(  3 )
+#define KIWI_TEST_3     KIWI_BIT(  4 )
+#define KIWI_TEST_4     KIWI_BIT(  5 )
+#define KIWI_TEST_5     KIWI_BIT(  6 )
+#define KIWI_DEBUG_0    KIWI_BIT(  7 )
+#define KIWI_DEBUG_1    KIWI_BIT(  8 )
+#define KIWI_DEBUG_2    KIWI_BIT(  9 )
+#define KIWI_DEBUG_3    KIWI_BIT( 10 )
+#define KIWI_DEBUG_4    KIWI_BIT( 11 )
+#define KIWI_DEBUG_5    KIWI_BIT( 12 )
+#define KIWI_WARNING_0  KIWI_BIT( 13 )
+#define KIWI_WARNING_1  KIWI_BIT( 14 )
+#define KIWI_WARNING_2  KIWI_BIT( 15 )
+#define KIWI_WARNING_3  KIWI_BIT( 16 )
+#define KIWI_WARNING_4  KIWI_BIT( 17 )
+#define KIWI_WARNING_5  KIWI_BIT( 18 )
+#define KIWI_INFO_0     KIWI_BIT( 19 )
+#define KIWI_INFO_1     KIWI_BIT( 20 )
+#define KIWI_INFO_2     KIWI_BIT( 21 )
+#define KIWI_INFO_3     KIWI_BIT( 22 )
+#define KIWI_INFO_4     KIWI_BIT( 23 )
+#define KIWI_INFO_5     KIWI_BIT( 24 )
+#define KIWI_ERROR      KIWI_BIT( 25 )
+#define KIWI_TEST_ALL   KIWI_TEST_0|KIWI_TEST_1|KIWI_TEST_2|KIWI_TEST_3|KIWI_TEST_4|KIWI_TEST_5
+#define KIWI_INFO_ALL   KIWI_INFO_0|KIWI_INFO_1|KIWI_INFO_2|KIWI_INFO_3|KIWI_INFO_4|KIWI_INFO_5
+#define KIWI_DEBUG_ALL  KIWI_DEBUG_0|KIWI_DEBUG_1|KIWI_DEBUG_2|KIWI_DEBUG_3|KIWI_DEBUG_4|KIWI_DEBUG_5
+#define KIWI_WARNING_ALL KIWI_WARNING_0|KIWI_WARNING_1|KIWI_WARNING_2|KIWI_WARNING_3|KIWI_WARNING_4|KIWI_WARNING_5
+
 
 kiwi::int32 WARNING_LEVEL( kiwi::int32 n );
 kiwi::int32 DEBUG_LEVEL( kiwi::int32 n );
@@ -80,7 +118,7 @@ public:
   /**
    * Constructor;
    */ 
-  DebugStream(std::ostream& stdStream, kiwi::int32 targets = kiwi::All){
+  DebugStream(std::ostream& stdStream, kiwi::int32 targets = KIWI_ALL){
     _stream = &stdStream;
     _endl = true;
     indentation = 0;
@@ -117,21 +155,21 @@ public:
   /**
    * Debug shortcut too print foo.
    */ 
-  DebugStream& foo(kiwi::int32 targets = kiwi::DEBUG_5) {
+  DebugStream& foo(kiwi::int32 targets = KIWI_DEBUG_5) {
     if(has(targets))
       (*this) << emphasePrefix() <<"foo" << resetFormat(); endl();
     return *this; }
   /**
    * Debug shortcut too print bat.
    */ 
-  DebugStream& bar(kiwi::int32 targets = kiwi::DEBUG_5) {
+  DebugStream& bar(kiwi::int32 targets = KIWI_DEBUG_5) {
     if(has(targets))
         (*this) << emphasePrefix() <<"bar" << resetFormat(); endl();
     return *this; }
   /**
    * Debug shortcut too print plop.
    */ 
-  DebugStream& plop(kiwi::int32 targets = kiwi::DEBUG_5) {
+  DebugStream& plop(kiwi::int32 targets = KIWI_DEBUG_5) {
     if(has(targets))
         (*this) << emphasePrefix() <<"plop" << resetFormat(); endl();
     return *this; }
@@ -228,7 +266,7 @@ DebugStream& operator << (DebugStream& stream, EndOfLine& eol);
 class ScopedBlock{
 public:
   ScopedBlock(const kiwi::string& message,DebugStream& stream
-    , kiwi::int32 targets = kiwi::All )
+    , kiwi::int32 targets = KIWI_ALL)
   {
     _stream = &stream;
     _msg = message;
@@ -254,7 +292,7 @@ DebugStream& operator << (DebugStream& stream, EndOfLine& eol);
 
 
 }//namespace
-extern utils::DebugStream out;
+extern utils::DebugStream log;
 extern utils::EndOfLine endl;
 }//namespace
 

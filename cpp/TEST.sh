@@ -35,28 +35,26 @@ fi
 
 
 
-cd ./test
+./BUILD.sh || exit
 
-scons -j4 || exit
 echo '\n\n'
 
 
+if [ "$core" = "yes" ]
+then
+./build/test/core/Node_Test ||
+exit
+fi
+
 if [ "$utils" = "yes" ]
 then
-./utils/DebugStreamTest ||
+echo 'no test for target: utils' ||
 exit
 fi
 
 if [ "$mpl" = "yes" ]
 then
-./mpl/TypeListTest &&
-./mpl/IsRelatedTest &&
-./mpl/TupleTest &&
-./mpl/TypeListTransform2Test &&
-./mpl/NumberTest &&
-./mpl/ApplyBitwiseOperatorTest &&
-./mpl/FillTypeListTest &&
-./mpl/MakeContainerTest ||
+echo "mpl" ||
 exit
 fi
 
@@ -66,14 +64,6 @@ echo 'no test for target: generic\n' ||
 exit
 fi
 
-if [ "$core" = "yes" ]
-then
-./core/PortTest &&
-./core/DynamicPortTest &&
-./core/ContainerTest &&
-./core/ContainerManagerTest ||
-exit
-fi
 
 if [ "$image" = "yes" ]
 then

@@ -1,23 +1,21 @@
 
-#include "DebugStream.hpp"
+#include "kiwi/utils/DebugStream.hpp"
 #include <string.h>
 
 namespace kiwi{
 
-
-kiwi::int32 DEBUG_LEVEL( kiwi::int32 n )  { return kiwi::DEBUG_0   << (n<5?n:5); }
-kiwi::int32 WARNING_LEVEL( kiwi::int32 n ){ return kiwi::WARNING_0 << (n<5?n:5); }
-kiwi::int32 TEST_LEVEL( kiwi::int32 n )   { return kiwi::TEST_0    << (n<5?n:5); }
-kiwi::int32 INFO_LEVEL( kiwi::int32 n )   { return kiwi::INFO_0    << (n<5?n:5); }
-
+kiwi::int32 DEBUG_LEVEL( kiwi::int32 n )  { return KIWI_DEBUG_0   << (n<5?n:5); }
+kiwi::int32 WARNING_LEVEL( kiwi::int32 n ){ return KIWI_WARNING_0 << (n<5?n:5); }
+kiwi::int32 TEST_LEVEL( kiwi::int32 n )   { return KIWI_TEST_0    << (n<5?n:5); }
+kiwi::int32 INFO_LEVEL( kiwi::int32 n )   { return KIWI_INFO_0    << (n<5?n:5); }
 
 namespace utils{
 
 
 DebugStream::ProxyStream& DebugStream::error(){
-  if( has(kiwi::ERROR) )
+  if( has(KIWI_ERROR) )
     (*this) << errorPrefix();
-  return (*this)[kiwi::ERROR];
+  return (*this)[KIWI_ERROR];
 }
 
 DebugStream::ProxyStream& DebugStream::warning(int32 level){
@@ -65,14 +63,15 @@ void DebugStream::beginBlock(const kiwi::string& message){
   }
   ++indentation;
 }
+
 void DebugStream::endBlock(const kiwi::string& message){
-  --indentation;
-  if(has(kiwi::DEBUG_LEVEL(3))){
-  *this << emphasePrefix() << KIWI_ENDBLOCK_1 << resetFormat()
-    << message
-    << emphasePrefix() << KIWI_ENDBLOCK_2 << resetFormat();
-  endl();
-  }
+	--indentation;
+	if(has(kiwi::DEBUG_LEVEL(3))){
+		*this << emphasePrefix() << KIWI_ENDBLOCK_1 << resetFormat()
+			<< message
+			<< emphasePrefix() << KIWI_ENDBLOCK_2 << resetFormat();
+		endl();
+	}
 }
 
 const char*  DebugStream::infoPrefix()
@@ -229,45 +228,45 @@ void DebugStream::parseArgs(int argc, char** argv){
   for(kiwi::int32 i = 1; i < argc; ++i){
     if(printOption){
       if( argv[i][0] == '-' ) { return; }
-      if(!strcmp(argv[i],      "None"      )){ _targets  = kiwi::None;     }
-      else if(!strcmp(argv[i], "All"       )){ _targets  = kiwi::All;      }
-      else if(!strcmp(argv[i], "Default"   )){ _targets |= kiwi::Default;  }
-      else if(!strcmp(argv[i], "TEST_0"    )){ _targets |= kiwi::TEST_0;   }
-      else if(!strcmp(argv[i], "TEST_1"    )){ _targets |= kiwi::TEST_1;   }
-      else if(!strcmp(argv[i], "TEST_2"    )){ _targets |= kiwi::TEST_2;   }
-      else if(!strcmp(argv[i], "TEST_3"    )){ _targets |= kiwi::TEST_3;   }
-      else if(!strcmp(argv[i], "TEST_4"    )){ _targets |= kiwi::TEST_4;   }
-      else if(!strcmp(argv[i], "TEST_5"    )){ _targets |= kiwi::TEST_5;   }
-      else if(!strcmp(argv[i], "DEBUG_0"   )){ _targets |= kiwi::DEBUG_0;  }
-      else if(!strcmp(argv[i], "DEBUG_1"   )){ _targets |= kiwi::DEBUG_1;  }
-      else if(!strcmp(argv[i], "DEBUG_2"   )){ _targets |= kiwi::DEBUG_2;  }
-      else if(!strcmp(argv[i], "DEBUG_3"   )){ _targets |= kiwi::DEBUG_3;  }
-      else if(!strcmp(argv[i], "DEBUG_4"   )){ _targets |= kiwi::DEBUG_4;  }
-      else if(!strcmp(argv[i], "DEBUG_5"   )){ _targets |= kiwi::DEBUG_5;  }
-      else if(!strcmp(argv[i], "WARNING_0" )){ _targets |= kiwi::WARNING_0;}
-      else if(!strcmp(argv[i], "WARNING_1" )){ _targets |= kiwi::WARNING_1;}
-      else if(!strcmp(argv[i], "WARNING_2" )){ _targets |= kiwi::WARNING_2;}
-      else if(!strcmp(argv[i], "WARNING_3" )){ _targets |= kiwi::WARNING_3;}
-      else if(!strcmp(argv[i], "WARNING_4" )){ _targets |= kiwi::WARNING_4;}
-      else if(!strcmp(argv[i], "WARNING_5" )){ _targets |= kiwi::WARNING_5;}
-      else if(!strcmp(argv[i], "INFO_0"    )){ _targets |= kiwi::INFO_0;   }
-      else if(!strcmp(argv[i], "INFO_1"    )){ _targets |= kiwi::INFO_1;   }
-      else if(!strcmp(argv[i], "INFO_2"    )){ _targets |= kiwi::INFO_2;   }
-      else if(!strcmp(argv[i], "INFO_3"    )){ _targets |= kiwi::INFO_3;   }
-      else if(!strcmp(argv[i], "INFO_4"    )){ _targets |= kiwi::INFO_4;   }
-      else if(!strcmp(argv[i], "INFO_5"    )){ _targets |= kiwi::INFO_5;   }
-      else if(!strcmp(argv[i], "ERROR"     )){ _targets |= kiwi::ERROR;    }
-      else if(!strcmp(argv[i], "INFO_ALL"  )){ _targets |= kiwi::INFO_ALL; }
-      else if(!strcmp(argv[i], "TEST_ALL"  )){ _targets |= kiwi::TEST_ALL; }
-      else if(!strcmp(argv[i], "DEBUG_ALL" )){ _targets |= kiwi::DEBUG_ALL;}
-      else if(!strcmp(argv[i],"WARNING_ALL")){ _targets |=kiwi::WARNING_ALL;}
+      if(!strcmp(argv[i],      "None"      )){ _targets  = KIWI_NONE;     }
+      else if(!strcmp(argv[i], "All"       )){ _targets  = KIWI_ALL;      }
+      else if(!strcmp(argv[i], "Default"   )){ _targets |= KIWI_DEFAULT;  }
+      else if(!strcmp(argv[i], "TEST_0"    )){ _targets |= KIWI_TEST_0;   }
+      else if(!strcmp(argv[i], "TEST_1"    )){ _targets |= KIWI_TEST_1;   }
+      else if(!strcmp(argv[i], "TEST_2"    )){ _targets |= KIWI_TEST_2;   }
+      else if(!strcmp(argv[i], "TEST_3"    )){ _targets |= KIWI_TEST_3;   }
+      else if(!strcmp(argv[i], "TEST_4"    )){ _targets |= KIWI_TEST_4;   }
+      else if(!strcmp(argv[i], "TEST_5"    )){ _targets |= KIWI_TEST_5;   }
+      else if(!strcmp(argv[i], "DEBUG_0"   )){ _targets |= KIWI_DEBUG_0;  }
+      else if(!strcmp(argv[i], "DEBUG_1"   )){ _targets |= KIWI_DEBUG_1;  }
+      else if(!strcmp(argv[i], "DEBUG_2"   )){ _targets |= KIWI_DEBUG_2;  }
+      else if(!strcmp(argv[i], "DEBUG_3"   )){ _targets |= KIWI_DEBUG_3;  }
+      else if(!strcmp(argv[i], "DEBUG_4"   )){ _targets |= KIWI_DEBUG_4;  }
+      else if(!strcmp(argv[i], "DEBUG_5"   )){ _targets |= KIWI_DEBUG_5;  }
+      else if(!strcmp(argv[i], "WARNING_0" )){ _targets |= KIWI_WARNING_0;}
+      else if(!strcmp(argv[i], "WARNING_1" )){ _targets |= KIWI_WARNING_1;}
+      else if(!strcmp(argv[i], "WARNING_2" )){ _targets |= KIWI_WARNING_2;}
+      else if(!strcmp(argv[i], "WARNING_3" )){ _targets |= KIWI_WARNING_3;}
+      else if(!strcmp(argv[i], "WARNING_4" )){ _targets |= KIWI_WARNING_4;}
+      else if(!strcmp(argv[i], "WARNING_5" )){ _targets |= KIWI_WARNING_5;}
+      else if(!strcmp(argv[i], "INFO_0"    )){ _targets |= KIWI_INFO_0;   }
+      else if(!strcmp(argv[i], "INFO_1"    )){ _targets |= KIWI_INFO_1;   }
+      else if(!strcmp(argv[i], "INFO_2"    )){ _targets |= KIWI_INFO_2;   }
+      else if(!strcmp(argv[i], "INFO_3"    )){ _targets |= KIWI_INFO_3;   }
+      else if(!strcmp(argv[i], "INFO_4"    )){ _targets |= KIWI_INFO_4;   }
+      else if(!strcmp(argv[i], "INFO_5"    )){ _targets |= KIWI_INFO_5;   }
+      else if(!strcmp(argv[i], "ERROR"     )){ _targets |= KIWI_ERROR;    }
+      else if(!strcmp(argv[i], "INFO_ALL"  )){ _targets |= KIWI_INFO_ALL; }
+      else if(!strcmp(argv[i], "TEST_ALL"  )){ _targets |= KIWI_TEST_ALL; }
+      else if(!strcmp(argv[i], "DEBUG_ALL" )){ _targets |= KIWI_DEBUG_ALL;}
+      else if(!strcmp(argv[i],"WARNING_ALL")){ _targets |= KIWI_WARNING_ALL;}
     }else if(!strcmp(argv[i], "-v"        )){ printOption = true; }
   }
-  if(!printOption) _targets = kiwi::All;
+  if(!printOption) _targets = KIWI_ALL;
 }
 
 
 }//namespace
-utils::DebugStream out(std::cout);
+utils::DebugStream log(std::cout);
 utils::EndOfLine endl;
 }//namespace

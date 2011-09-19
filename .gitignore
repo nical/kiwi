@@ -1,7 +1,11 @@
+*.o
+*.os
 *.cmake
 *.pro.user
 *Makefile*
 *CMakeFiles*
 build/*
+*/bin/*
 codeblocks/*
 *-build-desktop*
+*.dblite

@@ -11,7 +11,7 @@ namespace tutorial{
 FilterExample::FilterExample()
 : CanonicalFilter( 1 /*one writer input*/)
 {
-ScopedBlockMacro(scp_block, "FilterExample::constructor");
+SCOPEDBLOCK_MACRO(scp_block, "FilterExample::constructor");
 	// CanonicalFilter's constructor automatically adds one reader output port
 	// and one writer input port.
 	
@@ -26,7 +26,7 @@ void FilterExample::process()
 {
 	// a macro that creates an indentation block and closes it automatically
 	// at the end of the scop.
-	ScopedBlockMacro(proc_block, "AddArraysFilter::process()");
+	SCOPEDBLOCK_MACRO(proc_block, "AddArraysFilter::process()");
 
 	Debug::print() << "Allocate Reader #0" << endl();
 	myReader A( readerInputPort(0) );

@@ -2,9 +2,6 @@ module kiwi.text.basicfilters;
 
 
 import kiwi.core.all;
-import kiwi.dynamic.node;
-import kiwi.dynamic.port;
-import kiwi.dynamic.compatibility;
 import kiwi.text.data;
 
 import std.string;
@@ -17,6 +14,8 @@ import std.array;
 
 void applyUpperCase(Data[] input, Data[] output )
 {
+    mixin( logFunction!"text.upperCase" );
+    
     if (input is null     || output is null)     return;
     if (input.length == 0 || output.length == 0) return;
     
@@ -30,6 +29,8 @@ void applyUpperCase(Data[] input, Data[] output )
 
 void applyLowerCase(Data[] input, Data[] output )
 {
+    mixin( logFunction!"text.lowerCase" );
+    
     if (input is null     || output is null)     return;
     if (input.length == 0 || output.length == 0) return;
     
@@ -43,6 +44,7 @@ void applyLowerCase(Data[] input, Data[] output )
 
 void applyReplace(Data[] input, Data[] output )
 {
+    mixin( logFunction!"text.replace" );
     if (input is null    || output is null)     return;
     if (input.length < 2 || output.length == 0) return;
     
@@ -67,33 +69,40 @@ void applyReplace(Data[] input, Data[] output )
 Node NewUpperCaseFilter()
 {
     mixin( logFunction!"NewUpperCaseFilter" );
-    InputPortInitializer[] inputs   = [];
-    OutputPortInitializer[] outputs = [];
-    inputs  ~= InputPortInitializer("Input text", new DataTypeCompatibility(PlainTextContainer.Type),0);
-    outputs ~= OutputPortInitializer("Output text", PlainTextContainer.Type);
-    return new DynamicNode( inputs, outputs, &applyUpperCase );
+    return new Node
+    (
+        "UpperCase",
+        [ DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ) ],
+        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
+        new FunctionUpdate(&applyUpperCase)
+    );
 }
 
 Node NewLowerCaseFilter()
 {
     mixin( logFunction!"NewLowerCaseFilter" );
-    InputPortInitializer[] inputs   = [];
-    OutputPortInitializer[] outputs = [];
-    inputs  ~= InputPortInitializer("Input text", new DataTypeCompatibility(PlainTextContainer.Type),0);
-    outputs ~= OutputPortInitializer("Output text", PlainTextContainer.Type);
-    return new DynamicNode( inputs, outputs, &applyLowerCase );
+    return new Node
+    (
+        "UpperCase",
+        [ DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ) ],
+        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
+        new FunctionUpdate(&applyLowerCase)
+    );
 }
 
 Node NewTextReplaceFilter()
 {
-    mixin( logFunction!"NewTextReplaceFilter" );
-    InputPortInitializer[] inputs   = [];
-    OutputPortInitializer[] outputs = [];
-    inputs  ~= InputPortInitializer("Input text", new DataTypeCompatibility(PlainTextContainer.Type));
-    inputs  ~= InputPortInitializer("From",       new DataTypeCompatibility(PlainTextContainer.Type));
-    inputs  ~= InputPortInitializer("To",         new DataTypeCompatibility(PlainTextContainer.Type));
-    outputs ~= OutputPortInitializer("Output text", PlainTextContainer.Type);
-    return new DynamicNode( inputs, outputs, &applyReplace );
+    return new Node
+    (
+        "UpperCase",
+        [
+            DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ),
+            DeclareInput("Replace", new DataTypeCompatibility(PlainTextContainer.Type), READ ),
+            DeclareInput("With", new DataTypeCompatibility(PlainTextContainer.Type), READ )
+        ],
+        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
+        new FunctionUpdate(&applyReplace)
+    );
 }
 
 

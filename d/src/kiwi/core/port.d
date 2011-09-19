@@ -7,8 +7,9 @@ import kiwi.core.datastrategy;
 
 alias int DataAccessFlag;
 
-enum{ READ = 1, WRITE=2, READ_WRITE = READ | WRITE
-    , DATA=4, SIGNAL=8, SEMANTIC=16};
+enum{ READ=1, WRITE=2, READ_WRITE = READ|WRITE
+    , DATA=4, SIGNAL=8, SEMANTIC=16
+    , OPT=1};
 
 class OutputPort
 {
@@ -74,6 +75,11 @@ class OutputPort
         {
             for(int i = 0; i < _connections.length; ++i)
                 this.disconnect(_connections[i]);
+        }
+
+        bool isConnected()
+        {
+            return _connections.length != 0;
         }
         
     } // properties
@@ -170,6 +176,11 @@ class InputPort
             return _node;
         }
 
+        string name()
+        {
+            return _name;
+        }   
+
         Data data()
         {
             if (isConnected) return _connection.data;
@@ -212,7 +223,7 @@ class InputPort
         mixin( logFunction!"InputPort.isCompatible" );
         if ( !( accessFlags & port.accessFlags) && accessFlags != port.accessFlags )
         {
-            log.writeDebug(0,"incompatible flags ", accessFlags, " ", port.accessFlags, "\n" );
+            log.writeDebug(3,"incompatible flags ", accessFlags, " ", port.accessFlags, "\n" );
             return false;
         }
         if ( hasCompatibilityStrategy )
@@ -239,8 +250,8 @@ class InputPort
         
         this._connection = port;
         port._connections ~= this;
-        log.writeDebug(0,"connected\n");
-        return true;       
+        log.writeDebug(0,"connected");
+        return true;
     }
 
     /++

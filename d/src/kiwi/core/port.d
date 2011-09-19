@@ -84,6 +84,14 @@ class OutputPort
         
     } // properties
 
+    T dataAs(T)()
+    {
+        Data x;
+        static if ( __traits(compiles, x = new T ) )
+            return cast(T)data;
+        else
+            return ( (cast(ContainerWrapper!T)data).value );
+    }
     
     bool isCompatible( InputPort port )
     {
@@ -229,6 +237,14 @@ class InputPort
         if ( hasCompatibilityStrategy )
             return _compatibilityStrategy.isCompatible(this, port);
         return true;
+    }
+
+    T dataAs(T)()
+    {
+        static if ( __traits(compiles, cast(T)data ) )
+            return cast(T)data;
+        else
+            return ( (cast(ContainerWrapper!T)data).value );
     }
 
     bool isConnectedTo( OutputPort port ) const

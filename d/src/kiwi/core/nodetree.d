@@ -30,6 +30,13 @@ class NodeTree
         {
             return _parent;
         }
+
+        NodeTree root()
+        {
+            if( isRoot ) return this;
+            else return parent.root;
+        }   
+        
         Node[] nodes()
         {
             if( isLeaf )

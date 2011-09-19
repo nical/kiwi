@@ -83,10 +83,20 @@ private:
 class ContainerWrapper(dataType) : Data {
     alias dataType DataType;
     alias _data this;
+    alias dataType IsContainerWrapper;
     
 
     static this(){
-        _typeInfo = new DataTypeInfo("ContainerWrapper", [], false);
+        _typeInfo = new DataTypeInfo("ContainerWrapper"
+            , [], []
+            , false, function Data(){ return new ContainerWrapper!dataType; }
+        );
+    }
+
+    this(){}
+    this( DataType initvalue )
+    {
+        value = initvalue;
     }
 
     override{
@@ -96,8 +106,11 @@ class ContainerWrapper(dataType) : Data {
         @property Data[] subData(){ return []; }
         @property DataTypeInfo type(){ return _typeInfo; }        
     }
+    
     @property static DataTypeInfo Type(){ return _typeInfo; }
-    private DataType _data;
+
+    public DataType value;
+
     private static DataTypeInfo _typeInfo;
 }
 

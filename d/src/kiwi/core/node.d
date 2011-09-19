@@ -168,10 +168,7 @@ class FunctionUpdate : NodeUpdater
 }
 
 Node NewContainerNode( Data data, int accessFlags = 3 ) // 3=READ_WRITE
-in
-{
-    assert( data !is null );
-}
+in{ assert( data !is null ); }
 body
 {
     return new Node
@@ -236,8 +233,8 @@ unittest
     assert( !n2.input(0).isOptional );
     assert( !n2.input(1).isOptional );
     try{
-    n2.update; // should not update since the inputs are not optional and they're not connected
-    assert(false, "Calling update on n2 should throw an exception as inputs are not optional");
+        n2.update;
+        assert(false, "Calling update on n2 should throw an exception as inputs are not optional");
     }catch(Exception e){ }
     assert( execCount == 2 );
     

@@ -9,9 +9,10 @@ import std.exception;
 
 
 
-class Node
+final class Node
 {
     this( string nodeName
+        , NodeTypeInfo nodeTypeInfo
         , InputDescriptor[] inputDesc, OutputDescriptor[] outputDesc
         , NodeUpdater updater = null)
     {
@@ -26,9 +27,6 @@ class Node
 
         _updater = updater;
     }
-    
-
-    @property string name() { return _name; }
     
     InputPort input(uint index = 0)
     {
@@ -58,6 +56,10 @@ class Node
 
     @property
     {
+        string name()
+        {
+            return _name;
+        }
 
         InputPort[] inputs()
         {
@@ -84,6 +86,11 @@ class Node
             return _nodeTree;
         }
 
+        NodeTypeInfo type()
+        {
+            return _typeInfo;
+        }
+
         void update()
         {
             mixin( logFunction!"Node.update" );
@@ -96,6 +103,7 @@ private:
     OutputPort[]    _outputs;
     NodeTree        _nodeTree;
     NodeUpdater     _updater;
+    NodeTypeInfo    _typeInfo;
     string          _name;
 }
 
@@ -174,11 +182,125 @@ body
     return new Node
     (
         data.type.name ~ " container",
+        null,
         [ ],
         [ DeclareOutput("data", new UserAllocatedDataStrategy(data, accessFlags)) ],
         null
     );
 }
+
+
+
+
+
+
+
+
+
+class NodeTypeInfo
+{
+    alias Node function() Instanciator;
+
+    this(string nodeName, string nodeCategory, Instanciator newFunc, Object[string] components )
+    {
+        _name = nodeName;
+        _category = nodeCategory;
+        _newInstance = newFunc;
+        _components = components;
+    }
+
+    @property
+    {
+        string name()
+        {
+            return _name;
+        }
+
+        string gategory()
+        {
+            return _category;
+        }
+        
+        Node newInstance()
+        {
+            if (_newInstance !is null)
+                return _newInstance();
+            else return null;
+        }
+    }
+
+    Object component(string key)
+    {
+        if ( key in _components )
+            return _components[key];
+        return null;
+    }
+
+private:
+    string _name;
+    string _category;
+    Object[string] _components;
+    Instanciator _newInstance;
+}
+
+
+
+class NodeTypeManager
+{
+
+    static NodeTypeInfo Register( _Type )()
+    {
+        NotImplemented("NodeTypeManager.Register");
+    }
+
+    static Node Create( string key )
+    {
+        auto info = Get( key );
+        if ( info !is null )
+        {
+            return info.newInstance(); 
+        }
+        else 
+        {
+            // TODO: return an exception instead
+            return null;
+        }
+    }
+
+    static bool Contains( string key )
+    {
+        foreach( existing ; _nodeTypes.byKey )
+          if ( existing == key )
+            return true;
+        return false;
+    }
+
+    static auto Keys()
+    {
+        return _nodeTypes.keys;
+    }
+
+
+    static NodeTypeInfo Get(string key)
+    {
+        return opIndex( key );
+    }
+
+    static NodeTypeInfo opIndex( string key )
+    {
+        if( Contains(key) ) 
+            return _nodeTypes[key];
+        else
+            return null;
+    }
+    
+private: 
+    this(){ mixin( logFunction!"NodeTypeManager.constructor"); }
+    static NodeTypeInfo[string] _nodeTypes;
+}
+
+
+
 
 
 
@@ -207,7 +329,7 @@ unittest
 {
     mixin( logTest!"kiwi.core.core" );
 
-    auto n = new Node( "nodeTest1",[],[], new FunctionUpdate(&updateTestFunc) );
+    auto n = new Node( "nodeTest1",null,[],[], new FunctionUpdate(&updateTestFunc) );
 
     assert( execCount == 0 );
     n.update;
@@ -217,6 +339,7 @@ unittest
     
     auto n2 = new Node(
         "nodeTest2",
+        null,
         [ // inputs
             DeclareInput( "in1", new AlwaysCompatible, READ ),
             DeclareInput( "in2", new AlwaysCompatible, READ )

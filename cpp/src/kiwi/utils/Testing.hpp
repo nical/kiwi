@@ -26,7 +26,7 @@ namespace utils{
 class TestManager{
 public:
   TestManager(){
-    _out = &kiwi::out;
+    _out = &kiwi::log;
   } 
   
   static TestManager* getInstance(){
@@ -78,7 +78,7 @@ public:
     (*_out) << _out->reset() << _out->bold() << _out->blue()
     << "[End test] " << _out->reset()
       << kiwi_testname << kiwi::endl << kiwi::endl;  
-    out.indentation--;
+    log.indentation--;
     }
     return _success < _nbTests;
   }

@@ -32,11 +32,9 @@ mkdir test/core
 mkdir test/mpl
 mkdir test/generic
 mkdir test/text
-mkdir test/image &&
-mkdir test/image/gil
+mkdir test/image
 mkdir test/utils
 mkdir test/audio
-cp ../utils/inputImageTransp.png test/
 cmake .. &&
 make -j4 &&
 cd .. &&

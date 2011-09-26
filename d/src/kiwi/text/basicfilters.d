@@ -71,8 +71,7 @@ Node NewUpperCaseFilter()
     mixin( logFunction!"NewUpperCaseFilter" );
     return new Node
     (
-        "UpperCase",
-        null,
+        null, //"UpperCase"
         [ DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ) ],
         [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
         new FunctionUpdate(&applyUpperCase)
@@ -84,8 +83,7 @@ Node NewLowerCaseFilter()
     mixin( logFunction!"NewLowerCaseFilter" );
     return new Node
     (
-        "UpperCase",
-        null,
+        null, // "LowerCase"
         [ DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ) ],
         [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
         new FunctionUpdate(&applyLowerCase)
@@ -96,8 +94,7 @@ Node NewTextReplaceFilter()
 {
     return new Node
     (
-        "UpperCase",
-        null,
+        null, // "TextReplace"
         [
             DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ),
             DeclareInput("Replace", new DataTypeCompatibility(PlainTextContainer.Type), READ ),

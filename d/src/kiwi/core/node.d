@@ -8,16 +8,22 @@ import kiwi.core.nodetree;
 import std.exception;
 
 
-
+/**
+ * Represents an active element of the pipeline.
+ *
+ * Nodes are mainly used to execute algorithms. The input parameters and dependencies
+ * are defined by the node's input ports, and the result can be collected through the
+ * output ports.
+ */ 
 final class Node
 {
-    this( string nodeName
-        , NodeTypeInfo nodeTypeInfo
+    /**
+     * Constructor.
+     */ 
+    this( NodeTypeInfo nodeTypeInfo
         , InputDescriptor[] inputDesc, OutputDescriptor[] outputDesc
         , NodeUpdater updater = null)
     {
-        _name = nodeName;
-
         foreach( desc ; inputDesc )
             _inputs ~= new InputPort( desc.name, this, desc.compatibility
                 , desc.accessFlags, desc.isOptional );
@@ -27,17 +33,33 @@ final class Node
 
         _updater = updater;
     }
-    
+
+    /**
+     * Returns an input by index.
+     *
+     * No range checking is performed.
+     */     
     InputPort input(uint index = 0)
     {
         return _inputs[index];
     }
 
+    /**
+     * Returns an output by index.
+     *
+     * No range checking is performed.
+     */ 
     OutputPort output(uint index = 0)
     {
         return _outputs[index];
     }
 
+    /**
+     * Gets an input port by name.
+     *
+     * If two inputs has the same name, the one with the lowest index is returned.
+     * If no inputs has the name passed in parameter, a null reference is returned.
+     */ 
     InputPort input(string portName)
     {
         foreach ( ip ; _inputs )
@@ -46,6 +68,12 @@ final class Node
         return null;
     }
 
+    /**
+     * Gets an output port by name.
+     *
+     * If two outputs has the same name, the one with the lowest index is returned.
+     * If no output has the name passed in parameter, a null reference is returned.
+     */ 
     OutputPort output(string portName)
     {
         foreach ( op ; _outputs )
@@ -56,26 +84,43 @@ final class Node
 
     @property
     {
-        string name()
+        /**
+         * Returns this node's name.
+         */ 
+        string name() const
         {
-            return _name;
+            if (_typeInfo !is null)
+                return _typeInfo.name;
+            return "";
         }
 
+        /**
+         * Returns this node's input ports in an array.
+         */
         InputPort[] inputs()
         {
             return _inputs;
         }
 
+        /**
+         * Returns this node's output ports in an array.
+         */
         OutputPort[] outputs()
         {
             return _outputs;
         }
 
+        /**
+         * Returns the number of input ports.
+         */ 
         uint inputCount() const
         {
             return _inputs.length;
         }
 
+        /**
+         * Returns the number of output ports.
+         */ 
         uint outputCount() const
         {
             return _outputs.length;
@@ -86,16 +131,75 @@ final class Node
             return _nodeTree;
         }
 
-        NodeTypeInfo type()
+        /**
+         * Return a reference to this node's runtime type information.
+         */ 
+        const(NodeTypeInfo) type() const
         {
             return _typeInfo;
         }
 
+        /**
+         * Invokes this node's updater if any.
+         *
+         * Should be called only if the inputs and outputs are properly connected.
+         */ 
         void update()
         {
             mixin( logFunction!"Node.update" );
             if(_updater !is null) _updater.update(this);
         }
+
+        /**
+         * Returns the set of nodes connected to this node's inputs.
+         */ 
+        Node[] previousNodes()
+        {
+            Node[] result;
+            foreach( ip ; _inputs )
+            {
+                if ( ip.node is null )
+                    continue;
+                bool found = false;
+                foreach( res ; result )
+                {
+                    if( ip.node is res )
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if ( !found )
+                    result ~= ip.node;
+            }
+            return result;
+        }
+
+        /**
+         * Returns the set of nodes connected to this node's outputs.
+         */ 
+        Node[] nextNodes()
+        {
+            Node[] result;
+            foreach( op ; _outputs )
+            {
+                if ( op.node is null )
+                    continue;
+                bool found = false;
+                foreach( res ; result )
+                {
+                    if( op.node is res )
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if ( !found )
+                    result ~= op.node;
+            }
+            return result;
+        }
+        
     }//properties
     
 private:
@@ -104,7 +208,6 @@ private:
     NodeTree        _nodeTree;
     NodeUpdater     _updater;
     NodeTypeInfo    _typeInfo;
-    string          _name;
 }
 
 interface NodeUpdater
@@ -181,8 +284,7 @@ body
 {
     return new Node
     (
-        data.type.name ~ " container",
-        null,
+        null, // data.type.name ~ " container"
         [ ],
         [ DeclareOutput("data", new UserAllocatedDataStrategy(data, accessFlags)) ],
         null
@@ -196,32 +298,64 @@ body
 
 
 
-
+/**
+ * Runtime Type information structure for nodes.
+ *
+ * Should be stored in the NodeTypeManager. 
+ */ 
 class NodeTypeInfo
 {
     alias Node function() Instanciator;
+    enum{ NOTAG, ALGORITHM, LOADER, CONTAINER }
 
-    this(string nodeName, string nodeCategory, Instanciator newFunc, Object[string] components )
+    /**
+     * Constructor.
+     */ 
+    this(string nodeName, string nodeCategory, int nodeTag
+        , Instanciator newFunc, Object[string] components )
     {
         _name = nodeName;
         _category = nodeCategory;
+        _tag = nodeTag;
         _newInstance = newFunc;
         _components = components;
     }
 
     @property
     {
-        string name()
+        /**
+         * Name of this type of node.
+         *
+         * For example: "Multiply"
+         */ 
+        string name() const
         {
             return _name;
         }
 
-        string gategory()
+        /**
+         * Category of this type of node.
+         *
+         * For example: "Text"
+         */ 
+        string category() const
         {
             return _category;
         }
-        
-        Node newInstance()
+
+        /**
+         * A tag that gives some information on the nature of the node (is it an algorithm,
+         * a data container...).
+         */ 
+        int tag() const
+        {
+            return _tag;
+        }
+
+        /**
+         * Returns a new instance of this type of node.
+         */ 
+        Node newInstance() const
         {
             if (_newInstance !is null)
                 return _newInstance();
@@ -229,6 +363,12 @@ class NodeTypeInfo
         }
     }
 
+    /**
+     * Returns an optional component associated to the key if it exists.
+     *
+     * Optional components may be used to bring any kind of additional informations
+     * uch as a description or some kind of semantic info...
+     */ 
     Object component(string key)
     {
         if ( key in _components )
@@ -239,6 +379,7 @@ class NodeTypeInfo
 private:
     string _name;
     string _category;
+    int _tag;
     Object[string] _components;
     Instanciator _newInstance;
 }
@@ -248,9 +389,15 @@ private:
 class NodeTypeManager
 {
 
-    static NodeTypeInfo Register( _Type )()
+    static NodeTypeInfo Register(
+        string nodeName, string nodeCategory, int nodeTag
+        , NodeTypeInfo.Instanciator newFunc, Object[string] components )
     {
-        NotImplemented("NodeTypeManager.Register");
+        if ( Contains( nodeName ) ) return Get(nodeName);
+
+        auto temp = new NodeTypeInfo( nodeName, nodeCategory, nodeTag, newFunc, components );
+        _nodeTypes[nodeName] = temp;
+        return temp;        
     }
 
     static Node Create( string key )
@@ -269,10 +416,7 @@ class NodeTypeManager
 
     static bool Contains( string key )
     {
-        foreach( existing ; _nodeTypes.byKey )
-          if ( existing == key )
-            return true;
-        return false;
+        return ((key in _nodeTypes) !is null);
     }
 
     static auto Keys()
@@ -327,9 +471,16 @@ version(unittest)
 
 unittest
 {
-    mixin( logTest!"kiwi.core.core" );
+    mixin( logTest!"kiwi.core.node" );
 
-    auto n = new Node( "nodeTest1",null,[],[], new FunctionUpdate(&updateTestFunc) );
+    assert( !NodeTypeManager.Contains("NodeTypeTest") );
+    NodeTypeManager.Register("NodeTypeTest","Test", NodeTypeInfo.NOTAG, null, null);
+    assert( NodeTypeManager.Contains("NodeTypeTest") );
+    assert( NodeTypeManager["NodeTypeTest"].name == "NodeTypeTest" );
+    assert( NodeTypeManager["NodeTypeTest"].category == "Test" );
+    assert( NodeTypeManager["NodeTypeTest"].tag == NodeTypeInfo.NOTAG );
+
+    auto n = new Node( null,[],[], new FunctionUpdate(&updateTestFunc) );
 
     assert( execCount == 0 );
     n.update;
@@ -338,7 +489,6 @@ unittest
 
     
     auto n2 = new Node(
-        "nodeTest2",
         null,
         [ // inputs
             DeclareInput( "in1", new AlwaysCompatible, READ ),
@@ -349,7 +499,7 @@ unittest
         ],
         new FunctionUpdate(&updateTestFunc)
     );
-    assert( n2.name == "nodeTest2" );
+    //assert( n2.name == "nodeTest2" );
     assert( n2.inputs.length == 2 );
     assert( n2.outputs.length == 1 );
 
@@ -357,7 +507,7 @@ unittest
     assert( !n2.input(1).isOptional );
     try{
         n2.update;
-        assert(false, "Calling update on n2 should throw an exception as inputs are not optional");
+        assert(false, "Calling update on n2 should have thrown an exception as inputs are not optional");
     }catch(Exception e){ }
     assert( execCount == 2 );
     

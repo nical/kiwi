@@ -1,15 +1,10 @@
 module kiwi.core.port;
 
 import kiwi.core.data;
+import kiwi.core.container;
 import kiwi.core.node;
 import kiwi.core.commons;
 import kiwi.core.datastrategy;
-
-alias int DataAccessFlag;
-
-enum{ READ=1, WRITE=2, READ_WRITE = READ|WRITE
-    , DATA=4, SIGNAL=8, SEMANTIC=16
-    , OPT=1};
 
 class OutputPort
 {
@@ -90,7 +85,7 @@ class OutputPort
         static if ( __traits(compiles, x = new T ) )
             return cast(T)data;
         else
-            return ( (cast(ContainerWrapper!T)data).value );
+            return ( (cast(Container!T)data).value );
     }
     
     bool isCompatible( InputPort port )

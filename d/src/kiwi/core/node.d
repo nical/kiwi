@@ -280,18 +280,6 @@ class FunctionUpdate : NodeUpdater
     UpdateFunction _update;
 }
 
-Node NewContainerNode( Data data, int accessFlags = 3 ) // 3=READ_WRITE
-in{ assert( data !is null ); }
-body
-{
-    return new Node
-    (
-        null, // data.type.name ~ " container"
-        [ ],
-        [ DeclareOutput("data", new UserAllocatedDataStrategy(data, accessFlags)) ],
-        null
-    );
-}
 
 
 
@@ -422,6 +410,14 @@ class NodeTypeManager
         return ((key in _nodeTypes) !is null);
     }
 
+    static bool Contains( string key, int tag )
+    {
+        foreach( i ; _nodeTypes.values)
+            if ( i.name == key && i.tag == tag )
+                return true;
+        return false;
+    }
+
     static auto Keys()
     {
         return _nodeTypes.keys;
@@ -436,6 +432,14 @@ class NodeTypeManager
     static NodeTypeInfo opIndex( string key )
     {
         if( Contains(key) ) 
+            return _nodeTypes[key];
+        else
+            return null;
+    }
+
+    static NodeTypeInfo opIndex( string key, int tag )
+    {
+        if( Contains(key, tag) ) 
             return _nodeTypes[key];
         else
             return null;

@@ -80,40 +80,6 @@ private:
 
 
 
-class ContainerWrapper(dataType) : Data {
-    alias dataType DataType;
-    alias _data this;
-    alias dataType IsContainerWrapper;
-    
-
-    static this(){
-        _typeInfo = new DataTypeInfo("ContainerWrapper"
-            , [], []
-            , false, function Data(){ return new ContainerWrapper!dataType; }
-        );
-    }
-
-    this(){}
-    this( DataType initvalue )
-    {
-        value = initvalue;
-    }
-
-    override{
-        //bool isSerializable(){ return false; }
-        //bool serialize( DataStream stream ){ return false; }
-        //bool deSerialize( const DataStream stream ){ return false; }
-        @property Data[] subData(){ return []; }
-        @property DataTypeInfo type(){ return _typeInfo; }        
-    }
-    
-    @property static DataTypeInfo Type(){ return _typeInfo; }
-
-    public DataType value;
-
-    private static DataTypeInfo _typeInfo;
-}
-
 
 
 

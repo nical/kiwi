@@ -6,6 +6,13 @@ module kiwi.core.commons;
  */ 
 public import dtools.logstream; 
 
+
+alias int DataAccessFlag;
+enum{ READ=1, WRITE=2, READ_WRITE = READ|WRITE
+    , DATA=4, SIGNAL=8, SEMANTIC=16
+    , OPT=1};
+
+
 alias byte[] DataStream;
 
 // instance of the log object

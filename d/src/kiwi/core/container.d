@@ -14,11 +14,14 @@ class Container(dataType) : Data {
     
 
     static this(){
-        _typeInfo = new DataTypeInfo("ContainerWrapper"
+        log.writeDebug(3, dataType.stringof~"Container" );
+        _typeInfo = DataTypeManager.Register!(Container!DataType);
+/*
+        = new DataTypeInfo(dataType.stringof~"Container"
             , [], []
             , false, function Data(){ return new Container!dataType; }
         );
-    }
+*/    }
 
     this(){}
     this( DataType initvalue )
@@ -41,7 +44,27 @@ class Container(dataType) : Data {
     private static DataTypeInfo _typeInfo;
 }
 
+NodeTypeInfo RegisterContainerNode( const DataTypeInfo dataType )
+{
+    return NodeTypeManager.Register(dataType.name,"Processing",NodeTypeInfo.CONTAINER
+        , delegate(){ return NewContainerNode( dataType ); }
+        , null );
+}
 
+Node NewContainerNode( const DataTypeInfo dataType, DataAccessFlag accessFlags = READ_WRITE )
+in{ assert( dataType !is null ); }
+body
+{
+    auto typeInfo = NodeTypeManager[dataType.name, NodeTypeInfo.CONTAINER];
+    return new Node
+    (
+        typeInfo, // 
+        [ ],
+        [ DeclareOutput("data", new UserAllocatedDataStrategy(
+            dataType.newInstance(), accessFlags)) ],
+        null
+    );
+}
 
 Node NewContainerNode( Data data, DataAccessFlag accessFlags = READ_WRITE )
 in{ assert( data !is null ); }

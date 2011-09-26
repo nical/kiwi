@@ -224,7 +224,7 @@ class InputPort
     bool isCompatible( OutputPort port )
     {
         mixin( logFunction!"InputPort.isCompatible" );
-        if ( !( accessFlags & port.accessFlags) && accessFlags != port.accessFlags )
+        if ( !( accessFlags & port.accessFlags) && accessFlags != 0 )
         {
             log.writeDebug(3,"incompatible flags ", accessFlags, " ", port.accessFlags, "\n" );
             return false;
@@ -425,8 +425,8 @@ version(unittest)
             mixin( logFunction!"SubContainerTest.static_constructor" );
             _typeInfo = DataTypeManager.Register!SubContainerTest;
             assert( _typeInfo !is null );
-            assert( DataTypeManager["SubContainerTest"] !is null);
-            assert( DataTypeManager["SubContainerTest"] is _typeInfo );
+            assert( DataTypeManager["kiwi.core.port.SubContainerTest"] !is null);
+            assert( DataTypeManager["kiwi.core.port.SubContainerTest"] is _typeInfo );
         }
        
         override DataTypeInfo type(){ return _typeInfo; }
@@ -457,9 +457,9 @@ version(unittest)
             mixin( logFunction!"ContainerTest.static_constructor" );
             _typeInfo = DataTypeManager.Register!ContainerTest;
             assert( _typeInfo !is null );
-            assert( DataTypeManager["ContainerTest"] !is null);
-            assert( DataTypeManager["ContainerTest"] is _typeInfo );
-            assert( _typeInfo.name == "ContainerTest");
+            assert( DataTypeManager["kiwi.core.port.ContainerTest"] !is null);
+            assert( DataTypeManager["kiwi.core.port.ContainerTest"] is _typeInfo );
+            assert( _typeInfo.name == "kiwi.core.port.ContainerTest");
             assert( _typeInfo.subData.length == 2);
         }
 
@@ -482,7 +482,7 @@ unittest
     
     log.writeln( "ContainerTest.Type.name: ", ContainerTest.Type.name );
     assert( ContainerTest.Type.subData.length == 2 );
-    assert( ContainerTest.Type.subData[0].name == "SubContainerTest" );
+    assert( ContainerTest.Type.subData[0].name == "kiwi.core.port.SubContainerTest" );
 
     auto op_1 = new OutputPort( "op_1", null, new UserAllocatedDataStrategy( new ContainerTest, READ ) );
     auto ip_1 = new InputPort(  "ip_1", null, new AlwaysCompatible );

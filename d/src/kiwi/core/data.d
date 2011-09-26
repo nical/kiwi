@@ -27,7 +27,8 @@ interface Data
 class DataTypeInfo
 {
 public:
-    this(string name, DataTypeInfo[] subData, string[] subDataNames, bool serializable, NewDataFunction instanciator)
+    this(string name, DataTypeInfo[] subData, string[] subDataNames
+        , bool serializable, NewDataFunction instanciator)
     {
         mixin(logFunction!"DataTypeInfo.constructor");
         _name = name;
@@ -37,7 +38,7 @@ public:
     }
 
     @property{ 
-        const string name() pure
+        const string name() const pure
         {
             return _name;
         }
@@ -47,12 +48,12 @@ public:
             return _subData;
         }
 
-        bool isSerializable() pure
+        bool isSerializable() const pure
         {
             return _serializable;
         }
 
-        bool isComposite() pure
+        bool isComposite() const pure
         {
             if( _subData is null ){
                 return false;
@@ -65,7 +66,7 @@ public:
     /++
      + Instanciate an object of this type.
      +/
-    Data newInstance() pure
+    Data newInstance() const pure
     in{ assert( _newData !is null ); }
     body
     {
@@ -98,11 +99,13 @@ class DataTypeManager
     body
     {
         mixin( logFunction!"DataTypeManager.Register" );
-
+        
         static if ( __traits(compiles, name = _Type.Name) )
             string name = _Type.Name;
         else 
-            string name = _Type.stringof;
+            string name = typeid(_Type).name;//_Type.stringof;
+
+        log.writeDebug(3,name);
         
         DataTypeInfo result;
         if ( Contains(name) )
@@ -274,7 +277,7 @@ unittest
     {
         log.writeln(registeredKey);
     }
-    assert ( DataTypeManager["DataTest"] !is null );
-    assert ( DataTypeManager["DataTestSub"] !is null );
+    assert ( DataTypeManager["kiwi.core.data.DataTest"] !is null );
+    assert ( DataTypeManager["kiwi.core.data.DataTestSub"] !is null );
     assert ( DataTypeManager["unregistered"] is null );
 }

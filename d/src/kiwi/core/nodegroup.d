@@ -5,14 +5,14 @@ import kiwi.core.node;
 
 interface NodeProcessor
 {
-    void update( NodeGroup group );
+    bool update( NodeGroup group );
 }
 
 class NodeGroup
 {
-    void update( NodeProcessor p)
+    bool update( NodeProcessor p)
     {
-        p.update( this );
+        return p.update( this );
     }
 
     bool addNode( Node n )

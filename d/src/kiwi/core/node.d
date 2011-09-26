@@ -295,7 +295,7 @@ class FunctionUpdate : NodeUpdater
  */ 
 class NodeTypeInfo
 {
-    alias Node function() Instanciator;
+    alias Node delegate() Instanciator;
     enum{ NOTAG, ALGORITHM, LOADER, CONTAINER }
 
     /**

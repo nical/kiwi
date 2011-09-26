@@ -12,7 +12,7 @@ import std.array;
 
 // -------------------------------------------------- filter functions
 
-void applyUpperCase(Data[] input, Data[] output )
+void applyUpperCase( Data[] input, Data[] output )
 {
     mixin( logFunction!"text.upperCase" );
     

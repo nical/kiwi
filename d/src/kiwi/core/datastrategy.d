@@ -7,14 +7,14 @@ import kiwi.core.commons;
 
 class UserAllocatedDataStrategy : DataStrategy
 {
-    this( Data data_, DataAccessFlag flags_ )
+    this( Data data_, DataAccessFlag flags_ = READ_WRITE)
     {
         _data = data_;
         _dataType = data_.type;
         _accessFlags = flags_;
     }
 
-    this( DataTypeInfo dataTypeInfo, DataAccessFlag flags_ )
+    this( DataTypeInfo dataTypeInfo, DataAccessFlag flags_ = READ_WRITE )
     {
         _data = null;
         _dataType = dataTypeInfo;

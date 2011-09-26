@@ -86,7 +86,10 @@ private:
 
 
 
-
+/**
+ * Contains all the DataTypeInfo objects, can be used to instanciate Data objects
+ * by name.
+ */ 
 class DataTypeManager
 {
 
@@ -100,8 +103,8 @@ class DataTypeManager
     {
         mixin( logFunction!"DataTypeManager.Register" );
         string name;
-        static if ( __traits(compiles, name = _Type.Name) )
-            name = _Type.Name;
+        static if ( __traits(compiles, name = _Type.DataTypeName) )
+            name = _Type.DataTypeName;
         else
             name = typeid(_Type).name;//_Type.stringof;
         
@@ -177,17 +180,25 @@ class DataTypeManager
         return false;
     }
 
+    /**
+     * Returns a construct that can be used to iterate on keys with foreach.
+     */ 
     static auto Keys()
     {
         return _dataTypes.keys;
     }
 
-
-    static DataTypeInfo Get(string key)
+    /**
+     * Gets a type info by name, returns null if the name is not registered.
+     */ 
+    static DataTypeInfo Get( string key )
     {
         return opIndex( key );
     }
 
+    /**
+     * Gets a type info by name using [] operator, returns null if the name is not registered.
+     */ 
     static DataTypeInfo opIndex( string key )
     {
         if( Contains(key) ) 
@@ -204,17 +215,30 @@ private:
 
 
 
-
+/**
+ * Helper mixin to help declare subData types of a Data type.
+ */ 
 mixin template DeclareSubDataTypes(T...)
 {
     alias T SubDataTypes;
 }
 
+/**
+ * Helper mixin to specifiy the runtime type name of a data type.
+ *
+ * If no name is specified the runtime name will be the fully qualified name.
+ * By default, Containers!SomeType use SomeTypeContainer as name.
+ */ 
 mixin template DeclareName(alias name)
 {
-    alias name Name;
+    alias name DataTypeName;
 }
 
+/**
+ * Helper mixin to specify a function that can instanciate the Data object.
+ *
+ * By default, function(){ return new SomeType; } is used.
+ */ 
 mixin template DeclareInstanciator(alias func)
 {
     alias func NewInstance;

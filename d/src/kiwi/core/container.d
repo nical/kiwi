@@ -11,7 +11,8 @@ class Container(dataType) : Data {
     alias dataType DataType;
     alias _data this;
 
-    static string Name(){ return dataType.stringof~"Container"; } 
+    enum { _Name = dataType.stringof~"Container" };
+    mixin DeclareName!_Name;
     
 
     static this(){

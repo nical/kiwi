@@ -24,6 +24,8 @@ final class Node
         , InputDescriptor[] inputDesc, OutputDescriptor[] outputDesc
         , NodeUpdater updater = null)
     {
+        _typeInfo = nodeTypeInfo;
+        
         foreach( desc ; inputDesc )
             _inputs ~= new InputPort( desc.name, this, desc.compatibility
                 , desc.accessFlags, desc.isOptional );
@@ -393,7 +395,8 @@ class NodeTypeManager
         string nodeName, string nodeCategory, int nodeTag
         , NodeTypeInfo.Instanciator newFunc, Object[string] components )
     {
-        if ( Contains( nodeName ) ) return Get(nodeName);
+        if ( Contains( nodeName ) )
+            return Get(nodeName);
 
         auto temp = new NodeTypeInfo( nodeName, nodeCategory, nodeTag, newFunc, components );
         _nodeTypes[nodeName] = temp;
@@ -479,6 +482,7 @@ unittest
     assert( NodeTypeManager["NodeTypeTest"].name == "NodeTypeTest" );
     assert( NodeTypeManager["NodeTypeTest"].category == "Test" );
     assert( NodeTypeManager["NodeTypeTest"].tag == NodeTypeInfo.NOTAG );
+    assert( NodeTypeManager["NodeTypeTest"] is NodeTypeManager["NodeTypeTest"] );
 
     auto n = new Node( null,[],[], new FunctionUpdate(&updateTestFunc) );
 
@@ -489,7 +493,7 @@ unittest
 
     
     auto n2 = new Node(
-        null,
+        NodeTypeManager["NodeTypeTest"],
         [ // inputs
             DeclareInput( "in1", new AlwaysCompatible, READ ),
             DeclareInput( "in2", new AlwaysCompatible, READ )
@@ -499,7 +503,7 @@ unittest
         ],
         new FunctionUpdate(&updateTestFunc)
     );
-    //assert( n2.name == "nodeTest2" );
+    assert( n2.name == "NodeTypeTest" );
     assert( n2.inputs.length == 2 );
     assert( n2.outputs.length == 1 );
 

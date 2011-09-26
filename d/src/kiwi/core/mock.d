@@ -26,7 +26,7 @@ Node NewMockNode(uint nbImputs, uint nbOutputs)
         
     for(int i = 0; i < nbOutputs; ++i)
         outputs ~= DeclareOutput("out"
-            , new UserAllocatedDataStrategy(DataTypeManager["kiwi.core.container.Container!(MockData).Container"].newInstance));
+            , new UserAllocatedDataStrategy(DataTypeManager["MockDataContainer"].newInstance));
 
     return new Node
     (

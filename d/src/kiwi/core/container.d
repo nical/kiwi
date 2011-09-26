@@ -10,7 +10,8 @@ import kiwi.core.datastrategy;
 class Container(dataType) : Data {
     alias dataType DataType;
     alias _data this;
-    alias dataType IsContainerWrapper;
+
+    static string Name(){ return dataType.stringof~"Container"; } 
     
 
     static this(){

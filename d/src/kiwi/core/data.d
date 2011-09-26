@@ -99,12 +99,12 @@ class DataTypeManager
     body
     {
         mixin( logFunction!"DataTypeManager.Register" );
-        
+        string name;
         static if ( __traits(compiles, name = _Type.Name) )
-            string name = _Type.Name;
-        else 
-            string name = typeid(_Type).name;//_Type.stringof;
-
+            name = _Type.Name;
+        else
+            name = typeid(_Type).name;//_Type.stringof;
+        
         log.writeDebug(3,name);
         
         DataTypeInfo result;
@@ -236,6 +236,7 @@ version(unittest)
 
     class DataTestSub : Data
     {
+        mixin DeclareName!("DataTestSub");
         override{
             //bool serialize( DataStream stream ){ return false; }
             //bool deSerialize( const DataStream stream ){ return false; }
@@ -277,7 +278,7 @@ unittest
     {
         log.writeln(registeredKey);
     }
-    assert ( DataTypeManager["kiwi.core.data.DataTest"] !is null );
-    assert ( DataTypeManager["kiwi.core.data.DataTestSub"] !is null );
+    assert ( DataTypeManager["DataTest"] !is null );
+    assert ( DataTypeManager["DataTestSub"] !is null );
     assert ( DataTypeManager["unregistered"] is null );
 }

@@ -254,7 +254,7 @@ class InputPort
         if (port is null)
             return false;
 
-        if (! isCompatible(port) )
+        if ( !isCompatible(port) )
             return false;
 
         if( this.isConnected ) disconnect();
@@ -499,6 +499,8 @@ unittest
     assert( op_1.connect(ip_1) );
     assert( ip_1.isConnectedTo(op_1) );
     assert( op_1.isConnectedTo(ip_1) );
+    assert( op_1.isConnected() );
+    assert( ip_1.isConnected() );
 
     assert( op_1.disconnect(ip_1) );
     assert( !op_1.disconnect(ip_1) ); // should fail and return false without crash

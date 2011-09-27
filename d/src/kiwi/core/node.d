@@ -157,23 +157,25 @@ final class Node
          */ 
         Node[] previousNodes()
         {
+            mixin(logFunction!"Node.previousNodes");
             Node[] result;
             foreach( ip ; _inputs )
             {
-                if ( ip.node is null )
+                if ( !ip.isConnected || ip.connection.node is null )
                     continue;
-                bool found = false;
+                bool alreadyFound = false;
                 foreach( res ; result )
                 {
-                    if( ip.node is res )
+                    if( ip.connection.node is res )
                     {
-                        found = true;
+                        alreadyFound = true;
                         break;
                     }
                 }
-                if ( !found )
+                if ( !alreadyFound )
                     result ~= ip.node;
             }
+            log.writeDebug(3, result.length);
             return result;
         }
 
@@ -182,22 +184,27 @@ final class Node
          */ 
         Node[] nextNodes()
         {
+            mixin(logFunction!"Node.nextNodes");
             Node[] result;
-            foreach( op ; _outputs )
-            {
-                if ( op.node is null )
-                    continue;
-                bool found = false;
-                foreach( res ; result )
+            foreach( ref op ; _outputs )
+            {            
+                foreach( ref cn ; op.connections )
                 {
-                    if( op.node is res )
+                    if ( cn.node !is null )
                     {
-                        found = true;
-                        break;
+                        bool alreadyFound = false;
+                        foreach( res ; result )
+                        {
+                            if( cn.node is res )
+                            {
+                                alreadyFound = true;
+                                break;
+                            }
+                        }
+                        if ( !alreadyFound )
+                            result ~= cn.node;
                     }
                 }
-                if ( !found )
-                    result ~= op.node;
             }
             return result;
         }

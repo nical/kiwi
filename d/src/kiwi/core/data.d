@@ -244,6 +244,9 @@ mixin template DeclareInstanciator(alias func)
     alias func NewInstance;
 }
 
+
+
+
 //            #####   #####    ####   #####    ####
 //              #     #       #         #     #
 //              #     ###      ###      #      ###

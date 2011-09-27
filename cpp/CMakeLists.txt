@@ -96,6 +96,7 @@ message( "CXX Flags: ${CMAKE_CXX_FLAGS}" )
 
 # the library itself
 add_subdirectory(src/kiwi)
+add_subdirectory(src/glWidget)
 
 # tests
 if(DEFINED BUILD_KIWI_TESTS)

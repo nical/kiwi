@@ -7,7 +7,6 @@ import kiwi.core.nodetree;
 
 import std.exception;
 
-
 /**
  * Represents an active element of the pipeline.
  *
@@ -17,6 +16,7 @@ import std.exception;
  */ 
 final class Node
 {
+    alias int ID;
     /**
      * Constructor.
      */ 
@@ -24,6 +24,7 @@ final class Node
         , InputDescriptor[] inputDesc, OutputDescriptor[] outputDesc
         , NodeUpdater updater = null)
     {
+        _id = GenNodeId();
         _typeInfo = nodeTypeInfo;
         
         foreach( desc ; inputDesc )
@@ -86,6 +87,10 @@ final class Node
 
     @property
     {
+        ID id()
+        {
+            return _id;
+        }
         /**
          * Returns this node's name.
          */ 
@@ -173,9 +178,9 @@ final class Node
                     }
                 }
                 if ( !alreadyFound )
-                    result ~= ip.node;
+                    result ~= ip.connection.node;
             }
-            log.writeDebug(3, result.length);
+            
             return result;
         }
 
@@ -206,6 +211,8 @@ final class Node
                     }
                 }
             }
+            foreach (res;result)
+                log.writeln(res.id);
             return result;
         }
         
@@ -217,7 +224,18 @@ private:
     NodeTree        _nodeTree;
     NodeUpdater     _updater;
     NodeTypeInfo    _typeInfo;
+    ID              _id;
+}//Node
+
+
+
+private Node.ID GenNodeId()
+{
+    static Node.ID nextId = 1;
+    return nextId++;
 }
+
+
 
 interface NodeUpdater
 {

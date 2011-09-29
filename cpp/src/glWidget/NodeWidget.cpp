@@ -17,14 +17,23 @@ void DrawCircle(GLenum style, int step)
     glEnd();
 }
 
-void DrawSquare(GLenum style)
+
+void DrawSquare(float x, float y, float w, float h, GLenum style)
 {
     glBegin(style);
-        glVertex2f( 0, 0 );
-        glVertex2f( 1, 0 );
-        glVertex2f( 1, 1 );
-        glVertex2f( 0, 1 );
+        glVertex2f( x, y );
+        glVertex2f( x+w, y );
+        glVertex2f( x+w, y+h );
+        glVertex2f( x, y+h );
     glEnd();
+}
+
+
+void NodeWidget::display()
+{
+    glColor4f(0.0, 0.0, 0.0, 0.7);
+    DrawSquare(x,y,w,h);
+    
 }
 
 }//namespace

@@ -40,7 +40,6 @@ class NodeGroup
         foreach( dep ; n.previousNodes )
             if ( !contains(dep) )
             {
-                log.foo;
                 _nodes ~= dep;
                 recursiveAddNode( dep );
             }
@@ -48,7 +47,6 @@ class NodeGroup
         foreach( fol ; n.nextNodes )
             if ( !contains(fol) )
             {
-                log.bar;
                 _nodes ~= fol;
                 recursiveAddNode( fol );
             }
@@ -62,13 +60,10 @@ class NodeGroup
     bool contains( Node node_ )
     {
         mixin( logFunction!"NodeGroup.contains" );
-        foreach( ref n ; _nodes ){
+        foreach( int i, ref n ; _nodes ){
             if ( n is node_ )
-            {
                 return true;
-            }
         }
-        log.writeDebug(3,"false");
         return false;
     }
     

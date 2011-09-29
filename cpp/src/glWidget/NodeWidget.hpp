@@ -17,13 +17,18 @@ namespace glWidget{
 
 
 void DrawCircle(GLenum style = GL_POLYGON, int step = 32);
-void DrawSquare(GLenum style);
+void DrawSquare(float x, float y, float w, float h, GLenum style = GL_POLYGON);
 
 
 class NodeWidget
 {
 public:
     enum{ NORMAL=0, DRAG=1, PORT_SELECTED=2 };
+
+    NodeWidget(float nx, float ny, float nw = 30.0, float nh = 40.0)
+    : x(nx), y(ny), w(nw), h(nh)
+    {
+    }
 
     float x;
     float y;

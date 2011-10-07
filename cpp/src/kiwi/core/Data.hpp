@@ -1,11 +1,15 @@
+#pragma once
+#ifndef KIWI_CORE_DATA_HPP
+#define KIWI_CORE_DATA_HPP
+
 
 #include "kiwi/core/Commons.hpp"
-
+#include <vector>
 
 namespace kiwi{
 namespace core{
 
-
+class Data;
 
 class DataTypeInfo
 {
@@ -45,11 +49,13 @@ private:
 
 class Data
 {
-	enum{ READ = 1, WRITE = 2, READ_WRITE = READ | WRITE
-		, DATA = 4, SIGNAL = 8, SEMANTIC = 16 };
-	virtual DataTypeInfo* type() = 0;
+public:
+	virtual const DataTypeInfo* type() const = 0;
+    virtual ~Data(){};
 };
 
 
 }//namespace
 }//namespace
+
+#endif

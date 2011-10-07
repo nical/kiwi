@@ -11,8 +11,10 @@ class Data;
 
 class DataStrategy
 {
+public:
     virtual const DataTypeInfo* dataType() = 0;
-    virtual const Data* data() = 0;
+    virtual Data* data() = 0;
+    virtual ~DataStrategy(){}
 };
 
 

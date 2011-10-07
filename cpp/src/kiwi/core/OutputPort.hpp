@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "kiwi/core/Connect.hpp"
+#include "kiwi/core/Commons.hpp"
 
 namespace kiwi{
 namespace core{
@@ -12,6 +13,8 @@ class Node;
 class Data;
 class DataTypeInfo;
 class InputPort;
+class DataStrategy;
+
 
 class OutputPort
 {
@@ -19,6 +22,15 @@ friend bool kiwi::core::protocol::Connect(OutputPort&,InputPort&);
 friend bool kiwi::core::protocol::Disconnect(OutputPort&,InputPort&);
 public:
     typedef std::vector<InputPort*> ConnectionArray;
+
+    /**
+     * Constructor.
+     */ 
+    OutputPort(Node* n, DataStrategy* datastrategy, DataAccessFlags flags = READ|WRITE)
+    :_node(n), _dataStrategy(datastrategy), _accessFlags(flags)
+    {
+        
+    }
 
     const ConnectionArray& connections() const
     {
@@ -36,13 +48,24 @@ public:
     }
 
     Data* data() const;
-    DataTypeInfo* dataType() const;
+    
+    const DataTypeInfo* dataType() const;
+    
+    DataAccessFlags accessFlags() const
+    {
+        return _accessFlags;
+    }
 
     bool connect( InputPort& port );
     bool disconnect( InputPort& port );
     bool disconnectAll();
 
-    bool isConnected()
+    bool hasDataStrategy() const
+    {
+        return _dataStrategy != 0;
+    }
+
+    bool isConnected() const
     {
     	return _connections.size() != 0;
     }
@@ -67,6 +90,8 @@ protected://methods
 protected://variables
     Node* _node;
     ConnectionArray _connections;
+    DataAccessFlags _accessFlags;
+    DataStrategy* _dataStrategy;
 
 };
 

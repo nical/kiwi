@@ -42,7 +42,8 @@ echo '\n\n'
 
 if [ "$core" = "yes" ]
 then
-./build/test/core/Node_Test ||
+./build/test/core/Node_Test &&
+./build/test/core/Container_Test ||
 exit
 fi
 
@@ -54,13 +55,13 @@ fi
 
 if [ "$mpl" = "yes" ]
 then
-echo "mpl" ||
+echo 'no test for target: mpl' ||
 exit
 fi
 
 if [ "$generic" = "yes" ]
 then
-echo 'no test for target: generic\n' ||
+echo 'no test for target: generic' ||
 exit
 fi
 

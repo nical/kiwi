@@ -11,9 +11,9 @@ static char const* kiwi_testname;
 #define KIWI_TEST_assert( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);\
 assert(expr);
 
-#define KIWI_BEGIN_TESTING( testname ) if(kiwi::out.has(kiwi::TEST_0)) kiwi::out << out.bold() << out.blue() << "[Begin test] " << out.reset() << testname << kiwi::endl;\
+#define KIWI_BEGIN_TESTING( testname ) kiwi::log << log.bold() << log.blue() << "[Begin test] " << log.reset() << testname << kiwi::endl;\
 kiwi_testname = testname;\
-out.indentation++;
+log.indentation++;
 
 #define KIWI_END_TESTING kiwi::utils::TestManager::getInstance()->testResult();
 

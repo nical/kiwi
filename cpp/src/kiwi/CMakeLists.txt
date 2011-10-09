@@ -13,7 +13,8 @@ endif(DEFINED BUILD_KIWI_TEXT)
 
 
 SET(KIWI_SRC ${KIWI_SRC}
-    utils/DebugStream.cpp
+    extern/log/DebugStream.cpp
+    extern/utest/Testing.cpp
     utils/Testing.cpp
     core/Node.cpp
     core/InputPort.cpp

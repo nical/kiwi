@@ -1,4 +1,5 @@
 
+#include "kiwi/utils/Testing.hpp"
 #include "kiwi/core/Node.hpp"
 #include "kiwi/utils/DebugStream.hpp"
 #include "kiwi/processing/ProcessingPipeline.hpp"
@@ -10,7 +11,8 @@ using namespace kiwi::processing;
 
 int main()
 {
-	SCOPEDBLOCK("Kiwi::core::Node Test");
+    
+	KIWI_BEGIN_TESTING("Kiwi::core::Node Test");
 
     ProcessingPipeline p;
 
@@ -20,5 +22,5 @@ int main()
     
 	kiwi::log << "hej\n";
 	
-	return 0;
+	return KIWI_END_TESTING;
 }

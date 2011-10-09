@@ -2,8 +2,6 @@
 
 generic="yes"; core="yes"; image="yes"; text="yes"; utils="yes"; mpl="yes"
 
-echo '\nTest suite - target: '$1'\n\n'
-
 if [ "$1" = "generic" ]
 then
 	core="no"; image="no"; text="no"; utils="no"; mpl="no"
@@ -37,8 +35,7 @@ fi
 
 ./BUILD.sh || exit
 
-echo '\n\n'
-
+echo '\n'
 
 if [ "$core" = "yes" ]
 then
@@ -47,35 +44,4 @@ then
 exit
 fi
 
-if [ "$utils" = "yes" ]
-then
-echo 'no test for target: utils' ||
-exit
-fi
-
-if [ "$mpl" = "yes" ]
-then
-echo 'no test for target: mpl' ||
-exit
-fi
-
-if [ "$generic" = "yes" ]
-then
-echo 'no test for target: generic' ||
-exit
-fi
-
-
-if [ "$image" = "yes" ]
-then
-echo 'no test for target: image' ||
-exit
-fi
-
-if [ "$text" = "yes" ]
-then
-echo 'no test for target: text' ||
-exit
-fi
-
-echo '\n\n end of the test suite--\n'
+echo '--end of the test suite\n'

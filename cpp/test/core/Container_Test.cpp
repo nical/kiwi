@@ -1,4 +1,5 @@
 
+#include "kiwi/utils/Testing.hpp"
 #include "kiwi/core/Container.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/DebugStream.hpp"
@@ -29,11 +30,11 @@ public:
 
 int main()
 {
-    SCOPEDBLOCK("Kiwi::core::Node Test");
+    KIWI_BEGIN_TESTING("Kiwi::core::Node Test");
     
     const DataTypeInfo* info  = kiwi::core::RegisterDataType("TestData", &NewTestData );
 
     assert( info->name() == string(kiwi::user::DataTrait<TestData>::Name()) );
     
-    return 0;
+    return KIWI_END_TESTING;
 }

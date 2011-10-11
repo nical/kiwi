@@ -7,8 +7,8 @@
 
 static char const* kiwi_testname;
 
-#define KIWI_TEST( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);
-#define KIWI_TEST_assert( label, id, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__,id);\
+#define KIWI_TEST( label, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__);
+#define KIWI_TEST_assert( label, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__);\
 assert(expr);
 
 #define KIWI_BEGIN_TESTING( testname ) kiwi::log << log.bold() << log.blue() << "[Begin test] " << log.reset() << testname << kiwi::endl;\
@@ -27,6 +27,8 @@ class TestManager{
 public:
   TestManager(){
     _out = &kiwi::log;
+    _success = 0;
+    _successSinceLastError = 0;
   } 
   
   static TestManager* getInstance(){
@@ -42,20 +44,27 @@ public:
     , const char* const label
     , const char* const file
     , int line
-    , const char* const id){
+  ){
       ++_nbTests;
       if(expr){
         if( _out->has(TEST_LEVEL(0) ) ){
-        (*_out) << _out->blue() << "Test::" << _out->reset() <<id<<": "
+        (*_out) << _out->blue() << "Test::" << _out->reset() <<line<<": "
           << _out->green() <<"passed successfully."
           << _out->reset() <<" ["<< label <<"]" ;
         _out->endl();
+            if(_successSinceLastError % 20 == 0 && _successSinceLastError != 0)
+            {
+                (*_out) << "[!] " << _out->lightBlue() << "Achievement unlocked! "
+                        << _out->yellow() << "\""<< _successSinceLastError <<" successful tests in a row\"\n"
+                        << _out->reset();
+            }
         }
         ++_success;
+        ++_successSinceLastError;
         return true;
       }else{
         if( _out->has(TEST_LEVEL(0) ) ){
-        (*_out) << _out->blue() << "Test::" << _out->reset() <<id<<": "
+        (*_out) << _out->blue() << "Test::" << _out->reset() <<line<<": "
           << _out->red() <<"failed. | "<< label ;
         _out->endl();
         (*_out) << file << "  " << line;
@@ -88,6 +97,7 @@ protected:
   DebugStream* _out;
   int32 _nbTests;
   int32 _success;
+  int32 _successSinceLastError;
 };
 
 

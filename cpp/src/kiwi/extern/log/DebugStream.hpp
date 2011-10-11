@@ -209,6 +209,7 @@ public:
   const char*  blue();
   const char*  red();
   const char*  green();
+  const char*  yellow();
   const char*  purple();
   const char*  darkGray();
   const char*  lightBlue();

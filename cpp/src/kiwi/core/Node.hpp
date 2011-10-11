@@ -5,6 +5,8 @@
 #include <vector>
 
 #include "kiwi/core/Pipeline.hpp"
+#include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Data.hpp"
 
 namespace kiwi{
 namespace core{
@@ -12,6 +14,38 @@ namespace core{
 class InputPort;
 class OutputPort;
 class NodeUpdater;
+
+struct NodeInitializer
+{
+    struct PortInitializer
+    {
+        PortInitializer(string _name, int _flags, const DataTypeInfo* _type)
+        {
+            name = _name;
+            flags = _flags;
+            type = _type;
+        }
+        string name;
+        int flags;
+        const DataTypeInfo* type;
+    };
+
+    typedef std::vector<PortInitializer> PortInitArray;
+    enum{ IN, OUT, READ, WRITE, SIGNAL };
+    
+    NodeInitializer(string nodeName)
+    {
+        name = nodeName;
+    }
+
+    void addPort(string name, int flags, const DataTypeInfo* type)
+    {
+        ports.push_back( PortInitializer(name, flags,type) );
+    }
+    
+    string name;
+    PortInitArray ports;
+};
 
 class Node
 {

@@ -11,9 +11,10 @@ using namespace kiwi::processing;
 
 int main()
 {
-    
 	KIWI_BEGIN_TESTING("Kiwi::core::Node Test");
 
+    NodeInitializer nt1init("NodeTest1");
+    nt1init.addPort("in", IN, 0);
     ProcessingPipeline p;
 
     Node::InputArray ins;

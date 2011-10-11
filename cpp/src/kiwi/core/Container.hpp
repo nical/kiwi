@@ -13,14 +13,19 @@ namespace core{
 template<typename T> class Container : public Data
 {
 public:
-    Container()
+    Container(string name)
     {
-        _type = core::TypeOf( user::DataTrait<T>::Name() );
+        _type = core::TypeOf( name );
     }
     
     const DataTypeInfo* type() const
     {
         return _type;
+    }
+
+    Data::TypeId dataTypeId() const
+    {
+        return DataTypeId<T>();
     }
     
 private:
@@ -29,5 +34,8 @@ private:
 
 }//namespace
 }//namespace
+
+#define KIWI_DECLARE_CONTAINER_AND_NAME( type ) kiwi::core::Data* New##type(){ return new kiwi::core::Container<type>(#type); } 
+#define KIWI_DECLARE_CONTAINER( type, name ) kiwi::core::Data* New##type(){ return new kiwi::core::Container<type>(name); } 
 
 #endif

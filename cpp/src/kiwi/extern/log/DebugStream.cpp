@@ -154,6 +154,15 @@ const char*  DebugStream::green()
   return "";
 #endif
 }
+
+const char*  DebugStream::yellow()
+{
+#if ( (defined(UNIX)||defined(unix)||defined(linux)) )
+  return "\033[33m";
+#else
+  return "";
+#endif
+}
 const char*  DebugStream::lightGreen()
 {
 #if ( (defined(UNIX)||defined(unix)||defined(linux)) )

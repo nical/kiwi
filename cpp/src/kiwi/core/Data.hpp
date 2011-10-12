@@ -50,7 +50,10 @@ private:
 class Data
 {
 public:
+    typedef unsigned int TypeId;
+    
 	virtual const DataTypeInfo* type() const = 0;
+	virtual TypeId dataTypeId() const = 0;
     virtual ~Data(){};
 };
 

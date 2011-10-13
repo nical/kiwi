@@ -1,4 +1,5 @@
 #include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/InputPort.hpp"
 
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/Connect.hpp"
@@ -21,9 +22,14 @@ bool OutputPort::disconnect( InputPort& port )
 
 bool OutputPort::disconnectAll()
 {
+    // TODO!
 	return false;
 }
 
+bool OutputPort::isCompatible(const InputPort& port) const
+{
+    return port.isCompatible(*this);
+}
 
 Data* OutputPort::data() const
 {

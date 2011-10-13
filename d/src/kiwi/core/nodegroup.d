@@ -21,6 +21,11 @@ class NodeGroup
         {
             return _nodes;
         }
+
+        bool isValid()
+        {
+            throw NotImplemented("NodeGroup.isValid");
+        }
     }
 
     bool addNode( Node n )
@@ -52,10 +57,7 @@ class NodeGroup
             }
     }
 
-    bool isValid()
-    {
-        throw NotImplemented("NodeGroup.isValid");
-    }
+    
 
     bool contains( Node node_ )
     {
@@ -66,9 +68,18 @@ class NodeGroup
         }
         return false;
     }
-    
 
-    private Node[] _nodes;
+    Node opIndex( Node.ID id )
+    {
+        foreach( ref n ; _nodes )
+            if ( n.id == id )
+                return n;
+        return null;
+    }
+
+private:
+    Node[]  _nodes;
+    int     _changed;
 }
 
 

@@ -87,10 +87,14 @@ final class Node
 
     @property
     {
+        /**
+         * Returns this node's unique id.
+         */ 
         ID id()
         {
             return _id;
         }
+        
         /**
          * Returns this node's name.
          */ 
@@ -225,16 +229,22 @@ private:
     NodeUpdater     _updater;
     NodeTypeInfo    _typeInfo;
     ID              _id;
+    NodeComponent[] _components;
 }//Node
 
-
-
+/**
+ * Generate and return a new unique id.
+ */ 
 private Node.ID GenNodeId()
 {
     static Node.ID nextId = 1;
     return nextId++;
 }
 
+interface NodeComponent
+{
+    @property string type();
+}
 
 
 interface NodeUpdater

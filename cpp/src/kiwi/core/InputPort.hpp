@@ -13,6 +13,7 @@ namespace core{
 class Node;
 class OutputPort;
 class CompatibilityStrategy;
+class DataTypeInfo;
 
 class InputPort
 {
@@ -20,7 +21,13 @@ friend bool kiwi::core::protocol::Connect(OutputPort&,InputPort&);
 friend bool kiwi::core::protocol::Disconnect(OutputPort&,InputPort&);
 public:
 
+    InputPort(){}
+    InputPort(Node* n, const DataTypeInfo* datatype, DataAccessFlags flags)
+    : _node(n), _dataTypeInfo(datatype), _flags(flags)
+    {
 
+    }
+    
     OutputPort* connection() const
     {
         return _connection;
@@ -30,7 +37,6 @@ public:
     {
         return _node;
     }
-
     string name() const
     {
     	return _name;
@@ -41,9 +47,14 @@ public:
     	return _connection != 0;
     }
 
-    bool isConnectedTo(const OutputPort* port)
+    bool isConnectedTo(const OutputPort& port)
     {
-    	return _connection == port;
+    	return _connection == &port;
+    }
+
+    const DataTypeInfo* dataType() const
+    {
+        return _dataTypeInfo;
     }
 
     bool connect(OutputPort& port);
@@ -56,7 +67,8 @@ protected:
     OutputPort* _connection;
     string _name;
     DataAccessFlags _flags;
-    CompatibilityStrategy* _compatibility;
+    const DataTypeInfo* _dataTypeInfo;
+    //CompatibilityStrategy* _compatibility;
 };
 
 

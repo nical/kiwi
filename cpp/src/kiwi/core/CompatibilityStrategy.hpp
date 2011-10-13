@@ -8,7 +8,7 @@ namespace core{
 class InputPort;
 class OutputPort;
 
-
+// Note: use of custom compatibility strategies postponed
 class CompatibilityStrategy
 {
 public:

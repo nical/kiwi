@@ -6,6 +6,7 @@
 
 #include "kiwi/core/Pipeline.hpp"
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/extern/log/DebugStream.hpp"
 #include "kiwi/core/Data.hpp"
 
 namespace kiwi{
@@ -31,20 +32,26 @@ struct NodeInitializer
     };
 
     typedef std::vector<PortInitializer> PortInitArray;
-    enum{ IN, OUT, READ, WRITE, SIGNAL };
     
     NodeInitializer(string nodeName)
     {
         name = nodeName;
+        update = 0;
     }
 
     void addPort(string name, int flags, const DataTypeInfo* type)
     {
         ports.push_back( PortInitializer(name, flags,type) );
     }
+
+    void addUpdate(NodeUpdater* updater)
+    {
+        update = updater;
+    }
     
     string name;
     PortInitArray ports;
+    NodeUpdater* update;
 };
 
 class Node
@@ -58,21 +65,8 @@ public:
     /**
      * Constructor.
      */ 
-    Node(Pipeline* pipeline, const InputArray& inputports, const OutputArray& outputports, NodeUpdater* updater)
-    : _pipeline(pipeline), _inputs(inputports), _outputs(outputports), _updater(updater)
-    {
-        if(pipeline) pipeline->addNode(this);
-        _id = _newId();
-    }
+    Node(Pipeline* pipeline, NodeInitializer& init);
 
-    InputPort& input(int index = 0) const
-    {
-        return *_inputs[index];
-    }
-    OutputPort& output(int index = 0) const
-    {
-        return *_outputs[index];
-    }
     const InputArray& inputs() const
     {
         return _inputs;
@@ -80,6 +74,26 @@ public:
     const OutputArray& outputs() const
     {
         return _outputs;
+    }
+
+    InputPort& input(uint32 i = 0)
+    {
+        return *_inputs[i];
+    }
+
+    const InputPort& input(uint32 i = 0) const
+    {
+        return *_inputs[i];
+    }
+
+    OutputPort& output(uint32 i = 0)
+    {
+        return *_outputs[i];
+    }
+
+    const OutputPort& output(uint32 i = 0) const
+    {
+        return *_outputs[i];
     }
 
     Pipeline* pipeline() const

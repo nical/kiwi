@@ -23,6 +23,7 @@ friend bool kiwi::core::protocol::Disconnect(OutputPort&,InputPort&);
 public:
     typedef std::vector<InputPort*> ConnectionArray;
 
+    OutputPort(){}
     /**
      * Constructor.
      */ 
@@ -60,6 +61,9 @@ public:
     bool disconnect( InputPort& port );
     bool disconnectAll();
 
+    bool isCompatible(const InputPort& port) const;
+    
+
     bool hasDataStrategy() const
     {
         return _dataStrategy != 0;
@@ -70,10 +74,10 @@ public:
     	return _connections.size() != 0;
     }
 
-    bool isConnectedTo( const InputPort* port )
+    bool isConnectedTo( const InputPort& port )
     {
     	for(int i = 0; i < _connections.size(); ++i)
-    		if( port == _connections[i] )
+    		if( &port == _connections[i] )
     			return true;
     	return false;
     }

@@ -1,4 +1,5 @@
 #include "kiwi/core/InputPort.hpp"
+#include "kiwi/core/OutputPort.hpp"
 #include "kiwi/core/CompatibilityStrategy.hpp"
 #include "kiwi/core/Connect.hpp"
 
@@ -24,8 +25,9 @@ bool InputPort::disconnectAll()
 
 bool InputPort::isCompatible(const OutputPort& port) const
 {
-	if(_compatibility == 0) return true;
-	return _compatibility->isCompatible(*this, port);
+	//if(_compatibility != 0) return true;
+	//return _compatibility->isCompatible(*this, port);
+    return _dataTypeInfo == port.dataType();
 }
 
 }//namespace

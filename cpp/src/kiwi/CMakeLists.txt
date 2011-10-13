@@ -19,6 +19,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/Node.cpp
     core/InputPort.cpp
     core/OutputPort.cpp
+    core/OpConnect.cpp
     core/Connect.cpp
     core/Pipeline.cpp
     core/DataTypeManager.cpp

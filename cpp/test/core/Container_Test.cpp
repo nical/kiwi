@@ -4,7 +4,6 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/DebugStream.hpp"
 
-#include <assert.h>
 
 using namespace kiwi;
 using namespace kiwi::core;
@@ -30,7 +29,7 @@ KIWI_DECLARE_CONTAINER(float,"Float");
 
 int main()
 {
-    KIWI_BEGIN_TESTING("Kiwi::core::Node Test");
+    KIWI_BEGIN_TESTING("Kiwi::core::Node");
     
     auto info1  = kiwi::core::RegisterDataType("TestData1", &NewTestData1 );
     auto info2  = kiwi::core::RegisterDataType("TestData2", &NewTestData2 );
@@ -45,7 +44,8 @@ int main()
     int a;
     KIWI_TEST( "DataTypeId equality.", DataTypeId<int>() == DataTypeId(a) );
     KIWI_TEST( "DataTypeId inequality.", DataTypeId<float>() != DataTypeId<char>() );
-    KIWI_TEST( "DataTypeId equality and constness.", DataTypeId<const TestData1>() == DataTypeId<TestData1>() );
+    KIWI_TEST( "DataTypeId equality and constness."
+        , DataTypeId<const TestData1>() == DataTypeId<TestData1>() );
 
     auto td1 = InstanciateData("TestData1");
     KIWI_TEST( "Instanciate known data 1 type not null.", td1 != 0);

@@ -8,9 +8,9 @@
 #include "kiwi/core/Commons.hpp"
 
 #define KIWI_INDENTATION_PATTERN "  "
-#define KIWI_BEGINBLOCK_1 "\033[1;30m[begin block] "
+#define KIWI_BEGINBLOCK_1 "\033[1;34m{Begin block} "
 #define KIWI_BEGINBLOCK_2 " "
-#define KIWI_ENDBLOCK_1 "\033[1;30m[end block] "
+#define KIWI_ENDBLOCK_1 "\033[1;34m{End block} "
 #define KIWI_ENDBLOCK_2 " "
 
 #ifdef USE_SCOPEDBLOCK_MACRO

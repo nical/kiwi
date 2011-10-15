@@ -55,8 +55,8 @@ public:
             if(_successSinceLastError % 20 == 0 && _successSinceLastError != 0)
             {
                 (*_out) << "[!] " << _out->lightBlue() << "Achievement unlocked! "
-                        << _out->yellow() << "\""<< _successSinceLastError <<" successful tests in a row\"\n"
-                        << _out->reset();
+                        << _out->yellow() << "\""<< _successSinceLastError <<" successful tests in a row\"" << _out->reset();
+                _out->endl();
             }
         }
         ++_success;

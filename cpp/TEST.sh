@@ -39,8 +39,9 @@ echo '\n'
 
 if [ "$core" = "yes" ]
 then
+./build/test/core/Container_Test &&
 ./build/test/core/Node_Test &&
-./build/test/core/Container_Test ||
+./build/test/core/Algorithm_Test ||
 exit
 fi
 

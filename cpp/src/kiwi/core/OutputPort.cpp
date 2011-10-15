@@ -22,8 +22,13 @@ bool OutputPort::disconnect( InputPort& port )
 
 bool OutputPort::disconnectAll()
 {
-    // TODO!
-	return false;
+    if ( !isConnected() )
+        return false;
+    while( _connections.size() != 0 )
+    {
+        disconnect(*_connections[_connections.size()-1]);
+    }
+	return true;
 }
 
 bool OutputPort::isCompatible(const InputPort& port) const

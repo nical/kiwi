@@ -40,6 +40,10 @@ Node NewMockNode(uint nbImputs, uint nbOutputs)
 unittest
 {
     mixin( logTest!"kiwi.core.mock" );
+
+    
+    auto cuint = new Container!uint;
+    
     log.foo;
     DataTypeManager.Register!(Container!MockData);
     log.foo;

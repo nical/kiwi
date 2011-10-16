@@ -16,6 +16,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     extern/log/DebugStream.cpp
     extern/utest/Testing.cpp
     utils/Testing.cpp
+    mock/MockNodeUpdater.cpp
     core/Node.cpp
     core/InputPort.cpp
     core/OutputPort.cpp

@@ -5,6 +5,7 @@
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/CompatibilityStrategy.hpp"
 #include "kiwi/core/DataStrategy.hpp"
+#include "kiwi/core/NodeUpdater.hpp"
 
 namespace kiwi{
 namespace core{
@@ -14,6 +15,8 @@ Node::Node(Pipeline* pipeline, NodeInitializer& init)
     _pipeline = pipeline;
     if(pipeline) pipeline->addNode(this);
     _id = _newId();
+    _updater = init.update;
+    
     for(int i = 0; i < init.ports.size(); ++i)
     {
         if( (init.ports[i].flags & IN) && (init.ports[i].flags & OUT) ) // in+out port
@@ -36,6 +39,11 @@ Node::Node(Pipeline* pipeline, NodeInitializer& init)
     }
 }
 
+void Node::update()
+{
+    if (_updater)
+        _updater->update(*this);
+}
 
 
 

@@ -7,6 +7,7 @@
 namespace kiwi{
 namespace core{
 
+class Node;
 
 class NodeUpdater
 {

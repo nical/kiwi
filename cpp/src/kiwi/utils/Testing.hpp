@@ -8,6 +8,7 @@
 static char const* kiwi_testname;
 
 #define KIWI_TEST( label, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__);
+#define KIWI_TEST_EQUAL( label, expr1, expr2 ) kiwi::utils::TestManager::getInstance()->testEqual(expr1,expr2,#expr1,#expr2,label,__FILE__,__LINE__);
 #define KIWI_TEST_assert( label, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__);\
 assert(expr);
 
@@ -25,26 +26,29 @@ namespace utils{
 
 class TestManager{
 public:
-  TestManager(){
-    _out = &kiwi::log;
-    _success = 0;
-    _successSinceLastError = 0;
-  } 
+    TestManager(){
+        _out = &kiwi::log;
+        _success = 0;
+        _successSinceLastError = 0;
+    } 
   
-  static TestManager* getInstance(){
-    if(_instance){
-      return _instance;
-    }else{
-      _instance = new TestManager;
-      return _instance;
+    static TestManager* getInstance(){
+        if(_instance)
+        {
+            return _instance;
+        }
+        else
+        {
+            _instance = new TestManager;
+            return _instance;
+        }
     }
-  }
 
-  bool test( bool expr
-    , const char* const label
-    , const char* const file
-    , int line
-  ){
+    bool test( bool expr
+        , const char* const label
+        , const char* const file
+        , int line )
+    {
       ++_nbTests;
       if(expr){
         if( _out->has(TEST_LEVEL(0) ) ){
@@ -69,10 +73,52 @@ public:
         _out->endl();
         (*_out) << file << "  " << line;
         _out->endl();
+        _successSinceLastError = 0;
         }
         return false;
       }
-  }
+    }
+
+    bool testEqual(
+        int v1
+        , int v2
+        , const char* const expr1
+        , const char* const expr2
+        , const char* const label
+        , const char* const file
+        , int line )
+    {
+        bool result = (v1 == v2);
+        ++_nbTests;
+        if (result)
+        {
+            if ( _out->has(TEST_LEVEL(0) ) )
+            {
+                (*_out) << _out->blue() << "Test::" << _out->reset() <<line<<": "
+                  << _out->green() <<"passed successfully."
+                  << _out->reset() <<" ["<< label <<"]" ;
+                _out->endl();           
+            }
+            ++_success;
+            ++_successSinceLastError;
+            return true;
+        }
+        else
+        {
+            if ( _out->has(TEST_LEVEL(0) ) )
+            {
+                (*_out) << _out->blue() << "Test::" << _out->reset() <<line<<": "
+                        << _out->red() <<"failed. | "<< label ;
+                _out->endl();
+                (*_out) << file << "  " << line;
+                _out->endl();
+                (*_out) << "{" << expr1 << " == " << expr2 << "} -> {" << v1 << " == " << v2 << "}";
+                _out->endl();
+                _successSinceLastError=0;
+            }
+            return false;
+        }
+    }
 
   bool testResult(){
     if( _out->has(TEST_LEVEL(0) ) ){

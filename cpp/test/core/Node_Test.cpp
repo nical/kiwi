@@ -95,7 +95,13 @@ int main()
         KIWI_TEST("Input is not connected to.", ! n2->output().isConnectedTo( n1->input() ) );
         KIWI_TEST("Output is not connected.", ! n1->input().isConnected() );
         KIWI_TEST("Output is not connected to.", ! n1->input().isConnectedTo( n2->output() ) );
-
+    }
+    
+    {   SCOPEDBLOCK("Update");
+        mock::MockNodeUpdater::updateCount = 0;
+        n1->update();
+        n2->update();
+        KIWI_TEST_EQUAL("Number of updates.", mock::MockNodeUpdater::updateCount, 3  );
     }
 
     delete n1;

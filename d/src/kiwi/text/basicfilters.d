@@ -24,7 +24,7 @@ void applyUpperCase( Data[] input, Data[] output )
 
     if (inputData is null || outputData is null)  return;
     
-    outputData.text = toupper(inputData.text);
+    outputData.text = toUpper(inputData.text);
 }
 
 void applyLowerCase(Data[] input, Data[] output )
@@ -39,7 +39,7 @@ void applyLowerCase(Data[] input, Data[] output )
 
     if (inputData is null || outputData is null) return;
     
-    outputData.text = tolower(inputData.text);
+    outputData.text = toLower(inputData.text);
 }
 
 void applyReplace(Data[] input, Data[] output )

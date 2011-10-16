@@ -9,21 +9,17 @@ import kiwi.core.datastrategy;
 
 class Container(dataType) : Data {
     alias dataType DataType;
-    alias _data this;
+    alias value this;
 
     enum { _Name = dataType.stringof~"Container" };
     mixin DeclareName!_Name;
     
 
-    static this(){
+    static this()
+    {
         log.writeDebug(3, dataType.stringof~"Container" );
         _typeInfo = DataTypeManager.Register!(Container!DataType);
-/*
-        = new DataTypeInfo(dataType.stringof~"Container"
-            , [], []
-            , false, function Data(){ return new Container!dataType; }
-        );
-*/    }
+    }
 
     this(){}
     this( DataType initvalue )

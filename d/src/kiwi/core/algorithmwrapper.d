@@ -49,7 +49,7 @@ class FunctionWrapper(FuncType) : NodeUpdater
             }
             ++i;
         }
-        foreach( p; params ){ log.writeln("| ", p ); }
+        //foreach( p; params ){ log.writeln("| ", p ); }
         _funcPtr(params);
 
         // if one of the output is a container of a value semantic type, we need

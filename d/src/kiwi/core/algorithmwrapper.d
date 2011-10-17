@@ -80,6 +80,31 @@ NodeUpdater WrapFunction(T)(T* func)
     return new FunctionWrapper!T(func);
 }
 
+const NodeTypeInfo RegisterAlgorithm(T)( string nodeName, T functionPtr, string[] inputNames, string[] outputNames )
+{
+    uint nbInputs = inputNames.length;
+    uint nbOutputs = outputNames.length;
+
+    auto updater = WrapFunction( funcPtr );
+
+    //NodeTypeManager.Register( TODO );
+    
+    throw NotImplemented("RegisterAlgorithm");
+}
+
+
+
+
+//            #####   #####    ####   #####    ####
+//              #     #       #         #     #
+//              #     ###      ###      #      ###
+//              #     #           #     #         #
+//              #     #####   ####      #     ####
+
+
+
+
+
 version(unittest)
 {
     import kiwi.core.node;

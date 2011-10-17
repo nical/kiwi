@@ -28,7 +28,7 @@ final class Node
         _typeInfo = nodeTypeInfo;
         
         foreach( desc ; inputDesc )
-            _inputs ~= new InputPort( desc.name, this, desc.compatibility
+            _inputs ~= new InputPort( desc.name, this, desc.type, desc.compatibility
                 , desc.accessFlags, desc.isOptional );
 
         foreach( desc ; outputDesc )
@@ -267,14 +267,26 @@ struct OutputDescriptor
 
 struct InputDescriptor
 {
-    this( string name_, CompatibilityStrategy compatibility_, DataAccessFlag flags, bool opt = false)
+    this( string name_, const DataTypeInfo type_, CompatibilityStrategy compatibility_
+        , DataAccessFlag flags, bool opt = false)
     {
         name = name_;
+        type = type_;
         compatibility = compatibility_;
         accessFlags = flags;
         isOptional = opt;
     }
+    this( string name_, const DataTypeInfo type_
+        , DataAccessFlag flags, bool opt = false)
+    {
+        name = name_;
+        type = type_;
+        compatibility = null;
+        accessFlags = flags;
+        isOptional = opt;
+    }
     string name;
+    const DataTypeInfo type;
     CompatibilityStrategy compatibility;
     DataAccessFlag accessFlags;
     bool isOptional;
@@ -534,8 +546,8 @@ unittest
     auto n2 = new Node(
         NodeTypeManager["NodeTypeTest"],
         [ // inputs
-            DeclareInput( "in1", new AlwaysCompatible, READ ),
-            DeclareInput( "in2", new AlwaysCompatible, READ )
+            DeclareInput( "in1", null, new AlwaysCompatible, READ ),
+            DeclareInput( "in2", null, new AlwaysCompatible, READ )
         ],
         [ // outputs
             DeclareOutput( "out", new UserAllocatedDataStrategy(cast(DataTypeInfo)null, READ) )

@@ -110,8 +110,8 @@ unittest
     (
         null, // typeInfo("FuncWrapperTestNode",...
         [
-            DeclareInput("A", new DataTypeCompatibility(Container!int.Type), READ ),
-            DeclareInput("B", new DataTypeCompatibility(Container!float.Type), READ )
+            DeclareInput("A", Container!int.Type, READ ),
+            DeclareInput("B", Container!float.Type, READ )
         ],
         [
             DeclareOutput("out", new UserAllocatedDataStrategy(new Container!float, READ_WRITE)) 

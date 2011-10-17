@@ -161,12 +161,26 @@ package DataStrategy _dataStrategy;
 
 class InputPort
 {
-    this(string portName, Node n, CompatibilityStrategy comp
+    this( string portName, Node n
+        , const DataTypeInfo type, CompatibilityStrategy comp
         , DataAccessFlag flags = READ, bool optional = false)
     {
-        _name = portName;
+        _name = portName; // TODO remove names (and place them in NodeTypeInfo)
         _node = n;
+        _dataType = type;
         _compatibilityStrategy = comp;
+        _accessFlags = flags;
+        _optional = optional;
+    }
+
+    this( string portName, Node n
+        , const DataTypeInfo type
+        , DataAccessFlag flags = READ, bool optional = false)
+    {
+        _name = portName; // TODO remove names (and place them in NodeTypeInfo)
+        _node = n;
+        _dataType = type;
+        _compatibilityStrategy = null;
         _accessFlags = flags;
         _optional = optional;
     }
@@ -188,6 +202,11 @@ class InputPort
         {
             if (isConnected) return _connection.data;
             return null; 
+        }
+
+        const DataTypeInfo dataType() const
+        {
+            return dataType;
         }
             
         DataAccessFlag accessFlags() const
@@ -231,7 +250,8 @@ class InputPort
         }
         if ( hasCompatibilityStrategy )
             return _compatibilityStrategy.isCompatible(this, port);
-        return true;
+
+        return _dataType is port.dataType;
     }
 
     T dataAs(T)()
@@ -297,6 +317,7 @@ class InputPort
 private:
     Node _node;
     DataAccessFlag _accessFlags;
+    const DataTypeInfo _dataType;
     string _name;
     bool _optional;
     OutputPort _connection;
@@ -485,10 +506,10 @@ unittest
     assert( ContainerTest.Type.subData[0].name == "kiwi.core.port.SubContainerTest" );
 
     auto op_1 = new OutputPort( "op_1", null, new UserAllocatedDataStrategy( new ContainerTest, READ ) );
-    auto ip_1 = new InputPort(  "ip_1", null, new AlwaysCompatible );
+    auto ip_1 = new InputPort(  "ip_1", null, null, new AlwaysCompatible );
 
     auto op_2 = new OutputPort( "op_1", null, new UserAllocatedDataStrategy( new ContainerTest, READ ) );
-    auto ip_2 = new InputPort(  "ip_2", null, new AlwaysCompatible );
+    auto ip_2 = new InputPort(  "ip_2", null, null, new AlwaysCompatible );
 
     // simply trying every connection/disconnection cases.
 

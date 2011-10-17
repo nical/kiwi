@@ -72,7 +72,7 @@ Node NewUpperCaseFilter()
     return new Node
     (
         null, //"UpperCase"
-        [ DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ) ],
+        [ DeclareInput("Input text", PlainTextContainer.Type, READ ) ],
         [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
         new FunctionUpdate(&applyUpperCase)
     );
@@ -84,7 +84,7 @@ Node NewLowerCaseFilter()
     return new Node
     (
         null, // "LowerCase"
-        [ DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ) ],
+        [ DeclareInput("Input text", PlainTextContainer.Type, READ ) ],
         [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
         new FunctionUpdate(&applyLowerCase)
     );
@@ -96,9 +96,9 @@ Node NewTextReplaceFilter()
     (
         null, // "TextReplace"
         [
-            DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ),
-            DeclareInput("Replace", new DataTypeCompatibility(PlainTextContainer.Type), READ ),
-            DeclareInput("With", new DataTypeCompatibility(PlainTextContainer.Type), READ )
+            DeclareInput("Input text", PlainTextContainer.Type, READ ),
+            DeclareInput("Replace", PlainTextContainer.Type, READ ),
+            DeclareInput("With", PlainTextContainer.Type, READ )
         ],
         [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
         new FunctionUpdate(&applyReplace)

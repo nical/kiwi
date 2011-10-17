@@ -22,7 +22,7 @@ Node NewMockNode(uint nbImputs, uint nbOutputs)
     OutputDescriptor[] outputs;
 
     for(int i = 0; i < nbImputs; ++i)
-        inputs ~= DeclareInput("in", new AlwaysCompatible, 0, true);
+        inputs ~= DeclareInput("in", null, new AlwaysCompatible, 0, true);
         
     for(int i = 0; i < nbOutputs; ++i)
         outputs ~= DeclareOutput("out"

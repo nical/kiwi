@@ -23,7 +23,7 @@ friend bool kiwi::core::protocol::Disconnect(OutputPort&,InputPort&);
 public:
     typedef std::vector<InputPort*> ConnectionArray;
 
-    OutputPort(){}
+    //OutputPort(){}
     /**
      * Constructor.
      */ 

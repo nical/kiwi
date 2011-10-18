@@ -8,6 +8,11 @@ namespace core{
 class InputPort;
 class OutputPort;
 
+/**
+ * Defines an operator to connect ports.
+ *
+ * This is equivalent to calling output.connect( input ), but is more readable.
+ */ 
 bool operator >> (OutputPort& output, InputPort& input );
 
 }//namespace

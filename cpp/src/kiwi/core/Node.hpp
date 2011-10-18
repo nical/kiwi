@@ -17,7 +17,13 @@ class OutputPort;
 class NodeUpdater;
 class NodeTypeInfo;
 
-
+/**
+ * Composant of a scripting graph (or pipeline).
+ *
+ * Nodes are connected to one another through input and output ports.
+ * To create a node its type must first be registered.
+ * Use NodeTypeManager to create nodes.
+ */ 
 class Node
 {
 friend class kiwi::core::Pipeline;    
@@ -31,40 +37,66 @@ public:
      */ 
     Node(Pipeline* pipeline, const NodeTypeInfo* type);
 
+    /**
+     * Returns the input ports as a vector.
+     */ 
     const InputArray& inputs() const
     {
         return _inputs;
     }
+    /**
+     * Returns the output ports as a vector.
+     */ 
     const OutputArray& outputs() const
     {
         return _outputs;
     }
 
+    /**
+     * Returns the ith input port.
+     */ 
     InputPort& input(uint32 i = 0)
     {
         return *_inputs[i];
     }
 
+    /**
+     * Returns the ith input port (const).
+     */ 
     const InputPort& input(uint32 i = 0) const
     {
         return *_inputs[i];
     }
 
+    /**
+     * Returns the ith output port.
+     */ 
     OutputPort& output(uint32 i = 0)
     {
         return *_outputs[i];
     }
 
+    /**
+     * Returns the ith output port (const).
+     */ 
     const OutputPort& output(uint32 i = 0) const
     {
         return *_outputs[i];
     }
 
+    /**
+     * Returns a pointer to the pipeline this node belongs to.
+     */ 
     Pipeline* pipeline() const
     {
         return _pipeline;
     }
 
+    /**
+     * Updates the node if its type has a NodeUpdater component.
+     *
+     * This is when the algorithm carried by the node (if any) is executed.
+     */ 
     void update();
 
 private:

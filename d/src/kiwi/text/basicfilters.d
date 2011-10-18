@@ -2,7 +2,7 @@ module kiwi.text.basicfilters;
 
 
 import kiwi.core.all;
-import kiwi.text.data;
+import kiwi.core.algorithmwrapper;
 
 import std.string;
 import std.array;
@@ -12,58 +12,23 @@ import std.array;
 
 // -------------------------------------------------- filter functions
 
-void applyUpperCase( Data[] input, Data[] output )
+void upperCaseFunction(string inputstr, ref string outputstr)
 {
-    mixin( logFunction!"text.upperCase" );
-    
-    if (input is null     || output is null)     return;
-    if (input.length == 0 || output.length == 0) return;
-    
-    auto inputData  = cast(PlainTextContainer) input[0];
-    auto outputData = cast(PlainTextContainer) output[0];
-
-    if (inputData is null || outputData is null)  return;
-    
-    outputData.text = toUpper(inputData.text);
+    outputstr = toUpper(inputstr);
 }
 
-void applyLowerCase(Data[] input, Data[] output )
+void lowerCaseFunction(string inputstr, ref string outputstr)
 {
-    mixin( logFunction!"text.lowerCase" );
-    
-    if (input is null     || output is null)     return;
-    if (input.length == 0 || output.length == 0) return;
-    
-    auto inputData  = cast(PlainTextContainer) input[0];
-    auto outputData = cast(PlainTextContainer) output[0];
-
-    if (inputData is null || outputData is null) return;
-    
-    outputData.text = toLower(inputData.text);
+    outputstr = toLower(inputstr);
 }
 
-void applyReplace(Data[] input, Data[] output )
+void textReplaceFunction(string inputstr, string patternFrom, string patternTo, ref string outputstr)
 {
-    mixin( logFunction!"text.replace" );
-    if (input is null    || output is null)     return;
-    if (input.length < 2 || output.length == 0) return;
-    
-    auto inputData       = cast(PlainTextContainer) input[0];
-    auto inputFromPatern = cast(PlainTextContainer) input[1];
-    auto inputToPatern   = cast(PlainTextContainer) input[2];
-    auto outputData      = cast(PlainTextContainer) output[0];
-
-    if (inputData is null || inputFromPatern is null || inputToPatern is null || outputData is null)
-        return;
-    
-    outputData.text = std.array.replace(inputData.text, inputFromPatern.text, inputToPatern.text );
+    outputstr = std.array.replace(inputstr, patternFrom, patternTo );
 }
-
-
-
-
 
 // ------------------------------------------------------- creators
+
 
 
 Node NewUpperCaseFilter()
@@ -71,10 +36,10 @@ Node NewUpperCaseFilter()
     mixin( logFunction!"NewUpperCaseFilter" );
     return new Node
     (
-        null, //"UpperCase"
-        [ DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ) ],
-        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
-        new FunctionUpdate(&applyUpperCase)
+        null, //node type info
+        [ DeclareInput("Input text", Container!string.Type, READ ) ],
+        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new Container!string, READ_WRITE)) ],
+        WrapFunction( &upperCaseFunction )
     );
 }
 
@@ -83,10 +48,10 @@ Node NewLowerCaseFilter()
     mixin( logFunction!"NewLowerCaseFilter" );
     return new Node
     (
-        null, // "LowerCase"
-        [ DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ) ],
-        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
-        new FunctionUpdate(&applyLowerCase)
+        null, //node type info
+        [ DeclareInput("Input text", Container!string.Type, READ ) ],
+        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new Container!string, READ_WRITE)) ],
+        WrapFunction( &lowerCaseFunction )
     );
 }
 
@@ -94,14 +59,14 @@ Node NewTextReplaceFilter()
 {
     return new Node
     (
-        null, // "TextReplace"
+        null, //node type info
         [
-            DeclareInput("Input text", new DataTypeCompatibility(PlainTextContainer.Type), READ ),
-            DeclareInput("Replace", new DataTypeCompatibility(PlainTextContainer.Type), READ ),
-            DeclareInput("With", new DataTypeCompatibility(PlainTextContainer.Type), READ )
+            DeclareInput("Input text", Container!string.Type, READ ),
+            DeclareInput("Replace", Container!string.Type, READ ),
+            DeclareInput("With", Container!string.Type, READ )
         ],
-        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new PlainTextContainer, READ_WRITE)) ],
-        new FunctionUpdate(&applyReplace)
+        [ DeclareOutput("Output text", new UserAllocatedDataStrategy(new Container!string, READ_WRITE)) ],
+        WrapFunction( &textReplaceFunction )
     );
 }
 
@@ -135,11 +100,11 @@ unittest{
     auto upperCaseFilter = NewUpperCaseFilter(); 
     auto replaceFilter1  = NewTextReplaceFilter(); 
     auto replaceFilter2  = NewTextReplaceFilter(); 
-    auto inputPhrase     = NewContainerNode( new PlainTextContainer("<1> <2>!") );
-    auto inputTextP1     = NewContainerNode( new PlainTextContainer("<1>") );
-    auto inputTextP2     = NewContainerNode( new PlainTextContainer("<2>") );
-    auto inputTextHello  = NewContainerNode( new PlainTextContainer("Hello") );
-    auto inputTextWorld  = NewContainerNode( new PlainTextContainer("World") );
+    auto inputPhrase     = NewContainerNode( new Container!string("<1> <2>!") );
+    auto inputTextP1     = NewContainerNode( new Container!string("<1>") );
+    auto inputTextP2     = NewContainerNode( new Container!string("<2>") );
+    auto inputTextHello  = NewContainerNode( new Container!string("Hello") );
+    auto inputTextWorld  = NewContainerNode( new Container!string("World") );
     
     // Check references
     assert( inputPhrase.output() !is null );
@@ -152,13 +117,13 @@ unittest{
     assert( replaceFilter1.output().dataType !is null );
 
     // connect the nodes
-    assert(    inputPhrase.output().connect( replaceFilter1.input(0) ) );
-    assert(    inputTextP1.output().connect( replaceFilter1.input(1) ) );
-    assert( inputTextHello.output().connect( replaceFilter1.input(2) ) );
-    assert( replaceFilter1.output().connect( replaceFilter2.input(0) ) );
-    assert(    inputTextP2.output().connect( replaceFilter2.input(1) ) );
-    assert( inputTextWorld.output().connect( replaceFilter2.input(2) ) );
-    assert( replaceFilter2.output().connect( upperCaseFilter.input() ) );
+    assert(    inputPhrase.output() >> replaceFilter1.input(0)  );
+    assert(    inputTextP1.output() >> replaceFilter1.input(1)  );
+    assert( inputTextHello.output() >> replaceFilter1.input(2)  );
+    assert( replaceFilter1.output() >> replaceFilter2.input(0)  );
+    assert(    inputTextP2.output() >> replaceFilter2.input(1)  );
+    assert( inputTextWorld.output() >> replaceFilter2.input(2)  );
+    assert( replaceFilter2.output() >> upperCaseFilter.input()  );
 
     // check some of the connections
     assert( inputPhrase.output().isConnected() );
@@ -174,14 +139,14 @@ unittest{
     upperCaseFilter.update();
 
     // print the intermediate results
-    log.writeln( "input: ",     (cast(PlainTextContainer) inputPhrase.output().data).text );
-    log.writeln( "Output(0): ", (cast(PlainTextContainer) replaceFilter1.output().data).text );
-    log.writeln( "Output(1): ", (cast(PlainTextContainer) replaceFilter2.output().data).text );
+    log.writeln( "input: ",     inputPhrase.output().dataAs!string );
+    log.writeln( "Output(0): ", replaceFilter1.output().dataAs!string );
+    log.writeln( "Output(1): ", replaceFilter2.output().dataAs!string );
     
-    auto outputText = cast(PlainTextContainer) upperCaseFilter.output().data;    
-    log.writeln( "Output(final): ", outputText.text );
+    auto outputText = upperCaseFilter.output().dataAs!string;
+    log.writeln( "Output(final): ", outputText );
 
     // Check the result
-    assert(outputText.text == "HELLO WORLD!");
+    assert(outputText == "HELLO WORLD!");
     
 }

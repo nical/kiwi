@@ -23,6 +23,7 @@ endif(DEFINED BUILD_KIWI_TEXT)
 
 SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
 core/Node_Test
+core/NodeTypeManager_Test
 core/Container_Test
 core/Algorithm_Test
 glWidget

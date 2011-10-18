@@ -18,30 +18,79 @@ class Pipeline;
 class NodeUpdater;
 
 
-struct InputPortDescriptor
+class InputPortDescriptor
 {
+public:
     InputPortDescriptor(string portName
         , const DataTypeInfo* type, DataAccessFlags flags )
-    : name(portName), dataType(type), accessFlags(flags) 
+    : _name(portName), _dataType(type), _accessFlags(flags) 
     {
     }
+
+    InputPortDescriptor( const InputPortDescriptor& toCopy )
+    {
+        _name = toCopy._name;
+        _dataType = toCopy._dataType;
+        _accessFlags = toCopy._accessFlags;
+    }
+
+    string name() const
+    {
+        return _name;
+    }
+
+    const DataTypeInfo* dataType() const
+    {
+        return _dataType;
+    }
     
-    string name;
-    const DataTypeInfo* dataType;
-    DataAccessFlags accessFlags;
+    DataAccessFlags accessFlags() const
+    {
+        return _accessFlags;
+    }
+
+private:
+    string _name;
+    const DataTypeInfo* _dataType;
+    DataAccessFlags _accessFlags;
 };
 
-struct OutputPortDescriptor
+class OutputPortDescriptor
 {
+public:
     OutputPortDescriptor( string portName
         , const DataTypeInfo* type, DataAccessFlags flags )
-    : name(portName), dataType(type), accessFlags(flags) 
+    : _name(portName), _dataType(type), _accessFlags(flags) 
     {
     }
+
+    OutputPortDescriptor( const OutputPortDescriptor& toCopy )
+    {
+        _name = toCopy._name;
+        _dataType = toCopy._dataType;
+        _accessFlags = toCopy._accessFlags;
+    }
+
+    string name() const
+    {
+        return _name;
+    }
+
+    const DataTypeInfo* dataType() const
+    {
+        return _dataType;
+    }
     
-    string name;
-    const DataTypeInfo* dataType;
-    DataAccessFlags accessFlags;
+    DataAccessFlags accessFlags() const
+    {
+        return _accessFlags;
+    }
+
+private:
+
+    string _name;
+    const DataTypeInfo* _dataType;
+    DataAccessFlags _accessFlags;
 };
 
 
@@ -76,6 +125,11 @@ public:
         return _layout.outputs;
     }
 
+    NodeUpdater* updater() const
+    {
+        return _updater;
+    }
+
     Node* newInstance(Pipeline* p = 0) const;
     
 private:
@@ -95,7 +149,7 @@ public:
     static void UnregisterAll();
 
     static const NodeTypeInfo* TypeOf(string name);
-    static Node* Create(string name);
+    static Node* Create(string name, Pipeline* p = 0);
 };
 
 

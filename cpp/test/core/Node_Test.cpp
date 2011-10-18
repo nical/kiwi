@@ -38,15 +38,17 @@ int main()
     {
         OutputPortDescriptor("out", IntInfo, READ )
     };
+
+    assert( layout1.inputs[1].dataType() == IntInfo );
     
     //nt1init.addUpdate(new mock::MockNodeUpdater);
 
     NodeLayoutDescriptor layout2;
-    layout1.inputs =
+    layout2.inputs =
     {
         InputPortDescriptor("in", IntInfo, READ)
     };
-    layout1.outputs =
+    layout2.outputs =
     {
         OutputPortDescriptor("out", DummyInfo, READ )
     };
@@ -121,7 +123,7 @@ int main()
         mock::MockNodeUpdater::updateCount = 0;
         n1->update();
         n2->update();
-        KIWI_TEST_EQUAL("Number of updates.", mock::MockNodeUpdater::updateCount, 3  );
+        KIWI_TEST_EQUAL("Number of updates.", mock::MockNodeUpdater::updateCount, 2  );
     }
 
     delete n1;

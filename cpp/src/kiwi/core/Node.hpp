@@ -18,48 +18,6 @@ class NodeUpdater;
 class NodeTypeInfo;
 
 
-/*
-
-struct NodeInitializer
-{
-    struct PortInitializer
-    {
-        PortInitializer(string _name, int _flags, const DataTypeInfo* _type)
-        {
-            name = _name;
-            flags = _flags;
-            type = _type;
-        }
-        string name;
-        int flags;
-        const DataTypeInfo* type;
-    };
-
-    typedef std::vector<PortInitializer> PortInitArray;
-    
-    NodeInitializer(string nodeName)
-    {
-        name = nodeName;
-        update = 0;
-    }
-
-    void addPort(string name, int flags, const DataTypeInfo* type)
-    {
-        ports.push_back( PortInitializer(name, flags,type) );
-    }
-
-    void addUpdate(NodeUpdater* updater)
-    {
-        update = updater;
-    }
-    
-    string name;
-    PortInitArray ports;
-    NodeUpdater* update;
-};
-
-*/
-
 class Node
 {
 friend class kiwi::core::Pipeline;    
@@ -120,7 +78,6 @@ protected:
 private:
     InputArray _inputs;
     OutputArray _outputs;
-    NodeUpdater* _updater;
     const NodeTypeInfo* _type;
     ID _id;
 };

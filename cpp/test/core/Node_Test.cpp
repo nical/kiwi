@@ -23,20 +23,20 @@ int main()
 {
 	KIWI_BEGIN_TESTING("Kiwi::core::Node");
 
-    auto IntInfo = RegisterDataType("Int", &Newint);
-    auto DummyInfo = RegisterDataType("Dummmy", &NewDummy);
+    auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
+    auto DummyInfo = DataTypeManager::RegisterDataType("Dummmy", &NewDummy);
 
     
 
     NodeLayoutDescriptor layout1;
     layout1.inputs =
     {
-        InputPortDescriptor("in1", IntInfo, READ),
-        InputPortDescriptor("in2", IntInfo, READ)
+        { "in1", IntInfo, READ },
+        { "in2", IntInfo, READ }
     };
     layout1.outputs =
     {
-        OutputPortDescriptor("out", IntInfo, READ )
+        { "out", IntInfo, READ }
     };
 
     assert( layout1.inputs[1].dataType() == IntInfo );
@@ -46,11 +46,11 @@ int main()
     NodeLayoutDescriptor layout2;
     layout2.inputs =
     {
-        InputPortDescriptor("in", IntInfo, READ)
+        { "in", IntInfo, READ }
     };
     layout2.outputs =
     {
-        OutputPortDescriptor("out", DummyInfo, READ )
+        { "out", DummyInfo, READ }
     };
     
     //nt2init.addUpdate(new mock::MockNodeUpdater);

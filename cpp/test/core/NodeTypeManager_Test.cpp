@@ -23,8 +23,8 @@ int main()
 {
 	KIWI_BEGIN_TESTING("Kiwi::core::NodeTypeManager");
 
-    auto IntInfo = RegisterDataType("Int", &Newint);
-    auto DummyInfo = RegisterDataType("Dummmy", &NewDummy);
+    auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
+    auto DummyInfo = DataTypeManager::RegisterDataType("Dummmy", &NewDummy);
 
 
     NodeLayoutDescriptor layout1;

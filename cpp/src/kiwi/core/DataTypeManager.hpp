@@ -11,10 +11,15 @@
 namespace kiwi{
 namespace core{
 
-const DataTypeInfo* RegisterDataType(string uniqueName, DataTypeInfo::Instanciator instanciator);
-const DataTypeInfo* TypeOf(string name);
-Data* InstanciateData(string name);
+namespace DataTypeManager{
 
+    const DataTypeInfo* RegisterDataType(string uniqueName, DataTypeInfo::Instanciator instanciator);
+
+    const DataTypeInfo* TypeOf(string name);
+
+    Data* Create(string name);
+
+}//namespace
 
 
 // implementation from

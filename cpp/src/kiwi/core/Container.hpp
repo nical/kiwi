@@ -15,7 +15,7 @@ template<typename T> class Container : public Data
 public:
     Container(string name)
     {
-        _type = core::TypeOf( name );
+        _type = DataTypeManager::TypeOf( name );
     }
     
     const DataTypeInfo* type() const

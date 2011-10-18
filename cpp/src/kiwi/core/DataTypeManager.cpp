@@ -8,8 +8,10 @@
 namespace kiwi{
 namespace core{
 
+namespace DataTypeManager{
+    
 typedef std::map<string, DataTypeInfo*> DataTypeMap;
-std::map<string, DataTypeInfo*> _types;
+static std::map<string, DataTypeInfo*> _types;
 
 
 const DataTypeInfo* RegisterDataType(string name, DataTypeInfo::Instanciator instanciator)
@@ -35,7 +37,7 @@ const DataTypeInfo* TypeOf(string name)
     return info->second;
 }
 
-Data* InstanciateData(string name)
+Data* Create(string name)
 {
     const DataTypeInfo* info = TypeOf( name );
     if ( info== 0 )
@@ -43,6 +45,8 @@ Data* InstanciateData(string name)
     return info->newInstance();
 }
 
+
+}//namespace
 
 }//namespace
 }//namespace

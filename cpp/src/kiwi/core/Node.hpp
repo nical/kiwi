@@ -15,6 +15,10 @@ namespace core{
 class InputPort;
 class OutputPort;
 class NodeUpdater;
+class NodeTypeInfo;
+
+
+/*
 
 struct NodeInitializer
 {
@@ -54,6 +58,8 @@ struct NodeInitializer
     NodeUpdater* update;
 };
 
+*/
+
 class Node
 {
 friend class kiwi::core::Pipeline;    
@@ -65,7 +71,7 @@ public:
     /**
      * Constructor.
      */ 
-    Node(Pipeline* pipeline, NodeInitializer& init);
+    Node(Pipeline* pipeline, const NodeTypeInfo* type);
 
     const InputArray& inputs() const
     {
@@ -115,6 +121,7 @@ private:
     InputArray _inputs;
     OutputArray _outputs;
     NodeUpdater* _updater;
+    const NodeTypeInfo* _type;
     ID _id;
 };
 

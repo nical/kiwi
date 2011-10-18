@@ -29,7 +29,7 @@ KIWI_DECLARE_CONTAINER(float,"Float");
 
 int main()
 {
-    KIWI_BEGIN_TESTING("Kiwi::core::Node");
+    KIWI_BEGIN_TESTING("Kiwi::core::Container");
     
     auto info1  = kiwi::core::RegisterDataType("TestData1", &NewTestData1 );
     auto info2  = kiwi::core::RegisterDataType("TestData2", &NewTestData2 );

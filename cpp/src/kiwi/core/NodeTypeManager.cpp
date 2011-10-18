@@ -8,13 +8,18 @@ namespace kiwi{
 namespace core{
 
 
-static std::map<string,NodeTypeInfo*> _types;
-
 
 Node* NodeTypeInfo::newInstance(Pipeline* p) const
 {
     return new Node(p, this);
 }
+
+
+// -----------------------------------------------------------------------------
+
+
+static std::map<string,NodeTypeInfo*> _types;
+
 
 const NodeTypeInfo* NodeTypeManager::RegisterNode( string nodeName
     , const NodeLayoutDescriptor& layout, NodeUpdater* updater )
@@ -28,29 +33,25 @@ const NodeTypeInfo* NodeTypeManager::RegisterNode( string nodeName
     auto info = new NodeTypeInfo;
     info->_name = nodeName;
     info->_updater = updater;
-    
-    for( int i = 0; i < layout.inputs.size(); ++i )
-    {
-        info->_layout.inputs.push_back( layout.inputs[i] );
-        log << "| " << layout.inputs[i].dataType()->name() << endl;
-    }
-    for( int i = 0; i < layout.outputs.size(); ++i )
-    {
-        info->_layout.outputs.push_back( layout.outputs[i] );
-    }
-    
+    info->_layout = layout;
+
     _types[nodeName] = info;
     return info;
 }
 
 void NodeTypeManager::Unregister(string name)
 {
-    // TODO
+    auto info = _types.find(name);
+    if ( info == _types.end() )
+        return;
+
+    delete info->second;
+    _types.erase( info );
 }
 
 void NodeTypeManager::UnregisterAll()
 {
-    // TODO
+    _types.clear();
 }
 
 const NodeTypeInfo* NodeTypeManager::TypeOf(string name)

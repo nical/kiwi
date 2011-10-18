@@ -72,6 +72,28 @@ int main()
         KIWI_TEST("TypeOf(NodeTest2) updater."
             , dynamic_cast<mock::MockNodeUpdater*>(info2->updater()) != 0 )    
     }
+
+    {   SCOPEDBLOCK("Registration");
+        auto info1 = NodeTypeManager::TypeOf("NodeTest1");
+        auto info2 = NodeTypeManager::TypeOf("NodeTest2");
+
+        KIWI_TEST( "Registering NodeTest1 twice"
+            , NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater) == info1);
+        KIWI_TEST( "Registering NodeTest2 twice"
+            , NodeTypeManager::RegisterNode("NodeTest2", layout1, new mock::MockNodeUpdater) == info2);
+        KIWI_TEST( "Requesting unregistered node"
+            , NodeTypeManager::TypeOf("some_unregistered_node") == 0);
+        
+        NodeTypeManager::Unregister("NodeTest1");
+
+        KIWI_TEST( "Requesting NodeTest1 after unregistration"
+            , NodeTypeManager::TypeOf("NodeTest1") == 0);
+
+        info1 = NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater);
+
+        KIWI_TEST( "Registering NodeTest1 again"
+            , info1->name() == "NodeTest1" );
+    }
     
     ProcessingPipeline p;
 

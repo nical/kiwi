@@ -14,7 +14,7 @@ int main()
 {
     KIWI_BEGIN_TESTING("Kiwi::core::Algorithm");
 
-    
+    log << "No test implemented yet... " << endl;
 
     return KIWI_END_TESTING;
 }

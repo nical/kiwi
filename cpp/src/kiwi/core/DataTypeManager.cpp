@@ -23,7 +23,7 @@ const DataTypeInfo* RegisterDataType(string name, DataTypeInfo::Instanciator ins
     DataTypeInfo* newInfo = new DataTypeInfo(name, dummy, instanciator);
     _types[name] = newInfo;
     
-    return newInfo; // TODO
+    return newInfo;
 }
 
 const DataTypeInfo* TypeOf(string name)

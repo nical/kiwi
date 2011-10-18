@@ -33,12 +33,12 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
                 , new AutoDataStrategy( typeInfo->outputs()[i].dataType() )
                 , typeInfo->outputs()[i].accessFlags() )
         );
-        log << "out:" << typeInfo->outputs()[i].dataType()->name() << endl;
     }
 }
 
 void Node::update()
 {
+    SCOPEDBLOCK("Node::update");
     if ( _type->updater() )
         _type->updater()->update(*this);
 }

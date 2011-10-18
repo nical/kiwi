@@ -1,6 +1,7 @@
 
 #include "kiwi/utils/Testing.hpp"
 #include "kiwi/core/Node.hpp"
+#include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/InputPort.hpp"
 #include "kiwi/core/OutputPort.hpp"
 #include "kiwi/core/OpConnect.hpp"
@@ -25,21 +26,42 @@ int main()
     auto IntInfo = RegisterDataType("Int", &Newint);
     auto DummyInfo = RegisterDataType("Dummmy", &NewDummy);
 
-    NodeInitializer nt1init("NodeTest1");
-    nt1init.addPort("in1", IN, IntInfo);
-    nt1init.addPort("in1", IN, IntInfo);
-    nt1init.addPort("out", OUT, IntInfo);
-    nt1init.addUpdate(new mock::MockNodeUpdater);
+    
 
-    NodeInitializer nt2init("NodeTest2");
-    nt2init.addPort("in", IN, IntInfo);
-    nt2init.addPort("out", OUT, DummyInfo);
-    nt2init.addUpdate(new mock::MockNodeUpdater);
+    NodeLayoutDescriptor layout1;
+    layout1.inputs =
+    {
+        InputPortDescriptor("in1", IntInfo, READ),
+        InputPortDescriptor("in2", IntInfo, READ)
+    };
+    layout1.outputs =
+    {
+        OutputPortDescriptor("out", IntInfo, READ )
+    };
 
+    assert( layout1.inputs[1].dataType() == IntInfo );
+    
+    //nt1init.addUpdate(new mock::MockNodeUpdater);
+
+    NodeLayoutDescriptor layout2;
+    layout2.inputs =
+    {
+        InputPortDescriptor("in", IntInfo, READ)
+    };
+    layout2.outputs =
+    {
+        OutputPortDescriptor("out", DummyInfo, READ )
+    };
+    
+    //nt2init.addUpdate(new mock::MockNodeUpdater);
+
+    NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater);
+    NodeTypeManager::RegisterNode("NodeTest2", layout2, new mock::MockNodeUpdater);
+    
     ProcessingPipeline p;
 
-    auto n1 = new Node(&p, nt1init );
-    auto n2 = new Node(&p, nt2init );
+    auto n1 = new Node(&p, NodeTypeManager::TypeOf("NodeTest1") );
+    auto n2 = new Node(&p, NodeTypeManager::TypeOf("NodeTest2") );
 
     {   SCOPEDBLOCK("Initial state");
         KIWI_TEST("Number of input ports.", n1->inputs().size() == 2 );
@@ -101,7 +123,7 @@ int main()
         mock::MockNodeUpdater::updateCount = 0;
         n1->update();
         n2->update();
-        KIWI_TEST_EQUAL("Number of updates.", mock::MockNodeUpdater::updateCount, 3  );
+        KIWI_TEST_EQUAL("Number of updates.", mock::MockNodeUpdater::updateCount, 2  );
     }
 
     delete n1;

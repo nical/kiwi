@@ -23,7 +23,7 @@ public:
 
     InputPort(){}
     InputPort(Node* n, const DataTypeInfo* datatype, DataAccessFlags flags)
-    : _node(n), _dataTypeInfo(datatype), _flags(flags)
+    : _node(n), _dataTypeInfo(datatype), _flags(flags), _connection(0)
     {
 
     }
@@ -39,7 +39,7 @@ public:
     }
     string name() const
     {
-    	return _name;
+    	return "error";
     }
 
     bool isConnected() const
@@ -64,10 +64,9 @@ public:
 
 protected:
     Node* _node;
-    OutputPort* _connection;
-    string _name;
     DataAccessFlags _flags;
     const DataTypeInfo* _dataTypeInfo;
+    OutputPort* _connection;
     //CompatibilityStrategy* _compatibility;
 };
 

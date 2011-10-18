@@ -28,25 +28,17 @@ int main()
 
 
     NodeLayoutDescriptor layout1;
-    layout1.inputs =
-    {
-        InputPortDescriptor("in1", IntInfo, READ),
-        InputPortDescriptor("in2", IntInfo, READ)
+    layout1.inputs = {
+        { "in1", IntInfo, READ },
+        { "in2", IntInfo, READ }
     };
-    layout1.outputs =
-    {
-        OutputPortDescriptor("out", IntInfo, READ )
+    layout1.outputs = {
+        { "out", IntInfo, READ }
     };
     
     NodeLayoutDescriptor layout2;
-    layout2.inputs =
-    {
-        InputPortDescriptor("in", IntInfo, READ)
-    };
-    layout2.outputs =
-    {
-        OutputPortDescriptor("out", DummyInfo, READ )
-    };
+    layout2.inputs  = { { "in" , IntInfo  , READ } };
+    layout2.outputs = { { "out", DummyInfo, READ } };
 
     NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater);
     NodeTypeManager::RegisterNode("NodeTest2", layout2, new mock::MockNodeUpdater);

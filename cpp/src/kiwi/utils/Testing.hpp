@@ -12,7 +12,7 @@ static char const* kiwi_testname;
 #define KIWI_TEST_assert( label, expr ) kiwi::utils::TestManager::getInstance()->test(expr,label,__FILE__,__LINE__);\
 assert(expr);
 
-#define KIWI_BEGIN_TESTING( testname ) kiwi::log << log.bold() << log.blue() << "[Begin test] " << log.reset() << testname << kiwi::endl;\
+#define KIWI_BEGIN_TESTING( testname ) kiwi::log << log.bold() << log.blue() << "[Begin test] " << log.yellow() << testname << log.reset()<<kiwi::endl;\
 kiwi_testname = testname;\
 log.indentation++;
 
@@ -52,9 +52,9 @@ public:
       ++_nbTests;
       if(expr){
         if( _out->has(TEST_LEVEL(0) ) ){
-        (*_out) << _out->blue() << "Test::" << _out->reset() <<line<<": "
+        (*_out) << _out->blue() << "Test::t" << line <<": "
           << _out->green() <<"passed successfully."
-          << _out->reset() <<" ["<< label <<"]" ;
+          << _out->darkGray() <<" [" << _out->reset() << label << _out->darkGray() <<"]" << _out->reset() ;
         _out->endl();
             if(_successSinceLastError % 20 == 0 && _successSinceLastError != 0)
             {
@@ -94,9 +94,9 @@ public:
         {
             if ( _out->has(TEST_LEVEL(0) ) )
             {
-                (*_out) << _out->blue() << "Test::" << _out->reset() <<line<<": "
+                (*_out) << _out->blue() << "Test::t" << line <<": "
                   << _out->green() <<"passed successfully."
-                  << _out->reset() <<" ["<< label <<"]" ;
+                  << _out->darkGray() <<" [" << _out->reset() << label << _out->darkGray() <<"]" << _out->reset() ;
                 _out->endl();           
             }
             ++_success;
@@ -122,7 +122,7 @@ public:
 
   bool testResult(){
     if( _out->has(TEST_LEVEL(0) ) ){
-    (*_out) << "\n" << "The Test terminated ";
+    (*_out) << "The test terminated ";
     if( _success < _nbTests ) (*_out) << _out->red() << "with errors.\n" << _out->reset();
     else (*_out) << _out->green() << "without errors.\n" << _out->reset();
     (*_out) << _nbTests << " tests | "

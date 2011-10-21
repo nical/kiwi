@@ -32,7 +32,7 @@ public:
 
 class PipelineComponent
 {
-    virtual string name() = 0;
+    virtual string name() const = 0;
 };
 
 class PipelineUpdater : public PipelineComponent
@@ -45,7 +45,7 @@ public:
 class PipelineRuleSet : PipelineComponent
 {
 public:
-    virtual bool check( Pipeline* p );
+    virtual bool check( Pipeline* p ) = 0;
 
     virtual ~PipelineRuleSet() {}
 };

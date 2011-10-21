@@ -43,6 +43,135 @@ void Node::update()
         _type->updater()->update(*this);
 }
 
+void Node::findPreviousNodes()
+{
+    _previousNodes.clear();
+    for( auto it = _inputs.begin(); it != _inputs.end(); ++it )
+        if ( (*it)->isConnected() )
+        {
+            bool found = false;
+            for( auto itpn = _previousNodes.begin()
+                ; itpn != _previousNodes.end(); ++itpn )
+            {
+                if( (*it)->connection()->node() == *itpn )
+                    found = true;
+            }
+            if( !found )
+            {
+                _previousNodes.push_back( (*it)->connection()->node() );
+            }
+        }
+}
+
+void Node::findNextNodes()
+{
+    _nextNodes.clear();
+    for( auto it = _outputs.begin(); it != _outputs.end(); ++it )
+        if ( (*it)->isConnected() )
+        {
+            for( auto itc = (*it)->connections().begin(); itc != (*it)->connections().begin(); ++itc )
+            {
+                bool found = false;
+                for( auto itnn = _nextNodes.begin(); itnn != _nextNodes.end(); ++itnn )
+                {
+                    if( (*itc)->node() == *itnn )
+                        found = true;
+                }
+                if( !found )
+                {
+                    _nextNodes.push_back( (*itc)->node() );
+                }
+            }
+        }
+}
+
+void Node::inputConnected(InputPort* port, OutputPort* to)
+{
+    Node* n = to->node();
+    if ( n == 0 ) return;
+    bool found = false;
+    for( auto it = _previousNodes.begin(); it != _previousNodes.end(); ++it )
+    {
+        if ( (*it) == n )
+        {
+            found = true;
+            break;
+        }
+    }
+    if ( !found ){
+        _previousNodes.push_back(n);
+        log << "added previous node" << endl;
+    }
+}
+
+void Node::inputDisconnected(InputPort* port, OutputPort* from)
+{
+    Node* n = from->node();
+    if ( n == 0 ) return;
+    // look for the node in the input connections
+    for( auto it = _inputs.begin(); it != _inputs.end(); ++it )
+    {
+        if ( (*it)->node() == n )
+            return;
+    }
+    // not found, means it has to be removed from the prvious nodes list
+    log << "have to remove previous node" << endl;
+    for( int i = 0; i < _previousNodes.size(); ++i )
+    {
+        if( _previousNodes[i] == n )
+        {
+            _previousNodes[i] = _previousNodes[_previousNodes.size()-1];
+            _previousNodes.resize(_previousNodes.size()-1);
+            log << "removed previous node" << endl;
+            return;
+        }
+    }
+}
+
+void Node::outputConnected(OutputPort* port, InputPort* to)
+{
+    Node* n = to->node();
+    if ( n == 0 ) return;
+    bool found = false;
+    for( auto it = _nextNodes.begin(); it != _nextNodes.end(); ++it )
+    {
+        if ( (*it) == n )
+        {
+            found = true;
+            break;
+        }
+    }
+    if ( !found ){
+        _nextNodes.push_back(n);
+        log << "added next node" << endl;
+    }
+}
+void Node::outputDisconnected(OutputPort* port, InputPort* from)
+{
+    Node* n = from->node();
+    if ( n == 0 ) return;
+    // look for the node in the output connections
+    for( auto itp = _outputs.begin(); itp != _outputs.end(); ++itp )
+    {
+        for( auto itc = (*itp)->connections().begin(); itc != (*itp)->connections().end(); ++itc )
+        {
+            if ( (*itc)->node() == n )
+            return;
+        }
+    }
+    log << "have to remove next node" << endl;
+    // not found, means it has to be removed from the prvious nodes list
+    for( int i = 0; i < _nextNodes.size(); ++i )
+    {
+        if( _nextNodes[i] == n )
+        {
+            _nextNodes[i] = _nextNodes[_nextNodes.size()-1];
+            _nextNodes.resize(_nextNodes.size()-1);
+            log << "removed next node" << endl;
+            return;
+        }
+    }
+}
 
 
 }//namespace

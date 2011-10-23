@@ -2,6 +2,7 @@
 #include "kiwi/core/InputPort.hpp"
 #include "kiwi/core/OutputPort.hpp"
 #include "kiwi/core/Node.hpp"
+#include <assert.h>
 
 
 namespace kiwi{
@@ -28,11 +29,15 @@ bool Connect( OutputPort& output, InputPort& input )
 
 bool Disconnect( OutputPort& output, InputPort& input )
 {
+    SCOPEDBLOCK("protocol::Disconnect");
 
-	if ( !input.isConnected() ) return false;
+    if ( !input.isConnectedTo(output) ) return false;
 
 	int i2 = output._indexOf(input);
 
+    if ( i2 > 0 ){
+        assert( output._connections[i2]->node() == input.node() );
+    }
 	// proceed with the disconnection
 	input._connection = 0;
 	output._connections[i2] = output._connections[output._connections.size() -1];

@@ -88,8 +88,8 @@ protected://methods
     {
     	for(int i = 0; i < _connections.size(); ++i)
     		if(_connections[i] == &port)
-    			return true;
-    	return false;
+    			return i;
+    	return -1;
     }
 protected://variables
     Node* _node;

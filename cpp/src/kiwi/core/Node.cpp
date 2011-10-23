@@ -100,7 +100,6 @@ void Node::inputConnected(InputPort* port, OutputPort* to)
     }
     if ( !found ){
         _previousNodes.push_back(n);
-        log << "added previous node" << endl;
     }
 }
 
@@ -115,14 +114,12 @@ void Node::inputDisconnected(InputPort* port, OutputPort* from)
             return;
     }
     // not found, means it has to be removed from the prvious nodes list
-    log << "have to remove previous node" << endl;
     for( int i = 0; i < _previousNodes.size(); ++i )
     {
         if( _previousNodes[i] == n )
         {
             _previousNodes[i] = _previousNodes[_previousNodes.size()-1];
             _previousNodes.resize(_previousNodes.size()-1);
-            log << "removed previous node" << endl;
             return;
         }
     }
@@ -143,7 +140,6 @@ void Node::outputConnected(OutputPort* port, InputPort* to)
     }
     if ( !found ){
         _nextNodes.push_back(n);
-        log << "added next node" << endl;
     }
 }
 void Node::outputDisconnected(OutputPort* port, InputPort* from)
@@ -151,15 +147,19 @@ void Node::outputDisconnected(OutputPort* port, InputPort* from)
     Node* n = from->node();
     if ( n == 0 ) return;
     // look for the node in the output connections
+    int i=0; int j=0;
     for( auto itp = _outputs.begin(); itp != _outputs.end(); ++itp )
     {
         for( auto itc = (*itp)->connections().begin(); itc != (*itp)->connections().end(); ++itc )
         {
             if ( (*itc)->node() == n )
-            return;
+            {
+                return;
+            }
+            ++j;
         }
+        ++i;
     }
-    log << "have to remove next node" << endl;
     // not found, means it has to be removed from the prvious nodes list
     for( int i = 0; i < _nextNodes.size(); ++i )
     {
@@ -167,7 +167,6 @@ void Node::outputDisconnected(OutputPort* port, InputPort* from)
         {
             _nextNodes[i] = _nextNodes[_nextNodes.size()-1];
             _nextNodes.resize(_nextNodes.size()-1);
-            log << "removed next node" << endl;
             return;
         }
     }

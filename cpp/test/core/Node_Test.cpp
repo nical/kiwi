@@ -20,9 +20,40 @@ KIWI_DECLARE_CONTAINER(Dummy,"Dummy");
 
 
 #define PRINT_NODES( n, prevOrNext )  \
+log << #prevOrNext << ":" << endl; \
 for( auto it = n->prevOrNext().begin(); it != n->prevOrNext().end(); ++it ) \
 { if( *it == 0 ) log << ": null"  << endl; \
 else log << ": " << (*it)->id() << endl; }
+
+#define PRINT_OUT_CONNECTIONS( n )  \
+log << "| outputs:" << endl; \
+for( auto itp = n->outputs().begin(); itp != n->outputs().end(); ++itp ) \
+for( auto itc = (*itp)->connections().begin(); itc != (*itp)->connections().end(); ++itc ) \
+{ log << "| " << (*itc)->node()->id() << endl; }
+
+
+
+void printNodeLayout( Node* n )
+{
+        log << "Node id=" << n->id() << endl;
+        log << "inputs: {";
+        for( auto itp = n->inputs().begin(); itp != n->inputs().end(); ++itp )
+        {
+            if ( (*itp)->isConnected() )
+                log << (*itp)->connection()->node()->id() << " ";
+            else
+                log << "# ";
+        }
+        log << "} " << endl << "outputs: {";
+        for( auto itp = n->outputs().begin(); itp != n->outputs().end(); ++itp )
+        {
+            for( auto itc = (*itp)->connections().begin(); itc != (*itp)->connections().end(); ++itc )
+            {
+                log << (*itc)->node()->id() << " ";
+            }
+        }
+        log << "} " << endl;
+}
 
 
 int main()
@@ -144,7 +175,6 @@ int main()
     }
 
     {   SCOPEDBLOCK("Previous/next nodes");
-        log.foo();
         KIWI_TEST_EQUAL("Number of previous nodes.", n1->previousNodes().size(), 0); 
         KIWI_TEST_EQUAL("Number of next nodes.", n1->nextNodes().size(), 0);
         n1->output() >> n2->input();
@@ -156,56 +186,34 @@ int main()
         auto n3 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
         auto n4 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
         auto n5 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
-        log.bar();
+
         n1->output() >> n3->input(0);
         n4->output() >> n3->input(1);
         n5->output() >> n3->input(2);
-        log.plop();
+
         KIWI_TEST_EQUAL("Number of previous nodes.", n3->previousNodes().size(), 3); 
 
-        for( auto it = n3->previousNodes().begin(); it != n3->previousNodes().end(); ++it )
-        {
-            if( *it == 0 ) log << ": null"  << endl;
-            else log << ": " << (*it)->id() << endl;
-        }
-
         n3->input(0).disconnectAll();
-
-        for( auto it = n3->previousNodes().begin(); it != n3->previousNodes().end(); ++it )
-        {
-            if( *it == 0 ) log << ": null"  << endl;
-            else log << ": " << (*it)->id() << endl;
-        }
-        
         n3->input(1).disconnectAll();
         n3->input(2).disconnectAll();
-
-        for( auto it = n3->previousNodes().begin(); it != n3->previousNodes().end(); ++it )
-        {
-            if( *it == 0 ) log << ": null"  << endl;
-            else log << ": " << (*it)->id() << endl;
-        }
 
         KIWI_TEST_EQUAL("Number of previous nodes.", n3->previousNodes().size(), 0); 
 
         n3->output(0) >> n4->input(0);
-        n3->output(0) >> n5->input(0);
         n3->output(1) >> n4->input(1);
-
+        n3->output(0) >> n5->input(0);
+        
         KIWI_TEST_EQUAL("Number of next nodes.", n3->nextNodes().size(), 2); 
 
+        printNodeLayout(n3);
+
         // TODO ! fails when disconnected in a different order 
-        PRINT_NODES( n3, nextNodes );
         n4->input(0).disconnectAll();
-        PRINT_NODES( n3, nextNodes );
         n4->input(1).disconnectAll();
-        PRINT_NODES( n3, nextNodes );
         n5->input(0).disconnectAll();
-        PRINT_NODES( n3, nextNodes );
         
         KIWI_TEST_EQUAL("Number of next nodes.", n3->nextNodes().size(), 0); 
-        PRINT_NODES( n3, nextNodes );
-
+        
 
         delete n3;
         delete n4;

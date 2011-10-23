@@ -5,6 +5,8 @@
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/DataStrategy.hpp"
 
+#include <assert.h>
+
 namespace kiwi{
 namespace core{
 
@@ -16,7 +18,10 @@ bool OutputPort::connect( InputPort& port )
 
 bool OutputPort::disconnect( InputPort& port )
 {
-	return kiwi::core::protocol::Disconnect(*this,port);
+    if( port.isConnectedTo(*this) )
+        return kiwi::core::protocol::Disconnect(*this,port);
+    else
+        return false;
 }
 
 
@@ -28,6 +33,7 @@ bool OutputPort::disconnectAll()
     {
         disconnect(*_connections[_connections.size()-1]);
     }
+    assert( !isConnected() );
 	return true;
 }
 

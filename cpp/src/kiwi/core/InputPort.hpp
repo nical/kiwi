@@ -52,6 +52,11 @@ public:
     	return _connection == &port;
     }
 
+    bool isOptional() const
+    {
+        return _flags & OPTIONAL;
+    }
+
     const DataTypeInfo* dataType() const
     {
         return _dataTypeInfo;

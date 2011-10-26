@@ -36,11 +36,13 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
     }
 }
 
-void Node::update()
+bool Node::update()
 {
     SCOPEDBLOCK("Node::update");
     if ( _type->updater() )
-        _type->updater()->update(*this);
+        return _type->updater()->update(*this);
+
+    return false;
 }
 
 void Node::findPreviousNodes()

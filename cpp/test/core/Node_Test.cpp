@@ -214,7 +214,6 @@ int main()
         
         KIWI_TEST_EQUAL("Number of next nodes.", n3->nextNodes().size(), 0); 
         
-
         delete n3;
         delete n4;
         delete n5;

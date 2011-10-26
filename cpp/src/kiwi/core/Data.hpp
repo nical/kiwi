@@ -41,24 +41,33 @@ public:
 	{
 		return (*_newFunction)();
 	}
+
 private:
 	string _name;
 	SubDataArray _subData;
 	Instanciator _newFunction;
 };
 
+template<typename T> class Container;
+
 class Data
 {
 public:
-    typedef unsigned int TypeId;
     
 	virtual const DataTypeInfo* type() const = 0;
-	virtual TypeId dataTypeId() const = 0;
+	
+    template<typename T> T* value();
+    template<typename T> const T* value() const;
+    
     virtual ~Data(){};
 };
 
 
 }//namespace
 }//namespace
+
+
+// need to include Container.hpp because downCast must be defined after Container
+#include "kiwi/core/Container.hpp"
 
 #endif

@@ -123,7 +123,7 @@ public:
      *
      * This is when the algorithm carried by the node (if any) is executed.
      */ 
-    void update();
+    bool update();
 
     /**
      * Updates the internal list of previous nodes.

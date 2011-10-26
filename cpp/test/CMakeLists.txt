@@ -14,14 +14,8 @@ find_package(OpenGL)
 link_directories (${PROJECT_BINARY_DIR})
 
 
-if(DEFINED BUILD_KIWI_TEXT)
 SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
-# text/PlainTextContainerTest
-)
-endif(DEFINED BUILD_KIWI_TEXT)
-
-
-SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
+ui/gl
 core/Node_Test
 core/NodeTypeManager_Test
 core/Container_Test
@@ -33,8 +27,6 @@ message("-- Kiwi Library : ${LIBKIWI_NAME}")
 
 FOREACH(FILE ${KIWI_TESTS_SRC})
   add_executable(${FILE} ${FILE})
-  target_link_libraries (${FILE} ${LIBKIWI_NAME} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} )
+  target_link_libraries (${FILE} ${LIBKIWI_NAME} ${GLUT_LIBRARY} ${OPENGL_LIBRARY} -lGLEW )
 # add_test(${FILE} ${FILE})
 ENDFOREACH(FILE)
-
-

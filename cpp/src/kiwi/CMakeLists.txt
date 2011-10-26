@@ -26,6 +26,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/Connect.cpp
     core/Pipeline.cpp
     core/DataTypeManager.cpp
+    core/DynamicNodeUpdater.cpp
     
 # kiwi::core source files
 )

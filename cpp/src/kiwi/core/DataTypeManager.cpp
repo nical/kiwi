@@ -1,6 +1,7 @@
 
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/DataTypeManager.hpp"
+#include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/Commons.hpp"
 
 #include <map>
@@ -24,6 +25,11 @@ const DataTypeInfo* RegisterDataType(string name, DataTypeInfo::Instanciator ins
     DataTypeInfo::SubDataArray dummy;
     DataTypeInfo* newInfo = new DataTypeInfo(name, dummy, instanciator);
     _types[name] = newInfo;
+
+    // register a container node for this data type
+    NodeLayoutDescriptor containerNodeDesc;
+    containerNodeDesc.outputs = { { "data", newInfo, READ } };
+    NodeTypeManager::RegisterNode( name, containerNodeDesc, 0 );
     
     return newInfo;
 }

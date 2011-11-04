@@ -27,7 +27,8 @@ public:
 
     bool connect( PipelineId plid, NodeId nid1, uint32 outputPort, NodeId nid2, uint32 inputPort );
     bool disconnect( PipelineId plid, NodeId nid2, uint32 inputPort );
-    
+
+    bool update();
 private:
     struct Request
     {

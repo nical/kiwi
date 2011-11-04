@@ -28,6 +28,10 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/PipelineManager.cpp
     core/DataTypeManager.cpp
     core/DynamicNodeUpdater.cpp
+    view/NodeView
+    view/PipelineView
+    view/gl/GLNodeDisplay
+    view/gl/GLPipelineDisplay
     
 # kiwi::core source files
 )

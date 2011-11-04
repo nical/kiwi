@@ -164,6 +164,7 @@ private:
         static ID nextId = 0;
         return ++nextId;
     }
+    
     ID _id;
     NodeArray _nodes;
     // components

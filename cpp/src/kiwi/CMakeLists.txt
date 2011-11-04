@@ -24,6 +24,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/OpConnect.cpp
     core/Connect.cpp
     core/Pipeline.cpp
+    core/PipelineManager.cpp
     core/DataTypeManager.cpp
     processing/ProcessingPipeline.cpp
     

@@ -23,6 +23,7 @@ int main()
 {
 	KIWI_BEGIN_TESTING("Kiwi::core::NodeTypeManager");
 
+
     auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
     auto DummyInfo = DataTypeManager::RegisterDataType("Dummmy", &NewDummy);
 

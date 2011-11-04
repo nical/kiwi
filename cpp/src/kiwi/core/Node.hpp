@@ -30,7 +30,7 @@ friend class kiwi::core::Pipeline;
 public:
     typedef std::vector<InputPort*> InputArray;
     typedef std::vector<OutputPort*> OutputArray;
-    typedef int ID;
+    typedef uint32 ID;
 
     /**
      * Constructor.

@@ -2,10 +2,7 @@
 #define KIWI_CORE_PIPELINE_HPP
 
 #include "kiwi/core/Commons.hpp"
-<<<<<<< HEAD
-=======
 #include <vector>
->>>>>>> 1f1aefc17c62ed9874355e0cdbcd6cac9a8542c8
 
 namespace kiwi{
 namespace core{
@@ -56,20 +53,6 @@ public:
 class PipelineOptimizer : PipelineComponent
 {
 public:
-<<<<<<< HEAD
-    typedef uint32 ID; 
-
-    Pipeline();    
-    virtual ~Pipeline();
-
-    virtual bool addNode(Node* n) = 0;
-    virtual bool update() = 0;
-    
-    ID id()
-    {
-        return _id;
-    }
-=======
     /**
      * Optimizes the pipeline.
      */ 
@@ -94,6 +77,7 @@ class Pipeline : public Procedure
 {
 public:
     typedef std::vector<Node*> NodeArray;
+    typedef uint32 ID; 
 
     // update flags
     enum{ LAZY = 1, STEPBYSTEP = 2 };
@@ -108,6 +92,7 @@ public:
         , PipelineRuleSet*     p_rules )
     : _updater(p_updater), _optimizer( p_optimizer ), _rules( p_rules )
     {
+        _id = _newId();
     }
 
     /**
@@ -164,26 +149,27 @@ public:
     bool removeAllNodes();
     bool contains(const Node* n);
 
+    ID id() const
+    {
+        return _id;
+    }
+
     ~Pipeline();
->>>>>>> 1f1aefc17c62ed9874355e0cdbcd6cac9a8542c8
 
 protected:
     void setNodePipeline(Node* n, Pipeline* p);
 private:
-<<<<<<< HEAD
     static ID _newId()
     {
         static ID nextId = 0;
         return ++nextId;
     }
     ID _id;
-=======
     NodeArray _nodes;
     // components
     PipelineUpdater*    _updater;
     PipelineOptimizer*  _optimizer;
     PipelineRuleSet*    _rules;
->>>>>>> 1f1aefc17c62ed9874355e0cdbcd6cac9a8542c8
 };
 
 }//namespace

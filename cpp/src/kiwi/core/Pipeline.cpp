@@ -10,11 +10,6 @@ void Pipeline::setNodePipeline(Node* n, Pipeline* p)
     n->_pipeline = p;
 }
 
-Pipeline::Pipeline()
-{
-    _id = _newId();
-}
-
 Pipeline::~Pipeline()
 {
     removeAllNodes();

@@ -15,12 +15,11 @@ link_directories (${PROJECT_BINARY_DIR})
 
 
 SET(KIWI_TESTS_SRC ${KIWI_TESTS_SRC}
-ui/gl
 core/Node_Test
 core/NodeTypeManager_Test
 core/Container_Test
 core/Algorithm_Test
-glWidget
+#glWidget
 )
 
 message("-- Kiwi Library : ${LIBKIWI_NAME}")

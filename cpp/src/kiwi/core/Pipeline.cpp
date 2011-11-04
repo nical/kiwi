@@ -17,9 +17,41 @@ Pipeline::Pipeline()
 
 Pipeline::~Pipeline()
 {
+    removeAllNodes();
 
+    if ( _updater ) delete _updater;
+    if ( _optimizer ) delete _optimizer;
 }
 
+
+bool Pipeline::setInput(uint32 index, Data* inputData)
+{
+    return false;
+}
+
+bool Pipeline::setOutput(uint32 index, Data* inputData)
+{
+    return false;
+}
+
+bool Pipeline::addNode( Node* n )
+{
+    return false;
+}
+
+bool Pipeline::removeNode( Node* n )
+{
+    return false;
+}
+bool Pipeline::removeAllNodes()
+{
+    return false;
+}
+
+bool Pipeline::contains(const Node* n)
+{
+    return false;
+}
 
 }//namespace
 }//namespace

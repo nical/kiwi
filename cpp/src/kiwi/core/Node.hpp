@@ -8,6 +8,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/extern/log/DebugStream.hpp"
 #include "kiwi/core/Data.hpp"
+#include "kiwi/core/Connect.hpp"
 
 namespace kiwi{
 namespace core{
@@ -26,11 +27,14 @@ class NodeTypeInfo;
  */ 
 class Node
 {
-friend class kiwi::core::Pipeline;    
+friend class kiwi::core::Pipeline;
+friend bool kiwi::core::protocol::Connect(OutputPort&,InputPort&);
+friend bool kiwi::core::protocol::Disconnect(OutputPort&,InputPort&);
 public:
     typedef std::vector<InputPort*> InputArray;
     typedef std::vector<OutputPort*> OutputArray;
     typedef uint32 ID;
+    typedef std::vector<Node*> NodeArray;
 
     /**
      * Constructor.
@@ -44,6 +48,7 @@ public:
     {
         return _inputs;
     }
+    
     /**
      * Returns the output ports as a vector.
      */ 
@@ -85,6 +90,22 @@ public:
     }
 
     /**
+     * Returns the set of nodes connected to this ones' outputs as a vector.
+     */ 
+    const NodeArray& previousNodes() const
+    {
+        return _previousNodes;
+    }
+
+    /**
+     * Returns the set of nodes connected to this ones' inputs as a vector.
+     */ 
+    const NodeArray& nextNodes() const
+    {
+        return _nextNodes;
+    }
+
+    /**
      * Returns a pointer to the pipeline this node belongs to.
      */ 
     Pipeline* pipeline() const
@@ -92,13 +113,29 @@ public:
         return _pipeline;
     }
 
+    ID id() const
+    {
+        return _id;
+    }
+
     /**
      * Updates the node if its type has a NodeUpdater component.
      *
      * This is when the algorithm carried by the node (if any) is executed.
      */ 
-    void update();
+    bool update();
 
+    /**
+     * Updates the internal list of previous nodes.
+     *
+     * should be called by ports when they connect / disconnect.
+     */ 
+    void findPreviousNodes();
+
+    void findNextNodes();
+   
+
+    
 private:
     static ID _newId()
     {
@@ -106,10 +143,17 @@ private:
         return ++nextId;
     }
 protected:
+    void inputConnected(InputPort* port, OutputPort* to);
+    void inputDisconnected(InputPort* port, OutputPort* to);
+    void outputConnected(OutputPort* port, InputPort* from);
+    void outputDisconnected(OutputPort* port, InputPort* from);
+    
     Pipeline* _pipeline;
 private:
-    InputArray _inputs;
+    InputArray  _inputs;
     OutputArray _outputs;
+    NodeArray   _previousNodes;
+    NodeArray   _nextNodes;
     const NodeTypeInfo* _type;
     ID _id;
 };

@@ -37,9 +37,11 @@ private:
         NodeId secondNode;
         uint32 args[4];
     };
+    typedef std::queue<Request> RequestQueue;
+    typedef std::vector<Pipeline*> PipelineArray;
 
-    std::vector<Pipeline*>  _pipelines;
-    std::queue<Request>    _requests;
+    PipelineArray  _pipelines;
+    RequestQueue    _requests;
 };
 
 }//namespace

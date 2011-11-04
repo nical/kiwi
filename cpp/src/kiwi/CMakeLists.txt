@@ -14,9 +14,10 @@ endif(DEFINED BUILD_KIWI_TEXT)
 
 SET(KIWI_SRC ${KIWI_SRC}
     extern/log/DebugStream.cpp
-    extern/utest/Testing.cpp
+    #extern/utest/Testing.cpp
     utils/Testing.cpp
     mock/MockNodeUpdater.cpp
+    mock/MockPipeline.cpp
     core/NodeTypeManager.cpp
     core/Node.cpp
     core/InputPort.cpp
@@ -26,7 +27,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/Pipeline.cpp
     core/PipelineManager.cpp
     core/DataTypeManager.cpp
-    processing/ProcessingPipeline.cpp
+    core/DynamicNodeUpdater.cpp
     
 # kiwi::core source files
 )

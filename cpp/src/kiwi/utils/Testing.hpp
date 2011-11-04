@@ -28,6 +28,7 @@ class TestManager{
 public:
     TestManager(){
         _out = &kiwi::log;
+        _nbTests = 0;
         _success = 0;
         _successSinceLastError = 0;
     } 

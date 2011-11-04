@@ -34,11 +34,15 @@ public:
     
     virtual Data* data()
     {
+        if ( _data == 0 )
+            _data = _dataTypeInfo->newInstance();
         return _data;
     }
 
     virtual const Data* data() const
     {
+        if ( _data == 0 )
+            const_cast<Data*&>(_data) = _dataTypeInfo->newInstance();
         return _data;
     }
     

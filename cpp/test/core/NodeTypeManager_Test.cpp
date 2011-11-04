@@ -7,12 +7,10 @@
 #include "kiwi/core/OpConnect.hpp"
 #include "kiwi/core/Container.hpp"
 #include "kiwi/extern/log/DebugStream.hpp"
-#include "kiwi/processing/ProcessingPipeline.hpp"
 #include "kiwi/mock/MockNodeUpdater.hpp"
 
 using namespace kiwi;
 using namespace kiwi::core;
-using namespace kiwi::processing;
 
 struct Dummy{};
 KIWI_DECLARE_CONTAINER(int,"Int");
@@ -96,7 +94,7 @@ int main()
             , info1->name() == "NodeTest1" );
     }
     
-    ProcessingPipeline p;
+    Pipeline p(0,0,0);
 
     auto n1 = new Node(&p, NodeTypeManager::TypeOf("NodeTest1") );
     auto n2 = new Node(&p, NodeTypeManager::TypeOf("NodeTest2") );

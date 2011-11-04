@@ -7,16 +7,53 @@
 #include "kiwi/core/OpConnect.hpp"
 #include "kiwi/core/Container.hpp"
 #include "kiwi/extern/log/DebugStream.hpp"
-#include "kiwi/processing/ProcessingPipeline.hpp"
 #include "kiwi/mock/MockNodeUpdater.hpp"
+#include "kiwi/mock/MockPipeline.hpp"
+
 
 using namespace kiwi;
 using namespace kiwi::core;
-using namespace kiwi::processing;
 
 struct Dummy{};
 KIWI_DECLARE_CONTAINER(int,"Int");
 KIWI_DECLARE_CONTAINER(Dummy,"Dummy");
+
+
+#define PRINT_NODES( n, prevOrNext )  \
+log << #prevOrNext << ":" << endl; \
+for( auto it = n->prevOrNext().begin(); it != n->prevOrNext().end(); ++it ) \
+{ if( *it == 0 ) log << ": null"  << endl; \
+else log << ": " << (*it)->id() << endl; }
+
+#define PRINT_OUT_CONNECTIONS( n )  \
+log << "| outputs:" << endl; \
+for( auto itp = n->outputs().begin(); itp != n->outputs().end(); ++itp ) \
+for( auto itc = (*itp)->connections().begin(); itc != (*itp)->connections().end(); ++itc ) \
+{ log << "| " << (*itc)->node()->id() << endl; }
+
+
+
+void printNodeLayout( Node* n )
+{
+        log << "Node id=" << n->id() << endl;
+        log << "inputs: {";
+        for( auto itp = n->inputs().begin(); itp != n->inputs().end(); ++itp )
+        {
+            if ( (*itp)->isConnected() )
+                log << (*itp)->connection()->node()->id() << " ";
+            else
+                log << "# ";
+        }
+        log << "} " << endl << "outputs: {";
+        for( auto itp = n->outputs().begin(); itp != n->outputs().end(); ++itp )
+        {
+            for( auto itc = (*itp)->connections().begin(); itc != (*itp)->connections().end(); ++itc )
+            {
+                log << (*itc)->node()->id() << " ";
+            }
+        }
+        log << "} " << endl;
+}
 
 
 int main()
@@ -41,8 +78,6 @@ int main()
 
     assert( layout1.inputs[1].dataType() == IntInfo );
     
-    //nt1init.addUpdate(new mock::MockNodeUpdater);
-
     NodeLayoutDescriptor layout2;
     layout2.inputs =
     {
@@ -52,16 +87,29 @@ int main()
     {
         { "out", DummyInfo, READ }
     };
-    
-    //nt2init.addUpdate(new mock::MockNodeUpdater);
+
+    NodeLayoutDescriptor layout3;
+    layout3.inputs =
+    {
+        { "in1", IntInfo, READ },
+        { "in1", IntInfo, READ },
+        { "in2", IntInfo, READ }
+    };
+    layout3.outputs =
+    {
+        { "out", IntInfo, READ },
+        { "out", IntInfo, READ },
+        { "out", IntInfo, READ }
+    };
 
     NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater);
     NodeTypeManager::RegisterNode("NodeTest2", layout2, new mock::MockNodeUpdater);
+    NodeTypeManager::RegisterNode("NodeTest3", layout3, new mock::MockNodeUpdater);
     
-    ProcessingPipeline p;
+    Pipeline* p = mock::NewMockPipeline();
 
-    auto n1 = new Node(&p, NodeTypeManager::TypeOf("NodeTest1") );
-    auto n2 = new Node(&p, NodeTypeManager::TypeOf("NodeTest2") );
+    auto n1 = NodeTypeManager::TypeOf("NodeTest1")->newInstance(p);
+    auto n2 = NodeTypeManager::TypeOf("NodeTest2")->newInstance(p);
 
     {   SCOPEDBLOCK("Initial state");
         KIWI_TEST("Number of input ports.", n1->inputs().size() == 2 );
@@ -126,7 +174,55 @@ int main()
         KIWI_TEST_EQUAL("Number of updates.", mock::MockNodeUpdater::updateCount, 2  );
     }
 
+    {   SCOPEDBLOCK("Previous/next nodes");
+        KIWI_TEST_EQUAL("Number of previous nodes.", n1->previousNodes().size(), 0); 
+        KIWI_TEST_EQUAL("Number of next nodes.", n1->nextNodes().size(), 0);
+        n1->output() >> n2->input();
+        KIWI_TEST_EQUAL("Number of previous nodes.", n1->previousNodes().size(), 0); 
+        KIWI_TEST_EQUAL("Number of next nodes.", n1->nextNodes().size(), 1);
+        KIWI_TEST_EQUAL("Number of previous nodes.", n2->previousNodes().size(), 1); 
+        KIWI_TEST_EQUAL("Number of next nodes.", n2->nextNodes().size(), 0);
+
+        auto n3 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
+        auto n4 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
+        auto n5 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
+
+        n1->output() >> n3->input(0);
+        n4->output() >> n3->input(1);
+        n5->output() >> n3->input(2);
+
+        KIWI_TEST_EQUAL("Number of previous nodes.", n3->previousNodes().size(), 3); 
+
+        n3->input(0).disconnectAll();
+        n3->input(1).disconnectAll();
+        n3->input(2).disconnectAll();
+
+        KIWI_TEST_EQUAL("Number of previous nodes.", n3->previousNodes().size(), 0); 
+
+        n3->output(0) >> n4->input(0);
+        n3->output(1) >> n4->input(1);
+        n3->output(0) >> n5->input(0);
+        
+        KIWI_TEST_EQUAL("Number of next nodes.", n3->nextNodes().size(), 2); 
+
+        printNodeLayout(n3);
+
+        // TODO ! fails when disconnected in a different order 
+        n4->input(0).disconnectAll();
+        n4->input(1).disconnectAll();
+        n5->input(0).disconnectAll();
+        
+        KIWI_TEST_EQUAL("Number of next nodes.", n3->nextNodes().size(), 0); 
+        
+        delete n3;
+        delete n4;
+        delete n5;
+    }
+
+
     delete n1;
     delete n2;
+    delete p;
+    
     return KIWI_END_TESTING;
 }

@@ -1,7 +1,9 @@
 
 #include "kiwi/utils/Testing.hpp"
+#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Container.hpp"
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/utils/DebugStream.hpp"
 
 
@@ -41,12 +43,6 @@ int main()
     KIWI_TEST( "type info name check Int.", infoi->name() == string("Int") );
     KIWI_TEST( "type info name check Float.", infof->name() == string("Float") );
 
-    int a;
-    KIWI_TEST( "DataTypeId equality.", DataTypeId<int>() == DataTypeId(a) );
-    KIWI_TEST( "DataTypeId inequality.", DataTypeId<float>() != DataTypeId<char>() );
-    KIWI_TEST( "DataTypeId equality and constness."
-        , DataTypeId<const TestData1>() == DataTypeId<TestData1>() );
-
     auto td1 = DataTypeManager::Create("TestData1");
     KIWI_TEST( "Instanciate known data 1 type not null.", td1 != 0);
     KIWI_TEST( "Instanciated type 1 name.", td1->type() == info1 );
@@ -56,11 +52,18 @@ int main()
     auto tdx = DataTypeManager::Create("SomeUnknownType");
     KIWI_TEST( "Instanciate unknown data 2 type returns null.", tdx == 0);
 
-    KIWI_TEST( "Data.DataTypeId 1 check", td1->dataTypeId() == DataTypeId<TestData1>() );
-    KIWI_TEST( "Data.DataTypeId 2 check", td2->dataTypeId() == DataTypeId<TestData2>() );
+    auto tdi = DataTypeManager::Create("Int");
+    *tdi->value<int>() = 42;
 
+    KIWI_TEST( "Container value assignment.", *tdi->value<int>() == 42);
+    auto intContainerNode = NodeTypeManager::Create("Int");
+    KIWI_TEST( "creation of a container node.", intContainerNode != 0 );
+    
+    
     delete td1;
     delete td2;
     delete tdx;
+    delete tdi;
+    delete intContainerNode;
     return KIWI_END_TESTING;
 }

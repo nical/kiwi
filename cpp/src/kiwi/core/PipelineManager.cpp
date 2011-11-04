@@ -23,7 +23,6 @@ bool PipelineManager::addPipeline(Pipeline* p)
 
 bool PipelineManager::updatePipeline( PipelineId id )
 {
-    
     for( auto it = _pipelines.begin(); it != _pipelines.end(); ++it  )
     {
         if( (*it)->id() == id )

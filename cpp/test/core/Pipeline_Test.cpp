@@ -23,17 +23,18 @@ int main()
     auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
 
     NodeLayoutDescriptor layout1;
-    layout1.inputs =
-    {
-        { "in1", IntInfo, READ },
-        { "in2", IntInfo, READ }
+    layout1.inputs = {
+        { "in0", IntInfo, READ },
+        { "in1", IntInfo, READ }
     };
-    layout1.outputs =
-    {
-        { "out", IntInfo, READ }
+    layout1.outputs = {
+        { "out0", IntInfo, READ },
+        { "out1", IntInfo, READ }
     };
 
-    Pipeline Pipeline( new ProcessingPipelineUpdater(), 0, 0 );
-        
+    Pipeline pipeline( new ProcessingPipelineUpdater(), 0, 0 );
+
+    pipeline.update();
+    
     return KIWI_END_TESTING
 }

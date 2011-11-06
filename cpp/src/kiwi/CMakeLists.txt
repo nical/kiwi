@@ -14,10 +14,10 @@ endif(DEFINED BUILD_KIWI_TEXT)
 
 SET(KIWI_SRC ${KIWI_SRC}
     extern/log/DebugStream.cpp
-    #extern/utest/Testing.cpp
     utils/Testing.cpp
     mock/MockNodeUpdater.cpp
     mock/MockPipeline.cpp
+    mock/MockNode.cpp
     core/NodeTypeManager.cpp
     core/Node.cpp
     core/InputPort.cpp

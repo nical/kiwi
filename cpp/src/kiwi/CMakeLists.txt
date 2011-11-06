@@ -32,6 +32,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     view/PipelineView
     view/gl/GLNodeDisplay
     view/gl/GLPipelineDisplay
+    processing/ProcessingPipelineUpdater
     
 # kiwi::core source files
 )

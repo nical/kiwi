@@ -32,22 +32,26 @@ public:
 
 class PipelineComponent
 {
-    virtual string name() const = 0;
+public:
+    typedef enum { UPDATER, OPTIMIZER, RULESET, OTHER } ComponentType;
+    virtual ComponentType type() const = 0;
+    virtual ~PipelineComponent() {}
 };
 
 class PipelineUpdater : public PipelineComponent
 {
 public:
     virtual bool update( Pipeline* p, uint32 flags ) = 0;
-    virtual ~PipelineUpdater() {}
+    PipelineComponent::ComponentType type() const
+    { return PipelineComponent::UPDATER; }
 };
 
 class PipelineRuleSet : PipelineComponent
 {
 public:
     virtual bool check( Pipeline* p ) = 0;
-
-    virtual ~PipelineRuleSet() {}
+    PipelineComponent::ComponentType type() const
+    { return PipelineComponent::RULESET; }
 };
 
 class PipelineOptimizer : PipelineComponent
@@ -62,7 +66,8 @@ public:
      */ 
     virtual uint32 modes() = 0;
 
-    virtual ~PipelineOptimizer() {}
+    PipelineComponent::ComponentType type() const
+    { return PipelineComponent::OPTIMIZER; }
 };
 
 

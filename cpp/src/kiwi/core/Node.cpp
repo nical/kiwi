@@ -45,6 +45,8 @@ bool Node::update()
     return false;
 }
 
+/* Potentially useless code
+ 
 void Node::findPreviousNodes()
 {
     _previousNodes.clear();
@@ -86,6 +88,7 @@ void Node::findNextNodes()
             }
         }
 }
+*/
 
 void Node::inputConnected(InputPort* port, OutputPort* to)
 {

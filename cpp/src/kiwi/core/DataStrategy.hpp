@@ -8,7 +8,9 @@ namespace core{
 class DataTypeInfo;
 class Data;
 
-
+/**
+ * Defines the way output ports should handle data.
+ */ 
 class DataStrategy
 {
 public:
@@ -17,6 +19,7 @@ public:
     virtual const Data* data() const = 0;
     virtual ~DataStrategy(){}
 };
+
 
 class AutoDataStrategy : public DataStrategy
 {

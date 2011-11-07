@@ -9,6 +9,11 @@ namespace core{
 
 class Node;
 
+/**
+ * Mother class for node update strategies.
+ *
+ * @see DynamicNodeUpdater
+ */ 
 class NodeUpdater
 {
 public:

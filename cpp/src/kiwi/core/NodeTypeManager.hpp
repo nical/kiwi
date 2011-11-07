@@ -17,7 +17,13 @@ class Node;
 class Pipeline;
 class NodeUpdater;
 
-
+/**
+ * Describes an input port.
+ *
+ * Used to store informations about ports and keep them in NodeTypeInfo objects.
+ * This information is then used to instanciate the nodes with the corresponding set
+ * of ports.
+ */ 
 class InputPortDescriptor
 {
 public:
@@ -55,6 +61,13 @@ private:
     DataAccessFlags _accessFlags;
 };
 
+/**
+ * Describes an output port.
+ *
+ * Used to store informations about ports and keep them in NodeTypeInfo objects.
+ * This information is then used to instanciate the nodes with the corresponding set
+ * of ports.
+ */ 
 class OutputPortDescriptor
 {
 public:
@@ -94,7 +107,12 @@ private:
 };
 
 
-
+/**
+ * Describes the layout of a node type (its input and output ports).
+ *
+ * This information is then used to instanciate the nodes with the corresponding set
+ * of ports.
+ */ 
 struct NodeLayoutDescriptor
 {
     typedef std::vector<InputPortDescriptor> InputDescriptorArray;
@@ -103,7 +121,11 @@ struct NodeLayoutDescriptor
     OutputDescriptorArray outputs;
 };
 
-
+/**
+ * Runtime type info object for nodes.
+ *
+ * keeps informations about a given node type and can create instances of the node.
+ */ 
 class NodeTypeInfo
 {
 friend class NodeTypeManager;
@@ -139,19 +161,40 @@ private:
 };
 
 
+/**
+ * Manager for runtime node type info objects.
+ */ 
 class NodeTypeManager
 {
 public:
+    /**
+     * Register a node type.
+     */ 
     static const NodeTypeInfo* RegisterNode( string nodeName
         , const NodeLayoutDescriptor& layout, NodeUpdater* updater );
-    
+
+    /**
+     * Remove a node type from the manager.
+     */ 
     static void Unregister(string name);
+
+    /**
+     * Remove all the node types.
+     */ 
     static void UnregisterAll();
 
+    /**
+     * Returns a pointer to the runtime node type info for a given name.
+     *
+     * Returns a nil pointer if the name doesn't correspond to a registered type.
+     */ 
     static const NodeTypeInfo* TypeOf(string name);
+
+    /**
+     * Instanciates a node corresponding to its type name.
+     */
     static Node* Create(string name, Pipeline* p = 0);
 };
-
 
 
 

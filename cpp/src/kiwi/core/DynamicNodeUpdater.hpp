@@ -11,6 +11,9 @@ namespace core{
 
 class Data;
 
+/**
+ * Node updater that accepts functions of the type 'bool myFunction(const DataArray& inputs, const DataArray& outputs)'.
+ */ 
 class DynamicNodeUpdater : public NodeUpdater
 {
 public:

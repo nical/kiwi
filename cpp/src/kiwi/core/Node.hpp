@@ -113,6 +113,9 @@ public:
         return _pipeline;
     }
 
+    /**
+     * Returns this node's unique id.
+     */ 
     ID id() const
     {
         return _id;
@@ -124,16 +127,6 @@ public:
      * This is when the algorithm carried by the node (if any) is executed.
      */ 
     bool update();
-
-    /**
-     * Updates the internal list of previous nodes.
-     *
-     * should be called by ports when they connect / disconnect.
-     */ 
-    void findPreviousNodes();
-
-    void findNextNodes();
-   
 
     
 private:

@@ -13,6 +13,9 @@ namespace core{
 
 class Pipeline;
 
+/**
+ * Manage pipelines in a asynchronous way.
+ */ 
 class PipelineManager
 {
 public:

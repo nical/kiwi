@@ -11,6 +11,9 @@ namespace core{
 
 class Data;
 
+/**
+ * Runtime type information class for data.
+ */ 
 class DataTypeInfo
 {
 public:
@@ -50,12 +53,22 @@ private:
 
 template<typename T> class Container;
 
+
+/**
+ * Mother class of Data objects.
+ */ 
 class Data
 {
 public:
-    
+
+    /**
+     * Returns a pointer to the data's type info.
+     */ 
 	virtual const DataTypeInfo* type() const = 0;
-	
+
+    /**
+     * Returns the value of the data held by this object.
+     */
     template<typename T> T* value();
     template<typename T> const T* value() const;
     

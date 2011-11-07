@@ -30,11 +30,19 @@ public:
 
 // --------------------------------------------------------- Pipeline components
 
+/**
+ * Mother class for pipeline components. 
+ */ 
 class PipelineComponent
 {
     virtual string name() const = 0;
 };
 
+/**
+ * Mother class for pipeline updater components.
+ *
+ * Handles the update of a pipeline.
+ */ 
 class PipelineUpdater : public PipelineComponent
 {
 public:
@@ -42,6 +50,12 @@ public:
     virtual ~PipelineUpdater() {}
 };
 
+/**
+ * Mother class for pipeline rule set components
+ *
+ * Allows to add syntactic constraints to a pipeline.
+ * This feature is not yet fully implemented. 
+ */ 
 class PipelineRuleSet : PipelineComponent
 {
 public:
@@ -50,9 +64,18 @@ public:
     virtual ~PipelineRuleSet() {}
 };
 
+/**
+ * Mother class for pipeline optimizer components.
+ *
+ * Pipeline optimizers can generate an optimized version of the pipeline that
+ * cannot be modified anymore, but should be more efficient.
+ * The nature of the improvement is up to the optimizer implementation, though it
+ * can optionally use the flag passed in parameter as a hint.
+ */ 
 class PipelineOptimizer : PipelineComponent
 {
 public:
+    enum { NONE = 0, SPEED = 1, MEMORY = 2 };
     /**
      * Optimizes the pipeline.
      */ 
@@ -140,15 +163,39 @@ public:
         return _nodes;
     }
 
+    /**
+     * TODO
+     */ 
     bool setInput(uint32 index, Data* inputData); // override
+
+    /**
+     * TODO
+     */ 
     bool setOutput(uint32 index, Data* inputData); // override
     
-    
+    /**
+     * Adds a node to this pipeline.
+     */ 
     bool addNode( Node* n );
+
+    /**
+     * Remove a given node from this pipeline without deleting it.
+     */ 
     bool removeNode( Node* n );
+
+    /**
+     * Remove all nodes from this pipeline withou deleting them.
+     */ 
     bool removeAllNodes();
+
+    /**
+     * Returns true if this pipeline contains a given node.
+     */ 
     bool contains(const Node* n);
 
+    /**
+     * Returns the unique id of the pipeline object.
+     */ 
     ID id() const
     {
         return _id;

@@ -6,6 +6,9 @@
 #include <string>
 
 #include <boost/cstdint.hpp>
+#include <assert.h>
+
+#define KIWI_NOT_IMPLEMENTED(name) assert(name == " not implemented yet.");
 
 namespace kiwi{
 

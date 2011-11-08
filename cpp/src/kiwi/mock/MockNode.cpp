@@ -14,7 +14,7 @@ static const NodeTypeInfo* _mockNodeInfo;
 
 KIWI_DECLARE_CONTAINER(int,"Int");
 
-void DelcareMockNode( uint32 nbInputs, uint32 nbOutputs )
+void DeclareMockNode( uint32 nbInputs, uint32 nbOutputs )
 {
     auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
 

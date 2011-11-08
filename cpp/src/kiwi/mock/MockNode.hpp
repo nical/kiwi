@@ -12,7 +12,7 @@ namespace kiwi{
     }
 namespace mock{
 
-void DelcareMockNode( uint32 nbInputs, uint32 nbOutputs );
+void DeclareMockNode( uint32 nbInputs, uint32 nbOutputs );
 
 core::Node* NewMockNode();
 

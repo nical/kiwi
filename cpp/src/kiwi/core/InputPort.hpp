@@ -86,7 +86,7 @@ public:
      */ 
     bool isOptional() const
     {
-        return _flags & OPTIONAL;
+        return _flags & OPT;
     }
 
     /**

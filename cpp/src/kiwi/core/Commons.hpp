@@ -18,7 +18,7 @@ typedef std::string string;
 typedef int DataAccessFlags;
 
 enum{ READ = 1, WRITE = 2, SIGNAL = 4
-    , OPTIONAL = 16
+    , OPT = 16
     , IN = 64, OUT=128 };
 
 

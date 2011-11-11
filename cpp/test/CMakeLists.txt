@@ -22,8 +22,9 @@ core/Algorithm_Test
 core/Pipeline_Test
 #glWidget
 )
-
+message("-- Kiwi Test suite")
 message("-- Kiwi Library : ${LIBKIWI_NAME}")
+message("-- CXX Flags: ${CMAKE_CXX_FLAGS}" )
 
 FOREACH(FILE ${KIWI_TESTS_SRC})
   add_executable(${FILE} ${FILE})

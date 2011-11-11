@@ -17,29 +17,30 @@ bool ProcessingPipelineUpdater::update( Pipeline* p, uint32 flags )
     int i = 0;
     while( toUpdate.size() > 0 )
     {
+        log<< "#" <<i<<endl;
         Node* n = toUpdate[i];
         auto & dependencies = toUpdate[i]->previousNodes();
         // look for dependencies 
         bool foundDependency = false;
         for(auto it = dependencies.begin(); it!=dependencies.end();++it)
         {
-            if(n ==*it)
-            {
-                foundDependency = true;
-                break;
-            }
+            for(auto it2 = toUpdate.begin(); it2!=toUpdate.end(); ++it2)
+                if(*it2 ==*it)
+                {
+                    foundDependency = true;
+                    break;
+                }
         }
         if( !foundDependency )
         {
             n->update();
             // then remove the node from toUpdate
-            toUpdate[i] == toUpdate[ toUpdate.size()-1];
+            toUpdate[i] = toUpdate[ toUpdate.size()-1];
             toUpdate.resize(toUpdate.size()-1);
         }
-        else
-        {
-            ++i;
-        }
+
+        ++i;
+
         if( i >= toUpdate.size() ) i = 0;
     }
     

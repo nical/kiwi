@@ -83,7 +83,7 @@ set ( LIBKIWI_NAME "Kiwicpp${SUFFIXLIB}" )
 # -----------------------------------------------------------------------------
 # Compile flags
 # -----------------------------------------------------------------------------
-SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++0x)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -g")
 #SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -gdwarf-2-std=c++0x)
 
 message( "CXX Flags: ${CMAKE_CXX_FLAGS}" )

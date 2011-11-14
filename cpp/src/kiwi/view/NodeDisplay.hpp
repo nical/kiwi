@@ -17,6 +17,7 @@ class NodeView;
 class NodeDisplay
 {
 public:
+    virtual bool init( const NodeView& view ) = 0;
     virtual bool display( const NodeView& view ) = 0;
     virtual ~NodeDisplay() {}
 };

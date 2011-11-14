@@ -19,10 +19,10 @@ public:
     NodeView(NodeId nodeID, float nx, float ny )
     : _nodeId(nodeID), _state(NORMAL)
     {
-        _box.x = nx;
-        _box.y = ny;
-        _box.w = 30.f;
-        _box.h = 50.f;
+        _boundingBox.x = nx;
+        _boundingBox.y = ny;
+        _boundingBox.w = 30.f;
+        _boundingBox.h = 50.f;
     }
     
     int state() const
@@ -36,13 +36,13 @@ public:
 
     Box boundingBox() const
     {
-        return _box;
+        return _boundingBox;
     }
 
 private:
     NodeId _nodeId;
     int _state;
-    Box _box;
+    Box _boundingBox;
     NodeDisplay* _display;
 };
 

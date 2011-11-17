@@ -177,6 +177,27 @@ void Node::outputDisconnected(OutputPort* port, InputPort* from)
     }
 }
 
+const InputPort& Node::input( string portName ) const
+{
+    for(int i = 0; i < inputs().size(); ++i)
+    {
+        if(_type->inputs()[i].name() == portName)
+            return input(i);
+    }
+    assert("port not found" == portName ); 
+}
+
+const OutputPort& Node::output( string portName ) const
+{
+    for(int i = 0; i < outputs().size(); ++i)
+    {
+        if(_type->outputs()[i].name() == portName)
+            return output(i);
+    }
+    assert("port not found" == portName ); 
+}
+
+
 
 }//namespace
 }//namespace

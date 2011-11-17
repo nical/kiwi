@@ -89,6 +89,9 @@ public:
         return *_outputs[i];
     }
 
+    const InputPort& input( string portName ) const;
+    const OutputPort& output( string portName ) const;
+
     /**
      * Returns the set of nodes connected to this ones' outputs as a vector.
      */ 

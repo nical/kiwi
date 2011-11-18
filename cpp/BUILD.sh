@@ -3,6 +3,8 @@
 
 cd ./build
 
-make -j4
+make -j4 && cp -f src/kiwi/libkiwicpp.a ..
 
 cd ..
+
+

@@ -92,14 +92,14 @@ int main()
     layout3.inputs =
     {
         { "in1", IntInfo, READ },
-        { "in1", IntInfo, READ },
-        { "in2", IntInfo, READ }
+        { "in2", IntInfo, READ },
+        { "in3", IntInfo, READ }
     };
     layout3.outputs =
     {
-        { "out", IntInfo, READ },
-        { "out", IntInfo, READ },
-        { "out", IntInfo, READ }
+        { "out1", IntInfo, READ },
+        { "out2", IntInfo, READ },
+        { "out3", IntInfo, READ }
     };
 
     NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater);
@@ -117,7 +117,8 @@ int main()
         KIWI_TEST("Input 1 data type.", n1->inputs()[0]->dataType() == IntInfo );
         KIWI_TEST("Input 2 data type.", n1->inputs()[1]->dataType() == IntInfo );
         KIWI_TEST("Output 1 data type.", n1->outputs()[0]->dataType() == IntInfo );
-
+        KIWI_TEST("Access input by name", &n1->input("in1") == &n1->input(0) );
+        KIWI_TEST("Access input by name", &n1->input("in2") == &n1->input(1) );
         KIWI_TEST("Input is not connected.", ! n2->input().isConnected() );
         KIWI_TEST("Input is not connected to.", ! n2->input().isConnectedTo( n1->output() ) );
         KIWI_TEST("Output is not connected.", ! n1->output().isConnected() );

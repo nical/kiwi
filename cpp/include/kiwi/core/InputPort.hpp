@@ -4,6 +4,7 @@
 
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Connect.hpp"
+#include "kiwi/core/Data.hpp"
 
 #include <vector>
 
@@ -123,6 +124,15 @@ public:
      * This test is performed before each connection.
      */ 
     bool isCompatible( const OutputPort& port ) const;
+
+    Data* data() const;
+
+    template<typename T> T* dataAs() const
+    {
+        if ( data() == 0 )
+            return 0;
+        return data()->value<T>();
+    }
 
 protected:
     Node* _node;

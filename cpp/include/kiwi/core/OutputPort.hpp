@@ -5,6 +5,7 @@
 #include <vector>
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Data.hpp"
 
 namespace kiwi{
 namespace core{
@@ -65,6 +66,13 @@ public:
      * Returns a pointer to the data of this output port.
      */ 
     Data* data() const;
+
+    template<typename T> T* dataAs() const
+    {
+        if ( data() == 0 )
+            return 0;
+        return data()->value<T>();
+    }
 
     /**
      * Returns a pointer to this ports data type info object.

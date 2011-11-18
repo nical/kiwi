@@ -30,5 +30,12 @@ bool InputPort::isCompatible(const OutputPort& port) const
     return _dataTypeInfo == port.dataType();
 }
 
+Data* InputPort::data() const
+{
+    if (isConnected())
+        return connection()->data();
+    return 0;
+}
+
 }//namespace
 }//namespace

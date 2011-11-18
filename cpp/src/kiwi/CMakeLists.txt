@@ -1,8 +1,8 @@
-include_directories (${PROJECT_SOURCE_DIR}/src)
+include_directories (${PROJECT_SOURCE_DIR}/include)
 
 include_directories (${CAIRO_INCLUDE_DIR})
 SET(optionalLibs ${optionalLibs}  ) #additional libs here
-SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${CAIRO_CFLAGS})
+#SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${CAIRO_CFLAGS})
 
 SET(KIWI_SRC ${KIWI_SRC}
     extern/log/DebugStream.cpp
@@ -22,8 +22,8 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/DynamicNodeUpdater.cpp
     view/NodeView
     view/PipelineView
-    view/gl/GLNodeDisplay
-    view/gl/GLPipelineDisplay
+    #view/gl/GLNodeDisplay
+    #view/gl/GLPipelineDisplay
     processing/ProcessingPipelineUpdater
     
 # kiwi::core source files

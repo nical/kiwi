@@ -1,6 +1,7 @@
 
 #include "kiwi/mock/MockNode.hpp"
 #include "kiwi/core/Node.hpp"
+#include "kiwi/core/Commons.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/mock/MockNodeUpdater.hpp"
@@ -12,7 +13,7 @@ namespace mock{
 
 static const NodeTypeInfo* _mockNodeInfo;
 
-KIWI_DECLARE_CONTAINER(int,"Int");
+KIWI_DECLARE_CONTAINER(int,"Int")
 
 void DeclareMockNode( uint32 nbInputs, uint32 nbOutputs )
 {
@@ -20,10 +21,10 @@ void DeclareMockNode( uint32 nbInputs, uint32 nbOutputs )
 
     NodeLayoutDescriptor layout;
 
-    for(int i = 0; i < nbInputs; ++i)
+    for(uint32 i = 0; i < nbInputs; ++i)
         layout.inputs.push_back( { "in", IntInfo, READ } );
 
-    for(int i = 0; i < nbInputs; ++i)
+    for(uint32 i = 0; i < nbInputs; ++i)
         layout.outputs.push_back( { "out", IntInfo, READ } );
     
 

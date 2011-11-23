@@ -137,8 +137,8 @@ public:
 
 protected:
     Node* _node;
-    DataAccessFlags _flags;
     const DataTypeInfo* _dataTypeInfo;
+    DataAccessFlags _flags;
     OutputPort* _connection;
     //CompatibilityStrategy* _compatibility;
 };

@@ -14,8 +14,8 @@
 #define KIWI_ENDBLOCK_2 " "
 
 #ifdef USE_SCOPEDBLOCK_MACRO
-#define SCOPEDBLOCK(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::log, KIWI_DEBUG_3);
-#define FUNCTIONBLOCK kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNCTION__, kiwi::log, KIWI_DEBUG_3);
+#define SCOPEDBLOCK(message) kiwi::utils::ScopedBlock kiwi_scop##__LINE__(message, kiwi::log, KIWI_DEBUG_3)
+#define FUNCTIONBLOCK kiwi::utils::ScopedBlock kiwi_scop##__LINE__(__FUNCTION__, kiwi::log, KIWI_DEBUG_3)
 #else
 #define SCOPEDBLOCK(message) \
 

@@ -22,7 +22,7 @@ bool DynamicNodeUpdater::update(const Node& n)
     DataArray inputs( n.inputs().size() );
     DataArray outputs( n.outputs().size() );
 
-    for( int i = 0; i < n.inputs().size(); ++i )
+    for( uint32 i = 0; i < n.inputs().size(); ++i )
     {
         if ( n.inputs()[i]->isConnected() )
             inputs[i] = n.inputs()[i]->connection()->data();
@@ -34,7 +34,7 @@ bool DynamicNodeUpdater::update(const Node& n)
         }
     }
     
-    for( int i = 0; i < n.outputs().size(); ++i )
+    for( uint32 i = 0; i < n.outputs().size(); ++i )
     {
         outputs[i] = n.outputs()[i]->data();
     }

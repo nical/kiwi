@@ -14,7 +14,7 @@ bool ProcessingPipelineUpdater::update( Pipeline* p, uint32 flags )
 
     Pipeline::NodeArray toUpdate = p->nodes();
     
-    int i = 0;
+    uint32 i = 0;
     while( toUpdate.size() > 0 )
     {
         log<< "#" <<i<<endl;

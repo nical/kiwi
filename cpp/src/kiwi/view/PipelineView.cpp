@@ -7,7 +7,7 @@ namespace view{
 
 bool PipelineView::display() const
 {
-    _display->display( *this );
+    return _display->display( *this );
 }
 
 }//namespace

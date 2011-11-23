@@ -138,7 +138,7 @@ public:
      */ 
     bool isConnectedTo( const InputPort& port )
     {
-    	for(int i = 0; i < _connections.size(); ++i)
+    	for(uint32 i = 0; i < _connections.size(); ++i)
     		if( &port == _connections[i] )
     			return true;
     	return false;
@@ -148,7 +148,7 @@ public:
 protected://methods
     int _indexOf(const InputPort& port)
     {
-    	for(int i = 0; i < _connections.size(); ++i)
+    	for(uint32 i = 0; i < _connections.size(); ++i)
     		if(_connections[i] == &port)
     			return i;
     	return -1;
@@ -156,9 +156,8 @@ protected://methods
 protected://variables
     Node* _node;
     ConnectionArray _connections;
-    DataAccessFlags _accessFlags;
     DataStrategy* _dataStrategy;
-
+    DataAccessFlags _accessFlags;
 };
 
 } //namespace

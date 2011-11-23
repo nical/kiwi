@@ -5,10 +5,11 @@
 
 #include <string>
 
-#include <boost/cstdint.hpp>
+#include <stdint.h>
 #include <assert.h>
 
-#define KIWI_NOT_IMPLEMENTED(name) assert(name == " not implemented yet.");
+inline bool kiwi_error( const char* const text ) { return false; }
+#define KIWI_NOT_IMPLEMENTED(name) assert( kiwi_error(name" is not implemented yet.") )
 
 namespace kiwi{
 
@@ -24,12 +25,12 @@ enum{ READ = 1, WRITE = 2, SIGNAL = 4
 
 typedef unsigned int uint;
 typedef unsigned char uint8;
-typedef boost::uint16_t uint16;
-typedef boost::uint32_t uint32;
-typedef boost::uint64_t uint64;
-typedef boost::int16_t int16;
-typedef boost::int32_t int32;
-typedef boost::int64_t int64;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+typedef int16_t int16;
+typedef int32_t int32;
+typedef int64_t int64;
 typedef char int8;
 typedef char byte;
 

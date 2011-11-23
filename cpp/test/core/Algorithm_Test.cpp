@@ -15,7 +15,7 @@
 using namespace kiwi;
 using namespace kiwi::core;
 
-KIWI_DECLARE_CONTAINER(int,"Int");
+KIWI_DECLARE_CONTAINER(int,"Int")
 
 bool TestFunction(
       const DynamicNodeUpdater::DataArray& inputs

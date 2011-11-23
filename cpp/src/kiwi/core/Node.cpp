@@ -19,7 +19,7 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
     if(pipeline) pipeline->addNode(this);
     _id = _newId();
     
-    for(int i = 0; i < typeInfo->inputs().size(); ++i)
+    for(uint32 i = 0; i < typeInfo->inputs().size(); ++i)
     {
         _inputs.push_back( new InputPort( this
                 , typeInfo->inputs()[i].dataType()
@@ -27,7 +27,7 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
         );
     }
     
-    for(int i = 0; i < typeInfo->outputs().size(); ++i)
+    for(uint32 i = 0; i < typeInfo->outputs().size(); ++i)
     {
         _outputs.push_back( new OutputPort( this
                 , new AutoDataStrategy( typeInfo->outputs()[i].dataType() )
@@ -75,7 +75,7 @@ void Node::inputDisconnected(InputPort* port, OutputPort* from)
             return;
     }
     // not found, means it has to be removed from the prvious nodes list
-    for( int i = 0; i < _previousNodes.size(); ++i )
+    for( uint32 i = 0; i < _previousNodes.size(); ++i )
     {
         if( _previousNodes[i] == n )
         {
@@ -122,7 +122,7 @@ void Node::outputDisconnected(OutputPort* port, InputPort* from)
         ++i;
     }
     // not found, means it has to be removed from the prvious nodes list
-    for( int i = 0; i < _nextNodes.size(); ++i )
+    for( uint32 i = 0; i < _nextNodes.size(); ++i )
     {
         if( _nextNodes[i] == n )
         {
@@ -135,22 +135,24 @@ void Node::outputDisconnected(OutputPort* port, InputPort* from)
 
 const InputPort& Node::input( string portName ) const
 {
-    for(int i = 0; i < inputs().size(); ++i)
+    for(uint32 i = 0; i < inputs().size(); ++i)
     {
         if(_type->inputs()[i].name() == portName)
             return input(i);
     }
-    assert("port not found" == portName ); 
+    assert("port not found" == portName );
+    return input(0); // to avoid warnings, should never happen though
 }
 
 const OutputPort& Node::output( string portName ) const
 {
-    for(int i = 0; i < outputs().size(); ++i)
+    for(uint32 i = 0; i < outputs().size(); ++i)
     {
         if(_type->outputs()[i].name() == portName)
             return output(i);
     }
-    assert("port not found" == portName ); 
+    assert("port not found" == portName );
+    return output(0); // to avoid warnings, should never happen though
 }
 
 string Node::inputName( uint32 i ) const

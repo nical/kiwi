@@ -19,6 +19,7 @@ PipelineManager::~PipelineManager()
 bool PipelineManager::addPipeline(Pipeline* p)
 {
     _pipelines.push_back( p );
+    return true;
 }
 
 bool PipelineManager::updatePipeline( PipelineId id )
@@ -28,6 +29,7 @@ bool PipelineManager::updatePipeline( PipelineId id )
         if( (*it)->id() == id )
             (*it)->update();
     }
+    return true;
 }
 
 bool PipelineManager::connect( PipelineId plid, NodeId nid1, uint32 outputPort, NodeId nid2, uint32 inputPort )
@@ -41,6 +43,7 @@ bool PipelineManager::connect( PipelineId plid, NodeId nid1, uint32 outputPort, 
     r.args[1] = inputPort;
     
     _requests.push( r );
+    return true;
 }
 
 bool PipelineManager::disconnect( PipelineId plid, NodeId nid, uint32 inputPort )
@@ -52,11 +55,13 @@ bool PipelineManager::disconnect( PipelineId plid, NodeId nid, uint32 inputPort 
     r.args[1] = inputPort;
     
     _requests.push( r );
+    return true;
 }
 
 bool PipelineManager::update()
 {
-    
+    KIWI_NOT_IMPLEMENTED("PipelineManager::update");
+    return false;
 }
 
 }//namespace

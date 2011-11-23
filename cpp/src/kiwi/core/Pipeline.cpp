@@ -46,7 +46,7 @@ bool Pipeline::addNode( Node* n )
 
 static int _findIndexOf( Pipeline::NodeArray nodes, const Node* n )
 {
-    for(int  i=0; i < nodes.size(); ++i)
+    for(uint32  i=0; i < nodes.size(); ++i)
         if(nodes[i] == n)
              return i;
     return -1;

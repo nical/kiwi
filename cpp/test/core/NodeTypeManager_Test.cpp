@@ -13,8 +13,8 @@ using namespace kiwi;
 using namespace kiwi::core;
 
 struct Dummy{};
-KIWI_DECLARE_CONTAINER(int,"Int");
-KIWI_DECLARE_CONTAINER(Dummy,"Dummy");
+KIWI_DECLARE_CONTAINER(int,"Int")
+KIWI_DECLARE_CONTAINER(Dummy,"Dummy")
 
 
 int main()

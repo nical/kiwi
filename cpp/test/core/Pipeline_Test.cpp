@@ -109,7 +109,7 @@ int main()
     
     KIWI_TEST("Order of execution", updates == std::vector<int>({1,2,3}));
 
-    for(int i = 0; i < updates.size(); ++i )
+    for(uint32 i = 0; i < updates.size(); ++i )
     {
         log << " " << updates[i];
     }
@@ -125,7 +125,7 @@ int main()
     pipeline.update();
 
     
-    for(int i = 0; i < updates.size(); ++i )
+    for(uint32 i = 0; i < updates.size(); ++i )
     {
         log << " " << updates[i];
     }

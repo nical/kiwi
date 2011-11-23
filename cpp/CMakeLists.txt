@@ -54,27 +54,6 @@ list( APPEND CMAKE_MODULE_PATH . )
 set ( CMAKE_PREFIX_PATH "/usr:/usr/local:/opt/local:${CMAKE_PREFIX_PATH}" )
 message( "-- CMAKE_PREFIX_PATH = " ${CMAKE_PREFIX_PATH} )
 
-# Find the boost library
-FIND_PACKAGE(Boost REQUIRED)
-# MACPORT
-if(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
-SET( MACPORT_BOOST_INCLUDES "/opt/local/include/boost")
-SET( MACPORT_BOOST_LIBS "/opt/local/lib/")
-
-    include_directories( ${MACPORT_BOOST_INCLUDES} )
-    link_directories( ${MACPORT_BOOST_LIBS} )
-set( MACPORT_BOOST_FOUND TRUE)
-
-message( "-- Apple plateform detected : Boost lib path added." )
-endif(DEFINED APPLE AND NOT DEFINED ${MACPORT_BOOST_FOUND})
-
-if ( Boost_FOUND )
-   message( "-- Boost found. include=${Boost_INCLUDE_DIR}" )
-   include_directories( ${Boost_INCLUDE_DIR} )
-endif ( Boost_FOUND )
-
-
-
 # -----------------------------------------------------------------------------
 # Defines some variables
 # -----------------------------------------------------------------------------
@@ -83,7 +62,7 @@ set ( LIBKIWI_NAME "kiwicpp${SUFFIXLIB}" )
 # -----------------------------------------------------------------------------
 # Compile flags
 # -----------------------------------------------------------------------------
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -g")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -g -Wall -pedantic")
 #SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -gdwarf-2-std=c++0x)
 
 message( "CXX Flags: ${CMAKE_CXX_FLAGS}" )

@@ -8,8 +8,8 @@
 using namespace kiwi;
 using namespace kiwi::core;
 
-KIWI_DECLARE_CONTAINER(int,"Int");
-KIWI_DECLARE_CONTAINER(float,"Float");
+KIWI_DECLARE_CONTAINER(int,"Int")
+KIWI_DECLARE_CONTAINER(float,"Float")
 
 int main()
 {

@@ -6,6 +6,7 @@
 
 #include "kiwi/core/Commons.hpp"
 #include <vector>
+#include <map>
 
 namespace kiwi{
 namespace core{
@@ -167,6 +168,8 @@ private:
 class NodeTypeManager
 {
 public:
+    typedef std::map<string,NodeTypeInfo*> NodeTypeMap;
+    typedef NodeTypeMap::iterator NodeTypeIterator;
     /**
      * Register a node type.
      */ 
@@ -194,6 +197,12 @@ public:
      * Instanciates a node corresponding to its type name.
      */
     static Node* Create(string name, Pipeline* p = 0);
+
+    /**
+     * Iterator.
+     */ 
+    static NodeTypeIterator Types_begin();
+    static NodeTypeIterator Types_end();
 };
 
 

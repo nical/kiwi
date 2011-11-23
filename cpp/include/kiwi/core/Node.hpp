@@ -91,6 +91,8 @@ public:
 
     const InputPort& input( string portName ) const;
     const OutputPort& output( string portName ) const;
+    string inputName( uint32 i ) const;
+    string outputName( uint32 i ) const;
 
     /**
      * Returns the set of nodes connected to this ones' outputs as a vector.

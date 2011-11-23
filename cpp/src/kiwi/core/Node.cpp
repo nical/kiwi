@@ -45,50 +45,6 @@ bool Node::update()
     return false;
 }
 
-/* Potentially useless code
- 
-void Node::findPreviousNodes()
-{
-    _previousNodes.clear();
-    for( auto it = _inputs.begin(); it != _inputs.end(); ++it )
-        if ( (*it)->isConnected() )
-        {
-            bool found = false;
-            for( auto itpn = _previousNodes.begin()
-                ; itpn != _previousNodes.end(); ++itpn )
-            {
-                if( (*it)->connection()->node() == *itpn )
-                    found = true;
-            }
-            if( !found )
-            {
-                _previousNodes.push_back( (*it)->connection()->node() );
-            }
-        }
-}
-
-void Node::findNextNodes()
-{
-    _nextNodes.clear();
-    for( auto it = _outputs.begin(); it != _outputs.end(); ++it )
-        if ( (*it)->isConnected() )
-        {
-            for( auto itc = (*it)->connections().begin(); itc != (*it)->connections().begin(); ++itc )
-            {
-                bool found = false;
-                for( auto itnn = _nextNodes.begin(); itnn != _nextNodes.end(); ++itnn )
-                {
-                    if( (*itc)->node() == *itnn )
-                        found = true;
-                }
-                if( !found )
-                {
-                    _nextNodes.push_back( (*itc)->node() );
-                }
-            }
-        }
-}
-*/
 
 void Node::inputConnected(InputPort* port, OutputPort* to)
 {
@@ -196,6 +152,17 @@ const OutputPort& Node::output( string portName ) const
     }
     assert("port not found" == portName ); 
 }
+
+string Node::inputName( uint32 i ) const
+{
+    return _type->inputs()[i].name();
+}
+
+string Node::outputName( uint32 i ) const
+{
+    return _type->outputs()[i].name();
+}
+
 
 
 

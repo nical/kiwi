@@ -1,5 +1,4 @@
 #include "kiwi/core/NodeTypeManager.hpp"
-#include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/Node.hpp"
 
 #include <map>
@@ -20,6 +19,15 @@ Node* NodeTypeInfo::newInstance(Pipeline* p) const
 
 static std::map<string,NodeTypeInfo*> _types;
 
+NodeTypeManager::NodeTypeIterator NodeTypeManager::Types_begin()
+{
+    return _types.begin();
+}
+    
+NodeTypeManager::NodeTypeIterator NodeTypeManager::Types_end()
+{
+    return _types.end();
+}
 
 const NodeTypeInfo* NodeTypeManager::RegisterNode( string nodeName
     , const NodeLayoutDescriptor& layout, NodeUpdater* updater )

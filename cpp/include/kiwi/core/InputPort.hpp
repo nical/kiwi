@@ -63,6 +63,7 @@ public:
      */ 
     string name() const
     {
+        KIWI_NOT_IMPLEMENTED("InputPort::Name");
     	return "error";
     }
 

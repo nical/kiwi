@@ -20,6 +20,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/PipelineManager.cpp
     core/DataTypeManager.cpp
     core/DynamicNodeUpdater.cpp
+    core/Blob.cpp
     view/NodeView
     view/PipelineView
     #view/gl/GLNodeDisplay

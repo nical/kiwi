@@ -27,7 +27,7 @@ public:
     AutoDataStrategy(const DataTypeInfo* info)
     : _dataTypeInfo(info)
     {
-
+        _data = _dataTypeInfo->newInstance();
     }
     
     virtual const DataTypeInfo* dataType() const

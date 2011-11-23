@@ -9,6 +9,7 @@
 #include "kiwi/extern/log/DebugStream.hpp"
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/Connect.hpp"
+#include "kiwi/core/Blob.hpp"
 
 namespace kiwi{
 namespace core{
@@ -35,6 +36,7 @@ public:
     typedef std::vector<OutputPort*> OutputArray;
     typedef uint32 ID;
     typedef std::vector<Node*> NodeArray;
+    typedef Blob Storage;
 
     /**
      * Constructor.
@@ -126,13 +128,28 @@ public:
         return _id;
     }
 
+    Storage& storage()
+    {
+        return _storage;
+    }
+
+    const Storage& storage() const
+    {
+        return _storage;
+    }
+
+    bool hasStorage() const
+    {
+        return _storage.isAllocated();
+    }
+
     /**
      * Updates the node if its type has a NodeUpdater component.
      *
      * This is when the algorithm carried by the node (if any) is executed.
      */ 
     bool update();
-
+    void init();
     
 private:
     static ID _newId()
@@ -152,6 +169,7 @@ private:
     OutputArray _outputs;
     NodeArray   _previousNodes;
     NodeArray   _nextNodes;
+    Storage     _storage;
     const NodeTypeInfo* _type;
     ID _id;
 };

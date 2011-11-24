@@ -1,15 +1,6 @@
 #!/bin/sh
 
 
-########################################################
-# Test if a symbolic link to executable already exist. #
-# If it's true, then remove it.                        #
-########################################################
-if [ -L "kiwi" ]
-then
-  rm kiwi
-fi
-
 
 #############################################
 # Test if a build directory already exist.  #

@@ -29,5 +29,4 @@ mkdir test/audio
 cmake .. &&
 make -j4 &&
 cd .. &&
-ln -s build/src/software/kiwi kiwi
 

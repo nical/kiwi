@@ -8,6 +8,9 @@ else
   mkdir build;
   mkdir build/test
   mkdir build/test/core
+  cd build
+  cmake ..
+  cd ..
 fi
 
 

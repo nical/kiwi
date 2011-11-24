@@ -8,25 +8,11 @@
 #############################################
 if [ -d "build" ]
 then
-  rm -rf build/*
-else
-  mkdir build;
+  rm -rf build
 fi
-
 
 ###########################
 # Build and install kiwi. #
 ###########################
-cd build
-mkdir test &&
-mkdir test/core
-mkdir test/mpl
-mkdir test/generic
-mkdir test/text
-mkdir test/image
-mkdir test/utils
-mkdir test/audio
-cmake .. &&
-make -j4 &&
-cd .. &&
 
+./BUILD.sh

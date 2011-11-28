@@ -13,15 +13,15 @@ namespace core{
 
 bool DynamicNodeUpdater::update(const Node& n)
 {
-    SCOPEDBLOCK("DynamicNodeUpdater::update");
+    //SCOPEDBLOCK("DynamicNodeUpdater::update");
     if ( _fptr == 0 )
     {
+        log << "Error: No function" << endl;
         // TODO throw an error
         return false;
     }
     DataArray inputs( n.inputs().size() );
     DataArray outputs( n.outputs().size() );
-
     for( uint32 i = 0; i < n.inputs().size(); ++i )
     {
         if ( n.inputs()[i]->isConnected() )
@@ -29,7 +29,10 @@ bool DynamicNodeUpdater::update(const Node& n)
         else
         {
             if( !n.input(i).isOptional() )
+            {
+                log << "Error: input port  "<<i<<" not connected and not optional " << endl;
                 return false;
+            }
             inputs[i] = 0;
         }
     }

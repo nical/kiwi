@@ -2,7 +2,7 @@
 #ifndef KIWI_UTILS_DEBUGSTREAM_HPP
 #define KIWI_UTILS_DEBUGSTREAM_HPP
 
-#define USE_SCOPEDBLOCK_MACRO
+//#define USE_SCOPEDBLOCK_MACRO
 
 #include <iostream>
 #include "kiwi/core/Commons.hpp"

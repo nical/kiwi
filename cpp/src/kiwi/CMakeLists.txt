@@ -7,6 +7,7 @@ SET(optionalLibs ${optionalLibs}  ) #additional libs here
 SET(KIWI_SRC ${KIWI_SRC}
     extern/log/DebugStream.cpp
     utils/Testing.cpp
+    utils/TypeIdHelper.cpp
     mock/MockNodeUpdater.cpp
     mock/MockPipeline.cpp
     mock/MockNode.cpp

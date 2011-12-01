@@ -21,6 +21,7 @@ core/Container_Test
 core/Algorithm_Test
 core/Pipeline_Test
 core/Misc_Test
+core/TypeId_Test
 #glWidget
 )
 message("-- Kiwi Test suite")

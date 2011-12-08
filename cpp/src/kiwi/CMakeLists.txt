@@ -23,8 +23,6 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/Blob.cpp
     view/NodeView
     view/PipelineView
-    #view/gl/GLNodeDisplay
-    #view/gl/GLPipelineDisplay
     processing/ProcessingPipelineUpdater
     
 # kiwi::core source files

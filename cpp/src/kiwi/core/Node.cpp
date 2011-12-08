@@ -7,6 +7,7 @@
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/DataStrategy.hpp"
 #include "kiwi/core/NodeUpdater.hpp"
+#include "kiwi/view/NodeView.hpp"
 
 namespace kiwi{
 namespace core{
@@ -14,6 +15,7 @@ namespace core{
 Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
 {
     SCOPEDBLOCK("Node::constructor");
+    _view = 0;
     _pipeline = pipeline;
     _type = typeInfo;
     if(pipeline) pipeline->addNode(this);
@@ -39,10 +41,18 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
 bool Node::update()
 {
     SCOPEDBLOCK("Node::update");
+    int outcome;
     if ( _type->updater() )
-        return _type->updater()->update(*this);
-
-    return false;
+    {
+        outcome = _type->updater()->update(*this);
+        if(_view)_view->nodeUpdated(outcome);
+        return outcome;
+    }
+    else
+    {
+        if(_view)_view->nodeUpdated(false);
+        return false;
+    }
 }
 
 
@@ -153,6 +163,12 @@ const OutputPort& Node::output( string portName ) const
     }
     assert("port not found" == portName );
     return output(0); // to avoid warnings, should never happen though
+}
+
+void Node::setView( view::NodeView * v )
+{
+    _view = v;
+    _view->setNode(this);
 }
 
 string Node::inputName( uint32 i ) const

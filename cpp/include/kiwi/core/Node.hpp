@@ -11,6 +11,8 @@
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/Blob.hpp"
 
+namespace kiwi{ namespace view{ class NodeView; }}
+
 namespace kiwi{
 namespace core{
 
@@ -113,6 +115,14 @@ public:
     }
 
     /**
+     * Returns this node's runtime type info.
+     */ 
+    const NodeTypeInfo * type() const
+    {
+        return _type;
+    }
+
+    /**
      * Returns a pointer to the pipeline this node belongs to.
      */ 
     Pipeline* pipeline() const
@@ -143,6 +153,13 @@ public:
         return _storage.isAllocated();
     }
 
+    view::NodeView * view() const
+    {
+        return _view;
+    }
+
+    void setView( view::NodeView* v );
+
     /**
      * Updates the node if its type has a NodeUpdater component.
      *
@@ -170,6 +187,7 @@ private:
     NodeArray   _previousNodes;
     NodeArray   _nextNodes;
     Storage     _storage;
+    view::NodeView*   _view;
     const NodeTypeInfo* _type;
     ID _id;
 };

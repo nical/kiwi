@@ -5,6 +5,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/Data.hpp"
+#include "kiwi/core/Connect.hpp"
 
 #include <vector>
 
@@ -30,6 +31,7 @@ class InputPort
 friend bool kiwi::core::protocol::Connect(OutputPort&,InputPort&);
 friend bool kiwi::core::protocol::Disconnect(OutputPort&,InputPort&);
 public:
+    typedef void (*FeedBackFunction)(uint32);
 
     InputPort(){}
     InputPort(Node* n, const DataTypeInfo* datatype, DataAccessFlags flags)
@@ -105,7 +107,8 @@ public:
      * @return true if connection suceeded, fals otherwise.
      */ 
     bool connect(OutputPort& port);
-
+    // TODO !
+    template<typename Callable> void asyncConnect(OutputPort& port, Callable outcome);
     /**
      * Disconnects from a specific output port.
      *
@@ -113,6 +116,8 @@ public:
      * connected to the specified output port. 
      */ 
     bool disconnect(OutputPort& port);
+    // TODO !
+    template<typename Callable> void asyncDisconnect(OutputPort& port, Callable outcome);
 
     /**
      * Disconnects this port.
@@ -144,6 +149,18 @@ protected:
 };
 
 
+// Will be changed for truly async system 
+template<typename Callable>
+void InputPort::asyncConnect(OutputPort& port, Callable outcome)
+{
+    outcome( protocol::Connect(port, *this) );
+}
+
+template<typename Callable>
+void InputPort::asyncDisconnect(OutputPort& port, Callable outcome)
+{
+    outcome( protocol::Disconnect(port, *this) );
+}
 
 
 } //namespace

@@ -5,6 +5,8 @@
 
 #include "kiwi/core/Pipeline.hpp"
 
+namespace kiwi{ namespace core{ class Pipeline; }}
+
 namespace kiwi{
 namespace view{
 
@@ -14,16 +16,13 @@ class NodeView;
 class PipelineView
 {
 public:
-    typedef std::vector<NodeView*> NodeViewArray;
-    bool display() const;
-
-    NodeViewArray nodeViews() const
+    core::Pipeline * pipeline() const
     {
-        return _nodeViews;
+        return _pipeline;
     }
+    
 private:
-    PipelineDisplay* _display;
-    NodeViewArray _nodeViews;
+    core::Pipeline* _pipeline;
 };
 
 

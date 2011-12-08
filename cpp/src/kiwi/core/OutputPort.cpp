@@ -11,12 +11,12 @@ namespace kiwi{
 namespace core{
 
 
-bool OutputPort::connect( InputPort& port )
+uint32 OutputPort::connect( InputPort& port )
 {
 	return kiwi::core::protocol::Connect(*this,port);
 }
 
-bool OutputPort::disconnect( InputPort& port )
+uint32 OutputPort::disconnect( InputPort& port )
 {
     if( port.isConnectedTo(*this) )
         return kiwi::core::protocol::Disconnect(*this,port);

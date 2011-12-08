@@ -6,6 +6,7 @@
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Data.hpp"
+#include "kiwi/core/Connect.hpp"
 
 namespace kiwi{
 namespace core{
@@ -95,16 +96,18 @@ public:
      *
      * @return true if the connection suceeded. 
      */ 
-    bool connect( InputPort& port );
-
+    uint32 connect( InputPort& port );
+    template<typename Callable> void asyncConnect(InputPort& port, Callable outcome);
+    
     /**
      * Disconnect from a specific input port.
      *
      * @return true if disconnection succeeded, false if this port is not connected
      * to the specified input port.
      */ 
-    bool disconnect( InputPort& port );
-
+    uint32 disconnect( InputPort& port );
+    template<typename Callable> void asyncDisconnect(InputPort& port, Callable outcome);
+    
     /**
      * Disconnect this port from all the inputs connected to it.
      */ 
@@ -159,6 +162,20 @@ protected://variables
     DataStrategy* _dataStrategy;
     DataAccessFlags _accessFlags;
 };
+
+
+// TODO: Will be changed for a truly async system 
+template<typename Callable>
+void OutputPort::asyncConnect(InputPort& port, Callable outcome)
+{
+    outcome( protocol::Connect(*this, port) );
+}
+
+template<typename Callable>
+void OutputPort::asyncDisconnect(InputPort& port, Callable outcome)
+{
+    outcome( protocol::Disconnect(*this, port) );
+}
 
 } //namespace
 } //namespace

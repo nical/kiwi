@@ -175,7 +175,7 @@ private:
         return ++nextId;
     }
 protected:
-    void inputConnected(InputPort* port, OutputPort* to);
+    void inputConnected(InputPort* port, OutputPort* to); // TODO: remove these?
     void inputDisconnected(InputPort* port, OutputPort* to);
     void outputConnected(OutputPort* port, InputPort* from);
     void outputDisconnected(OutputPort* port, InputPort* from);

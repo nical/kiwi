@@ -4,10 +4,16 @@
 #define KIWI_CORE_CONTAINER_HPP
 
 #include "kiwi/core/Data.hpp"
-#include "kiwi/core/DataTypeManager.hpp"
+#include "kiwi/core/Commons.hpp"
 
 namespace kiwi{
 namespace core{
+
+class DataTypeInfo;
+namespace DataTypeManager{
+    const DataTypeInfo* TypeOf(string name);
+} 
+
 
 /**
  * Templated wrapper for data.
@@ -36,7 +42,7 @@ public:
     // later cannot check that the type info corresponds to the template parameter.
     Container(string name)
     {
-        _type = DataTypeManager::TypeOf(name);
+        _type = kiwi::core::DataTypeManager::TypeOf(name);
     }
 
     /**

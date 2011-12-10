@@ -4,6 +4,7 @@
 #include "kiwi/core/InputPort.hpp"
 #include "kiwi/core/OutputPort.hpp"
 #include "kiwi/core/OpConnect.hpp"
+#include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/Testing.hpp"

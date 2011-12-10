@@ -3,6 +3,7 @@
 #include "kiwi/core/Node.hpp"
 #include "kiwi/core/Container.hpp"
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/utils/DebugStream.hpp"
 

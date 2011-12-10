@@ -1,4 +1,5 @@
 
+#include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/core/Pipeline.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/Testing.hpp"

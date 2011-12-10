@@ -58,6 +58,7 @@ bool Node::update()
 
 void Node::inputConnected(InputPort* port, OutputPort* to)
 {
+    SCOPEDBLOCK("Node::inputConnected");
     Node* n = to->node();
     if ( n == 0 ) return;
     bool found = false;
@@ -72,10 +73,15 @@ void Node::inputConnected(InputPort* port, OutputPort* to)
     if ( !found ){
         _previousNodes.push_back(n);
     }
+    if( view() ) view()->inputConnected(port, to);
 }
 
 void Node::inputDisconnected(InputPort* port, OutputPort* from)
 {
+    log.debug() << "Node::inputDisconnected" << endl;
+    
+    if( view() ) view()->inputDisconnected(port, from); // TODO: maybe should be done last
+
     Node* n = from->node();
     if ( n == 0 ) return;
     // look for the node in the input connections
@@ -118,6 +124,9 @@ void Node::outputConnected(OutputPort* port, InputPort* to)
 
 void Node::outputDisconnected(OutputPort* port, InputPort* from)
 {
+    // TODO: maybe should be done at the end of the function
+    if( view() ) view()->outputDisconnected(port, from);
+    
     Node* n = from->node();
     if ( n == 0 ) return;
     // look for the node in the output connections
@@ -144,8 +153,6 @@ void Node::outputDisconnected(OutputPort* port, InputPort* from)
             return;
         }
     }
-
-    if( view() ) view()->outputDisconnected(port, from);
 }
 
 const InputPort& Node::input( string portName ) const

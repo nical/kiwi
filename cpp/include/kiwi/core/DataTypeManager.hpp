@@ -1,5 +1,4 @@
 
-#pragma once
 #ifndef KIWI_CORE_DATATYPEMANAGER_HPP
 #define KIWI_CORE_DATATYPEMANAGER_HPP
 

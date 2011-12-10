@@ -1,6 +1,6 @@
 #include "kiwi/core/OutputPort.hpp"
 #include "kiwi/core/InputPort.hpp"
-
+#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/DataStrategy.hpp"
@@ -24,6 +24,10 @@ uint32 OutputPort::disconnect( InputPort& port )
         return false;
 }
 
+uint32 OutputPort::index() const
+{
+    return node()->indexOf(this);
+}
 
 bool OutputPort::disconnectAll()
 {

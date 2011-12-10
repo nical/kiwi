@@ -64,6 +64,11 @@ public:
     }
 
     /**
+     * Returns this port's index.
+     */ 
+    uint32 index() const;
+
+    /**
      * Returns a pointer to the data of this output port.
      */ 
     Data* data() const;

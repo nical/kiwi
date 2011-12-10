@@ -112,7 +112,10 @@ void Node::outputConnected(OutputPort* port, InputPort* to)
     if ( !found ){
         _nextNodes.push_back(n);
     }
+
+    if( view() ) view()->outputConnected(port, to);
 }
+
 void Node::outputDisconnected(OutputPort* port, InputPort* from)
 {
     Node* n = from->node();
@@ -141,6 +144,8 @@ void Node::outputDisconnected(OutputPort* port, InputPort* from)
             return;
         }
     }
+
+    if( view() ) view()->outputDisconnected(port, from);
 }
 
 const InputPort& Node::input( string portName ) const
@@ -181,8 +186,23 @@ string Node::outputName( uint32 i ) const
     return _type->outputs()[i].name();
 }
 
+uint32 Node::indexOf( const InputPort * p )
+{
+    for( uint32 i = 0; i < _inputs.size(); ++i )
+        if( _inputs[i] == p)
+            return i;
+    log.error() << "Node::indexOf(InputPort*): bad param, return -1" << endl;
+    return -1;
+}
 
-
+uint32 Node::indexOf( const OutputPort * p )
+{
+    for( uint32 i = 0; i < _outputs.size(); ++i )
+        if( _outputs[i] == p)
+            return i;
+    log.error() << "Node::indexOf(OutputPort*): bad param, return -1" << endl;
+    return -1;
+}
 
 }//namespace
 }//namespace

@@ -98,6 +98,9 @@ public:
     string inputName( uint32 i ) const;
     string outputName( uint32 i ) const;
 
+    uint32 indexOf( const InputPort* p );
+    uint32 indexOf( const OutputPort* p );
+
     /**
      * Returns the set of nodes connected to this ones' outputs as a vector.
      */ 

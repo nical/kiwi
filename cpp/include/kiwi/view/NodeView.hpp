@@ -29,6 +29,11 @@ public:
     }
 
     virtual void nodeUpdated( int updateState ){}
+
+    virtual void outputConnected(core::OutputPort* port, core::InputPort* to){}
+    virtual void inputConnected(core::InputPort* port, core::OutputPort* to){}
+    virtual void outputDisconnected(core::OutputPort* port, core::InputPort* from){}
+    virtual void inputDisconnected(core::InputPort* port, core::OutputPort* from){}
     
     core::Node * node() const
     {

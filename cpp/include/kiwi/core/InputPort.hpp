@@ -57,6 +57,11 @@ public:
     {
         return _node;
     }
+
+    /**
+     * Returns this port's index.
+     */ 
+    uint32 index() const;
     
     /**
      * Returns the name of this port.

@@ -36,6 +36,11 @@ uint32 InputPort::index() const
     return node()->indexOf(this);
 }
 
+string InputPort::name() const
+{
+    return node()->type()->inputs()[index()].name();
+}
+
 Data* InputPort::data() const
 {
     if (isConnected())

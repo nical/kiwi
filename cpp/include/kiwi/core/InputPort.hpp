@@ -5,7 +5,9 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/Data.hpp"
+#include "kiwi/core/Node.hpp"
 #include "kiwi/core/Connect.hpp"
+#include "kiwi/core/NodeTypeManager.hpp"
 
 #include <vector>
 
@@ -68,11 +70,8 @@ public:
      *
      * Warning may be removed in the future!
      */ 
-    string name() const
-    {
-        KIWI_NOT_IMPLEMENTED("InputPort::Name");
-    	return "error";
-    }
+    string name() const;
+    
 
     /**
      * Returns true if this port is connected.

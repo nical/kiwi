@@ -20,6 +20,7 @@ core/NodeTypeManager_Test
 core/Container_Test
 core/Algorithm_Test
 core/Pipeline_Test
+core/TypeId_Test
 core/Misc_Test
 #glWidget
 )

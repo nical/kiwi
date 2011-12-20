@@ -7,7 +7,7 @@ include_directories (${PROJECT_SOURCE_DIR}/include)
 include_directories (${PROJECT_SOURCE_DIR}/test/)
 #include_directories (/usr/include/cairo/)
 
-find_package(GLUT)
+#find_package(GLUT)
 find_package(OpenGL)
 
 # Make sure the linker can find the library once it is built.

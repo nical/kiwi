@@ -7,6 +7,7 @@
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/DataStrategy.hpp"
 #include "kiwi/core/NodeUpdater.hpp"
+#include "kiwi/view/NodeView.hpp"
 
 namespace kiwi{
 namespace core{
@@ -14,6 +15,7 @@ namespace core{
 Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
 {
     SCOPEDBLOCK("Node::constructor");
+    _view = 0;
     _pipeline = pipeline;
     _type = typeInfo;
     if(pipeline) pipeline->addNode(this);
@@ -39,15 +41,24 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
 bool Node::update()
 {
     SCOPEDBLOCK("Node::update");
+    int outcome;
     if ( _type->updater() )
-        return _type->updater()->update(*this);
-
-    return false;
+    {
+        outcome = _type->updater()->update(*this);
+        if(_view)_view->nodeUpdated(outcome);
+        return outcome;
+    }
+    else
+    {
+        if(_view)_view->nodeUpdated(false);
+        return false;
+    }
 }
 
 
 void Node::inputConnected(InputPort* port, OutputPort* to)
 {
+    SCOPEDBLOCK("Node::inputConnected");
     Node* n = to->node();
     if ( n == 0 ) return;
     bool found = false;
@@ -62,10 +73,15 @@ void Node::inputConnected(InputPort* port, OutputPort* to)
     if ( !found ){
         _previousNodes.push_back(n);
     }
+    if( view() ) view()->inputConnected(port, to);
 }
 
 void Node::inputDisconnected(InputPort* port, OutputPort* from)
 {
+    log.debug() << "Node::inputDisconnected" << endl;
+    
+    if( view() ) view()->inputDisconnected(port, from); // TODO: maybe should be done last
+
     Node* n = from->node();
     if ( n == 0 ) return;
     // look for the node in the input connections
@@ -102,9 +118,15 @@ void Node::outputConnected(OutputPort* port, InputPort* to)
     if ( !found ){
         _nextNodes.push_back(n);
     }
+
+    if( view() ) view()->outputConnected(port, to);
 }
+
 void Node::outputDisconnected(OutputPort* port, InputPort* from)
 {
+    // TODO: maybe should be done at the end of the function
+    if( view() ) view()->outputDisconnected(port, from);
+    
     Node* n = from->node();
     if ( n == 0 ) return;
     // look for the node in the output connections
@@ -155,6 +177,12 @@ const OutputPort& Node::output( string portName ) const
     return output(0); // to avoid warnings, should never happen though
 }
 
+void Node::setView( view::NodeView * v )
+{
+    _view = v;
+    _view->setNode(this);
+}
+
 string Node::inputName( uint32 i ) const
 {
     return _type->inputs()[i].name();
@@ -165,8 +193,23 @@ string Node::outputName( uint32 i ) const
     return _type->outputs()[i].name();
 }
 
+uint32 Node::indexOf( const InputPort * p )
+{
+    for( uint32 i = 0; i < _inputs.size(); ++i )
+        if( _inputs[i] == p)
+            return i;
+    log.error() << "Node::indexOf(InputPort*): bad param, return -1" << endl;
+    return -1;
+}
 
-
+uint32 Node::indexOf( const OutputPort * p )
+{
+    for( uint32 i = 0; i < _outputs.size(); ++i )
+        if( _outputs[i] == p)
+            return i;
+    log.error() << "Node::indexOf(OutputPort*): bad param, return -1" << endl;
+    return -1;
+}
 
 }//namespace
 }//namespace

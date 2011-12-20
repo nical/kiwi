@@ -11,6 +11,8 @@
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/Blob.hpp"
 
+namespace kiwi{ namespace view{ class NodeView; }}
+
 namespace kiwi{
 namespace core{
 
@@ -96,6 +98,9 @@ public:
     string inputName( uint32 i ) const;
     string outputName( uint32 i ) const;
 
+    uint32 indexOf( const InputPort* p );
+    uint32 indexOf( const OutputPort* p );
+
     /**
      * Returns the set of nodes connected to this ones' outputs as a vector.
      */ 
@@ -110,6 +115,14 @@ public:
     const NodeArray& nextNodes() const
     {
         return _nextNodes;
+    }
+
+    /**
+     * Returns this node's runtime type info.
+     */ 
+    const NodeTypeInfo * type() const
+    {
+        return _type;
     }
 
     /**
@@ -143,6 +156,13 @@ public:
         return _storage.isAllocated();
     }
 
+    view::NodeView * view() const
+    {
+        return _view;
+    }
+
+    void setView( view::NodeView* v );
+
     /**
      * Updates the node if its type has a NodeUpdater component.
      *
@@ -158,7 +178,7 @@ private:
         return ++nextId;
     }
 protected:
-    void inputConnected(InputPort* port, OutputPort* to);
+    void inputConnected(InputPort* port, OutputPort* to); // TODO: remove these?
     void inputDisconnected(InputPort* port, OutputPort* to);
     void outputConnected(OutputPort* port, InputPort* from);
     void outputDisconnected(OutputPort* port, InputPort* from);
@@ -170,6 +190,7 @@ private:
     NodeArray   _previousNodes;
     NodeArray   _nextNodes;
     Storage     _storage;
+    view::NodeView*   _view;
     const NodeTypeInfo* _type;
     ID _id;
 };

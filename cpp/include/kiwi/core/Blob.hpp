@@ -10,7 +10,7 @@ namespace core{
 
 class BlobHeader
 {
-friend class Blob;
+friend class BasicBlob;
 public:
     uint32 type() const
     {
@@ -41,11 +41,11 @@ private:
     uint32 _padding;
 };
 
-class Blob
+class BasicBlob
 {
 public:
-    Blob( uint32 bufferSize = 0, uint32 btype = 0, uint32 bflags = 0 );
-    ~Blob();
+    BasicBlob( uint32 bufferSize = 0, uint32 btype = 0, uint32 bflags = 0 );
+    ~BasicBlob();
     
     void allocate( uint32 bufferSize, uint32 btype = 0, uint32 bflags = 0 );
     void deallocate();
@@ -92,6 +92,7 @@ private:
     BlobHeader * _buffer;
 };
 
+typedef BasicBlob Blob;
 
 }//namespace
 }//namespace

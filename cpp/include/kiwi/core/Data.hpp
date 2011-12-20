@@ -79,8 +79,8 @@ public:
 }//namespace
 }//namespace
 
-
 // need to include Container.hpp because downCast must be defined after Container
 #include "kiwi/core/Container.hpp"
+
 
 #endif

@@ -1,5 +1,6 @@
 #include "kiwi/core/InputPort.hpp"
 #include "kiwi/core/OutputPort.hpp"
+#include "kiwi/core/Node.hpp"
 #include "kiwi/core/CompatibilityStrategy.hpp"
 #include "kiwi/core/Connect.hpp"
 
@@ -28,6 +29,16 @@ bool InputPort::isCompatible(const OutputPort& port) const
 	//if(_compatibility != 0) return true;
 	//return _compatibility->isCompatible(*this, port);
     return _dataTypeInfo == port.dataType();
+}
+
+uint32 InputPort::index() const
+{
+    return node()->indexOf(this);
+}
+
+string InputPort::name() const
+{
+    return node()->type()->inputs()[index()].name();
 }
 
 Data* InputPort::data() const

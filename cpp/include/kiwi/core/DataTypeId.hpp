@@ -22,9 +22,15 @@ struct TypeIdGenerator
 class DataTypeId
 {
 public:
-    enum{ STATIC, RUNTIME, ANY };
+    typedef size_t TypeIndex;
+    enum{ INVALID, STATIC, RUNTIME };
 
-    DataTypeId( uint32 intId, uint8 category )
+    DataTypeId()
+    :_id(0), _category(INVALID)
+    {
+    }
+    
+    DataTypeId( TypeIndex intId, uint8 category )
     :_id(intId), _category(category)
     {
     }
@@ -38,6 +44,11 @@ public:
     static DataTypeId TypeOf()
     {
         return DataTypeId( TypeIdGenerator<T>::genId(), STATIC );
+    }
+
+    static DataTypeId NullType()
+    {
+        return DataTypeId();
     }
     
     bool operator==(const DataTypeId& other) const
@@ -63,7 +74,7 @@ public:
     
     
 private:
-    uint32  _id;
+    TypeIndex  _id;
     uint8   _category; 
 };
 

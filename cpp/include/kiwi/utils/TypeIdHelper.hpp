@@ -4,7 +4,7 @@
 #define KIWI_UTILS_TYPEIDHELPER_HPP
 
 #include "kiwi/core/Commons.hpp"
-#include "kiwi/core/TypeId.hpp"
+#include "kiwi/core/TypeIndex.hpp"
 
 namespace kiwi{
 namespace utils{

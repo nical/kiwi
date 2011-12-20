@@ -7,6 +7,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/Connect.hpp"
+#include "kiwi/core/DataTypeId.hpp"
 
 namespace kiwi{
 namespace core{
@@ -166,6 +167,7 @@ protected://variables
     ConnectionArray _connections;
     DataStrategy* _dataStrategy;
     DataAccessFlags _accessFlags;
+    DataTypeId _id;
 };
 
 

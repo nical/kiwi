@@ -9,15 +9,15 @@
 namespace kiwi{
 namespace core{
 
-typedef kiwi::uint32 TypeID;
+typedef size_t TypeID;
 
 
 template< typename T >
-struct TypeIdGenerator
+struct TypeIndexGenerator
 {
-private: TypeIdGenerator(){}
+private: TypeIndexGenerator(){}
 public:
-	static TypeID GetTypeId()
+	static TypeID Get()
 	{
         static char addressOfThisIsTheTypeId;
 		return reinterpret_cast< TypeID >( &addressOfThisIsTheTypeId );
@@ -26,23 +26,23 @@ public:
 
 // qualifier stripping
 template< typename T >
-struct TypeIdGenerator< const T >
+struct TypeIndexGenerator< const T >
 {
-private: TypeIdGenerator(){}
+private: TypeIndexGenerator(){}
 public:
-    static TypeID GetTypeId()
+    static TypeID Get()
 	{
-        return TypeIdGenerator<T>::GetTypeId();
+        return TypeIndexGenerator<T>::Get();
 	}
 };
 template< typename T >
-struct TypeIdGenerator< volatile T >
+struct TypeIndexGenerator< volatile T >
 {
-private: TypeIdGenerator(){}
+private: TypeIndexGenerator(){}
 public:
-    static TypeID GetTypeId()
+    static TypeID Get()
 	{
-        return TypeIdGenerator<T>::GetTypeId();
+        return TypeIndexGenerator<T>::Get();
 	}
 };
 
@@ -50,12 +50,12 @@ public:
 
 template <typename T> TypeID TypeOf(const T&)
 {
-    return TypeIdGenerator<T>::GetTypeId();
+    return TypeIndexGenerator<T>::Get();
 }
 
 template <typename T> TypeID TypeOf()
 {
-    return TypeIdGenerator<T>::GetTypeId();
+    return TypeIndexGenerator<T>::Get();
 }
 
 

@@ -135,13 +135,11 @@ public:
      */ 
     bool isCompatible( const OutputPort& port ) const;
 
-    Data* data() const;
+    Blob data() const;
 
     template<typename T> T* dataAs() const
     {
-        if ( data() == 0 )
-            return 0;
-        return data()->value<T>();
+        return data().dataAs<T>();
     }
 
 protected:

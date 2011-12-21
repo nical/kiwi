@@ -3,7 +3,6 @@
 #include "kiwi/core/Node.hpp"
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/Connect.hpp"
-#include "kiwi/core/DataStrategy.hpp"
 
 #include <assert.h>
 
@@ -46,18 +45,14 @@ bool OutputPort::isCompatible(const InputPort& port) const
     return port.isCompatible(*this);
 }
 
-Data* OutputPort::data() const
+Blob OutputPort::data() const
 {
-    if ( hasDataStrategy() )
-        return _dataStrategy->data();
-    else return 0;
+    return _dataProxy.data();
 }
 
 const DataTypeInfo* OutputPort::dataType() const
 {
-    if ( hasDataStrategy() )
-        return _dataStrategy->dataType();
-    else return 0;
+    return _id.dataTypeInfo();
 }
 
 }//namespace

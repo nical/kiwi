@@ -32,8 +32,9 @@ KIWI_DECLARE_CONTAINER(float,"Float")
 
 int main()
 {
-    KIWI_BEGIN_TESTING("Kiwi::core::Container");
     
+    KIWI_BEGIN_TESTING("Kiwi::core::Container");
+    /*
     auto info1  = DataTypeManager::RegisterDataType("TestData1", &NewTestData1 );
     auto info2  = DataTypeManager::RegisterDataType("TestData2", &NewTestData2 );
     auto infoi  = DataTypeManager::RegisterDataType("Int", &Newint );
@@ -66,5 +67,6 @@ int main()
     delete tdx;
     delete tdi;
     delete intContainerNode;
+    */
     return KIWI_END_TESTING;
 }

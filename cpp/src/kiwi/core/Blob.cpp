@@ -3,7 +3,7 @@
 namespace kiwi{
 namespace core{
 
-BasicBlob::BasicBlob( uint32 bufferSize, uint32 btype, uint32 bflags )
+Blob::Blob( uint32 bufferSize, uint32 btype, uint32 bflags )
 {
     if ( bufferSize == 0 )
     {
@@ -14,7 +14,7 @@ BasicBlob::BasicBlob( uint32 bufferSize, uint32 btype, uint32 bflags )
     allocate( bufferSize, btype, bflags );
 }
 
-BasicBlob::~BasicBlob()
+Blob::~Blob()
 {
     if ( isAllocated() )
     {
@@ -22,7 +22,7 @@ BasicBlob::~BasicBlob()
     }
 }
 
-void BasicBlob::allocate( uint32 bufferSize, uint32 btype, uint32 bflags)
+void Blob::allocate( uint32 bufferSize, uint32 btype, uint32 bflags)
 {
     //allocate at least 4 bytes
     if(bufferSize < 4 )
@@ -34,7 +34,7 @@ void BasicBlob::allocate( uint32 bufferSize, uint32 btype, uint32 bflags)
     header()->_size = bufferSize;
 }
 
-void BasicBlob::deallocate()
+void Blob::deallocate()
 {
     if ( _buffer )
         delete[] _buffer;

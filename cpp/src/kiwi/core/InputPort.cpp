@@ -41,7 +41,7 @@ string InputPort::name() const
     return node()->type()->inputs()[index()].name();
 }
 
-Data* InputPort::data() const
+Blob InputPort::data() const
 {
     if (isConnected())
         return connection()->data();

@@ -140,7 +140,7 @@ public:
     {
         return _id;
     }
-
+/*
     Storage& storage()
     {
         return _storage;
@@ -155,7 +155,7 @@ public:
     {
         return _storage.isAllocated();
     }
-
+*/
     view::NodeView * view() const
     {
         return _view;
@@ -189,7 +189,7 @@ private:
     OutputArray _outputs;
     NodeArray   _previousNodes;
     NodeArray   _nextNodes;
-    Storage     _storage;
+    //Storage     _storage;
     view::NodeView*   _view;
     const NodeTypeInfo* _type;
     ID _id;

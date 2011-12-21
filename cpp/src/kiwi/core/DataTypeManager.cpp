@@ -43,7 +43,7 @@ const DataTypeInfo* TypeOf(string name)
     return info->second;
 }
 
-Data* Create(string name)
+Blob Create(string name)
 {
     const DataTypeInfo* info = TypeOf( name );
     if ( info== 0 )

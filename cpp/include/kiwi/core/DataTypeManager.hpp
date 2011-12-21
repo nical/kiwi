@@ -33,7 +33,7 @@ namespace DataTypeManager{
      * The name must correspond to the one used when registering the data type.
      * Returns a nil pointer if the name is not registered in the manager. 
      */ 
-    Data* Create(string name);
+    Blob Create(string name);
 
 }//namespace
 

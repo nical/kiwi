@@ -9,6 +9,7 @@
 namespace kiwi{
 namespace core{
 
+class DataTypeInfo;
 
 class DataTypeId
 {
@@ -62,7 +63,7 @@ public:
         return _category == STATIC;
     }
 
-    
+    const DataTypeInfo * dataTypeInfo() const;
     
 private:
     TypeIndex  _id;

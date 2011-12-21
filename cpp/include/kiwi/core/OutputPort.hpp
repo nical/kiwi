@@ -8,6 +8,8 @@
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/Connect.hpp"
 #include "kiwi/core/DataTypeId.hpp"
+#include "kiwi/core/Blob.hpp"
+#include "kiwi/core/DataProxy.hpp"
 
 namespace kiwi{
 namespace core{
@@ -32,8 +34,8 @@ public:
     /**
      * Constructor.
      */ 
-    OutputPort(Node* n, DataStrategy* datastrategy, DataAccessFlags flags = READ|WRITE)
-    :_node(n), _dataStrategy(datastrategy), _accessFlags(flags)
+    OutputPort(Node* n, DataProxy dataproxy, DataAccessFlags flags = READ|WRITE)
+    :_node(n), _dataProxy(dataproxy), _accessFlags(flags)
     {
         
     }
@@ -72,13 +74,11 @@ public:
     /**
      * Returns a pointer to the data of this output port.
      */ 
-    Data* data() const;
+    Blob data() const;
 
     template<typename T> T* dataAs() const
     {
-        if ( data() == 0 )
-            return 0;
-        return data()->value<T>();
+        return data().dataAs<T>();
     }
 
     /**
@@ -127,14 +127,6 @@ public:
     bool isCompatible(const InputPort& port) const;
     
     /**
-     * Returns true if this port has a special data allocation strategy.
-     */ 
-    bool hasDataStrategy() const
-    {
-        return _dataStrategy != 0;
-    }
-
-    /**
      * Returns true if this port has at least on connection.
      */ 
     bool isConnected() const
@@ -165,9 +157,9 @@ protected://methods
 protected://variables
     Node* _node;
     ConnectionArray _connections;
-    DataStrategy* _dataStrategy;
+    DataProxy       _dataProxy;
     DataAccessFlags _accessFlags;
-    DataTypeId _id;
+    DataTypeId      _id;
 };
 
 

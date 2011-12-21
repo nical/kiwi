@@ -6,8 +6,11 @@
 #include "kiwi/core/NodeUpdater.hpp"
 #include <vector>
 
+#include "kiwi/core/Blob.hpp"
+
 namespace kiwi{
 namespace core{
+
 
 class Data;
 
@@ -17,7 +20,7 @@ class Data;
 class DynamicNodeUpdater : public NodeUpdater
 {
 public:
-    typedef std::vector<Data*> DataArray; 
+    typedef std::vector<Blob> DataArray; 
     typedef bool (*FunctionPointer)( const DataArray& inputs, const DataArray& outputs );
 
     DynamicNodeUpdater( FunctionPointer fptr )

@@ -13,6 +13,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     mock/MockNode.cpp
     core/NodeTypeManager.cpp
     core/Node.cpp
+    core/Context.cpp
     core/InputPort.cpp
     core/OutputPort.cpp
     core/OpConnect.cpp
@@ -20,6 +21,7 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/Pipeline.cpp
     core/PipelineManager.cpp
     core/DataTypeManager.cpp
+    core/DataProxy.cpp
     core/DynamicNodeUpdater.cpp
     core/Blob.cpp
     view/NodeView

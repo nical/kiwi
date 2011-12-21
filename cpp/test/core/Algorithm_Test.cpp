@@ -24,10 +24,10 @@ bool TestFunction(
 {
     SCOPEDBLOCK("TestFunction");
     
-    int a = *inputs[0]->value<int>();
-    int b = *inputs[1]->value<int>();
+    int a = *inputs[0].dataAs<int>();
+    int b = *inputs[1].dataAs<int>();
 
-    int& c = *outputs[0]->value<int>();
+    int& c = *outputs[0].dataAs<int>();
     c = a + b;
     
     return true;
@@ -59,11 +59,11 @@ int main()
     auto in1 = NodeTypeManager::Create("Int");
     auto in2 = NodeTypeManager::Create("Int");
 
-    assert( in1->output().data() != 0 );
-    assert( in1->output().data()->value<int>() != 0 );
+    assert( in1->output().data() != Blob::Null() );
+    assert( in1->output().dataAs<int>() != Blob::Null() );
 
-    *in1->output().data()->value<int>() = 42;
-    *in2->output().data()->value<int>() = 1337;
+    *in1->output().dataAs<int>() = 42;
+    *in2->output().dataAs<int>() = 1337;
 
     KIWI_TEST( "DynamicNodeUpdater update.", !n->update() );
 
@@ -73,7 +73,7 @@ int main()
     KIWI_TEST( "DynamicNodeUpdater update.", n->update() );
 
 
-    KIWI_TEST( "Update result.", *n->output().data()->value<int>() == 1337+42 );
+    KIWI_TEST( "Update result.", *n->output().dataAs<int>() == 1337+42 );
 
 
     return KIWI_END_TESTING;

@@ -58,6 +58,16 @@ template <typename T> TypeID TypeOf()
     return TypeIndexGenerator<T>::Get();
 }
 
+template <typename T> TypeID TypeIndexOf(const T&)
+{
+    return TypeIndexGenerator<T>::Get();
+}
+
+template <typename T> TypeID TypeIndexOf()
+{
+    return TypeIndexGenerator<T>::Get();
+}
+
 
 
 }//namespace

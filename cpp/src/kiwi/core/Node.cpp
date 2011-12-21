@@ -5,7 +5,6 @@
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/CompatibilityStrategy.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
-#include "kiwi/core/DataStrategy.hpp"
 #include "kiwi/core/NodeUpdater.hpp"
 #include "kiwi/view/NodeView.hpp"
 
@@ -31,8 +30,10 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
     
     for(uint32 i = 0; i < typeInfo->outputs().size(); ++i)
     {
+        auto b = new Blob;
+        *b = typeInfo->outputs()[i].dataType()->newInstance();
         _outputs.push_back( new OutputPort( this
-                , new AutoDataStrategy( typeInfo->outputs()[i].dataType() )
+                , DataProxy( b )
                 , typeInfo->outputs()[i].accessFlags() )
         );
     }

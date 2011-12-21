@@ -4,6 +4,7 @@
 
 
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Blob.hpp"
 #include <vector>
 
 namespace kiwi{
@@ -18,7 +19,7 @@ class DataTypeInfo
 {
 public:
 	typedef std::vector<DataTypeInfo*> SubDataArray;
-	typedef Data* (*Instanciator)();
+	typedef Blob (*Instanciator)();
 
 	DataTypeInfo(string dataName, SubDataArray subdata, Instanciator instanciator)
 	: _name(dataName), _subData(subdata), _newFunction(instanciator)
@@ -40,7 +41,7 @@ public:
 		return _subData.size() != 0;
 	}
 
-	Data* newInstance() const
+	Blob newInstance() const
 	{
 		return (*_newFunction)();
 	}
@@ -57,7 +58,7 @@ template<typename T> class Container;
 /**
  * Mother class of Data objects.
  */ 
-class Data
+class Data_deprecated
 {
 public:
 
@@ -72,7 +73,7 @@ public:
     template<typename T> T* value();
     template<typename T> const T* value() const;
     
-    virtual ~Data(){};
+    //virtual ~Data(){};
 };
 
 
@@ -80,7 +81,7 @@ public:
 }//namespace
 
 // need to include Container.hpp because downCast must be defined after Container
-#include "kiwi/core/Container.hpp"
+//#include "kiwi/core/Container.hpp"
 
 
 #endif

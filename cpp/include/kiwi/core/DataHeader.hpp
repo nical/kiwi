@@ -3,9 +3,12 @@
 #define KIWI_CORE_DATAHEADER_HPP
 
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/DataTypeId.hpp"
 
 namespace kiwi{ 
 namespace core{
+
+class Context;
 
 class DataHeader
 {
@@ -17,7 +20,18 @@ public:
 
     void * data() const
     {
-        return _data;
+        return _ptr;
+        //return (void*)(this+1);
+    }
+
+    uint32 size() const
+    {
+        return _size;
+    }
+
+    uint32 totalSize() const
+    {
+        return sizeof(this) + size();
     }
 
     void incrementRefCount()
@@ -27,16 +41,41 @@ public:
     
     void decrementRefCount()
     {
-        --refCount;
-        if(refCount == 0)
+        --_refCount;
+        if(_refCount == 0)
             context()->markNotUsed( this );
+    }
+    
+    uint32 refCount() const
+    {
+        return _refCount;
+    }
+
+    Context * context() const
+    {
+        return _context;
+    }
+
+    void init( Context * c, DataTypeId dataType, size_t dataSize )
+    {
+        _refCount = 0;
+        _context = c;
+        _type = dataType;
+        _size = dataSize;
+    }
+
+    // temporary
+    void dev_setptr( void * ptr )
+    {
+        _ptr = ptr;
     }
 
 private:
     DataTypeId  _type;
-    void *      _ptr;
+    uint32      _size;
     uint32      _refCount;
     Context *   _context;
+    void *      _ptr; // might be removed to have contiguously allocated data and header
 };
 
 }//namespace

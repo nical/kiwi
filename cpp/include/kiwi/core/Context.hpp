@@ -27,6 +27,9 @@ public:
 
     void setTypeManager( DataTypeManager * mgr );
 
+    /**
+     * Should be called from DataHeader only.
+     */ 
     void markNotUsed( DataHeader * data );
     
     uint32 id() const

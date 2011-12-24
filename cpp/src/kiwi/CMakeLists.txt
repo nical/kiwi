@@ -21,6 +21,8 @@ SET(KIWI_SRC ${KIWI_SRC}
     core/DataTypeManager.cpp
     core/DynamicNodeUpdater.cpp
     core/Blob.cpp
+    core/DataProxy.cpp
+    core/Context.cpp
     view/NodeView
     view/PipelineView
     processing/ProcessingPipelineUpdater

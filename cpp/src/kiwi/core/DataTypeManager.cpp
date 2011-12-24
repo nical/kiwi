@@ -9,13 +9,12 @@
 namespace kiwi{
 namespace core{
 
-namespace DataTypeManager{
     
 typedef std::map<string, DataTypeInfo*> DataTypeMap;
 static std::map<string, DataTypeInfo*> _types;
 
 
-const DataTypeInfo* RegisterDataType(string name, DataTypeInfo::Instanciator instanciator)
+const DataTypeInfo* DataTypeManager::RegisterDataType(string name, DataTypeInfo::Instanciator instanciator)
 {
     //DataTypeInfo(string dataName, SubDataArray subdata, Instanciator instanciator)
     const DataTypeInfo* result = TypeOf(name);
@@ -34,7 +33,7 @@ const DataTypeInfo* RegisterDataType(string name, DataTypeInfo::Instanciator ins
     return newInfo;
 }
 
-const DataTypeInfo* TypeOf(string name)
+const DataTypeInfo* DataTypeManager::TypeOf(string name)
 {
     DataTypeMap::iterator info = _types.find(name);
     if ( info == _types.end() )
@@ -43,7 +42,7 @@ const DataTypeInfo* TypeOf(string name)
     return info->second;
 }
 
-Data* Create(string name)
+Data* DataTypeManager::Create(string name)
 {
     const DataTypeInfo* info = TypeOf( name );
     if ( info== 0 )
@@ -52,7 +51,10 @@ Data* Create(string name)
 }
 
 
-}//namespace
+const DataTypeInfo* KIWI_DTM_TypeOf(string name)
+{
+    return DataTypeManager::TypeOf(name);
+}
 
 }//namespace
 }//namespace

@@ -60,12 +60,14 @@ int main()
 {
     KIWI_BEGIN_TESTING("kiwi::core::Pipeline")
 
+    kiwi::core::Context& compositor = kiwi::DefaultContext();
+
+
     mock::DeclareMockNode(3,3);
 
 
     //auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
-    //auto IntInfo = DataTypeManager::TypeOf("Int");
-    auto IntInfo = DefaultContext().dataTypeManager().typeOf("Int");
+    auto IntInfo = compositor.dataTypeInfo("Int");
     
 
     NodeLayoutDescriptor layout1;
@@ -78,27 +80,21 @@ int main()
         { "out1", IntInfo, READ }
     };
 
-    NodeTypeManager::RegisterNode("N1",layout1, new DynamicNodeUpdater(&func1));
-    NodeTypeManager::RegisterNode("N2",layout1, new DynamicNodeUpdater(&func2));
-    NodeTypeManager::RegisterNode("N3",layout1, new DynamicNodeUpdater(&func3));
-    NodeTypeManager::RegisterNode("N4",layout1, new DynamicNodeUpdater(&func4));
-    NodeTypeManager::RegisterNode("N5",layout1, new DynamicNodeUpdater(&func5));
+    compositor.registerNodeType("N1",layout1, new DynamicNodeUpdater(&func1));
+    compositor.registerNodeType("N2",layout1, new DynamicNodeUpdater(&func2));
+    compositor.registerNodeType("N3",layout1, new DynamicNodeUpdater(&func3));
+    compositor.registerNodeType("N4",layout1, new DynamicNodeUpdater(&func4));
+    compositor.registerNodeType("N5",layout1, new DynamicNodeUpdater(&func5));
 
     Pipeline pipeline( &DefaultContext(), new ProcessingPipelineUpdater() );
 
-    auto n1 = NodeTypeManager::Create("N1");
-    auto n2 = NodeTypeManager::Create("N2");
-    auto n3 = NodeTypeManager::Create("N3");
-    auto n4 = NodeTypeManager::Create("N4");
-    auto n5 = NodeTypeManager::Create("N5");
+    auto n1 = pipeline.instanciateNode("N1");
+    auto n2 = pipeline.instanciateNode("N2");
+    auto n3 = pipeline.instanciateNode("N3");
     
     assert( n1 != 0 );
     assert( n2 != 0 );
     assert( n3 != 0 );
-
-    pipeline.addNode(n1);
-    pipeline.addNode(n2);
-    pipeline.addNode(n3);
 
     n1->output(0) >> n2->input(0);
     n2->output(0) >> n3->input(0);
@@ -117,9 +113,9 @@ int main()
         log << " " << updates[i];
     }
 
-    pipeline.addNode(n4);
-    pipeline.addNode(n5);
-
+    auto n4 = pipeline.instanciateNode("N4");
+    auto n5 = pipeline.instanciateNode("N5");
+    
     n4->output(0) >> n2->input(1);
     n5->output(0) >> n3->input(1);
     

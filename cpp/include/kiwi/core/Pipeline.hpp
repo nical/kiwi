@@ -182,6 +182,8 @@ public:
      */ 
     bool contains(const Node* n);
 
+    Node * instanciateNode(const string& name);
+
     /**
      * Returns a pointer to the kiwi::core::Context used by this pipeline.
      */ 

@@ -3,12 +3,13 @@
 #include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Context.hpp"
 
 #include <map>
 
 namespace kiwi{
 namespace core{
-    
+
 typedef std::map<string, DataTypeInfo*> DataTypeMap;
 static DataTypeMap _types;
 
@@ -27,7 +28,7 @@ const DataTypeInfo* DataTypeManager::_RegisterDataType(string name, DataTypeInfo
     // register a container node for this data type
     NodeLayoutDescriptor containerNodeDesc;
     containerNodeDesc.outputs = { { "data", newInfo, READ } };
-    NodeTypeManager::RegisterNode( name, containerNodeDesc, 0 );
+    NodeTypeManager::_RegisterNode( name, containerNodeDesc, 0 );
     
     return newInfo;
 }
@@ -51,7 +52,7 @@ Data* DataTypeManager::_Create(string name)
 
 const DataTypeInfo* Kiwi_DTM_TypeOf(string name)
 {
-    return DataTypeManager::_TypeOf( name );
+    return DefaultContext().dataTypeInfo( name );
 }
 
 

@@ -1,6 +1,7 @@
 
 #include "kiwi/core/Pipeline.hpp"
 #include "kiwi/core/Node.hpp"
+#include "kiwi/core/Context.hpp"
 
 namespace kiwi{
 namespace core{
@@ -72,6 +73,14 @@ bool Pipeline::contains(const Node* n)
 {
     int idx = _findIndexOf(_nodes, n);
     return idx > 0;
+}
+
+
+Node * Pipeline::instanciateNode(const string& name)
+{
+    auto n = _context->instanciateNode(name);
+    addNode(n);
+    return n;
 }
 
 }//namespace

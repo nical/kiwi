@@ -13,8 +13,13 @@ namespace core{
 
 class DataHeader;
 class DataTypeManager;
+class NodeTypeManager;
+class NodeTypeInfo;
+class NodeUpdater;
 class DataPool;
 class Data;
+class Node;
+class NodeLayoutDescriptor;
 
 class Context
 {
@@ -34,7 +39,15 @@ public:
     const DataTypeInfo* registerDataType(const string& uniqueName, DataInstanciator instanciator);
     const DataTypeInfo* dataTypeInfo(const string& name);
     Data* instanciateData(const string& name);
-    
+    /**
+     * cf. NodeTypeManager
+     */ 
+    const NodeTypeInfo* registerNodeType(
+        const string& nodeName
+        , const NodeLayoutDescriptor& layout
+        , NodeUpdater* updater );
+    const NodeTypeInfo* nodeTypeInfo(const string& name);
+    Node* instanciateNode(const string& name);
     // ----
     
 
@@ -47,6 +60,7 @@ public:
     uint32 preallocateData( uint32 amountHint, DataTypeId type );
 
     void setDataTypeManager( DataTypeManager* mgr );
+    void setNodeTypeManager( NodeTypeManager* mgr );
 
     /**
      * Should be called from DataHeader only.
@@ -60,14 +74,21 @@ public:
 
     DataTypeManager& dataTypeManager() const
     {
-        assert( _typeManager );
-        return *_typeManager;
+        assert( _dataTypeManager );
+        return *_dataTypeManager;
+    }
+
+    NodeTypeManager& nodeTypeManager() const
+    {
+        assert( _nodeTypeManager );
+        return *_nodeTypeManager;
     }
 
 private:
     uint32 _id;
     DataMap _data;
-    DataTypeManager* _typeManager;
+    DataTypeManager* _dataTypeManager;
+    NodeTypeManager* _nodeTypeManager;
 };
 
 

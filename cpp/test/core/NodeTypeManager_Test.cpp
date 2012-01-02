@@ -23,9 +23,10 @@ int main()
 {
 	KIWI_BEGIN_TESTING("Kiwi::core::NodeTypeManager");
 
+    kiwi::core::Context& compositor = kiwi::DefaultContext();
 
-    auto IntInfo = DefaultContext().registerDataType("Int", &Newint);
-    auto DummyInfo = DefaultContext().registerDataType("Dummy", &NewDummy);
+    auto IntInfo   = compositor.registerDataType("Int", &Newint);
+    auto DummyInfo = compositor.registerDataType("Dummy", &NewDummy);
 
     NodeLayoutDescriptor layout1;
     layout1.inputs = {
@@ -40,12 +41,12 @@ int main()
     layout2.inputs  = { { "in" , IntInfo  , READ } };
     layout2.outputs = { { "out", DummyInfo, READ } };
 
-    NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater);
-    NodeTypeManager::RegisterNode("NodeTest2", layout2, new mock::MockNodeUpdater);
+    compositor.registerNodeType("NodeTest2", layout2, new mock::MockNodeUpdater);
+    compositor.registerNodeType("NodeTest1", layout1, new mock::MockNodeUpdater);
 
     {   SCOPEDBLOCK("Type info state");
-        auto info1 = NodeTypeManager::TypeOf("NodeTest1");
-        auto info2 = NodeTypeManager::TypeOf("NodeTest2");
+        auto info1 = compositor.nodeTypeInfo("NodeTest1");
+        auto info2 = compositor.nodeTypeInfo("NodeTest2");
         KIWI_TEST("TypeOf(NodeTest1) not null.", info1 != 0 );
         KIWI_TEST("TypeOf(NodeTest2) not null.", info2 != 0 );
         KIWI_TEST("TypeOf(NodeTest1) name.", info1->name() == string("NodeTest1") );
@@ -74,33 +75,33 @@ int main()
     }
 
     {   SCOPEDBLOCK("Registration");
-        auto info1 = NodeTypeManager::TypeOf("NodeTest1");
-        auto info2 = NodeTypeManager::TypeOf("NodeTest2");
+        auto info1 = compositor.nodeTypeInfo("NodeTest1");
+        auto info2 = compositor.nodeTypeInfo("NodeTest2");
 
         KIWI_TEST( "Registering NodeTest1 twice"
-            , NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater) == info1);
+            , compositor.registerNodeType("NodeTest1", layout1, new mock::MockNodeUpdater) == info1);
         KIWI_TEST( "Registering NodeTest2 twice"
-            , NodeTypeManager::RegisterNode("NodeTest2", layout1, new mock::MockNodeUpdater) == info2);
+            , compositor.registerNodeType("NodeTest2", layout1, new mock::MockNodeUpdater) == info2);
         KIWI_TEST( "Requesting unregistered node"
-            , NodeTypeManager::TypeOf("some_unregistered_node") == 0);
+            , compositor.nodeTypeInfo("some_unregistered_node") == 0);
         
         NodeTypeManager::Unregister("NodeTest1");
 
         KIWI_TEST( "Requesting NodeTest1 after unregistration"
-            , NodeTypeManager::TypeOf("NodeTest1") == 0);
+            , compositor.nodeTypeInfo("NodeTest1") == 0);
 
-        info1 = NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater);
+        info1 = compositor.registerNodeType("NodeTest1", layout1, new mock::MockNodeUpdater);
 
         KIWI_TEST( "Registering NodeTest1 again"
             , info1->name() == "NodeTest1" );
     }
     
-    Pipeline p(0,0,0);
+    Pipeline p;
 
     log.foo();
 
-    auto n1 = new Node(&p, NodeTypeManager::TypeOf("NodeTest1") );
-    auto n2 = new Node(&p, NodeTypeManager::TypeOf("NodeTest2") );
+    auto n1 = new Node(&p, compositor.nodeTypeInfo("NodeTest1") );
+    auto n2 = new Node(&p, compositor.nodeTypeInfo("NodeTest2") );
 
     log.bar();
     

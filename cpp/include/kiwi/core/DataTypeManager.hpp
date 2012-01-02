@@ -35,6 +35,7 @@ public:
     bool exists( DataTypeId datatype );
     DataTypeExtension* extension( DataTypeId datatype );
 
+
 // ------------------------------------------------------------------ Transition
 // DataTypeInfo will be replaced by DataTypeId and each type manager will have
 // it's own data typê base
@@ -55,6 +56,7 @@ public:
     }
 
 
+protected:
 // ------------------------------------------------------------------ Deprecated
 
     /**

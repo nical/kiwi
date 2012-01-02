@@ -30,7 +30,7 @@ void DeclareMockNode( uint32 nbInputs, uint32 nbOutputs )
         layout.outputs.push_back( { "out", IntInfo, READ } );
     
 
-    _mockNodeInfo = NodeTypeManager::RegisterNode(
+    _mockNodeInfo = DefaultContext().registerNodeType(
         "MockNode", layout, new mock::MockNodeUpdater
     );
 

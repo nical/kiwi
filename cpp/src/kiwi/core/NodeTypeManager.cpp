@@ -29,12 +29,12 @@ NodeTypeManager::NodeTypeIterator NodeTypeManager::Types_end()
     return _types.end();
 }
 
-const NodeTypeInfo* NodeTypeManager::RegisterNode( string nodeName
+const NodeTypeInfo* NodeTypeManager::_RegisterNode( string nodeName
     , const NodeLayoutDescriptor& layout, NodeUpdater* updater )
 {
     SCOPEDBLOCK("NodeTypeManager::RegisterNode");
     
-    auto existing = TypeOf(nodeName);
+    auto existing = _TypeOf(nodeName);
     if ( existing != 0 )
         return existing;
     
@@ -62,7 +62,7 @@ void NodeTypeManager::UnregisterAll()
     _types.clear();
 }
 
-const NodeTypeInfo* NodeTypeManager::TypeOf(string name)
+const NodeTypeInfo* NodeTypeManager::_TypeOf(string name)
 {
     auto info = _types.find(name);
     if ( info == _types.end() )
@@ -73,7 +73,7 @@ const NodeTypeInfo* NodeTypeManager::TypeOf(string name)
 
 Node* NodeTypeManager::Create(string name, Pipeline* p)
 {
-    auto info = TypeOf(name);
+    auto info = _TypeOf(name);
     if( info != 0 )
         return info->newInstance(p);
     return 0;

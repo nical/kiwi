@@ -37,9 +37,11 @@ bool TestFunction(
 int main()
 {
     KIWI_BEGIN_TESTING("Kiwi::core::Algorithm");
+
+    kiwi::core::Context& compositor = kiwi::DefaultContext();
  
     // declare data types
-    auto IntInfo = DefaultContext().registerDataType("Int", &Newint);
+    auto IntInfo = compositor.registerDataType("Int", &Newint);
 
     NodeLayoutDescriptor layout1;
     layout1.inputs =
@@ -52,13 +54,13 @@ int main()
         { "out", IntInfo, READ }
     };
 
-    NodeTypeManager::RegisterNode("MyNode1", layout1
+    compositor.registerNodeType("MyNode1", layout1
         , new DynamicNodeUpdater(&TestFunction) );
 
-    auto n = NodeTypeManager::Create("MyNode1");
+    auto n = compositor.instanciateNode("MyNode1");
 
-    auto in1 = NodeTypeManager::Create("Int");
-    auto in2 = NodeTypeManager::Create("Int");
+    auto in1 = compositor.instanciateNode("Int");
+    auto in2 = compositor.instanciateNode("Int");
 
     assert( in1->output().data() != 0 );
     assert( in1->output().data()->value<int>() != 0 );

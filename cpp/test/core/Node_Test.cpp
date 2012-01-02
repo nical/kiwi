@@ -61,8 +61,10 @@ int main()
 {
 	KIWI_BEGIN_TESTING("Kiwi::core::Node");
 
-    auto IntInfo = DefaultContext().registerDataType("Int", &Newint);
-    auto DummyInfo = DefaultContext().registerDataType("Dummy", &NewDummy);
+    kiwi::core::Context& compositor = kiwi::DefaultContext();
+
+    auto IntInfo   = compositor.registerDataType("Int", &Newint);
+    auto DummyInfo = compositor.registerDataType("Dummy", &NewDummy);
 
     
 
@@ -103,14 +105,14 @@ int main()
         { "out3", IntInfo, READ }
     };
 
-    NodeTypeManager::RegisterNode("NodeTest1", layout1, new mock::MockNodeUpdater);
-    NodeTypeManager::RegisterNode("NodeTest2", layout2, new mock::MockNodeUpdater);
-    NodeTypeManager::RegisterNode("NodeTest3", layout3, new mock::MockNodeUpdater);
+    compositor.registerNodeType("NodeTest1", layout1, new mock::MockNodeUpdater);
+    compositor.registerNodeType("NodeTest2", layout2, new mock::MockNodeUpdater);
+    compositor.registerNodeType("NodeTest3", layout3, new mock::MockNodeUpdater);
     
     Pipeline* p = mock::NewMockPipeline();
 
-    auto n1 = NodeTypeManager::TypeOf("NodeTest1")->newInstance(p);
-    auto n2 = NodeTypeManager::TypeOf("NodeTest2")->newInstance(p);
+    auto n1 = compositor.nodeTypeInfo("NodeTest1")->newInstance(p);
+    auto n2 = compositor.nodeTypeInfo("NodeTest2")->newInstance(p);
 
     {   SCOPEDBLOCK("Initial state");
         KIWI_TEST("Number of input ports.", n1->inputs().size() == 2 );
@@ -185,9 +187,9 @@ int main()
         KIWI_TEST_EQUAL("Number of previous nodes.", n2->previousNodes().size(), 1); 
         KIWI_TEST_EQUAL("Number of next nodes.", n2->nextNodes().size(), 0);
 
-        auto n3 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
-        auto n4 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
-        auto n5 = NodeTypeManager::TypeOf("NodeTest3")->newInstance(p);
+        auto n3 = compositor.nodeTypeInfo("NodeTest3")->newInstance(p);
+        auto n4 = compositor.nodeTypeInfo("NodeTest3")->newInstance(p);
+        auto n5 = compositor.nodeTypeInfo("NodeTest3")->newInstance(p);
 
         n1->output() >> n3->input(0);
         n4->output() >> n3->input(1);

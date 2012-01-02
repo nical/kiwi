@@ -34,32 +34,34 @@ KIWI_DECLARE_CONTAINER(float,"Float")
 int main()
 {
     KIWI_BEGIN_TESTING("Kiwi::core::Container");
+
+    kiwi::core::Context& compositor = kiwi::DefaultContext();
     
-    auto info1  = DefaultContext().registerDataType("TestData1", &NewTestData1 );
-    auto info2  = DefaultContext().registerDataType("TestData2", &NewTestData2 );
-    auto infoi  = DefaultContext().registerDataType("Int", &Newint );
-    auto infof  = DefaultContext().registerDataType("Float", &Newfloat );
+    auto info1  = compositor.registerDataType("TestData1", &NewTestData1 );
+    auto info2  = compositor.registerDataType("TestData2", &NewTestData2 );
+    auto infoi  = compositor.registerDataType("Int", &Newint );
+    auto infof  = compositor.registerDataType("Float", &Newfloat );
 
     KIWI_TEST( "type info name check 1.", info1->name() == string("TestData1") );
     KIWI_TEST( "type info name check 2.", info2->name() == string("TestData2") );
     KIWI_TEST( "type info name check Int.", infoi->name() == string("Int") );
     KIWI_TEST( "type info name check Float.", infof->name() == string("Float") );
 
-    auto td1 = DefaultContext().instanciateData("TestData1");
+    auto td1 = compositor.instanciateData("TestData1");
     KIWI_TEST( "Instanciate known data 1 type not null.", td1 != 0);
     KIWI_TEST( "Instanciated type 1 type.", td1->type() == info1 );
     log << td1->type()->name();
-    auto td2 = DefaultContext().instanciateData("TestData2");
+    auto td2 = compositor.instanciateData("TestData2");
     KIWI_TEST( "Instanciate known data 2 type not null.", td2 != 0);
     KIWI_TEST( "Instanciated type 2 type.", td2->type() == info2 );
-    auto tdx = DefaultContext().instanciateData("SomeUnknownType");
+    auto tdx = compositor.instanciateData("SomeUnknownType");
     KIWI_TEST( "Instanciate unknown data 2 type returns null.", tdx == 0);
 
-    auto tdi = DefaultContext().instanciateData("Int");
+    auto tdi = compositor.instanciateData("Int");
     *tdi->value<int>() = 42;
 
     KIWI_TEST( "Container value assignment.", *tdi->value<int>() == 42);
-    auto intContainerNode = NodeTypeManager::Create("Int");
+    auto intContainerNode = compositor.instanciateNode("Int");
     KIWI_TEST( "creation of a container node.", intContainerNode != 0 );
     
     

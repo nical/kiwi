@@ -3,6 +3,7 @@
 #define KIWI_CORE_DATATYPEMANAGER_HPP
 
 #include "kiwi/core/Data.hpp"
+#include "kiwi/core/DataTypeId.hpp"
 
 
 
@@ -10,22 +11,44 @@
 namespace kiwi{
 namespace core{
 
+
+class DataTypeInfo;
+class DataHeader;
+struct DataTypeExtension
+{
+    
+};
+
+
 /**
  * Manager for runtime data type info.
  */ 
-namespace DataTypeManager{
+class DataTypeManager
+{
+public:
+    typedef uint32 Status;
+    typedef void*(Instanciator)(void);
+    typedef struct{ Instanciator instanciator; DataTypeExtension extension; } DTypeInfo;
+
+    DataHeader* createInstance( DataTypeId datatype );
+    Status registerDataType( DataTypeId datatype, Instanciator instanciator, DataTypeExtension* extension = 0 );
+    bool exists( DataTypeId datatype );
+    DataTypeExtension* extension( DataTypeId datatype );
+
+
+// ------------------------------------------------------------------ Deprecated
 
     /**
      * Registers a data type into the manager.
      *
      * Should be invoked for every data type before they are used.
      */ 
-    const DataTypeInfo* RegisterDataType(string uniqueName, DataTypeInfo::Instanciator instanciator);
+    static const DataTypeInfo* RegisterDataType(string uniqueName, DataTypeInfo::Instanciator instanciator);
 
     /**
      * Returns the runtime type info for a given name.
      */ 
-    const DataTypeInfo* TypeOf(string name);
+    static const DataTypeInfo* TypeOf(string name);
 
     /**
      * Instanciates a Data object correspônding to the name passed in parameter.
@@ -33,9 +56,12 @@ namespace DataTypeManager{
      * The name must correspond to the one used when registering the data type.
      * Returns a nil pointer if the name is not registered in the manager. 
      */ 
-    Data* Create(string name);
+    static Data* Create(string name);
 
-}//namespace
+};
+
+
+const DataTypeInfo* Kiwi_DTM_TypeOf(string name);
 
 
 }//namespace

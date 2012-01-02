@@ -24,8 +24,7 @@ int main()
 
 
     auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
-    auto DummyInfo = DataTypeManager::RegisterDataType("Dummmy", &NewDummy);
-
+    auto DummyInfo = DataTypeManager::RegisterDataType("Dummy", &NewDummy);
 
     NodeLayoutDescriptor layout1;
     layout1.inputs = {
@@ -97,10 +96,12 @@ int main()
     
     Pipeline p(0,0,0);
 
+    log.foo();
+
     auto n1 = new Node(&p, NodeTypeManager::TypeOf("NodeTest1") );
     auto n2 = new Node(&p, NodeTypeManager::TypeOf("NodeTest2") );
 
-    
+    log.bar();
     
     delete n1;
     delete n2;

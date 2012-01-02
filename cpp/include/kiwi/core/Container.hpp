@@ -5,14 +5,16 @@
 
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/extern/log/DebugStream.hpp"
 
 namespace kiwi{
 namespace core{
 
 class DataTypeInfo;
-namespace DataTypeManager{
-    const DataTypeInfo* TypeOf(string name);
-} 
+class DataTypeManager;
+
+const DataTypeInfo * Kiwi_DTM_TypeOf(string name);
+
 
 
 /**
@@ -42,7 +44,10 @@ public:
     // later cannot check that the type info corresponds to the template parameter.
     Container(string name)
     {
-        _type = kiwi::core::DataTypeManager::TypeOf(name);
+        _type = kiwi::core::Kiwi_DTM_TypeOf(name);
+        if( !_type )
+            log << name << endl;
+        assert( _type );
     }
 
     /**

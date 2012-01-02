@@ -46,10 +46,11 @@ int main()
 
     auto td1 = DataTypeManager::Create("TestData1");
     KIWI_TEST( "Instanciate known data 1 type not null.", td1 != 0);
-    KIWI_TEST( "Instanciated type 1 name.", td1->type() == info1 );
+    KIWI_TEST( "Instanciated type 1 type.", td1->type() == info1 );
+    log << td1->type()->name();
     auto td2 = DataTypeManager::Create("TestData2");
     KIWI_TEST( "Instanciate known data 2 type not null.", td2 != 0);
-    KIWI_TEST( "Instanciated type 2 name.", td2->type() == info2 );
+    KIWI_TEST( "Instanciated type 2 type.", td2->type() == info2 );
     auto tdx = DataTypeManager::Create("SomeUnknownType");
     KIWI_TEST( "Instanciate unknown data 2 type returns null.", tdx == 0);
 

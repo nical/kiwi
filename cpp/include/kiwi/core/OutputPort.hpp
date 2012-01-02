@@ -7,6 +7,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/Connect.hpp"
+#include "kiwi/core/DataProxy.hpp"
 
 namespace kiwi{
 namespace core{
@@ -152,6 +153,10 @@ public:
     	return false;
     }
 
+    DataProxy& dataProxy()
+    {
+        return _dataProxy;
+    }
 
 protected://methods
     int _indexOf(const InputPort& port)
@@ -162,9 +167,10 @@ protected://methods
     	return -1;
     }
 protected://variables
-    Node* _node;
+    Node*           _node;
     ConnectionArray _connections;
-    DataStrategy* _dataStrategy;
+    DataProxy       _dataProxy;
+    DataStrategy*   _dataStrategy;
     DataAccessFlags _accessFlags;
 };
 

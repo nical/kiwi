@@ -161,6 +161,8 @@ private:
     NodeUpdater* _updater;
 };
 
+class NodeTypeContainer;
+
 
 /**
  * Manager for runtime node type info objects.
@@ -170,16 +172,16 @@ class NodeTypeManager
 public:
     typedef std::map<string,NodeTypeInfo*> NodeTypeMap;
     typedef NodeTypeMap::iterator NodeTypeIterator;
+
+    NodeTypeManager();
+    ~NodeTypeManager();
    
     /**
      * Returns a pointer to the runtime node type info for a given name.
      *
      * Returns a nil pointer if the name doesn't correspond to a registered type.
      */ 
-    const NodeTypeInfo* typeOf(const string& name)
-    {
-        return _TypeOf(name);
-    }
+    const NodeTypeInfo* typeOf(const string& name);
 
     /**
      * Register a node type.
@@ -187,45 +189,27 @@ public:
     const NodeTypeInfo* registerNodeType(
         const string& nodeName
         , const NodeLayoutDescriptor& layout
-        , NodeUpdater* updater )
-    {
-        return _RegisterNode(nodeName, layout, updater);
-    }
+        , NodeUpdater* updater );
 
     /**
      * Unregister all registered node types.
      */ 
-    void unregisterAll()
-    {
-        _UnregisterAll();
-    }
+    void unregisterAll();
 
     /**
      * Unregister a node type if it has been registred.
      */ 
-    void unregister(const string& name)
-    {
-        _Unregister(name);
-    }
-
+    void unregister(const string& name);
+    
     /**
      * Instanciates a node corresponding to its type name.
      */
-    Node* instanciate(string name, Pipeline* p = 0)
-    {
-        return _Create(name, p);
-    }
+    Node* instanciate(const string& name, Pipeline* p = 0);
+    
 
 
-    // -------------------------------------------------------------- deprecated
-
-    static const NodeTypeInfo* _RegisterNode( string nodeName
-        , const NodeLayoutDescriptor& layout, NodeUpdater* updater );
-    static const NodeTypeInfo* _TypeOf(string name);
-    static Node* _Create(string name, Pipeline* p = 0);
-    void _Unregister(string name);
-    void _UnregisterAll();
-
+private:    
+    NodeTypeContainer* _types;
 };
 
 

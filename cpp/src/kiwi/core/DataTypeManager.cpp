@@ -29,7 +29,6 @@ DataTypeManager::DataTypeManager()
 
 DataTypeManager::~DataTypeManager()
 {
-    // TODO: iterate through the type infos and delete them
     delete _types;
 }
 
@@ -48,7 +47,7 @@ const DataTypeInfo* DataTypeManager::registerDataType(
     // register a container node for this data type
     NodeLayoutDescriptor containerNodeDesc;
     containerNodeDesc.outputs = { { "data", newInfo, READ } };
-    NodeTypeManager::_RegisterNode( name, containerNodeDesc, 0 ); // TODO
+    DefaultContext().nodeTypeManager().registerNodeType( name, containerNodeDesc, 0 );
     
     return newInfo;
 }

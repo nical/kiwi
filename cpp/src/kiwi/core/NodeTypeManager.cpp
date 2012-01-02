@@ -16,25 +16,48 @@ Node* NodeTypeInfo::newInstance(Pipeline* p) const
 
 // -----------------------------------------------------------------------------
 
+typedef std::map<string,NodeTypeInfo*> NodeTypeMap;
 
-static std::map<string,NodeTypeInfo*> _types;
-
-NodeTypeManager::NodeTypeIterator Types_begin()
+struct NodeTypeContainer
 {
-    return _types.begin();
+    NodeTypeMap map;
+    ~NodeTypeContainer()
+    {
+        for(auto it = map.begin(); it!= map.end();++it)
+            delete it->second;
+    }
+};
+
+NodeTypeManager::NodeTypeManager()
+{
+    _types = new NodeTypeContainer;
 }
+
+NodeTypeManager::~NodeTypeManager()
+{
+    delete _types;
+}
+
+const NodeTypeInfo* NodeTypeManager::typeOf(const string& name)
+{
+    auto info = _types->map.find(name);
+    if ( info == _types->map.end() )
+        return 0;
     
-NodeTypeManager::NodeTypeIterator Types_end()
-{
-    return _types.end();
+    return info->second;
 }
 
-const NodeTypeInfo* NodeTypeManager::_RegisterNode( string nodeName
-    , const NodeLayoutDescriptor& layout, NodeUpdater* updater )
+/**
+ * Register a node type.
+ */ 
+const NodeTypeInfo* NodeTypeManager::registerNodeType(
+    const string& nodeName
+    , const NodeLayoutDescriptor& layout
+    , NodeUpdater* updater )
 {
     SCOPEDBLOCK("NodeTypeManager::RegisterNode");
     
-    auto existing = _TypeOf(nodeName);
+    auto existing = typeOf(nodeName);
     if ( existing != 0 )
         return existing;
     
@@ -43,43 +66,34 @@ const NodeTypeInfo* NodeTypeManager::_RegisterNode( string nodeName
     info->_updater = updater;
     info->_layout = layout;
 
-    _types[nodeName] = info;
+    _types->map[nodeName] = info;
     return info;
 }
 
-void NodeTypeManager::_Unregister(string name)
+void NodeTypeManager::unregisterAll()
 {
-    auto info = _types.find(name);
-    if ( info == _types.end() )
+    for(auto it = _types->map.begin(); it!= _types->map.end();++it)
+            delete it->second;
+    _types->map.clear();
+}
+
+void NodeTypeManager::unregister(const string& name)
+{
+    auto info = _types->map.find(name);
+    if ( info == _types->map.end() )
         return;
 
     delete info->second;
-    _types.erase( info );
+    _types->map.erase( info );
 }
 
-void NodeTypeManager::_UnregisterAll()
+Node* NodeTypeManager::instanciate(const string& name, Pipeline* p)
 {
-    _types.clear();
-}
-
-const NodeTypeInfo* NodeTypeManager::_TypeOf(string name)
-{
-    auto info = _types.find(name);
-    if ( info == _types.end() )
-        return 0;
-    
-    return info->second;
-}
-
-Node* NodeTypeManager::_Create(string name, Pipeline* p)
-{
-    auto info = _TypeOf(name);
+    auto info = typeOf(name);
     if( info != 0 )
         return info->newInstance(p);
     return 0;
 }
-
-
 
 
 }//namespace

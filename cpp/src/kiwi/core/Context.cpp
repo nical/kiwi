@@ -5,11 +5,19 @@
 
 
 namespace kiwi{
+
+// to pass by default context in default parameter without having to include
+// Context.hpp in too many headers
+kiwi::core::Context& DefaultContext()
+{
+    return core::Context::Default();
+}
+
 namespace core{
 
 Context::Context()
 {
-
+    setDataTypeManager( new DataTypeManager );
 }
 
 Context::~Context()
@@ -19,9 +27,9 @@ Context::~Context()
 
 static Context s_defaultContext;
 
-Context * Context::DefaultContext()
+Context& Context::Default()
 {
-    return &s_defaultContext;
+    return s_defaultContext;
 }
 
 DataHeader * Context::requestData( DataTypeId type )
@@ -30,7 +38,8 @@ DataHeader * Context::requestData( DataTypeId type )
     DataHeader* temp = _data[type]->pop();
     if (temp) return temp;
     return _typeManager->createInstance(type);
-    */ 
+    */
+    return 0;
 }
 
 DataHeader * Context::requestData( uint32 type )

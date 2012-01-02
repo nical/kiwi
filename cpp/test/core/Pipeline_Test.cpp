@@ -82,7 +82,7 @@ int main()
     NodeTypeManager::RegisterNode("N4",layout1, new DynamicNodeUpdater(&func4));
     NodeTypeManager::RegisterNode("N5",layout1, new DynamicNodeUpdater(&func5));
 
-    Pipeline pipeline( new ProcessingPipelineUpdater(), 0, 0 );
+    Pipeline pipeline( &DefaultContext(), new ProcessingPipelineUpdater() );
 
     auto n1 = NodeTypeManager::Create("N1");
     auto n2 = NodeTypeManager::Create("N2");

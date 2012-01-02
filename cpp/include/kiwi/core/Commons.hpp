@@ -18,6 +18,10 @@ namespace kiwi{
 typedef std::string string;
 typedef int DataAccessFlags;
 
+namespace core{ class Context; }
+
+kiwi::core::Context& DefaultContext();
+
 enum{ READ = 1, WRITE = 2, SIGNAL = 4
     , OPT = 16
     , IN = 64, OUT=128 };

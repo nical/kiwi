@@ -15,7 +15,6 @@ Pipeline::~Pipeline()
     removeAllNodes();
 
     if ( _updater ) delete _updater;
-    if ( _optimizer ) delete _optimizer;
 }
 
 

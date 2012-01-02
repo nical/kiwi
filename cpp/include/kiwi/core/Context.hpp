@@ -23,7 +23,7 @@ public:
     Context();
     ~Context();
 
-    static Context* DefaultContext();
+    static Context& Default();
 
     DataHeader* requestData( uint32 index );
     DataHeader* requestData( DataTypeId datatype );

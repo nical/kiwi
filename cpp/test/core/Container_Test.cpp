@@ -45,17 +45,17 @@ int main()
     KIWI_TEST( "type info name check Int.", infoi->name() == string("Int") );
     KIWI_TEST( "type info name check Float.", infof->name() == string("Float") );
 
-    auto td1 = DataTypeManager::Create("TestData1");
+    auto td1 = DefaultContext().instanciateData("TestData1");
     KIWI_TEST( "Instanciate known data 1 type not null.", td1 != 0);
     KIWI_TEST( "Instanciated type 1 type.", td1->type() == info1 );
     log << td1->type()->name();
-    auto td2 = DataTypeManager::Create("TestData2");
+    auto td2 = DefaultContext().instanciateData("TestData2");
     KIWI_TEST( "Instanciate known data 2 type not null.", td2 != 0);
     KIWI_TEST( "Instanciated type 2 type.", td2->type() == info2 );
-    auto tdx = DataTypeManager::Create("SomeUnknownType");
+    auto tdx = DefaultContext().instanciateData("SomeUnknownType");
     KIWI_TEST( "Instanciate unknown data 2 type returns null.", tdx == 0);
 
-    auto tdi = DataTypeManager::Create("Int");
+    auto tdi = DefaultContext().instanciateData("Int");
     *tdi->value<int>() = 42;
 
     KIWI_TEST( "Container value assignment.", *tdi->value<int>() == 42);

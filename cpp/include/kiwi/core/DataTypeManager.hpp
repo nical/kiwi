@@ -39,19 +39,19 @@ public:
 // DataTypeInfo will be replaced by DataTypeId and each type manager will have
 // it's own data typê base
 
-    const DataTypeInfo* registerDataType(string uniqueName, DataTypeInfo::Instanciator instanciator)
+    const DataTypeInfo* registerDataType(const string& uniqueName, DataTypeInfo::Instanciator instanciator)
     {
         return DataTypeManager::_RegisterDataType(uniqueName,instanciator);
     }
 
-    const DataTypeInfo* typeOf(string name)
+    const DataTypeInfo* typeOf( const string& name)
     {
         return DataTypeManager::_TypeOf(name);
     }
 
-    Data* create(string name)
+    Data* create( const string& name)
     {
-        return DataTypeManager::Create(name);
+        return DataTypeManager::_Create(name);
     }
 
 
@@ -75,7 +75,7 @@ public:
      * The name must correspond to the one used when registering the data type.
      * Returns a nil pointer if the name is not registered in the manager. 
      */ 
-    static Data* Create(string name);
+    static Data* _Create(string name);
 
 };
 

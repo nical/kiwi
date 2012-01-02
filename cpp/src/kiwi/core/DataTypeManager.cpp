@@ -41,7 +41,7 @@ const DataTypeInfo* DataTypeManager::_TypeOf(string name)
     return info->second;
 }
 
-Data* DataTypeManager::Create(string name)
+Data* DataTypeManager::_Create(string name)
 {
     const DataTypeInfo* info = DataTypeManager::_TypeOf( name );
     if ( info== 0 )

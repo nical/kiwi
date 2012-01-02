@@ -171,12 +171,19 @@ public:
     typedef std::map<string,NodeTypeInfo*> NodeTypeMap;
     typedef NodeTypeMap::iterator NodeTypeIterator;
    
-
+    /**
+     * Returns a pointer to the runtime node type info for a given name.
+     *
+     * Returns a nil pointer if the name doesn't correspond to a registered type.
+     */ 
     const NodeTypeInfo* typeOf(const string& name)
     {
         return _TypeOf(name);
     }
 
+    /**
+     * Register a node type.
+     */ 
     const NodeTypeInfo* registerNodeType(
         const string& nodeName
         , const NodeLayoutDescriptor& layout
@@ -186,49 +193,38 @@ public:
     }
 
     /**
+     * Unregister all registered node types.
+     */ 
+    void unregisterAll()
+    {
+        _UnregisterAll();
+    }
+
+    /**
+     * Unregister a node type if it has been registred.
+     */ 
+    void unregister(const string& name)
+    {
+        _Unregister(name);
+    }
+
+    /**
      * Instanciates a node corresponding to its type name.
      */
     Node* instanciate(string name, Pipeline* p = 0)
     {
-        return Create(name, p);
+        return _Create(name, p);
     }
 
 
     // -------------------------------------------------------------- deprecated
 
-    /**
-     * Register a node type.
-     */ 
     static const NodeTypeInfo* _RegisterNode( string nodeName
         , const NodeLayoutDescriptor& layout, NodeUpdater* updater );
-    
-    /**
-     * Returns a pointer to the runtime node type info for a given name.
-     *
-     * Returns a nil pointer if the name doesn't correspond to a registered type.
-     */ 
     static const NodeTypeInfo* _TypeOf(string name);
-
-    /**
-     * Instanciates a node corresponding to its type name.
-     */
-    static Node* Create(string name, Pipeline* p = 0);
-
-    /**
-     * Iterator.
-     */ 
-    static NodeTypeIterator Types_begin();
-    static NodeTypeIterator Types_end();
-
-    /**
-     * Remove a node type from the manager.
-     */ 
-    static void Unregister(string name);
-
-    /**
-     * Remove all the node types.
-     */ 
-    static void UnregisterAll();
+    static Node* _Create(string name, Pipeline* p = 0);
+    void _Unregister(string name);
+    void _UnregisterAll();
 
 };
 

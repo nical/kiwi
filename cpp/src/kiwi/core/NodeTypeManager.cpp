@@ -19,12 +19,12 @@ Node* NodeTypeInfo::newInstance(Pipeline* p) const
 
 static std::map<string,NodeTypeInfo*> _types;
 
-NodeTypeManager::NodeTypeIterator NodeTypeManager::Types_begin()
+NodeTypeManager::NodeTypeIterator Types_begin()
 {
     return _types.begin();
 }
     
-NodeTypeManager::NodeTypeIterator NodeTypeManager::Types_end()
+NodeTypeManager::NodeTypeIterator Types_end()
 {
     return _types.end();
 }
@@ -47,7 +47,7 @@ const NodeTypeInfo* NodeTypeManager::_RegisterNode( string nodeName
     return info;
 }
 
-void NodeTypeManager::Unregister(string name)
+void NodeTypeManager::_Unregister(string name)
 {
     auto info = _types.find(name);
     if ( info == _types.end() )
@@ -57,7 +57,7 @@ void NodeTypeManager::Unregister(string name)
     _types.erase( info );
 }
 
-void NodeTypeManager::UnregisterAll()
+void NodeTypeManager::_UnregisterAll()
 {
     _types.clear();
 }
@@ -71,7 +71,7 @@ const NodeTypeInfo* NodeTypeManager::_TypeOf(string name)
     return info->second;
 }
 
-Node* NodeTypeManager::Create(string name, Pipeline* p)
+Node* NodeTypeManager::_Create(string name, Pipeline* p)
 {
     auto info = _TypeOf(name);
     if( info != 0 )

@@ -111,8 +111,11 @@ int main()
     
     Pipeline* p = mock::NewMockPipeline();
 
-    auto n1 = compositor.nodeTypeInfo("NodeTest1")->newInstance(p);
-    auto n2 = compositor.nodeTypeInfo("NodeTest2")->newInstance(p);
+    //auto n1 = compositor.nodeTypeInfo("NodeTest1")->newInstance(p);
+    //auto n2 = compositor.nodeTypeInfo("NodeTest2")->newInstance(p);
+    auto n1 = p->instanciateNode("NodeTest1");
+    auto n2 = p->instanciateNode("NodeTest2");
+    
 
     {   SCOPEDBLOCK("Initial state");
         KIWI_TEST("Number of input ports.", n1->inputs().size() == 2 );
@@ -187,10 +190,10 @@ int main()
         KIWI_TEST_EQUAL("Number of previous nodes.", n2->previousNodes().size(), 1); 
         KIWI_TEST_EQUAL("Number of next nodes.", n2->nextNodes().size(), 0);
 
-        auto n3 = compositor.nodeTypeInfo("NodeTest3")->newInstance(p);
-        auto n4 = compositor.nodeTypeInfo("NodeTest3")->newInstance(p);
-        auto n5 = compositor.nodeTypeInfo("NodeTest3")->newInstance(p);
-
+        auto n3 = p->instanciateNode("NodeTest3");
+        auto n4 = p->instanciateNode("NodeTest3");
+        auto n5 = p->instanciateNode("NodeTest3");
+    
         n1->output() >> n3->input(0);
         n4->output() >> n3->input(1);
         n5->output() >> n3->input(2);

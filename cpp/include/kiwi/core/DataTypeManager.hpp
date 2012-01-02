@@ -50,7 +50,7 @@ public:
         return DataTypeManager::_TypeOf(name);
     }
 
-    Data* create( const string& name)
+    Data* instanciate( const string& name)
     {
         return DataTypeManager::_Create(name);
     }

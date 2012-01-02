@@ -85,7 +85,8 @@ int main()
         KIWI_TEST( "Requesting unregistered node"
             , compositor.nodeTypeInfo("some_unregistered_node") == 0);
         
-        NodeTypeManager::Unregister("NodeTest1");
+        //NodeTypeManager::Unregister("NodeTest1");
+        compositor.nodeTypeManager().unregister("NodeTest1");
 
         KIWI_TEST( "Requesting NodeTest1 after unregistration"
             , compositor.nodeTypeInfo("NodeTest1") == 0);
@@ -100,8 +101,10 @@ int main()
 
     log.foo();
 
-    auto n1 = new Node(&p, compositor.nodeTypeInfo("NodeTest1") );
-    auto n2 = new Node(&p, compositor.nodeTypeInfo("NodeTest2") );
+    //auto n1 = new Node(&p, compositor.nodeTypeInfo("NodeTest1") );
+    //auto n2 = new Node(&p, compositor.nodeTypeInfo("NodeTest2") );
+    auto n1 = p.instanciateNode("NodeTest1");
+    auto n2 = p.instanciateNode("NodeTest2");
 
     log.bar();
     

@@ -92,7 +92,7 @@ const DataTypeInfo* Context::dataTypeInfo(const string& name)
 
 Data* Context::instanciateData(const string& name)
 {
-    return _dataTypeManager->create(name);
+    return _dataTypeManager->instanciate(name);
 }
 
 const NodeTypeInfo* Context::registerNodeType(

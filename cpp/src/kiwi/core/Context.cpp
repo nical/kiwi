@@ -72,5 +72,21 @@ void Context::markNotUsed( DataHeader * data )
 }
 
 
+const DataTypeInfo* Context::registerDataType(const string& uniqueName, DataInstanciator instanciator)
+{
+    return _typeManager->registerDataType(uniqueName, instanciator);
+}
+
+const DataTypeInfo* Context::dataTypeInfo(const string& name)
+{
+    return _typeManager->typeOf(name);
+}
+
+Data* Context::instanciateData(const string& name)
+{
+    return _typeManager->create(name);
+}
+
+
 }//namespace
 }//namespace

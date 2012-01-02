@@ -4,6 +4,7 @@
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/utils/Testing.hpp"
 #include "kiwi/core/Node.hpp"
+#include "kiwi/core/Context.hpp"
 #include "kiwi/core/OpConnect.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/processing/ProcessingPipelineUpdater.hpp"
@@ -63,7 +64,8 @@ int main()
 
 
     //auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
-    auto IntInfo = DataTypeManager::TypeOf("Int");
+    //auto IntInfo = DataTypeManager::TypeOf("Int");
+    auto IntInfo = DefaultContext().dataTypeManager().typeOf("Int");
     
 
     NodeLayoutDescriptor layout1;
@@ -131,6 +133,5 @@ int main()
         log << " " << updates[i];
     }
 
-    
     return KIWI_END_TESTING
 }

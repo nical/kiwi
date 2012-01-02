@@ -61,8 +61,8 @@ int main()
 {
 	KIWI_BEGIN_TESTING("Kiwi::core::Node");
 
-    auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
-    auto DummyInfo = DataTypeManager::RegisterDataType("Dummy", &NewDummy);
+    auto IntInfo = DefaultContext().registerDataType("Int", &Newint);
+    auto DummyInfo = DefaultContext().registerDataType("Dummy", &NewDummy);
 
     
 

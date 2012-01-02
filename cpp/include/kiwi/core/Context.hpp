@@ -14,16 +14,29 @@ namespace core{
 class DataHeader;
 class DataTypeManager;
 class DataPool;
+class Data;
 
 class Context
 {
 public:
     typedef std::map<DataTypeId,DataPool*> DataMap;
-
+    typedef Data* (*DataInstanciator)();
+    
     Context();
     ~Context();
 
     static Context& Default();
+
+    // ----
+    /**
+     * cf. DataTypeManager
+     */ 
+    const DataTypeInfo* registerDataType(const string& uniqueName, DataInstanciator instanciator);
+    const DataTypeInfo* dataTypeInfo(const string& name);
+    Data* instanciateData(const string& name);
+    
+    // ----
+    
 
     DataHeader* requestData( uint32 index );
     DataHeader* requestData( DataTypeId datatype );
@@ -45,9 +58,10 @@ public:
         return _id;
     }
 
-    DataTypeManager * dataTypeManager() const
+    DataTypeManager& dataTypeManager() const
     {
-        return _typeManager;
+        assert( _typeManager );
+        return *_typeManager;
     }
 
 private:

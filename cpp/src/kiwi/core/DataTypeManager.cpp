@@ -13,10 +13,10 @@ typedef std::map<string, DataTypeInfo*> DataTypeMap;
 static DataTypeMap _types;
 
 
-const DataTypeInfo* DataTypeManager::RegisterDataType(string name, DataTypeInfo::Instanciator instanciator)
+const DataTypeInfo* DataTypeManager::_RegisterDataType(string name, DataTypeInfo::Instanciator instanciator)
 {
     //DataTypeInfo(string dataName, SubDataArray subdata, Instanciator instanciator)
-    const DataTypeInfo* result = TypeOf(name);
+    const DataTypeInfo* result = DataTypeManager::_TypeOf(name);
     if ( result != 0 )
         return result;
 
@@ -32,7 +32,7 @@ const DataTypeInfo* DataTypeManager::RegisterDataType(string name, DataTypeInfo:
     return newInfo;
 }
 
-const DataTypeInfo* DataTypeManager::TypeOf(string name)
+const DataTypeInfo* DataTypeManager::_TypeOf(string name)
 {
     DataTypeMap::iterator info = _types.find(name);
     if ( info == _types.end() )
@@ -43,7 +43,7 @@ const DataTypeInfo* DataTypeManager::TypeOf(string name)
 
 Data* DataTypeManager::Create(string name)
 {
-    const DataTypeInfo* info = TypeOf( name );
+    const DataTypeInfo* info = DataTypeManager::_TypeOf( name );
     if ( info== 0 )
         return 0;
     return info->newInstance();
@@ -51,7 +51,7 @@ Data* DataTypeManager::Create(string name)
 
 const DataTypeInfo* Kiwi_DTM_TypeOf(string name)
 {
-    return DataTypeManager::TypeOf( name );
+    return DataTypeManager::_TypeOf( name );
 }
 
 

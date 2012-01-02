@@ -1,6 +1,7 @@
 
 #include "kiwi/utils/Testing.hpp"
 #include "kiwi/core/Node.hpp"
+#include "kiwi/core/Context.hpp"
 #include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/InputPort.hpp"
@@ -23,8 +24,8 @@ int main()
 	KIWI_BEGIN_TESTING("Kiwi::core::NodeTypeManager");
 
 
-    auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
-    auto DummyInfo = DataTypeManager::RegisterDataType("Dummy", &NewDummy);
+    auto IntInfo = DefaultContext().registerDataType("Int", &Newint);
+    auto DummyInfo = DefaultContext().registerDataType("Dummy", &NewDummy);
 
     NodeLayoutDescriptor layout1;
     layout1.inputs = {

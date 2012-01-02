@@ -1,6 +1,7 @@
 
 #include "kiwi/core/Algorithm.hpp"
 #include "kiwi/core/Node.hpp"
+#include "kiwi/core/Context.hpp"
 #include "kiwi/core/InputPort.hpp"
 #include "kiwi/core/OutputPort.hpp"
 #include "kiwi/core/OpConnect.hpp"
@@ -38,7 +39,7 @@ int main()
     KIWI_BEGIN_TESTING("Kiwi::core::Algorithm");
  
     // declare data types
-    auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
+    auto IntInfo = DefaultContext().registerDataType("Int", &Newint);
 
     NodeLayoutDescriptor layout1;
     layout1.inputs =

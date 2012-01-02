@@ -2,6 +2,7 @@
 #include "kiwi/mock/MockNode.hpp"
 #include "kiwi/core/Node.hpp"
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Context.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/mock/MockNodeUpdater.hpp"
@@ -17,7 +18,8 @@ KIWI_DECLARE_CONTAINER(int,"Int")
 
 void DeclareMockNode( uint32 nbInputs, uint32 nbOutputs )
 {
-    auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
+    //auto IntInfo = DataTypeManager::RegisterDataType("Int", &Newint);
+    auto IntInfo = DefaultContext().registerDataType("Int", &Newint);
 
     NodeLayoutDescriptor layout;
 

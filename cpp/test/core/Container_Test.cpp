@@ -2,6 +2,7 @@
 #include "kiwi/utils/Testing.hpp"
 #include "kiwi/core/Node.hpp"
 #include "kiwi/core/Container.hpp"
+#include "kiwi/core/Context.hpp"
 #include "kiwi/core/Commons.hpp"
 #include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
@@ -34,10 +35,10 @@ int main()
 {
     KIWI_BEGIN_TESTING("Kiwi::core::Container");
     
-    auto info1  = DataTypeManager::RegisterDataType("TestData1", &NewTestData1 );
-    auto info2  = DataTypeManager::RegisterDataType("TestData2", &NewTestData2 );
-    auto infoi  = DataTypeManager::RegisterDataType("Int", &Newint );
-    auto infof  = DataTypeManager::RegisterDataType("Float", &Newfloat );
+    auto info1  = DefaultContext().registerDataType("TestData1", &NewTestData1 );
+    auto info2  = DefaultContext().registerDataType("TestData2", &NewTestData2 );
+    auto infoi  = DefaultContext().registerDataType("Int", &Newint );
+    auto infof  = DefaultContext().registerDataType("Float", &Newfloat );
 
     KIWI_TEST( "type info name check 1.", info1->name() == string("TestData1") );
     KIWI_TEST( "type info name check 2.", info2->name() == string("TestData2") );

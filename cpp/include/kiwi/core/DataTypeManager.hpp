@@ -41,12 +41,12 @@ public:
 
     const DataTypeInfo* registerDataType(string uniqueName, DataTypeInfo::Instanciator instanciator)
     {
-        return DataTypeManager::RegisterDataType(uniqueName,instanciator);
+        return DataTypeManager::_RegisterDataType(uniqueName,instanciator);
     }
 
     const DataTypeInfo* typeOf(string name)
     {
-        return DataTypeManager::TypeOf(name);
+        return DataTypeManager::_TypeOf(name);
     }
 
     Data* create(string name)
@@ -62,12 +62,12 @@ public:
      *
      * Should be invoked for every data type before they are used.
      */ 
-    static const DataTypeInfo* RegisterDataType(string uniqueName, DataTypeInfo::Instanciator instanciator);
+    static const DataTypeInfo* _RegisterDataType(string uniqueName, DataTypeInfo::Instanciator instanciator);
 
     /**
      * Returns the runtime type info for a given name.
      */ 
-    static const DataTypeInfo* TypeOf(string name);
+    static const DataTypeInfo* _TypeOf(string name);
 
     /**
      * Instanciates a Data object correspônding to the name passed in parameter.

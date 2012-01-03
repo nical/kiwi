@@ -12,6 +12,7 @@ namespace core{
 class DataHeader;
 class InputPort;
 class OutputPort;
+class Data;
 
 
 /**
@@ -28,7 +29,7 @@ class OutputPort;
 class DataProxy
 {
 public:
-    enum{ NONE, DATA, DATATYPE, INDEX, PROXY, INPUT };
+    enum{ NONE, PROXY, DATA, DATATYPE, INPUT };
 
     explicit DataProxy()
     :_flag(NONE), _refCount(1)
@@ -36,11 +37,11 @@ public:
         _ptr.raw = 0;
     }
     
-    explicit DataProxy( DataHeader * header )
+    explicit DataProxy( Data * dataptr )
     :_flag(DATA), _refCount(1)
     {
-        _ptr.dataHeader = 0;
-        setTarget( header );
+        _ptr.data = 0;
+        setTarget( dataptr );
     }
       
     explicit DataProxy( OutputPort * output )
@@ -57,21 +58,15 @@ public:
         setTarget( proxy );
     }
 
-    explicit DataProxy( uint32 index )
-    :_flag(INDEX), _refCount(1)
-    {
-        _ptr.index = 0;
-        setTarget( index );
-    }
-
-    void setTarget( DataHeader* data );
+    void setTarget( Data* dataptr );
     void setTarget( DataProxy* proxy );
     void setTarget( InputPort* input );
     void setTarget( OutputPort* output );
-    void setTarget( uint32 index );
     
     DataHeader* dataHeader( Context* c ) const;
     DataHeader* dataHeader() const;
+
+    Data * data() const;
 
     void beginUsingData( Context* c ) const;
     void endUsingData( Context* c ) const;
@@ -92,7 +87,7 @@ public:
 
     bool isDirectRef() const
     {
-        return (_flag == INDEX) || (_flag == DATA);
+        return _flag == DATA;
     }
 
     uint8 proxyType() const
@@ -111,7 +106,7 @@ private:
     uint16 _refCount;
     union{
         void* raw;
-        DataHeader* dataHeader;
+        Data* data;
         DataProxy* proxy;
         InputPort* input;
         uint32 index;

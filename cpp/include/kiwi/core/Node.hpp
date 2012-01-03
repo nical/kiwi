@@ -46,6 +46,11 @@ public:
     Node(Pipeline* pipeline, const NodeTypeInfo* type);
 
     /**
+     * Destructor.
+     */ 
+    ~Node();
+
+    /**
      * Returns the input ports as a vector.
      */ 
     const InputArray& inputs() const

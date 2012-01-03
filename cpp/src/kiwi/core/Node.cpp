@@ -9,6 +9,12 @@
 #include "kiwi/core/NodeUpdater.hpp"
 #include "kiwi/view/NodeView.hpp"
 
+
+#ifndef NDEBUG
+static int _nodeCount = 0;
+int kiwi_dev_GetNodeCount(){return _nodeCount;}
+#endif
+
 namespace kiwi{
 namespace core{
 
@@ -36,6 +42,16 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
                 , typeInfo->outputs()[i].accessFlags() )
         );
     }
+#ifndef NDEBUG
+    ++_nodeCount;
+#endif
+}
+
+Node::~Node()
+{
+#ifndef NDEBUG
+    --_nodeCount;
+#endif
 }
 
 bool Node::update()

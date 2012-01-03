@@ -12,7 +12,7 @@
 #include "kiwi/utils/DebugStream.hpp"
 #include "kiwi/core/DynamicNodeUpdater.hpp"
 #include "kiwi/core/Data.hpp"
-
+#include "kiwi/core/Pipeline.hpp"
 
 using namespace kiwi;
 using namespace kiwi::core;
@@ -57,10 +57,12 @@ int main()
     compositor.registerNodeType("MyNode1", layout1
         , new DynamicNodeUpdater(&TestFunction) );
 
-    auto n = compositor.instanciateNode("MyNode1");
+    Pipeline p;
 
-    auto in1 = compositor.instanciateNode("Int");
-    auto in2 = compositor.instanciateNode("Int");
+    auto n = p.instanciateNode("MyNode1");
+
+    auto in1 = p.instanciateNode("Int");
+    auto in2 = p.instanciateNode("Int");
 
     assert( in1->output().data() != 0 );
     assert( in1->output().data()->value<int>() != 0 );

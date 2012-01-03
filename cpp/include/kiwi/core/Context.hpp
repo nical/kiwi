@@ -37,8 +37,11 @@ public:
      * cf. DataTypeManager
      */ 
     const DataTypeInfo* registerDataType(const string& uniqueName, DataInstanciator instanciator);
+
     const DataTypeInfo* dataTypeInfo(const string& name);
+
     Data* instanciateData(const string& name);
+
     /**
      * cf. NodeTypeManager
      */ 
@@ -46,8 +49,8 @@ public:
         const string& nodeName
         , const NodeLayoutDescriptor& layout
         , NodeUpdater* updater );
+        
     const NodeTypeInfo* nodeTypeInfo(const string& name);
-    Node* instanciateNode(const string& name);
     // ----
     
 
@@ -55,9 +58,7 @@ public:
     DataHeader* requestData( DataTypeId datatype );
     DataHeader* requestData( const DataTypeInfo* dataTypeInfo ); // deprecated
 
-    uint32 freeData( uint32 amountHint, DataTypeId type = DataTypeId::Null );
-
-    uint32 preallocateData( uint32 amountHint, DataTypeId type );
+    
 
     void setDataTypeManager( DataTypeManager* mgr );
     void setNodeTypeManager( NodeTypeManager* mgr );

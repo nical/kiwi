@@ -2,6 +2,7 @@
 #include "kiwi/core/Pipeline.hpp"
 #include "kiwi/core/Node.hpp"
 #include "kiwi/core/Context.hpp"
+#include "kiwi/core/NodeTypeManager.hpp"
 
 namespace kiwi{
 namespace core{
@@ -54,9 +55,11 @@ static int _findIndexOf( Pipeline::NodeArray nodes, const Node* n )
 
 bool Pipeline::removeNode( Node* n )
 {
+    log << "Pipeline::removeNode" << endl;
     int idx = _findIndexOf(_nodes, n);
     if ( idx > 0 )
     {
+        delete n;
         _nodes[idx] = _nodes[_nodes.size()-1];
         _nodes.resize(_nodes.size()-1);
         return true;
@@ -65,6 +68,8 @@ bool Pipeline::removeNode( Node* n )
 }
 bool Pipeline::removeAllNodes()
 {
+    for(uint32 i = 0; i < _nodes.size(); ++i )
+        delete _nodes[i];
     _nodes.resize(0);
     return true;
 }
@@ -78,9 +83,7 @@ bool Pipeline::contains(const Node* n)
 
 Node * Pipeline::instanciateNode(const string& name)
 {
-    auto n = _context->instanciateNode(name);
-    addNode(n);
-    return n;
+    return _context->nodeTypeManager().instanciate(name, this);
 }
 
 }//namespace

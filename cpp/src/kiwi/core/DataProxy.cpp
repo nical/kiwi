@@ -12,10 +12,10 @@ namespace core{
 
 
 
-void DataProxy::setTarget( DataHeader* header )
+void DataProxy::setTarget( Data* dataptr )
 {
     _flag = DATA;
-    _ptr.dataHeader = header;
+    _ptr.data = dataptr;
 }
 
 void DataProxy::setTarget( DataProxy* proxy )
@@ -31,7 +31,6 @@ void DataProxy::setTarget( DataProxy* proxy )
 void DataProxy::setTarget( InputPort* input )
 {
     KIWI_NOT_IMPLEMENTED("DataProxy::setTarget");
-    // TODO: add methods in InputPort to handle ref counting properly
     _flag = INPUT;
     _ptr.input = input;
 }
@@ -42,32 +41,40 @@ void DataProxy::setTarget( OutputPort* output )
     _ptr.output = output;
 }
 
-void DataProxy::setTarget( uint32 index )
-{
-    _flag = INDEX;
-    _ptr.index = index;
-}
-
+/*
 DataHeader * DataProxy::dataHeader( Context * c ) const
 {
     switch( _flag )
     {
-        case DATA : return _ptr.dataHeader;
-        case INDEX : return c->requestData( _ptr.index );
-        case DATATYPE : return _ptr.output?c->requestData( _ptr.output->dataType() ):0;
+        case DATA : return _ptr.data;
+        case DATATYPE : return c->requestData( _ptr.output->dataType() );
         case PROXY : return _ptr.proxy->dataHeader();
         //case INPUT : return _ptr.input->dataHeader(); // TODO add method to input port
         default : return 0;
     }
 }
+*/
 
+Data* DataProxy::data() const
+{
+        switch( _flag )
+    {
+        case DATA : return _ptr.data;
+        case PROXY : return _ptr.proxy->data();
+        //case DATATYPE : return c->requestData( _ptr.output->dataType() );
+        //case INPUT : return _ptr.input->dataHeader(); // TODO add method to input port
+        default : return 0;
+    }
+}
+
+/*
 enum{ Error__need_context = 0 };
 DataHeader * DataProxy::dataHeader() const
 {
     switch( _flag )
     {
-        case DATA  : return _ptr.dataHeader;
-        case PROXY : return _ptr.proxy->dataHeader();
+        case DATA  : return _ptr.data;
+        case PROXY : return _ptr.proxy->data();
         case INPUT : {
             if( _ptr.input->isConnected() )
                 return _ptr.input->connection()->dataProxy().dataHeader();
@@ -77,6 +84,7 @@ DataHeader * DataProxy::dataHeader() const
         default : return 0;
     }
 }
+*/
 
 void DataProxy::increaseRefCount( uint16 nb )
 {
@@ -109,12 +117,13 @@ bool DataProxy::isAllocated() const
 {
     switch( _flag )
     {
-        case DATA : return _ptr.dataHeader != 0;
+        case DATA : return _ptr.data != 0;
         case PROXY : return _ptr.proxy->isAllocated();
         case INPUT : return (_ptr.input->isConnected() && _ptr.input->connection()->dataProxy().isAllocated());
         default : { assert(false); return false; }
     }
 }
+
 
 
 }//namespace

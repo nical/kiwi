@@ -33,6 +33,8 @@ for( auto itc = (*itp)->connections().begin(); itc != (*itp)->connections().end(
 { log << "| " << (*itc)->node()->id() << endl; }
 
 
+int kiwi_dev_GetNodeCount();
+
 
 void printNodeLayout( Node* n )
 {
@@ -219,17 +221,15 @@ int main()
         n4->input(1).disconnectAll();
         n5->input(0).disconnectAll();
         
-        KIWI_TEST_EQUAL("Number of next nodes.", n3->nextNodes().size(), 0); 
-        
-        delete n3;
-        delete n4;
-        delete n5;
+        KIWI_TEST_EQUAL("Number of next nodes.", n3->nextNodes().size(), 0);         
     }
 
 
-    delete n1;
-    delete n2;
     delete p;
-    
+
+#ifndef NDEBUG
+    KIWI_TEST_EQUAL("Check that all nodes were deallocated.", kiwi_dev_GetNodeCount(), 0 );
+#endif
+
     return KIWI_END_TESTING;
 }

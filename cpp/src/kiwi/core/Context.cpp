@@ -50,6 +50,7 @@ DataHeader * Context::requestData( uint32 type )
     return 0;
 }
 
+/*
 uint32 Context::freeData( uint32 amountHint, DataTypeId type )
 {
     return 0;
@@ -59,7 +60,7 @@ uint32 Context::preallocateData( uint32 amountHint, DataTypeId type )
 {    
     return 0;
 }
-
+*/
 void Context::setDataTypeManager( DataTypeManager * mgr )
 {
     assert( mgr );
@@ -108,10 +109,12 @@ const NodeTypeInfo* Context::nodeTypeInfo(const string& name)
     return _nodeTypeManager->typeOf(name);
 }
 
+/*
 Node* Context::instanciateNode(const string& name)
 {
     return _nodeTypeManager->instanciate(name);
 }
+*/
 
 }//namespace
 }//namespace

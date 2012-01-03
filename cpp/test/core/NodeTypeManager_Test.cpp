@@ -108,7 +108,5 @@ int main()
 
     log.bar();
     
-    delete n1;
-    delete n2;
     return KIWI_END_TESTING;
 }

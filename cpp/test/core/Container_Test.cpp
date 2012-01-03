@@ -4,6 +4,7 @@
 #include "kiwi/core/Container.hpp"
 #include "kiwi/core/Context.hpp"
 #include "kiwi/core/Commons.hpp"
+#include "kiwi/core/Pipeline.hpp"
 #include "kiwi/core/DataTypeManager.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
 #include "kiwi/utils/DebugStream.hpp"
@@ -47,6 +48,7 @@ int main()
     KIWI_TEST( "type info name check Int.", infoi->name() == string("Int") );
     KIWI_TEST( "type info name check Float.", infof->name() == string("Float") );
 
+   
     auto td1 = compositor.instanciateData("TestData1");
     KIWI_TEST( "Instanciate known data 1 type not null.", td1 != 0);
     KIWI_TEST( "Instanciated type 1 type.", td1->type() == info1 );
@@ -61,14 +63,14 @@ int main()
     *tdi->value<int>() = 42;
 
     KIWI_TEST( "Container value assignment.", *tdi->value<int>() == 42);
-    auto intContainerNode = compositor.instanciateNode("Int");
+
+    Pipeline p;
+    auto intContainerNode = p.instanciateNode("Int");
     KIWI_TEST( "creation of a container node.", intContainerNode != 0 );
-    
     
     delete td1;
     delete td2;
     delete tdx;
     delete tdi;
-    delete intContainerNode;
     return KIWI_END_TESTING;
 }

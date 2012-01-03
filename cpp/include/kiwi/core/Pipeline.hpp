@@ -122,6 +122,7 @@ public:
     {
         _id = _newId();
     }
+    
 
     /**
      * Updates the nodes in a correct order (eventually in parallel) using a

@@ -100,6 +100,7 @@ void DataProxy::decreaseRefCount( uint16 nb )
     //else if ( _flag == INPUT ) _ptr.input-> // TODO
 }
 
+/*
 void DataProxy::beginUsingData( Context * c ) const
 {
     // the direct reference to the data SHOULD be the first to access it
@@ -112,6 +113,7 @@ void DataProxy::endUsingData( Context * c ) const
 {
     dataHeader( c )->increaseRefCount( 1 );
 }
+*/
 
 bool DataProxy::isAllocated() const
 {

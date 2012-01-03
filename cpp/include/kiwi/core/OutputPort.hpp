@@ -32,8 +32,11 @@ public:
     /**
      * Constructor.
      */ 
-    OutputPort(Node* n, DataStrategy* datastrategy, DataAccessFlags flags = READ|WRITE)
-    :_node(n), _dataStrategy(datastrategy), _accessFlags(flags)
+    OutputPort( Node* n
+        , DataProxy dataproxy
+        , const DataTypeInfo* datatype
+        , DataAccessFlags flags )
+    :_node(n), _dataProxy(dataproxy), _dataTypeInfo(datatype), _accessFlags(flags)
     {
         
     }
@@ -125,14 +128,6 @@ public:
      * This check is performed before every connection.
      */ 
     bool isCompatible(const InputPort& port) const;
-    
-    /**
-     * Returns true if this port has a special data allocation strategy.
-     */ 
-    bool hasDataStrategy() const
-    {
-        return _dataStrategy != 0;
-    }
 
     /**
      * Returns true if this port has at least on connection.
@@ -170,7 +165,7 @@ protected://variables
     Node*           _node;
     ConnectionArray _connections;
     DataProxy       _dataProxy;
-    DataStrategy*   _dataStrategy;
+    const DataTypeInfo* _dataTypeInfo;
     DataAccessFlags _accessFlags;
 };
 

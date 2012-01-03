@@ -59,7 +59,8 @@ int main()
 
     Pipeline p;
 
-    auto n = p.instanciateNode("MyNode1");
+    auto n  = p.instanciateNode("MyNode1");
+    auto n2 = p.instanciateNode("MyNode1");
 
     auto in1 = p.instanciateNode("Int");
     auto in2 = p.instanciateNode("Int");
@@ -67,18 +68,21 @@ int main()
     assert( in1->output().data() != 0 );
     assert( in1->output().data()->value<int>() != 0 );
 
-    *in1->output().data()->value<int>() = 42;
-    *in2->output().data()->value<int>() = 1337;
+    *in1->output().dataAs<int>() = 42;
+    *in2->output().dataAs<int>() = 1337;
 
     KIWI_TEST( "DynamicNodeUpdater update.", !n->update() );
 
     assert( in1->output() >> n->input(0) );
     assert( in2->output() >> n->input(1) );
+    assert(  n->output() >> n2->input(0) );
+    assert(  n->output() >> n2->input(1) );
 
-    KIWI_TEST( "DynamicNodeUpdater update.", n->update() );
+    KIWI_TEST( "DynamicNodeUpdater update 1.", n->update() );
+    KIWI_TEST( "DynamicNodeUpdater update 2.", n2->update() );
 
-
-    KIWI_TEST( "Update result.", *n->output().data()->value<int>() == 1337+42 );
+    KIWI_TEST_EQUAL( "Update result 1.", *n->output().dataAs<int>(), 1337+42 );
+    KIWI_TEST_EQUAL( "Update result 2.", *n2->output().dataAs<int>(), (1337+42)*2 );
 
 
     return KIWI_END_TESTING;

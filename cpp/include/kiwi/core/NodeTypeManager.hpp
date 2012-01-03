@@ -18,6 +18,15 @@ class Node;
 class Pipeline;
 class NodeUpdater;
 
+struct DataAllocationStrategy
+{
+    enum{ SAME_AS_INPUT, PREALLOCATED };
+    uint8 strategy;
+    uint8 arg1;
+    uint8 arg2;
+    uint8 arg3;
+};
+
 /**
  * Describes an input port.
  *

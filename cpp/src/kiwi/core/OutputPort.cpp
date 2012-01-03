@@ -48,16 +48,12 @@ bool OutputPort::isCompatible(const InputPort& port) const
 
 Data* OutputPort::data() const
 {
-    if ( hasDataStrategy() )
-        return _dataStrategy->data();
-    else return 0;
+    return _dataProxy.data();
 }
 
 const DataTypeInfo* OutputPort::dataType() const
 {
-    if ( hasDataStrategy() )
-        return _dataStrategy->dataType();
-    else return 0;
+    return _dataTypeInfo;
 }
 
 }//namespace

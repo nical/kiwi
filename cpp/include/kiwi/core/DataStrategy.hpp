@@ -8,9 +8,7 @@ namespace core{
 class DataTypeInfo;
 class Data;
 
-/**
- * Defines the way output ports should handle data.
- */ 
+/*
 class DataStrategy
 {
 public:
@@ -53,7 +51,7 @@ private:
     const DataTypeInfo* _dataTypeInfo; 
     Data* _data; 
 };
-
+*/
 
 } //namespace
 } //namespace

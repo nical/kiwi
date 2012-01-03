@@ -15,6 +15,13 @@ class OutputPort;
 class Data;
 
 
+// outputs = {
+//  { intInfo, DataFromInput(0), READ },
+//  { intInfo, PreAllocatedData(), READ }
+//  { intInfo, DifferentFromInput(0), READ }
+//  { intInfo, SubDataFromOutput(1), READ }
+// }
+
 /**
  * @class DataProxy
  *

@@ -93,8 +93,7 @@ int main()
 
         info1 = compositor.registerNodeType("NodeTest1", layout1, new mock::MockNodeUpdater);
 
-        KIWI_TEST( "Registering NodeTest1 again"
-            , info1->name() == "NodeTest1" );
+        KIWI_TEST( "Registering NodeTest1 again", info1->name() == "NodeTest1" );
     }
     
     Pipeline p;
@@ -105,6 +104,9 @@ int main()
     //auto n2 = new Node(&p, compositor.nodeTypeInfo("NodeTest2") );
     auto n1 = p.instanciateNode("NodeTest1");
     auto n2 = p.instanciateNode("NodeTest2");
+
+    KIWI_TEST("Node 1 Instanciated", n1 != 0);
+    KIWI_TEST("Node 2 Instanciated", n2 != 0);
 
     log.bar();
     

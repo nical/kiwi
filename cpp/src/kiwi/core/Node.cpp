@@ -38,7 +38,9 @@ Node::Node(Pipeline* pipeline, const NodeTypeInfo* typeInfo)
     for(uint32 i = 0; i < typeInfo->outputs().size(); ++i)
     {
         _outputs.push_back( new OutputPort( this
-                , new AutoDataStrategy( typeInfo->outputs()[i].dataType() )
+                //, new AutoDataStrategy( typeInfo->outputs()[i].dataType() )
+                , DataProxy( typeInfo->outputs()[i].dataType()->newInstance() )
+                , typeInfo->outputs()[i].dataType()
                 , typeInfo->outputs()[i].accessFlags() )
         );
     }

@@ -75,7 +75,10 @@ public:
     /**
      * Returns a pointer to the data of this output port.
      */ 
-    Data* data() const;
+    Data* data() const
+    {
+        return _dataProxy.data();
+    }
 
     template<typename T> T* dataAs() const
     {
@@ -87,7 +90,10 @@ public:
     /**
      * Returns a pointer to this ports data type info object.
      */ 
-    const DataTypeInfo* dataType() const;
+    const DataTypeInfo* dataType() const
+    {
+        return _dataTypeInfo;
+    }
 
     /**
      * returns this port's access flags.

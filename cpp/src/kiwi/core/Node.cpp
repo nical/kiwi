@@ -5,7 +5,6 @@
 #include "kiwi/core/Data.hpp"
 #include "kiwi/core/CompatibilityStrategy.hpp"
 #include "kiwi/core/NodeTypeManager.hpp"
-#include "kiwi/core/DataStrategy.hpp"
 #include "kiwi/core/NodeUpdater.hpp"
 #include "kiwi/view/NodeView.hpp"
 

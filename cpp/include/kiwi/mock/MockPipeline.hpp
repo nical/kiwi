@@ -22,31 +22,6 @@ public:
     }
 };
 
-
-class MockPipelineOptimizer : public core::PipelineOptimizer
-{
-public:
-    string name() const
-    {
-        return "MockPipelineOptimizer";
-    }
-    /**
-     * Does nothing.
-     */ 
-    core::Procedure* optimize( core::Pipeline* p, uint32 flags )
-    {
-        return 0;
-    }
-
-    /**
-     * returns all the supported optimize flags (none)
-     */ 
-    virtual uint32 modes()
-    {
-        return 0;
-    }
-};
-
 class MockPipelineRuleSet : public core::PipelineRuleSet
 {
 public:

@@ -10,6 +10,9 @@ namespace core{
 class Data;
 class Node;
 class Pipeline;
+class InputPort;
+class OutputPort;
+class DataProxy;
 
 /**
  * Interface for immutable logic bloc.
@@ -68,34 +71,6 @@ public:
     { return PipelineComponent::RULESET; }
 };
 
-/**
- * Mother class for pipeline optimizer components.
- *
- * Pipeline optimizers can generate an optimized version of the pipeline that
- * cannot be modified anymore, but should be more efficient.
- * The nature of the improvement is up to the optimizer implementation, though it
- * can optionally use the flag passed in parameter as a hint.
- */ 
-class PipelineOptimizer : PipelineComponent
-{
-public:
-    enum { NONE = 0, SPEED = 1, MEMORY = 2 };
-    /**
-     * Optimizes the pipeline.
-     */ 
-    virtual Procedure* optimize( Pipeline* p, uint32 flags ) = 0;
-    /**
-     * returns all the supported optimize flags
-     */ 
-    virtual uint32 modes() = 0;
-
-    PipelineComponent::ComponentType type() const
-    { return PipelineComponent::OPTIMIZER; }
-};
-
-
-
-
 
 /**
  * Node based pipeline. Groups nodes and takes care of ordering
@@ -105,12 +80,9 @@ class Pipeline : public Procedure
 {
 public:
     typedef std::vector<Node*> NodeArray;
+    typedef std::vector<InputPort*> InputArray;
+    typedef std::vector<OutputPort*> OutputArray;
     typedef uint32 ID; 
-
-    // update flags
-    enum{ LAZY = 1, STEPBYSTEP = 2 };
-    // optimize flags
-    enum{ SPEED = 1, MEMORY = 2 };
 
     /**
      * Constructor.
@@ -203,8 +175,21 @@ public:
 
     ~Pipeline();
 
+    const InputArray& inputs() const
+    {
+        return _inputs;
+    }
+    const OutputArray& outputs() const
+    {
+        return _outputs;
+    }
+
+    bool useAsInput( InputPort * port, uint32 index );
+    bool useAsOutput( OutputPort * port, uint32 index );
+
 protected:
     void setNodePipeline(Node* n, Pipeline* p);
+    
 private:
     static ID _newId()
     {
@@ -213,12 +198,14 @@ private:
     }
     
     ID _id;
-    NodeArray _nodes;
+    NodeArray   _nodes;
+    InputArray  _inputs;
+    OutputArray _outputs;
     // components
     Context*            _context;
     PipelineUpdater*    _updater;
     PipelineRuleSet*    _rules;
-
+    
 };
 
 }//namespace

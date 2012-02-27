@@ -1,4 +1,4 @@
-module dtools.logstream;
+module kiwi.utils.log;
 
 import std.stdio;
 import std.string;
@@ -177,6 +177,11 @@ public:
         _output.writeln(LIGHTRED, Text, RESET );
         _endl = true;
     }
+
+    ScopedLog scoped(string label)
+    {
+        return ScopedLog(this,label);
+    }
     
     void foo(){
         writeln(PURPLE,"foo",RESET);
@@ -233,6 +238,27 @@ struct ScopedIndent{
   LogStream logStream;
 }
 
+struct ScopedLog
+{
+    LogStream _log;
+    string _label;
+    this( LogStream l, string label )
+    {
+        _log = l;
+        _label = label;
+        debug{
+            _log.writeln( LIGHTBLUE, "{Begin block} ",RESET, _label );
+            _log.indentation++;
+        }
+    }
+    ~this()
+    {
+        debug{
+            _log.indentation--;
+            _log.writeln( LIGHTBLUE, "{End block}   ",RESET, _label );
+        }
+    }
+}
 
 
 //              #######   #####    ####   #####    ####

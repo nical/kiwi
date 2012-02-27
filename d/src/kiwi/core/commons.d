@@ -1,30 +1,44 @@
 module kiwi.core.commons;
-/*
- * TODO: Dirty stuff here. needs cleanup
- * 
- * 
- */ 
-public import dtools.logstream; 
+
+enum { READ = 1, WRITE = 2, SIGNAL = 4, OPT = 32 };
+
+struct NodeTypeID
+{
+    uint index;
+    static @property NodeTypeID Null()
+    {
+        return NodeTypeID(0);
+    }
+}
 
 
-alias int DataAccessFlag;
-enum{ READ=1, WRITE=2, READ_WRITE = READ|WRITE
-    , DATA=4, SIGNAL=8, SEMANTIC=16
-    , OPT=1};
+alias const(object.TypeInfo) DataTypeID; 
 
 
-alias byte[] DataStream;
+class NotImplementedYetException : Exception
+{
+    this(string msg, string file = null, uint line = 0)
+    {
+        super(msg ~ " is not implemented yet.", file, line);
+    }
+}
+
+auto NotImplemented(string file = __FILE__, int line = __LINE__)(string name) pure
+{
+    return new NotImplementedYetException(name,file,line);
+}
+
 
 // instance of the log object
 LogStream log;
-
-
 static this()
 {
     log = new LogStream();
 }
 
 
+public import kiwi.utils.log;
+/+
 
 enum{ scopedIndent = "log.indentation++;scope(exit)log.indentation--;" };
 
@@ -56,31 +70,6 @@ string logTest(string name)()
        ~ "log.writeln( LIGHTGREEN, \"{Begin test} \",RESET,BOLD,\""~name~"\",RESET );"
        ~ "log.indentation++;"
        ~ "scope(exit){ log.indentation--;"
-       ~ "log.writeln( LIGHTGREEN, \"{End test} \",RESET,BOLD,\""~name~"\",RESET );}}";
+       ~ "log.writeln( LIGHTGREEN, \"{End test}   \",RESET,BOLD,\""~name~"\",RESET );}}";
 }
-
-class NotImplementedYetException : Exception
-{
-  this(string msg, string file = null, uint line = 0)
-  {
-    super(msg ~ " is not implemented yet.", file, line);
-  }
-}
-
-class UnalocatedDataObjectException : Exception
-{
-  this(string msg, string file = null, uint line = 0)
-  {
-    super(msg ~ " data is not allocated.", file, line);
-  }
-}
-
-auto NotImplemented(string file = __FILE__, int line = __LINE__)(string name) pure
-{
-    return new NotImplementedYetException(name,file,line);
-}
-
-auto UnalocatedData(string file = __FILE__, int line = __LINE__)(string msg = "") pure
-{
-    return new UnalocatedDataObjectException(msg,file,line);
-}
++/

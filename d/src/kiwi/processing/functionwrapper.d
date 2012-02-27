@@ -1,16 +1,123 @@
-module kiwi.core.algorithmwrapper;
+module kiwi.core.functionwrapper;
 
 import kiwi.core.node;
 import kiwi.core.data;
-import kiwi.core.container;
 import kiwi.core.commons;
-import kiwi.core.datastrategy;
 
 import std.traits;
+import std.stdio;
 
 
+bool delegate(Node*) wrapFunction(T...)( bool delegate(T) dg)
+{
+    alias ParameterTypeTuple!(typeof(dg)) Params;
+    bool updateNode(Node* n)
+    {
+        
+        writeln("type " ~ typeid(Params).toString );
+        Params params;
+        
+        foreach( i, p ; params)
+        {
+            auto sl = log.scoped("updatedeNode.foreach");
+            uint nbInputs = n.inputs.length;
+            if ( i < nbInputs )
+            {
+                log.writeln("input...");
+                if (!n.input(i).isOptionnal)
+                params[i] = n.input(i).dataAs!(typeof(p));
+                log.writeln("...input");
+            }
+            else
+            {
+                log.writeln("output");
+                break;
+            }
+        }
+        
+        log.writeln("update");
+        bool status = dg(params);
+        
+        foreach( i, p ; params)
+        {
+            if (i < n.inputs.length) continue;
+            log.writeln("write back");
+            n.output(i-n.inputs.length).setData( params[i] );
+        }
+        
+        return status;
+    }
+    
+    return &updateNode;
+}
 
-class FunctionWrapper(FuncType) : NodeUpdater
+unittest
+{
+    import kiwi.utils.testing;
+    import kiwi.core.node;
+    import kiwi.core.nodeinfo;
+    import kiwi.utils.hstring;
+
+    auto unit = TestSuite("kiwi.processing.functionwrapper");
+
+    auto f = delegate(int a, int b) { b = a; return true; };
+    
+    log.bar();
+    auto ff = wrapFunction(f);
+    log.foo();
+    
+    DataTypeID intID;
+
+    NodeTypeInfo ntinfo = {
+        name : StrHash("NodeName"),
+        inputs : [
+            { StrHash("in"), intID, READ | OPT }
+        ],
+        outputs : [
+            { StrHash("out"), intID, READ }
+        ],
+    };
+
+    Node n;
+    n.initialize( null, &ntinfo );
+    
+    assert( n.input().isOptionnal );
+    
+    ff(&n);
+    log.plop();
+}
+
+
+/+
+struct Wrapper(FuncType)
+{
+    alias ParameterTypeTuple!FuncType Params;
+    
+    static bool update(Node* n)
+    {
+        Params params;
+        int i = 0;// why ? and idx ?
+        foreach( int idx, ref param ; params )
+        {
+            if ( idx < n.inputCount )
+            {
+                
+            }
+            else
+            {
+            
+            }
+            
+        }
+        //_funcPtr(params);
+
+        return true
+    }
+}
++/
+/+
+
+struct FunctionWrapper(FuncType) : NodeUpdater
 {
     alias ParameterTypeTuple!FuncType Params;
     this( FuncType* funcPtr )
@@ -168,3 +275,4 @@ unittest
     foreach( i ; ints ){ assert( i == 42 ); }
 
 }
++/

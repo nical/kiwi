@@ -1,569 +1,188 @@
 module kiwi.core.node;
 
 import kiwi.core.commons;
-import kiwi.core.data;
 import kiwi.core.port;
-import kiwi.core.nodetree;
+import kiwi.core.pipeline;
+import kiwi.core.nodeinfo;
+import kiwi.core.runtimetype;
+import kiwi.utils.hstring;
 
-import std.exception;
-
-/**
- * Represents an active element of the pipeline.
- *
- * Nodes are mainly used to execute algorithms. The input parameters and dependencies
- * are defined by the node's input ports, and the result can be collected through the
- * output ports.
- */ 
-final class Node
+struct Node
 {
-    alias int ID;
-    /**
-     * Constructor.
-     */ 
-    this( NodeTypeInfo nodeTypeInfo
-        , InputDescriptor[] inputDesc, OutputDescriptor[] outputDesc
-        , NodeUpdater updater = null)
+    /++
+     + Nodes initialization occurs after constructions. This means a node's state
+     + is invalid between the constructor and initialize stages.
+     +/ 
+    void initialize( Pipeline* p, const NodeTypeInfo* nodeInfo )
     {
-        _id = GenNodeId();
-        _typeInfo = nodeTypeInfo;
-        
-        foreach( desc ; inputDesc )
-            _inputs ~= new InputPort( desc.name, this, desc.type, desc.compatibility
-                , desc.accessFlags, desc.isOptional );
-
-        foreach( desc ; outputDesc )
-            _outputs ~= new OutputPort( desc.name, this, desc.data );    
-
-        _updater = updater;
+        _pipeline = p;
+        _nodeTypeInfo = nodeInfo;
+        _inputs.length  = _nodeTypeInfo.inputs.length;
+        _outputs.length = _nodeTypeInfo.outputs.length;
+        for( ubyte i = 0; i < _inputs.length; ++i )
+        {
+            _inputs[i].initialize(&this, i);
+        }
+        for( ubyte i = 0; i < _outputs.length; ++i )
+        {
+            _outputs[i].initialize(&this, i);
+        }
     }
-
-    /**
-     * Returns an input by index.
-     *
-     * No range checking is performed.
-     */     
-    InputPort input(uint index = 0)
+    
+    alias uint NodeTypeID;
+    
+    
+    ref inout(InputPort) input( uint index = 0 ) inout pure
     {
         return _inputs[index];
     }
 
-    /**
-     * Returns an output by index.
-     *
-     * No range checking is performed.
-     */ 
-    OutputPort output(uint index = 0)
+    ref inout(OutputPort) output( uint index = 0 ) inout pure
     {
         return _outputs[index];
     }
 
-    /**
-     * Gets an input port by name.
-     *
-     * If two inputs has the same name, the one with the lowest index is returned.
-     * If no inputs has the name passed in parameter, a null reference is returned.
-     */ 
-    InputPort input(string portName)
+    ref InputPort input( StrHash pname ) pure
     {
-        foreach ( ip ; _inputs )
-            if (ip.name == portName)
-                return ip;
-        return null;
+        foreach( ref p ; _inputs )
+            if ( p.name == pname )
+                return p;
+
+        throw new PortNameNotFoundException("Node.input(StrHash)", __FILE__, __LINE__);
     }
 
-    /**
-     * Gets an output port by name.
-     *
-     * If two outputs has the same name, the one with the lowest index is returned.
-     * If no output has the name passed in parameter, a null reference is returned.
-     */ 
-    OutputPort output(string portName)
+    ref OutputPort output( StrHash pname ) pure
     {
-        foreach ( op ; _outputs )
-            if (op.name == portName)
-                return op;
-        return null;
+        foreach( ref p ; _outputs )
+            if ( p.name == pname )
+                return p;
+
+        throw new PortNameNotFoundException("Node.output(StrHash)", __FILE__, __LINE__);
     }
 
-    @property
+    bool update()
     {
-        /**
-         * Returns this node's unique id.
-         */ 
-        ID id()
+        bool status = true;
+
+        if (info.onUpdate)
+            status = info.onUpdate( &this );
+        
+        if (info.onProcess)
         {
-            return _id;
+            RuntimeType*[] inputData, outputData;
+            /+
+            foreach(i, ip ; _inputs ){
+                inputData ~= &(ip.data());
+                log.writeln(i,"## ", &ip," ",&(ip.data()));
+                assert( &ip is &_inputs[i] ); // OMGWTFBBQ ??
+            }+/
+            for(int i = 0; i < _inputs.length; ++i)
+                inputData ~= &(_inputs[i].data());
+            for(int i = 0; i < _outputs.length; ++i)
+                outputData ~= &(_outputs[i].data());
+            //foreach( op ; _outputs )
+            //    outputData ~= &(op.data());
+            status &= info.onProcess( inputData, outputData );
+        }
+        return status;
+    }
+    
+    void outputConnected(OutputPort* port, InputPort* to)
+    {
+        
+    }
+
+    @property 
+    {
+        const(NodeTypeInfo)* info() const  pure
+        {
+            return _nodeTypeInfo;
         }
         
-        /**
-         * Returns this node's name.
-         */ 
-        string name() const
+        auto inputs() inout pure
         {
-            if (_typeInfo !is null)
-                return _typeInfo.name;
-            return "";
-        }
-
-        /**
-         * Returns this node's input ports in an array.
-         */
-        InputPort[] inputs()
-        {
-            return _inputs;
-        }
-
-        /**
-         * Returns this node's output ports in an array.
-         */
-        OutputPort[] outputs()
-        {
-            return _outputs;
-        }
-
-        /**
-         * Returns the number of input ports.
-         */ 
-        uint inputCount() const
-        {
-            return _inputs.length;
-        }
-
-        /**
-         * Returns the number of output ports.
-         */ 
-        uint outputCount() const
-        {
-            return _outputs.length;
+            return _inputs[0..$];
         }
         
-        NodeTree nodeTree()
+        auto outputs() inout pure
         {
-            return _nodeTree;
+            return _outputs[0..$];
         }
 
-        /**
-         * Return a reference to this node's runtime type information.
-         */ 
-        const(NodeTypeInfo) type() const
+        
+        auto name() const pure
         {
-            return _typeInfo;
-        }
-
-        /**
-         * Invokes this node's updater if any.
-         *
-         * Should be called only if the inputs and outputs are properly connected.
-         */ 
-        void update()
-        {
-            mixin( logFunction!"Node.update" );
-            if(_updater !is null) _updater.update(this);
-        }
-
-        /**
-         * Returns the set of nodes connected to this node's inputs.
-         */ 
-        Node[] previousNodes()
-        {
-            mixin(logFunction!"Node.previousNodes");
-            Node[] result;
-            foreach( ip ; _inputs )
-            {
-                if ( !ip.isConnected || ip.connection.node is null )
-                    continue;
-                bool alreadyFound = false;
-                foreach( res ; result )
-                {
-                    if( ip.connection.node is res )
-                    {
-                        alreadyFound = true;
-                        break;
-                    }
-                }
-                if ( !alreadyFound )
-                    result ~= ip.connection.node;
-            }
-            
-            return result;
-        }
-
-        /**
-         * Returns the set of nodes connected to this node's outputs.
-         */ 
-        Node[] nextNodes()
-        {
-            mixin(logFunction!"Node.nextNodes");
-            Node[] result;
-            foreach( ref op ; _outputs )
-            {            
-                foreach( ref cn ; op.connections )
-                {
-                    if ( cn.node !is null )
-                    {
-                        bool alreadyFound = false;
-                        foreach( res ; result )
-                        {
-                            if( cn.node is res )
-                            {
-                                alreadyFound = true;
-                                break;
-                            }
-                        }
-                        if ( !alreadyFound )
-                            result ~= cn.node;
-                    }
-                }
-            }
-            foreach (res;result)
-                log.writeln(res.id);
-            return result;
+            return _nodeTypeInfo.name;
         }
         
-    }//properties
+        auto previousNodes() inout pure
+        {
+            return _previousNodes[0..$];
+        }
+        
+        auto nextNodes() inout pure
+        {
+            return _nextNodes[0..$];
+        }
+    }
     
 private:
-    InputPort[]     _inputs;
-    OutputPort[]    _outputs;
-    NodeTree        _nodeTree;
-    NodeUpdater     _updater;
-    NodeTypeInfo    _typeInfo;
-    ID              _id;
-    NodeComponent[] _components;
-}//Node
-
-/**
- * Generate and return a new unique id.
- */ 
-private Node.ID GenNodeId()
-{
-    static Node.ID nextId = 1;
-    return nextId++;
+    InputPort[]    _inputs;
+    OutputPort[]   _outputs;
+    NodeTypeID     _nodeTypeId;
+    Pipeline *     _pipeline;
+    const(NodeTypeInfo)*  _nodeTypeInfo;
+    // cached for efficiency, updated from port.d
+    package Node*[] _previousNodes;
+    package Node*[] _nextNodes;
+ 
 }
 
-interface NodeComponent
+class PortNameNotFoundException : Exception
 {
-    @property string type();
+    this(string msg, string file = null, uint line = 0)
+    {
+        super(msg ~ " is not implemented yet.", file, line);
+    }
 }
 
-
-interface NodeUpdater
-{
-    void update(Node n);
-}
-
-
-struct OutputDescriptor
-{
-    this( string portName, DataStrategy dataStrategy )
-    {
-        name = portName;
-        data = dataStrategy;
-    }
-    string name;
-    DataStrategy data;
-}
-
-
-struct InputDescriptor
-{
-    this( string name_, const DataTypeInfo type_, CompatibilityStrategy compatibility_
-        , DataAccessFlag flags, bool opt = false)
-    {
-        name = name_;
-        type = type_;
-        compatibility = compatibility_;
-        accessFlags = flags;
-        isOptional = opt;
-    }
-    this( string name_, const DataTypeInfo type_
-        , DataAccessFlag flags, bool opt = false)
-    {
-        name = name_;
-        type = type_;
-        compatibility = null;
-        accessFlags = flags;
-        isOptional = opt;
-    }
-    string name;
-    const DataTypeInfo type;
-    CompatibilityStrategy compatibility;
-    DataAccessFlag accessFlags;
-    bool isOptional;
-}
-
-alias InputDescriptor DeclareInput;
-alias OutputDescriptor DeclareOutput;
-
-class FunctionUpdate : NodeUpdater
-{
-    alias void function(Data[],Data[]) UpdateFunction;
-
-    this(UpdateFunction func)
-    {
-        _update = func;
-    }
-    
-    override void update(Node n)
-    {
-        mixin( logFunction!"FunctionUpdate.update" );
-        Data[] inputs;
-        Data[] outputs;
-        foreach( input ; n.inputs )
-        {
-            if ( !input.isOptional && !input.isConnected )
-            {
-                throw new Exception("node.FunctionUpdate: Input port "~input.name~" of node "~n.name~" is not optional, yet it is not connected while update is invoked.");
-                return;
-            }
-            inputs ~= input.data;
-        }
-        foreach( output ; n.outputs )
-            outputs ~= output.data;
-
-        _update(inputs, outputs);
-    }
-    
-    UpdateFunction _update;
-}
-
-
-
-
-
-
-
-
-
-/**
- * Runtime Type information structure for nodes.
- *
- * Should be stored in the NodeTypeManager. 
- */ 
-class NodeTypeInfo
-{
-    alias Node delegate() Instanciator;
-    enum{ NOTAG, ALGORITHM, LOADER, CONTAINER }
-
-    /**
-     * Constructor.
-     */ 
-    this(string nodeName, string nodeCategory, int nodeTag
-        , Instanciator newFunc, Object[string] components )
-    {
-        _name = nodeName;
-        _category = nodeCategory;
-        _tag = nodeTag;
-        _newInstance = newFunc;
-        _components = components;
-    }
-
-    @property
-    {
-        /**
-         * Name of this type of node.
-         *
-         * For example: "Multiply"
-         */ 
-        string name() const
-        {
-            return _name;
-        }
-
-        /**
-         * Category of this type of node.
-         *
-         * For example: "Text"
-         */ 
-        string category() const
-        {
-            return _category;
-        }
-
-        /**
-         * A tag that gives some information on the nature of the node (is it an algorithm,
-         * a data container...).
-         */ 
-        int tag() const
-        {
-            return _tag;
-        }
-
-        /**
-         * Returns a new instance of this type of node.
-         */ 
-        Node newInstance() const
-        {
-            if (_newInstance !is null)
-                return _newInstance();
-            else return null;
-        }
-    }
-
-    /**
-     * Returns an optional component associated to the key if it exists.
-     *
-     * Optional components may be used to bring any kind of additional informations
-     * uch as a description or some kind of semantic info...
-     */ 
-    Object component(string key)
-    {
-        if ( key in _components )
-            return _components[key];
-        return null;
-    }
-
-private:
-    string _name;
-    string _category;
-    int _tag;
-    Object[string] _components;
-    Instanciator _newInstance;
-}
-
-
-
-class NodeTypeManager
-{
-
-    static NodeTypeInfo Register(
-        string nodeName, string nodeCategory, int nodeTag
-        , NodeTypeInfo.Instanciator newFunc, Object[string] components )
-    {
-        if ( Contains( nodeName ) )
-            return Get(nodeName);
-
-        auto temp = new NodeTypeInfo( nodeName, nodeCategory, nodeTag, newFunc, components );
-        _nodeTypes[nodeName] = temp;
-        return temp;        
-    }
-
-    static Node Create( string key )
-    {
-        auto info = Get( key );
-        if ( info !is null )
-        {
-            return info.newInstance(); 
-        }
-        else 
-        {
-            // TODO: return an exception instead
-            return null;
-        }
-    }
-
-    static bool Contains( string key )
-    {
-        return ((key in _nodeTypes) !is null);
-    }
-
-    static bool Contains( string key, int tag )
-    {
-        foreach( i ; _nodeTypes.values)
-            if ( i.name == key && i.tag == tag )
-                return true;
-        return false;
-    }
-
-    static auto Keys()
-    {
-        return _nodeTypes.keys;
-    }
-
-
-    static NodeTypeInfo Get(string key)
-    {
-        return opIndex( key );
-    }
-
-    static NodeTypeInfo opIndex( string key )
-    {
-        if( Contains(key) ) 
-            return _nodeTypes[key];
-        else
-            return null;
-    }
-
-    static NodeTypeInfo opIndex( string key, int tag )
-    {
-        if( Contains(key, tag) ) 
-            return _nodeTypes[key];
-        else
-            return null;
-    }
-    
-private: 
-    this(){ mixin( logFunction!"NodeTypeManager.constructor"); }
-    static NodeTypeInfo[string] _nodeTypes;
-}
-
-
-
-
-
-
-//            #####   #####    ####   #####    ####
-//              #     #       #         #     #
-//              #     ###      ###      #      ###
-//              #     #           #     #         #
-//              #     #####   ####      #     ####
-
-
-
-version(unittest)
-{
-    import kiwi.core.datastrategy;
-    
-    int execCount = 0;
-
-    void updateTestFunc(Data[],Data[])
-    {
-        mixin( logFunction!"updateTestFunc" );
-        ++execCount;
-    }
-}
 
 unittest
 {
-    mixin( logTest!"kiwi.core.node" );
-
-    assert( !NodeTypeManager.Contains("NodeTypeTest") );
-    NodeTypeManager.Register("NodeTypeTest","Test", NodeTypeInfo.NOTAG, null, null);
-    assert( NodeTypeManager.Contains("NodeTypeTest") );
-    assert( NodeTypeManager["NodeTypeTest"].name == "NodeTypeTest" );
-    assert( NodeTypeManager["NodeTypeTest"].category == "Test" );
-    assert( NodeTypeManager["NodeTypeTest"].tag == NodeTypeInfo.NOTAG );
-    assert( NodeTypeManager["NodeTypeTest"] is NodeTypeManager["NodeTypeTest"] );
-
-    auto n = new Node( null,[],[], new FunctionUpdate(&updateTestFunc) );
-
-    assert( execCount == 0 );
-    n.update;
-    n.update;
-    assert( execCount == 2 );
-
+    import kiwi.utils.testing;
+    import kiwi.utils.hstring;
     
-    auto n2 = new Node(
-        NodeTypeManager["NodeTypeTest"],
-        [ // inputs
-            DeclareInput( "in1", null, new AlwaysCompatible, READ ),
-            DeclareInput( "in2", null, new AlwaysCompatible, READ )
-        ],
-        [ // outputs
-            DeclareOutput( "out", new UserAllocatedDataStrategy(cast(DataTypeInfo)null, READ) )
-        ],
-        new FunctionUpdate(&updateTestFunc)
-    );
-    assert( n2.name == "NodeTypeTest" );
-    assert( n2.inputs.length == 2 );
-    assert( n2.outputs.length == 1 );
+    auto unit = TestSuite("kiwi.core.node");
 
-    assert( !n2.input(0).isOptional );
-    assert( !n2.input(1).isOptional );
-    try{
-        n2.update;
-        assert(false, "Calling update on n2 should have thrown an exception as inputs are not optional");
-    }catch(Exception e){ }
-    assert( execCount == 2 );
+    DataTypeID intID;
+
+    auto nUpdate = delegate(Node*) {
+        log.writeln("Node updating");
+        return true;
+    };
     
+    NodeTypeInfo ntinfo = {
+        name : StrHash("NodeName"),
+        inputs : [
+            { StrHash("in#1"), intID, READ },
+            { StrHash("in#2"), intID, READ }
+        ],
+        outputs : [
+            { StrHash("out"), intID, READ },
+        ],
+        onUpdate : nUpdate
+    };
+
+    Node n1;
+    n1.initialize( null, &ntinfo );
+    
+    unit.test( &n1.inputs[0] is &n1._inputs[0], "Input port range random access" );
+    unit.test( &n1.outputs[0] is &n1._outputs[0], "Output port range random access" );
+    unit.test( n1.inputs.length == n1._inputs.length, "Input port range length" );
+    unit.test( n1.outputs.length == n1._outputs.length, "Output port range length" );
+    
+    unit.test( n1.input(0) is n1.input(StrHash("in#1")), "Access input port by name" );
+    unit.test( n1.input(1) is n1.input(StrHash("in#2")), "Access input port by name" );
+    unit.test( n1.output(0) is n1.output(StrHash("out")), "Access output port by name" );
+
 }

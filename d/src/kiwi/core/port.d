@@ -1,559 +1,453 @@
 module kiwi.core.port;
 
-import kiwi.core.data;
-import kiwi.core.container;
 import kiwi.core.node;
+import kiwi.core.nodeinfo;
+import kiwi.core.runtimetype;
 import kiwi.core.commons;
-import kiwi.core.datastrategy;
 
-class OutputPort
+import kiwi.utils.array;
+
+struct InputPort
 {
-    this(string name, Node n, DataStrategy dataStrategy )
+    package void initialize(Node* n, ubyte i)
     {
         _node = n;
-        _parent = null;
-        _name = name;
-        _setDataStrategy(dataStrategy); 
+        _index = i;
+    }
+
+    bool isConnectedTo( ref const(OutputPort) input ) const
+    {
+        return _connection is &input;
+    }
+
+    bool isCompatible( ref OutputPort port ) const
+    {
+        return dataType == port.dataType;
     }
     
+    bool connect( ref OutputPort port )
+    {
+        return connectPorts(port, this);
+    }
+
+    void disconnect()
+    {
+        if ( !isConnected )
+            return;
+        disconnectPorts(*_connection, this);
+        assert( !isConnected );
+    }
+
+    void disconnectAll()
+    {
+        disconnect();
+    }
+
     @property
     {
-        Node node()
+        inout(OutputPort)* connection() inout pure
         {
-            return _node;
+            return _connection; 
         }
 
-        bool hasDataStrategy() const
-        {
-            return _dataStrategy !is null;
-        }
-        
-        bool isComposite() const // TODO
-        {
-            return false;
-        }
-
-        bool isSubPort()
-        {
-            return _parent !is null;
-        }
-
-        DataTypeInfo dataType()
-        {
-            if ( this.hasDataStrategy() ) return _dataStrategy.dataType;
-            else return null;
-        }
-
-        Data data()
-        {
-            if ( hasDataStrategy ) return _dataStrategy.data;
-            else return null;
-        }
-
-        DataAccessFlag accessFlags() const
-        {
-            if ( hasDataStrategy ) return _dataStrategy.accessFlags;
-            else return 0;
-        }
-
-        string name() const
-        {
-            return _name;
-        }
-
-        InputPort[] connections()
-        {
-            return _connections;
-        }
-
-        void disconnectAll()
-        {
-            for(int i = 0; i < _connections.length; ++i)
-                this.disconnect(_connections[i]);
-        }
-
-        bool isConnected()
-        {
-            return _connections.length != 0;
-        }
-        
-    } // properties
-
-    T dataAs(T)()
-    {
-        Data x;
-        static if ( __traits(compiles, x = new T ) )
-            return cast(T)data;
-        else
-            return ( (cast(Container!T)data).value );
-    }
-    
-    bool isCompatible( InputPort port )
-    {
-        return port.isCompatible(this);
-    }
-
-    bool isConnectedTo( InputPort port ) const
-    {
-        foreach( p ; _connections)
-        {
-            if( p is port) return true;
-        }
-        return false;
-    }   
-
-    bool connect(InputPort port)
-    {
-        if ( port is null )
-            return false;
-        return port.connect(this);
-    }
-
-    bool disconnect( InputPort port )
-    {
-        if(port is null)
-                return false;
-            
-        return port.disconnect(this);
-    }
-
-    final bool opBinary(string op)(InputPort port) if (op == ">>")
-    {
-        return connect( port );
-    }
-
-    
-protected:
-    /++
-     + Returns the index of an output port in connections, or -1 if not found.
-     +/ 
-    protected int indexOf(InputPort port)
-    {
-        for(int i = 0; i < connections.length; ++i){
-            if( connections[i] is port )
-                return i;
-        }
-        return -1;
-    }
-
-    void _setDataStrategy(DataStrategy component)
-    {
-        mixin( logFunction!"OutputPort._setDataStrategy" );
-        if ( component is _dataStrategy ) return;
-
-        _dataStrategy = component;
-    }
-private:
-
-    Node    _node;
-    string  _name;
-    InputPort[] _connections;
-    OutputPort _parent; // deprecated
-    
-    // components
-package DataStrategy _dataStrategy;
-    //PortInfoStrategy   _portInfoStrategy;
-    
-}
-
-
-
-
-class InputPort
-{
-    this( string portName, Node n
-        , const DataTypeInfo type, CompatibilityStrategy comp
-        , DataAccessFlag flags = READ, bool optional = false)
-    {
-        _name = portName; // TODO remove names (and place them in NodeTypeInfo)
-        _node = n;
-        _dataType = type;
-        _compatibilityStrategy = comp;
-        _accessFlags = flags;
-        _optional = optional;
-    }
-
-    this( string portName, Node n
-        , const DataTypeInfo type
-        , DataAccessFlag flags = READ, bool optional = false)
-    {
-        _name = portName; // TODO remove names (and place them in NodeTypeInfo)
-        _node = n;
-        _dataType = type;
-        _compatibilityStrategy = null;
-        _accessFlags = flags;
-        _optional = optional;
-    }
-    
-    @property
-    {
-
-        Node node()
-        {
-            return _node;
-        }
-
-        string name()
-        {
-            return _name;
-        }   
-
-        Data data()
-        {
-            if (isConnected) return _connection.data;
-            return null; 
-        }
-
-        const DataTypeInfo dataType() const
-        {
-            return dataType;
-        }
-            
-        DataAccessFlag accessFlags() const
-        {
-            return _accessFlags;
-        }
-
-        OutputPort connection()
-        {
-            return _connection;
-        }
-
-        bool isConnected() const
+        bool isConnected() const pure
         {
             return _connection !is null;
         }
 
-        bool isOptional() const
+        inout(Node)* node() inout pure
         {
-            return true;
+            return _node;
         }
         
-        bool hasCompatibilityStrategy() const
+        ref inout(RuntimeType) data() inout pure
         {
-            return _compatibilityStrategy !is null;
-        }
-
-        bool isOptional()
-        {
-            return _optional;
-        }
-    }
-
-    bool isCompatible( OutputPort port )
-    {
-        mixin( logFunction!"InputPort.isCompatible" );
-        if ( !( accessFlags & port.accessFlags) && accessFlags != 0 )
-        {
-            log.writeDebug(3,"incompatible flags ", accessFlags, " ", port.accessFlags, "\n" );
-            return false;
-        }
-        if ( hasCompatibilityStrategy )
-            return _compatibilityStrategy.isCompatible(this, port);
-
-        return _dataType is port.dataType;
-    }
-
-    T dataAs(T)()
-    {
-        static if ( __traits(compiles, cast(T)data ) )
-            return cast(T)data;
-        else
-            return ( (cast(ContainerWrapper!T)data).value );
-    }
-
-    bool isConnectedTo( OutputPort port ) const
-    {
-        return _connection is port;
-    }
-
-    bool connect(OutputPort port)
-    {
-        mixin( logFunction!"InputPort.connect" );
-        
-        if (port is null)
-            return false;
-
-        if ( !isCompatible(port) )
-            return false;
-
-        if( this.isConnected ) disconnect();
-        
-        this._connection = port;
-        port._connections ~= this;
-        log.writeDebug(0,"connected");
-        return true;
-    }
-
-    /++
-     + Disconnect this port from an OutputPort if they are conected.
-     +/ 
-    bool disconnect( OutputPort port = null)
-    out
-    {
-        if(port !is null) assert( !port.isConnectedTo(this), "disconnection failed." ); 
-        assert( !this.isConnectedTo(port), "disconnection failed." ); 
-    }
-    body
-    {
-        mixin( logFunction!"InputPort.disconnect" );
-
-        if ( port !is null && _connection !is port ) return false;
-        else
-        {
-            if ( _connection is null ) return false;
-            port = this._connection;
+            if( isConnected )
+                return connection.data;
+            assert(false);
         }
         
-        int i2 = port.indexOf(this);
-        
-        // proceed with the disconnection
-        this._connection = null;
-        port._connections[i2] = port._connections[$-1];
-        port._connections.length -= 1;
-        return true;
+        ref const(T) dataAs(T)()
+        {
+            if( isConnected )
+                return _connection.dataAs!T;
+            assert(false, "InputPort.dataAs!T invoked while the port is not connected.");
+        }
+
+        auto info() const pure
+        {
+            return &node.info.inputs[index];
+        }
+
+        ubyte index() const pure
+        {
+            return _index;
+        }
+
+        DataTypeID dataType() const pure
+        {
+            return info.dataType;
+        }
+
+        auto name() const pure
+        {
+            return info.name;
+        }
+
+        auto flags() const pure
+        {
+            return info.flags;
+        }
+
+        bool isOptionnal() const pure
+        {
+            return (flags & OPT)!=0;
+        }
     }
     
 private:
-    Node _node;
-    DataAccessFlag _accessFlags;
-    const DataTypeInfo _dataType;
-    string _name;
-    bool _optional;
-    OutputPort _connection;
-    // components
-    CompatibilityStrategy  _compatibilityStrategy;
-    //PortInfoStrategy       _portInfoStrategy;
+    OutputPort* _connection;
+    Node*       _node;
+    ubyte       _index;
 }
 
 
 
-// ---------------------------
 
-
-interface DataStrategy
+struct OutputPort
 {
-    enum{ USER = 0, ENGINE = 1 };
+    package void initialize(Node* n, ubyte i)
+    {
+        _node = n;
+        _index = i;
+        if (n !is null)
+            _data.type = info.dataType;
+
+    }
+
+    bool isConnectedTo( ref const(InputPort) input ) const pure
+    {
+        foreach( c ; _connections )
+            if ( c is &input )
+                return true;
+        return false;
+    }
+
+    bool isCompatible( ref InputPort port ) const pure
+    {
+        return dataType is port.dataType;
+    }
+
+    bool connect( ref InputPort port )
+    {
+        return connectPorts(this, port);
+    }
+
+    void disconnect( ref InputPort port )
+    {
+        disconnectPorts( this, port );
+    }
+
+    void disconnectAll()
+    {
+        while( connections.length > 0 )
+            disconnectPorts(this, *_connections[$-1]);
+        assert( !isConnected );
+    }
+
+    void setData(T)(T value)
+    {
+        _data = value;
+    }
+
     @property
     {
-        Data data();
-        DataTypeInfo dataType();
-        DataAccessFlag accessFlags() const;
-        int componentFlags() const;
-        final string StrategyType() const { return "DataStrategy"; }
-    }
+        inout(Node)* node() inout pure
+        {
+            return _node;
+        }
+
+        auto info() const pure
+        {
+            return &node.info.outputs[index];
+        }
         
-}
+        ref inout(RuntimeType) data() inout pure
+        {
+            return _data;
+        }
+        
+        ref T dataAs(T)()
+        {
+            return _data.get!T();
+        }
 
+        auto connections() inout pure
+        {
+            return _connections[0..$];
+        }
 
+        bool isConnected() const pure
+        {
+            return _connections.length > 0;
+        }
 
-interface CompatibilityStrategy
-{
-    bool isCompatible(InputPort self, OutputPort port);
-    final string StrategyType() { return "CompatibilityStrategy"; }
-}
+        ubyte index() const pure
+        {
+            return _index;
+        }
 
+        DataTypeID dataType() const pure
+        {
+            return info.dataType;
+        }
 
-class DataTypeCompatibility : CompatibilityStrategy
-{
-	this(DataTypeInfo[] compatibleTypes)
-	{
-		_compatibleTypes = compatibleTypes;
-	}
-	
-	this(DataTypeInfo compatibleType)
-	{
-		_compatibleTypes ~= compatibleType;
-	}
+        auto name() const pure
+        {
+            return info.name;
+        }
 
-	override bool isCompatible(InputPort self, OutputPort port)
-	in
-	{
-		assert ( port !is null);
-	}
-	body
-	{	
-		foreach ( typeInfo ; _compatibleTypes )
-		{
-			if (port.dataType is typeInfo)
-				return true;
-		}
-		return false;
-	}
+        auto flags() const pure
+        {
+            return info.flags;
+        }
 
+        bool isOptionnal() const
+        {
+            return (flags & OPT) != 0;
+        }
+    }
+    
 private:
-	DataTypeInfo[] _compatibleTypes;
+    Node*           _node;
+    ubyte           _index;
+    InputPort*[]    _connections;
+    RuntimeType     _data;
 }
 
-
-/**
- * Runtime compatibility policy for kiwi.dynamic.InputPort objects, always compatible.
- */
-class AlwaysCompatible : CompatibilityStrategy
+private size_t findInArray(T)(ref T[] arr, const T elt)
 {
-	override bool isCompatible(InputPort self, OutputPort port)
-	in
-	{
-		assert ( port !is null);
-	}
-	body
-	{
-        mixin( logFunction!"AlwaysCompatible.isCompatible" );
-		return true;
-	}
+    foreach( i, e ; arr )
+        if ( e == elt )
+            return i;
+    
+    return arr.length;
 }
 
-/**
- * Runtime compatibility policy for kiwi.dynamic.InputPort objects, never compatible.
- */
-class NeverCompatible : CompatibilityStrategy
+private bool connectPorts(ref OutputPort output, ref InputPort input )
 {
-	override bool isCompatible(InputPort self, OutputPort port)
-	in
-	{
-		assert ( port !is null);
-	}
-	body
-	{
+    if ( !input.isCompatible( output ) )
 		return false;
-	}
+
+	if ( input.isConnected ) input.disconnectAll();
+
+	input._connection = &output;
+	output._connections ~= &input;
+    
+    // previous nodes cache
+    if( !contains(input.node._previousNodes, output.node) )
+        input.node._previousNodes ~= output.node;
+    // next nodes cache
+    if( !contains(output.node._nextNodes, input.node) )
+        output.node._nextNodes ~= input.node;
+
+	return true;
 }
 
-
-
-
-//            #####   #####    ####   #####    ####
-//              #     #       #         #     #
-//              #     ###      ###      #      ###
-//              #     #           #     #         #
-//              #     #####   ####      #     ####
-
-
-
-version(unittest)
+private void disconnectPorts( ref OutputPort output, ref InputPort input)
 {
-    import kiwi.core.datastrategy;
+    auto lb = log.scoped("disconnectPorts");
+    if ( !input.isConnectedTo(output) ) return;
 
-    Data NewContainerTest()
-    {
-        return new ContainerTest();
+	int i2 = findInArray!(InputPort*)(output._connections, &input);
+
+    if ( i2 != output._connections.length ){
+        assert( output._connections[i2].node() == input.node() );
     }
+	// proceed with the disconnection
+	input._connection = null;
+	output._connections[i2] = output._connections[$ -1];
+	output._connections.length = output._connections.length -1;
 
-    class SubContainerTest : Data
+    auto inputNode = input.node;
+    auto outputNode = output.node;
+    
+    if (inputNode)
     {
-        static this()
+        bool found = false;
+        foreach ( p ; inputNode.inputs )
         {
-            mixin( logFunction!"SubContainerTest.static_constructor" );
-            _typeInfo = DataTypeManager.Register!SubContainerTest;
-            assert( _typeInfo !is null );
-            assert( DataTypeManager["kiwi.core.port.SubContainerTest"] !is null);
-            assert( DataTypeManager["kiwi.core.port.SubContainerTest"] is _typeInfo );
+            if (p.connection && (p.connection.node is outputNode))
+            {
+                found = true;
+                break;
+            }
         }
-       
-        override DataTypeInfo type(){ return _typeInfo; }
-        static DataTypeInfo Type(){ return _typeInfo; }
-        override @property Data[] subData(){ return []; }
-        private static DataTypeInfo _typeInfo;
-       
-    } 
-
-    class ContainerTest : Data
+        if (!found)
+        {
+            int idx = kiwi.utils.array.indexOf(inputNode._previousNodes, outputNode);
+            assert(idx >= 0, "bug: The previous nodes cache should contain the node."); 
+            kiwi.utils.array.quickRemove(inputNode._previousNodes, idx);
+        }
+    }
+    if (outputNode)
     {
-        mixin DeclareSubDataTypes!(SubContainerTest,SubContainerTest);
-
-        
-        invariant()
+        bool found = false;
+        foreach ( p ; outputNode.outputs )
+            foreach ( c ; p.connections )
+            {
+                if (c.node == inputNode)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        if (!found)
         {
-            assert( _subData.length == 2 );   
+            int idx = kiwi.utils.array.indexOf(outputNode._nextNodes, inputNode);
+            assert(idx >= 0, "bug: The next nodes cache should contain the node."); 
+            kiwi.utils.array.quickRemove(outputNode._nextNodes, idx);
         }
-
-        this()
-        {
-            _subData ~= new SubContainerTest();
-            _subData ~= new SubContainerTest();
-        }
-
-        static this()
-        {
-            mixin( logFunction!"ContainerTest.static_constructor" );
-            _typeInfo = DataTypeManager.Register!ContainerTest;
-            assert( _typeInfo !is null );
-            assert( DataTypeManager["kiwi.core.port.ContainerTest"] !is null);
-            assert( DataTypeManager["kiwi.core.port.ContainerTest"] is _typeInfo );
-            assert( _typeInfo.name == "kiwi.core.port.ContainerTest");
-            assert( _typeInfo.subData.length == 2);
-        }
-
-        //override bool serialize( DataStream stream ){ return false; }
-        //override bool deSerialize( const DataStream stream ){ return false; }
-        override DataTypeInfo type(){ return _typeInfo; }
-        static DataTypeInfo Type(){ return _typeInfo; }
-        override @property Data[] subData(){ return _subData; }
-        
-    private Data[] _subData;
-    private static DataTypeInfo _typeInfo; 
     }
 }
 
-
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                  TESTS
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 unittest
 {
-    mixin(logTest!"kiwi.core.port");
+    import kiwi.core.nodeinfo;
+    import kiwi.utils.testing;
+    import kiwi.utils.hstring;
     
-    log.writeln( "ContainerTest.Type.name: ", ContainerTest.Type.name );
-    assert( ContainerTest.Type.subData.length == 2 );
-    assert( ContainerTest.Type.subData[0].name == "kiwi.core.port.SubContainerTest" );
+    import std.conv;
+    
+    auto unit = TestSuite("kiwi.core.ports");
 
-    auto op_1 = new OutputPort( "op_1", null, new UserAllocatedDataStrategy( new ContainerTest, READ ) );
-    auto ip_1 = new InputPort(  "ip_1", null, null, new AlwaysCompatible );
+    class Foo {};
+    class Bar {};
 
-    auto op_2 = new OutputPort( "op_1", null, new UserAllocatedDataStrategy( new ContainerTest, READ ) );
-    auto ip_2 = new InputPort(  "ip_2", null, null, new AlwaysCompatible );
+    DataTypeID fooID = Foo.classinfo;
+    DataTypeID barID = Bar.classinfo;
+    assert( fooID != barID );
 
-    // simply trying every connection/disconnection cases.
+    NodeTypeInfo ntinfo1 = {
+        inputs : [
+            { StrHash("in#1"), fooID, READ },
+            { StrHash("in#2"), barID, READ|OPT }
+        ],
+        outputs : [
+            { StrHash("out"), fooID, READ|OPT },
+        ]
+    };
 
-    assert( !(op_1 is null) && !(ip_1 is null) );
-    assert( !op_1.isConnectedTo(ip_1) );
-    assert( !ip_1.isConnectedTo(op_1) );
-    //assert( op_1.isComposite() ); // TODO
-    assert( op_1.connect(ip_1) );
-    assert( ip_1.isConnectedTo(op_1) );
-    assert( op_1.isConnectedTo(ip_1) );
-    assert( op_1.isConnected() );
-    assert( ip_1.isConnected() );
+    NodeTypeInfo ntinfo2 = {
+        inputs : [
+            { StrHash("in#1"), fooID, READ },
+            { StrHash("in#2"), fooID, READ|OPT }
+        ],
+        outputs : [
+            { StrHash("out"), barID, READ|OPT },
+        ]
+    };
 
-    assert( op_1.disconnect(ip_1) );
-    assert( !op_1.disconnect(ip_1) ); // should fail and return false without crash
-    assert( !ip_1.disconnect(op_1) ); // should fail and return false without crash
+    Node n1, n2;
+    n1.initialize( null, &ntinfo1 );
+    n2.initialize( null, &ntinfo2 );
 
-    assert( !op_1.isConnectedTo(ip_1) );
-    assert( !ip_1.isConnectedTo(op_1) );
+    unit.test( n1.inputs[0].name == StrHash("in#1"), "Input port name (0)." );
+    unit.test( n1.inputs[1].name == StrHash("in#2"), "Input port name (1)." );
+    unit.test( n1.outputs[0].name == StrHash("out"), "Output port name." );
 
-    assert( ip_1.connect(op_1) );
-    assert( op_1.isConnectedTo(ip_1) );
-    assert( ip_1.isConnectedTo(op_1) );
+    for( int i = 0; i < n1.inputs.length; ++i )
+        unit.test( n1.inputs[i].index == i, "Input port index "~to!string(i) );
+    for( int i = 0; i < n1.outputs.length; ++i )
+        unit.test( n1.outputs[i].index == i, "Output port index "~to!string(i) );
 
-    assert( ip_1.disconnect(op_1) );
-    assert( !op_1.isConnectedTo(ip_1) );
-    assert( !ip_1.isConnectedTo(op_1) );
+    unit.test( n1.inputs[0].dataType == fooID, "Input data type (0)." );
+    unit.test( n1.inputs[1].dataType == barID, "Input data type (1)." );
+    unit.test( n1.outputs[0].dataType == fooID, "Input data type (1)." );
+    unit.test( !n2.inputs[0].isOptionnal, "Non optionnal port" );
+    unit.test( n2.inputs[1].isOptionnal, "Optionnal port" );
 
-    // multiple connections
-    assert( op_1.connect(ip_1) );
-    assert( op_2.connect(ip_1) );
+    unit.test( n1.nextNodes.length == 0, "n1 not connected therefore can't have next nodes" );
+    unit.test( n1.previousNodes.length == 0, "n1 not connected therefore can't have previous nodes" );
 
-    assert( op_2.isConnectedTo(ip_1) );
-    assert( !op_1.isConnectedTo(ip_1) );
+    // trying to disconnect while not connected
+    // should not crash
+    n1.input().disconnect();
+    n1.output().disconnectAll();
+    n1.output().disconnect( n2.input() );
 
-    assert( op_2.disconnect(ip_1) );
+    unit.test( n1.output(0).isCompatible( n2.input(0) ) );
+    
+    auto status1 = n2.output().connect( n1.input(1) );
+    unit.test( status1, "Connecting compatible ports" );
+    unit.test( n2.outputs[0].isConnected, "Output connection state." );
+    unit.test( n1.inputs[1].isConnected, "Input connection state." );
+    
+    unit.test( n1.nextNodes == [] );
+    unit.test( n1.previousNodes == [&n2] );
+    unit.test( n2.nextNodes == [&n1] );
+    unit.test( n2.previousNodes == [] );
 
-    assert( !op_2.isConnectedTo(ip_1) );
-    assert( !op_1.isConnectedTo(ip_1) );
-
-    assert( ip_1.connect(op_2) );
-
-    assert( op_2.isConnectedTo(ip_1) );
-    assert( !op_1.isConnectedTo(ip_1) );
+    n1.input(1).disconnect();
+    unit.test( !n1.input(1).isConnected, "Input connection state." );
+    unit.test( !n2.output().isConnected, "Output connection state." );
+    
+    unit.test( n1.nextNodes == [] );
+    unit.test( n1.previousNodes == [] );
+    unit.test( n2.nextNodes == [] );
+    unit.test( n2.previousNodes == [] );
+    
+    auto status2 = n1.inputs[1].connect( n2.outputs[0] );
+    unit.test( status2, "Connecting compatible ports" );
+    unit.test( n2.outputs[0].isConnectedTo(n1.inputs[1]), "Output connection state." );
+    unit.test( n1.inputs[1].isConnectedTo(n2.outputs[0]), "Input connection state." );
+    
+    unit.test( n1.nextNodes == [] );
+    unit.test( n1.previousNodes == [&n2] );
+    unit.test( n2.nextNodes == [&n1] );
+    unit.test( n2.previousNodes == [] );
+    
+    n2.output(0).disconnect( n1.input(1) );
+    unit.test( !n1.input(1).isConnected, "Input connection state." );
+    unit.test( !n2.output().isConnected, "Output connection state." );
+    
+    unit.test( n1.nextNodes == [] );
+    unit.test( n1.previousNodes == [] );
+    unit.test( n2.nextNodes == [] );
+    unit.test( n2.previousNodes == [] );
+    
+    auto status3 = n2.output().connect( n1.input(1) );
+    auto status3bis = n2.output().connect( n1.input(1) );
+    unit.test( n2.output().connections.length == 1, "Connecting twice: nb of connections." );
+    
+    unit.test( n1.nextNodes == [] );
+    unit.test( n1.previousNodes == [&n2] );
+    unit.test( n2.nextNodes == [&n1] );
+    unit.test( n2.previousNodes == [] );
+    
+    n2.output().disconnectAll();
+    assert( !n1.input().isConnected );
+    assert( !n2.output().isConnected );
+    
+    unit.test( n1.nextNodes == [] );
+    unit.test( n1.previousNodes == [] );
+    unit.test( n2.nextNodes == [] );
+    unit.test( n2.previousNodes == [] );
+    
+    unit.test( ! n2.output().isCompatible( n1.input() ), "Uncompatible port check" );
+    auto status4 = n2.output().connect( n1.input() );
+    unit.test( !n1.input().isConnected, "Input should not be connected." );
+    unit.test( !n2.output().isConnected, "Output should not be connected." );
+    
+    unit.test( n1.nextNodes == [] );
+    unit.test( n1.previousNodes == [] );
+    unit.test( n2.nextNodes == [] );
+    unit.test( n2.previousNodes == [] );
+    
 }
-
-

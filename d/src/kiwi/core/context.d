@@ -44,32 +44,47 @@ private:
 
 // TODO move ID structs in another module ? 
 
-struct ContextID
-{
-    ushort contextIndex;
-}
 
 struct PipelineID
 {
-    ushort contextIndex;
-    ushort pipelineIndex;
+    this(ushort idx)
+    {
+        index = idx;
+    }
+    ushort index;
 }
 
 struct NodeID
 {
-    ushort contextIndex;
-    ushort pipelineIndex;
-    ushort nodeIndex;
+    this(PipelineID p, ushort idx)
+    {
+        pipeline = p;
+        index    = idx;
+    }
+    PipelineID  pipeline;
+    ushort      index;
 }
 
-struct PortID
+struct InputPortID
 {
-    enum{ INPUT, OUTPUT }
-    ushort context;
-    ushort pipeline;
-    ushort node;
-    ubyte  PortType;
-    ubyte  PortIndex;
+    this(NodeID n, ubyte idx)
+    {
+        node    = n;
+        index   = idx;
+    }
+    NodeID node;
+    ubyte  index;
+}
+
+struct OutputPortID
+{
+    this(NodeID n, ubyte idx)
+    {
+        node    = n;
+        index   = idx;
+    }
+    NodeID node;
+    ubyte  index;
 }
 
 

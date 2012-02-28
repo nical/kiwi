@@ -8,6 +8,8 @@ import kiwi.core.nodeinfo;
 import kiwi.core.runtimetype;
 import kiwi.utils.hstring;
 
+import kiwi.async.proxy;
+
 import std.stdio;
 
 template type(T) { auto type = typeid(T); }

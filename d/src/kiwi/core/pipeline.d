@@ -38,7 +38,7 @@ struct Pipeline
     
     ref inout(Node) node(NodeID nid) inout
     {
-        return _nodes[nid.nodeIndex];
+        return _nodes[nid.index];
     }
     
     bool update(uint hints = 0)

@@ -2,7 +2,7 @@ module kiwi.async.proxy;
 
 import kiwi.core.context;
 import kiwi.core.commons;
-import kiwi.async.transaction;
+import kiwi.async.command;
 
 import std.concurrency;
 
@@ -40,7 +40,7 @@ struct ContextProxy
 struct PipelineProxy
 {
 
-    void run( void delegate(bool) callback)
+    void run( void delegate(CommandOutcome) callback)
     {
         proxyAsyncRun(this, callback);
     }
@@ -120,12 +120,12 @@ struct InputPortProxy
         }
     }
     
-    void connect( OutputPortProxy output, void delegate(bool) callback = null )
+    void connect( OutputPortProxy output, void delegate(CommandOutcome) callback = null )
     {
         proxyAsyncConnect(output, this, callback);
     }
     
-    void disconnect( OutputPortProxy output, void delegate(bool) callback = null )
+    void disconnect( OutputPortProxy output, void delegate(CommandOutcome) callback = null )
     {
         proxyAsyncDisconnect(output, this, callback);
     }
@@ -157,12 +157,12 @@ struct OutputPortProxy
         }
     }
     
-    void connect( ref const(InputPortProxy) input, void delegate(bool) callback = null )
+    void connect( ref const(InputPortProxy) input, void delegate(CommandOutcome) callback = null )
     {
         proxyAsyncConnect( this, input, callback );
     }
     
-    void disconnect( ref const(InputPortProxy) input, void delegate(bool) callback = null )
+    void disconnect( ref const(InputPortProxy) input, void delegate(CommandOutcome) callback = null )
     {
         proxyAsyncDisconnect( this, input, callback );
     }
@@ -172,89 +172,58 @@ private:
     ContextProxy _contextProxy;
 }
 
-alias uint TransactionID;
 
-struct Transaction
-{
-    enum Type{ CONNECT, DISCONNECT, RUN };
-    
-    alias inputNode node;
-    
-    @property
-    {
-        NodeID inputNode() const pure
-        {
-            return inputPort.node;
-        }
-        
-        NodeID outputNode() const pure
-        {
-            return outputPort.node;
-        }
-        
-        PipelineID pipeline() const pure
-        {
-            return inputPort.node.pipeline;
-        }
-    }
-    
-    Type    type;
-    InputPortID  inputPort;
-    OutputPortID outputPort;
-    //Tid     callerThreadId; // error: *p is not mutable
-    int     contextIndex;
-    TransactionID   id;
-}
+
 
 private void proxyAsyncConnect( 
     ref const(OutputPortProxy) output
     , ref const(InputPortProxy) input
-    , void delegate(bool) callback )
+    , void delegate(CommandOutcome) callback )
 {
-    uint transactionID = genTransactionID();
+    uint commandID = genCommandID();
     
-    Transaction transaction = {
-        type: Transaction.Type.CONNECT,
+    Command command = {
+        type: Command.Type.CONNECT,
         inputPort: input.id,
         outputPort: output.id,
-        id: transactionID,
+        id: commandID,
         //callerThreadId: thisTid
     };
-    std.concurrency.send( input.context.tid, transaction, thisTid() );
+    std.concurrency.send( input.context.tid, command, thisTid() );
     
-    addTransactionCallback(transactionID, callback);
+    addCommandCallback(commandID, callback);
 }
 
 private void proxyAsyncDisconnect( 
     ref const(OutputPortProxy) output
     , ref const(InputPortProxy) input
-    , void delegate(bool) callback )
+    , void delegate(CommandOutcome) callback )
 {
-    uint transactionID = genTransactionID();
+    uint commandID = genCommandID();
     
-    Transaction transaction = {
-        type: Transaction.Type.DISCONNECT,
+    Command command = {
+        type: Command.Type.DISCONNECT,
         inputPort: input.id,
         outputPort: output.id,
-        id: transactionID,
+        id: commandID,
         //callerThreadId: thisTid
     };
-    std.concurrency.send( input.context.tid, transaction, thisTid() );
+    std.concurrency.send( input.context.tid, command, thisTid() );
     
-    addTransactionCallback(transactionID, callback);
+    addCommandCallback(commandID, callback);
 }
 
-private void proxyAsyncRun( ref PipelineProxy p, void delegate(bool) callback )
+private void proxyAsyncRun( ref PipelineProxy p, void delegate(CommandOutcome) callback )
 {
-    uint transactionID = genTransactionID();
+    uint commandID = genCommandID();
     
-    Transaction transaction = {
-        type: Transaction.Type.RUN,
-        id: transactionID,
+    Command command = {
+        type: Command.Type.RUN,
+        id: commandID,
         //callerThreadId: thisTid
     };
-    transaction.inputPort.node.pipeline = p.id;
-    std.concurrency.send( p.context.tid, transaction, thisTid() );
+    command.inputPort.node.pipeline = p.id;
+    std.concurrency.send( p.context.tid, command, thisTid() );
     
-    addTransactionCallback(transactionID, callback);
+    addCommandCallback(commandID, callback);
 }

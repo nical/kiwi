@@ -1,11 +1,20 @@
 module kiwi.core.port;
 
 import kiwi.core.node;
+import kiwi.core.pipeline;
 import kiwi.core.nodeinfo;
 import kiwi.core.runtimetype;
 import kiwi.core.commons;
 
 import kiwi.utils.array;
+
+struct PortIndex
+{
+    @property bool isNull() const pure { return node == 0; }
+    
+    ushort node;
+    ushort port;
+}
 
 struct InputPort
 {
@@ -15,9 +24,9 @@ struct InputPort
         _index = i;
     }
 
-    bool isConnectedTo( ref const(OutputPort) input ) const
+    bool isConnectedTo( ref const(OutputPort) output ) const
     {
-        return _connection is &input;
+        return _connection is output.portIndex;
     }
 
     bool isCompatible( ref OutputPort port ) const
@@ -34,7 +43,7 @@ struct InputPort
     {
         if ( !isConnected )
             return;
-        disconnectPorts(*_connection, this);
+        disconnectPorts(*connection, this);
         assert( !isConnected );
     }
 
@@ -45,14 +54,26 @@ struct InputPort
 
     @property
     {
-        inout(OutputPort)* connection() inout pure
+        inout(Pipeline)* pipeline() inout pure
         {
-            return _connection; 
+            return _node.pipeline;
+        }
+
+        PortIndex portIndex() pure
+        {
+            return PortIndex( node.index, _index );
+        }
+
+        inout(OutputPort)* connection() inout
+        {
+            if(_connection.isNull)
+                return null;
+            return &pipeline.outputPort(_connection);
         }
 
         bool isConnected() const pure
         {
-            return _connection !is null;
+            return !_connection.isNull;
         }
 
         inout(Node)* node() inout pure
@@ -60,7 +81,7 @@ struct InputPort
             return _node;
         }
         
-        ref inout(RuntimeType) data() inout pure
+        ref inout(RuntimeType) data() inout 
         {
             if( isConnected )
                 return connection.data;
@@ -70,7 +91,7 @@ struct InputPort
         ref const(T) dataAs(T)()
         {
             if( isConnected )
-                return _connection.dataAs!T;
+                return connection.dataAs!T;
             assert(false, "InputPort.dataAs!T invoked while the port is not connected.");
         }
 
@@ -103,10 +124,16 @@ struct InputPort
         {
             return (flags & OPT)!=0;
         }
+
+        PortIndex portIndex() const pure
+        {
+            return PortIndex( node.index, _index );
+        }
     }
     
 private:
-    OutputPort* _connection;
+    //OutputPort* _connection;
+    PortIndex   _connection;
     Node*       _node;
     ubyte       _index;
 }
@@ -162,6 +189,11 @@ struct OutputPort
 
     @property
     {
+        inout(Pipeline)* pipeline() inout pure
+        {
+            return _node.pipeline;
+        }
+
         inout(Node)* node() inout pure
         {
             return _node;
@@ -216,6 +248,12 @@ struct OutputPort
         {
             return (flags & OPT) != 0;
         }
+        
+        PortIndex portIndex() const pure
+        {
+            return PortIndex( node.index, _index );
+        }
+
     }
     
 private:
@@ -241,7 +279,7 @@ private bool connectPorts(ref OutputPort output, ref InputPort input )
 
 	if ( input.isConnected ) input.disconnectAll();
 
-	input._connection = &output;
+	input._connection = output.portIndex;
 	output._connections ~= &input;
     
     // previous nodes cache
@@ -265,7 +303,7 @@ private void disconnectPorts( ref OutputPort output, ref InputPort input)
         assert( output._connections[i2].node() == input.node() );
     }
 	// proceed with the disconnection
-	input._connection = null;
+	input._connection = PortIndex.init;
 	output._connections[i2] = output._connections[$ -1];
 	output._connections.length = output._connections.length -1;
 
@@ -355,8 +393,8 @@ unittest
     };
 
     Node n1, n2;
-    n1.initialize( null, &ntinfo1 );
-    n2.initialize( null, &ntinfo2 );
+    n1.initialize( null, &ntinfo1, 0 );
+    n2.initialize( null, &ntinfo2, 0 );
 
     unit.test( n1.inputs[0].name == StrHash("in#1"), "Input port name (0)." );
     unit.test( n1.inputs[1].name == StrHash("in#2"), "Input port name (1)." );

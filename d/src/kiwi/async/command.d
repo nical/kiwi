@@ -127,5 +127,5 @@ unittest
         (Variant v){log.writeln("main thread received outcome");}
     );
     
+}     
 
-}

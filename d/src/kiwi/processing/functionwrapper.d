@@ -79,7 +79,7 @@ unittest
     };
 
     Node n;
-    n.initialize( null, &ntinfo );
+    n.initialize( null, &ntinfo, 0 );
     
     assert( n.input().isOptionnal );
     

@@ -8,13 +8,9 @@ import kiwi.core.pipeline;
 
 struct Context
 {   
-    this( string label )
+    this( DataFactory df, NodeFactory nf = new NodeFactory )
     {
-        _nodeFactory = new NodeFactory;
-    }
-
-    this( NodeFactory nf = new NodeFactory )
-    {
+        _dataFactory = df;
         _nodeFactory = nf;
     }
     
@@ -31,6 +27,7 @@ struct Context
     @property 
     {
         NodeFactory nodeFactory() { return _nodeFactory; }
+        DataFactory dataFactory() { return _dataFactory; }
     }
     
     Pipeline* pipeline(PipelineID pid)
@@ -38,6 +35,7 @@ struct Context
         return &_pipelines[pid];
     }
 private:
+    DataFactory _dataFactory;
     NodeFactory _nodeFactory;
     Pipeline[PipelineID] _pipelines;
 }

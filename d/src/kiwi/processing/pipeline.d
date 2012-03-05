@@ -104,7 +104,7 @@ unittest
         ]
     };
     
-    Context ctx = Context( "kiwi" );
+    Context ctx = Context( null, new NodeFactory);
     ctx.registerNodeType( ntinfo );
     
     Pipeline p = Pipeline(&ctx);

@@ -11,12 +11,7 @@ import kiwi.utils.array;
 struct PortIndex
 {
     @property bool isNull() const pure { return node == 0; }
-    void nullify() pure
-    {
-        node = 0;
-        port = 0;
-    }
-
+    
     ushort node;
     ushort port;
 }
@@ -165,9 +160,9 @@ struct OutputPort
         return false;
     }
 
-    bool isCompatible( ref InputPort port ) const
+    bool isCompatible( ref InputPort port ) const pure
     {
-        return dataType == port.dataType;
+        return dataType is port.dataType;
     }
 
     bool connect( ref InputPort port )
@@ -280,10 +275,7 @@ private size_t findInArray(T)(ref T[] arr, const T elt)
 private bool connectPorts(ref OutputPort output, ref InputPort input )
 {
     if ( !input.isCompatible( output ) )
-    {
-        debug{ log.writeln("connectPorts: uncompatible ports"); }
 		return false;
-    }
 
 	if ( input.isConnected ) input.disconnectAll();
 
@@ -304,15 +296,15 @@ private void disconnectPorts( ref OutputPort output, ref InputPort input)
 {
     auto lb = log.scoped("disconnectPorts");
     if ( !input.isConnectedTo(output) ) return;
-    assert( output.isConnectedTo(input) );
-	
-    int i2 = indexOf(output._connections, &input);
-    if ( i2 != -1 ){
+
+	int i2 = findInArray!(InputPort*)(output._connections, &input);
+
+    if ( i2 != output._connections.length ){
         assert( output._connections[i2].node() == input.node() );
     }
 	// proceed with the disconnection
-	input._connection.nullify();
-	output._connections[i2] = output._connections[$ -1];//range violation
+	input._connection = PortIndex.init;
+	output._connections[i2] = output._connections[$ -1];
 	output._connections.length = output._connections.length -1;
 
     auto inputNode = input.node;
@@ -366,8 +358,6 @@ private void disconnectPorts( ref OutputPort output, ref InputPort input)
 unittest
 {
     import kiwi.core.nodeinfo;
-    import kiwi.core.context;
-    import kiwi.core.pipeline;
     import kiwi.utils.testing;
     import kiwi.utils.hstring;
     
@@ -383,7 +373,6 @@ unittest
     assert( fooID != barID );
 
     NodeTypeInfo ntinfo1 = {
-        name: StrHash("Node1"),
         inputs : [
             { StrHash("in#1"), fooID, READ },
             { StrHash("in#2"), barID, READ|OPT }
@@ -394,7 +383,6 @@ unittest
     };
 
     NodeTypeInfo ntinfo2 = {
-        name: StrHash("node2"),
         inputs : [
             { StrHash("in#1"), fooID, READ },
             { StrHash("in#2"), fooID, READ|OPT }
@@ -404,28 +392,10 @@ unittest
         ]
     };
 
-    Context ctx = Context("kiwi");
+    Node n1, n2;
+    n1.initialize( null, &ntinfo1, 0 );
+    n2.initialize( null, &ntinfo2, 0 );
 
-    auto tinfo1 = ctx.registerNodeType( ntinfo1 );
-    auto tinfo2 = ctx.registerNodeType( ntinfo2 );
-
-    assert( tinfo1 != tinfo2 );
-
-    Pipeline p = Pipeline( &ctx );
-    auto nodeIdx1 = p.instanciateNode( tinfo1 );
-    auto nodeIdx2 = p.instanciateNode( tinfo2 );
-    
-    assert( nodeIdx1 != 0 );
-    assert( nodeIdx1 != nodeIdx2 );
-
-    Node* n1 = &p.node( nodeIdx1 );
-    Node* n2 = &p.node( nodeIdx2 );
-
-    assert(n1);
-    assert(n2);
-
-    assert(n1 !is n2);
-    
     unit.test( n1.inputs[0].name == StrHash("in#1"), "Input port name (0)." );
     unit.test( n1.inputs[1].name == StrHash("in#2"), "Input port name (1)." );
     unit.test( n1.outputs[0].name == StrHash("out"), "Output port name." );
@@ -444,9 +414,6 @@ unittest
     unit.test( n1.nextNodes.length == 0, "n1 not connected therefore can't have next nodes" );
     unit.test( n1.previousNodes.length == 0, "n1 not connected therefore can't have previous nodes" );
 
-    log.writeln( "port index: ", n1.output.portIndex.node, " ",
-            n1.output.portIndex.port );
-
     // trying to disconnect while not connected
     // should not crash
     n1.input().disconnect();
@@ -454,21 +421,15 @@ unittest
     n1.output().disconnect( n2.input() );
 
     unit.test( n1.output(0).isCompatible( n2.input(0) ) );
-    unit.test( n2.output(0).isCompatible( n1.input(1) ) );
-
-    log.writeln( (cast(TypeInfo)n2.output(0).dataType).toString() );
-    log.writeln( (cast(TypeInfo)n1.input(1).dataType).toString() );
-    //log.writeln( n1.input(1).dataType.toString() );
     
-    log.writeln("--------------------");
     auto status1 = n2.output().connect( n1.input(1) );
     unit.test( status1, "Connecting compatible ports" );
     unit.test( n2.outputs[0].isConnected, "Output connection state." );
     unit.test( n1.inputs[1].isConnected, "Input connection state." );
     
     unit.test( n1.nextNodes == [] );
-    unit.test( n1.previousNodes == [n2] );
-    unit.test( n2.nextNodes == [n1] );
+    unit.test( n1.previousNodes == [&n2] );
+    unit.test( n2.nextNodes == [&n1] );
     unit.test( n2.previousNodes == [] );
 
     n1.input(1).disconnect();
@@ -486,8 +447,8 @@ unittest
     unit.test( n1.inputs[1].isConnectedTo(n2.outputs[0]), "Input connection state." );
     
     unit.test( n1.nextNodes == [] );
-    unit.test( n1.previousNodes == [n2] );
-    unit.test( n2.nextNodes == [n1] );
+    unit.test( n1.previousNodes == [&n2] );
+    unit.test( n2.nextNodes == [&n1] );
     unit.test( n2.previousNodes == [] );
     
     n2.output(0).disconnect( n1.input(1) );
@@ -504,8 +465,8 @@ unittest
     unit.test( n2.output().connections.length == 1, "Connecting twice: nb of connections." );
     
     unit.test( n1.nextNodes == [] );
-    unit.test( n1.previousNodes == [n2] );
-    unit.test( n2.nextNodes == [n1] );
+    unit.test( n1.previousNodes == [&n2] );
+    unit.test( n2.nextNodes == [&n1] );
     unit.test( n2.previousNodes == [] );
     
     n2.output().disconnectAll();

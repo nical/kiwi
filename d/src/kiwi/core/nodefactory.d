@@ -13,20 +13,10 @@ class NodeFactory
     
     NodeTypeID registerNodeType( NodeTypeInfo info )
     {
-        debug{
-            log.writeln("registerNodeType: ", info.name);
-        }
-        assert(info.name.hash != 0);
-
         foreach( ref i ; _nodeTypes.byKey )
         {
-            if( _nodeTypes[i].name == info.name ){
-                debug{
-                log.writeln("registerNodeType:already registered ");
-                log.writeln(" ", info.name );
-                }
+            if( _nodeTypes[i].name == info.name )
                 return NodeTypeID(i);
-            }
         }
         auto newID = NodeTypeID(_nextID++);
         _nodeTypes[newID.index] = info;

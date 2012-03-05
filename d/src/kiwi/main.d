@@ -50,7 +50,7 @@ int main()
         };
         
         import kiwi.core.nodefactory;
-        Context ctx = Context("processing");
+        Context ctx = Context( null, new NodeFactory);
         
         auto container_info = ctx.registerNodeType(intContainerInfo);
         auto add_info       = ctx.registerNodeType(addIntInfo);

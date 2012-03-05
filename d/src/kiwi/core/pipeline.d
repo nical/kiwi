@@ -14,7 +14,6 @@ struct Pipeline
     this( Context* ctx )
     {
         _context = ctx;
-        _nodes.length = 1;
     }
     
     

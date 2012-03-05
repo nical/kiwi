@@ -13,13 +13,12 @@ struct Node
      + Nodes initialization occurs after constructions. This means a node's state
      + is invalid between the constructor and initialize stages.
      +/ 
-    void initialize( Pipeline* p, const NodeTypeInfo* nodeInfo, ubyte nindex )
+    void initialize( Pipeline* p, const NodeTypeInfo* nodeInfo )
     {
         _pipeline = p;
         _nodeTypeInfo = nodeInfo;
         _inputs.length  = _nodeTypeInfo.inputs.length;
         _outputs.length = _nodeTypeInfo.outputs.length;
-        _index = nindex;
         for( ubyte i = 0; i < _inputs.length; ++i )
         {
             _inputs[i].initialize(&this, i);
@@ -71,12 +70,18 @@ struct Node
         if (info.onProcess)
         {
             RuntimeType*[] inputData, outputData;
-            
+            /+
+            foreach(i, ip ; _inputs ){
+                inputData ~= &(ip.data());
+                log.writeln(i,"## ", &ip," ",&(ip.data()));
+                assert( &ip is &_inputs[i] ); // OMGWTFBBQ ??
+            }+/
             for(int i = 0; i < _inputs.length; ++i)
                 inputData ~= &(_inputs[i].data());
             for(int i = 0; i < _outputs.length; ++i)
                 outputData ~= &(_outputs[i].data());
-            
+            //foreach( op ; _outputs )
+            //    outputData ~= &(op.data());
             status &= info.onProcess( inputData, outputData );
         }
         return status;
@@ -103,6 +108,7 @@ struct Node
         {
             return _outputs[0..$];
         }
+
         
         auto name() const pure
         {
@@ -118,16 +124,6 @@ struct Node
         {
             return _nextNodes[0..$];
         }
-
-        auto index() const pure
-        {
-            return _index;
-        }
-
-        inout(Pipeline)* pipeline() inout pure
-        {
-            return _pipeline;
-        } 
     }
     
 private:
@@ -138,8 +134,8 @@ private:
     const(NodeTypeInfo)*  _nodeTypeInfo;
     // cached for efficiency, updated from port.d
     package Node*[] _previousNodes;
-    package Node*[] _nextNodes; 
-    package ubyte   _index;
+    package Node*[] _nextNodes;
+ 
 }
 
 class PortNameNotFoundException : Exception
@@ -178,7 +174,7 @@ unittest
     };
 
     Node n1;
-    n1.initialize( null, &ntinfo, 0 );
+    n1.initialize( null, &ntinfo );
     
     unit.test( &n1.inputs[0] is &n1._inputs[0], "Input port range random access" );
     unit.test( &n1.outputs[0] is &n1._outputs[0], "Output port range random access" );

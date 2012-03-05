@@ -3,10 +3,10 @@ module kiwi.core.pipeline;
 import std.variant;
 import std.container : SList;
 
+//import kiwi.core.port;
 import kiwi.core.context;
 import kiwi.core.commons;
 import kiwi.core.node;
-import kiwi.core.port;
 import kiwi.utils.datastructures : PiecewiseVector;
 
 struct Pipeline
@@ -15,22 +15,6 @@ struct Pipeline
     {
         _context = ctx;
     }
-    
-    
-    ref inout(InputPort) inputPort(PortIndex idx) inout 
-    in{assert(!idx.isNull);}
-    body
-    {
-        return node(idx.node).input(idx.port);
-    }
-
-    ref inout(OutputPort) outputPort(PortIndex idx) inout 
-    in{assert(!idx.isNull);}
-    body
-    {
-        return node(idx.node).output(idx.port);
-    }
-
 
     @property 
     {
@@ -43,8 +27,7 @@ struct Pipeline
         assert(info !is null);
         
         _nodes.length = _nodes.length + 1;
-        _nodes[_nodes.length-1].initialize(&this, info,
-                cast(ubyte)(_nodes.length-1));
+        _nodes[_nodes.length-1].initialize(&this, info);
         return _nodes.length-1;
     }
     
@@ -68,7 +51,6 @@ private:
     PiecewiseVector!(Node,8) _nodes;
     PipelineUpdater _updater;
 }
-
 
 interface PipelineUpdater
 {

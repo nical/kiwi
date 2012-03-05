@@ -100,8 +100,7 @@ version(unittest)
     
     void workerThread()
     {
-        import kiwi.core.nodefactory;
-        Context ctx = Context(null, new NodeFactory);
+        Context ctx = Context("kiwi");
         
         bool loop = true;
         while(loop)

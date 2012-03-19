@@ -124,6 +124,12 @@ struct Node
         {
             return _nextNodes[0..$];
         }
+
+        ref inout(Pipeline) pipeline() inout pure
+        {
+            assert(_pipeline);
+            return *_pipeline;
+        }
     }
     
 private:

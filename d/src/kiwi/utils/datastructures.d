@@ -17,7 +17,7 @@ struct PiecewiseVector(T,int ChunkSize)
         length = initlen; 
     }
     
-    ref inout(T) opIndex(int i) inout
+    ref inout(T) opIndex(int i) inout pure
     {
         inout(Chunk)* chk = &_first;
         while( i >= ChunkSize )
@@ -30,7 +30,7 @@ struct PiecewiseVector(T,int ChunkSize)
     
     @property{
         
-        uint length()
+        uint length() const pure
         {
             return _length;
         }

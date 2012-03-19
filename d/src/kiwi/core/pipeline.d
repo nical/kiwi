@@ -45,10 +45,32 @@ struct Pipeline
     {
         return _updater.update(this,hints);
     }
+
+    void touch(int nodeIndex) pure
+    {
+        _touchList ~= nodeIndex;
+    }
     
+    void touch(ref Node n) pure
+    {
+        _touchList ~= nodeIndex(n);
+    }
+
+    int nodeIndex(ref const(Node) n) const pure // TODO
+    {
+        assert(&(n.pipeline()) is &this);
+        for(int i = 0; i < _nodes.length; ++i)
+        {
+            if(&_nodes[i] is &n)
+                return i;
+        }
+        assert(false);
+    }
+
 private:
     Context* _context;
     PiecewiseVector!(Node,8) _nodes;
+    int[]   _touchList;
     PipelineUpdater _updater;
 }
 

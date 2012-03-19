@@ -17,7 +17,7 @@ struct PiecewiseVector(T,int ChunkSize)
         length = initlen; 
     }
     
-    ref inout(T) opIndex(int i) inout pure
+    ref inout(T) opIndex(int i) inout
     {
         inout(Chunk)* chk = &_first;
         while( i >= ChunkSize )

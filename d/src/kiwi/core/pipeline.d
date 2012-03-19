@@ -25,20 +25,21 @@ struct Pipeline
     {
         auto info = _context.nodeFactory.nodeTypeInfo(type);
         assert(info !is null);
-        
+        int idx = _nodes.length;
         _nodes.length = _nodes.length + 1;
-        _nodes[_nodes.length-1].initialize(&this, info);
-        return _nodes.length-1;
+        _nodes[idx] = new Node;
+        _nodes[idx].initialize(&this, info);
+        return idx;
     }
     
     ref inout(Node) node(int index) inout
     {
-        return _nodes[index];
+        return *_nodes[index];
     }
     
     ref inout(Node) node(NodeID nid) inout
     {
-        return _nodes[nid.index];
+        return *_nodes[nid.index];
     }
     
     bool update(uint hints = 0)
@@ -61,16 +62,17 @@ struct Pipeline
         assert(&(n.pipeline()) is &this);
         for(int i = 0; i < _nodes.length; ++i)
         {
-            if(&_nodes[i] is &n)
+            if(_nodes[i] is &n)
                 return i;
         }
         assert(false);
     }
 
 private:
-    Context* _context;
-    PiecewiseVector!(Node,8) _nodes;
-    int[]   _touchList;
+    Context*    _context;
+    //PiecewiseVector!(Node,8) _nodes;
+    Node*[]     _nodes;
+    int[]       _touchList;
     PipelineUpdater _updater;
 }
 

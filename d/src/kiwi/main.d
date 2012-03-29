@@ -7,6 +7,7 @@ import kiwi.core.node;
 import kiwi.core.nodeinfo;
 import kiwi.core.runtimetype;
 import kiwi.utils.hstring;
+import kiwi.serializer.json;
 
 import kiwi.async.proxy;
 

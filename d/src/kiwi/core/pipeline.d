@@ -19,6 +19,7 @@ struct Pipeline
     @property 
     {
         Context* context() { return _context; }
+        auto nodes() const pure { return _nodes[0..$]; }
     }
     
     int instanciateNode( NodeTypeID type )
@@ -70,7 +71,6 @@ struct Pipeline
 
 private:
     Context*    _context;
-    //PiecewiseVector!(Node,8) _nodes;
     Node*[]     _nodes;
     int[]       _touchList;
     PipelineUpdater _updater;

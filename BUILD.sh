@@ -1,6 +1,6 @@
 #!/bin/sh
 echo ""
 echo "** build"
-cd ./build && make 2>&1 | prettybuild 
-cd .. 
+make -j4 -C ../objdir-kiwi  2>&1 | prettybuild 
+
 ./TEST.sh
